@@ -1,0 +1,5 @@
+Name,Description
+"Interact with plots, not knobs","The user should be able to perform all desired interaction via manipulating graphical objects inside plots and external widgets should not be necessary. E.g. instead of selecting from a drop-down menu, the user should be able to select a category by clicking a bar in a bargraph. "
+Consistent and predictable results,"The user’s interaction should produce consistent and predictable results across different types of plots. E.g. if pressing a specific key affects the size of graphical objects in one plot, it should do the same in another plot & not something different."
+"See everything, everywhere, all at once","The user should be able to see the results of their present interaction immediately, reminders of past interaction should remain visible, especially conditioning interactions."
+Minimize unintended changes to the visual scene,"All interaction should happen with purpose, without stealing spotling from the data, and without creating visual clutter."

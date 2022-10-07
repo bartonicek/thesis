@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>References | Efficient and Principled Interactive Data Visualization with plotscape</title>
+  <meta name="description" content="<p>This is a minimal example of using the bookdown package to write a book.
+set in the _output.yml file.
+The HTML output format for this example is bookdown::gitbook,</p>" />
+  <meta name="generator" content="bookdown 0.29 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="References | Efficient and Principled Interactive Data Visualization with plotscape" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="<p>This is a minimal example of using the bookdown package to write a book.
+set in the _output.yml file.
+The HTML output format for this example is bookdown::gitbook,</p>" />
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="References | Efficient and Principled Interactive Data Visualization with plotscape" />
+  
+  <meta name="twitter:description" content="<p>This is a minimal example of using the bookdown package to write a book.
+set in the _output.yml file.
+The HTML output format for this example is bookdown::gitbook,</p>" />
+  
+
+<meta name="author" content="Adam Bartonicek" />
+
+
+<meta name="date" content="2022-10-07" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="design.html"/>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
+<li class="chapter" data-level="2" data-path="literature-review.html"><a href="literature-review.html"><i class="fa fa-check"></i><b>2</b> Literature Review</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="literature-review.html"><a href="literature-review.html#what-even-is-interactivity"><i class="fa fa-check"></i><b>2.1</b> What even is interactivity?</a></li>
+<li class="chapter" data-level="2.2" data-path="literature-review.html"><a href="literature-review.html#types-of-interactive-features"><i class="fa fa-check"></i><b>2.2</b> Types of Interactive Features</a></li>
+<li class="chapter" data-level="2.3" data-path="literature-review.html"><a href="literature-review.html#current-options-for-interactive-visualizations"><i class="fa fa-check"></i><b>2.3</b> Current Options for Interactive Visualizations</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="design.html"><a href="design.html"><i class="fa fa-check"></i><b>3</b> Design</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="design.html"><a href="design.html#graphic-design"><i class="fa fa-check"></i><b>3.1</b> Graphic Design</a></li>
+<li class="chapter" data-level="3.2" data-path="design.html"><a href="design.html#user-interface"><i class="fa fa-check"></i><b>3.2</b> User Interface</a></li>
+<li class="chapter" data-level="3.3" data-path="design.html"><a href="design.html#technical-design"><i class="fa fa-check"></i><b>3.3</b> Technical Design</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="design.html"><a href="design.html#sec-scene"><i class="fa fa-check"></i><b>3.3.1</b> Scene</a></li>
+<li class="chapter" data-level="3.3.2" data-path="design.html"><a href="design.html#global-handlers"><i class="fa fa-check"></i><b>3.3.2</b> Global Handlers</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Efficient and Principled Interactive Data Visualization with plotscape</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="references" class="section level1 unnumbered hasAnchor">
+<h1>References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div class="csl-entry">
+Becker, Richard A, and William S Cleveland. 1987. <span>“Brushing Scatterplots.”</span> <em>Technometrics</em> 29 (2): 127–42.
+</div>
+<div class="csl-entry">
+Betancourt, Michael. 2020. <span>“<span class="nocase">Visualization Q and A</span>.”</span> <em>YouTube</em>. Youtube. <a href="https://www.youtube.com/watch?v=vPNxo9XdeLk">https://www.youtube.com/watch?v=vPNxo9XdeLk</a>.
+</div>
+<div class="csl-entry">
+Brodbeck, Dominique, Riccardo Mazza, and Denis Lalanne. 2009. <span>“<span>Interactive Visualization - A Survey</span>.”</span> In <em><span>Human Machine Interaction</span></em>, 27–46. Berlin, Germany: Springer. <a href="https://doi.org/10.1007/978-3-642-00437-7_2">https://doi.org/10.1007/978-3-642-00437-7_2</a>.
+</div>
+<div class="csl-entry">
+Buja, Andreas, Dianne Cook, and Deborah F Swayne. 1996. <span>“Interactive High-Dimensional Data Visualization.”</span> <em>Journal of Computational and Graphical Statistics</em> 5 (1): 78–99.
+</div>
+<div class="csl-entry">
+Holtz, Yan. 2022. <span>“<span class="nocase">Interactive charts <span><span class="math inline">\(\vert\)</span></span> the R Graph Gallery</span>.”</span> <a href="https://r-graph-gallery.com/interactive-charts.html">https://r-graph-gallery.com/interactive-charts.html</a>.
+</div>
+<div class="csl-entry">
+Jankun-Kelly, TJ, Kwan-Liu Ma, and Michael Gertz. 2007. <span>“A Model and Framework for Visualization Exploration.”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em> 13 (2): 357–69.
+</div>
+<div class="csl-entry">
+Kehrer, Johannes, Roland N Boubela, Peter Filzmoser, and Harald Piringer. 2012. <span>“A Generic Model for the Integration of Interactive Visualization and Statistical Computing Using r.”</span> In <em>2012 IEEE Conference on Visual Analytics Science and Technology (VAST)</em>, 233–34. IEEE.
+</div>
+<div class="csl-entry">
+Keim, Daniel A. 2002. <span>“Information Visualization and Visual Data Mining.”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em> 8 (1): 1–8.
+</div>
+<div class="csl-entry">
+Leman, Scotland C, Leanna House, Dipayan Maiti, Alex Endert, and Chris North. 2013. <span>“Visual to Parametric Interaction (V2pi).”</span> <em>PloS One</em> 8 (3): e50474.
+</div>
+<div class="csl-entry">
+McCloud, Scott. 1994. <em><span>Understanding Comics: The Invisible Art</span></em>. New York, NY, USA: William Morrow Paperbacks.
+</div>
+<div class="csl-entry">
+Pike, William A, John Stasko, Remco Chang, and Theresa A O’connell. 2009. <span>“The Science of Interaction.”</span> <em>Information Visualization</em> 8 (4): 263–74.
+</div>
+<div class="csl-entry">
+Plotly Inc. 2022. <span>“<span class="nocase">Part 4. Interactive Graphing and Crossfiltering <span><span class="math inline">\(\vert\)</span></span> Dash for Python Documentation <span><span class="math inline">\(\vert\)</span></span> Plotly</span>.”</span> <a href="https://dash.plotly.com/interactive-graphing">https://dash.plotly.com/interactive-graphing</a>.
+</div>
+<div class="csl-entry">
+Reynolds, Garr. 2011. <em><span class="nocase">Presentation Zen: Simple Ideas on Presentation Design and Delivery</span></em>. New Riders. <a href="https://books.google.co.nz/books/about/Presentation_Zen.html?id=m1xt5IMJbXAC&amp;source=kp_book_description&amp;redir_esc=y">https://books.google.co.nz/books/about/Presentation_Zen.html?id=m1xt5IMJbXAC&amp;source=kp_book_description&amp;redir_esc=y</a>.
+</div>
+<div class="csl-entry">
+Rheingans, Penny. 2002. <span>“Are We There yet? Exploring with Dynamic Visualization.”</span> <em>IEEE Computer Graphics and Applications</em> 22 (1): 6–10.
+</div>
+<div class="csl-entry">
+Tufte, Edward R. 2001. <em>The Visual Display of Quantitative Information</em>. Cheshire, Connecticut: Graphics Press LLC.
+</div>
+<div class="csl-entry">
+Unwin, Antony. 1999. <span>“<span class="nocase">Requirements for interactive graphics software for exploratory data analysis</span>.”</span> <em>Comput. Statist.</em> 14 (1): 7–22. <a href="https://doi.org/10.1007/PL00022706">https://doi.org/10.1007/PL00022706</a>.
+</div>
+<div class="csl-entry">
+Vega Project. 2022. <span>“<span>Example Gallery: Interactive</span>.”</span> <a href="https://vega.github.io/vega-lite/examples/#interactive">https://vega.github.io/vega-lite/examples/#interactive</a>.
+</div>
+<div class="csl-entry">
+Wikipedia. 2022. <span>“<span class="nocase">Duck test - Wikipedia</span>.”</span> <a href="https://en.wikipedia.org/w/index.php?title=Duck_test&amp;oldid=1110781513">https://en.wikipedia.org/w/index.php?title=Duck_test&amp;oldid=1110781513</a>.
+</div>
+<div class="csl-entry">
+Williams, Robin. 2004. <em><span class="nocase">The Non-designers Design Book: Design and Typographic Principles for the Visual Novice</span></em>. Peachpit Press.
+</div>
+<div class="csl-entry">
+Yi, Ji Soo, Youn ah Kang, John Stasko, and Julie A Jacko. 2007. <span>“Toward a Deeper Understanding of the Role of Interaction in Information Visualization.”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em> 13 (6): 1224–31.
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="design.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/07-references.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf", "_main.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

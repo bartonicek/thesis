@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 3 Design | Efficient and Principled Interactive Data Visualization with plotscape</title>
+  <meta name="description" content="<p>This is a minimal example of using the bookdown package to write a book.
+set in the _output.yml file.
+The HTML output format for this example is bookdown::gitbook,</p>" />
+  <meta name="generator" content="bookdown 0.29 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 3 Design | Efficient and Principled Interactive Data Visualization with plotscape" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="<p>This is a minimal example of using the bookdown package to write a book.
+set in the _output.yml file.
+The HTML output format for this example is bookdown::gitbook,</p>" />
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 3 Design | Efficient and Principled Interactive Data Visualization with plotscape" />
+  
+  <meta name="twitter:description" content="<p>This is a minimal example of using the bookdown package to write a book.
+set in the _output.yml file.
+The HTML output format for this example is bookdown::gitbook,</p>" />
+  
+
+<meta name="author" content="Adam Bartonicek" />
+
+
+<meta name="date" content="2022-10-07" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="literature-review.html"/>
+<link rel="next" href="references.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
+<li class="chapter" data-level="2" data-path="literature-review.html"><a href="literature-review.html"><i class="fa fa-check"></i><b>2</b> Literature Review</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="literature-review.html"><a href="literature-review.html#what-even-is-interactivity"><i class="fa fa-check"></i><b>2.1</b> What even is interactivity?</a></li>
+<li class="chapter" data-level="2.2" data-path="literature-review.html"><a href="literature-review.html#types-of-interactive-features"><i class="fa fa-check"></i><b>2.2</b> Types of Interactive Features</a></li>
+<li class="chapter" data-level="2.3" data-path="literature-review.html"><a href="literature-review.html#current-options-for-interactive-visualizations"><i class="fa fa-check"></i><b>2.3</b> Current Options for Interactive Visualizations</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="design.html"><a href="design.html"><i class="fa fa-check"></i><b>3</b> Design</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="design.html"><a href="design.html#graphic-design"><i class="fa fa-check"></i><b>3.1</b> Graphic Design</a></li>
+<li class="chapter" data-level="3.2" data-path="design.html"><a href="design.html#user-interface"><i class="fa fa-check"></i><b>3.2</b> User Interface</a></li>
+<li class="chapter" data-level="3.3" data-path="design.html"><a href="design.html#technical-design"><i class="fa fa-check"></i><b>3.3</b> Technical Design</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="design.html"><a href="design.html#sec-scene"><i class="fa fa-check"></i><b>3.3.1</b> Scene</a></li>
+<li class="chapter" data-level="3.3.2" data-path="design.html"><a href="design.html#global-handlers"><i class="fa fa-check"></i><b>3.3.2</b> Global Handlers</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Efficient and Principled Interactive Data Visualization with plotscape</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="design" class="section level1 hasAnchor" number="3">
+<h1><span class="header-section-number">Chapter 3</span> Design<a href="design.html#design" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="graphic-design" class="section level2 hasAnchor" number="3.1">
+<h2><span class="header-section-number">3.1</span> Graphic Design<a href="design.html#graphic-design" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<blockquote>
+<p>[A good visualization] is “boring” in the right way. It’s not trying to do too much, so you can focus on the message that is being communicated. […] I don’t want [the visualization] to be “pretty”, I want it to be visually pleasing enough that it doesn’t distract [from the information being presented].</p>
+<p>Visualization Q&amp;A Livestream <span class="citation">(<a href="#ref-betancourt2020may" role="doc-biblioref">Betancourt 2020</a>)</span></p>
+</blockquote>
+<blockquote>
+<p>Graphical excellence is that which gives to the viewer the greatest number of ideas in the shortest time with the least ink in the smallest space</p>
+<p>The Visual Display of Quantitative Information <span class="citation">(<a href="#ref-tufte2001visual" role="doc-biblioref">Tufte 2001</a>)</span></p>
+</blockquote>
+<p>Absence of graphical features can be equally as valuable as their presence (or arguably even moreso). In the cult classic book on the design of comics and graphical novels, Understanding Comics: The Invisible Art, Scott McCloud <span class="citation">(<a href="#ref-mccloud1994apr" role="doc-biblioref">1994</a>)</span> repeatedly stresses the importance of not just the things that appear on the page, but also the ones that are purposefully left out. For example, McCloud demonstrates how closure - the gap between the panels of a comic strip - is crucial for conveying meaning. In a similar vein, Tufte <span class="citation">(<a href="#ref-tufte2001visual" role="doc-biblioref">2001</a>)</span> shows how the absence of elements such as gridlines and axis ticks can greatly enhance the clarity and effectiveness of data visualization. Since interactive visualizations are static visualizations most of the time, the same principles apply. The default graphical setting of the visualization should therefore be as simple and austere as possible, within reason and unless the user explicitly desires otherwise.</p>
+<p>The visualization should also adhere to the big four principles of graphic design: <strong>contrast</strong>, <strong>repetition</strong>, <strong>alignment</strong>, and <strong>proximity</strong> <span class="citation">(CRAP, <a href="#ref-williams2004nondesigner" role="doc-biblioref">Williams 2004</a>)</span>. <strong>Contrast</strong> provides a way to direct the viewer’s attention and this makes it one of the most important concepts in graphic design <span class="citation">(<a href="#ref-reynolds2011dec" role="doc-biblioref">Reynolds 2011</a>)</span>. To properly leverage contrast, we should present large visual differences (contrast) in the parts of the visualization that we want the user to focus on, and, conversely, make the less important parts of the visualization appear more visually uniform. For a concrete example, when highlighting as a result of linked brushing, the highlight color should contrast strongly with the base color, and this can be achieved by using a muted (e.g. light gray) color for the base and a more vibrant color (e.g. green) as the highlight. As opposed to contrast, <strong>repetition</strong> provides a sense of visual unity and consistency.</p>
+<p>The choice of colors also greatly influences</p>
+</div>
+<div id="user-interface" class="section level2 hasAnchor" number="3.2">
+<h2><span class="header-section-number">3.2</span> User Interface<a href="design.html#user-interface" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>When a user first looks at the interactive visualization, they should immediately perceive it as a coherent, unified whole. This is to reinforce that fact that the individual plots and other graphical elements are inextricably linked via a shared data structure. Everything that happens in the visual scene should be intuitive, synchronous, and result from the user’s direct intentions.</p>
+<p>Making the interactive scene look visually unified can be achieved through several means. A consistent color scheme should be used across the different plots and other elements that make up the visualization.</p>
+</div>
+<div id="technical-design" class="section level2 hasAnchor" number="3.3">
+<h2><span class="header-section-number">3.3</span> Technical Design<a href="design.html#technical-design" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="sec-scene" class="section level3 hasAnchor" number="3.3.1">
+<h3><span class="header-section-number">3.3.1</span> Scene<a href="design.html#sec-scene" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Scene is the object that is placed the highest in the program hierarchy. It represents the unified whole of the information that the user sees and interacts with, both visually and programmatically. All other visual and interactive elements are defined as its children, and scene is responsible for organizing and coordinating them, either directly or via intermediaries that are also its children. The two main classes of elements defined on the scene are:</p>
+<ul>
+<li>Global Handlers</li>
+<li>Plots</li>
+</ul>
+</div>
+<div id="global-handlers" class="section level3 hasAnchor" number="3.3.2">
+<h3><span class="header-section-number">3.3.2</span> Global Handlers<a href="design.html#global-handlers" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Global handlers are child objects of <a href="design.html#sec-scene">Scene</a> that take care of things such as how plots are sized and placed together, how the scene responds to keyboard input, how it responds to certain cases (rows of the data) being selected, and how it responds to changes of state.</p>
+<ul>
+<li>Marker</li>
+<li>State handler</li>
+<li>Keyboard handler</li>
+<li>Size handler</li>
+</ul>
+<div id="sec-global-handlers" class="section level4 hasAnchor" number="3.3.2.1">
+<h4><span class="header-section-number">3.3.2.1</span> Marker<a href="design.html#sec-global-handlers" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Marker is a <a href="design.html#sec-global-handlers">global handler</a> whose primary task is to listen to changes in the membership of the cases in our data and answers questions about them. For example, if each case (row) in our data is a participant, we can tell Marker things such as <em>“mark participants 10, 11, and 12 as belonging to group 2”</em>, and ask things such as <em>“which participants currently belong to group 1?”</em>, or <em>“which participants currently belong to transient selection?”</em>.</p>
+
+</div>
+</div>
+</div>
+</div>
+<h3>References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-betancourt2020may" class="csl-entry">
+Betancourt, Michael. 2020. <span>“<span class="nocase">Visualization Q and A</span>.”</span> <em>YouTube</em>. Youtube. <a href="https://www.youtube.com/watch?v=vPNxo9XdeLk">https://www.youtube.com/watch?v=vPNxo9XdeLk</a>.
+</div>
+<div id="ref-mccloud1994apr" class="csl-entry">
+McCloud, Scott. 1994. <em><span>Understanding Comics: The Invisible Art</span></em>. New York, NY, USA: William Morrow Paperbacks.
+</div>
+<div id="ref-reynolds2011dec" class="csl-entry">
+Reynolds, Garr. 2011. <em><span class="nocase">Presentation Zen: Simple Ideas on Presentation Design and Delivery</span></em>. New Riders. <a href="https://books.google.co.nz/books/about/Presentation_Zen.html?id=m1xt5IMJbXAC&amp;source=kp_book_description&amp;redir_esc=y">https://books.google.co.nz/books/about/Presentation_Zen.html?id=m1xt5IMJbXAC&amp;source=kp_book_description&amp;redir_esc=y</a>.
+</div>
+<div id="ref-tufte2001visual" class="csl-entry">
+Tufte, Edward R. 2001. <em>The Visual Display of Quantitative Information</em>. Cheshire, Connecticut: Graphics Press LLC.
+</div>
+<div id="ref-williams2004nondesigner" class="csl-entry">
+Williams, Robin. 2004. <em><span class="nocase">The Non-designers Design Book: Design and Typographic Principles for the Visual Novice</span></em>. Peachpit Press.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="literature-review.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/03-design.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf", "_main.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

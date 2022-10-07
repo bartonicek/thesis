@@ -1,0 +1,212 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{book}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{5}
+\usepackage{booktabs}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage[]{natbib}
+\bibliographystyle{plainnat}
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={Efficient and Principled Interactive Data Visualization with plotscape},
+  pdfauthor={Adam Bartonicek},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Efficient and Principled Interactive Data Visualization with plotscape}
+\author{Adam Bartonicek}
+\date{2022-10-07}
+
+\begin{document}
+\maketitle
+
+{
+\setcounter{tocdepth}{1}
+\tableofcontents
+}
+\hypertarget{introduction}{%
+\chapter{Introduction}\label{introduction}}
+
+Introduction goes here.
+
+\hypertarget{literature-review}{%
+\chapter{Literature Review}\label{literature-review}}
+
+Interactive data visualization is popular. Interactive figures appear everywhere, from news articles, to business-analytic dashboards, to science communication outlets such as journal websites and personal blogs. Yet, despite the popularity, there does seem to be a lot of unanswered questions about them.
+
+\hypertarget{what-even-is-interactivity}{%
+\section{What even is interactivity?}\label{what-even-is-interactivity}}
+
+\begin{quote}
+If it looks like a duck, swims like a duck, and quacks like a duck, then it probably is a duck.
+
+\href{https://en.wikipedia.org/wiki/Duck_test}{Duck Test} entry, \citep{wikipedia2022}
+\end{quote}
+
+What is an interactive visualization? It may seen like a silly question. So many people talk about interactive visualizations, then, surely, they must all be referring to the same thing, right? Unfortunately, that does not seem to be the case. When researchers and applied practitioners say ``interactive visualization'', they tend to refer to many different things in many different contexts.
+
+First off, it is necessary to disambiguate whether we refer to ``interactive visualization'' as a noun, a thing that exists, or to ``interactive visualization'' as a process, an action undertaken by a human being. Pike et al. \citeyearpar{pike2009science} note that ``interaction'' is an overloaded term that can refer to either the concrete set of tools through which users manipulate the visual information or to the more abstract ``human interaction with information'' - the back-and-forth between the user and the visual information presented to them \citep[see also][]{yi2007toward}. Which definition you use depends on the field: statisticians and computer scientists primarily talk about interactive visualizations as things, whereas researchers in the fields of cognitive science and human-computer interaction tend to emphasize interactive visualization as action, although there is also considerable overlap. While the cognitive aspect of humans interacting with visual information is definitely interesting, for the purpose of this thesis, I will mainly talk about ``interactive visualizations'' as things, i.e.~visual objects that live on a computer screen.
+
+Yet, even if we narrow down the focus on interactive visualizations as visual objects, there is still a lot of ambiguity, and some researchers define interactive visualizations very broadly. For example, there are those that talk about interactive visualizations as any visualizations can be actively manipulated by the user \citep{brodbeck2009}. To others, the key thing about interactivity is time, or rather, the lag between the user's input and changes to the visualization, with less lag meaning more interactivity \citep{becker1987brushing, buja1996interactive}. Some even make the distinction between ``interactive'' and ``dynamic'' manipulation, where interactive manipulation happens discretely such as by pressing a button or selecting an item from a drop-down menu, whereas dynamic manipulation happens continuously, in real-time, for example by smoothly moving a slider or by clicking-and-dragging \citep{rheingans2002we, jankun2007model}. What these two definitions - which I will label the ``basic'' and ``temporal'' - have in common is that they impose relatively little restrictions on what can be considered interactive visualization. For example, one could argue that running code from a command line to render a new plot could be considered interactive visualization, under these definitions.
+
+In contrast, other researchers consider the category of ``interactive visualizations'' to be much narrower. For many, the defining features are the ability to query different parts of the dataset (by e.g.~zooming, panning, and filtering), and the propagation of changes between connected or ``linked'' parts of the visualization \citep{kehrer2012generic, buja1996interactive, keim2002information, unwin1999mar}. Similarly, in Visual Analytics (VA) research, a distinction is made between ``surface-level'' and ``parametric'' interactions, where surface-level interactions manipulate attributes of the visual domain only (e.g.~zooming and panning), whereas parametric interactions manipulate attributes of mathematical models underlying the visualization \citep{leman2013visual}. These definitions of interactivity - which I will label ``filtering'', ``linked'', and ``parametric'' -
+
+for example by brushing points on a scatterplot within a linked scatterplot matrix
+
+Put simply, . Below, in Table \ref{tab:definitions}, I have attempted to summarize the main types of interactivity in data visualizations. This list is not supposed to be exhaustive as many more complete and detailed taxonomies of interactive visualizations have been described \citep[see][]{yi2007toward}. Instead, the point of this list is to provide a rough sketch of the space interactive visualizations live in:
+
+\begin{longtable}[t]{l|l|l}
+\caption{\label{tab:definitions}Types of interactivity}\\
+\hline
+Type & Short definition & Details\\
+\hline
+Basic & Change happens at all & The user has the ability to manipulate some graphical attributes of the visual display.\\
+\hline
+Temporal & Change happens “in real-time” & The user’s input produces changes to the visual display fluidly, with little lag, real-time change is sometimes called dynamic.\\
+\hline
+Linked & Change propagates & Parts of the visual display are linked together and "communicate", i.e. the user's interaction with one plot produces a change in another plot (e.g. linked brushing)\\
+\hline
+Parametric & Change affects underlying models & The user can manipulate the underlying mathematical structure behind the visual display, not just its surface-level graphical attributes\\
+\hline
+(Cognitive) & Change is perceived by a human & There is a back-and-forth between the visual information displayed and the user's perception, cognition, insights, etc...\\
+\hline
+\end{longtable}
+
+Using the term ``interactive'' to cover such a wide range of diverse concepts makes it difficult to clearly classify visualizations. For example, imagine we have a single scatterplot. The user can click-and-drag this scatterplot to highlight certain points, which will then change color. Should the scatterplot be considered ``interactive''? Under the most basic definition, yes, since the user \emph{can} affect the visual display. However, under this broad definition, even the process of running code from the command line to produce a new plot could be considered interactive visualization. What if we instead used the linked or parametric definitions of interactivity? With only a single plot, there's nowhere for our interactions to propagate to, and changing the color of individual points can hardly be considered a change to a mathematical model, so our verdict would then have to be ``not interactive''. What about the temporal definition? If we assume the results of the user interaction render smoothly enough, then we could label the plot as ``interactive''. However, what if more data is added to the plot and the user now has to wait several hundred milliseconds before the result of the brushing is rendered? Does the plot stop being interactive (or dynamic) as the result of limited computational resources? Finally, is the plot interactive in the cognitive sense? Perhaps so, if it can help to generate new insights. That's not something that's easy to quantify, however, and if there was a plot that was more conducive to insights, should we consider it interactive? Therefore, even with such a simple example, there are many arguments for calling a plot interactive or not.
+
+The conceptual ambiguity about what ``interactivity'' is bleeds through to the software implementations. For example, the \href{https://r-graph-gallery.com/interactive-charts.html}{R Graph Gallery entry on Interactive Charts} \citep{holtz2022interactive} features several example plots which allow for surface-level user interactions such zooming, panning, hovering, 3D rotation, and node repositioning within a network graph. Crucially, in all of the examples, the user only interacts with a single plot and can only affect its graphical attributes, and so these visualizations do not meet the communicating and parametric definitions of interactivity. In contrast, the \href{https://dash.plotly.com/interactive-graphing}{Plotly Dash documentation page on Interactive Visualizations} \citep{bibentry2022plotly} features examples of linked hovering and cross-filtering, i.e.~examples of communicating and parametric interactivity. Somewhat differently again, \href{https://vega.github.io/vega-lite/examples/\#interactive-charts}{VegaLite Gallery pages on Interactive Charts} and \href{https://vega.github.io/vega-lite/examples/\#interactive-multi-view-displays}{Interactive Multiview Displays} \citep{bibentry2022vegalite} feature many examples, however, only a few meet the linked and parametric definitions.
+
+\hypertarget{design}{%
+\chapter{Design}\label{design}}
+
+\hypertarget{graphic-design}{%
+\section{Graphic Design}\label{graphic-design}}
+
+\begin{quote}
+{[}A good visualization{]} is ``boring'' in the right way. It's not trying to do too much, so you can focus on the message that is being communicated. {[}\ldots{]} I don't want {[}the visualization{]} to be ``pretty'', I want it to be visually pleasing enough that it doesn't distract {[}from the information being presented{]}.
+
+Visualization Q\&A Livestream \citep{betancourt2020may}
+\end{quote}
+
+\begin{quote}
+Graphical excellence is that which gives to the viewer the greatest number of ideas in the shortest time with the least ink in the smallest space
+
+The Visual Display of Quantitative Information \citep{tufte2001visual}
+\end{quote}
+
+Absence of graphical features can be equally as valuable as their presence (or arguably even moreso). In the cult classic book on the design of comics and graphical novels, Understanding Comics: The Invisible Art, Scott McCloud \citeyearpar{mccloud1994apr} repeatedly stresses the importance of not just the things that appear on the page, but also the ones that are purposefully left out. For example, McCloud demonstrates how closure - the gap between the panels of a comic strip - is crucial for conveying meaning. In a similar vein, Tufte \citeyearpar{tufte2001visual} shows how the absence of elements such as gridlines and axis ticks can greatly enhance the clarity and effectiveness of data visualization. Since interactive visualizations are static visualizations most of the time, the same principles apply. The default graphical setting of the visualization should therefore be as simple and austere as possible, within reason and unless the user explicitly desires otherwise.
+
+The visualization should also adhere to the big four principles of graphic design: \textbf{contrast}, \textbf{repetition}, \textbf{alignment}, and \textbf{proximity} \citep[CRAP,][]{williams2004nondesigner}. \textbf{Contrast} provides a way to direct the viewer's attention and this makes it one of the most important concepts in graphic design \citep{reynolds2011dec}. To properly leverage contrast, we should present large visual differences (contrast) in the parts of the visualization that we want the user to focus on, and, conversely, make the less important parts of the visualization appear more visually uniform. For a concrete example, when highlighting as a result of linked brushing, the highlight color should contrast strongly with the base color, and this can be achieved by using a muted (e.g.~light gray) color for the base and a more vibrant color (e.g.~green) as the highlight. As opposed to contrast, \textbf{repetition} provides a sense of visual unity and consistency.
+
+The choice of colors also greatly influences
+
+\hypertarget{user-interface}{%
+\section{User Interface}\label{user-interface}}
+
+When a user first looks at the interactive visualization, they should immediately perceive it as a coherent, unified whole. This is to reinforce that fact that the individual plots and other graphical elements are inextricably linked via a shared data structure. Everything that happens in the visual scene should be intuitive, synchronous, and result from the user's direct intentions.
+
+Making the interactive scene look visually unified can be achieved through several means. A consistent color scheme should be used across the different plots and other elements that make up the visualization.
+
+\hypertarget{technical-design}{%
+\section{Technical Design}\label{technical-design}}
+
+\hypertarget{sec-scene}{%
+\subsection{Scene}\label{sec-scene}}
+
+Scene is the object that is placed the highest in the program hierarchy. It represents the unified whole of the information that the user sees and interacts with, both visually and programmatically. All other visual and interactive elements are defined as its children, and scene is responsible for organizing and coordinating them, either directly or via intermediaries that are also its children. The two main classes of elements defined on the scene are:
+
+\begin{itemize}
+\tightlist
+\item
+  Global Handlers
+\item
+  Plots
+\end{itemize}
+
+\hypertarget{global-handlers}{%
+\subsection{Global Handlers}\label{global-handlers}}
+
+Global handlers are child objects of \protect\hyperlink{sec-scene}{Scene} that take care of things such as how plots are sized and placed together, how the scene responds to keyboard input, how it responds to certain cases (rows of the data) being selected, and how it responds to changes of state.
+
+\begin{itemize}
+\tightlist
+\item
+  Marker
+\item
+  State handler
+\item
+  Keyboard handler
+\item
+  Size handler
+\end{itemize}
+
+\hypertarget{sec-global-handlers}{%
+\subsubsection{Marker}\label{sec-global-handlers}}
+
+Marker is a \protect\hyperlink{sec-global-handlers}{global handler} whose primary task is to listen to changes in the membership of the cases in our data and answers questions about them. For example, if each case (row) in our data is a participant, we can tell Marker things such as \emph{``mark participants 10, 11, and 12 as belonging to group 2''}, and ask things such as \emph{``which participants currently belong to group 1?''}, or \emph{``which participants currently belong to transient selection?''}.
+
+  \bibliography{book.bib,packages.bib,references.bib}
+
+\end{document}

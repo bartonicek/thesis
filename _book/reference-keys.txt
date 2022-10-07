@@ -1,0 +1,13 @@
+tab:definitions
+introduction
+literature-review
+what-even-is-interactivity
+types-of-interactive-features
+current-options-for-interactive-visualizations
+design
+graphic-design
+user-interface
+technical-design
+sec-scene
+global-handlers
+sec-global-handlers

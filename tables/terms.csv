@@ -1,0 +1,3 @@
+Term,Description,Examples
+Visual scene,"The entirety of the visual information presented to the user as a coherent unit. Can consist of elements such as: plots, tables, auxiliary elements (e.g. title, explanatory text), interactive widgets (e.g. slider, drop-down menu).","A single static scatterplot, an interactive scatterplot matrix with linked brushing, a complex dashboard."
+Visual display,"The graphical aspect of the visual information presented to the user. Concerns various graphical elements such as colour, length, area, motion/speed.","A single realization of a (possibly interactive) visual scene, with a specific color scheme, size of graphical primitives, etc..., presented on a computer screen."

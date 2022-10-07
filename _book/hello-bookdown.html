@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Efficient and Principled Interactive Data Visualization with plotscape</title>
+  <meta name="description" content="<p>This is a minimal example of using the bookdown package to write a book.
+set in the _output.yml file.
+The HTML output format for this example is bookdown::gitbook,</p>" />
+  <meta name="generator" content="bookdown 0.29 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Efficient and Principled Interactive Data Visualization with plotscape" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="<p>This is a minimal example of using the bookdown package to write a book.
+set in the _output.yml file.
+The HTML output format for this example is bookdown::gitbook,</p>" />
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Efficient and Principled Interactive Data Visualization with plotscape" />
+  
+  <meta name="twitter:description" content="<p>This is a minimal example of using the bookdown package to write a book.
+set in the _output.yml file.
+The HTML output format for this example is bookdown::gitbook,</p>" />
+  
+
+<meta name="author" content="Adam Bartonicek" />
+
+
+<meta name="date" content="2022-10-06" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+
+<link rel="next" href="references.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="hello-bookdown.html"><a href="hello-bookdown.html"><i class="fa fa-check"></i><b>1</b> Hello bookdown</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="hello-bookdown.html"><a href="hello-bookdown.html#a-section"><i class="fa fa-check"></i><b>1.1</b> A section</a>
+<ul>
+<li class="chapter" data-level="" data-path="hello-bookdown.html"><a href="hello-bookdown.html#an-unnumbered-section"><i class="fa fa-check"></i>An unnumbered section</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="hello-bookdown.html"><a href="hello-bookdown.html#what-even-is-interactivity"><i class="fa fa-check"></i><b>1.2</b> What even is interactivity?</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Efficient and Principled Interactive Data Visualization with plotscape</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="header">
+<h1 class="title">Efficient and Principled Interactive Data Visualization with plotscape</h1>
+<p class="author"><em>Adam Bartonicek</em></p>
+<p class="date"><em>2022-10-06</em></p>
+</div>
+<div id="hello-bookdown" class="section level1 hasAnchor" number="1">
+<h1><span class="header-section-number">Chapter 1</span> Hello bookdown<a href="hello-bookdown.html#hello-bookdown" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>All chapters start with a first-level heading followed by your chapter title, like the line above. There should be only one first-level heading (<code>#</code>) per .Rmd file.</p>
+<div id="a-section" class="section level2 hasAnchor" number="1.1">
+<h2><span class="header-section-number">1.1</span> A section<a href="hello-bookdown.html#a-section" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>All chapter sections start with a second-level (<code>##</code>) or higher heading followed by your section title, like the sections above and below here. You can have as many as you want within a chapter.</p>
+<div id="an-unnumbered-section" class="section level3 unnumbered hasAnchor">
+<h3>An unnumbered section<a href="hello-bookdown.html#an-unnumbered-section" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Chapters and sections are numbered by default. To un-number a heading, add a <code>{.unnumbered}</code> or the shorter <code>{-}</code> at the end of the heading, like in this section.</p>
+
+</div>
+</div>
+<div id="what-even-is-interactivity" class="section level2 hasAnchor" number="1.2">
+<h2><span class="header-section-number">1.2</span> What even is interactivity?<a href="hello-bookdown.html#what-even-is-interactivity" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Despite the popularity of interactive data visualization, researchers seem to have many different ideas as to what it means for a visualization to be “interactive”. For example, Pike et al. <span class="citation">(<a href="#ref-pike2009science" role="doc-biblioref">2009</a>)</span> note that “interaction” is an overloaded term that can either refer to the concrete tools that users can use to manipulate the visualization, or to the more abstract “human interaction with information” - the back-and-forth between the user’s cognition and the visual information presented to them <span class="citation">(see also <a href="#ref-yi2007toward" role="doc-biblioref">Yi et al. 2007</a>)</span>. For others, the key measure of interactivity is lag between the user’s input and changes to the visualization, with less lag meaning more interactivity <span class="citation">(<a href="#ref-becker1987brushing" role="doc-biblioref">Becker and Cleveland 1987</a>; <a href="#ref-buja1996interactive" role="doc-biblioref">Buja, Cook, and Swayne 1996</a>)</span>, and some make the distinction between “interactive” and “dynamic” manipulation, where interactive manipulation induces change discretely such as by pressing a button or selecting an item from a menu to render a new display, whereas dynamic manipulation induces a real-time, continuous change, for example by smoothly moving a slider or by clicking-and-dragging <span class="citation">(<a href="#ref-rheingans2002we" role="doc-biblioref">Rheingans 2002</a>; <a href="#ref-jankun2007model" role="doc-biblioref">Jankun-Kelly, Ma, and Gertz 2007</a>)</span>. Yet for others, the defining features are the ability to query different parts of the dataset (by e.g. zooming and filtering), and that the interactions propagate between “linked” parts of the visualization, for example by brushing points on a scatterplot within a linked scatterplot matrix <span class="citation">(<a href="#ref-kehrer2012generic" role="doc-biblioref">Kehrer et al. 2012</a>; <a href="#ref-buja1996interactive" role="doc-biblioref">Buja, Cook, and Swayne 1996</a>; <a href="#ref-keim2002information" role="doc-biblioref">Keim 2002</a>; <a href="#ref-unwin1999mar" role="doc-biblioref">Unwin 1999</a>)</span>. Similarly, in Visual Analytics (VA) research, distinction is made between surface-level and parametric interactions, where surface-level interactions manipulate attributes of the visual domain only (e.g. zooming, panning, highlighting), whereas parametric interactions manipulate attributes of mathematical models underlying the visualization <span class="citation">(<a href="#ref-leman2013visual" role="doc-biblioref">Leman et al. 2013</a>)</span>. Put simply, the terms “interaction”, “interactive”, and “interactivity” mean a lot of different things to a lot of different people.</p>
+<p>Below, in <span class="citation">(<a href="#ref-tbl-definitions" role="doc-biblioref"><strong>tbl-definitions?</strong></a>)</span>, I have attempted to summarize the main types of interactivity in data visualizations. This list is not supposed to be exhaustive as many more complete and detailed taxonomies of interactive visualizations have been described <span class="citation">(see <a href="#ref-yi2007toward" role="doc-biblioref">Yi et al. 2007</a>)</span>. Instead, the point of this list is to provide a rough sketch of the space interactive visualizations live in:</p>
+
+</div>
+</div>
+<h3>References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-becker1987brushing" class="csl-entry">
+Becker, Richard A, and William S Cleveland. 1987. <span>“Brushing Scatterplots.”</span> <em>Technometrics</em> 29 (2): 127–42.
+</div>
+<div id="ref-buja1996interactive" class="csl-entry">
+Buja, Andreas, Dianne Cook, and Deborah F Swayne. 1996. <span>“Interactive High-Dimensional Data Visualization.”</span> <em>Journal of Computational and Graphical Statistics</em> 5 (1): 78–99.
+</div>
+<div id="ref-jankun2007model" class="csl-entry">
+Jankun-Kelly, TJ, Kwan-Liu Ma, and Michael Gertz. 2007. <span>“A Model and Framework for Visualization Exploration.”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em> 13 (2): 357–69.
+</div>
+<div id="ref-kehrer2012generic" class="csl-entry">
+Kehrer, Johannes, Roland N Boubela, Peter Filzmoser, and Harald Piringer. 2012. <span>“A Generic Model for the Integration of Interactive Visualization and Statistical Computing Using r.”</span> In <em>2012 IEEE Conference on Visual Analytics Science and Technology (VAST)</em>, 233–34. IEEE.
+</div>
+<div id="ref-keim2002information" class="csl-entry">
+Keim, Daniel A. 2002. <span>“Information Visualization and Visual Data Mining.”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em> 8 (1): 1–8.
+</div>
+<div id="ref-leman2013visual" class="csl-entry">
+Leman, Scotland C, Leanna House, Dipayan Maiti, Alex Endert, and Chris North. 2013. <span>“Visual to Parametric Interaction (V2pi).”</span> <em>PloS One</em> 8 (3): e50474.
+</div>
+<div id="ref-pike2009science" class="csl-entry">
+Pike, William A, John Stasko, Remco Chang, and Theresa A O’connell. 2009. <span>“The Science of Interaction.”</span> <em>Information Visualization</em> 8 (4): 263–74.
+</div>
+<div id="ref-rheingans2002we" class="csl-entry">
+Rheingans, Penny. 2002. <span>“Are We There yet? Exploring with Dynamic Visualization.”</span> <em>IEEE Computer Graphics and Applications</em> 22 (1): 6–10.
+</div>
+<div id="ref-unwin1999mar" class="csl-entry">
+Unwin, Antony. 1999. <span>“<span class="nocase">Requirements for interactive graphics software for exploratory data analysis</span>.”</span> <em>Comput. Statist.</em> 14 (1): 7–22. <a href="https://doi.org/10.1007/PL00022706">https://doi.org/10.1007/PL00022706</a>.
+</div>
+<div id="ref-yi2007toward" class="csl-entry">
+Yi, Ji Soo, Youn ah Kang, John Stasko, and Julie A Jacko. 2007. <span>“Toward a Deeper Understanding of the Role of Interaction in Information Visualization.”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em> 13 (6): 1224–31.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+
+<a href="references.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/01-intro.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf", "_main.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

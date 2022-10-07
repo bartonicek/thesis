@@ -1,0 +1,45 @@
+# Design
+
+## Graphic Design
+
+> [A good visualization] is "boring" in the right way. It's not trying to do too much, so you can focus on the message that is being communicated. [...] I don't want [the visualization] to be "pretty", I want it to be visually pleasing enough that it doesn't distract [from the information being presented]. 
+>
+> Visualization Q&A Livestream [@betancourt2020may]
+
+> Graphical excellence is that which gives to the viewer the greatest number of ideas in the shortest time with the least ink in the smallest space
+>
+> The Visual Display of Quantitative Information [@tufte2001visual]
+
+Absence of graphical features can be equally as valuable as their presence (or arguably even moreso). In the cult classic book on the design of comics and graphical novels, Understanding Comics: The Invisible Art, Scott McCloud [-@mccloud1994apr] repeatedly stresses the importance of not just the things that appear on the page, but also the ones that are purposefully left out. For example, McCloud demonstrates how closure - the gap between the panels of a comic strip - is crucial for conveying meaning. In a similar vein, Tufte [-@tufte2001visual] shows how the absence of elements such as gridlines and axis ticks can greatly enhance the clarity and effectiveness of data visualization. Since interactive visualizations are static visualizations most of the time, the same principles apply. The default graphical setting of the visualization should therefore be as simple and austere as possible, within reason and unless the user explicitly desires otherwise.
+
+The visualization should also adhere to the big four principles of graphic design: **contrast**, **repetition**, **alignment**, and **proximity** [CRAP, @williams2004nondesigner]. **Contrast** provides a way to direct the viewer's attention and this makes it one of the most important concepts in graphic design [@reynolds2011dec]. To properly leverage contrast, we should present large visual differences (contrast) in the parts of the visualization that we want the user to focus on, and, conversely, make the less important parts of the visualization appear more visually uniform. For a concrete example, when highlighting as a result of linked brushing, the highlight color should contrast strongly with the base color, and this can be achieved by using a muted (e.g. light gray) color for the base and a more vibrant color (e.g. green) as the highlight. As opposed to contrast, **repetition** provides a sense of visual unity and consistency.  
+
+The choice of colors also greatly influences 
+
+## User Interface
+
+When a user first looks at the interactive visualization, they should immediately perceive it as a coherent, unified whole. This is to reinforce that fact that the individual plots and other graphical elements are inextricably linked via a shared data structure. Everything that happens in the visual scene should be intuitive, synchronous, and result from the user's direct intentions.
+
+Making the interactive scene look visually unified can be achieved through several means. A consistent color scheme should be used across the different plots and other elements that make up the visualization. 
+
+## Technical Design
+
+### Scene {#sec-scene}
+
+Scene is the object that is placed the highest in the program hierarchy. It represents the unified whole of the information that the user sees and interacts with, both visually and programmatically. All other visual and interactive elements are defined as its children, and scene is responsible for organizing and coordinating them, either directly or via intermediaries that are also its children. The two main classes of elements defined on the scene are:
+
+- Global Handlers
+- Plots
+
+### Global Handlers
+
+Global handlers are child objects of [Scene](#sec-scene) that take care of things such as how plots are sized and placed together, how the scene responds to keyboard input, how it responds to certain cases (rows of the data) being selected, and how it responds to changes of state.    
+
+- Marker 
+- State handler
+- Keyboard handler
+- Size handler
+
+#### Marker {#sec-global-handlers}
+
+Marker is a [global handler](#sec-global-handlers) whose primary task is to listen to changes in the membership of the cases in our data and answers questions about them. For example, if each case (row) in our data is a participant, we can tell Marker things such as *"mark participants 10, 11, and 12 as belonging to group 2"*, and ask things such as *"which participants currently belong to group 1?"*, or *"which participants currently belong to transient selection?"*.
