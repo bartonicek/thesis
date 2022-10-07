@@ -60,8 +60,82 @@ The HTML output format for this example is bookdown::gitbook,</p>" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.10.0/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.5.1/plotly-latest.min.js"></script>
+<link href="libs/plotscape-1.0.0/styles.css" rel="stylesheet" />
+<script src="libs/plotscape-1.0.0/bundle.js"></script>
+<script src="libs/plotscapeTest-binding-0.0.0.9000/plotscapeTest.js"></script>
 
 
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
 
 <style type="text/css">
 /* Used with Pandoc 2.11+ new --citeproc when CSL is used */
@@ -105,7 +179,7 @@ div.csl-indent {
 <li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
 <li class="chapter" data-level="2" data-path="literature-review.html"><a href="literature-review.html"><i class="fa fa-check"></i><b>2</b> Literature Review</a>
 <ul>
-<li class="chapter" data-level="2.1" data-path="literature-review.html"><a href="literature-review.html#what-even-is-interactivity"><i class="fa fa-check"></i><b>2.1</b> What even is interactivity?</a></li>
+<li class="chapter" data-level="2.1" data-path="literature-review.html"><a href="literature-review.html#what-is-interactivity"><i class="fa fa-check"></i><b>2.1</b> What even is interactivity?</a></li>
 <li class="chapter" data-level="2.2" data-path="literature-review.html"><a href="literature-review.html#types-of-interactive-features"><i class="fa fa-check"></i><b>2.2</b> Types of Interactive Features</a></li>
 <li class="chapter" data-level="2.3" data-path="literature-review.html"><a href="literature-review.html#current-options-for-interactive-visualizations"><i class="fa fa-check"></i><b>2.3</b> Current Options for Interactive Visualizations</a></li>
 </ul></li>
@@ -143,17 +217,18 @@ div.csl-indent {
 <div id="literature-review" class="section level1 hasAnchor" number="2">
 <h1><span class="header-section-number">Chapter 2</span> Literature Review<a href="literature-review.html#literature-review" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>Interactive data visualization is popular. Interactive figures appear everywhere, from news articles, to business-analytic dashboards, to science communication outlets such as journal websites and personal blogs. Yet, despite the popularity, there does seem to be a lot of unanswered questions about them.</p>
-<div id="what-even-is-interactivity" class="section level2 hasAnchor" number="2.1">
-<h2><span class="header-section-number">2.1</span> What even is interactivity?<a href="literature-review.html#what-even-is-interactivity" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="what-is-interactivity" class="section level2 hasAnchor" number="2.1">
+<h2><span class="header-section-number">2.1</span> What even is interactivity?<a href="literature-review.html#what-is-interactivity" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <blockquote>
 <p>If it looks like a duck, swims like a duck, and quacks like a duck, then it probably is a duck.</p>
+<p>[…] The irony is that while the phrase is often cited as proof of abductive reasoning, it is not proof, as the mechanical duck is still not a living duck</p>
 <p><a href="https://en.wikipedia.org/wiki/Duck_test">Duck Test</a> entry, <span class="citation">(<a href="#ref-wikipedia2022" role="doc-biblioref">Wikipedia 2022</a>)</span></p>
 </blockquote>
 <p>What is an interactive visualization? It may seen like a silly question. So many people talk about interactive visualizations, then, surely, they must all be referring to the same thing, right? Unfortunately, that does not seem to be the case. When researchers and applied practitioners say “interactive visualization”, they tend to refer to many different things in many different contexts.</p>
 <p>First off, it is necessary to disambiguate whether we refer to “interactive visualization” as a noun, a thing that exists, or to “interactive visualization” as a process, an action undertaken by a human being. Pike et al. <span class="citation">(<a href="#ref-pike2009science" role="doc-biblioref">2009</a>)</span> note that “interaction” is an overloaded term that can refer to either the concrete set of tools through which users manipulate the visual information or to the more abstract “human interaction with information” - the back-and-forth between the user and the visual information presented to them <span class="citation">(see also <a href="#ref-yi2007toward" role="doc-biblioref">Yi et al. 2007</a>)</span>. Which definition you use depends on the field: statisticians and computer scientists primarily talk about interactive visualizations as things, whereas researchers in the fields of cognitive science and human-computer interaction tend to emphasize interactive visualization as action, although there is also considerable overlap. While the cognitive aspect of humans interacting with visual information is definitely interesting, for the purpose of this thesis, I will mainly talk about “interactive visualizations” as things, i.e. visual objects that live on a computer screen.</p>
 <p>Yet, even if we narrow down the focus on interactive visualizations as visual objects, there is still a lot of ambiguity, and some researchers define interactive visualizations very broadly. For example, there are those that talk about interactive visualizations as any visualizations can be actively manipulated by the user <span class="citation">(<a href="#ref-brodbeck2009" role="doc-biblioref">Brodbeck, Mazza, and Lalanne 2009</a>)</span>. To others, the key thing about interactivity is time, or rather, the lag between the user’s input and changes to the visualization, with less lag meaning more interactivity <span class="citation">(<a href="#ref-becker1987brushing" role="doc-biblioref">Becker and Cleveland 1987</a>; <a href="#ref-buja1996interactive" role="doc-biblioref">Buja, Cook, and Swayne 1996</a>)</span>. Some even make the distinction between “interactive” and “dynamic” manipulation, where interactive manipulation happens discretely such as by pressing a button or selecting an item from a drop-down menu, whereas dynamic manipulation happens continuously, in real-time, for example by smoothly moving a slider or by clicking-and-dragging <span class="citation">(<a href="#ref-rheingans2002we" role="doc-biblioref">Rheingans 2002</a>; <a href="#ref-jankun2007model" role="doc-biblioref">Jankun-Kelly, Ma, and Gertz 2007</a>)</span>. What these two definitions - which I will label the “basic” and “temporal” - have in common is that they impose relatively little restrictions on what can be considered an interactive visualization. For example, one could argue if the user runs a code from a command line to generate a new plot, this could be considered interactive visualization, under these definitions.</p>
 <p>In contrast, other researchers consider the category of “interactive visualizations” to be much narrower. For many, the defining features are the ability to query different parts of the dataset (by e.g. zooming, panning, and filtering), and the propagation of changes between connected or “linked” parts of the visualization <span class="citation">(<a href="#ref-kehrer2012generic" role="doc-biblioref">Kehrer et al. 2012</a>; <a href="#ref-buja1996interactive" role="doc-biblioref">Buja, Cook, and Swayne 1996</a>; <a href="#ref-keim2002information" role="doc-biblioref">Keim 2002</a>; <a href="#ref-unwin1999mar" role="doc-biblioref">Unwin 1999</a>)</span>. Similarly, in Visual Analytics (VA) research, a distinction is made between “surface-level” and “parametric” interactions, where surface-level interactions manipulate attributes of the visual domain only (e.g. zooming and panning), whereas parametric interactions manipulate attributes of mathematical models underlying the visualization <span class="citation">(<a href="#ref-leman2013visual" role="doc-biblioref">Leman et al. 2013</a>)</span>. These definitions of interactivity - which I will label “filtering”, “linked”, and “parametric” - can describe considerably more complex objects. Specifically, while filtering interactions like zooming and panning can be implemented by manipulating graphical attributes (i.e. coordinate system) of the visualization only, linked and parametric interactions require special underlying data structures in all but the most simple cases. For example, in a prototypical case of an interactive feature called “linked brushing”, the user can click-and-drag to select points on a scatter plot and the selection will then be reflected in another plot, for example, by drawing a bars in a barplot with the heights corresponding to the number of the selected points. This requires the barplot to be “aware” of which cases in the data (corresponding to the points in the scatterplot) have been selected, and it has to respond to these changes online, in real time, by recomputing the height of the newly drawn bars.</p>
-<p>Put simply, the term “interactive visualization” seems to mean a lot of different things to a lot of different people. Below, in Table <a href="literature-review.html#tab:definitions">2.1</a>, I have attempted to summarize the main types of interactivity in data visualizations. This list is not supposed to be exhaustive as more complete and detailed taxonomies of interactive visualizations have been described <span class="citation">(see <a href="#ref-yi2007toward" role="doc-biblioref">Yi et al. 2007</a>)</span>. Instead, the point of this list is to provide a rough sketch of the space interactive visualizations live in:</p>
+<p>Put simply, the term “interactive visualization” means a lot of different things to a lot of different people, unfortunately. Below, in Table <a href="literature-review.html#tab:definitions">2.1</a>, I have attempted to summarize the main types of interactivity in data visualizations. This list is not supposed to be exhaustive as more complete and detailed taxonomies of interactive visualizations have been described <span class="citation">(see <a href="#ref-yi2007toward" role="doc-biblioref">Yi et al. 2007</a>)</span>. Instead, the point of this list is to provide a rough sketch of the space interactive visualizations live in:</p>
 <table>
 <caption><span id="tab:definitions">Table 2.1: </span>Types of interactivity</caption>
 <colgroup>
@@ -202,19 +277,30 @@ div.csl-indent {
 </tbody>
 </table>
 <p>Using the term “interactive” to cover such a wide range of visualizations leads to ambiguity. For example, imagine we have a single scatterplot. The user can click-and-drag this scatterplot to highlight certain points (i.e. brush). Should this scatterplot be considered “interactive”? Under the most basic definition, yes, since the user <em>can</em> affect the visualization through interaction. However, some researcher may not be satisfied with that and may ask us to tell them whether the visualization meets linked or parametric defition of interactivity. With only a single plot, there’s nowhere for our interactions to propagate to, and changing the color of individual points can hardly be considered a change to a mathematical model, so our verdict would then have to be “not interactive”. What if the researcher was a fan of the temporal definition? If we assume the results of the user’s interactions render smoothly enough, we could certainly call the plot interactive. However, what if more data is added to the plot and the user now has to wait several hundreds of milliseconds, or even seconds, before the interaction is rendered? Does an interactive visualization stop being interactive as a result of our computational resources being reduced? Therefore, even with such a simple example, there are many arguments that could be made for and against calling a plot interactive.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="literature-review.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(plotly)</span>
+<span id="cb1-2"><a href="literature-review.html#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_ly</span>(mtcars, <span class="at">x =</span> <span class="sc">~</span>wt, <span class="at">y =</span> <span class="sc">~</span>mpg)</span></code></pre></div>
+<div id="htmlwidget-8cc83aa72608215ca2a0" style="width:672px;height:480px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-8cc83aa72608215ca2a0">{"x":{"visdat":{"1587636b21fa4":["function () ","plotlyVisDat"]},"cur_data":"1587636b21fa4","attrs":{"1587636b21fa4":{"x":{},"y":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20]}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"xaxis":{"domain":[0,1],"automargin":true,"title":"wt"},"yaxis":{"domain":[0,1],"automargin":true,"title":"mpg"},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[2.62,2.875,2.32,3.215,3.44,3.46,3.57,3.19,3.15,3.44,3.44,4.07,3.73,3.78,5.25,5.424,5.345,2.2,1.615,1.835,2.465,3.52,3.435,3.84,3.845,1.935,2.14,1.513,3.17,2.77,3.57,2.78],"y":[21,21,22.8,21.4,18.7,18.1,14.3,24.4,22.8,19.2,17.8,16.4,17.3,15.2,10.4,10.4,14.7,32.4,30.4,33.9,21.5,15.5,15.2,13.3,19.2,27.3,26,30.4,15.8,19.7,15,21.4],"type":"scatter","mode":"markers","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"line":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<blockquote>
+<p>Is this an interactive visualization? Depends on who you ask.</p>
+</blockquote>
 </div>
 <div id="types-of-interactive-features" class="section level2 hasAnchor" number="2.2">
 <h2><span class="header-section-number">2.2</span> Types of Interactive Features<a href="literature-review.html#types-of-interactive-features" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 </div>
 <div id="current-options-for-interactive-visualizations" class="section level2 hasAnchor" number="2.3">
 <h2><span class="header-section-number">2.3</span> Current Options for Interactive Visualizations<a href="literature-review.html#current-options-for-interactive-visualizations" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>It may seem that the conceptual ambiguity about what counts as an “interactive visualization” is just an academic matter, however, it has real consequences for the software implementations. For example, the <a href="https://r-graph-gallery.com/interactive-charts.html">R Graph Gallery entry on Interactive Charts</a> <span class="citation">(<a href="#ref-holtz2022interactive" role="doc-biblioref">Holtz 2022</a>)</span> several visualizations which allow for surface-level user interactions such zooming, panning, hovering, 3D rotation, and node repositioning within a network graph. However, in all of the examples, the user only affect graphical attributes of a single plot, and so these visualizations do not meet the linked and parametric definitions of interactivity. In contrast, the <a href="https://dash.plotly.com/interactive-graphing">Plotly Dash documentation page on Interactive Visualizations</a> <span class="citation">(<a href="#ref-bibentry2022plotly" role="doc-biblioref">Plotly Inc. 2022</a>)</span> features examples of linked hovering and cross-filtering, i.e. examples of linked interactivity. However, it should be mentioned that the . Somewhat differently again, <a href="https://vega.github.io/vega-lite/examples/#interactive-charts">VegaLite Gallery pages on Interactive Charts</a> and <a href="https://vega.github.io/vega-lite/examples/#interactive-multi-view-displays">Interactive Multiview Displays</a> <span class="citation">(<a href="#ref-bibentry2022vegalite" role="doc-biblioref">Vega Project 2022</a>)</span> feature many examples, however, only a few meet the linked or parametric definitions.</p>
-<p>What all of the packages listed above have in common is that linked interactive visualization make up a small proportion of the featured visualizations, and require quite difficult setup.</p>
+<p>The conceptual ambiguity about what counts as “interactive visualization” described in Chapter <a href="literature-review.html#what-is-interactivity">2.1</a> bleeds through to software implementation. For example, the <a href="https://r-graph-gallery.com/interactive-charts.html">R Graph Gallery entry on Interactive Charts</a> <span class="citation">(<a href="#ref-holtz2022interactive" role="doc-biblioref">Holtz 2022</a>)</span> several visualizations which allow for surface-level user interactions such zooming, panning, hovering, 3D rotation, and node repositioning within a network graph. However, in all of the examples, the user only affect graphical attributes of a single plot, and so these visualizations do not meet the linked and parametric definitions of interactivity. In contrast, the <a href="https://dash.plotly.com/interactive-graphing">Plotly Dash documentation page on Interactive Visualizations</a> <span class="citation">(<a href="#ref-bibentry2022plotly" role="doc-biblioref">Plotly Inc. 2022</a>)</span> does feature two examples of linked hovering and cross-filtering, i.e. examples of linked interactivity. However, it should be noted that vast majority of visualizations in the <a href="https://plotly.com/r/">Plotly R Open Source Graphing Library documentation page</a> <span class="citation">(<a href="#ref-bibentry2022plotly" role="doc-biblioref">Plotly Inc. 2022</a>)</span> allow for only surface-level interactions. Similarly, <a href="https://vega.github.io/vega-lite/examples/#interactive-charts">VegaLite Gallery pages on Interactive Charts</a> and <a href="https://vega.github.io/vega-lite/examples/#interactive-multi-view-displays">Interactive Multiview Displays</a> <span class="citation">(<a href="#ref-bibentry2022vegalite" role="doc-biblioref">Vega Project 2022</a>)</span> feature many examples, however, only a few show limited examples of linked or parametric interactivity. Finally, the <a href="https://jkunst.com/highcharter/articles/showcase.html">Highcharter Showcase Page</a> <span class="citation">(<a href="#ref-kunst2022" role="doc-biblioref">Kunst 2022</a>)</span> does not feature any examples of linking or parametric interactivity.</p>
+<p>What all of the packages listed above have in common is that most interaction is typically surface-level and takes place within a single plot, and the examples that feature interesting types of interactivity (linked or parametric) require an extensive setup (i.e. many lines of code). The main reason for this is that all of these packages have been designed to be very general-purpose and flexible, and the price to pay for this flexibility is that complex types of interactivity require complex code. Another reason is that these packages have been built for static visualizations first, and interactivity second. Further, since all of these packages are native to JavaScript, the expectation may be that if more interesting types of interactivity are desired, the interactive “back-end” may be written separately, outside of the package.</p>
+<p>Be it as it may, there is a fairly high barrier for entry for creating interesting types of interactivity (i.e. linked or parametric) with these packages. This may not be an issue for large organizations which can afford to hire specialists to work on complex interactive dashboards and visualizations. However, to the average applied scientist or data analyst, the upfront cost may be too high, especially if one is only interested in exploratory data analysis for one’s own benefit. This may be the reason why interactive visualization is nowadays mainly used for communication, not exploration <span class="citation">(<a href="#ref-batch2017interactive" role="doc-biblioref">Batch and Elmqvist 2017</a>)</span></p>
 
 </div>
 </div>
 <h3>References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-batch2017interactive" class="csl-entry">
+Batch, Andrea, and Niklas Elmqvist. 2017. <span>“The Interactive Visualization Gap in Initial Exploratory Data Analysis.”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em> 24 (1): 278–87.
+</div>
 <div id="ref-becker1987brushing" class="csl-entry">
 Becker, Richard A, and William S Cleveland. 1987. <span>“Brushing Scatterplots.”</span> <em>Technometrics</em> 29 (2): 127–42.
 </div>
@@ -235,6 +321,9 @@ Kehrer, Johannes, Roland N Boubela, Peter Filzmoser, and Harald Piringer. 2012. 
 </div>
 <div id="ref-keim2002information" class="csl-entry">
 Keim, Daniel A. 2002. <span>“Information Visualization and Visual Data Mining.”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em> 8 (1): 1–8.
+</div>
+<div id="ref-kunst2022" class="csl-entry">
+Kunst, Joshua. 2022. <em>Highcharter: A Wrapper for the ’Highcharts’ Library</em>.
 </div>
 <div id="ref-leman2013visual" class="csl-entry">
 Leman, Scotland C, Leanna House, Dipayan Maiti, Alex Endert, and Chris North. 2013. <span>“Visual to Parametric Interaction (V2pi).”</span> <em>PloS One</em> 8 (3): e50474.

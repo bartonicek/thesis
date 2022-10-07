@@ -1,7 +1,7 @@
 tab:definitions
 introduction
 literature-review
-what-even-is-interactivity
+what-is-interactivity
 types-of-interactive-features
 current-options-for-interactive-visualizations
 design

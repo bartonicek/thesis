@@ -1,16 +1,29 @@
 # Design
 
-## Graphic Design
-
 > [A good visualization] is "boring" in the right way. It's not trying to do too much, so you can focus on the message that is being communicated. [...] I don't want [the visualization] to be "pretty", I want it to be visually pleasing enough that it doesn't distract [from the information being presented]. 
 >
 > Visualization Q&A Livestream [@betancourt2020may]
+
+```{r}
+
+library(plotscapeTest)
+
+ps_scene(mtcars) |>
+  ps_scatter(ps_map(x = "wt", y = "mpg")) |>
+  ps_bar(ps_map(x = "cyl")) |>
+  ps_histo(ps_map(x = "disp")) |>
+  ps_scatter(ps_map(x = "drat", y = "qsec")) 
+
+
+```
+
+## Graphic Design
 
 > Graphical excellence is that which gives to the viewer the greatest number of ideas in the shortest time with the least ink in the smallest space
 >
 > The Visual Display of Quantitative Information [@tufte2001visual]
 
-Absence of graphical features can be equally as valuable as their presence (or arguably even moreso). In the cult classic book on the design of comics and graphical novels, Understanding Comics: The Invisible Art, Scott McCloud [-@mccloud1994apr] repeatedly stresses the importance of not just the things that appear on the page, but also the ones that are purposefully left out. For example, McCloud demonstrates how closure - the gap between the panels of a comic strip - is crucial for conveying meaning. In a similar vein, Tufte [-@tufte2001visual] shows how the absence of elements such as gridlines and axis ticks can greatly enhance the clarity and effectiveness of data visualization. Since interactive visualizations are static visualizations most of the time, the same principles apply. The default graphical setting of the visualization should therefore be as simple and austere as possible, within reason and unless the user explicitly desires otherwise.
+Absence of graphical features can be equally as valuable as their presence (or arguably even moreso). In the cult classic book on the design of comics and graphical novels, Understanding Comics: The Invisible Art, Scott McCloud [-@mccloud1994apr] repeatedly stresses the importance of not just the things that appear on the page but also the ones that are purposefully left out. For example, McCloud demonstrates how closure - the gap between the panels of a comic strip - is crucial for conveying meaning. In a similar vein, Tufte [-@tufte2001visual] shows how the absence of elements such as gridlines and axis ticks can greatly enhance the clarity and effectiveness of data visualization. Since interactive visualizations are static visualizations most of the time, the same principles apply. The default graphical setting of the visualization should therefore be as simple and austere as possible, within reason and unless the user explicitly desires otherwise.
 
 The visualization should also adhere to the big four principles of graphic design: **contrast**, **repetition**, **alignment**, and **proximity** [CRAP, @williams2004nondesigner]. **Contrast** provides a way to direct the viewer's attention and this makes it one of the most important concepts in graphic design [@reynolds2011dec]. To properly leverage contrast, we should present large visual differences (contrast) in the parts of the visualization that we want the user to focus on, and, conversely, make the less important parts of the visualization appear more visually uniform. For a concrete example, when highlighting as a result of linked brushing, the highlight color should contrast strongly with the base color, and this can be achieved by using a muted (e.g. light gray) color for the base and a more vibrant color (e.g. green) as the highlight. As opposed to contrast, **repetition** provides a sense of visual unity and consistency.  
 
@@ -23,6 +36,8 @@ When a user first looks at the interactive visualization, they should immediatel
 Making the interactive scene look visually unified can be achieved through several means. A consistent color scheme should be used across the different plots and other elements that make up the visualization. 
 
 ## Technical Design
+
+The JavaScript source files were written in TypeScript `r system("tsc --v", intern = TRUE)` [@bierman2014understanding] and bundled and transpiled into JavaScript using the `typescript-bundle` package Version 1.0.18, using the VS Code IDE `r system("code --v", intern = TRUE)[1]`. All code written was native Typescript/JavaScript, no external JavaScript packages were used. The R interface to the package was written in `r system("R --version", intern = TRUE)[1]`, using the RStudio IDE 
 
 ### Scene {#sec-scene}
 

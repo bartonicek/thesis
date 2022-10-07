@@ -535,11 +535,12 @@ var PLOTSCAPE = (() => {
                     this.context.scale(this.scaleFactor, this.scaleFactor);
                 };
                 this.dropMissing = (...vectors) => {
-                    let missingIndices = [...vectors].flatMap((vector) => vector
-                        .flatMap((value, index) => (value === null ? index : []))
-                        .sort((a, b) => a - b));
-                    missingIndices = Array.from(new Set(missingIndices));
-                    return [...vectors].map((vector) => vector.flatMap((value, index) => missingIndices.indexOf(index) === -1 ? value : []));
+                    let i = vectors[0].length;
+                    while (i--) {
+                        if (vectors.map((e) => e[i]).some((e) => e === null || e < 0))
+                            vectors.map((e) => e.splice(i, 1));
+                    }
+                    return vectors;
                 };
                 this.toAlpha = (col, alpha) => {
                     if (alpha === 1)
@@ -962,6 +963,7 @@ var PLOTSCAPE = (() => {
                     const [x, y] = this.getMappings();
                     const { y0Scalar, widthScalar, alphaMultiplier } = this;
                     const y0 = Array.from(Array(x.length), (e) => y0Scalar);
+                    console.log({ x, y, y0 });
                     const width = Array.from(Array(x.length), (e) => widthScalar);
                     const { col, strokeCol, strokeWidth } = this.pars[0];
                     const pars = { col, strokeCol, strokeWidth, alpha: alphaMultiplier };
@@ -1179,28 +1181,52 @@ var PLOTSCAPE = (() => {
                     return x >= this.dataMin && x <= this.dataMax;
                 };
                 this.pctToData = (pct) => {
+                    if (pct === null)
+                        return null;
                     const { dataMin, range } = this;
-                    return typeof pct === "number"
-                        ? dataMin + pct * range
-                        : pct.map((e) => dataMin + e * range);
+                    if (typeof pct === "number")
+                        return dataMin + pct * range;
+                    return pct.map((e) => {
+                        if (e === null)
+                            return null;
+                        return dataMin + e * range;
+                    });
                 };
                 this.dataToPct = (data) => {
+                    if (data === null)
+                        return null;
                     const { dataMin, range } = this;
-                    return typeof data === "number"
-                        ? (data - dataMin) / range
-                        : data.map((e) => (e - dataMin) / range);
+                    if (typeof data === "number")
+                        return (data - dataMin) / range;
+                    return data.map((e) => {
+                        if (e === null)
+                            return null;
+                        return (e - dataMin) / range;
+                    });
                 };
                 this.dataToUnits = (data) => {
+                    if (data === null)
+                        return null;
                     const { dataMin, length, offset, direction, range } = this;
-                    return typeof data === "number"
-                        ? offset + (direction * length * (data - dataMin)) / range
-                        : data.map((e) => offset + direction * length * ((e - dataMin) / range));
+                    if (typeof data === "number")
+                        return offset + (direction * length * (data - dataMin)) / range;
+                    return data.map((e) => {
+                        if (e === null)
+                            return null;
+                        return offset + direction * length * ((e - dataMin) / range);
+                    });
                 };
                 this.unitsToData = (units) => {
+                    if (units === null)
+                        return null;
                     const { dataMin, length, offset, direction, range } = this;
-                    return typeof units === "number"
-                        ? dataMin + (direction * range * (units - offset)) / length
-                        : units.map((e) => dataMin + direction * range * ((e - offset) / length));
+                    if (typeof units === "number")
+                        return dataMin + (direction * range * (units - offset)) / length;
+                    return units.map((e) => {
+                        if (e === null)
+                            return null;
+                        return dataMin + direction * range * ((e - offset) / length);
+                    });
                 };
                 this.zero = zero;
             }
@@ -1243,6 +1269,8 @@ var PLOTSCAPE = (() => {
                     return this;
                 };
                 this.dataToUnits = (x) => {
+                    if (x == null)
+                        return null;
                     const { values, length, direction, positions, offset } = this;
                     const xString = this.toString(x);
                     const valuesString = this.toString(values);

@@ -2,9 +2,11 @@
 
 Interactive data visualization is popular. Interactive figures appear everywhere, from news articles, to business-analytic dashboards, to science communication outlets such as journal websites and personal blogs. Yet, despite the popularity, there does seem to be a lot of unanswered questions about them. 
 
-## What even is interactivity?
+## What even is interactivity? {#what-is-interactivity}
 
->If it looks like a duck, swims like a duck, and quacks like a duck, then it probably is a duck.
+> If it looks like a duck, swims like a duck, and quacks like a duck, then it probably is a duck.
+> 
+> [...] The irony is that while the phrase is often cited as proof of abductive reasoning, it is not proof, as the mechanical duck is still not a living duck
 >
 > [Duck Test](https://en.wikipedia.org/wiki/Duck_test) entry, [@wikipedia2022] 
 
@@ -16,7 +18,7 @@ Yet, even if we narrow down the focus on interactive visualizations as visual ob
 
 In contrast, other researchers consider the category of "interactive visualizations" to be much narrower. For many, the defining features are the ability to query different parts of the dataset (by e.g. zooming, panning, and filtering), and the propagation of changes between connected or "linked" parts of the visualization [@kehrer2012generic; @buja1996interactive; @keim2002information; @unwin1999mar]. Similarly, in Visual Analytics (VA) research, a distinction is made between "surface-level" and "parametric" interactions, where surface-level interactions manipulate attributes of the visual domain only (e.g. zooming and panning), whereas parametric interactions manipulate attributes of mathematical models underlying the visualization [@leman2013visual]. These definitions of interactivity - which I will label "filtering", "linked", and "parametric" - can describe considerably more complex objects. Specifically, while filtering interactions like zooming and panning can be implemented by manipulating graphical attributes (i.e. coordinate system) of the visualization only, linked and parametric interactions require special underlying data structures in all but the most simple cases. For example, in a prototypical case of an interactive feature called "linked brushing", the user can click-and-drag to select points on a scatter plot and the selection will then be reflected in another plot, for example, by drawing a bars in a barplot with the heights corresponding to the number of the selected points. This requires the barplot to be "aware" of which cases in the data (corresponding to the points in the scatterplot) have been selected, and it has to respond to these changes online, in real time, by recomputing the height of the newly drawn bars. 
 
-Put simply, the term "interactive visualization" seems to mean a lot of different things to a lot of different people. Below, in Table \@ref(tab:definitions), I have attempted to summarize the main types of interactivity in data visualizations. This list is not supposed to be exhaustive as more complete and detailed taxonomies of interactive visualizations have been described [see @yi2007toward]. Instead, the point of this list is to provide a rough sketch of the space interactive visualizations live in: 
+Put simply, the term "interactive visualization" means a lot of different things to a lot of different people, unfortunately. Below, in Table \@ref(tab:definitions), I have attempted to summarize the main types of interactivity in data visualizations. This list is not supposed to be exhaustive as more complete and detailed taxonomies of interactive visualizations have been described [see @yi2007toward]. Instead, the point of this list is to provide a rough sketch of the space interactive visualizations live in: 
 
 ```{r definitions, echo = FALSE}
 
@@ -28,15 +30,25 @@ knitr::kable(tab, longtable = TRUE, caption = 'Types of interactivity')
 
 Using the term "interactive" to cover such a wide range of visualizations leads to ambiguity. For example, imagine we have a single scatterplot. The user can click-and-drag this scatterplot to highlight certain points (i.e. brush). Should this scatterplot be considered "interactive"? Under the most basic definition, yes, since the user *can* affect the visualization through interaction. However, some researcher may not be satisfied with that and may ask us to tell them whether the visualization meets linked or parametric defition of interactivity. With only a single plot, there's nowhere for our interactions to propagate to, and changing the color of individual points can hardly be considered a change to a mathematical model, so our verdict would then have to be "not interactive". What if the researcher was a fan of the temporal definition? If we assume the results of the user's interactions render smoothly enough, we could certainly call the plot interactive. However, what if more data is added to the plot and the user now has to wait several hundreds of milliseconds, or even seconds, before the interaction is rendered? Does an interactive visualization stop being interactive as a result of our computational resources being reduced? Therefore, even with such a simple example, there are many arguments that could be made for and against calling a plot interactive.
 
+```{r, message=FALSE, warning=FALSE}
 
+library(plotly)
+plot_ly(mtcars, x = ~wt, y = ~mpg)
+
+```
+
+>Is this an interactive visualization? Depends on who you ask.
 
 ## Types of Interactive Features
 
-
-
 ## Current Options for Interactive Visualizations
 
-It may seem that the conceptual ambiguity about what counts as an "interactive visualization" is just an academic matter, however, it has real consequences for the software implementations. For example, the [R Graph Gallery entry on Interactive Charts](https://r-graph-gallery.com/interactive-charts.html) [@holtz2022interactive] several visualizations which allow for surface-level user interactions such zooming, panning, hovering, 3D rotation, and node repositioning within a network graph. However, in all of the examples, the user only affect graphical attributes of a single plot, and so these visualizations do not meet the linked and parametric definitions of interactivity. In contrast, the [Plotly Dash documentation page on Interactive Visualizations](https://dash.plotly.com/interactive-graphing) [@bibentry2022plotly] features examples of linked hovering and cross-filtering, i.e. examples of linked interactivity. However, it should be noted that vast majority of visualizations in the [Plotly R Open Source Graphing Library documentation page](https://plotly.com/r/) [@bibentry2022plotly] allow only for surface-level interactions. Somewhat differently again, [VegaLite Gallery pages on Interactive Charts](https://vega.github.io/vega-lite/examples/#interactive-charts) and [Interactive Multiview Displays](https://vega.github.io/vega-lite/examples/#interactive-multi-view-displays)  [@bibentry2022vegalite] feature many examples, however, only a few meet the linked or parametric definitions.
+The conceptual ambiguity about what counts as "interactive visualization" described in Chapter \@ref(what-is-interactivity) bleeds through to software implementation. For example, the [R Graph Gallery entry on Interactive Charts](https://r-graph-gallery.com/interactive-charts.html) [@holtz2022interactive] several visualizations which allow for surface-level user interactions such zooming, panning, hovering, 3D rotation, and node repositioning within a network graph. However, in all of the examples, the user only affect graphical attributes of a single plot, and so these visualizations do not meet the linked and parametric definitions of interactivity. In contrast, the [Plotly Dash documentation page on Interactive Visualizations](https://dash.plotly.com/interactive-graphing) [@bibentry2022plotly] does feature two examples of linked hovering and cross-filtering, i.e. examples of linked interactivity. However, it should be noted that vast majority of visualizations in the [Plotly R Open Source Graphing Library documentation page](https://plotly.com/r/) [@bibentry2022plotly] allow for only surface-level interactions. Similarly, [VegaLite Gallery pages on Interactive Charts](https://vega.github.io/vega-lite/examples/#interactive-charts) and [Interactive Multiview Displays](https://vega.github.io/vega-lite/examples/#interactive-multi-view-displays)  [@bibentry2022vegalite] feature many examples, however, only a few show limited examples of linked or parametric interactivity.  Finally, the [Highcharter Showcase Page ](https://jkunst.com/highcharter/articles/showcase.html) [@kunst2022] does not feature any examples of linking or parametric interactivity.
 
-What all of the packages listed above have in common is that most visualizations feature only surface-level interactivity, and the ones that feature examples of linked or parametric interactivity require quite extensive setup.  
+What all of the packages listed above have in common is that most interaction is typically surface-level and takes place within a single plot, and the examples that feature interesting types of interactivity (linked or parametric) require an extensive setup (i.e. many lines of code). The main reason for this is that all of these packages have been designed to be very general-purpose and flexible, and the price to pay for this flexibility is that complex types of interactivity require complex code. Another reason is that these packages have been built for static visualizations first, and interactivity second. Further, since all of these packages are native to JavaScript, the expectation may be that if more interesting types of interactivity are desired, the interactive "back-end" may be written separately, outside of the package. 
+
+Be it as it may, there is a fairly high barrier for entry for creating interesting types of interactivity (i.e. linked or parametric) with these packages. This may not be an issue for large organizations which can afford to hire specialists to work on complex interactive dashboards and visualizations. However, to the average applied scientist or data analyst, the upfront cost may be too high, especially if one is only interested in exploratory data analysis for one's own benefit. This may be the reason why interactive visualization is nowadays mainly used for communication, not exploration [@batch2017interactive]
+   
+
+
 
