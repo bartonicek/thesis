@@ -1,0 +1,109 @@
+# Use
+
+## A minimal example: linked scatterplot and barplot
+
+To get started with `plotscape`, we first need to load the package:
+
+```{r}
+
+library(plotscapeTest)
+
+```
+
+Now, the first step of any `plotscape` visualization is creating a visual scene. We save the scene as an object and print it:
+
+```{r}
+
+scene1 <- ps_scene(mtcars) 
+scene1
+
+```
+
+Notice that all you can see now is a gray rectangle. This is because we have not populated the scene yet. Let's add a scatterplot and a barplot:
+
+```{r}
+
+scene1 |>
+  ps_scatter(ps_map(x = "wt", y = "mpg")) |>
+  ps_bar(ps_map(x = "am")) 
+```
+
+We use the base R pipe `|>` operator to take an existing `plotscape` scene and append plots to it using function with the `ps_[plot type]()` syntax (we could have also used the `%>%` pipe operator from the `magrittr`/`tidyverse` packages, but that would require us loading an additional package). The functions always return the scene object back so we can chain the functions together to add multiple plots at once. Inside the plot functions, we specify which variables map onto which aesthetic, similar to the `ggplot2` package. The aesthetics can also be more tersely specified by using positional argument matching, without providing explicit names for the aesthetics, like so:
+
+```{r, eval = FALSE}
+scene1 |> 
+  ps_scatter(ps_map("wt", "mpg")) |>
+  ps_bar(ps_map("am")) 
+```
+
+Or by supplying a named list:
+
+```{r, eval = FALSE}
+scene1 |> 
+  ps_scatter(list(x = "wt", y = "mpg")) |>
+  ps_bar(list(x = "am")) 
+```
+
+(in fact, all the `ps_map()` function do is take the provided arguments and convert it to a named list. One advantage it has over just `list()` is the positional matching, i.e. `ps_scatter(list("wt", "mpg"))` won't work)
+
+But it would not be a `plotscape` visualization without interactivity! Try interacting with the barplot by clicking on the right bar:
+
+```{r}
+scene1 |> 
+  ps_scatter(ps_map(x = "wt", y = "mpg")) |>
+  ps_bar(ps_map(x = "am")) 
+```
+
+You should now see all of the automatic cars highlighted in the scatterplot. Now, for change, try selecting the four points in the top-left corner of the scatterplot by clicking-and-dragging. To spice things up, hold down the "1" key on your keyboard while dragging assign the points to Group 1 (and color them green!).
+
+```{r}
+scene1 |> 
+  ps_scatter(ps_map(x = "wt", y = "mpg")) |>
+  ps_bar(ps_map(x = "am")) 
+```
+
+If you're struggling to see the points, try increasing their size with the "+" key (and if they get too big for your liking, you can make them smaller again with "-"). Or try increasing the transparency of the points with "[" (or decreasing with "]"):
+
+```{r}
+scene1 |> 
+  ps_scatter(ps_map(x = "wt", y = "mpg")) |>
+  ps_bar(ps_map(x = "am")) 
+```
+
+There are many different interactive actions you can take. To not have to remember them all, they're written in the pop-up help bar that you can access by pressing the button marked "?" in the top-right corner of the scene (the grey box around the plots).
+
+Okay, so you're probably getting a bit bored of the old scatterplot and barplot. How about adding a histogram and a squareplot:
+
+```{r}
+scene1 |> 
+  ps_scatter(ps_map("wt", "mpg")) |>
+  ps_bar(ps_map("am")) |>
+  ps_histo(ps_map("disp")) |>
+  ps_wrapper_plot("square", ps_map("gear", "cyl"))
+
+```
+
+## Creating more complex plots
+
+We can get a bit more creative by adding plots programmatically. For example, here's how we can create a "scatterplot matrix"-like (i.e. one showing only unique combinations of different variables) visualization of the `iris` data:
+
+```{r}
+
+# Create a matrix of all unique combinations  
+# of 2 variables in the iris data
+vars <- names(iris)
+xy <- matrix(vars[combn(1:4, 2)], 
+                    ncol = 2, byrow = TRUE)
+
+scene2 <- ps_scene(iris, 1000, 800)
+for (i in seq_len(nrow(xy))) {
+  scene2 <- scene2 |> ps_scatter(ps_map(xy[i, 1], xy[i, 2]))
+}
+scene2
+
+```
+
+**Note to self: fix sizing, works in regular RMarkdown**
+
+Notice that I also specified the width and height as 1000 x 800 pixels in the `ps_scene(iris, 1000, 800)` call.
+

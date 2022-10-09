@@ -1,7 +1,7 @@
 Type,Short definition,Details
 Basic,Change happens at all,The user can interact with the visualization in some way
 Temporal,Change happens “in real-time”,"There is little lag between the user’s interactions and changes to the visualization, real-time change is sometimes called dynamic."
-Filtering,Change relates to querying different parts of the dataset,"The user can query different parts of the dataset by interacting with the visualization, analogous to subsetting rows of the data (e.g. zooming, panning, and filtering)"
+Querying,Change relates to querying different parts of the dataset,"The user can query different parts of the dataset by interacting with the visualization, analogous to subsetting rows of the data (e.g. zooming, panning, and filtering)"
 Linked,Change propagates,"Parts of the visual display are connected or “linked”, such that the user's interaction with one part of the visualization produces a change in another (e.g. linked brushing)"
 Parametric,Change affects underlying models,"The user can manipulate the underlying mathematical structure behind the visualization, not just its surface-level graphical attributes"
 (Cognitive),Change is perceived by a human,"There is a back-and-forth between the visual information being presented and the user's cognition, insights are generated"

@@ -29,7 +29,7 @@ The HTML output format for this example is bookdown::gitbook,</p>" />
 <meta name="author" content="Adam Bartonicek" />
 
 
-<meta name="date" content="2022-10-07" />
+<meta name="date" content="2022-10-10" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -37,7 +37,7 @@ The HTML output format for this example is bookdown::gitbook,</p>" />
   
   
 <link rel="prev" href="literature-review.html"/>
-<link rel="next" href="references.html"/>
+<link rel="next" href="use.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -180,8 +180,9 @@ div.csl-indent {
 <li class="chapter" data-level="2" data-path="literature-review.html"><a href="literature-review.html"><i class="fa fa-check"></i><b>2</b> Literature Review</a>
 <ul>
 <li class="chapter" data-level="2.1" data-path="literature-review.html"><a href="literature-review.html#what-is-interactivity"><i class="fa fa-check"></i><b>2.1</b> What even is interactivity?</a></li>
-<li class="chapter" data-level="2.2" data-path="literature-review.html"><a href="literature-review.html#types-of-interactive-features"><i class="fa fa-check"></i><b>2.2</b> Types of Interactive Features</a></li>
-<li class="chapter" data-level="2.3" data-path="literature-review.html"><a href="literature-review.html#current-options-for-interactive-visualizations"><i class="fa fa-check"></i><b>2.3</b> Current Options for Interactive Visualizations</a></li>
+<li class="chapter" data-level="2.2" data-path="literature-review.html"><a href="literature-review.html#interactive-techniquesfeatures"><i class="fa fa-check"></i><b>2.2</b> Interactive Techniques/Features</a></li>
+<li class="chapter" data-level="2.3" data-path="literature-review.html"><a href="literature-review.html#older-generation-interactive-visualization"><i class="fa fa-check"></i><b>2.3</b> Older Generation Interactive Visualization</a></li>
+<li class="chapter" data-level="2.4" data-path="literature-review.html"><a href="literature-review.html#current-options-for-interactive-visualizations"><i class="fa fa-check"></i><b>2.4</b> Current Options for Interactive Visualizations</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="design.html"><a href="design.html"><i class="fa fa-check"></i><b>3</b> Design</a>
 <ul>
@@ -189,9 +190,15 @@ div.csl-indent {
 <li class="chapter" data-level="3.2" data-path="design.html"><a href="design.html#user-interface"><i class="fa fa-check"></i><b>3.2</b> User Interface</a></li>
 <li class="chapter" data-level="3.3" data-path="design.html"><a href="design.html#technical-design"><i class="fa fa-check"></i><b>3.3</b> Technical Design</a>
 <ul>
-<li class="chapter" data-level="3.3.1" data-path="design.html"><a href="design.html#sec-scene"><i class="fa fa-check"></i><b>3.3.1</b> Scene</a></li>
+<li class="chapter" data-level="3.3.1" data-path="design.html"><a href="design.html#scene"><i class="fa fa-check"></i><b>3.3.1</b> Scene</a></li>
 <li class="chapter" data-level="3.3.2" data-path="design.html"><a href="design.html#global-handlers"><i class="fa fa-check"></i><b>3.3.2</b> Global Handlers</a></li>
+<li class="chapter" data-level="3.3.3" data-path="design.html"><a href="design.html#plots"><i class="fa fa-check"></i><b>3.3.3</b> Plots</a></li>
 </ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="use.html"><a href="use.html"><i class="fa fa-check"></i><b>4</b> Use</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="use.html"><a href="use.html#a-minimal-example-linked-scatterplot-and-barplot"><i class="fa fa-check"></i><b>4.1</b> A minimal example: linked scatterplot and barplot</a></li>
+<li class="chapter" data-level="4.2" data-path="use.html"><a href="use.html#creating-more-complex-plots"><i class="fa fa-check"></i><b>4.2</b> Creating more complex plots</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -217,26 +224,17 @@ div.csl-indent {
 <div id="design" class="section level1 hasAnchor" number="3">
 <h1><span class="header-section-number">Chapter 3</span> Design<a href="design.html#design" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <blockquote>
-<p>[A good visualization] is “boring” in the right way. It’s not trying to do too much, so you can focus on the message that is being communicated. […] I don’t want [the visualization] to be “pretty”, I want it to be visually pleasing enough that it doesn’t distract [from the information being presented].</p>
-<p>Visualization Q&amp;A Livestream <span class="citation">(<a href="#ref-betancourt2020may" role="doc-biblioref">Betancourt 2020</a>)</span></p>
-</blockquote>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="design.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(plotscapeTest)</span>
-<span id="cb2-2"><a href="design.html#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="design.html#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ps_scene</span>(mtcars) <span class="sc">|&gt;</span></span>
-<span id="cb2-4"><a href="design.html#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ps_scatter</span>(<span class="fu">ps_map</span>(<span class="at">x =</span> <span class="st">&quot;wt&quot;</span>, <span class="at">y =</span> <span class="st">&quot;mpg&quot;</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb2-5"><a href="design.html#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ps_bar</span>(<span class="fu">ps_map</span>(<span class="at">x =</span> <span class="st">&quot;cyl&quot;</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb2-6"><a href="design.html#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ps_histo</span>(<span class="fu">ps_map</span>(<span class="at">x =</span> <span class="st">&quot;disp&quot;</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb2-7"><a href="design.html#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ps_scatter</span>(<span class="fu">ps_map</span>(<span class="at">x =</span> <span class="st">&quot;drat&quot;</span>, <span class="at">y =</span> <span class="st">&quot;qsec&quot;</span>)) </span></code></pre></div>
-<div id="htmlwidget-43e8101a212e19f29241" style="width:672px;height:480px;" class="plotscapeTest html-widget"></div>
-<script type="application/json" data-for="htmlwidget-43e8101a212e19f29241">{"x":{"data":{"mpg":[21,21,22.8,21.4,18.7,18.1,14.3,24.4,22.8,19.2,17.8,16.4,17.3,15.2,10.4,10.4,14.7,32.4,30.4,33.9,21.5,15.5,15.2,13.3,19.2,27.3,26,30.4,15.8,19.7,15,21.4],"cyl":[6,6,4,6,8,6,8,4,4,6,6,8,8,8,8,8,8,4,4,4,4,8,8,8,8,4,4,4,8,6,8,4],"disp":[160,160,108,258,360,225,360,146.7,140.8,167.6,167.6,275.8,275.8,275.8,472,460,440,78.7,75.7,71.1,120.1,318,304,350,400,79,120.3,95.1,351,145,301,121],"hp":[110,110,93,110,175,105,245,62,95,123,123,180,180,180,205,215,230,66,52,65,97,150,150,245,175,66,91,113,264,175,335,109],"drat":[3.9,3.9,3.85,3.08,3.15,2.76,3.21,3.69,3.92,3.92,3.92,3.07,3.07,3.07,2.93,3,3.23,4.08,4.93,4.22,3.7,2.76,3.15,3.73,3.08,4.08,4.43,3.77,4.22,3.62,3.54,4.11],"wt":[2.62,2.875,2.32,3.215,3.44,3.46,3.57,3.19,3.15,3.44,3.44,4.07,3.73,3.78,5.25,5.424,5.345,2.2,1.615,1.835,2.465,3.52,3.435,3.84,3.845,1.935,2.14,1.513,3.17,2.77,3.57,2.78],"qsec":[16.46,17.02,18.61,19.44,17.02,20.22,15.84,20,22.9,18.3,18.9,17.4,17.6,18,17.98,17.82,17.42,19.47,18.52,19.9,20.01,16.87,17.3,15.41,17.05,18.9,16.7,16.9,14.5,15.5,14.6,18.6],"vs":[0,0,1,1,0,1,0,1,1,1,1,0,0,0,0,0,0,1,1,1,1,0,0,0,0,1,0,1,0,0,0,1],"am":[1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1],"gear":[4,4,4,3,3,3,3,4,4,4,4,3,3,3,3,3,3,4,4,4,3,3,3,3,3,4,5,5,5,5,5,4],"carb":[4,4,1,1,2,1,4,2,2,4,4,3,3,3,4,4,4,1,2,1,1,2,2,4,2,1,2,2,4,6,8,2]},"types":["scatter","bar","histo","scatter"],"mappings":[{"x":"wt","y":"mpg"},{"x":"cyl"},{"x":"disp"},{"x":"drat","y":"qsec"}],"dims":[]},"evals":[],"jsHooks":[]}</script>
-<div id="graphic-design" class="section level2 hasAnchor" number="3.1">
-<h2><span class="header-section-number">3.1</span> Graphic Design<a href="design.html#graphic-design" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<blockquote>
 <p>Graphical excellence is that which gives to the viewer the greatest number of ideas in the shortest time with the least ink in the smallest space</p>
 <p>The Visual Display of Quantitative Information <span class="citation">(<a href="#ref-tufte2001visual" role="doc-biblioref">Tufte 2001</a>)</span></p>
 </blockquote>
-<p>Absence of graphical features can be equally as valuable as their presence (or arguably even moreso). In the cult classic book on the design of comics and graphical novels, Understanding Comics: The Invisible Art, Scott McCloud <span class="citation">(<a href="#ref-mccloud1994apr" role="doc-biblioref">1994</a>)</span> repeatedly stresses the importance of not just the things that appear on the page but also the ones that are purposefully left out. For example, McCloud demonstrates how closure - the gap between the panels of a comic strip - is crucial for conveying meaning. In a similar vein, Tufte <span class="citation">(<a href="#ref-tufte2001visual" role="doc-biblioref">2001</a>)</span> shows how the absence of elements such as gridlines and axis ticks can greatly enhance the clarity and effectiveness of data visualization. Since interactive visualizations are static visualizations most of the time, the same principles apply. The default graphical setting of the visualization should therefore be as simple and austere as possible, within reason and unless the user explicitly desires otherwise.</p>
-<p>The visualization should also adhere to the big four principles of graphic design: <strong>contrast</strong>, <strong>repetition</strong>, <strong>alignment</strong>, and <strong>proximity</strong> <span class="citation">(CRAP, <a href="#ref-williams2004nondesigner" role="doc-biblioref">Williams 2004</a>)</span>. <strong>Contrast</strong> provides a way to direct the viewer’s attention and this makes it one of the most important concepts in graphic design <span class="citation">(<a href="#ref-reynolds2011dec" role="doc-biblioref">Reynolds 2011</a>)</span>. To properly leverage contrast, we should present large visual differences (contrast) in the parts of the visualization that we want the user to focus on, and, conversely, make the less important parts of the visualization appear more visually uniform. For a concrete example, when highlighting as a result of linked brushing, the highlight color should contrast strongly with the base color, and this can be achieved by using a muted (e.g. light gray) color for the base and a more vibrant color (e.g. green) as the highlight. As opposed to contrast, <strong>repetition</strong> provides a sense of visual unity and consistency.</p>
+<div id="graphic-design" class="section level2 hasAnchor" number="3.1">
+<h2><span class="header-section-number">3.1</span> Graphic Design<a href="design.html#graphic-design" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<blockquote>
+<p>[A good visualization] is “boring” in the right way. It’s not trying to do too much, so you can focus on the message that is being communicated. […] I don’t want [the visualization] to be “pretty”, I want it to be visually pleasing enough that it doesn’t distract [from the information being presented].</p>
+<p>Visualization Q&amp;A Livestream <span class="citation">(<a href="#ref-betancourt2020may" role="doc-biblioref">Betancourt 2020</a>)</span></p>
+</blockquote>
+<p>Absence of graphical features can be equally as valuable as their presence (or arguably even moreso). In the cult classic book on the design of comics and graphical novels, Understanding Comics: The Invisible Art, Scott McCloud <span class="citation">(<a href="#ref-mccloud1994apr" role="doc-biblioref">1994</a>)</span> repeatedly stresses the importance of not just the things that appear on the page but also the ones that are purposefully left out. For example, McCloud demonstrates how closure - the gap between the panels of a comic strip - is crucial for conveying meaning. In a similar vein, Tufte <span class="citation">(<a href="#ref-tufte2001visual" role="doc-biblioref">2001</a>)</span> showed how the absence of non-data elements such as gridlines and axis ticks can greatly enhance the clarity and effectiveness of data visualization. Further, Tufte also disparaged about chartjunk, that is, completely redundant non-data elements and decorations that do nothing but distract from the data. While Tufte discussed these concepts in relation to static visualizations, other authors have also warned about the danger of regressing back to “artistic” rather than informative interactive visualizations as computational resources become cheaper <span class="citation">(<a href="#ref-dix1998" role="doc-biblioref">Dix and Ellis 1998</a>)</span>. To summarize, in static visualization there is a danger in not just showing too little but also showing too much, and since an interactive visualization is static visualization at any single moment of time, the same principles apply here. Therefore, the default graphical parameters in <code>plotscape</code> are chosen to create a clean, fairly austere look, as not to distract from the data. In similar vein, I have tried to minimize the presence of non-plot elements (such as sliders/drop-down menus) in the visual scene, by binding most interactive actions to either mouse or keyboard commands, and presenting only a single small help button in the top-right corner, so that the user can look these commands up on the fly.</p>
+<p>One of the aims of <code>plotscape</code> is also to adhere to the big four principles of graphic design: <strong>contrast</strong>, <strong>repetition</strong>, <strong>alignment</strong>, and <strong>proximity</strong> <span class="citation">(CRAP, <a href="#ref-williams2004nondesigner" role="doc-biblioref">Williams 2004</a>)</span>. <strong>Contrast</strong> is intimately linked to the well-known figure-ground phenomenon in cognitive sciences, whereby sharp borders and edges tend to draw attention from the brain’s visual system <span class="citation">(see e.g. <a href="#ref-qiu2007" role="doc-biblioref">Qiu, Sugihara, and Heydt 2007</a>)</span>. Thus, good use of contrast directs the viewer’s attention and this makes it one of the most important concepts in graphic design <span class="citation">(<a href="#ref-reynolds2011dec" role="doc-biblioref">Reynolds 2011</a>)</span>. To properly leverage contrast, the areas of the visualization that we want to draw the user’s attention to should present large visual contrasts, and, conversely, the less important parts of the visualization should appear more visually uniform. As a concrete example, when highlighting as a result of linked brushing, the highlight color should contrast strongly with the base color. I have tried to achieve this by using a muted (e.g. light gray) color for the base and a more vibrant color (e.g. green) for the highlight. Contrary to contrast, <strong>repetition</strong> provides a sense of visual unity and consistency. This is achieved in <code>plotscape</code> fairly automatically as all plots share the same graphical parameters, for example the same background color, object colors, font, etc… Similar to repetition, the purpose of <strong>alignment</strong> is to create a pleasing visual unity and a sense of connection between the aligned graphical elements <span class="citation">(<a href="#ref-williams2004nondesigner" role="doc-biblioref">Williams 2004</a>)</span>. Again, in <code>plotscape</code> alignment is resolved in a fairly straightforward way, as the default layout of plots within the visual scene is a rectangular grid with <span class="math inline">\(\lfloor \sqrt{N_{plots}} \rfloor\)</span> rows and <span class="math inline">\(\lceil N_{plots} / \lfloor \sqrt{N_{plots}} \rfloor \rceil\)</span> columns (where <span class="math inline">\(\lfloor \cdot \rfloor\)</span> and <span class="math inline">\(\lceil \cdot \rceil\)</span> indicate the floor and ceiling functions, respectively). A more elaborate layout scheme would be useful, however is outside the scope of the present thesis. Finally, the principle of <strong>proximity</strong> states that related things should be grouped together. In <code>plotscape</code>, all plots are related through the shared underlying data structure, so they should all be located close to each other. Again, this can be achieved via the rectangular grid. One could also ask if there is any other natural spatial ordering to the plots, outside of them all being related to each other. I think that, without specific domain knowledge about the data at hand, the answer is “no”. The user can, however, arrange plots within the visual scene based on their own perception of relatedness between the different types of plots and the variables being presented.</p>
 <p>The choice of colors also greatly influences</p>
 </div>
 <div id="user-interface" class="section level2 hasAnchor" number="3.2">
@@ -246,10 +244,10 @@ div.csl-indent {
 </div>
 <div id="technical-design" class="section level2 hasAnchor" number="3.3">
 <h2><span class="header-section-number">3.3</span> Technical Design<a href="design.html#technical-design" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>The JavaScript source files were written in TypeScript Version 4.6.3 <span class="citation">(<a href="#ref-bierman2014understanding" role="doc-biblioref">Bierman, Abadi, and Torgersen 2014</a>)</span> and bundled and transpiled into JavaScript using the <code>typescript-bundle</code> package Version 1.0.18, using the VS Code IDE 1.71.2. All code written was native Typescript/JavaScript, no external JavaScript packages were used. The R interface to the package was written in R version 4.2.1 (2022-06-23) – “Funny-Looking Kid”, using the RStudio IDE</p>
-<div id="sec-scene" class="section level3 hasAnchor" number="3.3.1">
-<h3><span class="header-section-number">3.3.1</span> Scene<a href="design.html#sec-scene" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Scene is the object that is placed the highest in the program hierarchy. It represents the unified whole of the information that the user sees and interacts with, both visually and programmatically. All other visual and interactive elements are defined as its children, and scene is responsible for organizing and coordinating them, either directly or via intermediaries that are also its children. The two main classes of elements defined on the scene are:</p>
+<p>The JavaScript source files were written in TypeScript version 4.6.3 <span class="citation">(<a href="#ref-bierman2014understanding" role="doc-biblioref">Bierman, Abadi, and Torgersen 2014</a>)</span> and bundled and transpiled into JavaScript using the <code>typescript-bundle</code> package version 1.0.18, using the VS Code IDE 1.71.2. All code written was native Typescript/JavaScript, no external JavaScript packages were used. The R interface to the package was written in R version 4.2.1 (2022-06-23) – “Funny-Looking Kid”, using the RStudio IDE. The binding between JavaScript and R was specified using the <code>htmlwidgets</code> package <span class="citation">(<a href="#ref-htmlwidgets2021" role="doc-biblioref">Vaidyanathan et al. 2021</a>)</span>, version 1.5.4.</p>
+<div id="scene" class="section level3 hasAnchor" number="3.3.1">
+<h3><span class="header-section-number">3.3.1</span> Scene<a href="design.html#scene" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Scene sits at the top of the object hierarchy. It represents the unified whole of the visual information that the user sees and interacts with. All other visual and interactive elements are defined as its children, and scene is responsible for organizing and coordinating them, either directly or via intermediaries. The two main classes of child elements defined on the scene are:</p>
 <ul>
 <li>Global Handlers</li>
 <li>Plots</li>
@@ -257,18 +255,103 @@ div.csl-indent {
 </div>
 <div id="global-handlers" class="section level3 hasAnchor" number="3.3.2">
 <h3><span class="header-section-number">3.3.2</span> Global Handlers<a href="design.html#global-handlers" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Global handlers are child objects of <a href="design.html#sec-scene">Scene</a> that take care of things such as how plots are sized and placed together, how the scene responds to keyboard input, how it responds to certain cases (rows of the data) being selected, and how it responds to changes of state.</p>
+<p>Global handlers are child objects of <a href="design.html#scene">Scene</a> that take care of responsibilities such as plot sizing and placement, keyboard input, changes in state, membership of the cases (rows of the data). The following global handlers are defined on the Scene:</p>
 <ul>
 <li>Marker</li>
 <li>State handler</li>
 <li>Keyboard handler</li>
 <li>Size handler</li>
 </ul>
-<div id="sec-global-handlers" class="section level4 hasAnchor" number="3.3.2.1">
-<h4><span class="header-section-number">3.3.2.1</span> Marker<a href="design.html#sec-global-handlers" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>Marker is a <a href="design.html#sec-global-handlers">global handler</a> whose primary task is to listen to changes in the membership of the cases in our data and answers questions about them. For example, if each case (row) in our data is a participant, we can tell Marker things such as <em>“mark participants 10, 11, and 12 as belonging to group 2”</em>, and ask things such as <em>“which participants currently belong to group 1?”</em>, or <em>“which participants currently belong to transient selection?”</em>.</p>
-
+<div id="marker" class="section level4 hasAnchor" number="3.3.2.1">
+<h4><span class="header-section-number">3.3.2.1</span> Marker<a href="design.html#marker" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Marker is probably the most important <a href="design.html#global-handlers">global handler</a>, whose primary task is to monitor changes in the membership and answers queries about them. Each case (row) of the data can be assigned one of several different memberships: base (no membership, group 0), persistent (group 1-3), transient (yes/no). Further, transient and persistent memberships cross: for example, a case can be either pure base, transiently selected base, pure group 1, transiently selected group 1, etc… The membership information is encoded on the Marker in a single unsigned 8-bit integer vector, with persistent group memberships being stored on the least significant bit (e.g. group 0: 00000000, group 1: 00000001, etc…) and transient membership being stored on the most significant (i.e. 8th) bit.</p>
+<table>
+<caption><span id="tab:unnamed-chunk-4">Table 3.1: </span>Membership representation</caption>
+<thead>
+<tr class="header">
+<th align="left">Transiently selected</th>
+<th align="left">Group</th>
+<th align="left">Bit representation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">No</td>
+<td align="left">Base</td>
+<td align="left">00000000</td>
+</tr>
+<tr class="even">
+<td align="left">No</td>
+<td align="left">Group 1</td>
+<td align="left">00000001</td>
+</tr>
+<tr class="odd">
+<td align="left">No</td>
+<td align="left">Group 2</td>
+<td align="left">00000010</td>
+</tr>
+<tr class="even">
+<td align="left">No</td>
+<td align="left">Group 3</td>
+<td align="left">00000011</td>
+</tr>
+<tr class="odd">
+<td align="left">No</td>
+<td align="left">Group 4</td>
+<td align="left">00000100</td>
+</tr>
+<tr class="even">
+<td align="left">Yes</td>
+<td align="left">Base</td>
+<td align="left">10000000</td>
+</tr>
+<tr class="odd">
+<td align="left">Yes</td>
+<td align="left">Group 1</td>
+<td align="left">10000001</td>
+</tr>
+<tr class="even">
+<td align="left">Yes</td>
+<td align="left">Group 2</td>
+<td align="left">10000010</td>
+</tr>
+<tr class="odd">
+<td align="left">Yes</td>
+<td align="left">Group 3</td>
+<td align="left">10000011</td>
+</tr>
+<tr class="even">
+<td align="left">Yes</td>
+<td align="left">Group 4</td>
+<td align="left">10000100</td>
+</tr>
+</tbody>
+</table>
+<p>The Marker listens to which cases are currently being selected, and, when selection happens, it queries the <a href="design.html#state-handler">State Handler</a> to find the current membership state and assigns that membership to the selected cases. For example, if we are currently holding down the “1” key (associated with group 1) and click on a bar in a barplot corresponding to cases 10, 11, and 12, the Marker will assigns those cases the group 1 membership. Conversely, other objects can query the marker to find the membership of specific cases. This will most often happen when graphical objects are being drawn: for example, when a barplot is drawing bars corresponding to group 2, it will query the marker to find which cases belong to group 2 and it will then draw bars of the relevant height and color.</p>
 </div>
+<div id="state-handler" class="section level4 hasAnchor" number="3.3.2.2">
+<h4><span class="header-section-number">3.3.2.2</span> State Handler<a href="design.html#state-handler" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The state listens to user’s input.</p>
+</div>
+<div id="keyboard-handler" class="section level4 hasAnchor" number="3.3.2.3">
+<h4><span class="header-section-number">3.3.2.3</span> Keyboard Handler<a href="design.html#keyboard-handler" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+</div>
+<div id="size-handler" class="section level4 hasAnchor" number="3.3.2.4">
+<h4><span class="header-section-number">3.3.2.4</span> Size Handler<a href="design.html#size-handler" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+</div>
+</div>
+<div id="plots" class="section level3 hasAnchor" number="3.3.3">
+<h3><span class="header-section-number">3.3.3</span> Plots<a href="design.html#plots" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Each plots consists any number of:</p>
+<ul>
+<li>Wranglers: bind, transform, and summarize variables from the data</li>
+<li>Scales: transform data into screen coordinates</li>
+<li>Representations: draw graphical objects</li>
+<li>Auxiliaries: take care of non-data elements such as axis lines, text, etc…</li>
+<li>Local handlers: take care of local behaviors such as clicking and dragging</li>
+<li>(Global handlers): passed by reference from the scene</li>
+</ul>
+
 </div>
 </div>
 </div>
@@ -280,14 +363,23 @@ Betancourt, Michael. 2020. <span>“<span class="nocase">Visualization Q and A</
 <div id="ref-bierman2014understanding" class="csl-entry">
 Bierman, Gavin, Martı́n Abadi, and Mads Torgersen. 2014. <span>“Understanding Typescript.”</span> In <em>European Conference on Object-Oriented Programming</em>, 257–81. Springer.
 </div>
+<div id="ref-dix1998" class="csl-entry">
+Dix, Alan, and Geoffrey Ellis. 1998. <span>“<span class="nocase">Starting simple: adding value to static visualisation through simple interaction</span>.”</span> In <em><span class="nocase">AVI ’98: Proceedings of the working conference on Advanced visual interfaces</span></em>, 124–34. New York, NY, USA: Association for Computing Machinery. <a href="https://doi.org/10.1145/948496.948514">https://doi.org/10.1145/948496.948514</a>.
+</div>
 <div id="ref-mccloud1994apr" class="csl-entry">
 McCloud, Scott. 1994. <em><span>Understanding Comics: The Invisible Art</span></em>. New York, NY, USA: William Morrow Paperbacks.
+</div>
+<div id="ref-qiu2007" class="csl-entry">
+Qiu, Fangtu T., Tadashi Sugihara, and Rüdiger von der Heydt. 2007. <span>“<span class="nocase">Figure-ground mechanisms provide structure for selective attention</span>.”</span> <em>Nat. Neurosci.</em> 10 (November): 1492–99. <a href="https://doi.org/10.1038/nn1989">https://doi.org/10.1038/nn1989</a>.
 </div>
 <div id="ref-reynolds2011dec" class="csl-entry">
 Reynolds, Garr. 2011. <em><span class="nocase">Presentation Zen: Simple Ideas on Presentation Design and Delivery</span></em>. New Riders. <a href="https://books.google.co.nz/books/about/Presentation_Zen.html?id=m1xt5IMJbXAC&amp;source=kp_book_description&amp;redir_esc=y">https://books.google.co.nz/books/about/Presentation_Zen.html?id=m1xt5IMJbXAC&amp;source=kp_book_description&amp;redir_esc=y</a>.
 </div>
 <div id="ref-tufte2001visual" class="csl-entry">
 Tufte, Edward R. 2001. <em>The Visual Display of Quantitative Information</em>. Cheshire, Connecticut: Graphics Press LLC.
+</div>
+<div id="ref-htmlwidgets2021" class="csl-entry">
+Vaidyanathan, Ramnath, Yihui Xie, JJ Allaire, Joe Cheng, Carson Sievert, and Kenton Russell. 2021. <em>Htmlwidgets: HTML Widgets for r</em>. <a href="https://CRAN.R-project.org/package=htmlwidgets">https://CRAN.R-project.org/package=htmlwidgets</a>.
 </div>
 <div id="ref-williams2004nondesigner" class="csl-entry">
 Williams, Robin. 2004. <em><span class="nocase">The Non-designers Design Book: Design and Typographic Principles for the Visual Novice</span></em>. Peachpit Press.
@@ -299,7 +391,7 @@ Williams, Robin. 2004. <em><span class="nocase">The Non-designers Design Book: D
         </div>
       </div>
 <a href="literature-review.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="use.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

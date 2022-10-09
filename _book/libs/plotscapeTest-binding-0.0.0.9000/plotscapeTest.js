@@ -17,8 +17,7 @@ HTMLWidgets.widget({
         el.innerText = PLOTSCAPE.mean(x.data);
         const scene = new PLOTSCAPE.Scene(el, new PLOTSCAPE.DataFrame(x.data))
 
-        console.log(x.dims[0])
-
+        if (!x.types) return
         const typeArray = Array.isArray(x.types) ? x.types : [x.types]
         typeArray.forEach((e, i) => {
           const mapping = x.mappings[i]

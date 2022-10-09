@@ -29,14 +29,14 @@ The HTML output format for this example is bookdown::gitbook,</p>" />
 <meta name="author" content="Adam Bartonicek" />
 
 
-<meta name="date" content="2022-10-07" />
+<meta name="date" content="2022-10-10" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="design.html"/>
+<link rel="prev" href="use.html"/>
 
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
@@ -180,8 +180,9 @@ div.csl-indent {
 <li class="chapter" data-level="2" data-path="literature-review.html"><a href="literature-review.html"><i class="fa fa-check"></i><b>2</b> Literature Review</a>
 <ul>
 <li class="chapter" data-level="2.1" data-path="literature-review.html"><a href="literature-review.html#what-is-interactivity"><i class="fa fa-check"></i><b>2.1</b> What even is interactivity?</a></li>
-<li class="chapter" data-level="2.2" data-path="literature-review.html"><a href="literature-review.html#types-of-interactive-features"><i class="fa fa-check"></i><b>2.2</b> Types of Interactive Features</a></li>
-<li class="chapter" data-level="2.3" data-path="literature-review.html"><a href="literature-review.html#current-options-for-interactive-visualizations"><i class="fa fa-check"></i><b>2.3</b> Current Options for Interactive Visualizations</a></li>
+<li class="chapter" data-level="2.2" data-path="literature-review.html"><a href="literature-review.html#interactive-techniquesfeatures"><i class="fa fa-check"></i><b>2.2</b> Interactive Techniques/Features</a></li>
+<li class="chapter" data-level="2.3" data-path="literature-review.html"><a href="literature-review.html#older-generation-interactive-visualization"><i class="fa fa-check"></i><b>2.3</b> Older Generation Interactive Visualization</a></li>
+<li class="chapter" data-level="2.4" data-path="literature-review.html"><a href="literature-review.html#current-options-for-interactive-visualizations"><i class="fa fa-check"></i><b>2.4</b> Current Options for Interactive Visualizations</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="design.html"><a href="design.html"><i class="fa fa-check"></i><b>3</b> Design</a>
 <ul>
@@ -189,9 +190,15 @@ div.csl-indent {
 <li class="chapter" data-level="3.2" data-path="design.html"><a href="design.html#user-interface"><i class="fa fa-check"></i><b>3.2</b> User Interface</a></li>
 <li class="chapter" data-level="3.3" data-path="design.html"><a href="design.html#technical-design"><i class="fa fa-check"></i><b>3.3</b> Technical Design</a>
 <ul>
-<li class="chapter" data-level="3.3.1" data-path="design.html"><a href="design.html#sec-scene"><i class="fa fa-check"></i><b>3.3.1</b> Scene</a></li>
+<li class="chapter" data-level="3.3.1" data-path="design.html"><a href="design.html#scene"><i class="fa fa-check"></i><b>3.3.1</b> Scene</a></li>
 <li class="chapter" data-level="3.3.2" data-path="design.html"><a href="design.html#global-handlers"><i class="fa fa-check"></i><b>3.3.2</b> Global Handlers</a></li>
+<li class="chapter" data-level="3.3.3" data-path="design.html"><a href="design.html#plots"><i class="fa fa-check"></i><b>3.3.3</b> Plots</a></li>
 </ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="use.html"><a href="use.html"><i class="fa fa-check"></i><b>4</b> Use</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="use.html"><a href="use.html#a-minimal-example-linked-scatterplot-and-barplot"><i class="fa fa-check"></i><b>4.1</b> A minimal example: linked scatterplot and barplot</a></li>
+<li class="chapter" data-level="4.2" data-path="use.html"><a href="use.html#creating-more-complex-plots"><i class="fa fa-check"></i><b>4.2</b> Creating more complex plots</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -237,6 +244,9 @@ Brodbeck, Dominique, Riccardo Mazza, and Denis Lalanne. 2009. <span>“<span>Int
 Buja, Andreas, Dianne Cook, and Deborah F Swayne. 1996. <span>“Interactive High-Dimensional Data Visualization.”</span> <em>Journal of Computational and Graphical Statistics</em> 5 (1): 78–99.
 </div>
 <div class="csl-entry">
+Dix, Alan, and Geoffrey Ellis. 1998. <span>“<span class="nocase">Starting simple: adding value to static visualisation through simple interaction</span>.”</span> In <em><span class="nocase">AVI ’98: Proceedings of the working conference on Advanced visual interfaces</span></em>, 124–34. New York, NY, USA: Association for Computing Machinery. <a href="https://doi.org/10.1145/948496.948514">https://doi.org/10.1145/948496.948514</a>.
+</div>
+<div class="csl-entry">
 Holtz, Yan. 2022. <span>“<span class="nocase">Interactive charts <span><span class="math inline">\(\vert\)</span></span> the R Graph Gallery</span>.”</span> <a href="https://r-graph-gallery.com/interactive-charts.html">https://r-graph-gallery.com/interactive-charts.html</a>.
 </div>
 <div class="csl-entry">
@@ -264,16 +274,31 @@ Pike, William A, John Stasko, Remco Chang, and Theresa A O’connell. 2009. <spa
 Plotly Inc. 2022. <span>“<span class="nocase">Part 4. Interactive Graphing and Crossfiltering <span><span class="math inline">\(\vert\)</span></span> Dash for Python Documentation <span><span class="math inline">\(\vert\)</span></span> Plotly</span>.”</span> <a href="https://dash.plotly.com/interactive-graphing">https://dash.plotly.com/interactive-graphing</a>.
 </div>
 <div class="csl-entry">
+Qiu, Fangtu T., Tadashi Sugihara, and Rüdiger von der Heydt. 2007. <span>“<span class="nocase">Figure-ground mechanisms provide structure for selective attention</span>.”</span> <em>Nat. Neurosci.</em> 10 (November): 1492–99. <a href="https://doi.org/10.1038/nn1989">https://doi.org/10.1038/nn1989</a>.
+</div>
+<div class="csl-entry">
 Reynolds, Garr. 2011. <em><span class="nocase">Presentation Zen: Simple Ideas on Presentation Design and Delivery</span></em>. New Riders. <a href="https://books.google.co.nz/books/about/Presentation_Zen.html?id=m1xt5IMJbXAC&amp;source=kp_book_description&amp;redir_esc=y">https://books.google.co.nz/books/about/Presentation_Zen.html?id=m1xt5IMJbXAC&amp;source=kp_book_description&amp;redir_esc=y</a>.
 </div>
 <div class="csl-entry">
 Rheingans, Penny. 2002. <span>“Are We There yet? Exploring with Dynamic Visualization.”</span> <em>IEEE Computer Graphics and Applications</em> 22 (1): 6–10.
 </div>
 <div class="csl-entry">
+Swayne, Deborah F., Dianne Cook, and Andreas Buja. 1998. <span>“<span class="nocase">XGobi: Interactive Dynamic Data Visualization in the X Window System</span>.”</span> <em>J. Comput. Graph. Stat.</em> 7 (1): 113–30. <a href="https://doi.org/10.1080/10618600.1998.10474764">https://doi.org/10.1080/10618600.1998.10474764</a>.
+</div>
+<div class="csl-entry">
+Swayne, Deborah F., Duncan Temple Lang, Andreas Buja, and Dianne Cook. 2003. <span>“<span class="nocase">GGobi: evolving from XGobi into an extensible framework for interactive data visualization</span>.”</span> <em>Comput. Statist. Data Anal.</em> 43 (4): 423–44. <a href="https://doi.org/10.1016/S0167-9473(02)00286-4">https://doi.org/10.1016/S0167-9473(02)00286-4</a>.
+</div>
+<div class="csl-entry">
+Theus, Martin. 2002. <span>“<span class="nocase">Interactive Data Visualization using Mondrian</span>.”</span> <em>J. Stat. Soft.</em> 7 (November): 1–9. <a href="https://doi.org/10.18637/jss.v007.i11">https://doi.org/10.18637/jss.v007.i11</a>.
+</div>
+<div class="csl-entry">
 Tufte, Edward R. 2001. <em>The Visual Display of Quantitative Information</em>. Cheshire, Connecticut: Graphics Press LLC.
 </div>
 <div class="csl-entry">
 Unwin, Antony. 1999. <span>“<span class="nocase">Requirements for interactive graphics software for exploratory data analysis</span>.”</span> <em>Comput. Statist.</em> 14 (1): 7–22. <a href="https://doi.org/10.1007/PL00022706">https://doi.org/10.1007/PL00022706</a>.
+</div>
+<div class="csl-entry">
+Vaidyanathan, Ramnath, Yihui Xie, JJ Allaire, Joe Cheng, Carson Sievert, and Kenton Russell. 2021. <em>Htmlwidgets: HTML Widgets for r</em>. <a href="https://CRAN.R-project.org/package=htmlwidgets">https://CRAN.R-project.org/package=htmlwidgets</a>.
 </div>
 <div class="csl-entry">
 Vega Project. 2022. <span>“<span>Example Gallery: Interactive</span>.”</span> <a href="https://vega.github.io/vega-lite/examples/#interactive">https://vega.github.io/vega-lite/examples/#interactive</a>.
@@ -294,7 +319,7 @@ Yi, Ji Soo, Youn ah Kang, John Stasko, and Julie A Jacko. 2007. <span>“Toward 
           </div>
         </div>
       </div>
-<a href="design.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="use.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 
     </div>
   </div>

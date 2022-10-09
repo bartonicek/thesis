@@ -515,7 +515,7 @@ var PLOTSCAPE = (() => {
             bgCol: `#f2efde`,
             reps: {
                 col: [`#cccccc`, `#1b9e77`, `#d95f02`, `#7570b3`, `#ffffffCC`],
-                strokeCol: [null, null, null, null, `#000000`],
+                strokeCol: [`#999999`, `#000000`, `#000000`, `#000000`, `#000000`],
                 strokeWidth: [1, 1, 1, 1, 1],
                 radius: [5, 5, 5, 5, 5],
             },

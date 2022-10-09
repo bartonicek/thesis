@@ -1,0 +1,11 @@
+Transiently selected,Group,Bit representation
+No,Base,00000000
+No,Group 1,00000001
+No,Group 2,00000010
+No,Group 3,00000011
+No,Group 4,00000100
+Yes,Base,10000000
+Yes,Group 1,10000001
+Yes,Group 2,10000010
+Yes,Group 3,10000011
+Yes,Group 4,10000100

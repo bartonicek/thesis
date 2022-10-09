@@ -1,31 +1,18 @@
 # Design
 
-> [A good visualization] is "boring" in the right way. It's not trying to do too much, so you can focus on the message that is being communicated. [...] I don't want [the visualization] to be "pretty", I want it to be visually pleasing enough that it doesn't distract [from the information being presented]. 
->
-> Visualization Q&A Livestream [@betancourt2020may]
-
-```{r}
-
-library(plotscapeTest)
-
-ps_scene(mtcars) |>
-  ps_scatter(ps_map(x = "wt", y = "mpg")) |>
-  ps_bar(ps_map(x = "cyl")) |>
-  ps_histo(ps_map(x = "disp")) |>
-  ps_scatter(ps_map(x = "drat", y = "qsec")) 
-
-
-```
-
-## Graphic Design
-
 > Graphical excellence is that which gives to the viewer the greatest number of ideas in the shortest time with the least ink in the smallest space
 >
 > The Visual Display of Quantitative Information [@tufte2001visual]
 
-Absence of graphical features can be equally as valuable as their presence (or arguably even moreso). In the cult classic book on the design of comics and graphical novels, Understanding Comics: The Invisible Art, Scott McCloud [-@mccloud1994apr] repeatedly stresses the importance of not just the things that appear on the page but also the ones that are purposefully left out. For example, McCloud demonstrates how closure - the gap between the panels of a comic strip - is crucial for conveying meaning. In a similar vein, Tufte [-@tufte2001visual] shows how the absence of elements such as gridlines and axis ticks can greatly enhance the clarity and effectiveness of data visualization. Since interactive visualizations are static visualizations most of the time, the same principles apply. The default graphical setting of the visualization should therefore be as simple and austere as possible, within reason and unless the user explicitly desires otherwise.
+## Graphic Design
 
-The visualization should also adhere to the big four principles of graphic design: **contrast**, **repetition**, **alignment**, and **proximity** [CRAP, @williams2004nondesigner]. **Contrast** provides a way to direct the viewer's attention and this makes it one of the most important concepts in graphic design [@reynolds2011dec]. To properly leverage contrast, we should present large visual differences (contrast) in the parts of the visualization that we want the user to focus on, and, conversely, make the less important parts of the visualization appear more visually uniform. For a concrete example, when highlighting as a result of linked brushing, the highlight color should contrast strongly with the base color, and this can be achieved by using a muted (e.g. light gray) color for the base and a more vibrant color (e.g. green) as the highlight. As opposed to contrast, **repetition** provides a sense of visual unity and consistency.  
+> [A good visualization] is "boring" in the right way. It's not trying to do too much, so you can focus on the message that is being communicated. [...] I don't want [the visualization] to be "pretty", I want it to be visually pleasing enough that it doesn't distract [from the information being presented]. 
+>
+> Visualization Q&A Livestream [@betancourt2020may]
+
+Absence of graphical features can be equally as valuable as their presence (or arguably even moreso). In the cult classic book on the design of comics and graphical novels, Understanding Comics: The Invisible Art, Scott McCloud [-@mccloud1994apr] repeatedly stresses the importance of not just the things that appear on the page but also the ones that are purposefully left out. For example, McCloud demonstrates how closure - the gap between the panels of a comic strip - is crucial for conveying meaning. In a similar vein, Tufte [-@tufte2001visual] showed how the absence of non-data elements such as gridlines and axis ticks can greatly enhance the clarity and effectiveness of data visualization. Further, Tufte also disparaged about chartjunk, that is, completely redundant non-data elements and decorations that do nothing but distract from the data. While Tufte discussed these concepts in relation to static visualizations, other authors have also warned about the danger of regressing back to "artistic" rather than informative interactive visualizations as computational resources become cheaper [@dix1998]. To summarize, in static visualization there is a danger in not just showing too little but also showing too much, and since an interactive visualization is static visualization at any single moment of time, the same principles apply here. Therefore, the default graphical parameters in `plotscape` are chosen to create a clean, fairly austere look, as not to distract from the data. In similar vein, I have tried to minimize the presence of non-plot elements (such as sliders/drop-down menus) in the visual scene, by binding most interactive actions to either mouse or keyboard commands, and presenting only a single small help button in the top-right corner, so that the user can look these commands up on the fly.
+
+One of the aims of `plotscape` is also to adhere to the big four principles of graphic design: **contrast**, **repetition**, **alignment**, and **proximity** [CRAP, @williams2004nondesigner]. **Contrast** is intimately linked to the well-known figure-ground phenomenon in cognitive sciences, whereby sharp borders and edges tend to draw attention from the brain's visual system [see e.g. @qiu2007]. Thus, good use of contrast directs the viewer's attention and this makes it one of the most important concepts in graphic design [@reynolds2011dec]. To properly leverage contrast, the areas of the visualization that we want to draw the user's attention to should present large visual contrasts, and, conversely, the less important parts of the visualization should appear more visually uniform. As a concrete example, when highlighting as a result of linked brushing, the highlight color should contrast strongly with the base color. I have tried to achieve this by using a muted (e.g. light gray) color for the base and a more vibrant color (e.g. green) for the highlight. Contrary to contrast, **repetition** provides a sense of visual unity and consistency. This is achieved in `plotscape` fairly automatically as all plots share the same graphical parameters, for example the same background color, object colors, font, etc... Similar to repetition, the purpose of **alignment** is to create a pleasing visual unity and a sense of connection between the aligned graphical elements [@williams2004nondesigner]. Again, in `plotscape` alignment is resolved in a fairly straightforward way, as the default layout of plots within the visual scene is a rectangular grid with $\lfloor \sqrt{N_{plots}} \rfloor$ rows and $\lceil N_{plots} / \lfloor \sqrt{N_{plots}} \rfloor \rceil$ columns (where $\lfloor \cdot \rfloor$ and $\lceil \cdot \rceil$ indicate the floor and ceiling functions, respectively). A more elaborate layout scheme would be useful, however is outside the scope of the present thesis. Finally, the principle of **proximity** states that related things should be grouped together. In `plotscape`, all plots are related through the shared underlying data structure, so they should all be located close to each other. Again, this can be achieved via the rectangular grid. One could also ask if there is any other natural spatial ordering to the plots, outside of them all being related to each other. I think that, without specific domain knowledge about the data at hand, the answer is "no". The user can, however, arrange plots within the visual scene based on their own perception of relatedness between the different types of plots and the variables being presented.       
 
 The choice of colors also greatly influences 
 
@@ -37,24 +24,55 @@ Making the interactive scene look visually unified can be achieved through sever
 
 ## Technical Design
 
-The JavaScript source files were written in TypeScript `r system("tsc --v", intern = TRUE)` [@bierman2014understanding] and bundled and transpiled into JavaScript using the `typescript-bundle` package Version 1.0.18, using the VS Code IDE `r system("code --v", intern = TRUE)[1]`. All code written was native Typescript/JavaScript, no external JavaScript packages were used. The R interface to the package was written in `r system("R --version", intern = TRUE)[1]`, using the RStudio IDE 
+The JavaScript source files were written in TypeScript `r tolower(system("tsc --v", intern = TRUE))` [@bierman2014understanding] and bundled and transpiled into JavaScript using the `typescript-bundle` package version 1.0.18, using the VS Code IDE `r system("code --v", intern = TRUE)[1]`. All code written was native Typescript/JavaScript, no external JavaScript packages were used. The R interface to the package was written in `r system("R --version", intern = TRUE)[1]`, using the RStudio IDE. The binding between JavaScript and R was specified using the `htmlwidgets` package [@htmlwidgets2021], version `r packageVersion("htmlwidgets")`. 
 
-### Scene {#sec-scene}
+### Scene {#scene}
 
-Scene is the object that is placed the highest in the program hierarchy. It represents the unified whole of the information that the user sees and interacts with, both visually and programmatically. All other visual and interactive elements are defined as its children, and scene is responsible for organizing and coordinating them, either directly or via intermediaries that are also its children. The two main classes of elements defined on the scene are:
+Scene sits at the top of the object hierarchy. It represents the unified whole of the visual information that the user sees and interacts with. All other visual and interactive elements are defined as its children, and scene is responsible for organizing and coordinating them, either directly or via intermediaries. The two main classes of child elements defined on the scene are:
 
 - Global Handlers
 - Plots
 
-### Global Handlers
+### Global Handlers {#global-handlers}
 
-Global handlers are child objects of [Scene](#sec-scene) that take care of things such as how plots are sized and placed together, how the scene responds to keyboard input, how it responds to certain cases (rows of the data) being selected, and how it responds to changes of state.    
+Global handlers are child objects of [Scene](#scene) that take care of responsibilities such as plot sizing and placement, keyboard input, changes in state, membership of the cases (rows of the data). The following global handlers are defined on the Scene:    
 
 - Marker 
 - State handler
 - Keyboard handler
 - Size handler
 
-#### Marker {#sec-global-handlers}
+#### Marker 
 
-Marker is a [global handler](#sec-global-handlers) whose primary task is to listen to changes in the membership of the cases in our data and answers questions about them. For example, if each case (row) in our data is a participant, we can tell Marker things such as *"mark participants 10, 11, and 12 as belonging to group 2"*, and ask things such as *"which participants currently belong to group 1?"*, or *"which participants currently belong to transient selection?"*.
+Marker is probably the most important [global handler](#global-handlers), whose primary task is to monitor changes in the membership and answers queries about them. Each case (row) of the data can be assigned one of several different memberships: base (no membership, group 0), persistent (group 1-3), transient (yes/no). Further, transient and persistent memberships cross: for example, a case can be either pure base, transiently selected base, pure group 1, transiently selected group 1, etc... The membership information is encoded on the Marker in a single unsigned 8-bit integer vector, with persistent group memberships being stored on the least significant bit (e.g. group 0: 00000000, group 1: 00000001, etc...) and transient membership being stored on the most significant (i.e. 8th) bit.
+
+```{r, echo = FALSE}
+
+tab <- read.csv("tables/memberships.csv", 
+                colClasses = rep("character", 3))
+colnames(tab) <- c("Transiently selected", "Group", "Bit representation")
+knitr::kable(tab, caption = "Membership representation")
+
+```
+
+The Marker listens to which cases are currently being selected, and, when selection happens, it queries the [State Handler](#state-handler) to find the current membership state and assigns that membership to the selected cases. For example, if we are currently holding down the "1" key (associated with group 1) and click on a bar in a barplot corresponding to cases 10, 11, and 12, the Marker will assigns those cases the group 1 membership. Conversely, other objects can query the marker to find the membership of specific cases. This will most often happen when graphical objects are being drawn: for example, when a barplot is drawing bars corresponding to group 2, it will query the marker to find which cases belong to group 2 and it will then draw bars of the relevant height and color. 
+
+#### State Handler {#state-handler}
+
+The state listens to user's input. 
+
+#### Keyboard Handler
+
+#### Size Handler
+
+### Plots
+
+Each plots consists any number of:
+
+- Wranglers: bind, transform, and summarize variables from the data
+- Scales: transform data into screen coordinates
+- Representations: draw graphical objects
+- Auxiliaries: take care of non-data elements such as axis lines, text, etc...
+- Local handlers: take care of local behaviors such as clicking and dragging
+- (Global handlers): passed by reference from the scene
+
