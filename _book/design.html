@@ -29,7 +29,7 @@ The HTML output format for this example is bookdown::gitbook,</p>" />
 <meta name="author" content="Adam Bartonicek" />
 
 
-<meta name="date" content="2022-10-10" />
+<meta name="date" content="2022-10-12" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -180,8 +180,8 @@ div.csl-indent {
 <li class="chapter" data-level="2" data-path="literature-review.html"><a href="literature-review.html"><i class="fa fa-check"></i><b>2</b> Literature Review</a>
 <ul>
 <li class="chapter" data-level="2.1" data-path="literature-review.html"><a href="literature-review.html#what-is-interactivity"><i class="fa fa-check"></i><b>2.1</b> What even is interactivity?</a></li>
-<li class="chapter" data-level="2.2" data-path="literature-review.html"><a href="literature-review.html#interactive-techniquesfeatures"><i class="fa fa-check"></i><b>2.2</b> Interactive Techniques/Features</a></li>
-<li class="chapter" data-level="2.3" data-path="literature-review.html"><a href="literature-review.html#older-generation-interactive-visualization"><i class="fa fa-check"></i><b>2.3</b> Older Generation Interactive Visualization</a></li>
+<li class="chapter" data-level="2.2" data-path="literature-review.html"><a href="literature-review.html#exploration-vs.-presentation"><i class="fa fa-check"></i><b>2.2</b> Exploration vs. Presentation</a></li>
+<li class="chapter" data-level="2.3" data-path="literature-review.html"><a href="literature-review.html#brief-history-of-interactive-data-visualization"><i class="fa fa-check"></i><b>2.3</b> Brief History of Interactive Data Visualization</a></li>
 <li class="chapter" data-level="2.4" data-path="literature-review.html"><a href="literature-review.html#current-options-for-interactive-visualizations"><i class="fa fa-check"></i><b>2.4</b> Current Options for Interactive Visualizations</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="design.html"><a href="design.html"><i class="fa fa-check"></i><b>3</b> Design</a>
@@ -244,7 +244,7 @@ div.csl-indent {
 </div>
 <div id="technical-design" class="section level2 hasAnchor" number="3.3">
 <h2><span class="header-section-number">3.3</span> Technical Design<a href="design.html#technical-design" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>The JavaScript source files were written in TypeScript version 4.6.3 <span class="citation">(<a href="#ref-bierman2014understanding" role="doc-biblioref">Bierman, Abadi, and Torgersen 2014</a>)</span> and bundled and transpiled into JavaScript using the <code>typescript-bundle</code> package version 1.0.18, using the VS Code IDE 1.71.2. All code written was native Typescript/JavaScript, no external JavaScript packages were used. The R interface to the package was written in R version 4.2.1 (2022-06-23) – “Funny-Looking Kid”, using the RStudio IDE. The binding between JavaScript and R was specified using the <code>htmlwidgets</code> package <span class="citation">(<a href="#ref-htmlwidgets2021" role="doc-biblioref">Vaidyanathan et al. 2021</a>)</span>, version 1.5.4.</p>
+<p>The JavaScript source files were written in TypeScript version 4.6.3 <span class="citation">(<a href="#ref-bierman2014understanding" role="doc-biblioref">Bierman, Abadi, and Torgersen 2014</a>)</span> and bundled and transpiled into JavaScript using the <code>typescript-bundle</code> package version 1.0.18, using the VS Code IDE 1.72.0. All code written was native Typescript/JavaScript, no external JavaScript packages were used. The R interface to the package was written in R version 4.2.1 (2022-06-23) – “Funny-Looking Kid”, using the RStudio IDE. The binding between JavaScript and R was specified using the <code>htmlwidgets</code> package <span class="citation">(<a href="#ref-htmlwidgets2021" role="doc-biblioref">Vaidyanathan et al. 2021</a>)</span>, version 1.5.4.</p>
 <div id="scene" class="section level3 hasAnchor" number="3.3.1">
 <h3><span class="header-section-number">3.3.1</span> Scene<a href="design.html#scene" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Scene sits at the top of the object hierarchy. It represents the unified whole of the visual information that the user sees and interacts with. All other visual and interactive elements are defined as its children, and scene is responsible for organizing and coordinating them, either directly or via intermediaries. The two main classes of child elements defined on the scene are:</p>

@@ -83,7 +83,7 @@ kbd {
   background-color:#39413D
 }
 
-.graphicContainer .active {
+.graphicContainer.active {
   outline: 3px solid #2E3532
 }
 

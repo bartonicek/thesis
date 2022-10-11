@@ -28,7 +28,9 @@ scene1 |>
   ps_bar(ps_map(x = "am")) 
 ```
 
-We use the base R pipe `|>` operator to take an existing `plotscape` scene and append plots to it using function with the `ps_[plot type]()` syntax (we could have also used the `%>%` pipe operator from the `magrittr`/`tidyverse` packages, but that would require us loading an additional package). The functions always return the scene object back so we can chain the functions together to add multiple plots at once. Inside the plot functions, we specify which variables map onto which aesthetic, similar to the `ggplot2` package. The aesthetics can also be more tersely specified by using positional argument matching, without providing explicit names for the aesthetics, like so:
+We use the base R pipe `|>` operator to take an existing `plotscape` scene and append plots to it using plot-wrapper functions with the `ps_{plot type}()` syntax. Instead of the native pipe, we could have also used the `%>%` pipe operator from the `magrittr`/`tidyverse` packages, but that would require us loading an additional package, so let's keep using the native pipe here instead. 
+
+The plot-wrapper functions take in several arguments, the most important of which is the `mapping` argument. This specifies which variables in the data map onto which visual aesthetic or encoding, similar to the `ggplot2` package. We specify the mapping using the `ps_map()` function which takes in named string arguments where the name specifies the aesthetic mapping and the string specifies that name of the variable (column) in the data. The aesthetics can also be more tersely specified by using positional argument matching, without providing explicit names for the aesthetics, like so:
 
 ```{r, eval = FALSE}
 scene1 |> 
@@ -44,9 +46,9 @@ scene1 |>
   ps_bar(list(x = "am")) 
 ```
 
-(in fact, all the `ps_map()` function do is take the provided arguments and convert it to a named list. One advantage it has over just `list()` is the positional matching, i.e. `ps_scatter(list("wt", "mpg"))` won't work)
+(In fact, all the `ps_map()` function do is take the provided arguments and convert it to a named list. One advantage it has over just `list()` is the positional matching, i.e. `ps_scatter(list("wt", "mpg"))` won't work)
 
-But it would not be a `plotscape` visualization without interactivity! Try interacting with the barplot by clicking on the right bar:
+But enough about functions and arguments, the hallmark of `plotscape` is interactivity! Try interacting with the barplot by clicking on the right bar:
 
 ```{r}
 scene1 |> 
@@ -70,22 +72,27 @@ scene1 |>
   ps_bar(ps_map(x = "am")) 
 ```
 
-There are many different interactive actions you can take. To not have to remember them all, they're written in the pop-up help bar that you can access by pressing the button marked "?" in the top-right corner of the scene (the grey box around the plots).
+There are many different interactive actions you can take. Fortunately, you do not have to remember them all, they're written in the pop-up help bar that you can access by pressing the button marked "?" in the top-right corner of the scene (the grey box around the plots).
 
-Okay, so you're probably getting a bit bored of the old scatterplot and barplot. How about adding a histogram and a squareplot:
+You might be getting a bit bored of the old scatterplot and barplot at this point. How about adding a histogram and a squareplot into the mix:
 
 ```{r}
-scene1 |> 
-  ps_scatter(ps_map("wt", "mpg")) |>
-  ps_bar(ps_map("am")) |>
-  ps_histo(ps_map("disp")) |>
-  ps_wrapper_plot("square", ps_map("gear", "cyl"))
+
+ps_scene(mtcars) |>
+  ps_scatter(ps_map(x = "wt", y = "mpg")) |>
+  ps_bar(ps_map(x = "cyl")) |>
+  ps_histo(ps_map(x = "disp")) |>
+  ps_wrapper_plot("square", ps_map(x = "gear", y = "am"))
 
 ```
 
+Now, in the squareplot, try selecting the square that encodes all 5-gear automatic (hint: the top-right square) and look at the scatterplot. Notice anything interesting?
+
+All of the 5-gear automatic cars are neatly aligned below the main diagonal, meaning that they are less efficient for their weight than we would expect. To arrive at an insight like this with traditional static plots, we would either have to know where to look or try out many different plots (personally, I've used the `mtcars` dataset for years to test models and algorithms and never noticed this trend). With `plotscape`, we can generate insights on the fly!   
+
 ## Creating more complex plots
 
-We can get a bit more creative by adding plots programmatically. For example, here's how we can create a "scatterplot matrix"-like (i.e. one showing only unique combinations of different variables) visualization of the `iris` data:
+We can get a bit more creative by adding plots programmatically. For example, here's how we can create a "scatterplot matrix"-like visualization of the `iris` data (i.e. one scatterplot per unique combination of two variables):
 
 ```{r}
 
@@ -95,7 +102,7 @@ vars <- names(iris)
 xy <- matrix(vars[combn(1:4, 2)], 
                     ncol = 2, byrow = TRUE)
 
-scene2 <- ps_scene(iris, 1000, 800)
+scene2 <- ps_scene(iris)
 for (i in seq_len(nrow(xy))) {
   scene2 <- scene2 |> ps_scatter(ps_map(xy[i, 1], xy[i, 2]))
 }
@@ -105,5 +112,4 @@ scene2
 
 **Note to self: fix sizing, works in regular RMarkdown**
 
-Notice that I also specified the width and height as 1000 x 800 pixels in the `ps_scene(iris, 1000, 800)` call.
 

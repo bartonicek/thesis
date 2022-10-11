@@ -517,7 +517,7 @@ var PLOTSCAPE = (() => {
                 col: [`#cccccc`, `#1b9e77`, `#d95f02`, `#7570b3`, `#ffffffCC`],
                 strokeCol: [`#999999`, `#000000`, `#000000`, `#000000`, `#000000`],
                 strokeWidth: [1, 1, 1, 1, 1],
-                radius: [5, 5, 5, 5, 5],
+                radius: [1, 1, 1, 1, 1],
             },
         };
     });
@@ -1013,13 +1013,14 @@ var PLOTSCAPE = (() => {
             constructor(wrangler) {
                 super(wrangler);
                 this.getMappings = (membership) => {
+                    const { getMapping, getPars, defaultRadius, sizeMultiplier } = this;
                     const mappings = ["x", "y", "size"];
-                    let [x, y, size] = mappings.map((e) => this.getMapping(e, membership));
-                    const radius = this.getPars(membership).radius;
+                    let [x, y, size] = mappings.map((e) => getMapping(e, membership));
+                    const radius = getPars(membership).radius;
                     size =
                         size.length > 0
-                            ? size.map((e) => radius * e * this.sizeMultiplier)
-                            : Array.from(Array(x.length), (e) => radius * this.sizeMultiplier);
+                            ? size.map((e) => radius * e * defaultRadius * sizeMultiplier)
+                            : Array.from(Array(x.length), (e) => radius * defaultRadius * sizeMultiplier);
                     return [x, y, size];
                 };
                 this.drawBase = (context) => {
@@ -1051,6 +1052,9 @@ var PLOTSCAPE = (() => {
                     });
                 };
             }
+            get defaultRadius() {
+                return Math.min(this.scales.x.length, this.scales.y.length) / 20;
+            }
             get boundingRects() {
                 const [x, y, size] = this.getMappings(1);
                 const c = 1 / Math.sqrt(2);
@@ -1070,14 +1074,14 @@ var PLOTSCAPE = (() => {
             constructor(wrangler) {
                 super(wrangler);
                 this.getMappings = (membership) => {
+                    const { getMapping, maxWidth, sizeMultiplier } = this;
                     const mappings = ["x", "y", "size"];
-                    let [x, y, size] = mappings.map((e) => this.getMapping(e, membership));
-                    const radius = this.getPars(membership !== null && membership !== void 0 ? membership : 1).radius;
+                    let [x, y, size] = mappings.map((e) => getMapping(e, membership));
                     if (size.length > 0) {
-                        size = size.map((e) => radius * e * this.sizeMultiplier);
+                        size = size.map((e) => maxWidth * e * sizeMultiplier);
                     }
                     else {
-                        size = Array.from(Array(x.length), (e) => radius * this.sizeMultiplier);
+                        size = Array.from(Array(x.length), (e) => maxWidth * sizeMultiplier);
                     }
                     return [x, y, size];
                 };
@@ -1104,6 +1108,9 @@ var PLOTSCAPE = (() => {
                         context.drawBarsV(x, y1, y0, sizeBase, pars);
                     });
                 };
+            }
+            get maxWidth() {
+                return Math.min(this.scales.x.intervalWidth, this.scales.y.intervalWidth);
             }
             get boundingRects() {
                 const [x, y, size] = this.getMappings();
@@ -1344,10 +1351,6 @@ var PLOTSCAPE = (() => {
                 };
                 this.margins = margins;
                 this.span = 1 - margins.lower - margins.upper;
-                // Shift & shrink the scale by the plot margins
-                // this.offset =
-                //   this.offset + this.direction * this.length * this.margins.lower;
-                // this.length = (1 - this.margins.lower - this.margins.upper) * this.length;
             }
             get offset() {
                 return (this.offsetOriginal +
@@ -1358,6 +1361,9 @@ var PLOTSCAPE = (() => {
             }
             get plotMax() {
                 return this.pctToUnits(1);
+            }
+            get intervalWidth() {
+                return Math.abs(this.dataToPlot(this.values[0]) - this.dataToPlot(this.values[1]));
             }
         }
         exports.XYScaleDiscrete = XYScaleDiscrete;
@@ -1383,10 +1389,6 @@ var PLOTSCAPE = (() => {
                 };
                 this.margins = margins;
                 this.span = 1 - margins.lower - margins.upper;
-                // Shift & shrink the scale by the plot margins
-                // this.offset =
-                //   this.offset + this.direction * this.length * this.margins.lower;
-                // this.length = (1 - this.margins.lower - this.margins.upper) * this.length;
             }
             get offset() {
                 return (this.offsetOriginal +
@@ -1911,7 +1913,7 @@ var PLOTSCAPE = (() => {
                 this.wranglers = {
                     wrangler1: new Wrangler_js_1.Wrangler(globals.data, mapping, globals.handlers.marker).extractAsIs(...mapping.keys()),
                 };
-                this.scales = Object.assign({ x: new scls.XYScaleContinuous(this.width), y: new scls.XYScaleContinuous(this.height, -1) }, (mapping.get("size") && { size: new scls.AreaScaleContinuous(10) }));
+                this.scales = Object.assign({ x: new scls.XYScaleContinuous(this.width), y: new scls.XYScaleContinuous(this.height, -1) }, (mapping.get("size") && { size: new scls.AreaScaleContinuous(1) }));
                 this.representations = {
                     points: new reps.Points(this.wranglers.wrangler1),
                 };
@@ -2026,7 +2028,7 @@ var PLOTSCAPE = (() => {
                 this.scales = {
                     x: new scls.XYScaleDiscrete(this.width),
                     y: new scls.XYScaleDiscrete(this.height, -1),
-                    size: new scls.AreaScaleContinuous(this.width),
+                    size: new scls.AreaScaleContinuous(1),
                 };
                 this.representations = {
                     squares: new reps.Squares(this.wranglers.wrangler1),
@@ -2106,7 +2108,7 @@ var PLOTSCAPE = (() => {
                 this.plotIds = [];
                 this.globals = {
                     nPlots: 0,
-                    scaleFactor: 3,
+                    scaleFactor: 2,
                     data: data,
                     sceneWidth: parseInt(getComputedStyle(element).width, 10),
                     sceneHeight: parseInt(getComputedStyle(element).height, 10),

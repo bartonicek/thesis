@@ -1,7 +1,6 @@
 HTMLWidgets.widget({
 
   name: 'plotscapeTest',
-
   type: 'output',
 
   factory: function(el, width, height) {
@@ -14,7 +13,6 @@ HTMLWidgets.widget({
 
         // TODO: code to render the widget, e.g.
         el.classList.add("graphicDiv")
-        el.innerText = PLOTSCAPE.mean(x.data);
         const scene = new PLOTSCAPE.Scene(el, new PLOTSCAPE.DataFrame(x.data))
 
         if (!x.types) return

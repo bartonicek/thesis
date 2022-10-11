@@ -3,8 +3,8 @@ tab:unnamed-chunk-4
 introduction
 literature-review
 what-is-interactivity
-interactive-techniquesfeatures
-older-generation-interactive-visualization
+exploration-vs.-presentation
+brief-history-of-interactive-data-visualization
 current-options-for-interactive-visualizations
 design
 graphic-design
