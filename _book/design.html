@@ -4,13 +4,13 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 3 Design | Efficient and Principled Interactive Data Visualization with plotscape</title>
+  <title>Chapter 3 Design | Principled and Efficient Interactive Data Exploration with plotscape</title>
   <meta name="description" content="<p>This is a minimal example of using the bookdown package to write a book.
 set in the _output.yml file.
 The HTML output format for this example is bookdown::gitbook,</p>" />
   <meta name="generator" content="bookdown 0.29 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 3 Design | Efficient and Principled Interactive Data Visualization with plotscape" />
+  <meta property="og:title" content="Chapter 3 Design | Principled and Efficient Interactive Data Exploration with plotscape" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="<p>This is a minimal example of using the bookdown package to write a book.
@@ -19,7 +19,7 @@ The HTML output format for this example is bookdown::gitbook,</p>" />
   <meta name="github-repo" content="rstudio/bookdown-demo" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 3 Design | Efficient and Principled Interactive Data Visualization with plotscape" />
+  <meta name="twitter:title" content="Chapter 3 Design | Principled and Efficient Interactive Data Exploration with plotscape" />
   
   <meta name="twitter:description" content="<p>This is a minimal example of using the bookdown package to write a book.
 set in the _output.yml file.
@@ -29,7 +29,6 @@ The HTML output format for this example is bookdown::gitbook,</p>" />
 <meta name="author" content="Adam Bartonicek" />
 
 
-<meta name="date" content="2022-10-12" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -60,16 +59,6 @@ The HTML output format for this example is bookdown::gitbook,</p>" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
-<script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
-<script src="libs/plotly-binding-4.10.0/plotly.js"></script>
-<script src="libs/typedarray-0.1/typedarray.min.js"></script>
-<link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
-<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
-<link href="libs/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
-<script src="libs/plotly-main-2.5.1/plotly-latest.min.js"></script>
-<link href="libs/plotscape-1.0.0/styles.css" rel="stylesheet" />
-<script src="libs/plotscape-1.0.0/bundle.js"></script>
-<script src="libs/plotscapeTest-binding-0.0.0.9000/plotscapeTest.js"></script>
 
 
 <style type="text/css">
@@ -110,7 +99,7 @@ code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code span.at { color: #7d9029; } /* Attribute */
 code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
+code span.bu { color: #008000; } /* BuiltIn */
 code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
 code span.ch { color: #4070a0; } /* Char */
 code span.cn { color: #880000; } /* Constant */
@@ -123,7 +112,7 @@ code span.er { color: #ff0000; font-weight: bold; } /* Error */
 code span.ex { } /* Extension */
 code span.fl { color: #40a070; } /* Float */
 code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
+code span.im { color: #008000; font-weight: bold; } /* Import */
 code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 code span.kw { color: #007020; font-weight: bold; } /* Keyword */
 code span.op { color: #666666; } /* Operator */
@@ -179,10 +168,10 @@ div.csl-indent {
 <li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
 <li class="chapter" data-level="2" data-path="literature-review.html"><a href="literature-review.html"><i class="fa fa-check"></i><b>2</b> Literature Review</a>
 <ul>
-<li class="chapter" data-level="2.1" data-path="literature-review.html"><a href="literature-review.html#what-is-interactivity"><i class="fa fa-check"></i><b>2.1</b> What even is interactivity?</a></li>
-<li class="chapter" data-level="2.2" data-path="literature-review.html"><a href="literature-review.html#exploration-vs.-presentation"><i class="fa fa-check"></i><b>2.2</b> Exploration vs. Presentation</a></li>
-<li class="chapter" data-level="2.3" data-path="literature-review.html"><a href="literature-review.html#brief-history-of-interactive-data-visualization"><i class="fa fa-check"></i><b>2.3</b> Brief History of Interactive Data Visualization</a></li>
-<li class="chapter" data-level="2.4" data-path="literature-review.html"><a href="literature-review.html#current-options-for-interactive-visualizations"><i class="fa fa-check"></i><b>2.4</b> Current Options for Interactive Visualizations</a></li>
+<li class="chapter" data-level="2.1" data-path="literature-review.html"><a href="literature-review.html#what-is-interactivity"><i class="fa fa-check"></i><b>2.1</b> What is interactivity?</a></li>
+<li class="chapter" data-level="2.2" data-path="literature-review.html"><a href="literature-review.html#brief-history-of-interactive-data-visualization-in-statistics"><i class="fa fa-check"></i><b>2.2</b> Brief History of Interactive Data Visualization in Statistics</a></li>
+<li class="chapter" data-level="2.3" data-path="literature-review.html"><a href="literature-review.html#current-age-interactive-data-visualization-and-the-rise-of-web-technologies"><i class="fa fa-check"></i><b>2.3</b> Current-Age Interactive Data Visualization and the Rise of Web Technologies</a></li>
+<li class="chapter" data-level="2.4" data-path="literature-review.html"><a href="literature-review.html#interactive-visualization-as-reactive-data-processing"><i class="fa fa-check"></i><b>2.4</b> Interactive Visualization as Reactive Data Processing</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="design.html"><a href="design.html"><i class="fa fa-check"></i><b>3</b> Design</a>
 <ul>
@@ -198,7 +187,12 @@ div.csl-indent {
 <li class="chapter" data-level="4" data-path="use.html"><a href="use.html"><i class="fa fa-check"></i><b>4</b> Use</a>
 <ul>
 <li class="chapter" data-level="4.1" data-path="use.html"><a href="use.html#a-minimal-example-linked-scatterplot-and-barplot"><i class="fa fa-check"></i><b>4.1</b> A minimal example: linked scatterplot and barplot</a></li>
-<li class="chapter" data-level="4.2" data-path="use.html"><a href="use.html#creating-more-complex-plots"><i class="fa fa-check"></i><b>4.2</b> Creating more complex plots</a></li>
+<li class="chapter" data-level="4.2" data-path="use.html"><a href="use.html#creating-more-complex-scenes-with-layouts"><i class="fa fa-check"></i><b>4.2</b> Creating more complex scenes with layouts</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>5</b> Conclusion</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="conclusion.html"><a href="conclusion.html#concluding-remarks"><i class="fa fa-check"></i><b>5.1</b> Concluding remarks</a></li>
+<li class="chapter" data-level="5.2" data-path="conclusion.html"><a href="conclusion.html#future-directions"><i class="fa fa-check"></i><b>5.2</b> Future Directions</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -213,7 +207,7 @@ div.csl-indent {
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Efficient and Principled Interactive Data Visualization with plotscape</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Principled and Efficient Interactive Data Exploration with plotscape</a>
           </h1>
         </div>
 
@@ -227,27 +221,30 @@ div.csl-indent {
 <p>Graphical excellence is that which gives to the viewer the greatest number of ideas in the shortest time with the least ink in the smallest space</p>
 <p>The Visual Display of Quantitative Information <span class="citation">(<a href="#ref-tufte2001visual" role="doc-biblioref">Tufte 2001</a>)</span></p>
 </blockquote>
+<p>The aim of <code>plotscape</code> is to provide a robust and efficient tool for exploratory data analysis (EDA). The profile of the hypothetical average user is someone who works with data a lot, has little spare time, and wants to understand the data as well as possible. As such, the broad design philosophy of <code>plotscape</code> is to provide an intuitive tool with a flat learning curve that can be easily used out-of-the-box.</p>
 <div id="graphic-design" class="section level2 hasAnchor" number="3.1">
 <h2><span class="header-section-number">3.1</span> Graphic Design<a href="design.html#graphic-design" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <blockquote>
 <p>[A good visualization] is “boring” in the right way. It’s not trying to do too much, so you can focus on the message that is being communicated. […] I don’t want [the visualization] to be “pretty”, I want it to be visually pleasing enough that it doesn’t distract [from the information being presented].</p>
 <p>Visualization Q&amp;A Livestream <span class="citation">(<a href="#ref-betancourt2020may" role="doc-biblioref">Betancourt 2020</a>)</span></p>
 </blockquote>
-<p>Absence of graphical features can be equally as valuable as their presence (or arguably even moreso). In the cult classic book on the design of comics and graphical novels, Understanding Comics: The Invisible Art, Scott McCloud <span class="citation">(<a href="#ref-mccloud1994apr" role="doc-biblioref">1994</a>)</span> repeatedly stresses the importance of not just the things that appear on the page but also the ones that are purposefully left out. For example, McCloud demonstrates how closure - the gap between the panels of a comic strip - is crucial for conveying meaning. In a similar vein, Tufte <span class="citation">(<a href="#ref-tufte2001visual" role="doc-biblioref">2001</a>)</span> showed how the absence of non-data elements such as gridlines and axis ticks can greatly enhance the clarity and effectiveness of data visualization. Further, Tufte also disparaged about chartjunk, that is, completely redundant non-data elements and decorations that do nothing but distract from the data. While Tufte discussed these concepts in relation to static visualizations, other authors have also warned about the danger of regressing back to “artistic” rather than informative interactive visualizations as computational resources become cheaper <span class="citation">(<a href="#ref-dix1998" role="doc-biblioref">Dix and Ellis 1998</a>)</span>. To summarize, in static visualization there is a danger in not just showing too little but also showing too much, and since an interactive visualization is static visualization at any single moment of time, the same principles apply here. Therefore, the default graphical parameters in <code>plotscape</code> are chosen to create a clean, fairly austere look, as not to distract from the data. In similar vein, I have tried to minimize the presence of non-plot elements (such as sliders/drop-down menus) in the visual scene, by binding most interactive actions to either mouse or keyboard commands, and presenting only a single small help button in the top-right corner, so that the user can look these commands up on the fly.</p>
-<p>One of the aims of <code>plotscape</code> is also to adhere to the big four principles of graphic design: <strong>contrast</strong>, <strong>repetition</strong>, <strong>alignment</strong>, and <strong>proximity</strong> <span class="citation">(CRAP, <a href="#ref-williams2004nondesigner" role="doc-biblioref">Williams 2004</a>)</span>. <strong>Contrast</strong> is intimately linked to the well-known figure-ground phenomenon in cognitive sciences, whereby sharp borders and edges tend to draw attention from the brain’s visual system <span class="citation">(see e.g. <a href="#ref-qiu2007" role="doc-biblioref">Qiu, Sugihara, and Heydt 2007</a>)</span>. Thus, good use of contrast directs the viewer’s attention and this makes it one of the most important concepts in graphic design <span class="citation">(<a href="#ref-reynolds2011dec" role="doc-biblioref">Reynolds 2011</a>)</span>. To properly leverage contrast, the areas of the visualization that we want to draw the user’s attention to should present large visual contrasts, and, conversely, the less important parts of the visualization should appear more visually uniform. As a concrete example, when highlighting as a result of linked brushing, the highlight color should contrast strongly with the base color. I have tried to achieve this by using a muted (e.g. light gray) color for the base and a more vibrant color (e.g. green) for the highlight. Contrary to contrast, <strong>repetition</strong> provides a sense of visual unity and consistency. This is achieved in <code>plotscape</code> fairly automatically as all plots share the same graphical parameters, for example the same background color, object colors, font, etc… Similar to repetition, the purpose of <strong>alignment</strong> is to create a pleasing visual unity and a sense of connection between the aligned graphical elements <span class="citation">(<a href="#ref-williams2004nondesigner" role="doc-biblioref">Williams 2004</a>)</span>. Again, in <code>plotscape</code> alignment is resolved in a fairly straightforward way, as the default layout of plots within the visual scene is a rectangular grid with <span class="math inline">\(\lfloor \sqrt{N_{plots}} \rfloor\)</span> rows and <span class="math inline">\(\lceil N_{plots} / \lfloor \sqrt{N_{plots}} \rfloor \rceil\)</span> columns (where <span class="math inline">\(\lfloor \cdot \rfloor\)</span> and <span class="math inline">\(\lceil \cdot \rceil\)</span> indicate the floor and ceiling functions, respectively). A more elaborate layout scheme would be useful, however is outside the scope of the present thesis. Finally, the principle of <strong>proximity</strong> states that related things should be grouped together. In <code>plotscape</code>, all plots are related through the shared underlying data structure, so they should all be located close to each other. Again, this can be achieved via the rectangular grid. One could also ask if there is any other natural spatial ordering to the plots, outside of them all being related to each other. I think that, without specific domain knowledge about the data at hand, the answer is “no”. The user can, however, arrange plots within the visual scene based on their own perception of relatedness between the different types of plots and the variables being presented.</p>
-<p>The choice of colors also greatly influences</p>
+<p>Graphic design is an important consideration since if a user finds the visualization unattractive, they will not want to spend as much time with it. While data should always come first, pure visuals are also an important part of the user experience. Therefore, it is necessary to take the different considerations of graphic design into account.</p>
+<p>Firstly, when a user looks at a <code>plotscape</code> visualization, it is important that they perceive it as a coherent, unified whole. This is to reinforce that fact that the individual plots and other graphical elements are inextricably linked via a shared data structure. Making the interactive scene look visually unified can be achieved through several means. For example, a consistent color scheme should be used across the different plots and other elements that make up the visualization. Likewise, sizing of the different elements should also be consistent. Finally, the results of interaction should also be consistently implemented across different plots: if clicking and dragging shows up as linked selection in one plot, it should not present a different visual result in another.</p>
+<p>Second and more generally, <code>plotscape</code> should also adhere to the big four principles of graphic design: <strong>contrast</strong>, <strong>repetition</strong>, <strong>alignment</strong>, and <strong>proximity</strong> <span class="citation">(CRAP, <a href="#ref-williams2004nondesigner" role="doc-biblioref">Williams 2004</a>)</span>. <strong>Contrast</strong> is intimately connected to the well-known figure-ground phenomenon in cognitive sciences, whereby sharp borders and edges tend to draw attention from the brain’s visual system <span class="citation">(see e.g. <a href="#ref-qiu2007" role="doc-biblioref">Qiu, Sugihara, and Heydt 2007</a>)</span>. Thus, good use of contrast directs the viewer’s attention and this makes it one of the most important concepts in graphic design <span class="citation">(<a href="#ref-reynolds2011dec" role="doc-biblioref">Reynolds 2011</a>)</span>. To properly leverage contrast, the areas of the visualization that we want to draw the user’s attention to should present large visual contrasts, and, conversely, the less important parts of the visualization should appear more visually uniform. As a concrete example, when highlighting as a result of linked selection, the highlight color should contrast strongly with the base color. I have tried to achieve this by using a muted (e.g. light gray) color for the base and a more vibrant color (e.g. green) for the highlight. Contrary to contrast, <strong>repetition</strong> provides a sense of visual unity and consistency. This is achieved in <code>plotscape</code> fairly automatically as all plots share the same graphical parameters, for example the same background color, object colors, font, etc… Similar to repetition, the purpose of <strong>alignment</strong> is to create a pleasing visual unity and a sense of connection between the aligned graphical elements <span class="citation">(<a href="#ref-williams2004nondesigner" role="doc-biblioref">Williams 2004</a>)</span>. Again, in <code>plotscape</code> alignment is resolved in a fairly straightforward way, as the default layout of plots within the visual scene is a rectangular grid with <span class="math inline">\(\lfloor \sqrt{N_{plots}} \rfloor\)</span> rows and <span class="math inline">\(\lceil N_{plots} / \lfloor \sqrt{N_{plots}} \rfloor \rceil\)</span> columns (where <span class="math inline">\(\lfloor \cdot \rfloor\)</span> and <span class="math inline">\(\lceil \cdot \rceil\)</span> indicate the floor and ceiling functions, respectively). I have plans to also implement a more sophisticated layout system based on the CSS grid functionality soon. Finally, the principle of <strong>proximity</strong> states that related things should be grouped together. In <code>plotscape</code>, all plots are related through the shared underlying data structure, so they should all be located close to each other. Again, this can be achieved via the rectangular grid. One could also ask if there is any other natural spatial ordering to the plots, outside of them all being related to each other. I think that, without specific domain knowledge about the data at hand, the answer is “no”. The user can, however, arrange plots within the visual scene based on their own perception of relatedness between the different types of plots and the variables being presented.</p>
+<p>Third, as is well known in the data visualization literature and graphic design literature in general, absence of graphical features can be equally as valuable as their presence (or arguably moreso). In the cult classic book on the design of comics and graphical novels, Understanding Comics: The Invisible Art, Scott McCloud <span class="citation">(<a href="#ref-mccloud1994apr" role="doc-biblioref">1994</a>)</span> repeatedly stresses the importance of not just the things that appear on the page but also the ones that are purposefully left out. For example, McCloud demonstrates how closure - the gap between the panels of a comic strip - is crucial for conveying meaning. In a similar vein, Tufte <span class="citation">(<a href="#ref-tufte2001visual" role="doc-biblioref">2001</a>)</span> showed how the absence of non-data elements such as gridlines and axis ticks can greatly enhance the clarity and effectiveness of data visualization. Further, Tufte also disparaged about chartjunk, that is, completely redundant non-data elements and decorations that do nothing but distract from the data. While Tufte discussed these concepts in relation to static visualizations, other authors have also warned about the danger of regressing back to “artistic” rather than informative interactive visualizations as computational resources become cheaper <span class="citation">(<a href="#ref-dix1998" role="doc-biblioref">Dix and Ellis 1998</a>)</span>. To summarize, in static visualization there is a danger in not just showing too little but also showing too much, and since an interactive visualization is static visualization at any single moment of time, the same principles apply here. Therefore, the default graphical parameters in <code>plotscape</code> are chosen to create a clean, fairly austere look, as not to distract from the data. In similar vein, I have tried to minimize the presence of non-plot elements (such as sliders/drop-down menus) in the visual scene, by binding most interactive actions to either mouse or keyboard commands, and presenting only a single small help button in the top-right corner, so that the user can look these commands up on the fly.</p>
 </div>
 <div id="user-interface" class="section level2 hasAnchor" number="3.2">
 <h2><span class="header-section-number">3.2</span> User Interface<a href="design.html#user-interface" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>When a user first looks at the interactive visualization, they should immediately perceive it as a coherent, unified whole. This is to reinforce that fact that the individual plots and other graphical elements are inextricably linked via a shared data structure. Everything that happens in the visual scene should be intuitive, synchronous, and result from the user’s direct intentions.</p>
-<p>Making the interactive scene look visually unified can be achieved through several means. A consistent color scheme should be used across the different plots and other elements that make up the visualization.</p>
+<p>Since <code>plotscape</code> is designed with exploration rather than presentation in mind, it follows that the average user will be more likely an applied researcher or data scientist rather than programmer specialized in creating intricate interactive visualizations. As such, much of <code>plotscape</code>’s programming interface should be streamlined, at the cost of some generality. That said, the user should always have the option of customizing and extending their experience provided they have the necessary expertise. However, for the average user, as much of the implementation as possible should be hidden behind a facade of sensible defaults.</p>
+<p>On the programming side, the user should be able to call simple, intuitively-named functions from R to produce <code>plotscape</code> scenes quickly and efficiently. The code should be simple enough so that the user can iterate through different visualizations until they converge at a scene that the greatest amount of information can be extracted from. Only a fairly basic knowledge fundamental R concepts such as functions, vectors, dataframes, and objects should be necessary to use <code>plotscape</code> effectively. If a user is more experienced, they may be able to add R-side JavaScript code, or even extend the TypeScript/JavaScript source code itself; however, no knowledge of TypeScript/JavaScript should be necessary for basic use.</p>
+<p>On the interaction side, the user’s interactions with a <code>plotscape</code> scene should be intuitive and responsive. Interactions with graphical representations of the data should result in predictable visual changes, and no visual change should happen without the user’s intention. Finally, the program should be optimized well-enough so that the lag between interactions and visual changes remains close to imperceptible under moderate data volumes.</p>
 </div>
 <div id="technical-design" class="section level2 hasAnchor" number="3.3">
 <h2><span class="header-section-number">3.3</span> Technical Design<a href="design.html#technical-design" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>The JavaScript source files were written in TypeScript version 4.6.3 <span class="citation">(<a href="#ref-bierman2014understanding" role="doc-biblioref">Bierman, Abadi, and Torgersen 2014</a>)</span> and bundled and transpiled into JavaScript using the <code>typescript-bundle</code> package version 1.0.18, using the VS Code IDE 1.72.0. All code written was native Typescript/JavaScript, no external JavaScript packages were used. The R interface to the package was written in R version 4.2.1 (2022-06-23) – “Funny-Looking Kid”, using the RStudio IDE. The binding between JavaScript and R was specified using the <code>htmlwidgets</code> package <span class="citation">(<a href="#ref-htmlwidgets2021" role="doc-biblioref">Vaidyanathan et al. 2021</a>)</span>, version 1.5.4.</p>
+<p>The source files were written in TypeScript version 4.9.3 <span class="citation">(<a href="#ref-bierman2014understanding" role="doc-biblioref">Bierman, Abadi, and Torgersen 2014</a>)</span> and bundled and transpiled into JavaScript using the <code>typescript-bundle</code> package version 1.0.18, using the VS Code IDE 1.74.3. All code written was in native Typescript/JavaScript, no external JavaScript packages were used. The R interface to the package was written in R version 4.2.2 (2022-10-31) – “Innocent and Trusting”, using the RStudio IDE. The binding between JavaScript and R was specified using the <code>htmlwidgets</code> package <span class="citation">(<a href="#ref-htmlwidgets2021" role="doc-biblioref">Vaidyanathan et al. 2021</a>)</span>, version 1.5.4.</p>
 <div id="scene" class="section level3 hasAnchor" number="3.3.1">
 <h3><span class="header-section-number">3.3.1</span> Scene<a href="design.html#scene" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Scene sits at the top of the object hierarchy. It represents the unified whole of the visual information that the user sees and interacts with. All other visual and interactive elements are defined as its children, and scene is responsible for organizing and coordinating them, either directly or via intermediaries. The two main classes of child elements defined on the scene are:</p>
+<p>Scene sits at the top of the <code>plotscape</code> object hierarchy. It represents the unified whole of the visual information that the user sees and interacts with. All other visual and interactive elements are defined as or on its proerties, and scene is responsible for constructing and organizing and coordinating them. The two main classes of elements defined on the scene are:</p>
 <ul>
 <li>Global Handlers</li>
 <li>Plots</li>
@@ -255,18 +252,17 @@ div.csl-indent {
 </div>
 <div id="global-handlers" class="section level3 hasAnchor" number="3.3.2">
 <h3><span class="header-section-number">3.3.2</span> Global Handlers<a href="design.html#global-handlers" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Global handlers are child objects of <a href="design.html#scene">Scene</a> that take care of responsibilities such as plot sizing and placement, keyboard input, changes in state, membership of the cases (rows of the data). The following global handlers are defined on the Scene:</p>
+<p>Global handlers take care of global responsibilities such as keyboard input, changes in state, and selection membership of the cases (rows of the data). The following global handlers are defined on the Scene:</p>
 <ul>
 <li>Marker</li>
 <li>State handler</li>
 <li>Keyboard handler</li>
-<li>Size handler</li>
 </ul>
 <div id="marker" class="section level4 hasAnchor" number="3.3.2.1">
 <h4><span class="header-section-number">3.3.2.1</span> Marker<a href="design.html#marker" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>Marker is probably the most important <a href="design.html#global-handlers">global handler</a>, whose primary task is to monitor changes in the membership and answers queries about them. Each case (row) of the data can be assigned one of several different memberships: base (no membership, group 0), persistent (group 1-3), transient (yes/no). Further, transient and persistent memberships cross: for example, a case can be either pure base, transiently selected base, pure group 1, transiently selected group 1, etc… The membership information is encoded on the Marker in a single unsigned 8-bit integer vector, with persistent group memberships being stored on the least significant bit (e.g. group 0: 00000000, group 1: 00000001, etc…) and transient membership being stored on the most significant (i.e. 8th) bit.</p>
+<p>Marker is probably the most important <a href="design.html#global-handlers">global handler</a>. Its primary task is to monitor changes in the membership of cases in the data and answers queries about them. Each case (row) of the data can be assigned one of several different memberships: base (no membership, group 0), persistent (group 1-3), transient (yes/no). Further, there can be a cross-product between transient and persistent membership: for example, a case can be either pure base, transiently selected base, pure group 1, transiently selected group 1, etc… The membership information is encoded on the Marker in a single unsigned 8-bit integer vector, with persistent group memberships being stored on the least significant bit (e.g. group 0: 00000000, group 1: 00000001, etc…) and transient membership being stored on the most significant (i.e. 8th) bit.</p>
 <table>
-<caption><span id="tab:unnamed-chunk-4">Table 3.1: </span>Membership representation</caption>
+<caption><span id="tab:unnamed-chunk-2">Table 3.1: </span>Membership representation</caption>
 <thead>
 <tr class="header">
 <th align="left">Transiently selected</th>
@@ -327,31 +323,132 @@ div.csl-indent {
 </tr>
 </tbody>
 </table>
-<p>The Marker listens to which cases are currently being selected, and, when selection happens, it queries the <a href="design.html#state-handler">State Handler</a> to find the current membership state and assigns that membership to the selected cases. For example, if we are currently holding down the “1” key (associated with group 1) and click on a bar in a barplot corresponding to cases 10, 11, and 12, the Marker will assigns those cases the group 1 membership. Conversely, other objects can query the marker to find the membership of specific cases. This will most often happen when graphical objects are being drawn: for example, when a barplot is drawing bars corresponding to group 2, it will query the marker to find which cases belong to group 2 and it will then draw bars of the relevant height and color.</p>
+<p>The Marker constantly listens to selection events. When selection happens, it queries the <a href="design.html#state-handler">State Handler</a> to find out the current membership state. It then assigns that membership to the selected cases. For example, if we are currently holding down the “1” key (associated with group 1) and click on a bar in a barplot corresponding to cases 10, 11, and 12, the Marker will assigns those cases the group 1 membership. Conversely, other objects can query the marker to find the membership of the cases. This will most often happen when graphical objects are being drawn: for example, when a barplot is drawing its bars, it draws one set of bars for each membership. At each step, it queries the marker to find which cases belong that particular membership, and it then draws bars of the relevant height and color.</p>
 </div>
 <div id="state-handler" class="section level4 hasAnchor" number="3.3.2.2">
 <h4><span class="header-section-number">3.3.2.2</span> State Handler<a href="design.html#state-handler" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>The state listens to user’s input.</p>
+<p>The State Handler keeps track of the global state (i.e. state of the entire scene) as well local state of the individual plots, by listening to user input captured by other handlers such as the Keyboard Handler. It also answers queries about state to other handlers and elements. For example, a Marker might enquire about the global state when a selection event is happening, to determine which membership it should assign to the selected cases. Conversely, when a selection action is happening somewhere within the scene, a single plot may enquire about its own state, specifically about whether it is active or not, and the plot will only draw its contents if the State Handler responds that it is active.</p>
 </div>
 <div id="keyboard-handler" class="section level4 hasAnchor" number="3.3.2.3">
 <h4><span class="header-section-number">3.3.2.3</span> Keyboard Handler<a href="design.html#keyboard-handler" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-</div>
-<div id="size-handler" class="section level4 hasAnchor" number="3.3.2.4">
-<h4><span class="header-section-number">3.3.2.4</span> Size Handler<a href="design.html#size-handler" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The Keyboard Handler listens to user’s input through keyboard. It records what keys are currently pressed and passes that information down to other handlers.</p>
 </div>
 </div>
 <div id="plots" class="section level3 hasAnchor" number="3.3.3">
 <h3><span class="header-section-number">3.3.3</span> Plots<a href="design.html#plots" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Each plots consists any number of:</p>
+<p>Plots are the core visible elements of a <code>plotscape</code> scene. Each plot consists of:</p>
 <ul>
-<li>Wranglers: bind, transform, and summarize variables from the data</li>
+<li>Graphic Stack: draw graphical primitives in one of three Layers: Base, Highlight, and User</li>
+<li>Wranglers: organize, transform, and summarize variables from the data</li>
 <li>Scales: transform data into screen coordinates</li>
-<li>Representations: draw graphical objects</li>
-<li>Auxiliaries: take care of non-data elements such as axis lines, text, etc…</li>
-<li>Local handlers: take care of local behaviors such as clicking and dragging</li>
-<li>(Global handlers): passed by reference from the scene</li>
+<li>Representations: draw and represent data with graphical objects</li>
+<li>Auxiliaries: draw and represent non-data elements such as axis lines, text, etc…</li>
+<li>Local handlers: handle local behaviors such as clicking and dragging</li>
+<li>(Global handlers): passed by reference from Scene, handle global behavior such as keyboard input, sizing, etc…</li>
 </ul>
+<p>The core difference between distinct types of plots such as scatterplot and barplot is a unique combination of a Wrangler and Representations. To create a new plot, we can either define a new Wrangler and assign one or more Representations to it, or we can use convenient, ready-made plot wrappers. The currently supported plot wrappers are: scatterplot, bubbplot, barplot, histogram, squareplot/square bubbleplot and a square heatmap.</p>
+<div id="graphic-stack" class="section level4 hasAnchor" number="3.3.3.1">
+<h4><span class="header-section-number">3.3.3.1</span> Graphic Stack<a href="design.html#graphic-stack" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Graphic stack is a container for three layers: Base, Highlight, and User. Together, these three layers provide an interface for drawing all relevant graphical primitives (such as lines, points, rectangles, etc…) on the the screen. First, the Base layer draws all parts of the plot that do not need to be re-rendered often, such as the base membership representations, axis lines, axis text, etc… The only time the Base layer gets redrawn is if either the scene gets re-scaled, or if some non-membership graphic attributes of objects such as size or opacity get changed. Next, the Highlight layer draws representations that belong to the highlight memberships (i.e. all possible combinations of transient and persistent membership). As such, the Highlight layer gets redrawn each time a selection event occurs. Finally, the User layer draws auxiliary graphical elements that correspond to user interaction. Currently, the only elements drawn in the User layer are screen dimming and a rectangular window that shows where a click-and-drag selection has occured.</p>
+</div>
+<div id="wrangler" class="section level4 hasAnchor" number="3.3.3.2">
+<h4><span class="header-section-number">3.3.3.2</span> Wrangler<a href="design.html#wrangler" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>A key issue in the design and production of statistical graphics is how to transform raw data into statistical summaries that can then be displayed. The “classical” answer to this problem is tight coupling between the graphic and the statistical summary: points display raw XY values (scatterplot), bars display counts (barplot), boxes with whiskers display quantiles (boxplot), etc… There is no clear conceptual separation between the statistical summaries computed from the data and the way they are drawn. Going further, one can extend this rigid view all the way to the data: <em>“the thing to do with a categorical variable is to summarize counts, and the thing to do with counts is to draw a barplot”</em>. Through this lens, the data dictates the graphic, and the choice we have in visualization is really just about how to decorate the plot.</p>
+<p>Yet, even among the few most common plot types, there is not a perfect one-to-one correspondence between summaries and graphics. Bars are, for example, used to draw both counts in barplot and binned frequencies in a histogram. This</p>
+<p>Wranglers provide a way to organize, transform, and summarize data into statistical summaries that underpin the graphical objects presented on the screen. Each wrangler is made up of several Casts. A cast is an augmented version of a data variable that: a) knows which aesthetic it represents, b) remembers which graphical object each of its elements belongs to via a list of indices, and c) knows how to apply a transformation to itself to return the relevant summaries of the data. This is necessary so that scene can respond to user input on the fly, while also retaining the flexibility to represent many different types of plots.</p>
+<p>To illustrate how Wranglers and Casts work, the simplest example is of course a scatterplot. A scatterplot a one-to-one representation of the data, meaning that each point represents one row of the dataset and its coordinates are given by the two columns that map onto the <code>x</code> and <code>y</code> axes. No transformations of the data are necessary. Thus, a scatterplot will have a single wrangler, with two casts: the <code>x</code> and <code>y</code>. The two casts will be independent, and since each row of the data is one point in the scatterplot, their lists of indices will consist of all unique values (one per each row of the dataset). Finally, the summary transformation applied to the data will simply be identity, meaning that the cast will simply return the raw values of the <code>x</code> and <code>y</code> variables from the data.</p>
+<p>More complex summaries of the data require more complex Wranglers. For example, the height of a histogram is determined by the number of cases within a specific range of the <code>x</code> variable. Thus, while histogram is also defined by a single wrangler with casts of <code>x</code> and <code>y</code> variables, these are no longer independent and we cannot get away with a simple identity transformation. First off, the <code>x</code> cast takes the original data variable and transforms it by assigning each value to one of <span class="math inline">\(n\)</span> bins. Then it also discards all non-unique values, ending up with <span class="math inline">\(n\)</span> values, one for each bin. In contrast, the <code>y</code> cast needs to count the number of cases within each bin. It can do this by taking a vector of 1’s, splitting it according to indices indicating bin membership, (e.g. indices [1, 1, 2, 2, 1, 3] mean that the first, second, and fifth values belong to bin one, third and fourth belong to bin two, and the sixth value belong to bin 3), and summing within each split. Here’s how we could implement the whole operation in R:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="design.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123456</span>)</span>
+<span id="cb1-2"><a href="design.html#cb1-2" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">20</span></span>
+<span id="cb1-3"><a href="design.html#cb1-3" aria-hidden="true" tabindex="-1"></a>bins <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">30</span>, <span class="dv">5</span>)</span>
+<span id="cb1-4"><a href="design.html#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="design.html#cb1-5" aria-hidden="true" tabindex="-1"></a>(numeric_variable <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">30</span>, N))</span></code></pre></div>
+<pre><code>##  [1] 28 10 29 17  7 13 22  4  6 30  3 20 25 15 26 19 16 12 24 18</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="design.html#cb3-1" aria-hidden="true" tabindex="-1"></a>(binned_numeric_variable <span class="ot">&lt;-</span> <span class="fu">cut</span>(numeric_variable, bins))</span></code></pre></div>
+<pre><code>##  [1] (25,30] (5,10]  (25,30] (15,20] (5,10]  (10,15] (20,25] (0,5]   (5,10] 
+## [10] (25,30] (0,5]   (15,20] (20,25] (10,15] (25,30] (15,20] (15,20] (10,15]
+## [19] (20,25] (15,20]
+## Levels: (0,5] (5,10] (10,15] (15,20] (20,25] (25,30]</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="design.html#cb5-1" aria-hidden="true" tabindex="-1"></a>indices <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(binned_numeric_variable)</span>
+<span id="cb5-2"><a href="design.html#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="design.html#cb5-3" aria-hidden="true" tabindex="-1"></a>(indicator <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span>, <span class="fu">length</span>(numeric_variable)))</span></code></pre></div>
+<pre><code>##  [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="design.html#cb7-1" aria-hidden="true" tabindex="-1"></a>(split_indicator <span class="ot">&lt;-</span> <span class="fu">split</span>(indicator, indices))</span></code></pre></div>
+<pre><code>## $`1`
+## [1] 1 1
+## 
+## $`2`
+## [1] 1 1 1
+## 
+## $`3`
+## [1] 1 1 1
+## 
+## $`4`
+## [1] 1 1 1 1 1
+## 
+## $`5`
+## [1] 1 1 1
+## 
+## $`6`
+## [1] 1 1 1 1</code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="design.html#cb9-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">unique</span>(binned_numeric_variable)</span>
+<span id="cb9-2"><a href="design.html#cb9-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">sapply</span>(split_indicator, sum)</span>
+<span id="cb9-3"><a href="design.html#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="design.html#cb9-4" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">data.frame</span>(x, y))</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">x</th>
+<th align="right">y</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(25,30]</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">(5,10]</td>
+<td align="right">3</td>
+</tr>
+<tr class="odd">
+<td align="left">(15,20]</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">(10,15]</td>
+<td align="right">5</td>
+</tr>
+<tr class="odd">
+<td align="left">(20,25]</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">(0,5]</td>
+<td align="right">4</td>
+</tr>
+</tbody>
+</table>
+<p>There are several questions one might ask about this way of doing things. First off, why go into the trouble of representing <code>y</code> as a vector of 1’s and then summing it up, instead of just counting the number of times each bin occurs? The answer is that having <code>y</code> represented with a separate variable gives us greater flexibility and generality. For example, imagine that instead of just counting the number of cases within each bin, we wanted to sum the values of another variable in each bin. In our framework, we can easily do this by swapping the vector of 1’s in <code>y</code> by an actual variable in the data.</p>
+</div>
+<div id="scales" class="section level4 hasAnchor" number="3.3.3.3">
+<h4><span class="header-section-number">3.3.3.3</span> Scales<a href="design.html#scales" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Scales translate the data coordinates into screen coordinates and vice versa, and come in two flavors: discrete and continuous. The most basic types of scales are the x- and y-axis scales. As of right now, there is also the area scale implemented, and other scales such as color will also be most likely implemented in the future.</p>
+<p>The most important property of a scale is its length. Continuous scales translate data values to length values by taking the data values as a fraction of the total data range and then multiplying it by the length. Discrete scales partition the length between a finite number of discrete values. Apart from length, other important properties of scales are direction, offset, zero, and expansion factor. Direction is fairly self-explanatory, for example the default plotting coordinate directions in HTML Canvas Element are left-to-right top-to-bottom, whereas in most typical plots, the y-axis direction is bottom-to-top, so in our y-axis scale we need to reverse the direction. Offset specifies whether the length values should start from some number other than zero, for example, if we want our x-axis to start 50px off the left border of the plot, we need to specify offset to be 50px. Zero is just a boolean value that specifies whether 0 is a meaningful value in the data: for example, in a barplot, we might have counts of in each bar &gt; 0, however, we want to plot the bars starting at 0, so we need to set zero to <code>true</code>. Finally, the expansion factor specifies how much beyond the range of the data should the scale expand. This is typically useful so that e.g. the smallest-valued points on a scatterplot do not get plotted over the x- or y- axis.</p>
+</div>
+<div id="representations" class="section level4 hasAnchor" number="3.3.3.4">
+<h4><span class="header-section-number">3.3.3.4</span> Representations<a href="design.html#representations" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Representations are one or more (usually more) graphical objects that directly represent the data. For example, all of the points on a scatterplot are a representation. Each representation knows how to query the Wrangler(s) for the mappings it needs to plot, how to draw its objects under different memberships, and where the boundaries of its objects are (such that they can be selected).</p>
+</div>
+<div id="auxiliaries" class="section level4 hasAnchor" number="3.3.3.5">
+<h4><span class="header-section-number">3.3.3.5</span> Auxiliaries<a href="design.html#auxiliaries" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Auxiliaries are graphical objects that do not directly represent the data. Typical examples are axis lines, axis text/title, etc… Because the design philosophy of <code>plotscape</code> is minimalism, only the most necessary few are currently implemented. Other auxiliaries such as axis ticks may be added later on, so that the user can display them if they want, however they will most likely not be on by default.</p>
+</div>
+<div id="local-handlers" class="section level4 hasAnchor" number="3.3.3.6">
+<h4><span class="header-section-number">3.3.3.6</span> Local Handlers<a href="design.html#local-handlers" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Like Global Handlers, Local Handlers manage responsibilities that are however local to a single plot. Examples currently include clicking with Click Handler, and dragging with Drag Handler.</p>
 
+</div>
 </div>
 </div>
 </div>

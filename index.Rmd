@@ -1,8 +1,10 @@
 --- 
-title: "Efficient and Principled Interactive Data Visualization with plotscape"
+title: "Principled and Efficient Interactive Data Exploration with plotscape"
 author: "Adam Bartonicek"
-date: "`r Sys.Date()`"
+date: "25/10/2022"
 output:
+  bookdown::html_document2:
+    toc: true
   bookdown::gitbook:
     df_print: paged
 documentclass: book

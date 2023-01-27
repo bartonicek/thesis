@@ -4,13 +4,13 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Efficient and Principled Interactive Data Visualization with plotscape</title>
+  <title>Principled and Efficient Interactive Data Exploration with plotscape</title>
   <meta name="description" content="<p>This is a minimal example of using the bookdown package to write a book.
 set in the _output.yml file.
 The HTML output format for this example is bookdown::gitbook,</p>" />
   <meta name="generator" content="bookdown 0.29 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Efficient and Principled Interactive Data Visualization with plotscape" />
+  <meta property="og:title" content="Principled and Efficient Interactive Data Exploration with plotscape" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="<p>This is a minimal example of using the bookdown package to write a book.
@@ -19,7 +19,7 @@ The HTML output format for this example is bookdown::gitbook,</p>" />
   <meta name="github-repo" content="rstudio/bookdown-demo" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Efficient and Principled Interactive Data Visualization with plotscape" />
+  <meta name="twitter:title" content="Principled and Efficient Interactive Data Exploration with plotscape" />
   
   <meta name="twitter:description" content="<p>This is a minimal example of using the bookdown package to write a book.
 set in the _output.yml file.
@@ -29,7 +29,6 @@ The HTML output format for this example is bookdown::gitbook,</p>" />
 <meta name="author" content="Adam Bartonicek" />
 
 
-<meta name="date" content="2022-10-12" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -67,9 +66,9 @@ The HTML output format for this example is bookdown::gitbook,</p>" />
 <script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
 <link href="libs/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
 <script src="libs/plotly-main-2.5.1/plotly-latest.min.js"></script>
-<link href="libs/plotscape-1.0.0/styles.css" rel="stylesheet" />
-<script src="libs/plotscape-1.0.0/bundle.js"></script>
-<script src="libs/plotscapeTest-binding-0.0.0.9000/plotscapeTest.js"></script>
+<link href="libs/plotscaper-1.0.0/styles.css" rel="stylesheet" />
+<script src="libs/plotscaper-1.0.0/bundle.js"></script>
+<script src="libs/plotscaper-binding-0.0.0.9000/plotscaper.js"></script>
 
 
 <style type="text/css">
@@ -180,9 +179,8 @@ div.csl-indent {
 <li class="chapter" data-level="2" data-path="literature-review.html"><a href="literature-review.html"><i class="fa fa-check"></i><b>2</b> Literature Review</a>
 <ul>
 <li class="chapter" data-level="2.1" data-path="literature-review.html"><a href="literature-review.html#what-is-interactivity"><i class="fa fa-check"></i><b>2.1</b> What even is interactivity?</a></li>
-<li class="chapter" data-level="2.2" data-path="literature-review.html"><a href="literature-review.html#exploration-vs.-presentation"><i class="fa fa-check"></i><b>2.2</b> Exploration vs. Presentation</a></li>
-<li class="chapter" data-level="2.3" data-path="literature-review.html"><a href="literature-review.html#brief-history-of-interactive-data-visualization"><i class="fa fa-check"></i><b>2.3</b> Brief History of Interactive Data Visualization</a></li>
-<li class="chapter" data-level="2.4" data-path="literature-review.html"><a href="literature-review.html#current-options-for-interactive-visualizations"><i class="fa fa-check"></i><b>2.4</b> Current Options for Interactive Visualizations</a></li>
+<li class="chapter" data-level="2.2" data-path="literature-review.html"><a href="literature-review.html#brief-history-of-interactive-data-visualization-in-statistics"><i class="fa fa-check"></i><b>2.2</b> Brief History of Interactive Data Visualization in Statistics</a></li>
+<li class="chapter" data-level="2.3" data-path="literature-review.html"><a href="literature-review.html#current-age-interactive-data-visualization-and-the-rise-of-web-technologies"><i class="fa fa-check"></i><b>2.3</b> Current-Age Interactive Data Visualization and the Rise of Web Technologies</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="design.html"><a href="design.html"><i class="fa fa-check"></i><b>3</b> Design</a>
 <ul>
@@ -198,7 +196,12 @@ div.csl-indent {
 <li class="chapter" data-level="4" data-path="use.html"><a href="use.html"><i class="fa fa-check"></i><b>4</b> Use</a>
 <ul>
 <li class="chapter" data-level="4.1" data-path="use.html"><a href="use.html#a-minimal-example-linked-scatterplot-and-barplot"><i class="fa fa-check"></i><b>4.1</b> A minimal example: linked scatterplot and barplot</a></li>
-<li class="chapter" data-level="4.2" data-path="use.html"><a href="use.html#creating-more-complex-plots"><i class="fa fa-check"></i><b>4.2</b> Creating more complex plots</a></li>
+<li class="chapter" data-level="4.2" data-path="use.html"><a href="use.html#creating-more-complex-scenes-with-layouts"><i class="fa fa-check"></i><b>4.2</b> Creating more complex scenes with layouts</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>5</b> Conclusion</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="conclusion.html"><a href="conclusion.html#concluding-remarks"><i class="fa fa-check"></i><b>5.1</b> Concluding remarks</a></li>
+<li class="chapter" data-level="5.2" data-path="conclusion.html"><a href="conclusion.html#future-directions"><i class="fa fa-check"></i><b>5.2</b> Future Directions</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -213,7 +216,7 @@ div.csl-indent {
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Efficient and Principled Interactive Data Visualization with plotscape</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Principled and Efficient Interactive Data Exploration with plotscape</a>
           </h1>
         </div>
 
@@ -222,13 +225,16 @@ div.csl-indent {
 
             <section class="normal" id="section-">
 <div id="header">
-<h1 class="title">Efficient and Principled Interactive Data Visualization with plotscape</h1>
+<h1 class="title">Principled and Efficient Interactive Data Exploration with plotscape</h1>
 <p class="author"><em>Adam Bartonicek</em></p>
-<p class="date"><em>2022-10-12</em></p>
+<p class="date"><em>25/10/2022</em></p>
 </div>
 <div id="introduction" class="section level1 hasAnchor" number="1">
 <h1><span class="header-section-number">Chapter 1</span> Introduction<a href="introduction.html#introduction" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>Introduction goes here.</p>
+<blockquote>
+<p>Note: If this is a pdf version of the thesis, the interactive graphics showcased in Section 4. Use will be rendered as static snapshots only, due to the limitations of the pdf format. The thesis is also available in fully interactive HTML format, and the source code for the Typescript version of the <code>plotscape</code> package can be found at <a href="https://github.com/bartonicek/plotscape" class="uri">https://github.com/bartonicek/plotscape</a></p>
+</blockquote>
+<p>Humans learn about the world around them by interacting with it. In the same way, if we want to learn about our data, we need to be able to interact with it. Currently, there are many options for interactive data visualization within the R ecosystem. However, they all tend to suffer from the same shortcomings. Most importantly, while these packages make it easy to create attractive-looking individual plots with surface-level kinds of interactivity, setting up more interesting kinds of interactivity between multiple plots is challenging and requires specialized expertise. Furthermore, the design philosophy behind these packages seems to favor data presentation over than data exploration. Finally, while these packages seem to offer a host of features, many of them may not be conducive to learning from data effectively. There is a need for a general purpose interactive data visualization system that allows for fast and effective exploratory data analysis (EDA), and the purpose of the present thesis is to develop a prototype of such a system in <code>plotscape</code>.</p>
 
 </div>
             </section>

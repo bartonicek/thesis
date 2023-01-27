@@ -4,33 +4,34 @@
 
 To get started with `plotscape`, we first need to load the package:
 
-```{r}
+```{r, webshot.opts=list(delay=2)}
 
-library(plotscapeTest)
+library(plotscaper)
 
 ```
 
-Now, the first step of any `plotscape` visualization is creating a visual scene. We save the scene as an object and print it:
+Now, the first step of any `plotscape` visualization is creating a visual scene. We assign the scene to an object and then print it:
 
 ```{r}
 
-scene1 <- ps_scene(mtcars) 
+scene1 <- ps_scene(mtcars)
 scene1
 
 ```
 
-Notice that all you can see now is a gray rectangle. This is because we have not populated the scene yet. Let's add a scatterplot and a barplot:
+All we can see now is a gray rectangle. This is because we have not populated the scene with any plots yet yet. Let's add a scatterplot and a barplot:
 
 ```{r}
 
 scene1 |>
   ps_scatter(ps_map(x = "wt", y = "mpg")) |>
   ps_bar(ps_map(x = "am")) 
+
 ```
 
-We use the base R pipe `|>` operator to take an existing `plotscape` scene and append plots to it using plot-wrapper functions with the `ps_{plot type}()` syntax. Instead of the native pipe, we could have also used the `%>%` pipe operator from the `magrittr`/`tidyverse` packages, but that would require us loading an additional package, so let's keep using the native pipe here instead. 
+Notice that we have used the base R pipe `|>` operator to take an existing `plotscape` scene and append plots to it using plot wrapper functions with the `ps_{plot type}()` syntax. Instead of the native pipe, we could have also used the `%>%` pipe operator from the `magrittr`/`tidyverse` packages, but that would require us loading an additional package, so let's keep using the native pipe here.
 
-The plot-wrapper functions take in several arguments, the most important of which is the `mapping` argument. This specifies which variables in the data map onto which visual aesthetic or encoding, similar to the `ggplot2` package. We specify the mapping using the `ps_map()` function which takes in named string arguments where the name specifies the aesthetic mapping and the string specifies that name of the variable (column) in the data. The aesthetics can also be more tersely specified by using positional argument matching, without providing explicit names for the aesthetics, like so:
+The plot wrapper functions take in several arguments, the most important of which is the `mapping` argument. This specifies which variables in the data map onto which visual aesthetic or encoding, similar to the `ggplot2` package. We specify the mapping using the `ps_map()` function (equivalent to `ggplot2`'s `aes()`) which takes in string as arguments, where the name of the argument specifies aesthetic mapping and the string specifies that name of the variable (column) in the data to map onto the aesthetic. We can either specify the aesthetics explicitly by writing e.g. `x = wt`, or more tersely by using positional argument matching, without providing explicit names for the aesthetics, such that the first argument gets automatically treated as `x` and second as `y`. We can do this like so:
 
 ```{r, eval = FALSE}
 scene1 |> 
@@ -38,7 +39,7 @@ scene1 |>
   ps_bar(ps_map("am")) 
 ```
 
-Or by supplying a named list:
+Final option is to supply a named list instead of `ps_map()`:
 
 ```{r, eval = FALSE}
 scene1 |> 
@@ -46,30 +47,33 @@ scene1 |>
   ps_bar(list(x = "am")) 
 ```
 
-(In fact, all the `ps_map()` function do is take the provided arguments and convert it to a named list. One advantage it has over just `list()` is the positional matching, i.e. `ps_scatter(list("wt", "mpg"))` won't work)
+This works, and in fact, all the `ps_map()` function does is take the provided arguments and convert it to a named list. However, an advantage of `ps_map()` over just `list()` is the positional matching, i.e. `ps_scatter(list("wt", "mpg"))` will not work. Therefore, it is better to always use `ps_map()` just to be on the safe side. 
 
-But enough about functions and arguments, the hallmark of `plotscape` is interactivity! Try interacting with the barplot by clicking on the right bar:
+We will stick with the terser positional matching syntax from now on. But enough about functions and arguments, `plotscape` is about interactivity! Try interacting with the barplot by clicking on the right bar:
+
+```{r}
+
+scene1 |> 
+  ps_scatter(ps_map("wt", "mpg")) |>
+  ps_bar(ps_map("am")) 
+```
+
+You should now see all of the automatic cars show up as highlighted points in the scatterplot. Now, for change, try selecting the four points in the top-left corner of the scatterplot by clicking-and-dragging. To make things more interesting, hold down the "1" key on your keyboard while dragging assign the points to Group 1 (and color them green!).
 
 ```{r}
 scene1 |> 
-  ps_scatter(ps_map(x = "wt", y = "mpg")) |>
-  ps_bar(ps_map(x = "am")) 
+  ps_scatter(ps_map("wt", "mpg")) |>
+  ps_bar(ps_map("am")) 
 ```
 
-You should now see all of the automatic cars highlighted in the scatterplot. Now, for change, try selecting the four points in the top-left corner of the scatterplot by clicking-and-dragging. To spice things up, hold down the "1" key on your keyboard while dragging assign the points to Group 1 (and color them green!).
-
-```{r}
-scene1 |> 
-  ps_scatter(ps_map(x = "wt", y = "mpg")) |>
-  ps_bar(ps_map(x = "am")) 
-```
+Notice that while the default (transient) selection disappears once you click the anywhere in the scene again, the grouped (persistent) selection persists. Further, we can do transiently select points that have been assigned to Group 1, and they will show up as both transiently selected *and* Group 1. This is a feature that is designed to help us ask questions that drill down to specific subgroups in the data, e.g. "what observations belong to this bar on a barplot *and* also are located within this region of a scatterplot". Had we instead used another persistent selection to select Group 1 points, e.g. Group 2 (the "2" key), we would instead just overwrite the current selection. The key lesson here is that transient and persistent selections compose, however, persistent and persistent don't.          
 
 If you're struggling to see the points, try increasing their size with the "+" key (and if they get too big for your liking, you can make them smaller again with "-"). Or try increasing the transparency of the points with "[" (or decreasing with "]"):
 
 ```{r}
 scene1 |> 
-  ps_scatter(ps_map(x = "wt", y = "mpg")) |>
-  ps_bar(ps_map(x = "am")) 
+  ps_scatter(ps_map("wt", "mpg")) |>
+  ps_bar(ps_map("am")) 
 ```
 
 There are many different interactive actions you can take. Fortunately, you do not have to remember them all, they're written in the pop-up help bar that you can access by pressing the button marked "?" in the top-right corner of the scene (the grey box around the plots).
@@ -88,11 +92,20 @@ ps_scene(mtcars) |>
 
 Now, in the squareplot, try selecting the square that encodes all 5-gear automatic (hint: the top-right square) and look at the scatterplot. Notice anything interesting?
 
-All of the 5-gear automatic cars are neatly aligned below the main diagonal, meaning that they are less efficient for their weight than we would expect. To arrive at an insight like this with traditional static plots, we would either have to know where to look or try out many different plots (personally, I've used the `mtcars` dataset for years to test models and algorithms and never noticed this trend). With `plotscape`, we can generate insights on the fly!   
+All of the 5-gear automatic cars are neatly aligned below the main diagonal, meaning that they are less efficient for their weight than we would expect. To arrive at an insight like this with traditional static plots, we would either have to know where to look or try out many different plots (personally, I've used the `mtcars` dataset as test data for years never noticed this trend). With `plotscape`, we can generate insights on the fly!   
 
-## Creating more complex plots
+## Creating more complex scenes with layouts
 
-We can get a bit more creative by adding plots programmatically. For example, here's how we can create a "scatterplot matrix"-like visualization of the `iris` data (i.e. one scatterplot per unique combination of two variables):
+To create more interesting scenes, we can use two tools: a) adding plots programmatically, and b) arranging them using the CSS grid layout. Adding plots programmatically means we can just write R code (e.g. a `for` loop) and let R handle adding plots to a scene for us, instead of explicitly declaring each plot one by one. The CSS grid layout should come naturally to those used to R's `layout()` function (part of the `graphics` package). In short, we can define the scene layout using a matrix that encodes the relative sizes and positions of the different plots. For example, the following matrix:
+
+```
+1 1 1 4
+2 2 3 4
+```
+
+would give us a scene where most of the top half is taken up by a wide plot (plot 1), the right side is taken up by a tall narrow plot (plot 4), and the rest of the space is split up between two plots, with one (plot 2) being twice as wide as the other (plot 3).
+
+To give an example, using CSS grid layout and adding plots programmatically, here's how we can create a visualization that combines a barplot and a scatterplot matrix, using the `iris` data:
 
 ```{r}
 
@@ -102,14 +115,21 @@ vars <- names(iris)
 xy <- matrix(vars[combn(1:4, 2)], 
                     ncol = 2, byrow = TRUE)
 
-scene2 <- ps_scene(iris)
+layout1 <- matrix(c(
+  7, 7, 7, 1, 
+  7, 7, 7, 2,
+  7, 7, 7, 3,
+  4, 5, 6, 0 # Put 0 instead of plot number to leave the space empty
+), nrow = 4, byrow = TRUE)
+
+scene2 <- ps_scene(iris, layout = layout1)
 for (i in seq_len(nrow(xy))) {
   scene2 <- scene2 |> ps_scatter(ps_map(xy[i, 1], xy[i, 2]))
 }
+scene2 <- scene2 |> ps_bar(ps_map("Species"))
 scene2
 
 ```
 
-**Note to self: fix sizing, works in regular RMarkdown**
-
+This is not a very efficient visualization, as the barplot eats up a lot of the available space, to the detriment of the scatterplots. However, it does serve its purpose in highlighting the power and flexibility of grid layouts. As long as we can frame it in terms of composing several rectangular plots into a grid, we can create any kind of scene we want!
 

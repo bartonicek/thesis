@@ -1,8 +1,15 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
 # Design
 
 > Graphical excellence is that which gives to the viewer the greatest number of ideas in the shortest time with the least ink in the smallest space
 >
 > The Visual Display of Quantitative Information [@tufte2001visual]
+
+The aim of `plotscape` is to provide a robust and efficient tool for exploratory data analysis (EDA). The profile of the hypothetical average user is someone who works with data a lot, has little spare time, and wants to understand the data as well as possible. As such, the broad design philosophy of `plotscape` is to provide an intuitive tool with a flat learning curve that can be easily used out-of-the-box.       
 
 ## Graphic Design
 
@@ -10,41 +17,44 @@
 >
 > Visualization Q&A Livestream [@betancourt2020may]
 
-Absence of graphical features can be equally as valuable as their presence (or arguably even moreso). In the cult classic book on the design of comics and graphical novels, Understanding Comics: The Invisible Art, Scott McCloud [-@mccloud1994apr] repeatedly stresses the importance of not just the things that appear on the page but also the ones that are purposefully left out. For example, McCloud demonstrates how closure - the gap between the panels of a comic strip - is crucial for conveying meaning. In a similar vein, Tufte [-@tufte2001visual] showed how the absence of non-data elements such as gridlines and axis ticks can greatly enhance the clarity and effectiveness of data visualization. Further, Tufte also disparaged about chartjunk, that is, completely redundant non-data elements and decorations that do nothing but distract from the data. While Tufte discussed these concepts in relation to static visualizations, other authors have also warned about the danger of regressing back to "artistic" rather than informative interactive visualizations as computational resources become cheaper [@dix1998]. To summarize, in static visualization there is a danger in not just showing too little but also showing too much, and since an interactive visualization is static visualization at any single moment of time, the same principles apply here. Therefore, the default graphical parameters in `plotscape` are chosen to create a clean, fairly austere look, as not to distract from the data. In similar vein, I have tried to minimize the presence of non-plot elements (such as sliders/drop-down menus) in the visual scene, by binding most interactive actions to either mouse or keyboard commands, and presenting only a single small help button in the top-right corner, so that the user can look these commands up on the fly.
+Graphic design is an important consideration since if a user finds the visualization unattractive, they will not want to spend as much time with it. While data should always come first, pure visuals are also an important part of the user experience. Therefore, it is necessary to take the different considerations of graphic design into account. 
 
-One of the aims of `plotscape` is also to adhere to the big four principles of graphic design: **contrast**, **repetition**, **alignment**, and **proximity** [CRAP, @williams2004nondesigner]. **Contrast** is intimately linked to the well-known figure-ground phenomenon in cognitive sciences, whereby sharp borders and edges tend to draw attention from the brain's visual system [see e.g. @qiu2007]. Thus, good use of contrast directs the viewer's attention and this makes it one of the most important concepts in graphic design [@reynolds2011dec]. To properly leverage contrast, the areas of the visualization that we want to draw the user's attention to should present large visual contrasts, and, conversely, the less important parts of the visualization should appear more visually uniform. As a concrete example, when highlighting as a result of linked brushing, the highlight color should contrast strongly with the base color. I have tried to achieve this by using a muted (e.g. light gray) color for the base and a more vibrant color (e.g. green) for the highlight. Contrary to contrast, **repetition** provides a sense of visual unity and consistency. This is achieved in `plotscape` fairly automatically as all plots share the same graphical parameters, for example the same background color, object colors, font, etc... Similar to repetition, the purpose of **alignment** is to create a pleasing visual unity and a sense of connection between the aligned graphical elements [@williams2004nondesigner]. Again, in `plotscape` alignment is resolved in a fairly straightforward way, as the default layout of plots within the visual scene is a rectangular grid with $\lfloor \sqrt{N_{plots}} \rfloor$ rows and $\lceil N_{plots} / \lfloor \sqrt{N_{plots}} \rfloor \rceil$ columns (where $\lfloor \cdot \rfloor$ and $\lceil \cdot \rceil$ indicate the floor and ceiling functions, respectively). A more elaborate layout scheme would be useful, however is outside the scope of the present thesis. Finally, the principle of **proximity** states that related things should be grouped together. In `plotscape`, all plots are related through the shared underlying data structure, so they should all be located close to each other. Again, this can be achieved via the rectangular grid. One could also ask if there is any other natural spatial ordering to the plots, outside of them all being related to each other. I think that, without specific domain knowledge about the data at hand, the answer is "no". The user can, however, arrange plots within the visual scene based on their own perception of relatedness between the different types of plots and the variables being presented.       
+Firstly, when a user looks at a `plotscape` visualization, it is important that they perceive it as a coherent, unified whole. This is to reinforce that fact that the individual plots and other graphical elements are inextricably linked via a shared data structure. Making the interactive scene look visually unified can be achieved through several means. For example, a consistent color scheme should be used across the different plots and other elements that make up the visualization. Likewise, sizing of the different elements should also be consistent. Finally, the results of interaction should also be consistently implemented across different plots: if clicking and dragging shows up as linked selection in one plot, it should not present a different visual result in another. 
 
-The choice of colors also greatly influences 
+Second and more generally, `plotscape` should also adhere to the big four principles of graphic design: **contrast**, **repetition**, **alignment**, and **proximity** [CRAP, @williams2004nondesigner]. **Contrast** is intimately connected to the well-known figure-ground phenomenon in cognitive sciences, whereby sharp borders and edges tend to draw attention from the brain's visual system [see e.g. @qiu2007]. Thus, good use of contrast directs the viewer's attention and this makes it one of the most important concepts in graphic design [@reynolds2011dec]. To properly leverage contrast, the areas of the visualization that we want to draw the user's attention to should present large visual contrasts, and, conversely, the less important parts of the visualization should appear more visually uniform. As a concrete example, when highlighting as a result of linked selection, the highlight color should contrast strongly with the base color. I have tried to achieve this by using a muted (e.g. light gray) color for the base and a more vibrant color (e.g. green) for the highlight. Contrary to contrast, **repetition** provides a sense of visual unity and consistency. This is achieved in `plotscape` fairly automatically as all plots share the same graphical parameters, for example the same background color, object colors, font, etc... Similar to repetition, the purpose of **alignment** is to create a pleasing visual unity and a sense of connection between the aligned graphical elements [@williams2004nondesigner]. Again, in `plotscape` alignment is resolved in a fairly straightforward way, as the default layout of plots within the visual scene is a rectangular grid with $\lfloor \sqrt{N_{plots}} \rfloor$ rows and $\lceil N_{plots} / \lfloor \sqrt{N_{plots}} \rfloor \rceil$ columns (where $\lfloor \cdot \rfloor$ and $\lceil \cdot \rceil$ indicate the floor and ceiling functions, respectively). I have plans to also implement a more sophisticated layout system based on the CSS grid functionality soon. Finally, the principle of **proximity** states that related things should be grouped together. In `plotscape`, all plots are related through the shared underlying data structure, so they should all be located close to each other. Again, this can be achieved via the rectangular grid. One could also ask if there is any other natural spatial ordering to the plots, outside of them all being related to each other. I think that, without specific domain knowledge about the data at hand, the answer is "no". The user can, however, arrange plots within the visual scene based on their own perception of relatedness between the different types of plots and the variables being presented.       
+
+Third, as is well known in the data visualization literature and graphic design literature in general, absence of graphical features can be equally as valuable as their presence (or arguably moreso). In the cult classic book on the design of comics and graphical novels, Understanding Comics: The Invisible Art, Scott McCloud [-@mccloud1994apr] repeatedly stresses the importance of not just the things that appear on the page but also the ones that are purposefully left out. For example, McCloud demonstrates how closure - the gap between the panels of a comic strip - is crucial for conveying meaning. In a similar vein, Tufte [-@tufte2001visual] showed how the absence of non-data elements such as gridlines and axis ticks can greatly enhance the clarity and effectiveness of data visualization. Further, Tufte also disparaged about chartjunk, that is, completely redundant non-data elements and decorations that do nothing but distract from the data. While Tufte discussed these concepts in relation to static visualizations, other authors have also warned about the danger of regressing back to "artistic" rather than informative interactive visualizations as computational resources become cheaper [@dix1998]. To summarize, in static visualization there is a danger in not just showing too little but also showing too much, and since an interactive visualization is static visualization at any single moment of time, the same principles apply here. Therefore, the default graphical parameters in `plotscape` are chosen to create a clean, fairly austere look, as not to distract from the data. In similar vein, I have tried to minimize the presence of non-plot elements (such as sliders/drop-down menus) in the visual scene, by binding most interactive actions to either mouse or keyboard commands, and presenting only a single small help button in the top-right corner, so that the user can look these commands up on the fly.
 
 ## User Interface
 
-When a user first looks at the interactive visualization, they should immediately perceive it as a coherent, unified whole. This is to reinforce that fact that the individual plots and other graphical elements are inextricably linked via a shared data structure. Everything that happens in the visual scene should be intuitive, synchronous, and result from the user's direct intentions.
+Since `plotscape` is designed with exploration rather than presentation in mind, it follows that the average user will be more likely an applied researcher or data scientist rather than programmer specialized in creating intricate interactive visualizations. As such, much of `plotscape`'s programming interface should be streamlined, at the cost of some generality. That said, the user should always have the option of customizing and extending their experience provided they have the necessary expertise. However, for the average user, as much of the implementation as possible should be hidden behind a facade of sensible defaults.   
 
-Making the interactive scene look visually unified can be achieved through several means. A consistent color scheme should be used across the different plots and other elements that make up the visualization. 
+On the programming side, the user should be able to call simple, intuitively-named functions from R to produce `plotscape` scenes quickly and efficiently. The code should be simple enough so that the user can iterate through different visualizations until they converge at a scene that the greatest amount of information can be extracted from. Only a fairly basic knowledge fundamental R concepts such as functions, vectors, dataframes, and objects should be necessary to use `plotscape` effectively. If a user is more experienced, they may be able to add R-side JavaScript code, or even extend the TypeScript/JavaScript source code itself; however, no knowledge of TypeScript/JavaScript should be necessary for basic use.
+
+On the interaction side, the user's interactions with a `plotscape` scene should be intuitive and responsive. Interactions with graphical representations of the data should result in predictable visual changes, and no visual change should happen without the user's intention. Finally, the program should be optimized well-enough so that the lag between interactions and visual changes remains close to imperceptible under moderate data volumes.  
 
 ## Technical Design
 
-The JavaScript source files were written in TypeScript `r tolower(system("tsc --v", intern = TRUE))` [@bierman2014understanding] and bundled and transpiled into JavaScript using the `typescript-bundle` package version 1.0.18, using the VS Code IDE `r system("code --v", intern = TRUE)[1]`. All code written was native Typescript/JavaScript, no external JavaScript packages were used. The R interface to the package was written in `r system("R --version", intern = TRUE)[1]`, using the RStudio IDE. The binding between JavaScript and R was specified using the `htmlwidgets` package [@htmlwidgets2021], version `r packageVersion("htmlwidgets")`. 
+The source files were written in TypeScript `r tolower(system("tsc --v", intern = TRUE))` [@bierman2014understanding] and bundled and transpiled into JavaScript using the `typescript-bundle` package version 1.0.18, using the VS Code IDE `r system("code --v", intern = TRUE)[1]`. All code written was in native Typescript/JavaScript, no external JavaScript packages were used. The R interface to the package was written in `r system("R --version", intern = TRUE)[1]`, using the RStudio IDE. The binding between JavaScript and R was specified using the `htmlwidgets` package [@htmlwidgets2021], version `r packageVersion("htmlwidgets")`. 
 
 ### Scene {#scene}
 
-Scene sits at the top of the object hierarchy. It represents the unified whole of the visual information that the user sees and interacts with. All other visual and interactive elements are defined as its children, and scene is responsible for organizing and coordinating them, either directly or via intermediaries. The two main classes of child elements defined on the scene are:
+Scene sits at the top of the `plotscape` object hierarchy. It represents the unified whole of the visual information that the user sees and interacts with. All other visual and interactive elements are defined as or on its proerties, and scene is responsible for constructing and organizing and coordinating them. The two main classes of elements defined on the scene are:
 
 - Global Handlers
 - Plots
 
 ### Global Handlers {#global-handlers}
 
-Global handlers are child objects of [Scene](#scene) that take care of responsibilities such as plot sizing and placement, keyboard input, changes in state, membership of the cases (rows of the data). The following global handlers are defined on the Scene:    
+Global handlers take care of global responsibilities such as keyboard input, changes in state, and selection membership of the cases (rows of the data). The following global handlers are defined on the Scene:    
 
 - Marker 
 - State handler
 - Keyboard handler
-- Size handler
 
 #### Marker 
 
-Marker is probably the most important [global handler](#global-handlers), whose primary task is to monitor changes in the membership and answers queries about them. Each case (row) of the data can be assigned one of several different memberships: base (no membership, group 0), persistent (group 1-3), transient (yes/no). Further, transient and persistent memberships cross: for example, a case can be either pure base, transiently selected base, pure group 1, transiently selected group 1, etc... The membership information is encoded on the Marker in a single unsigned 8-bit integer vector, with persistent group memberships being stored on the least significant bit (e.g. group 0: 00000000, group 1: 00000001, etc...) and transient membership being stored on the most significant (i.e. 8th) bit.
+Marker is probably the most important [global handler](#global-handlers). Its primary task is to monitor changes in the membership of cases in the data and answers queries about them. Each case (row) of the data can be assigned one of several different memberships: base (no membership, group 0), persistent (group 1-3), transient (yes/no). Further, there can be a cross-product between transient and persistent membership: for example, a case can be either pure base, transiently selected base, pure group 1, transiently selected group 1, etc... The membership information is encoded on the Marker in a single unsigned 8-bit integer vector, with persistent group memberships being stored on the least significant bit (e.g. group 0: 00000000, group 1: 00000001, etc...) and transient membership being stored on the most significant (i.e. 8th) bit.
 
 ```{r, echo = FALSE}
 
@@ -55,24 +65,111 @@ knitr::kable(tab, caption = "Membership representation")
 
 ```
 
-The Marker listens to which cases are currently being selected, and, when selection happens, it queries the [State Handler](#state-handler) to find the current membership state and assigns that membership to the selected cases. For example, if we are currently holding down the "1" key (associated with group 1) and click on a bar in a barplot corresponding to cases 10, 11, and 12, the Marker will assigns those cases the group 1 membership. Conversely, other objects can query the marker to find the membership of specific cases. This will most often happen when graphical objects are being drawn: for example, when a barplot is drawing bars corresponding to group 2, it will query the marker to find which cases belong to group 2 and it will then draw bars of the relevant height and color. 
+The Marker constantly listens to selection events. When selection happens, it queries the [State Handler](#state-handler) to find out the current membership state. It then assigns that membership to the selected cases. For example, if we are currently holding down the "1" key (associated with group 1) and click on a bar in a barplot corresponding to cases 10, 11, and 12, the Marker will assigns those cases the group 1 membership. Conversely, other objects can query the marker to find the membership of the cases. This will most often happen when graphical objects are being drawn: for example, when a barplot is drawing its bars, it draws one set of bars for each membership. At each step, it queries the marker to find which cases belong that particular membership, and it then draws bars of the relevant height and color. 
 
 #### State Handler {#state-handler}
 
-The state listens to user's input. 
+The State Handler keeps track of the global state (i.e. state of the entire scene) as well local state of the individual plots, by listening to user input captured by other handlers such as the Keyboard Handler. It also answers queries about state to other handlers and elements. For example, a Marker might enquire about the global state when a selection event is happening, to determine which membership it should assign to the selected cases. Conversely, when a selection action is happening somewhere within the scene, a single plot may enquire about its own state, specifically about whether it is active or not, and the plot will only draw its contents if the State Handler responds that it is active.     
 
 #### Keyboard Handler
 
-#### Size Handler
+The Keyboard Handler listens to user's input through keyboard. It records what keys are currently pressed and passes that information down to other handlers.  
 
 ### Plots
 
-Each plots consists any number of:
+Plots are the core visible elements of a `plotscape` scene. Each plot consists of:
 
-- Wranglers: bind, transform, and summarize variables from the data
+- Graphic Stack: draw graphical primitives in one of three Layers: Base, Highlight, and User
+- Wranglers: organize, transform, and summarize variables from the data
 - Scales: transform data into screen coordinates
-- Representations: draw graphical objects
-- Auxiliaries: take care of non-data elements such as axis lines, text, etc...
-- Local handlers: take care of local behaviors such as clicking and dragging
-- (Global handlers): passed by reference from the scene
+- Representations: draw and represent data with graphical objects 
+- Auxiliaries: draw and represent non-data elements such as axis lines, text, etc...
+- Local handlers: handle local behaviors such as clicking and dragging
+- (Global handlers): passed by reference from Scene, handle global behavior such as keyboard input, sizing, etc...
 
+The core difference between distinct types of plots such as scatterplot and barplot is a unique combination of a Wrangler and Representations. To create a new plot, we can either define a new Wrangler and assign one or more Representations to it, or we can use convenient, ready-made plot wrappers. The currently supported plot wrappers are: scatterplot, bubbplot, barplot, histogram, squareplot/square bubbleplot and a square heatmap. 
+
+#### Graphic Stack
+
+Graphic stack is a container for three layers: Base, Highlight, and User. Together, these three layers provide an interface for drawing all relevant graphical primitives (such as lines, points, rectangles, etc...) on the the screen. First, the Base layer draws all parts of the plot that do not need to be re-rendered often, such as the base membership representations, axis lines, axis text, etc... The only time the Base layer gets redrawn is if either the scene gets re-scaled, or if some non-membership graphic attributes of objects such as size or opacity get changed. Next, the Highlight layer draws representations that belong to the highlight memberships (i.e. all possible combinations of transient and persistent membership). As such, the Highlight layer gets redrawn each time a selection event occurs. Finally, the User layer draws auxiliary graphical elements that correspond to user interaction. Currently, the only elements drawn in the User layer are screen dimming and a rectangular window that shows where a click-and-drag selection has occured.
+
+```{r echo=FALSE}
+
+# shear_mat <- matrix(c(
+#   1, 0.5,
+#   0, 1), ncol = 2)
+# 
+# shear <- function(x, y, var = "x") {
+#   res <- cbind(x, y) %*% shear_mat
+#   res[, ifelse(var == "x", 1, 2)]
+# }
+# 
+# b_x <- c(-2, 2, 2, -2)
+# b_y <- c(-1, -1, 1, 1)
+# b_bars_x <- c(-0.25, -0.25, 0.25, 0.25) + 
+#   rep(c(-1, -0.5, 0, 0.5, 1), each = 4)
+# b_bars_y <- rep(c(-0.75, 0, 0, -0.75), 5) + 
+#   c(0, 1, 1, 0) * rep(0.25 * c(-0.5, 1, 3, 2, 0), each = 4)
+# b_lines_x <- c(1.5, -1.5, -1.5)
+# b_lines_y <- c(-0.75, -0.75, 0.75)
+# 
+# plot(-3:3, -3:3, type = "n", asp = 1)
+# polygon(shear(b_x, b_y, "x"), 
+#         shear(b_x, b_y, "y"), border = NA,
+#         col = rgb(0.1, 0.1, 0.1, 0.1))
+# polygon(shear(b_bars_x, b_bars_y, "x"),
+#         shear(b_bars_x, b_bars_y, "y"),
+#         col = "grey80", border = NA)
+# lines(shear(b_lines_x, b_lines_y, "x"),
+#       shear(b_lines_x, b_lines_y, "y"))
+
+
+```
+
+#### Wrangler
+
+Wranglers provide a way to organize, transform, and summarize data into statistical summaries that underpin the graphical objects presented on the screen. Each wrangler is made up of several Casts. A cast is an augmented version of a data variable that: a) knows which aesthetic it represents, b) remembers which graphical object each of its elements belongs to via a list of indices, and c) knows how to apply a transformation to itself to return the relevant summaries of the data. This is necessary so that scene can respond to user input on the fly, while also retaining the flexibility to represent many different types of plots.  
+
+To illustrate how Wranglers and Casts work, the simplest example is of course a scatterplot. A scatterplot a one-to-one representation of the data, meaning that each point represents one row of the dataset and its coordinates are given by the two columns that map onto the `x` and `y` axes. No transformations of the data are necessary. Thus, a scatterplot will have a single wrangler, with two casts: the `x` and `y`. The two casts will be independent, and since each row of the data is one point in the scatterplot, their lists of indices will consist of all unique values (one per each row of the dataset). Finally, the summary transformation applied to the data will simply be identity, meaning that the cast will simply return the raw values of the `x` and `y` variables from the data.       
+
+More complex summaries of the data require more complex Wranglers. For example, the height of a histogram is determined by the number of cases within a specific range of the `x` variable. Thus, while histogram is also defined by a single wrangler with casts of `x` and `y` variables, these are no longer independent and we cannot get away with a simple identity transformation. First off, the `x` cast takes the original data variable and transforms it by assigning each value to one of $n$ bins. Then it also discards all non-unique values, ending up with $n$ values, one for each bin. In contrast, the `y` cast needs to count the number of cases within each bin. It can do this by taking a vector of 1's, splitting it according to indices indicating bin membership, (e.g. indices [1, 1, 2, 2, 1, 3] mean that the first, second, and fifth values belong to bin one, third and fourth belong to bin two, and the sixth value belong to bin 3), and summing within each split. Here's how we could implement the whole operation in R:
+
+```{r}
+
+set.seed(123456)
+N <- 20
+bins <- seq(0, 30, 5)
+
+(numeric_variable <- sample(1:30, N))
+(binned_numeric_variable <- cut(numeric_variable, bins))
+indices <- as.numeric(binned_numeric_variable)
+
+(indicator <- rep(1, length(numeric_variable)))
+(split_indicator <- split(indicator, indices))
+
+x <- unique(binned_numeric_variable)
+y <- sapply(split_indicator, sum)
+
+knitr::kable(data.frame(x, y))
+
+```
+
+There are several questions one might ask about this way of doing things. First off, why go into the trouble of representing `y` as a vector of 1's and then summing it up, instead of just counting the number of times each bin occurs? The answer is that having `y` represented with a separate variable gives us greater flexibility and generality. For example, imagine that instead of just counting the number of cases within each bin, we wanted to sum the values of another variable in each bin. In our framework, we can easily do this by swapping the vector of 1's in `y` by an actual variable in the data. 
+
+#### Scales
+
+Scales translate the data coordinates into screen coordinates and vice versa, and come in two flavors: discrete and continuous. The most basic types of scales are the x- and y-axis scales. As of right now, there is also the area scale implemented, and other scales such as color will also be most likely implemented in the future.  
+
+The most important property of a scale is its length. Continuous scales translate data values to length values by taking the data values as a fraction of the total data range and then multiplying it by the length. Discrete scales partition the length between a finite number of discrete values. Apart from length, other important properties of scales are direction, offset, zero, and expansion factor. Direction is fairly self-explanatory, for example the default plotting coordinate directions in HTML Canvas Element are left-to-right top-to-bottom, whereas in most typical plots, the y-axis direction is bottom-to-top, so in our y-axis scale we need to reverse the direction. Offset specifies whether the length values should start from some number other than zero, for example, if we want our x-axis to start 50px off the left border of the plot, we need to specify offset to be 50px. Zero is just a boolean value that specifies whether 0 is a meaningful value in the data: for example, in a barplot, we might have counts of in each bar > 0, however, we want to plot the bars starting at 0, so we need to set zero to `true`. Finally, the expansion factor specifies how much beyond the range of the data should the scale expand. This is typically useful so that e.g. the smallest-valued points on a scatterplot do not get plotted over the x- or y- axis. 
+
+#### Representations
+
+Representations are one or more (usually more) graphical objects that directly represent the data. For example, all of the points on a scatterplot are a representation. Each representation knows how to query the Wrangler(s) for the mappings it needs to plot, how to draw its objects under different memberships, and where the boundaries of its objects are (such that they can be selected).
+
+#### Auxiliaries
+
+Auxiliaries are graphical objects that do not directly represent the data. Typical examples are axis lines, axis text/title, etc... Because the design philosophy of `plotscape` is minimalism, only the most necessary few are currently implemented. Other auxiliaries such as axis ticks may be added later on, so that the user can display them if they want, however they will most likely not be on by default.  
+
+#### Local Handlers
+
+Like Global Handlers, Local Handlers manage responsibilities that are however local to a single plot. Examples currently include clicking with Click Handler, and dragging with Drag Handler.
