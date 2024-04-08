@@ -1,0 +1,140 @@
+# Design
+
+### Scales
+
+Scales facilitate the representation of data by providing a way to translate values from the space of the data (*domain*) to the space of the graphical device (*codomain*).
+
+Typically, scales are implemented as pairs of components (classes, objects or functions) where one component corresponds to the domain and other to the codomain. For example, in the **D3** library [@bostock2011], scales consist of pairs of `domain` and `range` components, where `domain`, true to its name, handles the task of normalizing data values, and `range` plays the role of the codomain by translating normalized values to graphical aesthetics. Similar pattern is used in the **scales** package [@R-scales]. Here the two components are `scale` and `palette`, where `scale` plays, somewhat confusingly, the role of the domain, and `palette` plays the role of the codomain. 
+
+The two components also typically behave differently and do not share type. For example, in **D3**, different functions are used to `normalize` data values and `interpolate` graphical values. Likewise, in **scales**, `scale` and `palette` behave in fundamentally different ways.   
+
+In `plotscaper`, things are implemented in a somewhat different way. Here, each scale is composed of three components, called *domain*, *codomain*, and *norm*. Moreover, all three components share the same underlying type: *expanse*. Before explaining why three components were used instead of two, let's first lay out how expanses work.
+
+### Expanses
+
+In its most basic form, an expanse is a set $S$ with a pair of maps: a *normalize* map $S \to [0, 1]$ and an *unnormalize* map $[0, 1] \to S$. In plain words, an expanse can take a value of some type and transform it into a percentage (e.g. 0.65), or take some percentage and transform it to a value of its associated type.
+
+#### Continuous Expanses
+
+The classic example of an expanse is a continuous expanse with its underlying set $[\min, \max] \subseteq \mathbb{R}$. Then, for some value $x \in [\min, \max]$, the normalizing function:
+
+$$n(x) = \frac{x - \min}{\max - \min}$$
+transforms $x$ to a percentage value $p \in [0, 1]$, provided $x$ is within the $[\min, \max]$ limits. The value $(\max - \min)$ is also sometimes called the *range*. 
+
+We can invert the normalizing function and obtain the unnormalizing function, which for some percentage $p \in [0, 1]$:
+
+$$u(p) = \min + p \cdot (\max - \min)$$
+returns value within the $[\min, \max]$ range. 
+
+We can think of the normalized percentage $p$ as the proportion of the maximum possible distance (range) from the origin ($\min$). For example, if $p = 0.5$, this tells use that we are at a point that is located halfway between the limits.
+
+Here's an example of how to implement a simple continuous expanse in code:
+
+```{r}
+
+expanse <- list(min = 1, max = 10)
+
+expanse$range <- function() with(expanse, max - min)
+expanse$normalize <- function(x) with(expanse, (x - min) / range())
+expanse$unnormalize <- function(p) with(expanse, min + p * range())
+
+expanse$normalize(5)
+expanse$unnormalize(0.5)
+```
+
+The two functions ($n, u$) have a few interesting properties. First off, the two functions are inverses to each other and form an *isomorphism*, i.e. $u = n^{-1}$ and $n = u^{-1}$ such that $u(n(x)) = x$ and $n(u(p)) = p$. This also means that each function is a 1-to-1 mapping or *bijection*. In plain words, this means that we cannot get the same percentage by normalizing two different values and vice versa. As a result, we can keep switching between the normalized and unnormalized values without losing any information:  
+
+```{r}
+with(expanse, unnormalize(normalize(5)))
+with(expanse, normalize(unnormalize(normalize(unnormalize(0.5)))))
+```
+##### Linearity
+
+One other important thing to note is that, while the functions and the corresponding type of expanse are often called "linear", since their graphs form a straight line, they should not be confused with "linear functions", since they do not necessarily satisfy the requisite properties, namely:
+
+- Additivity: $\text{normalize}(x + c) \neq \text{normalize}(x) + \text{normalize}(c)$
+- Homogeneity of degree 1: $\text{normalize}(c \cdot x) \neq c \cdot \text{normalize(x)}$.
+
+To illustrate, additivity does not hold when $\min \neq 0$ because:
+
+$$\frac{(x + c) - \min}{(\max - \min)}$$
+$$= \frac{x - \min}{\max - \min} + \frac{c}{\max - \min}$$
+$$\neq \frac{x - \min}{\max - min} + \frac{c - \min}{\max - \min}$$
+
+The same can be easily shown for the $\text{unnormalize}$ map and for homogeneity.
+
+Technically, this is due to a confusion between the definition of a "linear function" and a "linear polynomial". The appropriate term to use would actually be "affine transformation." 
+
+Either way, if the minimum is not 0, we cannot expect the following to be equal:
+
+```{r}
+with(expanse, c(normalize(5), normalize(3) + normalize(2)))
+```
+Or the following to be equal:
+
+```{r}
+with(expanse, c(normalize(2 * 5), 2 * normalize(5)))
+```
+
+However, if we keep in mind the fact that the normalizing function calculates the proportion of distance from the origin, we can see that the function in fact behaves linearly within the context of its limits.
+
+For example, consider the range $[1, 10]$. The value $5$ is $4$ units away from the lower limit, i.e. $5 - 1 = 4$, so we can represent it as sum of two values that are 2 units away, $n(5) = n(3) + n(3)$: 
+
+```{r}
+with(expanse, c(normalize(5), normalize(3) + normalize(3)))
+```
+
+Likewise, again because $5$ represents the distance of $4$ units and $3$ of $2$, we can expect $n(5) = 2 \cdot n(3)$:  
+
+```{r}
+with(expanse, c(normalize(5), 2 * normalize(3)))
+```
+
+
+
+##### Transformations
+
+We can apply transformations to continuous expanses by transforming their limits. The outcome of this is that $\min$ and $\max$ still get mapped to $0$ and $1$ however, the graph of the function is no longer linear. Suppose we have non-linear function $f$, along with an inverse $f^{-1}$. Then:
+
+$$\text{normalize}(x) = \frac{f(x) - f(\min)}{f(\max) - f(\min)}$$
+$$\text{unnormalize}(p) = f^{-1} \bigg\{f(\min) + p \cdot \big[ f(\max) - f(\min) \big] \bigg\}$$
+For example, here's how we could apply the transformations $f(x) = \sqrt{x}$ and $f(x) = x^2$ in code: 
+
+```{r}
+expanse$trans <- sqrt
+expanse$inv <- function(x) x^2
+
+# Need to redefine normalize and unnormalize
+expanse$trans_range <- function() with(expanse, trans(max) - trans(min))
+expanse$normalize <- function(x) {
+  with(expanse, (trans(x) - trans(min)) / trans_range())
+}
+expanse$unnormalize <- function(p) {
+  with(expanse, inv(trans(min) + p * trans_range()))
+}
+
+# Normalizing limits still returns c(0, 1)
+c(expanse$normalize(1), expanse$normalize(10))
+
+# Notice that these return different values from before though
+expanse$normalize(5)
+expanse$unnormalize(0.5)
+
+x <- seq(1, 10, length = 100)
+p <- seq(0, 1, length = 100)
+
+# The graphs are no longer linear
+par(mfrow = c(1, 2))
+plot(x, expanse$normalize(x), type = "l", ylab = "normalize(x)")
+plot(p, expanse$unnormalize(p), type = "l", ylab = "unnormalize(p)")
+
+```
+
+Transformations such as these can be useful in two ways. First, sometimes we may be able to better see trends in the data when the data has been appropriately transformed. This is the case, for example, when plotting data which varies across orders of magnitude. In this case it may be useful to apply $\log$-transformation. Second, transformations can also be helpful in situations where some graphical attributes are not perceived linearly. For example, when judging differently sized objects, viewers tend judge magnitude based on area rather than side or radius. As such, when drawing objects such as points or squares it can be helpful to apply square root as the inverse transformation. The idea is that, if one point has a data value that is $c$ times bigger than another, it will have $\sqrt{c}$ times bigger radius and $c$ times bigger area. Note that we are talking about the inverse transformation here, i.e. the transformation affecting the unnormalizing function.
+
+One thing to note is that the proportionality of the square-root transformation is only precise when $\min = 0$. Otherwise:
+
+$$\sqrt{(\min)^2 + cp \cdot [(\max)^2 - (\min)^2]}$$
+$$= \sqrt{c} \cdot \sqrt{(\min)^2/c + p \cdot [(\max)^2 - (\min)^2]}$$
+$$\neq \sqrt{c} \cdot \sqrt{(\min)^2 + p \cdot [(\max)^2 - (\min)^2]}$$
+

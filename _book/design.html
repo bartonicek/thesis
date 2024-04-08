@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>3 Design | Fluent Graphics</title>
+  <meta name="description" content="3 Design | Fluent Graphics" />
+  <meta name="generator" content="bookdown 0.35 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="3 Design | Fluent Graphics" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="3 Design | Fluent Graphics" />
+  
+  
+  
+
+<meta name="author" content="Adam Bartonicek" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="introduction.html"/>
+<link rel="next" href="case-study.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Abstract</a></li>
+<li class="chapter" data-level="2" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>2</b> Introduction</a></li>
+<li class="chapter" data-level="3" data-path="design.html"><a href="design.html"><i class="fa fa-check"></i><b>3</b> Design</a>
+<ul>
+<li class="chapter" data-level="3.0.1" data-path="design.html"><a href="design.html#scales"><i class="fa fa-check"></i><b>3.0.1</b> Scales</a></li>
+<li class="chapter" data-level="3.0.2" data-path="design.html"><a href="design.html#expanses"><i class="fa fa-check"></i><b>3.0.2</b> Expanses</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="case-study.html"><a href="case-study.html"><i class="fa fa-check"></i><b>4</b> Case study</a></li>
+<li class="chapter" data-level="5" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>5</b> References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Fluent Graphics</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="design" class="section level1 hasAnchor" number="3">
+<h1><span class="header-section-number">3</span> Design<a href="design.html#design" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="scales" class="section level3 hasAnchor" number="3.0.1">
+<h3><span class="header-section-number">3.0.1</span> Scales<a href="design.html#scales" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Scales facilitate the representation of data by providing a way to translate values from the space of the data (<em>domain</em>) to the space of the graphical device (<em>codomain</em>).</p>
+<p>Typically, scales are implemented as pairs of components (classes, objects or functions) where one component corresponds to the domain and other to the codomain. For example, in the <strong>D3</strong> library <span class="citation">(Bostock, Ogievetsky, and Heer 2011)</span>, scales consist of pairs of <code>domain</code> and <code>range</code> components, where <code>domain</code>, true to its name, handles the task of normalizing data values, and <code>range</code> plays the role of the codomain by translating normalized values to graphical aesthetics. Similar pattern is used in the <strong>scales</strong> package <span class="citation">(Wickham and Seidel 2022)</span>. Here the two components are <code>scale</code> and <code>palette</code>, where <code>scale</code> plays, somewhat confusingly, the role of the domain, and <code>palette</code> plays the role of the codomain.</p>
+<p>The two components also typically behave differently and do not share type. For example, in <strong>D3</strong>, different functions are used to <code>normalize</code> data values and <code>interpolate</code> graphical values. Likewise, in <strong>scales</strong>, <code>scale</code> and <code>palette</code> behave in fundamentally different ways.</p>
+<p>In <code>plotscaper</code>, things are implemented in a somewhat different way. Here, each scale is composed of three components, called <em>domain</em>, <em>codomain</em>, and <em>norm</em>. Moreover, all three components share the same underlying type: <em>expanse</em>. Before explaining why three components were used instead of two, let’s first lay out how expanses work.</p>
+</div>
+<div id="expanses" class="section level3 hasAnchor" number="3.0.2">
+<h3><span class="header-section-number">3.0.2</span> Expanses<a href="design.html#expanses" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>In its most basic form, an expanse is a set <span class="math inline">\(S\)</span> with a pair of maps: a <em>normalize</em> map <span class="math inline">\(S \to [0, 1]\)</span> and an <em>unnormalize</em> map <span class="math inline">\([0, 1] \to S\)</span>. In plain words, an expanse can take a value of some type and transform it into a percentage (e.g. 0.65), or take some percentage and transform it to a value of its associated type.</p>
+<div id="continuous-expanses" class="section level4 hasAnchor" number="3.0.2.1">
+<h4><span class="header-section-number">3.0.2.1</span> Continuous Expanses<a href="design.html#continuous-expanses" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The classic example of an expanse is a continuous expanse with its underlying set <span class="math inline">\([\min, \max] \subseteq \mathbb{R}\)</span>. Then, for some value <span class="math inline">\(x \in [\min, \max]\)</span>, the normalizing function:</p>
+<p><span class="math display">\[n(x) = \frac{x - \min}{\max - \min}\]</span>
+transforms <span class="math inline">\(x\)</span> to a percentage value <span class="math inline">\(p \in [0, 1]\)</span>, provided <span class="math inline">\(x\)</span> is within the <span class="math inline">\([\min, \max]\)</span> limits. The value <span class="math inline">\((\max - \min)\)</span> is also sometimes called the <em>range</em>.</p>
+<p>We can invert the normalizing function and obtain the unnormalizing function, which for some percentage <span class="math inline">\(p \in [0, 1]\)</span>:</p>
+<p><span class="math display">\[u(p) = \min + p \cdot (\max - \min)\]</span>
+returns value within the <span class="math inline">\([\min, \max]\)</span> range.</p>
+<p>We can think of the normalized percentage <span class="math inline">\(p\)</span> as the proportion of the maximum possible distance (range) from the origin (<span class="math inline">\(\min\)</span>). For example, if <span class="math inline">\(p = 0.5\)</span>, this tells use that we are at a point that is located halfway between the limits.</p>
+<p>Here’s an example of how to implement a simple continuous expanse in code:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="design.html#cb1-1" tabindex="-1"></a>expanse <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">min =</span> <span class="dv">1</span>, <span class="at">max =</span> <span class="dv">10</span>)</span>
+<span id="cb1-2"><a href="design.html#cb1-2" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="design.html#cb1-3" tabindex="-1"></a>expanse<span class="sc">$</span>range <span class="ot">&lt;-</span> <span class="cf">function</span>() <span class="fu">with</span>(expanse, max <span class="sc">-</span> min)</span>
+<span id="cb1-4"><a href="design.html#cb1-4" tabindex="-1"></a>expanse<span class="sc">$</span>normalize <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="fu">with</span>(expanse, (x <span class="sc">-</span> min) <span class="sc">/</span> <span class="fu">range</span>())</span>
+<span id="cb1-5"><a href="design.html#cb1-5" tabindex="-1"></a>expanse<span class="sc">$</span>unnormalize <span class="ot">&lt;-</span> <span class="cf">function</span>(p) <span class="fu">with</span>(expanse, min <span class="sc">+</span> p <span class="sc">*</span> <span class="fu">range</span>())</span>
+<span id="cb1-6"><a href="design.html#cb1-6" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="design.html#cb1-7" tabindex="-1"></a>expanse<span class="sc">$</span><span class="fu">normalize</span>(<span class="dv">5</span>)</span></code></pre></div>
+<pre><code>## [1] 0.4444444</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="design.html#cb3-1" tabindex="-1"></a>expanse<span class="sc">$</span><span class="fu">unnormalize</span>(<span class="fl">0.5</span>)</span></code></pre></div>
+<pre><code>## [1] 5.5</code></pre>
+<p>The two functions (<span class="math inline">\(n, u\)</span>) have a few interesting properties. First off, the two functions are inverses to each other and form an <em>isomorphism</em>, i.e. <span class="math inline">\(u = n^{-1}\)</span> and <span class="math inline">\(n = u^{-1}\)</span> such that <span class="math inline">\(u(n(x)) = x\)</span> and <span class="math inline">\(n(u(p)) = p\)</span>. This also means that each function is a 1-to-1 mapping or <em>bijection</em>. In plain words, this means that we cannot get the same percentage by normalizing two different values and vice versa. As a result, we can keep switching between the normalized and unnormalized values without losing any information:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="design.html#cb5-1" tabindex="-1"></a><span class="fu">with</span>(expanse, <span class="fu">unnormalize</span>(<span class="fu">normalize</span>(<span class="dv">5</span>)))</span></code></pre></div>
+<pre><code>## [1] 5</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="design.html#cb7-1" tabindex="-1"></a><span class="fu">with</span>(expanse, <span class="fu">normalize</span>(<span class="fu">unnormalize</span>(<span class="fu">normalize</span>(<span class="fu">unnormalize</span>(<span class="fl">0.5</span>)))))</span></code></pre></div>
+<pre><code>## [1] 0.5</code></pre>
+<div id="linearity" class="section level5 hasAnchor" number="3.0.2.1.1">
+<h5><span class="header-section-number">3.0.2.1.1</span> Linearity<a href="design.html#linearity" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>One other important thing to note is that, while the functions and the corresponding type of expanse are often called “linear”, since their graphs form a straight line, they should not be confused with “linear functions”, since they do not necessarily satisfy the requisite properties, namely:</p>
+<ul>
+<li>Additivity: <span class="math inline">\(\text{normalize}(x + c) \neq \text{normalize}(x) + \text{normalize}(c)\)</span></li>
+<li>Homogeneity of degree 1: <span class="math inline">\(\text{normalize}(c \cdot x) \neq c \cdot \text{normalize(x)}\)</span>.</li>
+</ul>
+<p>To illustrate, additivity does not hold when <span class="math inline">\(\min \neq 0\)</span> because:</p>
+<p><span class="math display">\[\frac{(x + c) - \min}{(\max - \min)}\]</span>
+<span class="math display">\[= \frac{x - \min}{\max - \min} + \frac{c}{\max - \min}\]</span>
+<span class="math display">\[\neq \frac{x - \min}{\max - min} + \frac{c - \min}{\max - \min}\]</span></p>
+<p>The same can be easily shown for the <span class="math inline">\(\text{unnormalize}\)</span> map and for homogeneity.</p>
+<p>Technically, this is due to a confusion between the definition of a “linear function” and a “linear polynomial”. The appropriate term to use would actually be “affine transformation.”</p>
+<p>Either way, if the minimum is not 0, we cannot expect the following to be equal:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="design.html#cb9-1" tabindex="-1"></a><span class="fu">with</span>(expanse, <span class="fu">c</span>(<span class="fu">normalize</span>(<span class="dv">5</span>), <span class="fu">normalize</span>(<span class="dv">3</span>) <span class="sc">+</span> <span class="fu">normalize</span>(<span class="dv">2</span>)))</span></code></pre></div>
+<pre><code>## [1] 0.4444444 0.3333333</code></pre>
+<p>Or the following to be equal:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="design.html#cb11-1" tabindex="-1"></a><span class="fu">with</span>(expanse, <span class="fu">c</span>(<span class="fu">normalize</span>(<span class="dv">2</span> <span class="sc">*</span> <span class="dv">5</span>), <span class="dv">2</span> <span class="sc">*</span> <span class="fu">normalize</span>(<span class="dv">5</span>)))</span></code></pre></div>
+<pre><code>## [1] 1.0000000 0.8888889</code></pre>
+<p>However, if we keep in mind the fact that the normalizing function calculates the proportion of distance from the origin, we can see that the function in fact behaves linearly within the context of its limits.</p>
+<p>For example, consider the range <span class="math inline">\([1, 10]\)</span>. The value <span class="math inline">\(5\)</span> is <span class="math inline">\(4\)</span> units away from the lower limit, i.e. <span class="math inline">\(5 - 1 = 4\)</span>, so we can represent it as sum of two values that are 2 units away, <span class="math inline">\(n(5) = n(3) + n(3)\)</span>:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="design.html#cb13-1" tabindex="-1"></a><span class="fu">with</span>(expanse, <span class="fu">c</span>(<span class="fu">normalize</span>(<span class="dv">5</span>), <span class="fu">normalize</span>(<span class="dv">3</span>) <span class="sc">+</span> <span class="fu">normalize</span>(<span class="dv">3</span>)))</span></code></pre></div>
+<pre><code>## [1] 0.4444444 0.4444444</code></pre>
+<p>Likewise, again because <span class="math inline">\(5\)</span> represents the distance of <span class="math inline">\(4\)</span> units and <span class="math inline">\(3\)</span> of <span class="math inline">\(2\)</span>, we can expect <span class="math inline">\(n(5) = 2 \cdot n(3)\)</span>:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="design.html#cb15-1" tabindex="-1"></a><span class="fu">with</span>(expanse, <span class="fu">c</span>(<span class="fu">normalize</span>(<span class="dv">5</span>), <span class="dv">2</span> <span class="sc">*</span> <span class="fu">normalize</span>(<span class="dv">3</span>)))</span></code></pre></div>
+<pre><code>## [1] 0.4444444 0.4444444</code></pre>
+</div>
+<div id="transformations" class="section level5 hasAnchor" number="3.0.2.1.2">
+<h5><span class="header-section-number">3.0.2.1.2</span> Transformations<a href="design.html#transformations" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>We can apply transformations to continuous expanses by transforming their limits. The outcome of this is that <span class="math inline">\(\min\)</span> and <span class="math inline">\(\max\)</span> still get mapped to <span class="math inline">\(0\)</span> and <span class="math inline">\(1\)</span> however, the graph of the function is no longer linear. Suppose we have non-linear function <span class="math inline">\(f\)</span>, along with an inverse <span class="math inline">\(f^{-1}\)</span>. Then:</p>
+<p><span class="math display">\[\text{normalize}(x) = \frac{f(x) - f(\min)}{f(\max) - f(\min)}\]</span>
+<span class="math display">\[\text{unnormalize}(p) = f^{-1} \bigg\{f(\min) + p \cdot \big[ f(\max) - f(\min) \big] \bigg\}\]</span>
+For example, here’s how we could apply the transformations <span class="math inline">\(f(x) = \sqrt{x}\)</span> and <span class="math inline">\(f(x) = x^2\)</span> in code:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="design.html#cb17-1" tabindex="-1"></a>expanse<span class="sc">$</span>trans <span class="ot">&lt;-</span> sqrt</span>
+<span id="cb17-2"><a href="design.html#cb17-2" tabindex="-1"></a>expanse<span class="sc">$</span>inv <span class="ot">&lt;-</span> <span class="cf">function</span>(x) x<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb17-3"><a href="design.html#cb17-3" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="design.html#cb17-4" tabindex="-1"></a><span class="co"># Need to redefine normalize and unnormalize</span></span>
+<span id="cb17-5"><a href="design.html#cb17-5" tabindex="-1"></a>expanse<span class="sc">$</span>trans_range <span class="ot">&lt;-</span> <span class="cf">function</span>() <span class="fu">with</span>(expanse, <span class="fu">trans</span>(max) <span class="sc">-</span> <span class="fu">trans</span>(min))</span>
+<span id="cb17-6"><a href="design.html#cb17-6" tabindex="-1"></a>expanse<span class="sc">$</span>normalize <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb17-7"><a href="design.html#cb17-7" tabindex="-1"></a>  <span class="fu">with</span>(expanse, (<span class="fu">trans</span>(x) <span class="sc">-</span> <span class="fu">trans</span>(min)) <span class="sc">/</span> <span class="fu">trans_range</span>())</span>
+<span id="cb17-8"><a href="design.html#cb17-8" tabindex="-1"></a>}</span>
+<span id="cb17-9"><a href="design.html#cb17-9" tabindex="-1"></a>expanse<span class="sc">$</span>unnormalize <span class="ot">&lt;-</span> <span class="cf">function</span>(p) {</span>
+<span id="cb17-10"><a href="design.html#cb17-10" tabindex="-1"></a>  <span class="fu">with</span>(expanse, <span class="fu">inv</span>(<span class="fu">trans</span>(min) <span class="sc">+</span> p <span class="sc">*</span> <span class="fu">trans_range</span>()))</span>
+<span id="cb17-11"><a href="design.html#cb17-11" tabindex="-1"></a>}</span>
+<span id="cb17-12"><a href="design.html#cb17-12" tabindex="-1"></a></span>
+<span id="cb17-13"><a href="design.html#cb17-13" tabindex="-1"></a><span class="co"># Normalizing limits still returns c(0, 1)</span></span>
+<span id="cb17-14"><a href="design.html#cb17-14" tabindex="-1"></a><span class="fu">c</span>(expanse<span class="sc">$</span><span class="fu">normalize</span>(<span class="dv">1</span>), expanse<span class="sc">$</span><span class="fu">normalize</span>(<span class="dv">10</span>))</span></code></pre></div>
+<pre><code>## [1] 0 1</code></pre>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="design.html#cb19-1" tabindex="-1"></a><span class="co"># Notice that these return different values from before though</span></span>
+<span id="cb19-2"><a href="design.html#cb19-2" tabindex="-1"></a>expanse<span class="sc">$</span><span class="fu">normalize</span>(<span class="dv">5</span>)</span></code></pre></div>
+<pre><code>## [1] 0.5716509</code></pre>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="design.html#cb21-1" tabindex="-1"></a>expanse<span class="sc">$</span><span class="fu">unnormalize</span>(<span class="fl">0.5</span>)</span></code></pre></div>
+<pre><code>## [1] 4.331139</code></pre>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="design.html#cb23-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">10</span>, <span class="at">length =</span> <span class="dv">100</span>)</span>
+<span id="cb23-2"><a href="design.html#cb23-2" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="at">length =</span> <span class="dv">100</span>)</span>
+<span id="cb23-3"><a href="design.html#cb23-3" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="design.html#cb23-4" tabindex="-1"></a><span class="co"># The graphs are no longer linear</span></span>
+<span id="cb23-5"><a href="design.html#cb23-5" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb23-6"><a href="design.html#cb23-6" tabindex="-1"></a><span class="fu">plot</span>(x, expanse<span class="sc">$</span><span class="fu">normalize</span>(x), <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;normalize(x)&quot;</span>)</span>
+<span id="cb23-7"><a href="design.html#cb23-7" tabindex="-1"></a><span class="fu">plot</span>(p, expanse<span class="sc">$</span><span class="fu">unnormalize</span>(p), <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;unnormalize(p)&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>Transformations such as these can be useful in two ways. First, sometimes we may be able to better see trends in the data when the data has been appropriately transformed. This is the case, for example, when plotting data which varies across orders of magnitude. In this case it may be useful to apply <span class="math inline">\(\log\)</span>-transformation. Second, transformations can also be helpful in situations where some graphical attributes are not perceived linearly. For example, when judging differently sized objects, viewers tend judge magnitude based on area rather than side or radius. As such, when drawing objects such as points or squares it can be helpful to apply square root as the inverse transformation. The idea is that, if one point has a data value that is <span class="math inline">\(c\)</span> times bigger than another, it will have <span class="math inline">\(\sqrt{c}\)</span> times bigger radius and <span class="math inline">\(c\)</span> times bigger area. Note that we are talking about the inverse transformation here, i.e. the transformation affecting the unnormalizing function.</p>
+<p>One thing to note is that the proportionality of the square-root transformation is only precise when <span class="math inline">\(\min = 0\)</span>. Otherwise:</p>
+<p><span class="math display">\[\sqrt{(\min)^2 + cp \cdot [(\max)^2 - (\min)^2]}\]</span>
+<span class="math display">\[= \sqrt{c} \cdot \sqrt{(\min)^2/c + p \cdot [(\max)^2 - (\min)^2]}\]</span>
+<span class="math display">\[\neq \sqrt{c} \cdot \sqrt{(\min)^2 + p \cdot [(\max)^2 - (\min)^2]}\]</span></p>
+
+</div>
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="introduction.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="case-study.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

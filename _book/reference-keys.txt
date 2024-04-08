@@ -1,0 +1,12 @@
+abstract
+introduction
+design
+scales
+case-study
+references
+expanse
+continuous
+continuous-expanses
+linearity
+transformations
+expanses
