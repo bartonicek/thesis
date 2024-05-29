@@ -1,0 +1,10 @@
+---
+title: "test"
+author: "Adam Bartonicek"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+\begin{tikzpicture}
+\draw (0,0) circle (2cm);
+\end{tikzpicture}

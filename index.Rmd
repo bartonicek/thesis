@@ -4,12 +4,32 @@ author: "Adam Bartonicek"
 site: bookdown::bookdown_site
 documentclass: book
 output:
-  bookdown::gitbook: default
-  #bookdown::pdf_book: default
-bibliography: [references.bib, packages.bib]
-
+  # bookdown::gitbook: default
+  bookdown::pdf_book: default
+bibliography: [references.bib]
+link-citations: true
 ---
+
 
 # Abstract 
 
 Something something about section.
+
+```{r}
+#| echo: false
+
+knitr::opts_chunk$set(
+  cache = TRUE,
+  fig.align = 'center'
+)
+
+knitr::knit_engines$set(ts = function(options) {
+  code <- paste0(options$code, collapse = "\n")
+  out <- system2("echo", c(shQuote(code), 
+                           "| /home/adam/.bun/bin/bun run -"), 
+                 stdout = TRUE)
+  knitr::engine_output(options, code, out)
+})
+
+```
+

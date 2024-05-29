@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>5 References | Fluent Graphics</title>
-  <meta name="description" content="5 References | Fluent Graphics" />
+  <title>4 References | Fluent Graphics</title>
+  <meta name="description" content="4 References | Fluent Graphics" />
   <meta name="generator" content="bookdown 0.35 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="5 References | Fluent Graphics" />
+  <meta property="og:title" content="4 References | Fluent Graphics" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="5 References | Fluent Graphics" />
+  <meta name="twitter:title" content="4 References | Fluent Graphics" />
   
   
   
@@ -29,7 +29,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="case-study.html"/>
+<link rel="prev" href="design.html"/>
 
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
@@ -51,12 +51,100 @@
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<link href="libs/tabwid-1.1.3/tabwid.css" rel="stylesheet" />
+<script src="libs/tabwid-1.1.3/tabwid.js"></script>
 
 
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
 
 <style type="text/css">
   
   div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
 </style>
 
 </head>
@@ -72,13 +160,30 @@
 
 <ul class="summary">
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Abstract</a></li>
-<li class="chapter" data-level="2" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>2</b> Introduction</a></li>
+<li class="chapter" data-level="2" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>2</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="introduction.html"><a href="introduction.html#defining-interactivity"><i class="fa fa-check"></i><b>2.1</b> Defining Interactivity</a></li>
+<li class="chapter" data-level="2.2" data-path="introduction.html"><a href="introduction.html#mathematical-theory"><i class="fa fa-check"></i><b>2.2</b> Mathematical Theory</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="introduction.html"><a href="introduction.html#relations"><i class="fa fa-check"></i><b>2.2.1</b> Relations</a></li>
+<li class="chapter" data-level="2.2.2" data-path="introduction.html"><a href="introduction.html#functions"><i class="fa fa-check"></i><b>2.2.2</b> Functions</a></li>
+<li class="chapter" data-level="2.2.3" data-path="introduction.html"><a href="introduction.html#partitions"><i class="fa fa-check"></i><b>2.2.3</b> Partitions</a></li>
+<li class="chapter" data-level="2.2.4" data-path="introduction.html"><a href="introduction.html#preorders"><i class="fa fa-check"></i><b>2.2.4</b> Preorders</a></li>
+<li class="chapter" data-level="2.2.5" data-path="introduction.html"><a href="introduction.html#monoids"><i class="fa fa-check"></i><b>2.2.5</b> Monoids</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="introduction.html"><a href="introduction.html#components-of-a-data-visualization-system"><i class="fa fa-check"></i><b>2.3</b> Components of a Data Visualization System</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="introduction.html"><a href="introduction.html#scales"><i class="fa fa-check"></i><b>2.3.1</b> Scales</a></li>
+</ul></li>
+</ul></li>
 <li class="chapter" data-level="3" data-path="design.html"><a href="design.html"><i class="fa fa-check"></i><b>3</b> Design</a>
 <ul>
-<li class="chapter" data-level="3.0.1" data-path="design.html"><a href="design.html#scales"><i class="fa fa-check"></i><b>3.0.1</b> Scales</a></li>
+<li class="chapter" data-level="3.0.1" data-path="design.html"><a href="design.html#factors"><i class="fa fa-check"></i><b>3.0.1</b> Factors</a></li>
+<li class="chapter" data-level="3.0.2" data-path="design.html"><a href="design.html#reducers"><i class="fa fa-check"></i><b>3.0.2</b> Reducers</a></li>
+<li class="chapter" data-level="3.0.3" data-path="design.html"><a href="design.html#scales-1"><i class="fa fa-check"></i><b>3.0.3</b> Scales</a></li>
+<li class="chapter" data-level="3.0.4" data-path="design.html"><a href="design.html#expanses"><i class="fa fa-check"></i><b>3.0.4</b> Expanses</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="case-study.html"><a href="case-study.html"><i class="fa fa-check"></i><b>4</b> Case study</a></li>
-<li class="chapter" data-level="5" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>5</b> References</a></li>
+<li class="chapter" data-level="4" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>4</b> References</a></li>
 </ul>
 
       </nav>
@@ -96,16 +201,126 @@
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 hasAnchor" number="5">
-<h1><span class="header-section-number">5</span> References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="references" class="section level1 hasAnchor" number="4">
+<h1><span class="header-section-number">4</span> References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div class="csl-entry">
+Abrams, Dave. 2024. <span>“Total Weak Order Vs Total Order.”</span> <em>Mathematics Stack Exchange</em>. <a href="https://math.stackexchange.com/questions/3793222/total-weak-order-vs-total-order">https://math.stackexchange.com/questions/3793222/total-weak-order-vs-total-order</a>.
 </div>
+<div class="csl-entry">
+Baez, John. 2023. <span>“<span>Applied Category Theory Course</span>.”</span> <a href="https://math.ucr.edu/home/baez/act_course">https://math.ucr.edu/home/baez/act_course</a>.
+</div>
+<div class="csl-entry">
+Barrett, Lisa Feldman. 2013. <span>“Psychological Construction: The Darwinian Approach to the Science of Emotion.”</span> <em>Emotion Review</em> 5 (4): 379–89.
+</div>
+<div class="csl-entry">
+Becker, Richard A, and William S Cleveland. 1987. <span>“Brushing Scatterplots.”</span> <em>Technometrics</em> 29 (2): 127–42.
+</div>
+<div class="csl-entry">
+Beckmann, Peter E. 1995. <span>“On the Problem of Visualizing Point Distributions in High Dimensional Spaces.”</span> <em>Computers &amp; Graphics</em> 19 (4): 617–29.
+</div>
+<div class="csl-entry">
+Bostock, Michael, Vadim Ogievetsky, and Jeffrey Heer. 2011. <span>“D<span class="math inline">\(^3\)</span> Data-Driven Documents.”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em> 17 (12): 2301–9.
+</div>
+<div class="csl-entry">
+Brodbeck, Dominique, Riccardo Mazza, and Denis Lalanne. 2009. <span>“<span>Interactive Visualization - A Survey</span>.”</span> In <em><span>Human Machine Interaction</span></em>, 27–46. Berlin, Germany: Springer. <a href="https://doi.org/10.1007/978-3-642-00437-7_2">https://doi.org/10.1007/978-3-642-00437-7_2</a>.
+</div>
+<div class="csl-entry">
+Buja, Andreas, Dianne Cook, and Deborah F Swayne. 1996. <span>“Interactive High-Dimensional Data Visualization.”</span> <em>Journal of Computational and Graphical Statistics</em> 5 (1): 78–99.
+</div>
+<div class="csl-entry">
+Fong, Brendan, and David I Spivak. 2019. <em>An Invitation to Applied Category Theory: Seven Sketches in Compositionality</em>. Cambridge University Press.
+</div>
+<div class="csl-entry">
+Gray, Jim, Surajit Chaudhuri, Adam Bosworth, Andrew Layman, Don Reichart, Murali Venkatrao, Frank Pellow, and Hamid Pirahesh. 1997. <span>“Data Cube: A Relational Aggregation Operator Generalizing Group-by, Cross-Tab, and Sub-Totals.”</span> <em>Data Mining and Knowledge Discovery</em> 1: 29–53.
+</div>
+<div class="csl-entry">
+Jankun-Kelly, TJ, Kwan-Liu Ma, and Michael Gertz. 2007. <span>“A Model and Framework for Visualization Exploration.”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em> 13 (2): 357–69.
+</div>
+<div class="csl-entry">
+Kehrer, Johannes, Roland N Boubela, Peter Filzmoser, and Harald Piringer. 2012. <span>“A Generic Model for the Integration of Interactive Visualization and Statistical Computing Using r.”</span> In <em>2012 IEEE Conference on Visual Analytics Science and Technology (VAST)</em>, 233–34. IEEE.
+</div>
+<div class="csl-entry">
+Keim, Daniel A. 2002. <span>“Information Visualization and Visual Data Mining.”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em> 8 (1): 1–8.
+</div>
+<div class="csl-entry">
+Kindlmann, Gordon, and Carlos Scheidegger. 2014. <span>“An Algebraic Process for Visualization Design.”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em> 20 (12): 2181–90.
+</div>
+<div class="csl-entry">
+Lawvere, F William, and Stephen H Schanuel. 2009. <em>Conceptual Mathematics: A First Introduction to Categories</em>. Cambridge University Press.
+</div>
+<div class="csl-entry">
+Leman, Scotland C, Leanna House, Dipayan Maiti, Alex Endert, and Chris North. 2013. <span>“Visual to Parametric Interaction (V2pi).”</span> <em>PloS One</em> 8 (3): e50474.
+</div>
+<div class="csl-entry">
+Mayr, Ernst. 1999. <em>Systematics and the Origin of Species, from the Viewpoint of a Zoologist</em>. Harvard University Press.
+</div>
+<div class="csl-entry">
+Michell, Joel. 1986. <span>“Measurement Scales and Statistics: A Clash of Paradigms.”</span> <em>Psychological Bulletin</em> 100 (3): 398.
+</div>
+<div class="csl-entry">
+Milewski, Bartosz. 2018. <em>Category Theory for Programmers</em>. Blurb.
+</div>
+<div class="csl-entry">
+nLab. 2024a. <span>“Posetal Reflection in nLab.”</span> <a href="https://ncatlab.org/nlab/show/posetal+reflection">https://ncatlab.org/nlab/show/posetal+reflection</a>.
+</div>
+<div class="csl-entry">
+———. 2024b. <span>“Strict Weak Order in nLab.”</span> <a href="https://ncatlab.org/nlab/show/strict+weak+order">https://ncatlab.org/nlab/show/strict+weak+order</a>.
+</div>
+<div class="csl-entry">
+———. 2024c. <span>“Weak Order in nLab.”</span> <a href="https://ncatlab.org/nlab/show/weak+order">https://ncatlab.org/nlab/show/weak+order</a>.
+</div>
+<div class="csl-entry">
+Petricek, Tomas. 2021. <span>“Composable Data Visualizations.”</span> <em>Journal of Functional Programming</em> 31: e13.
+</div>
+<div class="csl-entry">
+Pike, William A, John Stasko, Remco Chang, and Theresa A O’connell. 2009. <span>“The Science of Interaction.”</span> <em>Information Visualization</em> 8 (4): 263–74.
+</div>
+<div class="csl-entry">
+Rheingans, Penny. 2002. <span>“Are We There yet? Exploring with Dynamic Visualization.”</span> <em>IEEE Computer Graphics and Applications</em> 22 (1): 6–10.
+</div>
+<div class="csl-entry">
+Smeltzer, Karl, and Martin Erwig. 2018. <span>“A Domain-Specific Language for Exploratory Data Visualization.”</span> In <em>Proceedings of the 17th ACM SIGPLAN International Conference on Generative Programming: Concepts and Experiences</em>, 1–13.
+</div>
+<div class="csl-entry">
+Smeltzer, Karl, Martin Erwig, and Ronald Metoyer. 2014. <span>“A Transformational Approach to Data Visualization.”</span> In <em>Proceedings of the 2014 International Conference on Generative Programming: Concepts and Experiences</em>, 53–62.
+</div>
+<div class="csl-entry">
+Stevens, Stanley Smith. 1946. <span>“On the Theory of Scales of Measurement.”</span> <em>Science</em> 103 (2684): 677–80.
+</div>
+<div class="csl-entry">
+Tal, Eran. 2015. <span>“Measurement in Science.”</span>
+</div>
+<div class="csl-entry">
+Unwin, Antony. 1999. <span>“<span class="nocase">Requirements for interactive graphics software for exploratory data analysis</span>.”</span> <em>Comput. Statist.</em> 14 (1): 7–22. <a href="https://doi.org/10.1007/PL00022706">https://doi.org/10.1007/PL00022706</a>.
+</div>
+<div class="csl-entry">
+Velleman, Paul F, and Leland Wilkinson. 1993. <span>“Nominal, Ordinal, Interval, and Ratio Typologies Are Misleading.”</span> <em>The American Statistician</em> 47 (1): 65–72.
+</div>
+<div class="csl-entry">
+Wickham, Hadley. 2013. <span>“Bin-Summarise-Smooth: A Framework for Visualising Large Data.”</span> <em>Had. Co. Nz, Tech. Rep</em>.
+</div>
+<div class="csl-entry">
+Yi, Ji Soo, Youn ah Kang, John Stasko, and Julie A Jacko. 2007. <span>“Toward a Deeper Understanding of the Role of Interaction in Information Visualization.”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em> 13 (6): 1224–31.
+</div>
+<div class="csl-entry">
+Yorgey, Brent A. 2012. <span>“Monoids: Theme and Variations (Functional Pearl).”</span> <em>ACM SIGPLAN Notices</em> 47 (12): 105–16.
+</div>
+</div>
+</div>
+
+
+
+
+
+
             </section>
 
           </div>
         </div>
       </div>
-<a href="case-study.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="design.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 
     </div>
   </div>
@@ -148,7 +363,7 @@ gitbook.start({
 "link": null,
 "text": null
 },
-"download": null,
+"download": ["_main.pdf"],
 "search": {
 "engine": "fuse",
 "options": null
@@ -160,6 +375,20 @@ gitbook.start({
 });
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
 
 </html>

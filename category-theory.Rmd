@@ -1,0 +1,8 @@
+
+# Applied Category Theory
+
+Category theory is a fairly abstract area of mathematics concerned with the ideas of structure, relation, and composition. At first, it may seem surprising that such an abstract area of mathematics would be relevant to the arguably down-to-earth and applied discipline of interactive graphics. However, one of the goals of the present thesis is to make the case it is not so. 
+
+First of all, in recent decades, category theory has been making inroads into other applied disciplines, including computer science, physics, biology [@baez2023; @fong2019], under the guise of "applied category theory". 
+
+The following chapter gives a short overview of some of the basic concepts in applied category theory which may be relevant to the production of interactive graphics, starting with the fundamentals.
