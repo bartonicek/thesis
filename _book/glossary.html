@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Fluent Graphics</title>
-  <meta name="description" content="Fluent Graphics" />
+  <title>4 Glossary | Fluent Graphics</title>
+  <meta name="description" content="4 Glossary | Fluent Graphics" />
   <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Fluent Graphics" />
+  <meta property="og:title" content="4 Glossary | Fluent Graphics" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Fluent Graphics" />
+  <meta name="twitter:title" content="4 Glossary | Fluent Graphics" />
   
   
   
@@ -29,8 +29,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-
-<link rel="next" href="introduction.html"/>
+<link rel="prev" href="design.html"/>
+<link rel="next" href="references.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -221,22 +221,62 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">Fluent Graphics</h1>
-<p class="author"><em>Adam Bartonicek</em></p>
+<div id="glossary" class="section level1 hasAnchor" number="4">
+<h1><span class="header-section-number">4</span> Glossary<a href="glossary.html#glossary" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="JSON" class="section level2 hasAnchor" number="4.1">
+<h2><span class="header-section-number">4.1</span> JSON<a href="glossary.html#JSON" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Short for “JavaScript Object Notation”, JSON is a flexible data format based on the JavaScript object type <span class="citation">(<a href="#ref-ecma2024">Ecma International 2024</a>; see also e.g. <a href="#ref-bourhis2017">Bourhis et al. 2017</a>; <a href="#ref-pezoa2016">Pezoa et al. 2016</a>)</span>. On the highest level, a JSON is an dictionary (also known as object, struct, hash-table, or list in other languages) containing key-value pairs, where the keys are strings and the values can be any of the following types: string, number, boolean, null (an undefined/missing value), an array (which can contain any other valid JSON values), or another JSON object.</p>
+<p>For example, the following snippet is a valid JSON:</p>
+<pre><code>{
+  &quot;name&quot;: &quot;Adam&quot;,
+  &quot;age&quot;: 30,
+  &quot;friends&quot;: [{ &quot;name&quot;: &quot;Sam&quot;, &quot;age&quot;: 30 }, { &quot;name&quot;: &quot;Franta&quot;, &quot;age&quot;: 26}],
+  &quot;can drive&quot;: true,
+  &quot;problems&quot;: null
+}</code></pre>
+<p>JSON is more limited than a true JavaScript object type (as implemented in the browser and various JavaScript runtimes). JavaScript objects are very flexible and can have non-string keys (numbers or symbols) and contain a wider variety of values, most notably functions/methods (and, of course, both the keys and values can be changed during runtime). In contrast, JSON is a “simple” static data format designed for declaring and transporting data. Specifically, JSON is often used as the medium for sending data to and from Web APIs <span class="citation">(<a href="#ref-bourhis2017">Bourhis et al. 2017</a>; <a href="#ref-pezoa2016">Pezoa et al. 2016</a>)</span> as well as for configuration documents.</p>
+<p>The main advantages of JSON are that it is a simple, flexible, and human-readable format. Also, due to its recursive nature (JSON arrays and objects can contain other JSON arrays and objects), it can be used to express a wide variety of hierarchical data which would not be efficient to express in “flat” data formats such as CSV. However, this flexibility also comes with some disadvantages. The recursive nature of the format makes parsing JSON files inherently more time-intensive, and, since the values in a JSON can be of any type (as long as it is a valid JSON type), it is often necessary to validate JSON data inputs <span class="citation">(<a href="#ref-pezoa2016">Pezoa et al. 2016</a>)</span>.</p>
 </div>
-<div id="abstract" class="section level1 hasAnchor" number="1">
-<h1><span class="header-section-number">1</span> Abstract<a href="index.html#abstract" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>Something something about section.</p>
+<div id="svg" class="section level2 hasAnchor" number="4.2">
+<h2><span class="header-section-number">4.2</span> SVG<a href="glossary.html#svg" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Short for “Scalable Vector Graphics”, SVG is a markup language for defining vector graphics <span class="citation">(<a href="#ref-mdn2024b">MDN 2024b</a>)</span>. Based on XML, SVG graphics can be specified via a hierarchy of elements enclosed by tags, which may be given attributes.</p>
+<p>For example, the following is a valid SVG:</p>
+<pre><code>&lt;svg width=&quot;400&quot; height=&quot;400&quot;&gt;
+  &lt;circle cx=&quot;200&quot; cy=&quot;200&quot; r=&quot;50&quot; fill=&quot;skyblue&quot;&gt;&lt;/circle&gt;
+  &lt;rect x=&quot;150&quot; y=&quot;150&quot; width=&quot;50&quot; height=&quot;50&quot; fill=&quot;firebrick&quot;&gt;&lt;/rect&gt;
+&lt;/svg&gt;</code></pre>
+<p>And this is its output, as interpreted by a Web browser:</p>
+<svg width="300" height="300">
+<rect x="0" y="0" width="300" height="300" fill="antiquewhite"></rect>
+<circle cx="150" cy="150" r="100" fill="skyblue"></circle>
+<rect x="50" y="50" width="100" height="100" fill="firebrick"></rect>
+</svg>
+<p>Compared to typical raster formats such as PNG or JPEG, in which the image is defined as an array of pixels or bytes, SVG has the advantage that its lossless: images can be scaled or transformed without loss of quality. SVG images can also be readily manipulated and animated by modifying the elements’ attributes (for example, to move the red rectangle in the image above to the right, we could simply increment its “x” attribute). However, the main disadvantage of SVG is that the file size scales with the number of objects in the image. As such, rendering SVG images with many small objects (such as points on a scatterplot) can become prohibitively slow, especially when there are animations involved.</p>
 
+</div>
+</div>
+<h3> References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-bourhis2017" class="csl-entry">
+Bourhis, Pierre, Juan L Reutter, Fernando Suárez, and Domagoj Vrgoč. 2017. <span>“JSON: Data Model, Query Languages and Schema Specification.”</span> In <em>Proceedings of the 36th ACM SIGMOD-SIGACT-SIGAI Symposium on Principles of Database Systems</em>, 123–35.
+</div>
+<div id="ref-ecma2024" class="csl-entry">
+Ecma International. 2024. <span>“JSON.”</span> <a href="https://www.json.org/json-en.html">https://www.json.org/json-en.html</a>.
+</div>
+<div id="ref-mdn2024b" class="csl-entry">
+———. 2024b. <span>“SVG: Scalable Vector Graphics <span><span class="math inline">\(\vert\)</span></span> MDN.”</span> <em>MDN Web Docs</em>. <a href="https://developer.mozilla.org/en-US/docs/Web/SVG">https://developer.mozilla.org/en-US/docs/Web/SVG</a>.
+</div>
+<div id="ref-pezoa2016" class="csl-entry">
+Pezoa, Felipe, Juan L Reutter, Fernando Suarez, Martı́n Ugarte, and Domagoj Vrgoč. 2016. <span>“Foundations of JSON Schema.”</span> In <em>Proceedings of the 25th International Conference on World Wide Web</em>, 263–73.
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-
-<a href="introduction.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="design.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

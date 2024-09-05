@@ -1,5 +1,25 @@
 # Design
 
+```{r}
+#| echo: false
+plot <- function(..., pch = 19, col = "grey80", cex = 2) {
+  base::plot(..., col = col, pch = pch, cex = cex, xaxt = 'n', yaxt = 'n')
+  axis(1, tick = FALSE)
+  axis(2, tick = FALSE, las = 1)
+}
+
+```
+
+### User Profile
+
+The profile of average user can also differ significantly, across systems and research areas. For example, some areas of interactive data visualization and HCI make no assumptions about the user's level of experience or motivation, whereas others assume a highly motivated "expert" user with a sufficient level of domain knowledge [@dimara2019].
+
+While designing my system, I have attempted to 
+
+## Implementation
+
+> The example code chunks in this section are written in both R and TypeScript. The reason for this is that, while I would prefer to use R for everything due to its tight integration with RMarkdown, some of the concepts are much easier to explain in a language with static typing features like TypeScript (particularly, type annotations and interfaces). However, since the examples relate to plotting and some can be improved by showing graphical output/plots, I also wanted to use (base) R for plotting. So, where graphical output is important, the code chunks are written in R, and, where the code itself is the main focus, they are written in TypeScript. I hope this bilingualism is not too confusing and have tried to use only the basic features of each language to make the examples clear. 
+
 ### Factors 
 
 Factors provide a way to partition the data into multiple disjoint parts. 
@@ -18,9 +38,118 @@ $$i_{\text{product}} = i_1 + i_2 \cdot \max(j, k)$$
 
 ### Scales
 
-Most data visualization packages rely on some concept of scales. While there is some overlap with scales discussed in [INTRODUCTION], here I mean scales as objects (in a broad sense: they may be functions, classes, etc...) which are used to translate values from the data space (*domain*) to the graphical space (*codomain*).
+A fundamental problem when visualizing data is how to translate values of the data to something that can be actually displayed on the screen. This is the job of scales. While there exists is a fair amount of literature on the theoretical properties of scales [SEE INTRODUCTION], there is much less written about the actual details of how to implement scales for concrete data visualization systems. As such, the following section is based largely on information gleaned from how scales have been implemented in other codebases, such as the `scales` R package [@wickham2023] or `d3-scale` module of D3 [@d3-scale2024], as well personal experience.
 
-Many packages implement scales with domain and codomain as two components, however these often tend to have distinct interfaces. For example, the **D3** library [@bostock2011] takes a data-centric approach, with `domain` and `range` (= codomain) implemented as tuples or arrays of values, and during the translation step each is called via a different specialized function (e.g. `normalize()` and `scale()` functions for continuous and discrete/ordinal domains and various `interpolate()` functions for codomains). Similarly, in the **scales** package [@R-scales], the scaling operation relies on a `limits` vector (2-element numeric vector for continuous scales and an arbitrary-length character vector/factor for discrete), a `palette()` function (corresponding to the codomain), and `map_discrete()` or `map_continuous()` function (which further relies on a `rescale()` method).   
+#### Overview
+
+From a high-level perspective, a scale is just a function $s: D \to V$, which translates values from the data domain $D$ to the visual attribute (co)domain $V$. A typical case is where both $S$ and $D$ are subsets of the real numbers:
+
+$$s: [a, b] \to [j, k] \qquad \text{where } a, b, j, k \in \mathbb{R}$$
+
+For example, suppose our data takes values in the range from 1 to 10 and we want to plot it along the x-axis within a plotting region which is 800 pixels wide. Then, our scale may be simply:
+
+$$s: [1, 10] \to [0, 800]$$
+
+Now, there can be many potential functions that fit this description. One particularly nice and simple candidate is the following function:
+
+$$s(x) = j + \frac{x - a}{b -a} \cdot (k - j)$$
+
+or, with concrete values substituted for the variables:
+
+$$s(x) = 0 + \frac{x - 1}{10 - 1} \cdot (800 - 0) \\ \implies s(x) = \frac{x - 1}{9} \cdot 800$$
+
+This function is a simple linear map, which acts on the data in the following way:
+
+- $s(1) = (1 - 1) / 9 \cdot 800 = 0$
+- $s(10) = (10 - 1) / 9 \cdot 800 = 800$
+- $s(x) \in (0, 800)$ for any $x \in (1, 10)$
+
+That is, the function maps the data value 1 to pixel 0 (left border of the plotting region), value 10 to to pixel 800 (right border of the plotting region), and any value in between 1 and 10 to the interval 0 to 800, proportional to how far within the data range it is located.
+
+We can easily implement the function by simply translating the formula to code:
+
+```{ts}
+function scale(x: number, a: number, b: number, j: number, k: number): number {
+  return j + ((x - a) / (b - a)) * (k - j)
+}
+
+// And indeed, this works as expected
+console.log(scale(5.5, 1, 10, 0, 800))
+```
+
+#### Limits of modeling scales as simple functions
+
+Simple scale functions like the one shown above can work fine for simple data visualization systems. However, once we begin adding more features, this design starts becoming prohibitive. For example, what if we want to:
+
+- Expand the scale limits
+- Apply non-linear transformations
+- Pan, zoom, or reverse the scale interactively
+- Scale discrete data
+
+
+Let's take the first point as a motivating example. Consider what happens to data points at the limits of the data range:   
+
+```{r}
+#| out-width: 800px
+#| fig-align: 'center'
+x <- 1:10
+y <- rnorm(10, 0, 5)
+col <- ifelse(1:10 %in% c(1, 10), "indianred", "grey80")
+
+plot(x, y, col = col, cex = 3, xaxs = "i")
+```
+
+The plot above could represent the plotting some data using the simple linear mapping described above on the x-axis, i.e. $s: [1, 10] \to [0, 800]$. Notice that, since the position of the points representing the values 1 and 10 get mapped to pixel values 0 and 800 (the left and right border of the plot), only half of each point is visible. 
+
+To address this, most data visualization systems automatically expand the range of the domain by some pre-specified percentage:
+
+```{r}
+#| out-width: 800px
+#| fig-align: 'center'
+plot(x, y, col = col, cex = 3)
+```
+
+We could achieve this effect by adding an extra argument to the `scale` function:
+
+```{ts}
+function scale(
+  x: number,
+  a: number,
+  b: number,
+  j: number,
+  k: number,
+  w: number
+): number {
+  return j + (w / 2 + ((x - a) / (b - a)) * (1 - w)) * (k - j);
+}
+
+console.log(scale(1, 1, 10, 0, 800, 0.1));
+console.log(scale(5.5, 1, 10, 0, 800, 0.1));
+console.log(scale(10, 1, 10, 0, 800, 0.1));
+```
+
+The additional argument `w` allows us to specify that we want to expand the range by 10% (5% upper and lower limit, respectively), such that the data values of 1 and 10 are no longer translated to 0 and 800 pixels but instead closer to the center of the plotting area (40 and 760, respectively).   
+
+However, with many additional arguments, the function starts to become hard to reason about. Add to it the fact that we may want to persist or modify some of the function's arguments during runtime, and it becomes clear that a more structured approach is needed.
+
+#### Solution: Two-component scale system
+
+The formula for the linear mapping may provide hints as to how we might go about breaking the scaling function apart into more manageable components:
+
+$$s(x) = j + \frac{x - a}{b -a} \cdot (k - j)$$
+
+If we look at the formula closely, we can re-imagine the function as a composition of two simpler functions:
+
+- A "normalizing" function $n: D \to [0, 1], \qquad n(x) = (x - a) / (b - a)$
+- An "unnormalizing" function $u: [0, 1] \to V, \qquad u(y) = j + y \cdot (k - j)$
+
+That is, the normalizing function $n$ translates the data values $D$ to a percentage $[0, 1]$, and the unnormalizing function $u$ takes the percentage and translates it into the space of the visual attribute $V$. The scale function is then simply the composition of these two functions:
+
+$$s(x) = u(n(x))$$
+
+Technically, there isn't anything special about the interval $[0, 1]$ as the intermediate domain: any finite subset of $\mathbb{R}$ would work. However, it is convenient, both in terms of its interpretation 
+
+Many data visualization packages implement scales as two components. For example, the D3 [@bostock2011] implements `domain` and `range` (codomain) as tuples or arrays of values, and during the translation step each is called via a different specialized function (e.g. `normalize()` and `scale()` functions for continuous and discrete/ordinal domains and various `interpolate()` functions for codomains). Similarly, in the **scales** package [@wickham2023], the scaling operation relies on a `limits` vector (2-element numeric vector for continuous scales and an arbitrary-length character vector/factor for discrete), a `palette()` function (corresponding to the codomain), and `map_discrete()` or `map_continuous()` function (which further relies on a `rescale()` method).   
 
 In `plotscaper`, scales also consist of two components, however, both components share the same interface. Specifically, each scale consists of a `domain` and `codomain` which both implement the interface `Expanse<T>`. `Expanse<T>` is generic and hence `Scale<T, U>` has two type arguments: the type of its domain and the type of its codomain. The way scale can be used then is that it can be used to *push values forward* through its domain first and codomain second, or *pull them back*, through its codomain first and domain second. Hence, the basic interface for a scale is: 
 
@@ -60,8 +189,8 @@ x <- rnorm(5)
 y <- rnorm(5)
 
 par(mfrow = c(1, 2))
-plot(x, y, col = "red", pch = 19) 
-plot(x, y, xaxs = 'i', yaxs = 'i', col = "red", pch = 19) 
+plot(x, y) 
+plot(x, y, xaxs = 'i', yaxs = 'i') 
 ```
 
 Thus, upon normalizing the minimum and maximum data values, the expanse should return values other than $\{0, 1\}$. Likewise, to support user interactions such as zooming and panning, the expanses may accept and return values outside of $D^*$ and $[0, 1]$. 
@@ -180,10 +309,10 @@ console.log(expanse1.unnormalize(0.5))
 
 The functions $n, u$ have several interesting properties. First off, they are inverses to each other and form an *isomorphism*, i.e. $u = n^{-1}$ and $n = u^{-1}$ such that $u(n(x)) = x$ and $n(u(p)) = p$. This also means that each function is a 1-to-1 mapping or *bijection*. In plain words, this means that we cannot get the same percentage by normalizing two different values and vice versa. As a result, we can keep switching between the normalized and unnormalized representations without losing any information:  
 
-```{r}
-with(expanse, unnormalize(normalize(5)))
-with(expanse, normalize(unnormalize(normalize(unnormalize(0.5)))))
-```
+<!-- ```{r} -->
+<!-- with(expanse, unnormalize(normalize(5))) -->
+<!-- with(expanse, normalize(unnormalize(normalize(unnormalize(0.5))))) -->
+<!-- ``` -->
 
 ##### Linearity
 
@@ -204,29 +333,29 @@ Technically, this is due to a confusion between the definition of a "linear func
 
 Either way, if the minimum is not 0, we cannot expect the following to be equal:
 
-```{r}
-with(expanse, c(normalize(5), normalize(3) + normalize(2)))
-```
+<!-- ```{r} -->
+<!-- with(expanse, c(normalize(5), normalize(3) + normalize(2))) -->
+<!-- ``` -->
 
 Or the following to be equal:
 
-```{r}
-with(expanse, c(normalize(2 * 5), 2 * normalize(5)))
-```
+<!-- ```{r} -->
+<!-- with(expanse, c(normalize(2 * 5), 2 * normalize(5))) -->
+<!-- ``` -->
 
 However, if we keep in mind the fact that the normalizing function calculates the proportion of distance from the origin, we can see that the function in fact behaves linearly within the context of its limits.
 
 For example, consider the range $[1, 10]$. The value $5$ is $4$ units away from the lower limit, i.e. $5 - 1 = 4$, so we can represent it, for example, as the sum of a value that is 3 units away and another that is one unit away, $n(5) = n(4) + n(2)$: 
 
-```{r}
-with(expanse, c(normalize(5), normalize(4) + normalize(2)))
-```
+<!-- ```{r} -->
+<!-- with(expanse, c(normalize(5), normalize(4) + normalize(2))) -->
+<!-- ``` -->
 
 Likewise, again because $5$ represents the distance of $4$ units and $3$ of $2$, we can expect $n(5) = 2 \cdot n(3)$:  
 
-```{r}
-with(expanse, c(normalize(5), 2 * normalize(3)))
-```
+<!-- ```{r} -->
+<!-- with(expanse, c(normalize(5), 2 * normalize(3))) -->
+<!-- ``` -->
 
 
 
@@ -238,35 +367,35 @@ $$n(x) = \frac{f(x) - f(\min)}{f(\max) - f(\min)}$$
 $$u(p) = f^{-1} \bigg\{f(\min) + p \cdot \big[ f(\max) - f(\min) \big] \bigg\}$$
 For example, here's how we could apply the transformation $\bigg( f(x) = \sqrt{x}, \; f^{-1}(x) = x^2 \bigg)$ in code: 
 
-```{r}
-expanse$trans <- sqrt
-expanse$inv <- function(x) x^2
+<!-- ```{r} -->
+<!-- expanse$trans <- sqrt -->
+<!-- expanse$inv <- function(x) x^2 -->
 
-# Need to redefine normalize and unnormalize
-expanse$trans_range <- function() with(expanse, trans(max) - trans(min))
-expanse$normalize <- function(x) {
-  with(expanse, (trans(x) - trans(min)) / trans_range())
-}
-expanse$unnormalize <- function(p) {
-  with(expanse, inv(trans(min) + p * trans_range()))
-}
+<!-- # Need to redefine normalize and unnormalize -->
+<!-- expanse$trans_range <- function() with(expanse, trans(max) - trans(min)) -->
+<!-- expanse$normalize <- function(x) { -->
+<!--   with(expanse, (trans(x) - trans(min)) / trans_range()) -->
+<!-- } -->
+<!-- expanse$unnormalize <- function(p) { -->
+<!--   with(expanse, inv(trans(min) + p * trans_range())) -->
+<!-- } -->
 
-# Normalizing limits still returns c(0, 1)
-c(expanse$normalize(c(1, 10)))
+<!-- # Normalizing limits still returns c(0, 1) -->
+<!-- c(expanse$normalize(c(1, 10))) -->
 
-# Notice that these return different values from before though
-expanse$normalize(5)
-expanse$unnormalize(0.5)
+<!-- # Notice that these return different values from before though -->
+<!-- expanse$normalize(5) -->
+<!-- expanse$unnormalize(0.5) -->
 
-x <- seq(1, 10, length = 100)
-p <- seq(0, 1, length = 100)
+<!-- x <- seq(1, 10, length = 100) -->
+<!-- p <- seq(0, 1, length = 100) -->
 
-# The graphs are no longer linear
-par(mfrow = c(1, 2))
-plot(x, expanse$normalize(x), type = "l", ylab = "normalize(x)")
-plot(p, expanse$unnormalize(p), type = "l", ylab = "unnormalize(p)")
+<!-- # The graphs are no longer linear -->
+<!-- par(mfrow = c(1, 2)) -->
+<!-- plot(x, expanse$normalize(x), type = "l", ylab = "normalize(x)") -->
+<!-- plot(p, expanse$unnormalize(p), type = "l", ylab = "unnormalize(p)") -->
 
-```
+<!-- ``` -->
 
 Transformations such as these can be useful in two ways. First, sometimes we may be able to better see trends in the data when the data has been appropriately transformed. This is the case, for example, when plotting data which varies across orders of magnitude. In this case it may be useful to apply $\log$-transformation. Second, transformations can also be helpful in situations where some graphical attributes are not perceived linearly. For example, when judging differently sized objects, viewers tend judge magnitude based on area rather than side or radius. As such, when drawing objects such as points or squares it can be helpful to apply square root as the inverse transformation. The idea is that, if one point has a data value that is $c$ times bigger than another, it will have $\sqrt{c}$ times bigger radius and $c$ times bigger area. Note that we are talking about the inverse transformation here, i.e. the transformation affecting the unnormalizing function.
 
@@ -278,26 +407,28 @@ $$\neq \sqrt{c} \cdot \sqrt{(\min)^2 + p \cdot [(\max)^2 - (\min)^2]}$$
 
 This is a problem in the existing packages. For example:
 
-```{r}
+<!-- ```{r} -->
 
-library(scales)
-pal <- area_pal(c(1, 5))  
+<!-- library(scales) -->
+<!-- pal <- area_pal(c(1, 5))   -->
 
-# Comparing cscale to naive implementation
-all.equal(cscale(1:5, pal), sqrt((1:5 - 1) / 4) * 4 + 1)
+<!-- # Comparing cscale to naive implementation -->
+<!-- all.equal(cscale(1:5, pal), sqrt((1:5 - 1) / 4) * 4 + 1) -->
 
-# Should be equal since 3 is twice as far from 1 as 2 is
-c(cscale(1:5, pal)[3] / cscale(1:5, pal)[2], 
-  sqrt(2))
+<!-- # Should be equal since 3 is twice as far from 1 as 2 is -->
+<!-- c(cscale(1:5, pal)[3] / cscale(1:5, pal)[2],  -->
+<!--   sqrt(2)) -->
 
-expanse$min <- 1
-expanse$max <- 5
-cscale(1:5, pal)
-expanse$unnormalize(1:5 / 5)
+<!-- expanse$min <- 1 -->
+<!-- expanse$max <- 5 -->
+<!-- cscale(1:5, pal) -->
+<!-- expanse$unnormalize(1:5 / 5) -->
 
-expanse
+<!-- expanse -->
 
-plot(1:5, expanse$unnormalize(1:5 / 5))
-plot(1:5, cscale(1:5, pal))
+<!-- plot(1:5, expanse$unnormalize(1:5 / 5)) -->
+<!-- plot(1:5, cscale(1:5, pal)) -->
 
-```
+<!-- ``` -->
+
+## 

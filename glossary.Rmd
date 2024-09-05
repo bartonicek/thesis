@@ -1,0 +1,56 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+# Glossary
+
+## JSON {#JSON}
+
+Short for "JavaScript Object Notation", JSON is a flexible data format based on the JavaScript object type [@ecma2024; see also e.g. @bourhis2017; @pezoa2016]. On the highest level, a JSON is an dictionary (also known as object, struct, hash-table, or list in other languages) containing key-value pairs, where the keys are strings and the values can be any of the following types: string, number, boolean, null (an undefined/missing value), an array (which can contain any other valid JSON values), or another JSON object. 
+
+For example, the following snippet is a valid JSON:
+
+```
+{
+  "name": "Adam",
+  "age": 30,
+  "friends": [{ "name": "Sam", "age": 30 }, { "name": "Franta", "age": 26}],
+  "can drive": true,
+  "problems": null
+}
+```
+
+JSON is more limited than a true JavaScript object type (as implemented in the browser and various JavaScript runtimes). JavaScript objects are very flexible and can have non-string keys (numbers or symbols) and contain a wider variety of values, most notably functions/methods (and, of course, both the keys and values can be changed during runtime). In contrast, JSON is a "simple" static data format designed for declaring and transporting data. Specifically, JSON is often used as the medium for sending data to and from Web APIs [@bourhis2017; @pezoa2016] as well as for configuration documents.
+
+The main advantages of JSON are that it is a simple, flexible, and human-readable format. Also, due to its recursive nature (JSON arrays and objects can contain other JSON arrays and objects), it can be used to express a wide variety of hierarchical data which would not be efficient to express in "flat" data formats such as CSV. However, this flexibility also comes with some disadvantages. The recursive nature of the format makes parsing JSON files inherently more time-intensive, and, since the values in a JSON can be of any type (as long as it is a valid JSON type), it is often necessary to validate JSON data inputs [@pezoa2016].      
+
+## SVG
+
+Short for "Scalable Vector Graphics", SVG is a markup language for defining vector graphics [@mdn2024b]. Based on XML, SVG graphics can be specified via a hierarchy of elements enclosed by tags, which may be given attributes.
+
+For example, the following is a valid SVG:
+
+
+
+```
+<svg width="400" height="400">
+  <circle cx="200" cy="200" r="50" fill="skyblue"></circle>
+  <rect x="150" y="150" width="50" height="50" fill="firebrick"></rect>
+</svg>
+```
+
+And this is its output, as interpreted by a Web browser:
+
+<svg width="300" height="300">
+  <rect x="0" y="0" width="300" height="300" fill="antiquewhite"></rect>
+  <circle cx="150" cy="150" r="100" fill="skyblue"></circle>
+  <rect x="50" y="50" width="100" height="100" fill="firebrick"></rect>
+</svg>
+
+Compared to typical raster formats such as PNG or JPEG, in which the image is defined as an array of pixels or bytes, SVG has the advantage that its lossless: images can be scaled or transformed without loss of quality. SVG images can also be readily manipulated and animated by modifying the elements' attributes (for example, to move the red rectangle in the image above to the right, we could simply increment its "x" attribute). However, the main disadvantage of SVG is that the file size scales with the number of objects in the image. As such, rendering SVG images with many small objects (such as points on a scatterplot) can become prohibitively slow, especially when there are animations involved. 
+
+
+
+

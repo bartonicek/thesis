@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Page not found | Fluent Graphics</title>
   <meta name="description" content="Page not found | Fluent Graphics" />
-  <meta name="generator" content="bookdown 0.35 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Page not found | Fluent Graphics" />
   <meta property="og:type" content="book" />
@@ -51,10 +51,72 @@
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
-<script src="libs/kePrint-0.0.1/kePrint.js"></script>
-<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
 
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
 
 <style type="text/css">
   
@@ -65,6 +127,7 @@
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
+  margin-bottom: 0em;
 }
 .hanging div.csl-entry {
   margin-left:2em;
@@ -98,18 +161,23 @@ div.csl-indent {
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Abstract</a></li>
 <li class="chapter" data-level="2" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>2</b> Introduction</a>
 <ul>
-<li class="chapter" data-level="2.1" data-path="introduction.html"><a href="introduction.html#defining-interactivity"><i class="fa fa-check"></i><b>2.1</b> Defining Interactivity</a>
+<li class="chapter" data-level="2.1" data-path="introduction.html"><a href="introduction.html#what-is-interactive-visualization"><i class="fa fa-check"></i><b>2.1</b> What Even is Interactive Data Visualization?</a>
 <ul>
-<li class="chapter" data-level="2.1.1" data-path="introduction.html"><a href="introduction.html#interactive-visualization-vs.-interacting-with-a-visualization"><i class="fa fa-check"></i><b>2.1.1</b> Interactive Visualization vs. Interacting with a Visualization</a></li>
-<li class="chapter" data-level="2.1.2" data-path="introduction.html"><a href="introduction.html#features-of-interactivity"><i class="fa fa-check"></i><b>2.1.2</b> Features of Interactivity</a></li>
+<li class="chapter" data-level="2.1.1" data-path="introduction.html"><a href="introduction.html#brief-history-of-interactive-data-visualization"><i class="fa fa-check"></i><b>2.1.1</b> Brief History of Interactive Data Visualization</a></li>
+<li class="chapter" data-level="2.1.2" data-path="introduction.html"><a href="introduction.html#interactive-vs.-interacting-with"><i class="fa fa-check"></i><b>2.1.2</b> Interactive vs. Interacting With</a></li>
+<li class="chapter" data-level="2.1.3" data-path="introduction.html"><a href="introduction.html#the-bar-for-interactivity"><i class="fa fa-check"></i><b>2.1.3</b> The Bar for Interactivity</a></li>
+<li class="chapter" data-level="2.1.4" data-path="introduction.html"><a href="introduction.html#interactivity-and-implementation"><i class="fa fa-check"></i><b>2.1.4</b> Interactivity and Implementation</a></li>
+<li class="chapter" data-level="2.1.5" data-path="introduction.html"><a href="introduction.html#working-definition-of-interactivity"><i class="fa fa-check"></i><b>2.1.5</b> Working Definition of Interactivity</a></li>
+<li class="chapter" data-level="2.1.6" data-path="introduction.html"><a href="introduction.html#common-interactive-features"><i class="fa fa-check"></i><b>2.1.6</b> Common Interactive Features</a></li>
 </ul></li>
 <li class="chapter" data-level="2.2" data-path="introduction.html"><a href="introduction.html#mathematical-theory"><i class="fa fa-check"></i><b>2.2</b> Mathematical Theory</a>
 <ul>
-<li class="chapter" data-level="2.2.1" data-path="introduction.html"><a href="introduction.html#relations"><i class="fa fa-check"></i><b>2.2.1</b> Relations</a></li>
-<li class="chapter" data-level="2.2.2" data-path="introduction.html"><a href="introduction.html#functions"><i class="fa fa-check"></i><b>2.2.2</b> Functions</a></li>
-<li class="chapter" data-level="2.2.3" data-path="introduction.html"><a href="introduction.html#partitions"><i class="fa fa-check"></i><b>2.2.3</b> Partitions</a></li>
-<li class="chapter" data-level="2.2.4" data-path="introduction.html"><a href="introduction.html#preorders"><i class="fa fa-check"></i><b>2.2.4</b> Preorders</a></li>
-<li class="chapter" data-level="2.2.5" data-path="introduction.html"><a href="introduction.html#monoids"><i class="fa fa-check"></i><b>2.2.5</b> Monoids</a></li>
+<li class="chapter" data-level="2.2.1" data-path="introduction.html"><a href="introduction.html#past-application-of-category-theory-to-data-visualization"><i class="fa fa-check"></i><b>2.2.1</b> Past Application of Category Theory to Data Visualization</a></li>
+<li class="chapter" data-level="2.2.2" data-path="introduction.html"><a href="introduction.html#relations"><i class="fa fa-check"></i><b>2.2.2</b> Relations</a></li>
+<li class="chapter" data-level="2.2.3" data-path="introduction.html"><a href="introduction.html#functions"><i class="fa fa-check"></i><b>2.2.3</b> Functions</a></li>
+<li class="chapter" data-level="2.2.4" data-path="introduction.html"><a href="introduction.html#partitions"><i class="fa fa-check"></i><b>2.2.4</b> Partitions</a></li>
+<li class="chapter" data-level="2.2.5" data-path="introduction.html"><a href="introduction.html#preorders"><i class="fa fa-check"></i><b>2.2.5</b> Preorders</a></li>
+<li class="chapter" data-level="2.2.6" data-path="introduction.html"><a href="introduction.html#monoids"><i class="fa fa-check"></i><b>2.2.6</b> Monoids</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="introduction.html"><a href="introduction.html#components-of-a-data-visualization-system"><i class="fa fa-check"></i><b>2.3</b> Components of a Data Visualization System</a>
 <ul>
@@ -118,12 +186,22 @@ div.csl-indent {
 </ul></li>
 <li class="chapter" data-level="3" data-path="design.html"><a href="design.html"><i class="fa fa-check"></i><b>3</b> Design</a>
 <ul>
-<li class="chapter" data-level="3.0.1" data-path="design.html"><a href="design.html#factors"><i class="fa fa-check"></i><b>3.0.1</b> Factors</a></li>
-<li class="chapter" data-level="3.0.2" data-path="design.html"><a href="design.html#reducers"><i class="fa fa-check"></i><b>3.0.2</b> Reducers</a></li>
-<li class="chapter" data-level="3.0.3" data-path="design.html"><a href="design.html#scales-1"><i class="fa fa-check"></i><b>3.0.3</b> Scales</a></li>
-<li class="chapter" data-level="3.0.4" data-path="design.html"><a href="design.html#expanses"><i class="fa fa-check"></i><b>3.0.4</b> Expanses</a></li>
+<li class="chapter" data-level="3.0.1" data-path="design.html"><a href="design.html#user-profile"><i class="fa fa-check"></i><b>3.0.1</b> User Profile</a></li>
+<li class="chapter" data-level="3.1" data-path="design.html"><a href="design.html#implementation"><i class="fa fa-check"></i><b>3.1</b> Implementation</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="design.html"><a href="design.html#factors"><i class="fa fa-check"></i><b>3.1.1</b> Factors</a></li>
+<li class="chapter" data-level="3.1.2" data-path="design.html"><a href="design.html#reducers"><i class="fa fa-check"></i><b>3.1.2</b> Reducers</a></li>
+<li class="chapter" data-level="3.1.3" data-path="design.html"><a href="design.html#scales-1"><i class="fa fa-check"></i><b>3.1.3</b> Scales</a></li>
+<li class="chapter" data-level="3.1.4" data-path="design.html"><a href="design.html#expanses"><i class="fa fa-check"></i><b>3.1.4</b> Expanses</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>4</b> References</a></li>
+<li class="chapter" data-level="3.2" data-path="design.html"><a href="design.html#section"><i class="fa fa-check"></i><b>3.2</b> </a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>4</b> Glossary</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="glossary.html"><a href="glossary.html#JSON"><i class="fa fa-check"></i><b>4.1</b> JSON</a></li>
+<li class="chapter" data-level="4.2" data-path="glossary.html"><a href="glossary.html#svg"><i class="fa fa-check"></i><b>4.2</b> SVG</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>5</b> References</a></li>
 </ul>
 
       </nav>
