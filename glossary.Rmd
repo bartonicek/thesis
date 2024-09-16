@@ -6,7 +6,7 @@ editor_options:
 
 # Glossary
 
-## JSON {#JSON}
+#### JSON {#JSON}
 
 Short for "JavaScript Object Notation", JSON is a flexible data format based on the JavaScript object type [@ecma2024; see also e.g. @bourhis2017; @pezoa2016]. On the highest level, a JSON is an dictionary (also known as object, struct, hash-table, or list in other languages) containing key-value pairs, where the keys are strings and the values can be any of the following types: string, number, boolean, null (an undefined/missing value), an array (which can contain any other valid JSON values), or another JSON object. 
 
@@ -26,7 +26,7 @@ JSON is more limited than a true JavaScript object type (as implemented in the b
 
 The main advantages of JSON are that it is a simple, flexible, and human-readable format. Also, due to its recursive nature (JSON arrays and objects can contain other JSON arrays and objects), it can be used to express a wide variety of hierarchical data which would not be efficient to express in "flat" data formats such as CSV. However, this flexibility also comes with some disadvantages. The recursive nature of the format makes parsing JSON files inherently more time-intensive, and, since the values in a JSON can be of any type (as long as it is a valid JSON type), it is often necessary to validate JSON data inputs [@pezoa2016].      
 
-## SVG
+#### SVG
 
 Short for "Scalable Vector Graphics", SVG is a markup language for defining vector graphics [@mdn2024b]. Based on XML, SVG graphics can be specified via a hierarchy of elements enclosed by tags, which may be given attributes.
 
@@ -49,7 +49,7 @@ And this is its output, as interpreted by a Web browser:
   <rect x="50" y="50" width="100" height="100" fill="firebrick"></rect>
 </svg>
 
-Compared to typical raster formats such as PNG or JPEG, in which the image is defined as an array of pixels or bytes, SVG has the advantage that its lossless: images can be scaled or transformed without loss of quality. SVG images can also be readily manipulated and animated by modifying the elements' attributes (for example, to move the red rectangle in the image above to the right, we could simply increment its "x" attribute). However, the main disadvantage of SVG is that the file size scales with the number of objects in the image. As such, rendering SVG images with many small objects (such as points on a scatterplot) can become prohibitively slow, especially when there are animations involved. 
+Compared to typical raster formats such as PNG or JPEG, in which the image is defined as an array of pixels or bytes, SVG has the advantage that its lossless: images can be arbitrarily scaled or transformed without loss of quality. SVG images can also be easily manipulated and animated by modifying the elements' attributes (for example, to move the red rectangle in the image above to the right, we could simply increment its "x" attribute). However, the main disadvantage of SVG is that the file size scales with the number of objects in the image. As such, SVG images with many small objects (such as points on a scatterplot) can become prohibitively large and slow to render. 
 
 
 
