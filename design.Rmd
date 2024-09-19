@@ -38,15 +38,15 @@ $$i_{\text{product}} = i_1 + i_2 \cdot \max(j, k)$$
 
 ### Scales
 
-A fundamental task when visualizing data is translating values from the coordinates of the data to something that can be actually displayed on the screen. In most data visualization system, this is the job of scales. While there exists is a fair amount of literature on the theoretical properties of scales [SEE INTRODUCTION], there is much less written about the actual details of implementing scales in concrete data visualization systems. As such, the following section is based largely on how scales have been implemented in other data visualization codebases, such as the `ggplot2` R package [@wickham2016] or `d3-scale` module of D3 [@d3-scale2024], as well on personal experience with.
+A fundamental task when visualizing data is translating values from the coordinates of the data to something that can be actually displayed on the screen. In most data visualization system, this is the job of scales. While there exists is a fair amount of literature on the theoretical properties of scales [SEE INTRODUCTION], there is much less written about the actual details of implementing scales in concrete data visualization systems. As such, the following section is based largely on how scales have been implemented in other data visualization codebases, such as the `ggplot2` R package [@wickham2016] or `d3-scale` module of D3 [@d3-scale2024], as well on personal insights while implementing the package.
 
 #### Overview
 
-From a high-level perspective, we can think of a scale as just a function $s: D \to V$, which translates values from the data domain $D$ to some visual attribute (co)domain $V$, which could be, for example, the x- or y-position, length, area, radius, or color. 
+From a high-level perspective, we can think of a scale as just a function $s: D \to V$, which translates data values $d \in D$ to some visual attribute (co)domain $V$, which could be, for example, the x- or y-position, length, area, radius, or color. 
 
-The most typical case is where both $S$ and $D$ are subsets of the real numbers:
+The simplest and most typical case is where both $S$ and $D$ are subsets of the real numbers:
 
-$$s: [a, b] \to [j, k] \qquad \text{where } a, b, j, k \in \mathbb{R}$$
+$$s: [d_{min}, d_{max}] \to [v_{min}, v_{max}] \qquad d_{min}, d_{max}, v_{min}, v_{max} \in \mathbb{R}$$
 
 For example, suppose our data takes values in the range from 1 to 10 and we want to plot it along the x-axis within a plotting region which is 800 pixels wide. Then, our scale is simply:
 
@@ -54,25 +54,31 @@ $$s: [1, 10] \to [0, 800]$$
 
 Now, there can be many potential functions that fit this signature. One particularly nice and simple candidate is the following function:
 
-$$s(x) = j + \frac{x - a}{b -a} \cdot (k - j)$$
+$$s(d) = v_{max} + \frac{d - d_{min}}{d_{max} - d_{min}} \cdot (v_{max} - v_{min})$$
 
 or, with concrete values substituted for the variables:
 
-$$s(x) = 0 + \frac{x - 1}{10 - 1} \cdot (800 - 0) \\ \implies s(x) = \frac{x - 1}{9} \cdot 800$$
+$$s(d) = 0 + \frac{d - 1}{10 - 1} \cdot (800 - 0) \\ \implies s(d) = [(d - 1) / 9] \cdot 800$$
 
 This function is a simple linear map, which acts on the data in the following way:
 
 - $s(1) = (1 - 1) / 9 \cdot 800 = 0$
 - $s(10) = (10 - 1) / 9 \cdot 800 = 800$
-- $s(x) \in (0, 800)$ for any $x \in (1, 10)$
+- $s(d) \in (0, 800)$ for any $d \in (1, 10)$
 
-That is, the function maps the data value 1 to pixel 0 (left border of the plotting region), value 10 to to pixel 800 (right border of the plotting region), and any value in between 1 and 10 to the interval 0 to 800, proportional to how far within the data range it is located.
+That is, the function maps the data value 1 to pixel 0 (left border of the plotting region), value 10 to to pixel 800 (right border of the plotting region), and any value in between 1 and 10 to the interval 0 to 800, proportional to where in the data range it is located.
 
 We can easily implement the function by simply translating the formula to code:
 
 ```{ts}
-function scale(x: number, a: number, b: number, j: number, k: number): number {
-  return j + ((x - a) / (b - a)) * (k - j)
+function scale(
+  d: number,
+  dmin: number,
+  dmax: number,
+  vmin: number,
+  vmax: number,
+): number {
+  return vmin + ((d - dmin) / (dmax - dmin)) * (vmax - vmin);
 }
 
 // And indeed, this works as expected
@@ -81,7 +87,7 @@ console.log(scale(5.5, 1, 10, 0, 800))
 
 #### Limits of modeling scales as simple functions
 
-Simple scale functions like the one shown above can work fine for simple data visualization systems. However, once we want to add more features, this design can become prohibitive. For example, what if we want to:
+Simple scale functions like the one shown above can work fine for basic data visualization systems. However, once we want to add more features, this design can become prohibitive. Consider, for example, what we might have to do if we want to:
 
 - Expand the scale limits
 - Apply non-linear transformations
@@ -113,18 +119,20 @@ plot(x, y, col = col, cex = 3)
 
 (in R, this is approximately 4% at each end of the axis, see `xaxs` in `?graphicss::par`)
 
-We could achieve the same effect by adding an extra argument to the `scale` function:
+Turning back to the simple `scale` function, we could achieve the same effect by adding an extra argument:
 
 ```{ts}
 function scale(
-  x: number,
-  a: number,
-  b: number,
-  j: number,
-  k: number,
-  w: number
+  d: number,
+  dmin: number,
+  dmax: number,
+  vmin: number,
+  vmax: number,
+  exp: number,
 ): number {
-  return j + (w / 2 + ((x - a) / (b - a)) * (1 - w)) * (k - j);
+  return (
+    vmin + (exp / 2 + ((d - dmin) / (dmax - dmin)) * (1 - exp)) * (vmax - vmin)
+  );
 }
 
 console.log(scale(1, 1, 10, 0, 800, 0.1));
@@ -132,30 +140,45 @@ console.log(scale(5.5, 1, 10, 0, 800, 0.1));
 console.log(scale(10, 1, 10, 0, 800, 0.1));
 ```
 
-The additional argument `w` allows us to specify that we want to expand the range by 10% (5% upper and lower limit, respectively), such that the data values of 1 and 10 are no longer translated to 0 and 800 pixels but instead closer to the center of the plotting area (40 and 760 pixels, respectively).   
+The `exp` argument effectively allows allows us expand the data range by some fixed percentage, e.g. 10% (5% upper and lower limit, respectively). This means that the data values of 1 and 10 are no longer translated to 0 and 800 pixels but instead somewhere closer to the center of the plotting area (40 and 760 pixels, respectively).   
 
-However, if we start piling on additional arguments, the function may quickly become unwieldy and hard to reason about. Further, we also may want to persist or modify some of the values during runtime (such as when panning or zooming). Thus, it becomes clear that a more structured approach is needed.
+However, as can be plainly seen, with more arguments, the function quickly becomes unwieldy and hard to reason about. Further, we also may want to persist or modify some of the values during runtime (such as when panning or zooming). Therefore, a more structured approach is needed.
 
 #### Solution: Two-component scale system
 
-The formula for the linear mapping may provide hints as to how we might go about breaking the scaling function apart into smaller, more manageable components. If we look at the formula closely, we can re-frame the function as a composition of two simpler functions:
+The linear mapping formula can guide us in decomposing the scaling function into smaller, more manageable parts. Looking at the formula closely, we can see that it can be expressed as the composition of two simpler functions:
 
 $$s(x) = \color{steelblue}{j +} \color{indianred}{\frac{x - a}{b -a}} \color{steelblue}{\cdot (k - j)}$$
 
 That is, the scale function consists of:
 
-- A *normalize* function $\color{indianred}{n: D \to [0, 1], \qquad n(x) = (x - a) / (b - a)}$
-- An *unnormalize* function $\color{steelblue}{u: [0, 1] \to V, \qquad u(y) = j + y \cdot (k - j)}$
+- A *normalize* function $\color{indianred}{n: D \to [0, 1], \qquad n(d) = (d - a) / (b - a)}$
+- An *unnormalize* function $\color{steelblue}{u: [0, 1] \to V, \qquad u(p) = j + p \cdot (k - j)}$
 
-Put simply, the normalize function $n$ translates the data values $D$ to a percentage $[0, 1]$, and the unnormalize function $u$ takes the percentage and translates it into the space of the visual attribute $V$. The scale function is then simply the composition of these two functions:
+Put simply, the normalize function $n$ translates data values $d \in D$ to a percentage $p \in [0, 1]$, and the unnormalize function $u$ converts the percentage to the space of the visual attribute $V$. The scale function is then simply the composition of these two functions:
 
-$$s(x) = \color{steelblue}{u(} \color{indianred}{n(x)} \color{steelblue}{)}$$
+$$s(d) = \color{steelblue}{u(} \color{indianred}{n(\color{black}{d})} \color{steelblue}{)}$$
 
-This two component system has a big advantage in that it allows for a clean separation of concerns. Specifically, the unnormalize function only needs to know how to translate values from $[0, 1]$ to the space of its own visual attribute (such as x-axis position); it does not need to know what data it is mapping to the attribute or how it's been normalized. Conversely, the normalize function does not need to know where the data it's normalizing will be mapped to.
+In code, we can write this as follows:
 
-Also note that, technically, there isn't anything special about the $[0, 1]$ interval as the intermediate domain: any finite subset of $\mathbb{R}$ will work. However, the specific interval $[0, 1]$ is convenient, both in terms of interpretation and implementation, as will be discussed later.
+```{ts}
+function normalize(x: number, a: number, b: number) {
+  return (x - a) / (b - a)
+}
 
-Finally, so far I have referred to the normalize and unnormalize *functions*. This framing lends itself to a nice correspondence between the mathematical definition and the code implementation. However, in practice, we could also just as well speak of the domain and codomain *objects* or *classes*, as we will see in the next section. The important point is that, no matter whether the two components are functions or objects, they are each responsible for translating values in their domain to and from the interval $[0, 1]$.
+function unnormalize(p: number, j: number, k: number) {
+ return j + p * (k - j) 
+}
+
+console.log(normalize(5.5, 1, 10))
+console.log(unnormalize(0.5, 0, 800))
+```
+
+This two component system allows for a clean separation of concerns. Specifically, the normalize function how to map the data values to $[0, 1]$. It does not need to be aware of where these normalized data values will be mapped to. Conversely, the unnormalize function only needs to understand how to translate values from $[0, 1]$ to the space of the visual attribute (such as x-axis position).
+
+It is worth noting that any finite subset of $\mathbb{R}$ could serve as the intermediate domain. However, the specific interval $[0, 1]$ is convenient, both in terms of interpretation as well as for implementation, as will be discussed later.
+
+Finally, so far I have referred to the normalize and unnormalize *functions*. Framing scales as composition of functions leads to a nice correspondence between the mathematical definition and the code implementation. However, in practice, we can just as well implement the domain and codomain as *objects* or *classes*, as we will see in the next section. The important point is that, no matter what type the two components are, each is responsible for translating values between its domain and the interval $[0, 1]$.
 
 #### Past implementations of scales
 
@@ -191,42 +214,68 @@ map = function(self, x, limits = self$get_limits()) {
 
 #### Proposed model of scales
 
-The important thing to note is that both `D3` and `ggplot2` treat the data domain and the visual attribute codomain as fundamentally different objects. In `D3`, different functions are used to translate from $D \to [0, 1]$ and from $[0, 1] \to V$, and, in `ggplot2`, while `limits` is a simple vector/tuple, `palette` is a function. This adds additional complexity, since we have to use a different mental model when thinking about each component. However, is this added complexity necessary?
+One disadvantage the models of scales that `D3` and `ggplot2` use is that they treat the data domain and the visual attribute codomain as fundamentally different objects. In `D3`, different functions are used to translate from $D \to [0, 1]$ and from $[0, 1] \to V$, and, in `ggplot2`, while `limits` is a simple vector/tuple, `palette` is a function. While this approach may have some benefits, it does add additional complexity, since we have to use a different mental model when considering each component. Further, the model only works in one direction, for mapping values $D \to V$; if we want to go the other way, i.e. map $V \to D$, we have to use other specialized functions. 
 
-I propose a simpler model of scales which implements both the domain and codomain as objects of the same type (`Expanse`). Specifically, here is a simplified version of the `Scale` interface:  
+Instead, I propose a different model of scales which implements both the domain and codomain as objects of the same type (`Expanse`). This has the advantage of making the code easier to reason about, and, most of the time, inverting the scaling function is trivial.
+
+Here is a (somewhat) simplified version of the `Scale` interface:  
 
 ```{ts}
 #| eval: false
-interface Scale<T, U> {
-  domain: Expanse<T>
-  codomain: Expanse<U>
+interface Scale<D, V> {
+  domain: Expanse<D>
+  codomain: Expanse<V>
 }
 ```
 
-Here, `T` represents the type of the data domain, and `U` represents the type of the visual attribute codomain.
+Here, `D` represents the type of the data domain, and `V` represents the type of the visual attribute codomain.
 
-Then, using this interface, we can make use of the following two functions:
+With this interface, we can use of the following two functions:
 
 ```{ts}
-function pushforward<T, U>(scale: Scale<T, U>, value: T): U
-function pullback<T, U>(scale: Scale<T, U>, value: U): T
+function pushforward<D, D>(scale: Scale<D, V>, value: D): V
+function pullback<D, V>(scale: Scale<D, V>, value: V): D
 ```
 
-The `pushforward` function can be *push values forward* through the scale, first through its domain and then its codomain, and the `pullback` function can be used to *pull values back*, first through its codomain and then through its domain. 
+The `pushforward` function can be *push values forward* through the scale, first through its domain and then its codomain, and the `pullback` function can be used to *pull values back*, first through its codomain and then through its domain. The implementation of these functions is actually trivial:
+
+```{ts}
+function pushforward<D, V>(scale: Scale<D, V>, value: D): V {
+  return unnormalize(scale.codomain, normalize(scale.domain, value))
+}
+
+function pullback<D, V>(scale: Scale<D, V>, value: V): D {
+  return unnormalize(scale.domain, normalize(scale.codomain, value))
+}
+```
+
+That is, each `Expanse` does all of the work, translating between either $D$ or $V$ and $[0, 1]$; a `Scale` only connects two arbitrary expanses together. As such, before talking about additional features of scales, we should discuss expanses, since these lend scale the bulk of their functionality. 
 
 ### Expanses
 
-Expanses provide a way to translate between data values and relative proportions of graphical encodings, such as the x- and y-axis position, area, or size. Formally speaking, an expanse is a set of some possible data values $D$, together with a pair of maps:
+As was hinted at in the previous section, expanses map values between their domain and the interval $[0, 1]$. To do this, they are equipped with two familiar functions:
 
-- A *normalize* map $n: D \to \mathbb{R}$
-- An *unnormalize* map $u: \mathbb{R} \to D$ 
+- A *normalize* function $\color{indianred}{n: X \to [0, 1]}$
+- An *unnormalize* function $\color{steelblue}{u: [0, 1] \to X}$
 
-This may seem rather abstract, however, what might make things clearer is that most of the time we will be dealing with specific subsets of $D$ and $\mathbb{R}$: observed data $D^* \subseteq D$ and percentages $p^* \in [0, 1] \subset \mathbb{R}$. Then, provided that the expanse has been trained on the observed data values and no adjustments such as expanding margins, zooming, or panning have been made: 
+Or, in code:
 
-- The normalize map translates observed data to percentages: $n(d^*) \to [0, 1]$
-- The unnormalize map translates percentages to observed data: $u(p^*) \to D^*$ 
+```{ts}
+#| eval: false
+function normalize<X>(expanse: Expanse<X>, value: X): number
+function unnnormalize<X>(expanse: Expanse<X>, value: number): X
+```
 
-#### Zero and One
+Notice that, whereas before we had considered *normalize* as mapping between $D \to [0, 1]$ and *unnormalize* as mapping between $[0, 1] \to V$, we now consider both as mapping between $[0, 1]$ and an arbitrary domain $X$. This domain can represent the data or the visual attribute - the expanse is agnostic about this.
+
+Also, while before we have discussed domains as subsets of $\mathbb{R}$, we can now start thinking about them as arbitrary sets. While subsets of $\mathbb{R}$ and sets of strings are really the only types of domains used in `plotscaper`, the model should readily extends to other sets, as long as a mapping to and from $[0, 1]$ can be provided.
+
+How `normalize` and `unnormalize` are implemented will depend largely on the subtype of `Expanse`, as well as on the desired behavior. For example, as will be discussed later, in `plotscaper`, the normalize and unnormalize methods implemented for `ExpanseContinuous` (subtype of `Expanse<number>`) work largely the same way as in section [SECTION]. However, while `ExpansePoint` and `ExpanseBand` are both subtypes of `Expanse<string>`, they behave differently - `ExpansePoint` maps strings (factor levels) to equidistant points along $[0, 1]$, whereas `ExpanseBand` maps the strings into the middle of "buckets" along $[0, 1]$.   
+
+However, there is also some behavior that we may want to apply the same way across the different expanse subtypes. For example, it seems reasonable that the user should be able to zoom, pan, or reverse axes, regardless of whether a plot shows discrete or continuous data. As such, there may be some properties and functions common to the `Expanse` type. I will discuss these first.
+
+
+#### Zero and one
 
 The maps may also take in and return values outside of $D^*$ and $[0, 1]$, if adjustments have been made. For instance, in most data visualization packages, x- and y-axis limits are by default expanded some percentage beyond the range of the observed data to avoid the maximum and minimum datapoints from overlapping with the limits. For example, in base R:
 

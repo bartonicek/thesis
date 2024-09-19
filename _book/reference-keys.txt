@@ -13,7 +13,7 @@ def:unlabeled-div-8
 def:unlabeled-div-9
 def:unlabeled-div-10
 tab:scales
-fig:unnamed-chunk-7
+fig:unnamed-chunk-11
 abstract
 introduction
 what-is-interactive-visualization
@@ -49,6 +49,8 @@ scales-1
 overview
 limits-of-modeling-scales-as-simple-functions
 solution-two-component-scale-system
+past-implementations-of-scales
+proposed-model-of-scales
 expanses
 zero-and-one
 expanse-interface
@@ -60,10 +62,6 @@ glossary
 JSON
 svg
 references
-fig:unnamed-chunk-6
-solution-two-component-scale-systems
-past-implementations-of-scales
-proposed-model-of-scales
-fig:unnamed-chunk-8
-fig:unnamed-chunk-9
 fig:unnamed-chunk-10
+fig:unnamed-chunk-12
+fig:unnamed-chunk-13
