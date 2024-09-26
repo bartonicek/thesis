@@ -13,7 +13,7 @@ def:unlabeled-div-8
 def:unlabeled-div-9
 def:unlabeled-div-10
 tab:scales
-fig:unnamed-chunk-11
+fig:unnamed-chunk-16
 abstract
 introduction
 what-is-interactive-visualization
@@ -42,6 +42,10 @@ criticism-of-on-the-theory-of-scales-of-measurement
 design
 user-profile
 implementation
+programming-paradigms
+imperative-programming
+data-oriented-programming-and-design
+system-components
 factors
 product-factors
 reducers
@@ -62,6 +66,9 @@ glossary
 JSON
 svg
 references
-fig:unnamed-chunk-10
-fig:unnamed-chunk-12
-fig:unnamed-chunk-13
+fig:unnamed-chunk-15
+fig:unnamed-chunk-17
+encapsulation
+data-oriented-programming
+inheritance
+fig:unnamed-chunk-14

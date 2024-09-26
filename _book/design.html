@@ -186,15 +186,19 @@ div.csl-indent {
 </ul></li>
 <li class="chapter" data-level="3" data-path="design.html"><a href="design.html"><i class="fa fa-check"></i><b>3</b> Design</a>
 <ul>
-<li class="chapter" data-level="3.0.1" data-path="design.html"><a href="design.html#user-profile"><i class="fa fa-check"></i><b>3.0.1</b> User Profile</a></li>
+<li class="chapter" data-level="3.0.1" data-path="design.html"><a href="design.html#user-profile"><i class="fa fa-check"></i><b>3.0.1</b> User profile</a></li>
 <li class="chapter" data-level="3.1" data-path="design.html"><a href="design.html#implementation"><i class="fa fa-check"></i><b>3.1</b> Implementation</a>
 <ul>
-<li class="chapter" data-level="3.1.1" data-path="design.html"><a href="design.html#factors"><i class="fa fa-check"></i><b>3.1.1</b> Factors</a></li>
-<li class="chapter" data-level="3.1.2" data-path="design.html"><a href="design.html#reducers"><i class="fa fa-check"></i><b>3.1.2</b> Reducers</a></li>
-<li class="chapter" data-level="3.1.3" data-path="design.html"><a href="design.html#scales-1"><i class="fa fa-check"></i><b>3.1.3</b> Scales</a></li>
-<li class="chapter" data-level="3.1.4" data-path="design.html"><a href="design.html#expanses"><i class="fa fa-check"></i><b>3.1.4</b> Expanses</a></li>
+<li class="chapter" data-level="3.1.1" data-path="design.html"><a href="design.html#programming-paradigms"><i class="fa fa-check"></i><b>3.1.1</b> Programming paradigms</a></li>
 </ul></li>
-<li class="chapter" data-level="3.2" data-path="design.html"><a href="design.html#section"><i class="fa fa-check"></i><b>3.2</b> </a></li>
+<li class="chapter" data-level="3.2" data-path="design.html"><a href="design.html#system-components"><i class="fa fa-check"></i><b>3.2</b> System components</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="design.html"><a href="design.html#factors"><i class="fa fa-check"></i><b>3.2.1</b> Factors</a></li>
+<li class="chapter" data-level="3.2.2" data-path="design.html"><a href="design.html#reducers"><i class="fa fa-check"></i><b>3.2.2</b> Reducers</a></li>
+<li class="chapter" data-level="3.2.3" data-path="design.html"><a href="design.html#scales-1"><i class="fa fa-check"></i><b>3.2.3</b> Scales</a></li>
+<li class="chapter" data-level="3.2.4" data-path="design.html"><a href="design.html#expanses"><i class="fa fa-check"></i><b>3.2.4</b> Expanses</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="design.html"><a href="design.html#section"><i class="fa fa-check"></i><b>3.3</b> </a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>4</b> Glossary</a></li>
 <li class="chapter" data-level="5" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>5</b> References</a></li>
@@ -218,7 +222,7 @@ div.csl-indent {
 <div id="design" class="section level1 hasAnchor" number="3">
 <h1><span class="header-section-number">3</span> Design<a href="design.html#design" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <div id="user-profile" class="section level3 hasAnchor" number="3.0.1">
-<h3><span class="header-section-number">3.0.1</span> User Profile<a href="design.html#user-profile" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<h3><span class="header-section-number">3.0.1</span> User profile<a href="design.html#user-profile" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The profile of average user can also differ significantly, across systems and research areas. For example, some areas of interactive data visualization and HCI make no assumptions about the user’s level of experience or motivation, whereas others assume a highly motivated “expert” user with a sufficient level of domain knowledge <span class="citation">(<a href="#ref-dimara2019">Dimara and Perin 2019</a>)</span>.</p>
 <p>While designing my system, I have attempted to</p>
 </div>
@@ -227,25 +231,68 @@ div.csl-indent {
 <blockquote>
 <p>The example code chunks in this section are written in both R and TypeScript. The reason for this is that, while I would prefer to use R for everything due to its tight integration with RMarkdown, some of the concepts are much easier to explain in a language with static typing features like TypeScript (particularly, type annotations and interfaces). However, since the examples relate to plotting and some can be improved by showing graphical output/plots, I also wanted to use (base) R for plotting. So, where graphical output is important, the code chunks are written in R, and, where the code itself is the main focus, they are written in TypeScript. I hope this bilingualism is not too confusing and have tried to use only the basic features of each language to make the examples clear.</p>
 </blockquote>
-<div id="factors" class="section level3 hasAnchor" number="3.1.1">
-<h3><span class="header-section-number">3.1.1</span> Factors<a href="design.html#factors" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="programming-paradigms" class="section level3 hasAnchor" number="3.1.1">
+<h3><span class="header-section-number">3.1.1</span> Programming paradigms<a href="design.html#programming-paradigms" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>It is often the case that the same programming task can be solved in many, often vastly different, ways. Programs solving the same problem can differ in how they decompose the problem, how they represent and manipulate data, how they handle state, how explicit or implicit they are about handling low-level system details versus relying on abstractions, how they structure and organize their constituent components, and so on. Dealing with these concerns, and coming up with a formal set of principles for addressing them is the job of programming paradigms <span class="citation">(<a href="#ref-chambers2014">Chambers 2014</a>; <a href="#ref-jordan2015">Jordan et al. 2015</a>; <a href="#ref-van2009">Van Roy et al. 2009</a>)</span>.</p>
+<p>Most programming languages are geared towards one specific style of programming, typically supporting only one or two programming paradigms to a reasonable capacity <span class="citation">(<a href="#ref-van2009">Van Roy et al. 2009</a>)</span>. Fortunately, this is not the case for either JavaScript/TypeScript or R, since both are multiparadigm programming languages <span class="citation">(<a href="#ref-chambers2014">Chambers 2014</a>; <a href="#ref-mdn2024c">MDN 2024c</a>)</span>. Both support object-oriented programming, via prototype inheritance in the case of JavaScript <span class="citation">(<a href="#ref-mdn2024d">MDN 2024a</a>)</span> and the S3, S4, and R6 systems in the case of R <span class="citation">(<a href="#ref-wickham2019">Wickham 2019</a>)</span>, and treat functions as first class citizens, allowing for functional programming style <span class="citation">(<a href="#ref-chambers2014">Chambers 2014</a>; <a href="#ref-mdn2024e">MDN 2024b</a>)</span>. Further, as C based languages, both also support classical imperative/procedural programming style, and also provide some utilities for reflective metaprogramming.</p>
+<p>The flexibility of JavaScript and R allowed me to experiment with different programming paradigms while developing <code>plotscaper</code>. I had rewritten the JavaScript side of the package multiple times from scratch, testing out several different programming paradigms and styles in the process. Below, I provide a very broad overview of the paradigms I have tried, as well as an account of my experience of using each paradigm and some thoughts on its suitability towards designing interactive data visualization systems.</p>
+<div id="imperative-programming" class="section level4 hasAnchor" number="3.1.1.1">
+<h4><span class="header-section-number">3.1.1.1</span> Imperative programming<a href="design.html#imperative-programming" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Imperative programming style is one of the oldest and most classical styles of programming. It conceptualizes the program as a discrete sequence of steps that manipulate some mutable state <span class="citation">(<a href="#ref-frame2014">Frame and Coffey 2014</a>)</span>. In this way, it closely resembles the way CPU executes instructions.</p>
+</div>
+<div id="data-oriented-programming" class="section level4 hasAnchor" number="3.1.1.2">
+<h4><span class="header-section-number">3.1.1.2</span> Data oriented programming<a href="design.html#data-oriented-programming" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Data oriented programming (DOP) and data oriented design (DOD) are two newer programming paradigms that have been slowly gaining prominence in the recent years. While the terms are sometimes used interchangeably, there are some subtle differences: DOP focuses more on high-level principles such as structuring and organizing code, whereas DOD, originating in the world of video-game development, tends to be more concerned with low-level optimization details such as memory layout and CPU access patterns <span class="citation">(<a href="#ref-sharvit2022">Sharvit 2022</a>; c.f. <a href="#ref-acton2014">Acton 2014</a>; <a href="#ref-fabian2018">Fabian 2018</a>)</span>. However, there is a remarkable overlap between the conclusions and high-level concepts of the two programming paradigms. For this reason, I will discuss both here simultaneously and refer to both as “DOP” unless explicitly mentioned otherwise.</p>
+<p>The core idea of DOP is a data-first perspective. Under this view, programs should be viewed as transformations of data, nothing less, nothing more. As a result, every program is composed of two sets of components: stateful data and stateless functions that transform this data <span class="citation">(<a href="#ref-fabian2018">Fabian 2018</a>)</span>. Data should be represented by generic data structures, formed by combining maps/structs, arrays, and primitives <span class="citation">(for example <a href="glossary.html#JSON">JSON</a>; <a href="#ref-sharvit2022">Sharvit 2022</a>)</span>, and it may even be desirable that it adheres to the relational model <span class="citation">(<a href="#ref-codd1970">Codd 1970</a>; <a href="#ref-moseley2006">Moseley and Marks 2006</a>; <a href="#ref-fabian2018">Fabian 2018</a>; note that the data does not actually have to <em>live</em> inside a relational database, just have the shape of a normalized table, with columns represented by generic arrays)</span>. Data and code should be kept separate, with code living in separate modules, composed of stateless functions <span class="citation">(<a href="#ref-fabian2018">Fabian 2018</a>; <a href="#ref-sharvit2022">Sharvit 2022</a>)</span>. Further, since data is just itself - data - there is no obligation for it to model the real world or any kind of abstract entity and we are free to represent it in any way we want <span class="citation">(<a href="#ref-acton2014">Acton 2014</a>; <a href="#ref-fabian2018">Fabian 2018</a>; an extreme example of this are Entity Component Systems in videogames, <a href="#ref-harkonen2019">Härkönen 2019</a>)</span>. Finally, abstraction should be introduced only gradually, and most of the work should be done by generic data manipulation functions <span class="citation">(<a href="#ref-fabian2018">Fabian 2018</a>; <a href="#ref-sharvit2022">Sharvit 2022</a>)</span>.</p>
+<p>It may seem that many of the DOP principles directly contradict many popular OOP principles, specifically encapsulation, inheritance, polymorphism, and domain driven design. However, many of these principles can either be reconciled with DOP, or DOP in fact provides better alternatives. Below, I go over these principles and provide code examples that further illustrate how DOP works.</p>
+<div id="encapsulation" class="section level5 hasAnchor" number="3.1.1.2.1">
+<h5><span class="header-section-number">3.1.1.2.1</span> Encapsulation<a href="design.html#encapsulation" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>When it comes to encapsulation in DOP, we have to differentiate between encapsulating data and encapsulating code. Encapsulating code is easy in DOP - we can simply not export certain functions from the code modules. We are then free to modify the signature of these functions without affecting the public interface <span class="citation">(<a href="#ref-fabian2018">Fabian 2018</a>)</span>. Encapsulating data may be a bit more work. Depending on the language we use, generic data structures may not come equipped with property access modifiers <span class="citation">(although there does seem to be a trend in recent languages to support property access modifiers more generically, see e.g. <a href="#ref-rust2024">Rust Foundation 2024</a>; <a href="#ref-zig2024">Zig Software Foundation 2024</a>)</span>. For example, in JavaScript, private properties can only be declared as part of a class declaration <span class="citation">(<a href="#ref-mdn2024e">MDN 2024b</a>)</span>. However, this does not necessarily mean that encapsulation of data is impossible - in most languages, there will most likely exist some way to emulate private property access, e.g. by using metaprogammming.</p>
+<p>foo bar baz</p>
+<p>For example, here’s how we can emulate private property access in JavaScript using Proxy:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb1-1"><a href="design.html#cb1-1" tabindex="-1"></a><span class="co">// Make object properties modifiable only from within the namespace</span></span></code></pre></div>
+<pre><code>## {
+##   firstName: &quot;adam&quot;,
+##   lastName: &quot;bartonicek&quot;,
+## }
+## undefined
+## undefined
+## adam bartonicek</code></pre>
+<p>In the code above, we managed to encapsulate data even while maintaining a clear separation between data and code. Specifically, <code>User</code> is still just a generic object and can be inspected via <code>console.log</code>, however, we cannot access or modify its properties outside of the <code>User</code> code module.</p>
+<p>Thus, encapsulation of data is certainly possible in DOP. However, a question still remains whether it is a good idea. While encapsulation is generally seen as a net positive in OOP, in the DOP view, data encapsulation presents trade-offs. Whereas it might provide a layer of security, it also makes systems more complex, harder to debug, and even with encapsulated data users may still come to rely on hidden features of the system <span class="citation">(<a href="#ref-fabian2018">Fabian 2018</a>; <a href="#ref-sharvit2022">Sharvit 2022</a>)</span>. Thus, it is necessary to weight the pros and cons of encapsulation.</p>
+<p>In JavaScript/TypeScript, it is also possible to</p>
+</div>
+<div id="inheritance" class="section level5 hasAnchor" number="3.1.1.2.2">
+<h5><span class="header-section-number">3.1.1.2.2</span> Inheritance<a href="design.html#inheritance" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>In OOP, the primary mechanism for code reuse is inheritance.</p>
+<p>In DOP, since data is generic and separate from behavior, we can call functions from any module as long as the data we provide it as arguments adheres to the module’s interface. This makes code reuse trivial. For example, here’s a simplified version of the <code>Reactive</code> interface (Observer pattern) from <code>plotscape</code>:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode ts"><code class="sourceCode typescript"></code></pre></div>
+<pre><code>## Woof!</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div id="system-components" class="section level2 hasAnchor" number="3.2">
+<h2><span class="header-section-number">3.2</span> System components<a href="design.html#system-components" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="factors" class="section level3 hasAnchor" number="3.2.1">
+<h3><span class="header-section-number">3.2.1</span> Factors<a href="design.html#factors" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Factors provide a way to partition the data into multiple disjoint parts.</p>
-<div id="product-factors" class="section level4 hasAnchor" number="3.1.1.1">
-<h4><span class="header-section-number">3.1.1.1</span> Product factors<a href="design.html#product-factors" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div id="product-factors" class="section level4 hasAnchor" number="3.2.1.1">
+<h4><span class="header-section-number">3.2.1.1</span> Product factors<a href="design.html#product-factors" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>We can combine a factor with <span class="math inline">\(j\)</span> levels and another factor with <span class="math inline">\(k\)</span> levels into a product factor with up to <span class="math inline">\(j \cdot k\)</span> levels.</p>
 <p>I independently discovered a formula similar to <span class="citation">(<a href="#ref-wickham2013">Wickham 2013</a>)</span>:</p>
 <p><span class="math display">\[i_{\text{product}} = i_1 + i_2 \cdot \max(j, k)\]</span></p>
 </div>
 </div>
-<div id="reducers" class="section level3 hasAnchor" number="3.1.2">
-<h3><span class="header-section-number">3.1.2</span> Reducers<a href="design.html#reducers" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="reducers" class="section level3 hasAnchor" number="3.2.2">
+<h3><span class="header-section-number">3.2.2</span> Reducers<a href="design.html#reducers" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p><span class="citation">(<a href="#ref-gray1997">Gray et al. 1997</a>)</span> came up with OLAP data cube</p>
 </div>
-<div id="scales-1" class="section level3 hasAnchor" number="3.1.3">
-<h3><span class="header-section-number">3.1.3</span> Scales<a href="design.html#scales-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="scales-1" class="section level3 hasAnchor" number="3.2.3">
+<h3><span class="header-section-number">3.2.3</span> Scales<a href="design.html#scales-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>A fundamental task when visualizing data is translating values from the coordinates of the data to something that can be actually displayed on the screen. In most data visualization system, this is the job of scales. While there exists is a fair amount of literature on the theoretical properties of scales [SEE INTRODUCTION], there is much less written about the actual details of implementing scales in concrete data visualization systems. As such, the following section is based largely on how scales have been implemented in other data visualization codebases, such as the <code>ggplot2</code> R package <span class="citation">(<a href="#ref-wickham2016">Wickham 2016</a>)</span> or <code>d3-scale</code> module of D3 <span class="citation">(<a href="#ref-d3-scale2024">Observable 2024</a>)</span>, as well on personal insights while implementing the package.</p>
-<div id="overview" class="section level4 hasAnchor" number="3.1.3.1">
-<h4><span class="header-section-number">3.1.3.1</span> Overview<a href="design.html#overview" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div id="overview" class="section level4 hasAnchor" number="3.2.3.1">
+<h4><span class="header-section-number">3.2.3.1</span> Overview<a href="design.html#overview" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>From a high-level perspective, we can think of a scale as just a function <span class="math inline">\(s: D \to V\)</span>, which translates data values <span class="math inline">\(d \in D\)</span> to some visual attribute (co)domain <span class="math inline">\(V\)</span>, which could be, for example, the x- or y-position, length, area, radius, or color.</p>
 <p>The simplest and most typical case is where both <span class="math inline">\(S\)</span> and <span class="math inline">\(D\)</span> are subsets of the real numbers:</p>
 <p><span class="math display">\[s: [d_{min}, d_{max}] \to [v_{min}, v_{max}] \qquad d_{min}, d_{max}, v_{min}, v_{max} \in \mathbb{R}\]</span></p>
@@ -263,22 +310,11 @@ div.csl-indent {
 </ul>
 <p>That is, the function maps the data value 1 to pixel 0 (left border of the plotting region), value 10 to to pixel 800 (right border of the plotting region), and any value in between 1 and 10 to the interval 0 to 800, proportional to where in the data range it is located.</p>
 <p>We can easily implement the function by simply translating the formula to code:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb1-1"><a href="design.html#cb1-1" tabindex="-1"></a><span class="kw">function</span> <span class="fu">scale</span>(</span>
-<span id="cb1-2"><a href="design.html#cb1-2" tabindex="-1"></a>  d<span class="op">:</span> <span class="dt">number</span><span class="op">,</span></span>
-<span id="cb1-3"><a href="design.html#cb1-3" tabindex="-1"></a>  dmin<span class="op">:</span> <span class="dt">number</span><span class="op">,</span></span>
-<span id="cb1-4"><a href="design.html#cb1-4" tabindex="-1"></a>  dmax<span class="op">:</span> <span class="dt">number</span><span class="op">,</span></span>
-<span id="cb1-5"><a href="design.html#cb1-5" tabindex="-1"></a>  vmin<span class="op">:</span> <span class="dt">number</span><span class="op">,</span></span>
-<span id="cb1-6"><a href="design.html#cb1-6" tabindex="-1"></a>  vmax<span class="op">:</span> <span class="dt">number</span><span class="op">,</span></span>
-<span id="cb1-7"><a href="design.html#cb1-7" tabindex="-1"></a>)<span class="op">:</span> <span class="dt">number</span> {</span>
-<span id="cb1-8"><a href="design.html#cb1-8" tabindex="-1"></a>  <span class="cf">return</span> vmin <span class="op">+</span> ((d <span class="op">-</span> dmin) <span class="op">/</span> (dmax <span class="op">-</span> dmin)) <span class="op">*</span> (vmax <span class="op">-</span> vmin)<span class="op">;</span></span>
-<span id="cb1-9"><a href="design.html#cb1-9" tabindex="-1"></a>}</span>
-<span id="cb1-10"><a href="design.html#cb1-10" tabindex="-1"></a></span>
-<span id="cb1-11"><a href="design.html#cb1-11" tabindex="-1"></a><span class="co">// And indeed, this works as expected</span></span>
-<span id="cb1-12"><a href="design.html#cb1-12" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="fu">scale</span>(<span class="fl">5.5</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">10</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">800</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb5-1"><a href="design.html#cb5-1" tabindex="-1"></a><span class="kw">function</span> <span class="fu">scale</span>(</span></code></pre></div>
 <pre><code>## 400</code></pre>
 </div>
-<div id="limits-of-modeling-scales-as-simple-functions" class="section level4 hasAnchor" number="3.1.3.2">
-<h4><span class="header-section-number">3.1.3.2</span> Limits of modeling scales as simple functions<a href="design.html#limits-of-modeling-scales-as-simple-functions" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div id="limits-of-modeling-scales-as-simple-functions" class="section level4 hasAnchor" number="3.2.3.2">
+<h4><span class="header-section-number">3.2.3.2</span> Limits of modeling scales as simple functions<a href="design.html#limits-of-modeling-scales-as-simple-functions" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>Simple scale functions like the one shown above can work fine for basic data visualization systems. However, once we want to add more features, this design can become prohibitive. Consider, for example, what we might have to do if we want to:</p>
 <ul>
 <li>Expand the scale limits</li>
@@ -287,42 +323,27 @@ div.csl-indent {
 <li>Scale discrete data</li>
 </ul>
 <p>Let’s take the first point as a motivating example. Consider what happens to data points at the limits of the data range with our “simple” scale function:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="design.html#cb3-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span></span>
-<span id="cb3-2"><a href="design.html#cb3-2" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">10</span>, <span class="dv">0</span>, <span class="dv">5</span>)</span>
-<span id="cb3-3"><a href="design.html#cb3-3" tabindex="-1"></a>col <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span> <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">10</span>), <span class="st">&quot;indianred&quot;</span>, <span class="st">&quot;grey80&quot;</span>)</span>
-<span id="cb3-4"><a href="design.html#cb3-4" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="design.html#cb3-5" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">col =</span> col, <span class="at">cex =</span> <span class="dv">3</span>, <span class="at">xaxs =</span> <span class="st">&quot;i&quot;</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-3-1.png" width="800px" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="design.html#cb7-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span></span>
+<span id="cb7-2"><a href="design.html#cb7-2" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">10</span>, <span class="dv">0</span>, <span class="dv">5</span>)</span>
+<span id="cb7-3"><a href="design.html#cb7-3" tabindex="-1"></a>col <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span> <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">10</span>), <span class="st">&quot;indianred&quot;</span>, <span class="st">&quot;grey80&quot;</span>)</span>
+<span id="cb7-4"><a href="design.html#cb7-4" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="design.html#cb7-5" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">col =</span> col, <span class="at">cex =</span> <span class="dv">3</span>, <span class="at">xaxs =</span> <span class="st">&quot;i&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-5-1.png" width="800px" style="display: block; margin: auto;" /></p>
 <p>The plot above shows values scaled using the simple linear mapping described above along the x-axis, i.e. <span class="math inline">\(s: [1, 10] \to [0, 800]\)</span>. Notice that, since the position of the points representing the values 1 and 10 get mapped to pixel values 0 and 800 (the left and right border of the plot), only half of each point is visible.</p>
 <p>To address this, most data visualization systems automatically expand the range of the domain by some pre-specified percentage:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="design.html#cb4-1" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">col =</span> col, <span class="at">cex =</span> <span class="dv">3</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-4-1.png" width="800px" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="design.html#cb8-1" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">col =</span> col, <span class="at">cex =</span> <span class="dv">3</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-6-1.png" width="800px" style="display: block; margin: auto;" /></p>
 <p>(in R, this is approximately 4% at each end of the axis, see <code>xaxs</code> in <code>?graphicss::par</code>)</p>
 <p>Turning back to the simple <code>scale</code> function, we could achieve the same effect by adding an extra argument:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb5-1"><a href="design.html#cb5-1" tabindex="-1"></a><span class="kw">function</span> <span class="fu">scale</span>(</span>
-<span id="cb5-2"><a href="design.html#cb5-2" tabindex="-1"></a>  d<span class="op">:</span> <span class="dt">number</span><span class="op">,</span></span>
-<span id="cb5-3"><a href="design.html#cb5-3" tabindex="-1"></a>  dmin<span class="op">:</span> <span class="dt">number</span><span class="op">,</span></span>
-<span id="cb5-4"><a href="design.html#cb5-4" tabindex="-1"></a>  dmax<span class="op">:</span> <span class="dt">number</span><span class="op">,</span></span>
-<span id="cb5-5"><a href="design.html#cb5-5" tabindex="-1"></a>  vmin<span class="op">:</span> <span class="dt">number</span><span class="op">,</span></span>
-<span id="cb5-6"><a href="design.html#cb5-6" tabindex="-1"></a>  vmax<span class="op">:</span> <span class="dt">number</span><span class="op">,</span></span>
-<span id="cb5-7"><a href="design.html#cb5-7" tabindex="-1"></a>  exp<span class="op">:</span> <span class="dt">number</span><span class="op">,</span></span>
-<span id="cb5-8"><a href="design.html#cb5-8" tabindex="-1"></a>)<span class="op">:</span> <span class="dt">number</span> {</span>
-<span id="cb5-9"><a href="design.html#cb5-9" tabindex="-1"></a>  <span class="cf">return</span> (</span>
-<span id="cb5-10"><a href="design.html#cb5-10" tabindex="-1"></a>    vmin <span class="op">+</span> (exp <span class="op">/</span> <span class="dv">2</span> <span class="op">+</span> ((d <span class="op">-</span> dmin) <span class="op">/</span> (dmax <span class="op">-</span> dmin)) <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> exp)) <span class="op">*</span> (vmax <span class="op">-</span> vmin)</span>
-<span id="cb5-11"><a href="design.html#cb5-11" tabindex="-1"></a>  )<span class="op">;</span></span>
-<span id="cb5-12"><a href="design.html#cb5-12" tabindex="-1"></a>}</span>
-<span id="cb5-13"><a href="design.html#cb5-13" tabindex="-1"></a></span>
-<span id="cb5-14"><a href="design.html#cb5-14" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="fu">scale</span>(<span class="dv">1</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">10</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">800</span><span class="op">,</span> <span class="fl">0.1</span>))<span class="op">;</span></span>
-<span id="cb5-15"><a href="design.html#cb5-15" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="fu">scale</span>(<span class="fl">5.5</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">10</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">800</span><span class="op">,</span> <span class="fl">0.1</span>))<span class="op">;</span></span>
-<span id="cb5-16"><a href="design.html#cb5-16" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="fu">scale</span>(<span class="dv">10</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">10</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">800</span><span class="op">,</span> <span class="fl">0.1</span>))<span class="op">;</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb9-1"><a href="design.html#cb9-1" tabindex="-1"></a><span class="kw">function</span> <span class="fu">scale</span>(</span></code></pre></div>
 <pre><code>## 40
 ## 400
 ## 760</code></pre>
 <p>The <code>exp</code> argument effectively allows allows us expand the data range by some fixed percentage, e.g. 10% (5% upper and lower limit, respectively). This means that the data values of 1 and 10 are no longer translated to 0 and 800 pixels but instead somewhere closer to the center of the plotting area (40 and 760 pixels, respectively).</p>
 <p>However, as can be plainly seen, with more arguments, the function quickly becomes unwieldy and hard to reason about. Further, we also may want to persist or modify some of the values during runtime (such as when panning or zooming). Therefore, a more structured approach is needed.</p>
 </div>
-<div id="solution-two-component-scale-system" class="section level4 hasAnchor" number="3.1.3.3">
-<h4><span class="header-section-number">3.1.3.3</span> Solution: Two-component scale system<a href="design.html#solution-two-component-scale-system" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div id="solution-two-component-scale-system" class="section level4 hasAnchor" number="3.2.3.3">
+<h4><span class="header-section-number">3.2.3.3</span> Solution: Two-component scale system<a href="design.html#solution-two-component-scale-system" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>The linear mapping formula can guide us in decomposing the scaling function into smaller, more manageable parts. Looking at the formula closely, we can see that it can be expressed as the composition of two simpler functions:</p>
 <p><span class="math display">\[s(x) = \color{steelblue}{j +} \color{indianred}{\frac{x - a}{b -a}} \color{steelblue}{\cdot (k - j)}\]</span></p>
 <p>That is, the scale function consists of:</p>
@@ -333,93 +354,70 @@ div.csl-indent {
 <p>Put simply, the normalize function <span class="math inline">\(n\)</span> translates data values <span class="math inline">\(d \in D\)</span> to a percentage <span class="math inline">\(p \in [0, 1]\)</span>, and the unnormalize function <span class="math inline">\(u\)</span> converts the percentage to the space of the visual attribute <span class="math inline">\(V\)</span>. The scale function is then simply the composition of these two functions:</p>
 <p><span class="math display">\[s(d) = \color{steelblue}{u(} \color{indianred}{n(\color{black}{d})} \color{steelblue}{)}\]</span></p>
 <p>In code, we can write this as follows:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb7-1"><a href="design.html#cb7-1" tabindex="-1"></a><span class="kw">function</span> <span class="fu">normalize</span>(x<span class="op">:</span> <span class="dt">number</span><span class="op">,</span> a<span class="op">:</span> <span class="dt">number</span><span class="op">,</span> b<span class="op">:</span> <span class="dt">number</span>) {</span>
-<span id="cb7-2"><a href="design.html#cb7-2" tabindex="-1"></a>  <span class="cf">return</span> (x <span class="op">-</span> a) <span class="op">/</span> (b <span class="op">-</span> a)</span>
-<span id="cb7-3"><a href="design.html#cb7-3" tabindex="-1"></a>}</span>
-<span id="cb7-4"><a href="design.html#cb7-4" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="design.html#cb7-5" tabindex="-1"></a><span class="kw">function</span> <span class="fu">unnormalize</span>(p<span class="op">:</span> <span class="dt">number</span><span class="op">,</span> j<span class="op">:</span> <span class="dt">number</span><span class="op">,</span> k<span class="op">:</span> <span class="dt">number</span>) {</span>
-<span id="cb7-6"><a href="design.html#cb7-6" tabindex="-1"></a> <span class="cf">return</span> j <span class="op">+</span> p <span class="op">*</span> (k <span class="op">-</span> j) </span>
-<span id="cb7-7"><a href="design.html#cb7-7" tabindex="-1"></a>}</span>
-<span id="cb7-8"><a href="design.html#cb7-8" tabindex="-1"></a></span>
-<span id="cb7-9"><a href="design.html#cb7-9" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="fu">normalize</span>(<span class="fl">5.5</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">10</span>))</span>
-<span id="cb7-10"><a href="design.html#cb7-10" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="fu">unnormalize</span>(<span class="fl">0.5</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">800</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb11-1"><a href="design.html#cb11-1" tabindex="-1"></a><span class="kw">function</span> <span class="fu">normalize</span>(x<span class="op">:</span> <span class="dt">number</span><span class="op">,</span> a<span class="op">:</span> <span class="dt">number</span><span class="op">,</span> b<span class="op">:</span> <span class="dt">number</span>) {</span></code></pre></div>
 <pre><code>## 0.5
 ## 400</code></pre>
 <p>This two component system allows for a clean separation of concerns. Specifically, the normalize function how to map the data values to <span class="math inline">\([0, 1]\)</span>. It does not need to be aware of where these normalized data values will be mapped to. Conversely, the unnormalize function only needs to understand how to translate values from <span class="math inline">\([0, 1]\)</span> to the space of the visual attribute (such as x-axis position).</p>
 <p>It is worth noting that any finite subset of <span class="math inline">\(\mathbb{R}\)</span> could serve as the intermediate domain. However, the specific interval <span class="math inline">\([0, 1]\)</span> is convenient, both in terms of interpretation as well as for implementation, as will be discussed later.</p>
 <p>Finally, so far I have referred to the normalize and unnormalize <em>functions</em>. Framing scales as composition of functions leads to a nice correspondence between the mathematical definition and the code implementation. However, in practice, we can just as well implement the domain and codomain as <em>objects</em> or <em>classes</em>, as we will see in the next section. The important point is that, no matter what type the two components are, each is responsible for translating values between its domain and the interval <span class="math inline">\([0, 1]\)</span>.</p>
 </div>
-<div id="past-implementations-of-scales" class="section level4 hasAnchor" number="3.1.3.4">
-<h4><span class="header-section-number">3.1.3.4</span> Past implementations of scales<a href="design.html#past-implementations-of-scales" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div id="past-implementations-of-scales" class="section level4 hasAnchor" number="3.2.3.4">
+<h4><span class="header-section-number">3.2.3.4</span> Past implementations of scales<a href="design.html#past-implementations-of-scales" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>Implementing scales as composition of two components is fairly standard across data visualization packages. For example, the D3 library <span class="citation">(<a href="#ref-bostock2011">Bostock, Ogievetsky, and Heer 2011</a>)</span> implements scales in a functional style, with the values representing the data domain and the visual (co)domain being provided as tuples or arrays of values, either during initialization or at some later point. For illustration, here are some examples from the oficial documentation <span class="citation">(<a href="#ref-d3-scale2024">Observable 2024</a>)</span>:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb9-1"><a href="design.html#cb9-1" tabindex="-1"></a><span class="kw">const</span> x <span class="op">=</span> d3<span class="op">.</span><span class="fu">scaleLinear</span>([<span class="dv">10</span><span class="op">,</span> <span class="dv">130</span>]<span class="op">,</span> [<span class="dv">0</span><span class="op">,</span> <span class="dv">960</span>])<span class="op">;</span></span>
-<span id="cb9-2"><a href="design.html#cb9-2" tabindex="-1"></a><span class="fu">x</span>(<span class="dv">20</span>)<span class="op">;</span> <span class="co">// 80</span></span>
-<span id="cb9-3"><a href="design.html#cb9-3" tabindex="-1"></a></span>
-<span id="cb9-4"><a href="design.html#cb9-4" tabindex="-1"></a><span class="kw">const</span> x <span class="op">=</span> d3<span class="op">.</span><span class="fu">scaleLinear</span>()<span class="op">.</span><span class="fu">domain</span>([<span class="dv">10</span><span class="op">,</span> <span class="dv">130</span>])<span class="op">;</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb13-1"><a href="design.html#cb13-1" tabindex="-1"></a><span class="kw">const</span> x <span class="op">=</span> d3<span class="op">.</span><span class="fu">scaleLinear</span>([<span class="dv">10</span><span class="op">,</span> <span class="dv">130</span>]<span class="op">,</span> [<span class="dv">0</span><span class="op">,</span> <span class="dv">960</span>])<span class="op">;</span></span></code></pre></div>
 <p>Internally, specialized functions are then used to translate from the domain to the codomain, such as the <code>normalize()</code> and <code>scale()</code> functions for continuous and discrete/ordinal domains, respectively, and various <code>interpolate()</code> functions for codomains.</p>
 <p>Similarly, <code>ggplot2</code> <span class="citation">(<a href="#ref-wickham2016">Wickham 2016</a>)</span> implements each subtype of the <code>Scale</code> class with <code>limits</code> and <code>palette</code> properties, each corresponding roughly to the data domain and the visual codomain (“roughly”, because the x- and y-position are treated slightly differently, due to being passed through coordinate systems). Internally, the package uses the <code>rescale</code> function from the <code>scales</code> package <span class="citation">(<a href="#ref-wickham2023">Wickham, Pedersen, and Seidel 2023</a>)</span> to map data to <span class="math inline">\([0, 1]\)</span> and then the palette function is responsible for mapping these normalized values to the visual attribute. For illustration, here’s the full definition of the <code>map</code> method on the <code>ScaleContinuous</code> class (I’ve added my own comments for clarity):</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="design.html#cb10-1" tabindex="-1"></a>map <span class="ot">=</span> <span class="cf">function</span>(self, x, <span class="at">limits =</span> self<span class="sc">$</span><span class="fu">get_limits</span>()) {</span>
-<span id="cb10-2"><a href="design.html#cb10-2" tabindex="-1"></a>  <span class="co"># Limits are just a tuple, rescale maps x to [0, 1]</span></span>
-<span id="cb10-3"><a href="design.html#cb10-3" tabindex="-1"></a>  x <span class="ot">&lt;-</span> self<span class="sc">$</span><span class="fu">rescale</span>(self<span class="sc">$</span><span class="fu">oob</span>(x, <span class="at">range =</span> limits), limits) </span>
-<span id="cb10-4"><a href="design.html#cb10-4" tabindex="-1"></a></span>
-<span id="cb10-5"><a href="design.html#cb10-5" tabindex="-1"></a>  uniq <span class="ot">&lt;-</span> <span class="fu">unique0</span>(x)</span>
-<span id="cb10-6"><a href="design.html#cb10-6" tabindex="-1"></a>  <span class="co"># Palette is a function which returns a vector of attribute values</span></span>
-<span id="cb10-7"><a href="design.html#cb10-7" tabindex="-1"></a>  pal <span class="ot">&lt;-</span> self<span class="sc">$</span><span class="fu">palette</span>(uniq) </span>
-<span id="cb10-8"><a href="design.html#cb10-8" tabindex="-1"></a>  scaled <span class="ot">&lt;-</span> pal[<span class="fu">match</span>(x, uniq)]</span>
-<span id="cb10-9"><a href="design.html#cb10-9" tabindex="-1"></a></span>
-<span id="cb10-10"><a href="design.html#cb10-10" tabindex="-1"></a>  <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(scaled), scaled, self<span class="sc">$</span>na.value)</span>
-<span id="cb10-11"><a href="design.html#cb10-11" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="design.html#cb14-1" tabindex="-1"></a>map <span class="ot">=</span> <span class="cf">function</span>(self, x, <span class="at">limits =</span> self<span class="sc">$</span><span class="fu">get_limits</span>()) {</span>
+<span id="cb14-2"><a href="design.html#cb14-2" tabindex="-1"></a>  <span class="co"># Limits are just a tuple, rescale maps x to [0, 1]</span></span>
+<span id="cb14-3"><a href="design.html#cb14-3" tabindex="-1"></a>  x <span class="ot">&lt;-</span> self<span class="sc">$</span><span class="fu">rescale</span>(self<span class="sc">$</span><span class="fu">oob</span>(x, <span class="at">range =</span> limits), limits) </span>
+<span id="cb14-4"><a href="design.html#cb14-4" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="design.html#cb14-5" tabindex="-1"></a>  uniq <span class="ot">&lt;-</span> <span class="fu">unique0</span>(x)</span>
+<span id="cb14-6"><a href="design.html#cb14-6" tabindex="-1"></a>  <span class="co"># Palette is a function which returns a vector of attribute values</span></span>
+<span id="cb14-7"><a href="design.html#cb14-7" tabindex="-1"></a>  pal <span class="ot">&lt;-</span> self<span class="sc">$</span><span class="fu">palette</span>(uniq) </span>
+<span id="cb14-8"><a href="design.html#cb14-8" tabindex="-1"></a>  scaled <span class="ot">&lt;-</span> pal[<span class="fu">match</span>(x, uniq)]</span>
+<span id="cb14-9"><a href="design.html#cb14-9" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="design.html#cb14-10" tabindex="-1"></a>  <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(scaled), scaled, self<span class="sc">$</span>na.value)</span>
+<span id="cb14-11"><a href="design.html#cb14-11" tabindex="-1"></a>}</span></code></pre></div>
 </div>
-<div id="proposed-model-of-scales" class="section level4 hasAnchor" number="3.1.3.5">
-<h4><span class="header-section-number">3.1.3.5</span> Proposed model of scales<a href="design.html#proposed-model-of-scales" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div id="proposed-model-of-scales" class="section level4 hasAnchor" number="3.2.3.5">
+<h4><span class="header-section-number">3.2.3.5</span> Proposed model of scales<a href="design.html#proposed-model-of-scales" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>One disadvantage the models of scales that <code>D3</code> and <code>ggplot2</code> use is that they treat the data domain and the visual attribute codomain as fundamentally different objects. In <code>D3</code>, different functions are used to translate from <span class="math inline">\(D \to [0, 1]\)</span> and from <span class="math inline">\([0, 1] \to V\)</span>, and, in <code>ggplot2</code>, while <code>limits</code> is a simple vector/tuple, <code>palette</code> is a function. While this approach may have some benefits, it does add additional complexity, since we have to use a different mental model when considering each component. Further, the model only works in one direction, for mapping values <span class="math inline">\(D \to V\)</span>; if we want to go the other way, i.e. map <span class="math inline">\(V \to D\)</span>, we have to use other specialized functions.</p>
 <p>Instead, I propose a different model of scales which implements both the domain and codomain as objects of the same type (<code>Expanse</code>). This has the advantage of making the code easier to reason about, and, most of the time, inverting the scaling function is trivial.</p>
 <p>Here is a (somewhat) simplified version of the <code>Scale</code> interface:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb11-1"><a href="design.html#cb11-1" tabindex="-1"></a><span class="kw">interface</span> Scale<span class="op">&lt;</span>D<span class="op">,</span> V<span class="op">&gt;</span> {</span>
-<span id="cb11-2"><a href="design.html#cb11-2" tabindex="-1"></a>  domain<span class="op">:</span> Expanse<span class="op">&lt;</span>D<span class="op">&gt;</span></span>
-<span id="cb11-3"><a href="design.html#cb11-3" tabindex="-1"></a>  codomain<span class="op">:</span> Expanse<span class="op">&lt;</span>V<span class="op">&gt;</span></span>
-<span id="cb11-4"><a href="design.html#cb11-4" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb15-1"><a href="design.html#cb15-1" tabindex="-1"></a><span class="kw">interface</span> Scale<span class="op">&lt;</span>D<span class="op">,</span> V<span class="op">&gt;</span> {</span></code></pre></div>
 <p>Here, <code>D</code> represents the type of the data domain, and <code>V</code> represents the type of the visual attribute codomain.</p>
 <p>With this interface, we can use of the following two functions:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb12-1"><a href="design.html#cb12-1" tabindex="-1"></a><span class="kw">function</span> <span class="fu">pushforward</span><span class="op">&lt;</span>D<span class="op">,</span> D<span class="op">&gt;</span>(scale<span class="op">:</span> Scale<span class="op">&lt;</span>D<span class="op">,</span> V<span class="op">&gt;,</span> value<span class="op">:</span> D)<span class="op">:</span> V</span>
-<span id="cb12-2"><a href="design.html#cb12-2" tabindex="-1"></a><span class="kw">function</span> <span class="fu">pullback</span><span class="op">&lt;</span>D<span class="op">,</span> V<span class="op">&gt;</span>(scale<span class="op">:</span> Scale<span class="op">&lt;</span>D<span class="op">,</span> V<span class="op">&gt;,</span> value<span class="op">:</span> V)<span class="op">:</span> D</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb16-1"><a href="design.html#cb16-1" tabindex="-1"></a><span class="kw">function</span> <span class="fu">pushforward</span><span class="op">&lt;</span>D<span class="op">,</span> D<span class="op">&gt;</span>(scale<span class="op">:</span> Scale<span class="op">&lt;</span>D<span class="op">,</span> V<span class="op">&gt;,</span> value<span class="op">:</span> D)<span class="op">:</span> V</span></code></pre></div>
 <p>The <code>pushforward</code> function can be <em>push values forward</em> through the scale, first through its domain and then its codomain, and the <code>pullback</code> function can be used to <em>pull values back</em>, first through its codomain and then through its domain. The implementation of these functions is actually trivial:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb13-1"><a href="design.html#cb13-1" tabindex="-1"></a><span class="kw">function</span> <span class="fu">pushforward</span><span class="op">&lt;</span>D<span class="op">,</span> V<span class="op">&gt;</span>(scale<span class="op">:</span> Scale<span class="op">&lt;</span>D<span class="op">,</span> V<span class="op">&gt;,</span> value<span class="op">:</span> D)<span class="op">:</span> V {</span>
-<span id="cb13-2"><a href="design.html#cb13-2" tabindex="-1"></a>  <span class="cf">return</span> <span class="fu">unnormalize</span>(scale<span class="op">.</span><span class="at">codomain</span><span class="op">,</span> <span class="fu">normalize</span>(scale<span class="op">.</span><span class="at">domain</span><span class="op">,</span> value))</span>
-<span id="cb13-3"><a href="design.html#cb13-3" tabindex="-1"></a>}</span>
-<span id="cb13-4"><a href="design.html#cb13-4" tabindex="-1"></a></span>
-<span id="cb13-5"><a href="design.html#cb13-5" tabindex="-1"></a><span class="kw">function</span> <span class="fu">pullback</span><span class="op">&lt;</span>D<span class="op">,</span> V<span class="op">&gt;</span>(scale<span class="op">:</span> Scale<span class="op">&lt;</span>D<span class="op">,</span> V<span class="op">&gt;,</span> value<span class="op">:</span> V)<span class="op">:</span> D {</span>
-<span id="cb13-6"><a href="design.html#cb13-6" tabindex="-1"></a>  <span class="cf">return</span> <span class="fu">unnormalize</span>(scale<span class="op">.</span><span class="at">domain</span><span class="op">,</span> <span class="fu">normalize</span>(scale<span class="op">.</span><span class="at">codomain</span><span class="op">,</span> value))</span>
-<span id="cb13-7"><a href="design.html#cb13-7" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb17-1"><a href="design.html#cb17-1" tabindex="-1"></a><span class="kw">function</span> <span class="fu">pushforward</span><span class="op">&lt;</span>D<span class="op">,</span> V<span class="op">&gt;</span>(scale<span class="op">:</span> Scale<span class="op">&lt;</span>D<span class="op">,</span> V<span class="op">&gt;,</span> value<span class="op">:</span> D)<span class="op">:</span> V {</span></code></pre></div>
 <p>That is, each <code>Expanse</code> does all of the work, translating between either <span class="math inline">\(D\)</span> or <span class="math inline">\(V\)</span> and <span class="math inline">\([0, 1]\)</span>; a <code>Scale</code> only connects two arbitrary expanses together. As such, before talking about additional features of scales, we should discuss expanses, since these lend scale the bulk of their functionality.</p>
 </div>
 </div>
-<div id="expanses" class="section level3 hasAnchor" number="3.1.4">
-<h3><span class="header-section-number">3.1.4</span> Expanses<a href="design.html#expanses" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="expanses" class="section level3 hasAnchor" number="3.2.4">
+<h3><span class="header-section-number">3.2.4</span> Expanses<a href="design.html#expanses" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>As was hinted at in the previous section, expanses map values between their domain and the interval <span class="math inline">\([0, 1]\)</span>. To do this, they are equipped with two familiar functions:</p>
 <ul>
 <li>A <em>normalize</em> function <span class="math inline">\(\color{indianred}{n: X \to [0, 1]}\)</span></li>
 <li>An <em>unnormalize</em> function <span class="math inline">\(\color{steelblue}{u: [0, 1] \to X}\)</span></li>
 </ul>
 <p>Or, in code:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb14-1"><a href="design.html#cb14-1" tabindex="-1"></a><span class="kw">function</span> <span class="fu">normalize</span><span class="op">&lt;</span>X<span class="op">&gt;</span>(expanse<span class="op">:</span> Expanse<span class="op">&lt;</span>X<span class="op">&gt;,</span> value<span class="op">:</span> X)<span class="op">:</span> <span class="dt">number</span></span>
-<span id="cb14-2"><a href="design.html#cb14-2" tabindex="-1"></a><span class="kw">function</span> <span class="fu">unnnormalize</span><span class="op">&lt;</span>X<span class="op">&gt;</span>(expanse<span class="op">:</span> Expanse<span class="op">&lt;</span>X<span class="op">&gt;,</span> value<span class="op">:</span> <span class="dt">number</span>)<span class="op">:</span> X</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb18-1"><a href="design.html#cb18-1" tabindex="-1"></a><span class="kw">function</span> <span class="fu">normalize</span><span class="op">&lt;</span>X<span class="op">&gt;</span>(expanse<span class="op">:</span> Expanse<span class="op">&lt;</span>X<span class="op">&gt;,</span> value<span class="op">:</span> X)<span class="op">:</span> <span class="dt">number</span></span></code></pre></div>
 <p>Notice that, whereas before we had considered <em>normalize</em> as mapping between <span class="math inline">\(D \to [0, 1]\)</span> and <em>unnormalize</em> as mapping between <span class="math inline">\([0, 1] \to V\)</span>, we now consider both as mapping between <span class="math inline">\([0, 1]\)</span> and an arbitrary domain <span class="math inline">\(X\)</span>. This domain can represent the data or the visual attribute - the expanse is agnostic about this.</p>
 <p>Also, while before we have discussed domains as subsets of <span class="math inline">\(\mathbb{R}\)</span>, we can now start thinking about them as arbitrary sets. While subsets of <span class="math inline">\(\mathbb{R}\)</span> and sets of strings are really the only types of domains used in <code>plotscaper</code>, the model should readily extends to other sets, as long as a mapping to and from <span class="math inline">\([0, 1]\)</span> can be provided.</p>
 <p>How <code>normalize</code> and <code>unnormalize</code> are implemented will depend largely on the subtype of <code>Expanse</code>, as well as on the desired behavior. For example, as will be discussed later, in <code>plotscaper</code>, the normalize and unnormalize methods implemented for <code>ExpanseContinuous</code> (subtype of <code>Expanse&lt;number&gt;</code>) work largely the same way as in section [SECTION]. However, while <code>ExpansePoint</code> and <code>ExpanseBand</code> are both subtypes of <code>Expanse&lt;string&gt;</code>, they behave differently - <code>ExpansePoint</code> maps strings (factor levels) to equidistant points along <span class="math inline">\([0, 1]\)</span>, whereas <code>ExpanseBand</code> maps the strings into the middle of “buckets” along <span class="math inline">\([0, 1]\)</span>.</p>
 <p>However, there is also some behavior that we may want to apply the same way across the different expanse subtypes. For example, it seems reasonable that the user should be able to zoom, pan, or reverse axes, regardless of whether a plot shows discrete or continuous data. As such, there may be some properties and functions common to the <code>Expanse</code> type. I will discuss these first.</p>
-<div id="zero-and-one" class="section level4 hasAnchor" number="3.1.4.1">
-<h4><span class="header-section-number">3.1.4.1</span> Zero and one<a href="design.html#zero-and-one" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div id="zero-and-one" class="section level4 hasAnchor" number="3.2.4.1">
+<h4><span class="header-section-number">3.2.4.1</span> Zero and one<a href="design.html#zero-and-one" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>The maps may also take in and return values outside of <span class="math inline">\(D^*\)</span> and <span class="math inline">\([0, 1]\)</span>, if adjustments have been made. For instance, in most data visualization packages, x- and y-axis limits are by default expanded some percentage beyond the range of the observed data to avoid the maximum and minimum datapoints from overlapping with the limits. For example, in base R:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="design.html#cb15-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>)</span>
-<span id="cb15-2"><a href="design.html#cb15-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">5</span>)</span>
-<span id="cb15-3"><a href="design.html#cb15-3" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">5</span>)</span>
-<span id="cb15-4"><a href="design.html#cb15-4" tabindex="-1"></a></span>
-<span id="cb15-5"><a href="design.html#cb15-5" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
-<span id="cb15-6"><a href="design.html#cb15-6" tabindex="-1"></a><span class="fu">plot</span>(x, y) </span>
-<span id="cb15-7"><a href="design.html#cb15-7" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">xaxs =</span> <span class="st">&#39;i&#39;</span>, <span class="at">yaxs =</span> <span class="st">&#39;i&#39;</span>) </span></code></pre></div>
-<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-13"></span>
-<img src="_main_files/figure-html/unnamed-chunk-13-1.png" alt="Expanding axes. By default, axes in base R `plot()` function are expanded 4% beyond the range of the data (left). Otherwise, datapoints on the limits of their respective scales end up overlapping with the plot borders (right)." width="672" />
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="design.html#cb19-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>)</span>
+<span id="cb19-2"><a href="design.html#cb19-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">5</span>)</span>
+<span id="cb19-3"><a href="design.html#cb19-3" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">5</span>)</span>
+<span id="cb19-4"><a href="design.html#cb19-4" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="design.html#cb19-5" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb19-6"><a href="design.html#cb19-6" tabindex="-1"></a><span class="fu">plot</span>(x, y) </span>
+<span id="cb19-7"><a href="design.html#cb19-7" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">xaxs =</span> <span class="st">&#39;i&#39;</span>, <span class="at">yaxs =</span> <span class="st">&#39;i&#39;</span>) </span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-15"></span>
+<img src="_main_files/figure-html/unnamed-chunk-15-1.png" alt="Expanding axes. By default, axes in base R `plot()` function are expanded 4% beyond the range of the data (left). Otherwise, datapoints on the limits of their respective scales end up overlapping with the plot borders (right)." width="672" />
 <p class="caption">
 Figure 3.1: Expanding axes. By default, axes in base R <code>plot()</code> function are expanded 4% beyond the range of the data (left). Otherwise, datapoints on the limits of their respective scales end up overlapping with the plot borders (right).
 </p>
@@ -461,8 +459,8 @@ Figure 3.1: Expanding axes. By default, axes in base R <code>plot()</code> funct
 </tbody>
 </table>
 </div>
-<div id="expanse-interface" class="section level4 hasAnchor" number="3.1.4.2">
-<h4><span class="header-section-number">3.1.4.2</span> Expanse Interface<a href="design.html#expanse-interface" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div id="expanse-interface" class="section level4 hasAnchor" number="3.2.4.2">
+<h4><span class="header-section-number">3.2.4.2</span> Expanse Interface<a href="design.html#expanse-interface" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>There are also other behaviours that expanses should support. For instance, we may want to be able to reset the expanse to defaults, retrain when the underlying data changes, and return nicely formatted breaks. How these behaviours are implemented, as well as other types of behavior, may be specific to the underlying data type. Overall, expanse interface may look something like this:</p>
 <pre><code>interface Expanse&lt;T&gt; {
   normalize(value: T): number
@@ -481,8 +479,8 @@ Figure 3.1: Expanding axes. By default, axes in base R <code>plot()</code> funct
   breaks(n?: number): T[]  
 }</code></pre>
 </div>
-<div id="continuous-expanses" class="section level4 hasAnchor" number="3.1.4.3">
-<h4><span class="header-section-number">3.1.4.3</span> Continuous Expanses<a href="design.html#continuous-expanses" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div id="continuous-expanses" class="section level4 hasAnchor" number="3.2.4.3">
+<h4><span class="header-section-number">3.2.4.3</span> Continuous Expanses<a href="design.html#continuous-expanses" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>The continuous expanse has as its underlying set <span class="math inline">\([\min, \max] \subseteq \mathbb{R}\)</span>. To understand how it works, let’s build it step by step.</p>
 <p>We start with the basic normalizing function:</p>
 <ol style="list-style-type: decimal">
@@ -502,39 +500,7 @@ Figure 3.1: Expanding axes. By default, axes in base R <code>plot()</code> funct
 <p><span class="math display">\[u(p) = \min + p \cdot (\max - \min)\]</span>
 returns a value within the <span class="math inline">\([\min, \max]\)</span> range, corresponding to the proportion of the maximum possible distance (range) from the origin (<span class="math inline">\(\min\)</span>). For example, <span class="math inline">\(u(0.5)\)</span>, returns a value that is located halfway between the limits.</p>
 <p>We can implement a simple continuous expanse like so:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb17-1"><a href="design.html#cb17-1" tabindex="-1"></a></span>
-<span id="cb17-2"><a href="design.html#cb17-2" tabindex="-1"></a><span class="kw">function</span> <span class="fu">identity</span><span class="op">&lt;</span>T<span class="op">&gt;</span>(x<span class="op">:</span> T) {</span>
-<span id="cb17-3"><a href="design.html#cb17-3" tabindex="-1"></a>  <span class="cf">return</span> x<span class="op">;</span></span>
-<span id="cb17-4"><a href="design.html#cb17-4" tabindex="-1"></a>}</span>
-<span id="cb17-5"><a href="design.html#cb17-5" tabindex="-1"></a></span>
-<span id="cb17-6"><a href="design.html#cb17-6" tabindex="-1"></a><span class="kw">function</span> <span class="fu">expanseContinuous</span>(min <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> max <span class="op">=</span> <span class="dv">1</span>) {</span>
-<span id="cb17-7"><a href="design.html#cb17-7" tabindex="-1"></a>  <span class="kw">const</span> [zero<span class="op">,</span> one] <span class="op">=</span> [<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span>]</span>
-<span id="cb17-8"><a href="design.html#cb17-8" tabindex="-1"></a>  <span class="kw">const</span> [trans<span class="op">,</span> inv] <span class="op">=</span> [identity<span class="op">,</span> identity]</span>
-<span id="cb17-9"><a href="design.html#cb17-9" tabindex="-1"></a>  </span>
-<span id="cb17-10"><a href="design.html#cb17-10" tabindex="-1"></a>  <span class="cf">return</span> { min<span class="op">,</span> max<span class="op">,</span> zero<span class="op">,</span> one<span class="op">,</span> trans<span class="op">,</span> inv<span class="op">,</span></span>
-<span id="cb17-11"><a href="design.html#cb17-11" tabindex="-1"></a>    <span class="fu">range</span>() {</span>
-<span id="cb17-12"><a href="design.html#cb17-12" tabindex="-1"></a>      <span class="cf">return</span> <span class="kw">this</span><span class="op">.</span><span class="at">max</span> <span class="op">-</span> <span class="kw">this</span><span class="op">.</span><span class="at">min</span><span class="op">;</span></span>
-<span id="cb17-13"><a href="design.html#cb17-13" tabindex="-1"></a>    }<span class="op">,</span></span>
-<span id="cb17-14"><a href="design.html#cb17-14" tabindex="-1"></a>    <span class="fu">transRange</span>() {</span>
-<span id="cb17-15"><a href="design.html#cb17-15" tabindex="-1"></a>      <span class="kw">const</span> { min<span class="op">,</span> max<span class="op">,</span> trans } <span class="op">=</span> <span class="kw">this</span><span class="op">;</span></span>
-<span id="cb17-16"><a href="design.html#cb17-16" tabindex="-1"></a>      <span class="cf">return</span> <span class="fu">trans</span>(max) <span class="op">-</span> <span class="fu">trans</span>(min)<span class="op">;</span></span>
-<span id="cb17-17"><a href="design.html#cb17-17" tabindex="-1"></a>    }<span class="op">,</span></span>
-<span id="cb17-18"><a href="design.html#cb17-18" tabindex="-1"></a>    <span class="fu">normalize</span>(x<span class="op">:</span> <span class="dt">number</span>) {</span>
-<span id="cb17-19"><a href="design.html#cb17-19" tabindex="-1"></a>      <span class="kw">const</span> { min<span class="op">,</span> zero<span class="op">,</span> one<span class="op">,</span> trans } <span class="op">=</span> <span class="kw">this</span><span class="op">;</span></span>
-<span id="cb17-20"><a href="design.html#cb17-20" tabindex="-1"></a>      <span class="kw">const</span> normalized <span class="op">=</span> (<span class="fu">trans</span>(x) <span class="op">-</span> <span class="fu">trans</span>(min)) <span class="op">/</span> <span class="kw">this</span><span class="op">.</span><span class="fu">transRange</span>()<span class="op">;</span></span>
-<span id="cb17-21"><a href="design.html#cb17-21" tabindex="-1"></a>      <span class="cf">return</span> zero <span class="op">+</span> normalized <span class="op">*</span> (one <span class="op">-</span> zero)<span class="op">;</span></span>
-<span id="cb17-22"><a href="design.html#cb17-22" tabindex="-1"></a>    }<span class="op">,</span></span>
-<span id="cb17-23"><a href="design.html#cb17-23" tabindex="-1"></a>    <span class="fu">unnormalize</span>(p<span class="op">:</span> <span class="dt">number</span>) {</span>
-<span id="cb17-24"><a href="design.html#cb17-24" tabindex="-1"></a>      <span class="kw">const</span> { min<span class="op">,</span> zero<span class="op">,</span> one<span class="op">,</span> trans<span class="op">,</span> inv } <span class="op">=</span> <span class="kw">this</span><span class="op">;</span></span>
-<span id="cb17-25"><a href="design.html#cb17-25" tabindex="-1"></a>      <span class="cf">return</span> <span class="fu">inv</span>(<span class="fu">trans</span>(min) <span class="op">+</span> ((p <span class="op">-</span> zero) <span class="op">/</span> (one <span class="op">-</span> zero)) <span class="op">*</span> <span class="kw">this</span><span class="op">.</span><span class="fu">transRange</span>())<span class="op">;</span></span>
-<span id="cb17-26"><a href="design.html#cb17-26" tabindex="-1"></a>    }<span class="op">,</span></span>
-<span id="cb17-27"><a href="design.html#cb17-27" tabindex="-1"></a>  }<span class="op">;</span></span>
-<span id="cb17-28"><a href="design.html#cb17-28" tabindex="-1"></a>}</span>
-<span id="cb17-29"><a href="design.html#cb17-29" tabindex="-1"></a></span>
-<span id="cb17-30"><a href="design.html#cb17-30" tabindex="-1"></a><span class="kw">const</span> expanse1 <span class="op">=</span> <span class="fu">expanseContinuous</span>(<span class="dv">1</span><span class="op">,</span> <span class="dv">10</span>)<span class="op">;</span></span>
-<span id="cb17-31"><a href="design.html#cb17-31" tabindex="-1"></a></span>
-<span id="cb17-32"><a href="design.html#cb17-32" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(expanse1<span class="op">.</span><span class="fu">normalize</span>(<span class="dv">5</span>))<span class="op">;</span></span>
-<span id="cb17-33"><a href="design.html#cb17-33" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(expanse1<span class="op">.</span><span class="fu">unnormalize</span>(<span class="fl">0.5</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode ts"><code class="sourceCode typescript"></code></pre></div>
 <pre><code>## 0.4444444444444444
 ## 5.5</code></pre>
 <p>The functions <span class="math inline">\(n, u\)</span> have several interesting properties. First off, they are inverses to each other and form an <em>isomorphism</em>, i.e. <span class="math inline">\(u = n^{-1}\)</span> and <span class="math inline">\(n = u^{-1}\)</span> such that <span class="math inline">\(u(n(x)) = x\)</span> and <span class="math inline">\(n(u(p)) = p\)</span>. This also means that each function is a 1-to-1 mapping or <em>bijection</em>. In plain words, this means that we cannot get the same percentage by normalizing two different values and vice versa. As a result, we can keep switching between the normalized and unnormalized representations without losing any information:</p>
@@ -542,8 +508,8 @@ returns a value within the <span class="math inline">\([\min, \max]\)</span> ran
 <!-- with(expanse, unnormalize(normalize(5))) -->
 <!-- with(expanse, normalize(unnormalize(normalize(unnormalize(0.5))))) -->
 <!-- ``` -->
-<div id="linearity" class="section level5 hasAnchor" number="3.1.4.3.1">
-<h5><span class="header-section-number">3.1.4.3.1</span> Linearity<a href="design.html#linearity" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<div id="linearity" class="section level5 hasAnchor" number="3.2.4.3.1">
+<h5><span class="header-section-number">3.2.4.3.1</span> Linearity<a href="design.html#linearity" class="anchor-section" aria-label="Anchor link to header"></a></h5>
 <p>Another important thing to note is that, while these types of normalizing functions are often called “linear” (e.g. <code>scaleLinear()</code> in <strong>D3</strong>), since their graphs form a straight line, they should not be confused with “linear functions”, since they do not satisfy the properties of linear functions, namely:</p>
 <ul>
 <li>Additivity: <span class="math inline">\(\text{normalize}(x + c) \neq \text{normalize}(x) + \text{normalize}(c)\)</span></li>
@@ -573,8 +539,8 @@ returns a value within the <span class="math inline">\([\min, \max]\)</span> ran
 <!-- with(expanse, c(normalize(5), 2 * normalize(3))) -->
 <!-- ``` -->
 </div>
-<div id="transformations" class="section level5 hasAnchor" number="3.1.4.3.2">
-<h5><span class="header-section-number">3.1.4.3.2</span> Transformations<a href="design.html#transformations" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<div id="transformations" class="section level5 hasAnchor" number="3.2.4.3.2">
+<h5><span class="header-section-number">3.2.4.3.2</span> Transformations<a href="design.html#transformations" class="anchor-section" aria-label="Anchor link to header"></a></h5>
 <p>We can apply transformations to continuous expanses by transforming their limits. The outcome of this is that <span class="math inline">\(\min\)</span> and <span class="math inline">\(\max\)</span> still get mapped to <span class="math inline">\(0\)</span> and <span class="math inline">\(1\)</span> however, the graph of the function is no longer linear. Suppose we have non-linear function <span class="math inline">\(f\)</span>, along with an inverse <span class="math inline">\(f^{-1}\)</span>. Then:</p>
 <p><span class="math display">\[n(x) = \frac{f(x) - f(\min)}{f(\max) - f(\min)}\]</span>
 <span class="math display">\[u(p) = f^{-1} \bigg\{f(\min) + p \cdot \big[ f(\max) - f(\min) \big] \bigg\}\]</span>
@@ -628,24 +594,66 @@ For example, here’s how we could apply the transformation <span class="math in
 </div>
 </div>
 </div>
-<div id="section" class="section level2" number="3.2">
-<h2><span class="header-section-number">3.2</span> </h2>
+<div id="section" class="section level2" number="3.3">
+<h2><span class="header-section-number">3.3</span> </h2>
 
 </div>
 </div>
 <h3> References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-acton2014" class="csl-entry">
+Acton, Mike. 2014. <span>“Data-Oriented Design and c++.”</span> <em>Luento. CppCon</em>.
+</div>
 <div id="ref-bostock2011" class="csl-entry">
 Bostock, Michael, Vadim Ogievetsky, and Jeffrey Heer. 2011. <span>“D<span class="math inline">\(^3\)</span> Data-Driven Documents.”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em> 17 (12): 2301–9.
+</div>
+<div id="ref-chambers2014" class="csl-entry">
+Chambers, John M. 2014. <span>“Object-Oriented Programming, Functional Programming and r.”</span> <em>Statistical Science</em> 29 (2): 167–80. <a href="https://doi.org/10.1214/13-STS452">https://doi.org/10.1214/13-STS452</a>.
+</div>
+<div id="ref-codd1970" class="csl-entry">
+Codd, Edgar F. 1970. <span>“A Relational Model of Data for Large Shared Data Banks.”</span> <em>Communications of the ACM</em> 13 (6): 377–87.
 </div>
 <div id="ref-dimara2019" class="csl-entry">
 Dimara, Evanthia, and Charles Perin. 2019. <span>“What Is Interaction for Data Visualization?”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em> 26 (1): 119–29.
 </div>
+<div id="ref-fabian2018" class="csl-entry">
+Fabian, Richard. 2018. <span>“Data-Oriented Design.”</span> <em>Framework</em> 21: 1–7.
+</div>
+<div id="ref-frame2014" class="csl-entry">
+Frame, Scott, and John W Coffey. 2014. <span>“A Comparison of Functional and Imperative Programming Techniques for Mathematical Software Development.”</span> <em>Journal of Systemics, Cybernetics and Informatics</em> 12 (2): 1–10.
+</div>
 <div id="ref-gray1997" class="csl-entry">
 Gray, Jim, Surajit Chaudhuri, Adam Bosworth, Andrew Layman, Don Reichart, Murali Venkatrao, Frank Pellow, and Hamid Pirahesh. 1997. <span>“Data Cube: A Relational Aggregation Operator Generalizing Group-by, Cross-Tab, and Sub-Totals.”</span> <em>Data Mining and Knowledge Discovery</em> 1: 29–53.
 </div>
+<div id="ref-harkonen2019" class="csl-entry">
+Härkönen, Toni. 2019. <span>“Advantages and Implementation of Entity-Component-Systems.”</span>
+</div>
+<div id="ref-jordan2015" class="csl-entry">
+Jordan, Howell, Goetz Botterweck, John Noll, Andrew Butterfield, and Rem Collier. 2015. <span>“A Feature Model of Actor, Agent, Functional, Object, and Procedural Programming Languages.”</span> <em>Science of Computer Programming</em> 98: 120–39.
+</div>
+<div id="ref-mdn2024d" class="csl-entry">
+MDN. 2024a. <span>“Classes - JavaScript <span><span class="math inline">\(\vert\)</span></span> MDN.”</span> <em>MDN Web Docs</em>. <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes</a>.
+</div>
+<div id="ref-mdn2024e" class="csl-entry">
+———. 2024b. <span>“Functions - JavaScript <span><span class="math inline">\(\vert\)</span></span> MDN.”</span> <em>MDN Web Docs</em>. <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions</a>.
+</div>
+<div id="ref-mdn2024c" class="csl-entry">
+———. 2024c. <span>“JavaScript Language Overview - JavaScript <span><span class="math inline">\(\vert\)</span></span> MDN.”</span> <em>MDN Web Docs</em>. <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Language_overview">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Language_overview</a>.
+</div>
+<div id="ref-moseley2006" class="csl-entry">
+Moseley, Ben, and Peter Marks. 2006. <span>“Out of the Tar Pit.”</span> <em>Software Practice Advancement (SPA)</em> 2006.
+</div>
 <div id="ref-d3-scale2024" class="csl-entry">
 Observable. 2024. <span>“D3-Scale <span><span class="math inline">\(\vert\)</span></span> D3 by Observable.”</span> <a href="https://d3js.org/d3-scale">https://d3js.org/d3-scale</a>.
+</div>
+<div id="ref-rust2024" class="csl-entry">
+Rust Foundation. 2024. <span>“Pub - Rust.”</span> <a href="https://doc.rust-lang.org/std/keyword.pub.html">https://doc.rust-lang.org/std/keyword.pub.html</a>.
+</div>
+<div id="ref-sharvit2022" class="csl-entry">
+Sharvit, Yehonathan. 2022. <em>Data-Oriented Programming: Reduce Software Complexity</em>. Simon; Schuster.
+</div>
+<div id="ref-van2009" class="csl-entry">
+Van Roy, Peter et al. 2009. <span>“Programming Paradigms for Dummies: What Every Programmer Should Know.”</span> <em>New Computational Paradigms for Computer Music</em> 104: 616–21.
 </div>
 <div id="ref-wickham2013" class="csl-entry">
 Wickham, Hadley. 2013. <span>“Bin-Summarise-Smooth: A Framework for Visualising Large Data.”</span> <em>Had. Co. Nz, Tech. Rep</em>.
@@ -653,8 +661,14 @@ Wickham, Hadley. 2013. <span>“Bin-Summarise-Smooth: A Framework for Visualisin
 <div id="ref-wickham2016" class="csl-entry">
 ———. 2016. <em>Ggplot2: Elegant Graphics for Data Analysis</em>. Springer-Verlag New York. <a href="https://ggplot2.tidyverse.org">https://ggplot2.tidyverse.org</a>.
 </div>
+<div id="ref-wickham2019" class="csl-entry">
+———. 2019. <em>Advanced r</em>. Chapman; Hall/CRC.
+</div>
 <div id="ref-wickham2023" class="csl-entry">
 Wickham, Hadley, Thomas Lin Pedersen, and Dana Seidel. 2023. <em>Scales: Scale Functions for Visualization</em>. <a href="https://CRAN.R-project.org/package=scales">https://CRAN.R-project.org/package=scales</a>.
+</div>
+<div id="ref-zig2024" class="csl-entry">
+Zig Software Foundation. 2024. <span>“Documentation - the Zig Programming Language.”</span> <a href="https://ziglang.org/documentation/master">https://ziglang.org/documentation/master</a>.
 </div>
 </div>
 <div class="footnotes">

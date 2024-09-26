@@ -10,7 +10,7 @@ plot <- function(..., pch = 19, col = "grey80", cex = 2) {
 
 ```
 
-### User Profile
+### User profile
 
 The profile of average user can also differ significantly, across systems and research areas. For example, some areas of interactive data visualization and HCI make no assumptions about the user's level of experience or motivation, whereas others assume a highly motivated "expert" user with a sufficient level of domain knowledge [@dimara2019].
 
@@ -19,6 +19,132 @@ While designing my system, I have attempted to
 ## Implementation
 
 > The example code chunks in this section are written in both R and TypeScript. The reason for this is that, while I would prefer to use R for everything due to its tight integration with RMarkdown, some of the concepts are much easier to explain in a language with static typing features like TypeScript (particularly, type annotations and interfaces). However, since the examples relate to plotting and some can be improved by showing graphical output/plots, I also wanted to use (base) R for plotting. So, where graphical output is important, the code chunks are written in R, and, where the code itself is the main focus, they are written in TypeScript. I hope this bilingualism is not too confusing and have tried to use only the basic features of each language to make the examples clear. 
+
+### Programming paradigms
+
+It is often the case that the same programming task can be solved in many, often vastly different, ways. Programs solving the same problem can differ in how they decompose the problem, how they represent and manipulate data, how they handle state, how explicit or implicit they are about handling low-level system details versus relying on abstractions, how they structure and organize their constituent components, and so on. Dealing with these concerns, and coming up with a formal set of principles for addressing them is the job of programming paradigms [@chambers2014; @jordan2015; @van2009]. 
+
+Most programming languages are geared towards one specific style of programming, typically supporting only one or two programming paradigms to a reasonable capacity [@van2009]. Fortunately, this is not the case for either JavaScript/TypeScript or R, since both are multiparadigm programming languages [@chambers2014; @mdn2024c]. Both support object-oriented programming, via prototype inheritance in the case of JavaScript [@mdn2024d] and the S3, S4, and R6 systems in the case of R [@wickham2019], and treat functions as first class citizens, allowing for functional programming style [@chambers2014; @mdn2024e]. Further, as C based languages, both also support classical imperative/procedural programming style, and also provide some utilities for reflective metaprogramming.  
+
+The flexibility of JavaScript and R allowed me to experiment with different programming paradigms while developing `plotscaper`. I had rewritten the JavaScript side of the package multiple times from scratch, testing out several different programming paradigms and styles in the process. Below, I provide a very broad overview of the paradigms I have tried, as well as an account of my experience of using each paradigm and some thoughts on its suitability towards designing interactive data visualization systems.
+
+#### Imperative programming
+
+Imperative programming style is one of the oldest and most classical styles of programming. It conceptualizes the program as a discrete sequence of steps that manipulate some mutable state [@frame2014]. In this way, it closely resembles the way CPU executes instructions.
+
+#### Data oriented programming
+
+Data oriented programming (DOP) and data oriented design (DOD) are two newer programming paradigms that have been slowly gaining prominence in the recent years. While the terms are sometimes used interchangeably, there are some subtle differences: DOP focuses more on high-level principles such as structuring and organizing code, whereas DOD, originating in the world of video-game development, tends to be more concerned with low-level optimization details such as memory layout and CPU access patterns [@sharvit2022; c.f. @acton2014; @fabian2018]. However, there is a remarkable overlap between the conclusions and high-level concepts of the two programming paradigms. For this reason, I will discuss both here simultaneously and refer to both as "DOP" unless explicitly mentioned otherwise. 
+
+The core idea of DOP is a data-first perspective. Under this view, programs should be viewed as transformations of data, nothing less, nothing more. As a result, every program is composed of two sets of components: stateful data and stateless functions that transform this data [@fabian2018]. Data should be represented by generic data structures, formed by combining maps/structs, arrays, and primitives [for example [JSON]\; @sharvit2022], and it may even be desirable that it adheres to the relational model [@codd1970; @moseley2006; @fabian2018\; note that the data does not actually have to *live* inside a relational database, just have the shape of a normalized table, with columns represented by generic arrays]. Data and code should be kept separate, with code living in separate modules, composed of stateless functions [@fabian2018; @sharvit2022]. Further, since data is just itself - data - there is no obligation for it to model the real world or any kind of abstract entity and we are free to represent it in any way we want [@acton2014; @fabian2018; an extreme example of this are Entity Component Systems in videogames, @harkonen2019]. Finally, abstraction should be introduced only gradually, and most of the work should be done by generic data manipulation functions [@fabian2018; @sharvit2022].
+
+It may seem that many of the DOP principles directly contradict many popular OOP principles, specifically encapsulation, inheritance, polymorphism, and domain driven design. However, many of these principles can either be reconciled with DOP, or DOP in fact provides better alternatives. Below, I go over these principles and provide code examples that further illustrate how DOP works. 
+
+##### Encapsulation
+
+When it comes to encapsulation in DOP, we have to differentiate between encapsulating data and encapsulating code. Encapsulating code is easy in DOP - we can simply not export certain functions from the code modules. We are then free to modify the signature of these functions without affecting the public interface [@fabian2018]. Encapsulating data may be a bit more work. Depending on the language we use, generic data structures may not come equipped with property access modifiers [although there does seem to be a trend in recent languages to support property access modifiers more generically, see e.g. @rust2024; @zig2024]. For example, in JavaScript, private properties can only be declared as part of a class declaration [@mdn2024e]. However, this does not necessarily mean that encapsulation of data is impossible - in most languages, there will most likely exist some way to emulate private property access, e.g. by using metaprogammming.
+
+foo bar baz
+
+For example, here's how we can emulate private property access in JavaScript using Proxy:
+
+```{ts}
+// Make object properties modifiable only from within the namespace
+function makePrivate<T extends Object>(object: T, namespace: Object) {
+  return new Proxy(object, {
+    get: (t, k, e) => (e === namespace ? Reflect.get(t, k) : undefined),
+    set: (t, k, v, e) => (e === namespace ? (Reflect.set(t, k, v), true) : true),
+  });
+}
+
+// Data type - container for stateful data
+interface User {
+  firstName: string;
+  lastName: string;
+}
+
+// Code module - consists of stateless functions
+namespace User {
+  // Constructor function
+  export function of(firstName: string, lastName: string): User {
+    return makePrivate({firstName, lastName}, User);
+  }
+  
+  // Internal getter function
+  function get(user: User, key: keyof User) {
+    return Reflect.get(user, key, User);
+  }
+  
+  // We could do the same thing for function set() { ... }
+
+  export function getFullName(user: User) {
+    // Uses the internal get() function we defined above
+    return get(user, `firstName`) + ` ` + get(user, `lastName`);
+  }
+}
+
+const user = User.of(`adam`, `bartonicek`);
+
+console.log(user)
+console.log(user.firstName);
+console.log(user.lastName);
+console.log(User.getFullName(user));
+```
+
+In the code above, we managed to encapsulate data even while maintaining a clear separation between data and code. Specifically, `User` is still just a generic object and can be inspected via `console.log`, however, we cannot access or modify its properties outside of the `User` code module.
+
+Thus, encapsulation of data is certainly possible in DOP. However, a question still remains whether it is a good idea. While encapsulation is generally seen as a net positive in OOP, in the DOP view, data encapsulation presents trade-offs. Whereas it might provide a layer of security, it also makes systems more complex, harder to debug, and even with encapsulated data users may still come to rely on hidden features of the system [@fabian2018; @sharvit2022]. Thus, it is necessary to weight the pros and cons of encapsulation.
+
+In JavaScript/TypeScript, it is also possible to 
+
+
+##### Inheritance
+
+In OOP, the primary mechanism for code reuse is inheritance.
+
+In DOP, since data is generic and separate from behavior, we can call functions from any module as long as the data we provide it as arguments adheres to the module's interface. This makes code reuse trivial. For example, here's a simplified version of the `Reactive` interface (Observer pattern) from `plotscape`:
+ 
+```{ts}
+
+const LISTENERS = Symbol(`listeners`); // A unique symbol, to avoid namespace clashes
+type Dict = Record<string, any>; // Generic dictionary type
+type Callback = (data: Dict) => void; // Generic callback function type
+
+interface Reactive {
+  [LISTENERS]: Record<string, Callback[]>;
+}
+
+namespace Reactive {
+  export function of<T extends Object>(object: T): T & Reactive {
+    return { ...object, [LISTENERS]: {} };
+  }
+
+  export function listen(object: Reactive, event: string, cb: Callback) {
+    if (!object[LISTENERS][event]) object[LISTENERS][event] = [];
+    object[LISTENERS][event].push(cb);
+  }
+
+  export function dispatch(object: Reactive, event: string, data: Dict) {
+    for (const cb of object[LISTENERS][event] ?? []) cb(data);
+  }
+}
+
+interface Dog extends Reactive {
+  name: string
+}
+
+namespace Dog {
+  export function of(name: string) {
+    return Reactive.of({ name })
+  }
+}
+
+const dog = Dog.of(`Terry`)
+Reactive.listen(dog, `car goes by`, () => console.log(`Woof!`))
+Reactive.dispatch(dog, `car goes by`)
+```
+
+## System components
 
 ### Factors 
 

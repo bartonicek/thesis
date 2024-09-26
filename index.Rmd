@@ -25,10 +25,11 @@ knitr::opts_chunk$set(
 
 knitr::knit_engines$set(ts = function(options) {
   code <- paste0(options$code, collapse = "\n")
-  out <- system2("echo", c(shQuote(code), 
-                           "| /home/adam/.bun/bin/bun run -"), 
-                 stdout = TRUE)
-  knitr::engine_output(options, code, out)
+  args <- c(shQuote(code), "| /home/adam/.bun/bin/bun run -")
+  out <- system2("echo", args, stdout = TRUE)
+  
+  knitr::engine_output(options, options$code[1], out)
+  # knitr::engine_output(options, code, out)
 })
 
 ```
