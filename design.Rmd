@@ -42,61 +42,61 @@ It may seem that many of the DOP principles directly contradict many popular OOP
 
 ##### Encapsulation
 
-When it comes to encapsulation in DOP, we have to differentiate between encapsulating data and encapsulating code. Encapsulating code is easy in DOP - we can simply not export certain functions from the code modules. We are then free to modify the signature of these functions without affecting the public interface [@fabian2018]. Encapsulating data may be a bit more work. Depending on the language we use, generic data structures may not come equipped with property access modifiers [although there does seem to be a trend in recent languages to support property access modifiers more generically, see e.g. @rust2024; @zig2024]. For example, in JavaScript, private properties can only be declared as part of a class declaration [@mdn2024e]. However, this does not necessarily mean that encapsulation of data is impossible - in most languages, there will most likely exist some way to emulate private property access, e.g. by using metaprogammming.
+When it comes to encapsulation in DOP, we have to differentiate between encapsulating data and encapsulating code. Encapsulating code is easy in DOP - we can simply not export certain functions from the code modules. We are then free to modify the signature of these functions without affecting the public interface [@fabian2018]. Encapsulating data may require a bit more work. Depending on the language, generic data structures may not have property access modifiers [although there does seem to be a trend in recent languages to support property access modifiers more generically, see e.g. @rust2024; @zig2024]. For instance, in JavaScript, private properties can only be declared as part of a class declaration [@mdn2024e]. However, in most languages, it is still possible to use other language features and metaprogramming to achieve data encapsulation - for example, in JavaScript, we can use the Proxy class to emulate private property access ([see Appendix](#dop-encapsulation)).
 
-foo bar baz
+Thus, encapsulation of data is certainly possible in DOP. However, a question still remains whether it is a good idea. Encapsulation is generally seen as a net positive in OOP, however, in the DOP view, data encapsulation presents trade-offs. While it may provide an additional layer of security, it also makes systems more complex and harder to debug [@fabian2018; @sharvit2022]. , And, even with fully encapsulated data, users may still come to rely on hidden features of the system [@fabian2018]. Ultimately, it is necessary to weigh the pros and cons of encapsulating data within the context of the specific use-case.
 
-For example, here's how we can emulate private property access in JavaScript using Proxy:
+In JavaScript, there is also a third option which I actually found to be a good fit while writing `plotscape`, and that is a weak form of encapsulation by using symbol keys [@mdn2024f]. Symbols are builtin primitive that are guaranteed to be unique. By not exporting the symbol value, we can make a property weakly encapsulated in the sense that the user will not be able to access it without using reflection. For example:
 
 ```{ts}
-// Make object properties modifiable only from within the namespace
-function makePrivate<T extends Object>(object: T, namespace: Object) {
-  return new Proxy(object, {
-    get: (t, k, e) => (e === namespace ? Reflect.get(t, k) : undefined),
-    set: (t, k, v, e) => (e === namespace ? (Reflect.set(t, k, v), true) : true),
-  });
+// Meta.ts
+const METADATA = Symbol("metadata");
+type METADATA = typeof METADATA;
+
+export interface Meta<T extends Record<string, any> = any> {
+  [METADATA]: T;
 }
 
-// Data type - container for stateful data
-interface User {
-  firstName: string;
-  lastName: string;
-}
-
-// Code module - consists of stateless functions
-namespace User {
-  // Constructor function
-  export function of(firstName: string, lastName: string): User {
-    return makePrivate({firstName, lastName}, User);
+export namespace Meta {
+  export function of<T extends Object>(object: T) {
+    return { ...object, [METADATA]: {} };
   }
-  
-  // Internal getter function
-  function get(user: User, key: keyof User) {
-    return Reflect.get(user, key, User);
-  }
-  
-  // We could do the same thing for function set() { ... }
 
-  export function getFullName(user: User) {
-    // Uses the internal get() function we defined above
-    return get(user, `firstName`) + ` ` + get(user, `lastName`);
+  export function get<T extends Meta>(object: T, key: keyof T[METADATA]) {
+    return object[METADATA][key];
+  }
+
+  export function set<T extends Meta, K extends keyof T[METADATA]>(
+    object: T,
+    key: K,
+    value: T[METADATA][K]
+  ) {
+    object[METADATA][key] = value;
   }
 }
-
-const user = User.of(`adam`, `bartonicek`);
-
-console.log(user)
-console.log(user.firstName);
-console.log(user.lastName);
-console.log(User.getFullName(user));
 ```
 
-In the code above, we managed to encapsulate data even while maintaining a clear separation between data and code. Specifically, `User` is still just a generic object and can be inspected via `console.log`, however, we cannot access or modify its properties outside of the `User` code module.
+Now we can import the module and use it to add secret metadata to arbitrary data objects:
 
-Thus, encapsulation of data is certainly possible in DOP. However, a question still remains whether it is a good idea. While encapsulation is generally seen as a net positive in OOP, in the DOP view, data encapsulation presents trade-offs. Whereas it might provide a layer of security, it also makes systems more complex, harder to debug, and even with encapsulated data users may still come to rely on hidden features of the system [@fabian2018; @sharvit2022]. Thus, it is necessary to weight the pros and cons of encapsulation.
+```{ts}
+import { Meta } from "./Meta.ts"
 
-In JavaScript/TypeScript, it is also possible to 
+interface User extends Meta<{ id: number }> {
+  name: string;
+}
 
+const user: User = Meta.of({ name: "Adam" });
+Meta.set(user, `id`, 1337);
+console.log(Meta.get(user, `id`));
+
+interface Variable extends Array<number>, Meta<{ min: number; max: number }> {}
+
+const values: Variable = Meta.of([1, 2, 3]);
+Meta.set(values, `min`, 0);
+console.log(Meta.get(values, `min`));
+```
+
+The user can access and set the metadata values using the `Meta.get` and `Meta.set` functions, however, they cannot directly access the metadata property since the value `METADATA` symbol is not exported. There is a way to access this symbol via the `Reflect.ownKeys` and `Object.getOwnPropertySymbols` functions, and so this is not a strong form of encapsulation [@mdn2024f]. However, arguably, if the user goes as far as to use these functions, and, assuming we are not storing any sensitive data (which is generally not the case in interactive data visualization), it may be reasonable to allow them to access these "private" values and suffer the consequences.  
 
 ##### Inheritance
 

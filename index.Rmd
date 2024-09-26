@@ -23,13 +23,27 @@ knitr::opts_chunk$set(
   fig.align = 'center'
 )
 
+get_ts_filepath <- function(x) {
+  if (endsWith(x, ".ts")) {
+    paste0("/tmp/Rtmp2p1Ve6/", trimws(gsub("//", "", x)))
+  } else {
+    tempfile(fileext = ".ts")
+  }
+}
+
 knitr::knit_engines$set(ts = function(options) {
   code <- paste0(options$code, collapse = "\n")
-  args <- c(shQuote(code), "| /home/adam/.bun/bin/bun run -")
+  
+  ts_path <- get_ts_filepath(options$code[1])
+  ts_conn <- file(ts_path)
+  writeLines(code, ts_conn)
+  
+  args <- c(shQuote(code), "| /home/adam/.bun/bin/bun run", ts_path)
   out <- system2("echo", args, stdout = TRUE)
   
-  knitr::engine_output(options, options$code[1], out)
-  # knitr::engine_output(options, code, out)
+  close(ts_conn)
+  
+  knitr::engine_output(options, code, out)
 })
 
 ```

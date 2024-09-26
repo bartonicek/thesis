@@ -1,0 +1,57 @@
+
+# Appendix
+
+#### Encapsulation in DOP {#dop-encapsulation}
+
+For example, here's how we can emulate private property access in JavaScript using Proxy. We create a namespace with a single constructor function that takes an object and a namespace and returns a proxy of the object which prevents access to the object fields outside of the namespace:
+
+```{ts}
+// Private.ts
+export namespace Private {
+  export function of<T extends Object>(object: T, namespace: Object) {
+    return new Proxy(object, {
+      get: (t, k, e) => (e === namespace ? Reflect.get(t, k) : undefined),
+      set: (t, k, v, e) => (e === namespace ? (Reflect.set(t, k, v), true) : true),
+    });
+  }
+}
+```
+
+We can then use this namespace in the constructor functions of data we want to make private:
+
+```{ts}
+import { Private } from "./Private.ts"
+
+// Data type - container for stateful data
+interface User {
+  firstName: string;
+  lastName: string;
+}
+
+// Code module - consists of stateless functions
+namespace User {
+  // Constructor function
+  export function of(firstName: string, lastName: string): User {
+    return Private.of({firstName, lastName}, User);
+  }
+  
+  // Internal getter function
+  function get(user: User, key: keyof User) {
+    return Reflect.get(user, key, User);
+  }
+  // We could do the same thing for a private setter
+  
+  export function getFullName(user: User) {
+    return get(user, `firstName`) + ` ` + get(user, `lastName`);
+  }
+}
+
+const user = User.of(`Adam`, `Bartonicek`);
+
+user.firstName = `Bob`
+console.log(user)
+console.log(user.lastName);
+console.log(User.getFullName(user));
+```
+
+Clearly, it is possible to encapsulate data while maintaining separation between data and code. Specifically, the data underpinning `User` is still a plain data object and can be inspected using `console.log`. However, we cannot access or modify its properties outside of the `User` code module.

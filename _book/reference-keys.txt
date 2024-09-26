@@ -13,7 +13,7 @@ def:unlabeled-div-8
 def:unlabeled-div-9
 def:unlabeled-div-10
 tab:scales
-fig:unnamed-chunk-16
+fig:unnamed-chunk-17
 abstract
 introduction
 what-is-interactive-visualization
@@ -44,7 +44,9 @@ user-profile
 implementation
 programming-paradigms
 imperative-programming
-data-oriented-programming-and-design
+data-oriented-programming
+encapsulation
+inheritance
 system-components
 factors
 product-factors
@@ -65,10 +67,7 @@ section
 glossary
 JSON
 svg
+appendix
+dop-encapsulation
 references
-fig:unnamed-chunk-15
-fig:unnamed-chunk-17
-encapsulation
-data-oriented-programming
-inheritance
-fig:unnamed-chunk-14
+fig:unnamed-chunk-16

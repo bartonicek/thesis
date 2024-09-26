@@ -1,2 +1,2 @@
-rmd_files: ["index.Rmd", "intro.Rmd", "design.Rmd", "glossary.Rmd", "references.Rmd"]
+rmd_files: ["index.Rmd", "intro.Rmd", "design.Rmd", "glossary.Rmd", "appendix.Rmd", "references.Rmd"]
 delete_merged_file: true
