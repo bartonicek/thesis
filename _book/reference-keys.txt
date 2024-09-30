@@ -13,7 +13,9 @@ def:unlabeled-div-8
 def:unlabeled-div-9
 def:unlabeled-div-10
 tab:scales
-fig:unnamed-chunk-18
+def:simple
+def:unlabeled-div-11
+fig:unnamed-chunk-19
 abstract
 introduction
 what-is-interactive-visualization
@@ -70,8 +72,3 @@ svg
 appendix
 dop-encapsulation
 references
-fig:unnamed-chunk-17
-def:simple-scale
-def:simple
-def:unlabeled-div-11
-fig:unnamed-chunk-19

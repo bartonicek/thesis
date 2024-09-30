@@ -32,6 +32,7 @@ get_ts_filepath <- function(x) {
   }
 }
 
+# Create a TypeScript knitr engine
 knitr::knit_engines$set(ts = function(options) {
   code <- paste0(options$code, collapse = "\n")
   
@@ -39,8 +40,7 @@ knitr::knit_engines$set(ts = function(options) {
   ts_conn <- file(ts_path)
   writeLines(code, ts_conn)
   
-  args <- c(shQuote(code), "| /home/adam/.bun/bin/bun run", ts_path)
-  out <- system2("echo", args, stdout = TRUE)
+  out <- system2(c("bun run", ts_path), stdout = TRUE)
   close(ts_conn)
   
   knitr::engine_output(options, code, out)
