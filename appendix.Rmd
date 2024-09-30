@@ -20,6 +20,7 @@ export namespace Private {
 We can then use this namespace in the constructor functions of data we want to make private:
 
 ```{ts}
+#| eval: false
 import { Private } from "./Private.ts"
 
 // Data type - container for stateful data

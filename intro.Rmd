@@ -487,6 +487,10 @@ $$1 + (2 + 3) = (1 + 2) + 3 = 1 + 2 + 3 \qquad \text{(associativity)}$$
 
 Likewise, products of real numbers $(\mathbb{R}, 1, \times)$ are also a monoid, and so is multiplication of $n \times n$ square matrices $(\mathbf{M}_{n \in \mathbb{Z}}, \mathbf{I}, \cdot)$, where $\mathbf{I}$ is the identity matrix and $\cdot$ stands for an infix operator that is usually omitted. As a counterexample, exponentiation does not meet the definition of a monoid, since it is not associative: $x^{(y^z)} \neq (x^y)^z$. 
 
+There are more exotic forms of monoids as well. For example, the operation of appending a value to a vector and taking the Euclidean norm can also be recast as a monoid:
+
+$$||(||(x, y)||_2, z)||_2 = \sqrt{\bigg(\sqrt{(x^2 + y^2)}\bigg)^2 + z^2} = \sqrt{(x^2 + y^2) + z^2} = ||(x, y, z)||_2$$
+
 We may want to impose further restrictions on monoids, for example:
 
 3. $m_1 \otimes m_2 = m_2 \otimes m_1$ for all $m_1, m_2 \in M$ (commutativity)

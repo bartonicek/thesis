@@ -23,9 +23,11 @@ knitr::opts_chunk$set(
   fig.align = 'center'
 )
 
+directory <- tempdir()
+
 get_ts_filepath <- function(x) {
   if (endsWith(x, ".ts")) {
-    paste0("/tmp/Rtmp2p1Ve6/", trimws(gsub("//", "", x)))
+    paste0(directory, trimws(gsub("//", "", x)))
   } else {
     tempfile(fileext = ".ts")
   }
@@ -40,7 +42,6 @@ knitr::knit_engines$set(ts = function(options) {
   
   args <- c(shQuote(code), "| /home/adam/.bun/bin/bun run", ts_path)
   out <- system2("echo", args, stdout = TRUE)
-  
   close(ts_conn)
   
   knitr::engine_output(options, code, out)

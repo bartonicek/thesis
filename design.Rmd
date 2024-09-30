@@ -312,10 +312,9 @@ Implementing scales as composition of two components is fairly standard across d
 
 ```{ts}
 #| eval: false
-const x = d3.scaleLinear([10, 130], [0, 960]);
-x(20); // 80
-
-const x = d3.scaleLinear().domain([10, 130]);
+// const x = d3.scaleLinear([10, 130], [0, 960]);
+// x(20); // 80
+// const y = d3.scaleLinear().domain([10, 130]);
 ```
 
 
