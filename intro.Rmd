@@ -6,7 +6,7 @@ editor_options:
 
 # Introduction
 
-## What Even is Interactive Data Visualization? {#what-is-interactive-visualization}
+## What even is interactive data visualization? {#what-is-interactive-visualization}
 
 > If it looks like a duck, swims like a duck, and quacks like a duck, then it probably is a duck. 
 >
@@ -20,9 +20,9 @@ The lack of a clear consensus about what "interactive data visualization" is mak
 
 The following section is laid out as follows. I start with a brief overview of the history of the field, of data visualization more generally and interactive data visualization more specifically. Then I discuss the different ways the term "interactive data visualization" has been used throughout the literature, and finally I arrive at a working definition of interactivity for the scope of the present thesis.
 
-### Brief History of Interactive Data Visualization
+### Brief history of interactive data visualization
 
-#### Early Interactive Data Visualization: By Statisticians for Statisticians
+#### Early interactive data visualization: By statisticians for statisticians
 
 Static data visualization has a rich and intricate history, and a full treatment would be beyond the scope of the current thesis [but see e.g. @dix1998; @friendly2006; @friendly2021; @young2011]. Suffice it to say, prior to the second half of the 20th century, data visualization was largely seen as, at best, secondary to "serious" statistical analysis, although there were indeed some prominent counter-examples [@friendly2006; @young2011]. However, beginning with the end of 1950's, a series of developments lead to a great increase in prominence of data visualization. Firstly, at the theoretical level, the work of Tukey [-@tukey1962; -@tukey1977] and Bertin [-@bertin1967] established data visualization as valuable discipline in its own right. Secondly, at the practical level, the development of personal computers [see e.g. @abbate1999] and high-level programming languages, most notably FORTRAN in 1954 [@backus1978], lead to the proliferation of powerful and widely available tools that made the process of rendering production-grade figures near-effortless, in comparison to the earlier hand-drawn techniques. Combined, these developments lead to a surge in the use and dissemination of data visualization.  
 
@@ -32,7 +32,7 @@ Later systems saw even greater flexibility and also integration into general sta
 
 What all of these interactive data visualization systems had in common is that they were designed by statisticians and with interesting, often ambitious interactive features in mind. High-level analytic features such as linked selection/brushing, rotation and projection, and interactive manipulation of model parameters made frequent appearances. While being a clear strength, the more complex nature of the systems may have also slowed their adoption, as they often demanded an expert user to take advantage of most fully.
 
-#### Interactive Data Visualization and the Web: Interactivity for Everyone
+#### Interactive data visualization and the web: Interactivity for everyone
 
 The tail end of the millennium would mark the arrival of a whole new class of technologies that would have a significant impact on interactive data visualization, just as it had on almost every other field of human endeavor. The arrival of the internet in the mid 1990's, and the development of JavaScript in 1995 as a high-level programming language for the Web [for a thorough description of the history, see e.g. @wirfs-brock2020], saw the rise of interactive applications that could be accessed by anyone, from anywhere. This was aided by the dissemination of robust and standardized Web browsers. Soon, interactive data visualization became just one of many interactive technologies highly sought after within the fledgling Web ecosystem. 
 
@@ -50,17 +50,17 @@ What all of the packages listed above have in common is that most featured inter
 
 Be it as it may, there is a fairly high barrier for entry for creating interesting types of interactivity (i.e. linked or parametric) with these packages. This may not be an issue for large organizations which can afford to hire computer science specialists to work on complex interactive dashboards and visualizations full-time. However, to the average applied scientist or data scientist, the upfront cost of producing a useful interactive data visualization may be too high, especially if one is only interested in exploratory data analysis for one's own benefit. This may be the reason why interactive visualizations are nowadays mainly used for data communication, not data exploration [@batch2017]. On a higher level, the current options for interactive data visualization may reflect a broader cultural differences between Computer Science and Statistics, where Computer Science may be more oriented towards business and large-team collaboration, whereas Statistics may be more focused on applied research and individual/small-team workflow.    
 
-### Interactive vs. Interacting With
+### Interactive vs. interacting with
 
-First, when we say "interactive data visualization", are we referring to a concrete figure or chart or are we referring to the process of interacting with a visualization? In other words, does the word "visualization" in the term play the role of a noun or a nominalized verb? Here already we can see a significant overloading of the term [@dimara2019; @pike2009; see also @yi2007]. The split between these two meanings is quite noticeable within the interactive data visualization literature. On one hand, there are some papers which focus on the mathematical and computational aspects of interactive data visualization, discussing specific systems and implementations [see e.g. @buja1996; @kelleher2015; @leman2013; @wills2008]. On the other hand, there are papers which approach the topic from a more cognitive or human-computer interaction (HCI) point of view: exploring what impact different kinds of visualization and interaction styles have on the user's ability to derive insights from the data [see e.g. @dimara2019; @dix1998; @pike2009; @quadri2021; @yi2007]. 
+First, when we say "interactive data visualization", are we referring to a concrete figure or chart, or are we referring to the process of interacting with such a figure? In other words, are we using the term "visualization" as a noun or a verb? Here already we can see a significant overloading of the term [@dimara2019; @pike2009; see also @yi2007]. The split between these two meanings is quite noticeable within the interactive data visualization literature. On one hand, there are some papers which focus on the mathematical and computational aspects of interactive data visualization, discussing specific systems and implementations [see e.g. @buja1996; @kelleher2015; @leman2013; @wills2008]. On the other hand, there are papers which approach the topic from a more cognitive or human-computer interaction (HCI) point of view: exploring what impact different kinds of visualization and interaction styles have on the user's ability to derive insights from the data [see e.g. @dimara2019; @dix1998; @pike2009; @quadri2021; @yi2007]. 
 
 There is of course a significant overlap between these two uses of the term "interactive data visualization": most papers discuss both concrete implementations of interactive data visualization systems and the user's actions and experiences while using those systems. Nevertheless, the fact that the term is used to refer to both the user's actions and experiences as well as the object of these actions and experiences can make can make literature search complicated - whenever searching for any subtopic within one of the two fields, one will inevitably find hits from the other. It also highlights an important fact about interactive data visualization as a research area: rather than being a single field, it is actually an intersection of several different fields, including statistics, computer science, applied mathematics, business analytics, human-computer interaction, and cognitive psychology [@dimara2019]. 
 
 While I do plan to discuss some elementary features of the psychology of *interacting* with visualizations, when used throughout this thesis, the term *"interactive data visualization"* will refer to concrete charts or figures, typically displayed on a computer screen. When referring to the *practice* of interactive data visualization, I will attempt to use more active phrasing such as *"interacting with a visualization"* or *"user's interaction with a visualization"*, to indicate that what is being referred to is the activity or process of visualization, rather than any concrete object or implementation. 
 
-### The Bar for Interactivity
+### What counts as "interactive enough"?
 
-But even when we take the term "interactive data visualization" to mean concrete charts or figures, the meaning still remains ambiguous. What is the bar for calling a figure "interactive"? What features should an interactive figure have? Among data visualization researchers, there are considerable differences of opinion, such that the same figure may be considered interactive by some but not by others. And these differences are important - they are not just a matter of opinion or aesthetic taste. When building interactive data visualization systems, what we consider "interactive" has a profound impact on the implementation details and requirements of the system.  
+But even when we use the term "interactive data visualization" to refer to concrete charts or figures, the meaning still remains ambiguous. What is the bar for calling a figure "interactive"? What features should an interactive figure have? Among data visualization researchers, there are considerable differences of opinion, such that the same figure may be considered interactive by some but not by others. And these differences are important - they are not just a matter of opinion or aesthetic taste. When building interactive data visualization systems, what we consider "interactive" has a profound impact on the implementation details and requirements of the system.  
 
 Consider a scatterplot with a color palette widget that can be used to select the color of the points. Does such a feature justify the scatterplot being called an "interactive data visualization"? There are some researchers who will answer affirmatively - for them, interactivity is something fundamental, and if the user is able to manipulate some visual aspect of the figure, that's enough to call the visualization interactive. To some, almost any user manipulation qualifies [@brodbeck2009]. Other researchers emphasize speed of the computer's responses to user interaction, with faster updates translating to greater interactivity [@becker1987; @buja1996]. Complicating matters further, some of these researchers also make the distinction between "interactive" and "dynamic" manipulation, where interactive manipulation involves discrete actions such as pressing a button or selecting an item from a drop-down menu, whereas dynamic manipulation involves continuous actions, like moving a slider or clicking-and-dragging to highlight a rectangular area [@rheingans2002; @jankun2007; see also @dimara2019]. 
 
@@ -100,7 +100,7 @@ knitr::kable(tab, caption = "Definitions of Interactivity") |> kable_styling(ful
 
 ```
 
-### Interactivity and Implementation
+### Complexity of interactive features
 
 The different definitions of interactivity are not just differences in opinion or taste - they also imply radically different implementation requirements. To start with a perhaps slightly over-exaggerated example, many programming languages come equipped with a read-evaluate-print loop (REPL) which can be used to interactively execute code from the command line. The user writes code, presses ENTER, and the language interpreter evaluates the code, returns any output, and waits for more input from the user. Now, if the language in question supports plotting, then, under the permissive "user interaction" definition, it could be argued that even the act of running code from a command line to produce new plots could be considered an "interactive data visualization system", since the user's interaction with the REPL produces changes to the visual output. And, hypothetically, if the user could type fast enough, they would see the updates appear almost instantly, satisfying the "real-time update" definition.
 
@@ -110,11 +110,11 @@ Now, let's set the somewhat exaggerated example of the REPL aside, and focus on 
 
 There are features which manipulate visual attributes of the plot only, independent of the data. These include, for example, changing the size, color, or opacity of points in a scatterplot. Features like this are usually fairly simple to implement because they do not affect the underlying data representation: a point displays the same data (as indicated by its xy-coordinates) no matter whether it is green or orange. Also, these graphical-only features typically do not require specialized data structures, and have low time- and space-complexity: for example, when interactively changing the opacity of points in a scatterplot, we only need to update one scalar value - the points' opacity - and as such most of the user-experienced time will be spent re-rendering, rather than on any computation.     
 
-In contrast, some interactive features require specialized data structures and additional computation, above and beyond what would be required for a static plot. For example, each time the user engages in interactive features such as filtering, linked highlighting, or parametric interaction, entirely new summaries of the underlying data may need to be computed. When a user selects several points in a linked scatterplot, we first have to find the ids of all the corresponding cases, recompute the statistics underlying all other linked plots (such as counts/sums in barplots or histograms), and only then can we re-render the plot. Likewise, if we interactively manipulate a histogram's binwidth, we need to recompute the number of cases in each bin each time the binwidth changes. To maintain the illusion of smooth, "continuous" interaction [@dimara2019], these computations need to happen fast enough, and as such, computational efficiency becomes imperative.
+In contrast, some interactive features require specialized data structures and complex algorithms, above and beyond those that are required for static plots. For instance, each time the user engages in interactive features such as filtering, linked highlighting, or parametric interaction, new summaries of the underlying data may need to be computed. When a user selects several points in a linked scatterplot, we first have to find the ids of all the corresponding cases, recompute the statistics underlying all other linked plots (such as counts/sums in barplots or histograms), train all of the relevant scales, and only then can we re-render the plot. Likewise, if we interactively manipulate a histogram's binwidth, we need to recompute the number of cases in each bin each time the binwidth changes. To maintain the illusion of smooth, "continuous" interaction [@dimara2019], these computations need to happen fast, and as such, computational efficiency becomes imperative.
 
-### Working Definition of Interactivity
+### Working definition
 
-Clearly, when building interactive data visualization systems, what we choose to call "interactive" has significant implications for what the users will be able to do and how much work will be required to implement the system. So how do we go about deciding what we should consider "interactive"? 
+Clearly, when building an interactive data visualization system, what we choose to call "interactive" has profound implications on our implementation. So how do we decide what we should consider "interactive"? 
 
 There are essentially two modes of visualizing data. 
 
@@ -130,11 +130,11 @@ If we accept this proposition, then there are several important consequences tha
 
 That is not to say that purely graphical interactive features are not useful. For example, in the presence of overplotting, manipulating size or alpha of objects can help us features (areas of high density) that would otherwise remain hidden. Likewise, zooming and panning, while often being counted among the more high-level features, require manipulation of existing axis limits only and can be done without reference to the original data. Still, I argue that the ability to see new summaries of the data is what makes some interactive data visualizations systems ultimately more powerful (and also more challenging to implement). The interactive features that enable this, such as filtering, linked highlighting, and parameter manipulation, go beyond aesthetics, and empower the users to explore the data dynamically, uncovering hidden patterns and relationships that may otherwise remain hidden. 
 
-### Common Interactive Features
+### List of common interactive features
 
 This section describes several common types of interactive features that facilitate interactive data exploration. 
 
-## Mathematical Theory
+## Mathematical theory
 
 The main idea of the present thesis is that the mathematical properties of the statistical summaries underlying our visualizations determine which interactive features will be "well-behaved" and vice versa. Therefore, a foundational understanding of these properties is necessary to be able to delve into the problem deeper.
 
@@ -503,7 +503,7 @@ If $M$ is a preorder, another restriction we may want to impose is that the mono
 
 This means that when we combine two things, we get back something that's at least as big as the bigger of the two things. Summation of natural numbers $(\mathbb{N}, 0, +)$ again works, but for example summation of integers $(\mathbb{Z}, 0, +)$ or multiplication of reals $(\mathbb{R}, 1, \times)$ does not. 
 
-## Components of a Data Visualization System
+## Components of a data visualization system
 
 ### Scales
 
