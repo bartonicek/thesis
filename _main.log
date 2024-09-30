@@ -1,11 +1,11 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.8.9)  9 AUG 2024 12:14
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.9.30)  30 SEP 2024 08:56
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **_main.tex
 (./_main.tex
 LaTeX2e <2024-06-01> patch level 2
-L3 programming layer <2024-07-20>
+L3 programming layer <2024-09-10>
 (/home/adam/.TinyTeX/texmf-dist/tex/latex/base/book.cls
 Document Class: book 2024/02/08 v1.4n Standard LaTeX document class
 (/home/adam/.TinyTeX/texmf-dist/tex/latex/base/bk10.clo
@@ -257,7 +257,6 @@ Package graphics Info: Driver file: pdftex.def on input line 106.
 )
 \cslhangindent=\skip64
 \csllabelwidth=\skip65
-\cslentryspacingunit=\skip66
 (/home/adam/.TinyTeX/texmf-dist/tex/latex/bookmark/bookmark.sty
 Package: bookmark 2023-12-10 v1.31 PDF bookmarks (HO)
 (/home/adam/.TinyTeX/texmf-dist/tex/latex/hyperref/hyperref.sty
@@ -363,73 +362,93 @@ Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
 )
 Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 285.
 )
-\Hy@SectionHShift=\skip67
+\Hy@SectionHShift=\skip66
 ) (/home/adam/.TinyTeX/texmf-dist/tex/latex/bookmark/bkm-pdftex.def
 File: bkm-pdftex.def 2023-12-10 v1.31 bookmark driver for pdfTeX and luaTeX (HO)
 \BKM@id=\count308
-))
-LaTeX Font Info:    Trying to load font information for T1+lmr on input line 145.
+)) (/home/adam/.TinyTeX/texmf-dist/tex/latex/amscls/amsthm.sty
+Package: amsthm 2020/05/29 v2.20.6
+\thm@style=\toks27
+\thm@bodyfont=\toks28
+\thm@headfont=\toks29
+\thm@notefont=\toks30
+\thm@headpunct=\toks31
+\thm@preskip=\skip67
+\thm@postskip=\skip68
+\thm@headsep=\skip69
+\dth@everypar=\toks32
+)
+\c@theorem=\count309
+\c@lemma=\count310
+\c@corollary=\count311
+\c@proposition=\count312
+\c@conjecture=\count313
+\c@definition=\count314
+\c@example=\count315
+\c@exercise=\count316
+\c@hypothesis=\count317
+LaTeX Font Info:    Trying to load font information for T1+lmr on input line 172.
 (/home/adam/.TinyTeX/texmf-dist/tex/latex/lm/t1lmr.fd
 File: t1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 ) (/home/adam/.TinyTeX/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2024-05-08 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count309
+\l__color_backend_stack_int=\count318
 \l__pdf_internal_box=\box63
 ) (./_main.aux)
 \openout1 = `_main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 145.
-LaTeX Font Info:    ... okay on input line 145.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 145.
-LaTeX Font Info:    ... okay on input line 145.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 145.
-LaTeX Font Info:    ... okay on input line 145.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 145.
-LaTeX Font Info:    ... okay on input line 145.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 145.
-LaTeX Font Info:    ... okay on input line 145.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 145.
-LaTeX Font Info:    ... okay on input line 145.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 145.
-LaTeX Font Info:    ... okay on input line 145.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 145.
-LaTeX Font Info:    ... okay on input line 145.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 145.
-LaTeX Font Info:    ... okay on input line 145.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 172.
+LaTeX Font Info:    ... okay on input line 172.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 172.
+LaTeX Font Info:    ... okay on input line 172.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 172.
+LaTeX Font Info:    ... okay on input line 172.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 172.
+LaTeX Font Info:    ... okay on input line 172.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 172.
+LaTeX Font Info:    ... okay on input line 172.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 172.
+LaTeX Font Info:    ... okay on input line 172.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 172.
+LaTeX Font Info:    ... okay on input line 172.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 172.
+LaTeX Font Info:    ... okay on input line 172.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 172.
+LaTeX Font Info:    ... okay on input line 172.
 (/home/adam/.TinyTeX/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 485.
 (/home/adam/.TinyTeX/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
-Package hyperref Info: Link coloring OFF on input line 145.
-LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 147.
+Package hyperref Info: Link coloring OFF on input line 172.
+LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 174.
 (/home/adam/.TinyTeX/texmf-dist/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for OML+lmm on input line 147.
+LaTeX Font Info:    Trying to load font information for OML+lmm on input line 174.
 (/home/adam/.TinyTeX/texmf-dist/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 147.
+LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 174.
 (/home/adam/.TinyTeX/texmf-dist/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 147.
+LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 174.
 (/home/adam/.TinyTeX/texmf-dist/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 147.
+(Font)              <12> on input line 174.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 147.
+(Font)              <8> on input line 174.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 147.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 147.
+(Font)              <6> on input line 174.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 174.
 (/home/adam/.TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 147.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 174.
 (/home/adam/.TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
@@ -462,68 +481,388 @@ Chapter 1.
 ]
 Chapter 2.
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
+LaTeX Warning: Citation `ref-wikipedia2022' on page 7 undefined on input line 192.
+
+
+LaTeX Warning: Citation `ref-dimara2019' on page 7 undefined on input line 195.
+
+
+LaTeX Warning: Citation `ref-elmqvist2011' on page 7 undefined on input line 195.
+
+
+LaTeX Warning: Citation `ref-pike2009' on page 7 undefined on input line 195.
+
+
+LaTeX Warning: Citation `ref-dimara2019' on page 7 undefined on input line 197.
+
+
+LaTeX Warning: Citation `ref-elmqvist2011' on page 7 undefined on input line 197.
 
 
 
 [7]
 
+LaTeX Warning: Citation `ref-dix1998' on page 8 undefined on input line 205.
+
+
+LaTeX Warning: Citation `ref-friendly2006' on page 8 undefined on input line 205.
+
+
+LaTeX Warning: Citation `ref-friendly2021' on page 8 undefined on input line 205.
+
+
+LaTeX Warning: Citation `ref-young2011' on page 8 undefined on input line 205.
+
+
+LaTeX Warning: Citation `ref-friendly2006' on page 8 undefined on input line 205.
+
+
+LaTeX Warning: Citation `ref-young2011' on page 8 undefined on input line 205.
+
+
+LaTeX Warning: Citation `ref-tukey1962' on page 8 undefined on input line 205.
+
+
+LaTeX Warning: Citation `ref-tukey1977' on page 8 undefined on input line 205.
+
+
+LaTeX Warning: Citation `ref-bertin1967' on page 8 undefined on input line 205.
+
+
+LaTeX Warning: Citation `ref-abbate1999' on page 8 undefined on input line 205.
+
+
+LaTeX Warning: Citation `ref-backus1978' on page 8 undefined on input line 205.
+
+
+LaTeX Warning: Citation `ref-fowlkes1969' on page 8 undefined on input line 207.
+
+
+LaTeX Warning: Citation `ref-kruskal1964' on page 8 undefined on input line 207.
+
+
+LaTeX Warning: Citation `ref-fisherkeller1974' on page 8 undefined on input line 207.
+
+
+LaTeX Warning: Citation `ref-donoho1988' on page 8 undefined on input line 207.
+
+
+LaTeX Warning: Citation `ref-swayne1998' on page 8 undefined on input line 207.
+
+
+LaTeX Warning: Citation `ref-swayne2003' on page 8 undefined on input line 209.
+
+
+LaTeX Warning: Citation `ref-theus2002' on page 8 undefined on input line 209.
+
+
+LaTeX Warning: Citation `ref-urbanek2003' on page 8 undefined on input line 209.
+
+
+LaTeX Warning: Citation `ref-urbanek2011' on page 8 undefined on input line 209.
+
+
+
 [8]
+
+LaTeX Warning: Citation `ref-wirfs-brock2020' on page 9 undefined on input line 215.
+
+
+LaTeX Warning: Citation `ref-heer2005' on page 9 undefined on input line 217.
+
+
+LaTeX Warning: Citation `ref-flare2020' on page 9 undefined on input line 217.
+
+
+LaTeX Warning: Citation `ref-bostock2022' on page 9 undefined on input line 219.
+
+
+LaTeX Warning: Citation `ref-react2024' on page 9 undefined on input line 219.
+
+
+LaTeX Warning: Citation `ref-vue2024' on page 9 undefined on input line 219.
+
+
+LaTeX Warning: Citation `ref-svelte2024' on page 9 undefined on input line 219.
+
+
 
 [9]
 
-[10
+LaTeX Warning: Citation `ref-plotly2022' on page 10 undefined on input line 221.
 
-]
-Chapter 3.
+
+LaTeX Warning: Citation `ref-highcharts2024' on page 10 undefined on input line 221.
+
+
+LaTeX Warning: Citation `ref-mdn2024a' on page 10 undefined on input line 221.
+
+
+LaTeX Warning: Citation `ref-highschartsboost2022' on page 10 undefined on input line 221.
+
+
+LaTeX Warning: Citation `ref-plotly2024b' on page 10 undefined on input line 221.
+
+
+LaTeX Warning: Citation `ref-satyanarayan2015' on page 10 undefined on input line 223.
+
+
+LaTeX Warning: Citation `ref-vega2024a' on page 10 undefined on input line 223.
+
+
+LaTeX Warning: Hyper reference `JSON' on page 10 undefined on input line 223.
+
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 223.
+(/home/adam/.TinyTeX/texmf-dist/tex/latex/lm/t1lmtt.fd
+File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
+)
+
+LaTeX Warning: Citation `ref-vega2024b' on page 10 undefined on input line 223.
+
+
+LaTeX Warning: Citation `ref-holtz2022' on page 10 undefined on input line 225.
+
+
+LaTeX Warning: Citation `ref-plotly2022' on page 10 undefined on input line 225.
+
+
+LaTeX Warning: Citation `ref-plotly2022' on page 10 undefined on input line 225.
+
+
+LaTeX Warning: Citation `ref-vegalite2022' on page 10 undefined on input line 225.
+
+
+LaTeX Warning: Citation `ref-kunst2022' on page 10 undefined on input line 225.
+
+
+
+[10]
+
+LaTeX Warning: Citation `ref-batch2017' on page 11 undefined on input line 229.
+
+
+LaTeX Warning: Citation `ref-dimara2019' on page 11 undefined on input line 233.
+
+
+LaTeX Warning: Citation `ref-pike2009' on page 11 undefined on input line 233.
+
+
+LaTeX Warning: Citation `ref-yi2007' on page 11 undefined on input line 233.
+
+
+LaTeX Warning: Citation `ref-buja1996' on page 11 undefined on input line 233.
+
+
+LaTeX Warning: Citation `ref-kelleher2015' on page 11 undefined on input line 233.
+
+
+LaTeX Warning: Citation `ref-leman2013' on page 11 undefined on input line 233.
+
+
+LaTeX Warning: Citation `ref-wills2008' on page 11 undefined on input line 233.
+
+
+LaTeX Warning: Citation `ref-dimara2019' on page 11 undefined on input line 233.
+
+
+LaTeX Warning: Citation `ref-dix1998' on page 11 undefined on input line 233.
+
+
+LaTeX Warning: Citation `ref-pike2009' on page 11 undefined on input line 233.
+
+
+LaTeX Warning: Citation `ref-quadri2021' on page 11 undefined on input line 233.
+
+
+LaTeX Warning: Citation `ref-yi2007' on page 11 undefined on input line 233.
+
+
+LaTeX Warning: Citation `ref-dimara2019' on page 11 undefined on input line 235.
+
 
 
 [11]
 
+LaTeX Warning: Citation `ref-brodbeck2009' on page 12 undefined on input line 243.
+
+
+LaTeX Warning: Citation `ref-becker1987' on page 12 undefined on input line 243.
+
+
+LaTeX Warning: Citation `ref-buja1996' on page 12 undefined on input line 243.
+
+
+LaTeX Warning: Citation `ref-rheingans2002' on page 12 undefined on input line 243.
+
+
+LaTeX Warning: Citation `ref-jankun2007' on page 12 undefined on input line 243.
+
+
+LaTeX Warning: Citation `ref-dimara2019' on page 12 undefined on input line 243.
+
+
+LaTeX Warning: Citation `ref-kehrer2012' on page 12 undefined on input line 245.
+
+
+LaTeX Warning: Citation `ref-buja1996' on page 12 undefined on input line 245.
+
+
+LaTeX Warning: Citation `ref-keim2002' on page 12 undefined on input line 245.
+
+
+LaTeX Warning: Citation `ref-unwin1999' on page 12 undefined on input line 245.
+
+
+LaTeX Warning: Citation `ref-leman2013' on page 12 undefined on input line 245.
+
+
+LaTeX Warning: Citation `ref-pike2009' on page 12 undefined on input line 245.
+
+
+
 [12]
-Chapter 4.
-LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 285.
-(/home/adam/.TinyTeX/texmf-dist/tex/latex/lm/t1lmtt.fd
-File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-)
-Overfull \hbox (53.99884pt too wide) in paragraph at lines 293--293
-[]  \T1/lmtt/m/n/10 "friends": [{ "name": "Sam", "age": 30 }, { "name": "Franta", "age": 26}],[] 
+
+LaTeX Warning: Citation `ref-dimara2019' on page 13 undefined on input line 247.
+
+
+LaTeX Warning: Citation `ref-yi2007' on page 13 undefined on input line 247.
+
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <10> on input line 253.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <7> on input line 253.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <5> on input line 253.
+
+Overfull \hbox (608.48656pt too wide) in paragraph at lines 253--268
+ [][] 
  []
 
 
 
-[13
+[13]
 
-]
-LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <10> not available
-(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 308.
+LaTeX Warning: Citation `ref-foley1990' on page 14 undefined on input line 274.
+
+
+LaTeX Warning: Citation `ref-howard1995' on page 14 undefined on input line 274.
+
+
+LaTeX Warning: Citation `ref-dimara2019' on page 14 undefined on input line 274.
+
+
+LaTeX Warning: Citation `ref-dimara2019' on page 14 undefined on input line 280.
+
 
 
 [14]
-Chapter 5.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 324.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 324.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 324.
 
-! LaTeX Error: Unicode character ́ (U+0301)
+LaTeX Warning: Citation `ref-cairo2014' on page 15 undefined on input line 290.
+
+
+LaTeX Warning: Citation `ref-cairo2019' on page 15 undefined on input line 290.
+
+
+LaTeX Warning: Citation `ref-gelman2013' on page 15 undefined on input line 290.
+
+
+LaTeX Warning: Citation `ref-tufte2001' on page 15 undefined on input line 290.
+
+
+LaTeX Warning: Citation `ref-abukhodair2013' on page 15 undefined on input line 290.
+
+
+LaTeX Warning: Citation `ref-franconeri2021' on page 15 undefined on input line 290.
+
+
+
+[15]
+
+LaTeX Warning: Citation `ref-fong2019' on page 16 undefined on input line 318.
+
+
+LaTeX Warning: Citation `ref-lawvere2009' on page 16 undefined on input line 318.
+
+
+LaTeX Warning: Citation `ref-baez2023' on page 16 undefined on input line 318.
+
+
+LaTeX Warning: Citation `ref-milewski2018' on page 16 undefined on input line 318.
+
+
+LaTeX Warning: Citation `ref-fong2019' on page 16 undefined on input line 318.
+
+
+LaTeX Warning: Citation `ref-lawvere2009' on page 16 undefined on input line 318.
+
+
+LaTeX Warning: Citation `ref-beckmann1995' on page 16 undefined on input line 322.
+
+
+LaTeX Warning: Citation `ref-kindlmann2014' on page 16 undefined on input line 322.
+
+
+LaTeX Warning: Citation `ref-yorgey2012' on page 16 undefined on input line 322.
+
+
+LaTeX Warning: Citation `ref-petricek2021' on page 16 undefined on input line 322.
+
+
+LaTeX Warning: Citation `ref-smeltzer2014' on page 16 undefined on input line 322.
+
+
+LaTeX Warning: Citation `ref-smeltzer2018' on page 16 undefined on input line 322.
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+[16]
+<_main_files/figure-latex/relations-subset-1.pdf, id=103, 469.755pt x 325.215pt>
+File: _main_files/figure-latex/relations-subset-1.pdf Graphic file (type pdf)
+<use _main_files/figure-latex/relations-subset-1.pdf>
+Package pdftex.def Info: _main_files/figure-latex/relations-subset-1.pdf  used on input line 334.
+(pdftex.def)             Requested size: 344.997pt x 238.84406pt.
+
+
+[17{/home/adam/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/home/adam/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/home/adam/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}]
+
+[18 <./_main_files/figure-latex/relations-subset-1.pdf>]
+<_main_files/figure-latex/function-subset-1.pdf, id=127, 469.755pt x 325.215pt>
+File: _main_files/figure-latex/function-subset-1.pdf Graphic file (type pdf)
+<use _main_files/figure-latex/function-subset-1.pdf>
+Package pdftex.def Info: _main_files/figure-latex/function-subset-1.pdf  used on input line 373.
+(pdftex.def)             Requested size: 344.997pt x 238.84406pt.
+<_main_files/figure-latex/function-types-1.pdf, id=129, 469.755pt x 325.215pt>
+File: _main_files/figure-latex/function-types-1.pdf Graphic file (type pdf)
+<use _main_files/figure-latex/function-types-1.pdf>
+Package pdftex.def Info: _main_files/figure-latex/function-types-1.pdf  used on input line 400.
+(pdftex.def)             Requested size: 344.997pt x 238.84406pt.
+
+
+[19]
+
+[20 <./_main_files/figure-latex/function-subset-1.pdf>]
+
+[21 <./_main_files/figure-latex/function-types-1.pdf>]
+
+! LaTeX Error: Unicode character ⨾ (U+2A3E)
                not set up for use with LaTeX.
 
 See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.330 ...Juan L Reutter, Fernando Suarez, Martı́
-                                                  n Ugarte, and Domagoj Vrgo... 
+l.428   \(h = f ⨾
+                    g\) (read ``apply \(f\) then \(g\)'') 
 Here is how much of TeX's memory you used:
- 11612 strings out of 475539
- 177003 string characters out of 5777526
- 1933957 words of memory out of 5000000
- 33968 multiletter control sequences out of 15000+600000
- 624068 words of font info for 83 fonts, out of 8000000 for 9000
+ 11739 strings out of 475539
+ 179607 string characters out of 5777525
+ 574769 words of memory out of 5000000
+ 34145 multiletter control sequences out of 15000+600000
+ 623750 words of font info for 82 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 89i,6n,93p,756b,466s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 89i,8n,93p,2070b,699s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
 !  ==> Fatal error occurred, no output PDF file produced!

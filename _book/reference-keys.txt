@@ -13,7 +13,7 @@ def:unlabeled-div-8
 def:unlabeled-div-9
 def:unlabeled-div-10
 tab:scales
-fig:unnamed-chunk-17
+fig:unnamed-chunk-18
 abstract
 introduction
 what-is-interactive-visualization
@@ -21,10 +21,10 @@ brief-history-of-interactive-data-visualization
 early-interactive-data-visualization-by-statisticians-for-statisticians
 interactive-data-visualization-and-the-web-interactivity-for-everyone
 interactive-vs.-interacting-with
-the-bar-for-interactivity
-interactivity-and-implementation
-working-definition-of-interactivity
-common-interactive-features
+what-counts-as-interactive-enough
+complexity-of-interactive-features
+working-definition
+list-of-common-interactive-features
 mathematical-theory
 past-application-of-category-theory-to-data-visualization
 relations
@@ -53,7 +53,7 @@ product-factors
 reducers
 scales-1
 overview
-limits-of-modeling-scales-as-simple-functions
+the-limits-of-modeling-scales-as-simple-functions
 solution-two-component-scale-system
 past-implementations-of-scales
 proposed-model-of-scales
@@ -70,4 +70,8 @@ svg
 appendix
 dop-encapsulation
 references
-fig:unnamed-chunk-16
+fig:unnamed-chunk-17
+def:simple-scale
+def:simple
+def:unlabeled-div-11
+fig:unnamed-chunk-19

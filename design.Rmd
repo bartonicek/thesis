@@ -164,40 +164,43 @@ $$i_{\text{product}} = i_1 + i_2 \cdot \max(j, k)$$
 
 ### Scales
 
-A fundamental task when visualizing data is translating values from the coordinates of the data to something that can be actually displayed on the screen. In most data visualization system, this is the job of scales. While there exists is a fair amount of literature on the theoretical properties of scales [SEE INTRODUCTION], there is much less written about the actual details of implementing scales in concrete data visualization systems. As such, the following section is based largely on how scales have been implemented in other data visualization codebases, such as the `ggplot2` R package [@wickham2016] or `d3-scale` module of D3 [@d3-scale2024], as well on personal insights while implementing the package.
+To visualize data, we need to be able to translate values from the space of the data to space of the graphical device (computer screen). In most data visualization systems, this is done by specialized components called scales. While there exists is a fair amount of literature on the theoretical properties of scales [SEE INTRODUCTION], much less is written about the actual details of implementing scales in concrete data visualization systems. As such, the following section is based largely on how scales have been implemented in other data visualization codebases, such as the `ggplot2` R package [@wickham2016] or `d3-scale` module of D3 [@d3-scale2024], as well on personal insights while implementing the package.
 
 #### Overview
 
-From a high-level perspective, we can think of a scale as just a function $s: D \to V$, which translates data values $d \in D$ to some visual attribute (co)domain $V$, which could be, for example, the x- or y-position, length, area, radius, or color. 
+From a high-level perspective, a scale is just a function $s: D \to V$ which translates values of the data $d \in D$ to values of some visual attribute $v \in V$, such as the x- and y-position, length, area, radius, or color. This function may or may not be invertible, such that each value of the visual attribute can but does not have to be identified with a unique data value.
 
-The simplest and most typical case is where both $S$ and $D$ are subsets of the real numbers:
+One of the most common and typical cases is where both $D$ and $V$ are subsets of the real numbers:
 
 $$s: [d_{min}, d_{max}] \to [v_{min}, v_{max}] \qquad d_{min}, d_{max}, v_{min}, v_{max} \in \mathbb{R}$$
 
-For example, suppose our data takes values in the range from 1 to 10 and we want to plot it along the x-axis within a plotting region which is 800 pixels wide. Then, our scale is simply:
+For example, suppose our data takes values in the range from 1 to 10 and we want to plot it along the x-axis, within a 800 pixels wide plotting region. Then, our scale is simply:
 
-$$s: [1, 10] \to [0, 800]$$
+$$s_x: [1, 10] \to [0, 800]$$
 
-Now, there can be many potential functions that fit this signature. One particularly nice and simple candidate is the following function:
+Now, there is an infinite number of functions that fit this signature. However, one particularly nice and simple candidate is the following function:
 
+::: {.definition #simple name="Simple scale function"}
 $$s(d) = v_{max} + \frac{d - d_{min}}{d_{max} - d_{min}} \cdot (v_{max} - v_{min})$$
+:::
 
-or, with concrete values substituted for the variables:
+if we substitute the concrete values into the formula, this becomes:
 
-$$s(d) = 0 + \frac{d - 1}{10 - 1} \cdot (800 - 0) \\ \implies s(d) = [(d - 1) / 9] \cdot 800$$
+$$s_x(d) = 0 + \frac{d - 1}{10 - 1} \cdot (800 - 0) = [(d - 1) / 9] \cdot 800$$
 
-This function is a simple linear map, which acts on the data in the following way:
+The function is a simple linear map, which acts on the data in the following way:
 
-- $s(1) = (1 - 1) / 9 \cdot 800 = 0$
-- $s(10) = (10 - 1) / 9 \cdot 800 = 800$
-- $s(d) \in (0, 800)$ for any $d \in (1, 10)$
+- $s_x(1) = (1 - 1) / 9 \cdot 800 = 0$
+- $s_x(10) = (10 - 1) / 9 \cdot 800 = 800$
+- $s_x(d) \in (0, 800)$ for any $d \in (1, 10)$
 
-That is, the function maps the data value 1 to pixel 0 (left border of the plotting region), value 10 to to pixel 800 (right border of the plotting region), and any value in between 1 and 10 to the interval 0 to 800, proportional to where in the data range it is located.
+That is, the function maps the data value 1 to pixel 0 (left border of the plotting region), value 10 to to pixel 800 (right border of the plotting region), and any value in between 1 and 10 inside the interval 0 to 800, proportionally to where in the data range it is located.
 
-We can easily implement the function by simply translating the formula to code:
+It is relatively simple to translate the formula in \@ref(def:simple) to code:
 
 ```{ts}
-function scale(
+// simpleScale.ts
+export function simpleScale(
   d: number,
   dmin: number,
   dmax: number,
@@ -206,22 +209,29 @@ function scale(
 ): number {
   return vmin + ((d - dmin) / (dmax - dmin)) * (vmax - vmin);
 }
-
-// And indeed, this works as expected
-console.log(scale(5.5, 1, 10, 0, 800))
 ```
 
-#### Limits of modeling scales as simple functions
+And indeed, this function works the way we would expect:
 
-Simple scale functions like the one shown above can work fine for basic data visualization systems. However, once we want to add more features, this design can become prohibitive. Consider, for example, what we might have to do if we want to:
+```{ts}
+import { simpleScale } from "./simpleScale.ts"
+
+console.log(simpleScale(1, 1, 10, 0, 800))
+console.log(simpleScale(5.5, 1, 10, 0, 800))
+console.log(simpleScale(10, 1, 10, 0, 800))
+```
+
+#### The limits of modeling scales as simple functions
+
+Simple scale functions like the one above can work fine for basic data visualization systems. However, once we begin adding more features, this design can become prohibitive. Consider, for example, what happens if we want to:
 
 - Expand the scale limits
 - Apply non-linear transformations
-- Pan, zoom, reversem, or otherwise modify the scale interactively
+- Pan, zoom, reverse, or otherwise modify the scales interactively
 - Scale discrete data
 
 
-Let's take the first point as a motivating example. Consider what happens to data points at the limits of the data range with our "simple" scale function:   
+Let's take the first point as a motivating example. Consider what happens to data points at the limits of the data range:   
 
 ```{r}
 #| out-width: 800px
@@ -233,22 +243,23 @@ col <- ifelse(1:10 %in% c(1, 10), "indianred", "grey80")
 plot(x, y, col = col, cex = 3, xaxs = "i")
 ```
 
-The plot above shows values scaled using the simple linear mapping described above along the x-axis, i.e. $s: [1, 10] \to [0, 800]$. Notice that, since the position of the points representing the values 1 and 10 get mapped to pixel values 0 and 800 (the left and right border of the plot), only half of each point is visible. 
+The plot above shows values scaled using the simple linear mapping described above along the x-axis, i.e. $s: [1, 10] \to [0, 800]$. Notice that, since the position of the points representing the values 1 and 10 get mapped to pixel values 0 and 800 (the left and right border of the plot), resulting in only half of each point being visible. 
 
 To address this, most data visualization systems automatically expand the range of the domain by some pre-specified percentage:
 
 ```{r}
 #| out-width: 800px
 #| fig-align: 'center'
+# By default, the plot() function automatically expands the x- and y-axis
+# scale limits by approximately 4% on each end, see `xaxs` in ?graphics::par
 plot(x, y, col = col, cex = 3)
 ```
 
-(in R, this is approximately 4% at each end of the axis, see `xaxs` in `?graphicss::par`)
-
-Turning back to the simple `scale` function, we could achieve the same effect by adding an extra argument:
+We *could* achieve similar effect by modifying the scale function and adding an additional argument:
 
 ```{ts}
-function scale(
+// simpleScale2.ts
+export function simpleScale2(
   d: number,
   dmin: number,
   dmax: number,
@@ -260,68 +271,79 @@ function scale(
     vmin + (exp / 2 + ((d - dmin) / (dmax - dmin)) * (1 - exp)) * (vmax - vmin)
   );
 }
-
-console.log(scale(1, 1, 10, 0, 800, 0.1));
-console.log(scale(5.5, 1, 10, 0, 800, 0.1));
-console.log(scale(10, 1, 10, 0, 800, 0.1));
 ```
 
-The `exp` argument effectively allows allows us expand the data range by some fixed percentage, e.g. 10% (5% upper and lower limit, respectively). This means that the data values of 1 and 10 are no longer translated to 0 and 800 pixels but instead somewhere closer to the center of the plotting area (40 and 760 pixels, respectively).   
+Now, if we set the `exp` argument to some positive value, the scaled values get mapped closer to the center of the plotting region. For example, setting `exp` to 0.1 moves each of the data limits 5% closer to the center of the plotting region:
 
-However, as can be plainly seen, with more arguments, the function quickly becomes unwieldy and hard to reason about. Further, we also may want to persist or modify some of the values during runtime (such as when panning or zooming). Therefore, a more structured approach is needed.
+```{ts}
+import { simpleScale2 } from "./simpleScale2.ts"
+
+console.log(simpleScale2(1, 1, 10, 0, 800, 0.1));
+console.log(simpleScale2(5.5, 1, 10, 0, 800, 0.1));
+console.log(simpleScale2(10, 1, 10, 0, 800, 0.1));
+```
+
+However, with many additional arguments, the function can quickly become unwieldy. The logic inside the function's body gets more complicated, and if we have to call the function in multiple places in our code, it may become difficult to remember the order and identity of the arguments. Further, we may want to persist or modify some of the arguments during runtime (such as when panning or zooming). Therefore, a more structured approach is needed.
 
 #### Solution: Two-component scale system
 
-The linear mapping formula can guide us in decomposing the scaling function into smaller, more manageable parts. Looking at the formula closely, we can see that it can be expressed as the composition of two simpler functions:
+The linear mapping formula can guide us in decomposing the scaling function into smaller, more manageable parts. By looking at the formula closely, we may be able to see that it can be expressed as the composition of two simpler functions:
 
-$$s(x) = \color{steelblue}{j +} \color{indianred}{\frac{x - a}{b -a}} \color{steelblue}{\cdot (k - j)}$$
+::: {.definition name="Two-component scale system"}
 
-That is, the scale function consists of:
+$$s(d) = \color{steelblue}{v_{min} +} \color{indianred}{\frac{d - d_{min}}{d_{max} - d_{min}}} \color{steelblue}{\cdot (v_{max} - v_{min})}$$
 
-- A *normalize* function $\color{indianred}{n: D \to [0, 1], \qquad n(d) = (d - a) / (b - a)}$
-- An *unnormalize* function $\color{steelblue}{u: [0, 1] \to V, \qquad u(p) = j + p \cdot (k - j)}$
+where we can interpret $s$ as being composed of:
 
-Put simply, the normalize function $n$ translates data values $d \in D$ to a percentage $p \in [0, 1]$, and the unnormalize function $u$ converts the percentage to the space of the visual attribute $V$. The scale function is then simply the composition of these two functions:
+- A *normalize* function $\color{indianred}{n: D \to [0, 1], \qquad n(d) = (d - d_{min}) / (d_{max} - d_{min})}$
+- An *unnormalize* function $\color{steelblue}{u: [0, 1] \to V, \qquad u(p) = v_{min} + p \cdot (v_{max} - v_{min})}$
+
+Such that:
 
 $$s(d) = \color{steelblue}{u(} \color{indianred}{n(\color{black}{d})} \color{steelblue}{)}$$
+:::
+
+Put simply, the normalize function $n$ translates data values $d \in D$ to a percentage $p \in [0, 1]$, and the unnormalize function $u$ converts the percentage to the space of the visual attribute $V$.
 
 In code, we can write this as follows:
 
 ```{ts}
-function normalize(x: number, a: number, b: number) {
-  return (x - a) / (b - a)
+function normalize(d: number, dmin: number, dmax: number) {
+  return (d - dmin) / (dmax - dmin)
 }
 
-function unnormalize(p: number, j: number, k: number) {
- return j + p * (k - j) 
+function unnormalize(p: number, vmin: number, vmax: number) {
+ return vmin + p * (vmax - vmin) 
 }
 
 console.log(normalize(5.5, 1, 10))
 console.log(unnormalize(0.5, 0, 800))
+console.log(unnormalize(normalize(5.5, 1, 10), 0, 800))
 ```
 
-This two component system allows for a clean separation of concerns. Specifically, the normalize function how to map the data values to $[0, 1]$. It does not need to be aware of where these normalized data values will be mapped to. Conversely, the unnormalize function only needs to understand how to translate values from $[0, 1]$ to the space of the visual attribute (such as x-axis position).
+This two component system allows for a clean separation of concerns. Specifically, the normalize function only needs to know how to map the data values to $[0, 1]$. It does not need to be aware of where these normalized data values will be mapped to. Conversely, the unnormalize function only needs to understand how to translate values from $[0, 1]$ to the space of the visual attribute (such as x-axis position).
 
-It is worth noting that any finite subset of $\mathbb{R}$ could serve as the intermediate domain. However, the specific interval $[0, 1]$ is convenient, both in terms of interpretation as well as for implementation, as will be discussed later.
+It is worth noting that there is nothing inherently special about the interval $[0, 1]$ as the intermediate domain: any finite subset of $\mathbb{R}$ would do. However, the interval $[0, 1]$ is convenient, both in terms of interpretation as well as for implementation, as will be discussed later.
 
-Finally, so far I have referred to the normalize and unnormalize *functions*. Framing scales as composition of functions leads to a nice correspondence between the mathematical definition and the code implementation. However, in practice, we can just as well implement the domain and codomain as *objects* or *classes*, as we will see in the next section. The important point is that, no matter what type the two components are, each is responsible for translating values between its domain and the interval $[0, 1]$.
+Finally, so far I have discussed scales as *functions*: the scale function, the normalize function, and unnormalize function. Framing scales as composition of functions leads to a nice correspondence between the mathematical definition and the code implementation. However, in practice, it may be more convenient to implement the domain and codomain as *objects* or *classes*, as we will see in the following section. The important point is that, no matter what type the two components are, each is responsible for translating values from/to its domain and the interval $[0, 1]$.
 
 #### Past implementations of scales
 
-Implementing scales as composition of two components is fairly standard across data visualization packages. For example, the D3 library [@bostock2011] implements scales in a functional style, with the values representing the data domain and the visual (co)domain being provided as tuples or arrays of values, either during initialization or at some later point. For illustration, here are some examples from the oficial documentation [@d3-scale2024]:
+Implementing scales as composition of two components is fairly standard practice across data visualization packages. For example, the D3 library [@bostock2011] implements scales in a functional style, with the values representing the data domain and the visual (co)domain being provided as tuples or arrays of values, either during initialization or at some later point. For illustration, here is an example from the oficial documentation [@d3-scale2024]:
 
 ```{ts}
 #| eval: false
 const x = d3.scaleLinear([10, 130], [0, 960]);
 x(20); // 80
-
-const x = d3.scaleLinear().domain([10, 130]);
+const color = d3.scaleLinear([10, 100], ["brown", "steelblue"]);
+color(20); // "rgb(154, 52, 57)"
+// The domain and codomain can also be specified separately
+const y = d3.scaleLinear().domain([10, 130]); 
 ```
 
+Internally, D3 uses specialized functions to translate from the domain to the codomain (such as the `normalize()` and `scale()` functions for continuous and discrete/ordinal domains, respectively, and various `interpolate()` functions for codomains). 
 
-Internally, specialized functions are then used to translate from the domain to the codomain, such as the `normalize()` and `scale()` functions for continuous and discrete/ordinal domains, respectively, and various `interpolate()` functions for codomains. 
-
-Similarly, `ggplot2` [@wickham2016] implements each subtype of the `Scale` class with `limits` and `palette` properties, each corresponding roughly to the data domain and the visual codomain ("roughly", because the x- and y-position are treated slightly differently, due to being passed through coordinate systems). Internally, the package uses the `rescale` function from the `scales` package [@wickham2023] to map data to $[0, 1]$ and then the palette function is responsible for mapping these normalized values to the visual attribute. For illustration, here's the full definition of the `map` method on the `ScaleContinuous` class (I've added my own comments for clarity):
+Similarly, `ggplot2` [@wickham2016] scales are built upon the `Scale` class, with each subtype implementing `limits` and `palette` properties. Similar to D3, the `limits` property is a vector which corresponds to the data domain and the `palette` property is a function which corresponds roughly to the visual codomain (the x- and y-position behave slightly differently, due to being passed through coordinate systems). Internally, the package uses the `rescale` function from the `scales` package [@wickham2023] to map data values to $[0, 1]$ and then the `palette` function is responsible for mapping these normalized values to the visual attribute. For illustration, here's the full definition of the `map` method on the `ScaleContinuous` class (I've added comments for clarity):
 
 ```{r}
 #| eval: false
@@ -340,11 +362,11 @@ map = function(self, x, limits = self$get_limits()) {
 
 #### Proposed model of scales
 
-One disadvantage the models of scales that `D3` and `ggplot2` use is that they treat the data domain and the visual attribute codomain as fundamentally different objects. In `D3`, different functions are used to translate from $D \to [0, 1]$ and from $[0, 1] \to V$, and, in `ggplot2`, while `limits` is a simple vector/tuple, `palette` is a function. While this approach may have some benefits, it does add additional complexity, since we have to use a different mental model when considering each component. Further, the model only works in one direction, for mapping values $D \to V$; if we want to go the other way, i.e. map $V \to D$, we have to use other specialized functions. 
+One feature that the models of scales that `D3` and `ggplot2` rely on is that they both treat the data domain and the visual attribute codomain as different types. In `D3`, fundamentally different functions are used to translate from $D \to [0, 1]$ and from $[0, 1] \to V$, and, in `ggplot2`, `limits` is a simple vector/tuple whereas `palette` is a function. While this approach may have some benefits, offering greater flexibility, it also does add additional complexity. Specifically, we have to use one mental model when considering the domain and another when considering the codomain. Further, this model of scales only works in one direction: mapping values $D \to V$. For going the the other way, i.e. mapping $V \to D$, other specialized functions have to be used. 
 
-Instead, I propose a different model of scales which implements both the domain and codomain as objects of the same type (`Expanse`). This has the advantage of making the code easier to reason about, and, most of the time, inverting the scaling function is trivial.
+I propose a model of scales which implements both the domain and the codomain as objects of the same type: `Expanse`. Fundamentally, this makes it so that the only difference between the data domain and the visual attribute codomain is which property of the scale they are assigned to. I argue that this model has several benefits, including making the code easier to reason about, as well as providing a simple interface for inverting values from $V \to D$.
 
-Here is a (somewhat) simplified version of the `Scale` interface:  
+Here is a (slightly) simplified version of the `Scale` interface:  
 
 ```{ts}
 #| eval: false
@@ -354,28 +376,30 @@ interface Scale<D, V> {
 }
 ```
 
-Here, `D` represents the type of the data domain, and `V` represents the type of the visual attribute codomain.
+`D` represents the type of the data domain, and `V` represents the type of the visual attribute codomain.
 
-With this interface, we can use of the following two functions:
+The main nuts and bolts of the `Scale` interface are the following two functions:
 
 ```{ts}
 function pushforward<D, D>(scale: Scale<D, V>, value: D): V
 function pullback<D, V>(scale: Scale<D, V>, value: V): D
 ```
 
-The `pushforward` function can be *push values forward* through the scale, first through its domain and then its codomain, and the `pullback` function can be used to *pull values back*, first through its codomain and then through its domain. The implementation of these functions is actually trivial:
+The `pushforward` function *pushes values forward* through the scale, first through its domain and then its codomain, and the `pullback` function *pulls values back*, first through its codomain and then through its domain. For clarity, here is a simplified implementation:
 
 ```{ts}
 function pushforward<D, V>(scale: Scale<D, V>, value: D): V {
-  return unnormalize(scale.codomain, normalize(scale.domain, value))
+  return Expanse.unnormalize(scale.codomain, Expanse.normalize(scale.domain, value))
 }
 
 function pullback<D, V>(scale: Scale<D, V>, value: V): D {
-  return unnormalize(scale.domain, normalize(scale.codomain, value))
+  return Expanse.unnormalize(scale.domain, Expanse.normalize(scale.codomain, value))
 }
 ```
 
-That is, each `Expanse` does all of the work, translating between either $D$ or $V$ and $[0, 1]$; a `Scale` only connects two arbitrary expanses together. As such, before talking about additional features of scales, we should discuss expanses, since these lend scale the bulk of their functionality. 
+In plain words, most of the work is done using the two `Expanse` objects: we use `domain` to translates $D \to [0, 1]$ and codomain to translate $[0, 1] \to V$. `Scale` serves as a plumbing, connecting these two expanses together. 
+
+However, before diving in to discuss `Expanse`, there are also a few behaviors we may like to implement on `Scale`. Specifically, 
 
 ### Expanses
 
