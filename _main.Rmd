@@ -1,3 +1,54 @@
+---
+title: "Fluent Graphics"
+author: "Adam Bartonicek"
+site: bookdown::bookdown_site
+documentclass: book
+output:
+  bookdown::gitbook: default
+bibliography: [references.bib]
+link-citations: true
+---
+
+# Abstract 
+
+Placeholder
+
+
+
+<!--chapter:end:index.Rmd-->
+
+
+# Introduction
+
+Placeholder
+
+
+## What even is interactive data visualization? {#what-is-interactive-visualization}
+### Brief history of interactive data visualization
+#### Early interactive data visualization: By statisticians for statisticians
+#### Interactive data visualization and the web: Interactivity for everyone
+### Interactive vs. interacting with
+### What counts as "interactive enough"?
+### Complexity of interactive features
+### Working definition
+### List of common interactive features
+## Mathematical theory
+### Past Application of Category Theory to Data Visualization
+### Relations
+### Functions
+### Partitions
+### Preorders
+### Monoids
+## Components of a data visualization system
+### Scales
+##### Nominal scales
+##### Ordinal scales
+##### Interval scales
+###### Ratio scales
+##### Criticism of On the Theory of Scales of Measurement
+
+<!--chapter:end:intro.Rmd-->
+
 # Design
 
 ```{r}
@@ -681,3 +732,32 @@ This is a problem in the existing packages. For example:
 <!-- ``` -->
 
 ## 
+
+<!--chapter:end:design.Rmd-->
+
+
+# Glossary
+
+Placeholder
+
+
+#### JSON {#JSON}
+#### SVG
+
+<!--chapter:end:glossary.Rmd-->
+
+
+# Appendix
+
+Placeholder
+
+
+#### Encapsulation in DOP {#dop-encapsulation}
+
+<!--chapter:end:appendix.Rmd-->
+
+# References
+
+
+<!--chapter:end:references.Rmd-->
+
