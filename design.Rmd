@@ -18,25 +18,35 @@ While designing my system, I have attempted to
 
 ## Implementation
 
-> The example code chunks in this section are written in both R and TypeScript. The reason for this is that, while I would prefer to use R for everything due to its tight integration with RMarkdown, some of the concepts are much easier to explain in a language with static typing features like TypeScript (particularly, type annotations and interfaces). However, since the examples relate to plotting and some can be improved by showing graphical output/plots, I also wanted to use (base) R for plotting. So, where graphical output is important, the code chunks are written in R, and, where the code itself is the main focus, they are written in TypeScript. I hope this bilingualism is not too confusing and have tried to use only the basic features of each language to make the examples clear. 
+> The example code chunks in this section are written in both R and TypeScript. While I would prefer to use R for all code examples, due to its tight integration with RMarkdown, some of the concepts are much easier to explain in a language with static typing like TypeScript (particularly, type annotations and interfaces). However, since some examples also use graphical output/plots, I also wanted to use R. 
+>
+> So, where graphical output is important, the code examples are written in R, and, where the code itself is the main focus, they are written in TypeScript. I hope this bilingualism is not too confusing and have tried to use only the basic features of each language to make the examples clear. 
 
 ### Programming paradigms
 
-It is often the case that the same programming task can be solved in many, often vastly different, ways. Programs solving the same problem can differ in how they decompose the problem, how they represent and manipulate data, how they handle state, how explicit or implicit they are about handling low-level system details versus relying on abstractions, how they structure and organize their constituent components, and so on. Dealing with these concerns, and coming up with a formal set of principles for addressing them is the job of programming paradigms [@chambers2014; @jordan2015; @van2009]. 
+It is often the case that the same programming task can be tackled in many different ways. Programs solving the same problem can differ in how they decompose the problem, how they represent and manipulate data, how they handle state, how explicit or implicit they are about handling low-level system details versus relying on abstractions, how they structure and organize their constituent components, and so on. Dealing with these concerns, and coming up with a formal set of principles for addressing them is the job of programming paradigms [@chambers2014; @jordan2015; @van2009]. 
 
-Most programming languages are geared towards one specific style of programming, typically supporting only one or two programming paradigms to a reasonable capacity [@van2009]. Fortunately, this is not the case for either JavaScript/TypeScript or R, since both are multiparadigm programming languages [@chambers2014; @mdn2024c]. Both support object-oriented programming, via prototype inheritance in the case of JavaScript [@mdn2024d] and the S3, S4, and R6 systems in the case of R [@wickham2019], and treat functions as first class citizens, allowing for functional programming style [@chambers2014; @mdn2024e]. Further, as C based languages, both also support classical imperative/procedural programming style, and also provide some utilities for reflective metaprogramming.  
+Most programming languages are geared towards one specific style of programming, typically supporting only one or two programming paradigms to a reasonable capacity [@van2009]. Fortunately, this is not the case for either JavaScript/TypeScript or R, since both are multiparadigm programming languages [@chambers2014; @mdn2024c]. Both languages support object-oriented programming, via prototype inheritance in the case of JavaScript [@mdn2024d] and the S3, S4, and R6 systems in the case of R [@wickham2019], and treat functions as first class citizens, allowing for functional programming style [@chambers2014; @mdn2024e]. Further, as C based languages, both also support classical imperative/procedural programming style, and also provide some utilities for reflective metaprogramming.  
 
-The flexibility of JavaScript and R allowed me to experiment with different programming paradigms while developing `plotscaper`. I had rewritten the JavaScript side of the package multiple times from scratch, testing out several different programming paradigms and styles in the process. Below, I provide a very broad overview of the paradigms I have tried, as well as an account of my experience of using each paradigm and some thoughts on its suitability towards designing interactive data visualization systems.
+The flexibility of JavaScript and R allowed me to experiment with different programming paradigms while developing `plotscaper`. I have rewritten the JavaScript side of the package multiple times from scratch, testing out several different programming paradigms and styles in the process. Below, I provide a very broad overview of the paradigms I have tried, as well as an account of my experience of using each paradigm and some thoughts on its suitability towards designing interactive data visualization systems.
 
 #### Imperative programming
 
 Imperative programming style is one of the oldest and most classical styles of programming. It conceptualizes the program as a discrete sequence of steps that manipulate some mutable state [@frame2014]. In this way, it closely resembles the way CPU executes instructions.
 
+#### Functional programming
+
+#### Object oriented programming
+
 #### Data oriented programming
 
-Data oriented programming (DOP) and data oriented design (DOD) are two newer programming paradigms that have been slowly gaining prominence in the recent years. While the terms are sometimes used interchangeably, there are some subtle differences: DOP focuses more on high-level principles such as structuring and organizing code, whereas DOD, originating in the world of video-game development, tends to be more concerned with low-level optimization details such as memory layout and CPU access patterns [@sharvit2022; c.f. @acton2014; @fabian2018]. However, there is a remarkable overlap between the conclusions and high-level concepts of the two programming paradigms. For this reason, I will discuss both here simultaneously and refer to both as "DOP" unless explicitly mentioned otherwise. 
+Data oriented programming (DOP) and data oriented design (DOD) are two newer programming paradigms that have been slowly gaining a foothold in the recent years. While the terms are sometimes used interchangeably, there are some important differences: DOP focuses more on high-level principles such as structuring and organizing code [@sharvit2022; @parlog2024], whereas DOD, having originated in the world of video-game development, tends to be more concerned with low-level optimization details such as memory layout and CPU access patterns [@acton2014; @bayliss2022; @kelley2023; @nikolov2018; @fabian2018]. However, there is a considerable overlap the conclusions and high-level guidelines that the two programming paradigms provide. For this reason, I will discuss both DOP and DOD here, in the same section, and refer to both as "DOP" unless explicitly stated otherwise. 
 
-The core idea of DOP is a data-first perspective. Under this view, programs should be viewed as transformations of data, nothing less, nothing more. As a result, every program is composed of two sets of components: stateful data and stateless functions that transform this data [@fabian2018]. Data should be represented by generic data structures, formed by combining maps/structs, arrays, and primitives [for example [JSON]\; @sharvit2022], and it may even be desirable that it adheres to the relational model [@codd1970; @moseley2006; @fabian2018\; note that the data does not actually have to *live* inside a relational database, just have the shape of a normalized table, with columns represented by generic arrays]. Data and code should be kept separate, with code living in separate modules, composed of stateless functions [@fabian2018; @sharvit2022]. Further, since data is just itself - data - there is no obligation for it to model the real world or any kind of abstract entity and we are free to represent it in any way we want [@acton2014; @fabian2018; an extreme example of this are Entity Component Systems in videogames, @harkonen2019]. Finally, abstraction should be introduced only gradually, and most of the work should be done by generic data manipulation functions [@fabian2018; @sharvit2022].
+The core idea of DOP is a data-first perspective. In the DOP view, programs should be viewed as transformations of data, nothing less, nothing more [@acton2014; @sharvit2022]. As a result, every program is composed of two sets of components: stateful data and stateless functions that transform this data [@fabian2018]. Data should be represented by generic data structures, formed by combining maps/structs, arrays, and primitives [for example [JSON]\; @sharvit2022]. It may even be desirable that the data adheres to the relational model [@codd1970; @moseley2006; @fabian2018]. This does not mean that the data has to actually *live* inside a relational database, just that its shape should be close to that of normalized relational database tables, with columns represented by generic arrays [@fabian2018]. 
+
+Data and code should always be kept separate, such that both can be reasoned about in isolation. Code should live inside modules composed of pure (stateless) functions [@fabian2018; @sharvit2022]. This strict segregation brings several benefits. The data becomes easy to pass around and serialize, and, since the code is composed of pure functions, it becomes easy to test and mock [@sharvit2022].   
+
+Data represents just itself - data - and there is no obligation for it to model the real world or any kind of abstract entity. As a result, and we are free to represent data in any way we want, and this can in fact bring significant performance benefits [@acton2014; @fabian2018]. A typical example of this in DOD is the Structure of Arrays (SoA; aka "parallel arrays" or "columnar format") data structure [@acton2014; @acton2019; @kelley2014], in which a list of records is stored as a single object, with the records' properties being stored as homogeneous arrays (this is also how R's `data.frame` class is implemented). This type of representation reduces memory footprint and can improve cache line utilization, resulting in faster runtime [@acton2014; @fabian2018; @kelley2023]. Another example of idiosyncratic data representation that can lead to improved performance are Entity Component Systems in videogames [@harkonen2019]. Either way, even if performance is not the nubmer one concern, another benefit data representing itself is that it allows us introduce abstraction only gradually, since we can get far by relying on generic data manipulation functions [@fabian2018; @sharvit2022].
 
 It may seem that many of the DOP principles directly contradict many popular OOP principles, specifically encapsulation, inheritance, polymorphism, and domain driven design. However, many of these principles can either be reconciled with DOP, or DOP in fact provides better alternatives. Below, I go over these principles and provide code examples that further illustrate how DOP works. 
 
@@ -44,9 +54,11 @@ It may seem that many of the DOP principles directly contradict many popular OOP
 
 When it comes to encapsulation in DOP, we have to differentiate between encapsulating data and encapsulating code. Encapsulating code is easy in DOP - we can simply not export certain functions from the code modules. We are then free to modify the signature of these functions without affecting the public interface [@fabian2018]. Encapsulating data may require a bit more work. Depending on the language, generic data structures may not have property access modifiers [although there does seem to be a trend in recent languages to support property access modifiers more generically, see e.g. @rust2024; @zig2024]. For instance, in JavaScript, private properties can only be declared as part of a class declaration [@mdn2024e]. However, in most languages, it is still possible to use other language features and metaprogramming to achieve data encapsulation - for example, in JavaScript, we can use the Proxy class to emulate private property access ([see Appendix](#dop-encapsulation)).
 
-Thus, encapsulation of data is certainly possible in DOP. However, a question still remains whether it is a good idea. Encapsulation is generally seen as a net positive in OOP, however, in the DOP view, data encapsulation presents trade-offs. While it may provide an additional layer of security, it also makes systems more complex and harder to debug [@fabian2018; @sharvit2022]. , And, even with fully encapsulated data, users may still come to rely on hidden features of the system [@fabian2018]. Ultimately, it is necessary to weigh the pros and cons of encapsulating data within the context of the specific use-case.
+Thus, encapsulation of data is certainly possible in DOP. However, a question still remains whether it is a good idea. While in OOP, encapsulation is generally seen as a net positive, in DOP it is thought to come with trade-offs. It does provide an additional layer of security, however, it also makes systems more complex and harder to debug [@fabian2018; @sharvit2022]. And, even with full encapsulation, users may still come to rely on hidden features of the system [@fabian2018]. Ultimately, it is necessary to weigh the pros and cons of encapsulating data within the context of the specific use-case.
 
-In JavaScript, there is also a third option which I actually found to be a good fit while writing `plotscape`, and that is a weak form of encapsulation by using symbol keys [@mdn2024f]. Symbols are builtin primitive that are guaranteed to be unique. By not exporting the symbol value, we can make a property weakly encapsulated in the sense that the user will not be able to access it without using reflection. For example:
+Some languages also have features which allow for a weak form encapsulation which is compatible with DOP. In JavaScript, this can be implemented by using symbol keys for object properties [@mdn2024f]. Symbols are builtin primitive and are guaranteed to be unique. If we assign a property to an object using a symbol as key and then not export the symbol, the user will not be able to access the property without using reflection. 
+
+I actually found this form a weak encapsulation a good fit for `plotscape`. For example, here is how I implemented the `Meta` mixin which allows use to store arbitrary metadata on objects:
 
 ```{ts}
 // Meta.ts
@@ -87,16 +99,11 @@ interface User extends Meta<{ id: number }> {
 
 const user: User = Meta.of({ name: "Adam" });
 Meta.set(user, `id`, 1337);
+console.log(user)
 console.log(Meta.get(user, `id`));
-
-interface Variable extends Array<number>, Meta<{ min: number; max: number }> {}
-
-const values: Variable = Meta.of([1, 2, 3]);
-Meta.set(values, `min`, 0);
-console.log(Meta.get(values, `min`));
 ```
 
-The user can access and set the metadata values using the `Meta.get` and `Meta.set` functions, however, they cannot directly access the metadata property since the value `METADATA` symbol is not exported. There is a way to access this symbol via the `Reflect.ownKeys` and `Object.getOwnPropertySymbols` functions, and so this is not a strong form of encapsulation [@mdn2024f]. However, arguably, if the user goes as far as to use these functions, and, assuming we are not storing any sensitive data (which is generally not the case in interactive data visualization), it may be reasonable to allow them to access these "private" values and suffer the consequences.  
+We can now use the `Meta` module internally, and, if we do not export the module or the `METADATA` symbol, then the user will not be able to access those properties easily. The user can still inspect the object and see the associated metadata, however, they cannot access it without the symbol. They may still be able to retrieve the symbol using the via the `Reflect.ownKeys` and `Object.getOwnPropertySymbols` functions, and so this is not a strong form of encapsulation [@mdn2024f]. However, arguably, if the user goes this far as to retrive the symbol, and, assuming we are not storing any sensitive data (which is not the case in `plotscape`), it may be reasonable to allow them to access these "private" properties and suffer the consequences.  
 
 ##### Inheritance
 
@@ -180,7 +187,7 @@ $$s_x: [1, 10] \to [0, 800]$$
 
 Now, there is an infinite number of functions that fit this signature. However, one particularly nice and simple candidate is the following function:
 
-::: {.definition #simple name="Simple scale function"}
+::: {.definition #linear-mapping name="Simple linear mapping"}
 $$s(d) = v_{max} + \frac{d - d_{min}}{d_{max} - d_{min}} \cdot (v_{max} - v_{min})$$
 :::
 
@@ -188,7 +195,7 @@ if we substitute the concrete values into the formula, this becomes:
 
 $$s_x(d) = 0 + \frac{d - 1}{10 - 1} \cdot (800 - 0) = [(d - 1) / 9] \cdot 800$$
 
-The function is a simple linear map, which acts on the data in the following way:
+The function acts on the data in the following way:
 
 - $s_x(1) = (1 - 1) / 9 \cdot 800 = 0$
 - $s_x(10) = (10 - 1) / 9 \cdot 800 = 800$
@@ -196,7 +203,7 @@ The function is a simple linear map, which acts on the data in the following way
 
 That is, the function maps the data value 1 to pixel 0 (left border of the plotting region), value 10 to to pixel 800 (right border of the plotting region), and any value in between 1 and 10 inside the interval 0 to 800, proportionally to where in the data range it is located.
 
-It is relatively simple to translate the formula in \@ref(def:simple) to code:
+It is relatively simple to translate the formula in \@ref(def:linear-mapping) to code:
 
 ```{ts}
 // simpleScale.ts
@@ -283,47 +290,157 @@ console.log(simpleScale2(5.5, 1, 10, 0, 800, 0.1));
 console.log(simpleScale2(10, 1, 10, 0, 800, 0.1));
 ```
 
-However, with many additional arguments, the function can quickly become unwieldy. The logic inside the function's body gets more complicated, and if we have to call the function in multiple places in our code, it may become difficult to remember the order and identity of the arguments. Further, we may want to persist or modify some of the arguments during runtime (such as when panning or zooming). Therefore, a more structured approach is needed.
+However, with many additional arguments, the function can quickly become unwieldy. The logic inside the function's body becomes more complicated, and if we have to call the function in multiple places in our code, it may become difficult to remember the order and identity of the arguments. Further, we may want to persist or modify some of the arguments during runtime (such as when panning or zooming). Therefore, a more structured approach is required.
 
-#### Solution: Two-component scale system
+#### Solution: Two-component scales
 
-The linear mapping formula can guide us in decomposing the scaling function into smaller, more manageable parts. By looking at the formula closely, we may be able to see that it can be expressed as the composition of two simpler functions:
+The linear mapping formula in \@ref(def:linear-mapping) can guide us in decomposing the scaling function into smaller, more manageable parts. Let's look at the formula again:
 
-::: {.definition name="Two-component scale system"}
+$$s(d) = v_{min} + \frac{d - d_{min}}{d_{max} - d_{min}} \cdot (v_{max} - v_{min})$$
 
-$$s(d) = \color{steelblue}{v_{min} +} \color{indianred}{\frac{d - d_{min}}{d_{max} - d_{min}}} \color{steelblue}{\cdot (v_{max} - v_{min})}$$
+If we look closely, we may be able to see that the linear mapping is composed of two parts:
 
-where we can interpret $s$ as being composed of:
+$$s(d) = \color{steelblue}{v_{min} +} \color{indianred}{\frac{\color{black}{d} - d_{min}}{d_{max} - d_{min}}} \color{steelblue}{\cdot (v_{max} - v_{min})}$$
 
-- A *normalize* function $\color{indianred}{n: D \to [0, 1], \qquad n(d) = (d - d_{min}) / (d_{max} - d_{min})}$
-- An *unnormalize* function $\color{steelblue}{u: [0, 1] \to V, \qquad u(p) = v_{min} + p \cdot (v_{max} - v_{min})}$
+That is, the linear mapping is composed of two simpler functions:
+
+- $\color{indianred}{n(d) = (d - d_{min}) / (d_{max} - d_{min})}$ maps the data value $d$ to the interval $[0, 1]$
+- $\color{steelblue}{u(p) = v_{min} + p \cdot (v_{max} - v_{min})}$, takes a value in $[0, 1]$ and maps it to $V$ 
+
+This leads us to the following definition of a scale:
+
+::: {.definition #scale name="Scale as composition of two functions"}
+
+A scale $s$ can be created by composing:
+
+- A *normalize* function $n: D \to [0, 1]$, mapping data to the interval $[0, 1]$
+- An *unnormalize* function $u: [0, 1] \to V$, mapping value in $[0, 1]$ to the visual attribute codomain
 
 Such that:
 
-$$s(d) = \color{steelblue}{u(} \color{indianred}{n(\color{black}{d})} \color{steelblue}{)}$$
+$$s(d) = u(n(d))$$
 :::
 
-Put simply, the normalize function $n$ translates data values $d \in D$ to a percentage $p \in [0, 1]$, and the unnormalize function $u$ converts the percentage to the space of the visual attribute $V$.
-
-In code, we can write this as follows:
+For the case of the linear mapping, we could rewrite this in code as follows:
 
 ```{ts}
-function normalize(d: number, dmin: number, dmax: number) {
-  return (d - dmin) / (dmax - dmin)
-}
+// LinearMap.ts
+export namespace LinearMap {
+  export function normalize(d: number, dmin: number, dmax: number) {
+    return (d - dmin) / (dmax - dmin);
+  }
 
-function unnormalize(p: number, vmin: number, vmax: number) {
- return vmin + p * (vmax - vmin) 
+  export function unnormalize(p: number, vmin: number, vmax: number) {
+    return vmin + p * (vmax - vmin);
+  }
 }
+```
 
-console.log(normalize(5.5, 1, 10))
-console.log(unnormalize(0.5, 0, 800))
-console.log(unnormalize(normalize(5.5, 1, 10), 0, 800))
+```{ts}
+import { LinearMap } from "./LinearMap.ts"
+
+console.log(LinearMap.normalize(5.5, 1, 10))
+console.log(LinearMap.unnormalize(0.5, 0, 800))
+console.log(LinearMap.unnormalize(LinearMap.normalize(5.5, 1, 10), 0, 800))
 ```
 
 This two component system allows for a clean separation of concerns. Specifically, the normalize function only needs to know how to map the data values to $[0, 1]$. It does not need to be aware of where these normalized data values will be mapped to. Conversely, the unnormalize function only needs to understand how to translate values from $[0, 1]$ to the space of the visual attribute (such as x-axis position).
 
-It is worth noting that there is nothing inherently special about the interval $[0, 1]$ as the intermediate domain: any finite subset of $\mathbb{R}$ would do. However, the interval $[0, 1]$ is convenient, both in terms of interpretation as well as for implementation, as will be discussed later.
+##### Beyond linear maps
+
+One big advantage of the two-component scale system is that the functions $n$ and $u$ do not need to be a simple linear maps anymore. For example, suppose that our data $D$ takes form of a set of discrete labels, such as $D = \{ Prague,  Vienna, Munich, Salzburg \}$. We can then replace $n$ with a surjective function $n: D \to [0, 1]$ such that:
+
+$$n(d) = \begin{cases}  
+0.2 & \text{if } d = Munich 
+\\ 0.4 & \text{if } d = Prague 
+\\ 0.6 & \text{if } d = Salzburg 
+\\ 0.8 & \text{if } d = Vienna
+\end{cases}$$
+
+In other words, $n$ will place values of $D$ at equidistant points along $[0, 1]$, ordered alphabetically. We can implement this function in code as follows: 
+
+```{ts}
+// PointMap.ts
+export namespace PointMap {
+  export function normalize(d: string, dlabels: string[]) {
+    return (dlabels.indexOf(d) + 1) / (dlabels.length + 1)
+  }
+}
+```
+
+Since the codomain of $n$ is still $[0, 1]$, we can compose it with a simple linear mapping $u$ just as easily as before: 
+
+```{ts}
+import { LinearMap } from "./LinearMap.ts"
+import { PointMap } from "./PointMap.ts"
+
+const labels = ["Munich", "Prague", "Salzburg", "Vienna"];
+
+console.log(PointMap.normalize("Munich", labels));
+console.log(LinearMap.unnormalize(PointMap.normalize("Munich", labels), 0, 800));
+console.log(LinearMap.unnormalize(PointMap.normalize("Prague", labels), 0, 800));
+```
+
+##### Inverses 
+
+Another big advantage is that if both $n$ and $u$ are invertible, then so will be $s$: we can obtain the inverse scale function by simply inverting the definition from \@ref(def:scale):
+
+::: {.definition #scale-inverse name="Scale inverse"}
+
+If a scale $s$ is composed of invertible functions $n$ and  $u$, then $s$ is invertible:
+
+$$s^{-1}(v) = n^{-1}(u^{-1}(v))$$
+
+:::
+
+This is the case for the simple linear map: the normalize and unnormalize functions are actually inverses of each other:
+
+```{ts}
+import { LinearMap } from "./LinearMap.ts"
+
+console.log(LinearMap.unnormalize(LinearMap.normalize(300, 0, 500), 0, 500))
+```
+
+However, an inverse may not always exist. This is often the case when the domain of the data $D$ is smaller than the codomain $[0, 1]$. Take, for example, the discrete point mapping. Since $D$ is finite but $[0, 1]$ has infinitely many values, there will always be some values in $[0, 1]$ that no $d \in D$ maps to. For example, if $D = \{ Munich, Prague, Salzburg, Vienna \}$ and $Munich$ maps to 0.2, $Prague$ maps to $0.4$, and $Salzburg$ maps to $0.8$, then there are no data values which map to 0.9, 0.444, or 0.123456789. Conversely, there is nowhere in the data space to map these values back to.
+
+One thing we can do however is to replace the inverse/unnormalize function with a weaker form of inverse, called retraction [@lawvere2009]. Specifically, if we have a normalize function $n: D \to [0, 1]$, then an unnormalize retraction $u^*$ will have the property that:
+
+$$u^*(n(d)) = d \qquad \forall d \in D$$
+
+However, the function doesn't necessarily work the other way around:
+
+$$n(u^*(v)) = v \qquad \not\forall v \in V$$
+
+For example, for the discrete point mapping, a retraction may map a value in $[0, 1]$ to the closest data value $d \in D$:
+
+```{ts}
+// PointMap.ts
+export namespace PointMap {
+  export function normalize(d: string, dlabels: string[]) {
+    return (dlabels.indexOf(d) + 1) / (dlabels.length + 1)
+  }
+  
+  // Retraction - finds the closest label
+  export function unnormalize(p: number, dlabels: string[]) {
+    const k = Math.round(p * (dlabels.length + 1) - 1)
+    return dlabels[k]
+  }
+}
+
+const labels = ["Munich", "Prague", "Salzburg", "Vienna"];
+
+// 0.3 is the midpoint between Munich and Prague, ignoring floating point error
+console.log((PointMap.normalize("Munich", labels) + 
+               PointMap.normalize("Prague", labels)) / 2)
+
+console.log(PointMap.unnormalize(0.2999, labels))
+console.log(PointMap.unnormalize(0.3, labels))
+
+```
+
+While inverses are unique [@lawvere2009; @fong2019], there may be many different retraction for any function. For example, with the discrete point map above, we could use the floor function instead of rounding: assign specific label to value in $[0, 1]$ if it is less than the corresponding normalized value.
+
+It is also worth noting that there is nothing inherently special about the interval $[0, 1]$ as the intermediate domain: any finite subset of $\mathbb{R}$ would do. However, the interval $[0, 1]$ is convenient, both in terms of interpretation as well as for implementation, as will be discussed later.
 
 Finally, so far I have discussed scales as *functions*: the scale function, the normalize function, and unnormalize function. Framing scales as composition of functions leads to a nice correspondence between the mathematical definition and the code implementation. However, in practice, it may be more convenient to implement the domain and codomain as *objects* or *classes*, as we will see in the following section. The important point is that, no matter what type the two components are, each is responsible for translating values from/to its domain and the interval $[0, 1]$.
 
@@ -407,6 +524,8 @@ As was hinted at in the previous section, expanses map values between their doma
 
 - A *normalize* function $\color{indianred}{n: X \to [0, 1]}$
 - An *unnormalize* function $\color{steelblue}{u: [0, 1] \to X}$
+
+foo
 
 Or, in code:
 
