@@ -212,7 +212,9 @@ $$i_{\text{product}} = i_1 + i_2 \cdot \max(j, k)$$
 
 ### Scales
 
-To visualize data, we need to be able to translate values from the space of the data to space of the graphical device (computer screen). In most data visualization systems, this is done by specialized components called scales or coordinate systems. There exists is a fair amount of literature written on the theoretical properties of scales and the mechanisms of visual perception [see e.g. @krzywinski2013; @michell1986; @wilkinson2012; @stevens1946]. However, when it comes to applying this knowledge and implementing scales in concrete data visualization systems, scant information is available, and even when it is it is often quite high-level [for some rare counter-examples, see e.g. @murrell2005; @ziemkiewicz2009]. As such, the following section is based largely on how scales have been implemented in existing data visualization codebases, such as the `ggplot2` R package [@wickham2016] or `d3-scale` module of D3 [@d3-scale2024; also used by Vega @satyanarayan2015], as well as on personal insights gained while implementing the package.
+To visualize data, we need to be able to translate values from the space of the data to the space of the graphical device (computer screen). In most data visualization systems, this is done by specialized components called scales or coordinate systems. By serving as a bridge between what we have (data) and what we see (visual attributes), scales act as a fundamental building block of all data visualization systems.
+
+There exists is a fair research on the theoretical properties of scales and how they relate to the mechanisms of visual perception [see e.g. @krzywinski2013; @michell1986; @wilkinson2012; @stevens1946]. However, when it comes to applying this knowledge and implementing scales in concrete data visualization systems, only scant information is available. And, even when such information is available, it is it is often quite abstract or high-level [for some rare counter-examples, see e.g. @murrell2005; @ziemkiewicz2009]. Therefore, I thought it could be quite instructive to go into the details of how scales are implemented in my own data visualization system. The following section is based largely on how scales have been implemented in existing data visualization codebases, such as the `ggplot2` R package [@wickham2016] or `d3-scale` module of D3 [@d3-scale2024; also used by Vega @satyanarayan2015], as well as on personal insights gained while implementing the package.
 
 #### Overview
 
@@ -271,7 +273,7 @@ console.log(simpleScale(10, 1, 10, 0, 800))
 
 #### Limits of modeling scales as simple functions {#simple-scale-limits}
 
-Simple scale functions like the one above can work fine for basic data visualization systems. However, once we begin adding more features, this design can become prohibitive. Consider, for example, what happens if we want to:
+Simple scale functions like the one above can work fine for basic data visualization systems. However, once we begin adding more features, this design becomes prohibitive. Consider, for example, what happens if we want to:
 
 - Expand the scale limits
 - Scale discrete data
@@ -290,19 +292,19 @@ col <- ifelse(1:10 %in% c(1, 10), "indianred", "grey80")
 plot(x, y, col = col, cex = 3, xaxs = "i")
 ```
 
-The plot above shows values scaled using the simple linear mapping along the x-axis, i.e. $s: [1, 10] \to [0, 800]$. Notice that, since the position of the points representing the values 1 and 10 get mapped to pixel values 0 and 800 (the left and right border of the plot), resulting in only half of each point being visible. 
+The plot above shows values scaled using the simple linear mapping along the x-axis, i.e. $s: [1, 10] \to [0, 800]$. Notice that, since the position of the points representing the values 1 and 10 gets mapped to pixel values 0 and 800 (the left and right border of the plot), only half of each point is visible. 
 
 To address this, most data visualization systems automatically expand the range of the domain by some pre-specified percentage:
 
 ```{r}
 #| out-width: 800px
 #| fig-align: 'center'
-# By default, the plot() function automatically expands the x- and y-axis
-# scale limits by approximately 4% on each end, see `xaxs` in ?graphics::par
+# By default, the plot() automatically expands the x- and y-axis
+# limits by approximately 4% on each end, see `xaxs` in ?graphics::par
 plot(x, y, col = col, cex = 3)
 ```
 
-We *could* achieve similar effect by modifying the simple linear mapping function and adding an additional argument:
+We *could* achieve similar effect by modifying the simple linear mapping and adding an additional argument:
 
 ```{ts}
 // simpleScale2.ts
@@ -320,17 +322,17 @@ export function simpleScale2(
 }
 ```
 
-Now, if we set the `exp` argument to some positive value, the scaled values get mapped closer to the center of the plotting region. For example, setting `exp` to 0.1 moves each of the data limits 5% closer to the center of the plotting region:
+Now, if we set the `exp` argument to some positive value, the scaled values get mapped closer to the center of the plotting region. For example, setting `exp` to 0.2 moves each of the data limits 10% closer to the center of the plotting region:
 
 ```{ts}
 import { simpleScale2 } from "./simpleScale2.ts"
 
-console.log(simpleScale2(1, 1, 10, 0, 800, 0.1));
-console.log(simpleScale2(5.5, 1, 10, 0, 800, 0.1));
-console.log(simpleScale2(10, 1, 10, 0, 800, 0.1));
+console.log(simpleScale2(1, 1, 10, 0, 800, 0.2));
+console.log(simpleScale2(5.5, 1, 10, 0, 800, 0.2));
+console.log(simpleScale2(10, 1, 10, 0, 800, 0.2));
 ```
 
-However, the value of this argument is applied symmetrically, and at times, we may want to apply different expansion factor to each margin. We could split the argument into two, e.g. `expLeft` and `expRight`, however, at this point, the function signature starts to become unwieldy. Also, note that the logic inside the function's body also becomes more complicated. If we have to call the function in multiple places in our code, it may become difficult to remember what the individual arguments represent. Further, we may want to persist or modify some of the arguments during runtime (such as when panning or zooming). Therefore, a more structured approach is required.
+However, notice that this argument is applied symmetrically. At times, we may want to apply a different margin to each end of the scale. We could solve this by adding two arguments instead of one, e.g. `expLeft` and `expRight`, however, at this point, the function signature starts to become unwieldy. Also, note that the logic inside the function's body becomes more complicated. If we have to call the function in multiple places, it may become difficult to remember what the each individual argument represents. Further, we may want to persist or modify some of the arguments during runtime (such as when panning or zooming). Therefore, a more structured approach is required.
 
 #### Solution: Two-component scales
 
@@ -423,7 +425,7 @@ console.log(LinearMap.unnormalize(PointMap.normalize("Prague", labels), 0, 800))
 
 ##### Inverses 
 
-Another benefit of two-component scale system is that, if both $n$ and $u$ are invertible, then so is $s$: we can obtain the inverse scale function by simply inverting the definition from \@ref(def:scale):
+Another benefit of two-component scale system is that, if both $n$ and $u$ are invertible, then so is $s$: we can easily obtain the inverse scale function by inverting the definition from \@ref(def:scale):
 
 ::: {.definition #scale-inverse name="Scale inverse"}
 
@@ -441,7 +443,7 @@ import { LinearMap } from "./LinearMap.ts"
 console.log(LinearMap.unnormalize(LinearMap.normalize(300, 0, 500), 0, 500))
 ```
 
-However, an inverse may not always exist. This is often the case when the domain of the data $D$ is smaller than the codomain $[0, 1]$. Take, for example, the discrete point mapping. Since $D$ is finite but $[0, 1]$ has infinitely many values, there will always be some values in $[0, 1]$ that no $d \in D$ maps to. For example, if $D = \{ Munich, Prague, Salzburg, Vienna \}$ and $Munich$ maps to 0.2, $Prague$ maps to $0.4$, and $Salzburg$ maps to $0.8$, then there are no cities which map to 0.9, 0.444, or 0.123456789. Conversely, if we get given those numeric values, then there is no obvious way to map them back to the cities. 
+However, the inverse may not always exist. In practice, this is often the case when the domain of the data $D$ is smaller than the codomain $[0, 1]$. Take, for example, the discrete point mapping. Since $D$ is finite but $[0, 1]$ has infinitely many values, there will always be some values in $[0, 1]$ that no $d \in D$ maps to. For example, if $D = \{ Munich, Prague, Salzburg, Vienna \}$ and $Munich$ maps to 0.2, $Prague$ maps to $0.4$, and $Salzburg$ maps to $0.8$, then there are no cities which map to 0.9, 0.444, or 0.123456789. Conversely, if we get given those numeric values, then there is no obvious way to map them back to the cities. 
 
 One thing we can do is to replace the inverse/unnormalize function with a weaker form of inverse, called retraction [@lawvere2009]. Specifically, if we have a normalize function $n: D \to [0, 1]$, then an unnormalize retraction $u^*$ will have the property that:
 
@@ -449,7 +451,7 @@ $$u^*(n(d)) = d \qquad \forall d \in D$$
 
 However, the converse doesn't necessarily hold:
 
-$$n(u^*(v)) = v \qquad \not\forall v \in V$$
+$$\neg \big[ n(u^*(v)) = v \qquad \forall v \in V \big]$$
 
 For example, for the discrete point mapping, a retraction may map a value in $[0, 1]$ to the closest data value $d \in D$:
 
@@ -460,7 +462,7 @@ export namespace PointMap {
     return (dlabels.indexOf(d) + 1) / (dlabels.length + 1)
   }
   
-  // Retraction - finds the closest label
+  // Retraction - find the closest label
   export function unnormalize(p: number, dlabels: string[]) {
     const k = Math.round(p * (dlabels.length + 1) - 1)
     return dlabels[k]
@@ -469,22 +471,29 @@ export namespace PointMap {
 
 const labels = ["Munich", "Prague", "Salzburg", "Vienna"];
 
-// 0.3 is the midpoint between Munich and Prague, ignoring floating point error
-console.log((PointMap.normalize("Munich", labels) + 
-               PointMap.normalize("Prague", labels)) / 2)
+const [prague, munich] = ["Prague", "Munich"].map(x => PointMap.normalize(x, labels))
+const midpoint = (prague + munich) / 2
 
-console.log(PointMap.unnormalize(0.2999, labels))
-console.log(PointMap.unnormalize(0.3, labels))
+// Helper function for stripping away floating point error 
+const strip = (x: number) => parseFloat(x.toPrecision(12))
+
+console.log(`Midpoint between Munich and Prague: `, strip(midpoint))
+console.log(`unnormalize(0.2999): `, PointMap.unnormalize(0.2999, labels))
+console.log(`unnormalize(3): `, PointMap.unnormalize(0.3, labels))
 
 ```
 
-While inverses are always unique [@lawvere2009; @fong2019], we may be able to come up with many different retractions for any given function. For example, with the discrete point map above, we could use the floor function instead of rounding and assign label to a value in $[0, 1]$ if it is less than the value of the normalized label (but more than the preceeding labels).
+While inverses are always unique [@lawvere2009; @fong2019], we may be able to come up with many different retractions for any given function. For example, with the discrete point map above, we could use the floor function instead of rounding and assign label to a value in $[0, 1]$ if it is less than the value of the normalized label (but more than the preceding labels).
+
+The non-uniqueness of retractions presents a bit of a dilemma. How do we decide which retraction to use? And, if a certain retractive implementation of `unnormalize` returns a value, how do we decide if it is the "correct one"? 
+
+However, in practice, this is not much of a problem. While developing the package, I found that I've only ever had to use the `unnormalize` function with continuous data (`LinearMap`), and so the inverse was always well-defined. This is probably also why packages like `ggplot2` and `D3` can get by without this functionality. However, I still find it helpful to include the `unnormalize` function as a first class citizen (instead of it being relegated to some special case), both in terms of the mental model and also for debugging.        
 
 ##### Some other remarks about the two-component scale system
 
-It is worth noting that there is nothing inherently special about the interval $[0, 1]$ as the intermediate domain: any finite subset of $\mathbb{R}$ would do. However, the interval $[0, 1]$ is convenient, both in terms of interpretation as well as for implementation, as will be discussed later.
+It is worth noting that there is nothing inherently special about the interval $[0, 1]$ as the intermediate domain: any finite subset of $\mathbb{R}$ would do. However, the interval $[0, 1]$ is convenient, both in terms of interpretation as well as for implementation, as we will see later.
 
-Finally, so far I have discussed scales as *functions*: the scale function, the normalize function, and unnormalize function. Framing scales as composition of functions leads to a nice correspondence between the mathematical definition and the code. However, in practice, it may be more convenient to implement the domain and codomain as *objects* or *classes*, as we will see in the following section. The important point is that, no matter how the two components are represented, each is responsible for translating values from/to its domain and the interval $[0, 1]$.
+Finally, so far I have discussed scales as *functions*: the scale function, the normalize function, and unnormalize function. Framing scales as composition of functions leads to a nice correspondence between the mathematical definition and the code. However, in practice, it may be more convenient to implement the domain and codomain as *objects* or *classes*, as we will also see in the following section. The important point is that, no matter how the two components are represented, each is responsible for translating values from/to its domain and the interval $[0, 1]$.
 
 #### Past implementations of scales
 
@@ -521,65 +530,71 @@ map = function(self, x, limits = self$get_limits()) {
 
 #### Proposed model of scales
 
-One feature that the models of scales that `D3` and `ggplot2` rely on is that they both treat the data domain and the visual attribute codomain as different types. In `D3`, fundamentally different functions are used to translate from $D \to [0, 1]$ and from $[0, 1] \to V$, and, in `ggplot2`, `limits` is a simple vector/tuple whereas `palette` is a function. While this approach may have some benefits, offering greater flexibility, it also does add additional complexity. Specifically, we have to use one mental model when considering the domain and another when considering the codomain. Further, this model of scales only works in one direction: mapping values $D \to V$. For going the the other way, i.e. mapping $V \to D$, other specialized functions have to be used. 
+One feature that the models of scales that `D3` and `ggplot2` rely on is that they both treat the data domain and the visual attribute codomain as different types. In `D3`, fundamentally different functions are used to translate from $D \to [0, 1]$ and from $[0, 1] \to V$, and in `ggplot2`, `limits` is a simple vector/tuple whereas `palette` is a function. While these approaches may have some benefits, such as perhaps offering greater flexibility, they also add additional complexity. Specifically, we have to use two different mental models: one when considering the domain and another when considering the codomain. Further, these models of scales only work in one direction: mapping values $D \to V$. For going the the other way, i.e. mapping $V \to D$, other specialized functions have to be used. 
 
-I propose a model of scales which implements both the domain and the codomain as objects of the same generic type: `Expanse<T>`. Fundamentally, this makes it so that the only difference between the data domain and the visual attribute codomain is which property of the scale they are assigned to. 
+I propose a model of scales which implements both the domain and the codomain as components of the same type: `Expanse`. Fundamentally, this makes it so that the only difference between the data domain and the visual attribute codomain is which property of the scale they are assigned to. 
 
 Here is a (slightly) simplified version of the `Scale` interface:  
 
 ```{ts}
 #| eval: false
-interface Scale<D, V> {
-  domain: Expanse<D>
-  codomain: Expanse<V>
+interface Scale<D extends Expanse, V extends Expanse> {
+  domain: D
+  codomain: V
 }
 ```
 
-`D` represents the type of the data domain, and `V` represents the type of the visual attribute codomain.
+`D` and `V` represent the data domain and the visual attribute codomain, respectively.
 
-The main nuts and bolts of the `Scale` interface are the following two functions:
+The two fundamental functions connected to `Scale` are:
 
 ```{ts}
-function pushforward<D, D>(scale: Scale<D, V>, value: D): V
-function pullback<D, V>(scale: Scale<D, V>, value: V): D
+function pushforward<D, V>(scale: Scale<D, V>, value: ValueOf<D>): ValueOf<V>
+function pullback<D, V>(scale: Scale<D, V>, value: ValueOf<V>): ValueOf<D>
 ```
 
-The `pushforward` function *pushes values forward* through the scale, first through its domain and then its codomain, and the `pullback` function *pulls values back*, first through its codomain and then through its domain. For clarity, here is their simplified implementation:
+The `pushforward` function *pushes values forward* through the scale, first through its domain and then its codomain, and the `pullback` function *pulls values back*, first through its codomain and then through its domain. The `ValueOf` type helper just identifies the type associated with the expanse's data (e.g. `number` for a continuous `Expanse`, `string` for a discrete `Expanse`, etc...). I've omitted the generic type parameter constraint (`<D extends Expanse, V extends Expanse>`) for brevity.
+
+Here is a simplified implementation of the two functions:
 
 ```{ts}
 #| eval: false
 namespace Scale {
-  function pushforward<D, V>(scale: Scale<D, V>, value: D): V {
+  function pushforward<D, V>(scale: Scale<D, V>, value: ValueOf<D>): ValueOf<V> {
     const { domain, codomain } = scale;
     return Expanse.unnormalize(codomain, Expanse.normalize(domain, value));
   }
 
-  function pullback<D, V>(scale: Scale<D, V>, value: V): D {
+  function pullback<D, V>(scale: Scale<D, V>, value: ValueOf<V>): ValueOf<D> {
     const { domain, codomain } = scale;
     return Expanse.unnormalize(domain, Expanse.normalize(codomain, value))
   }
 }
 ```
 
-Most of the work is done using the two `Expanse` objects: we use `domain` to translates $D \to [0, 1]$ and codomain to translate $[0, 1] \to V$. `Scale` only serves as plumbing, connecting these two expanses together. 
+We can see that most of the work is done by the two `Expanse` components: we use `domain` to translates $D \to [0, 1]$ and codomain to translate $[0, 1] \to V$. `Scale` only serves as plumbing, connecting the two together. 
 
-I argue that this model provides several benefits. First of all, it makes the code easier to reason about. Since both the `domain` and `codomain` are of the same type, we only need to keep one mental model in mind. Second, if `domain` and `codomain` provide inverse functions (unnormalize), we get the inverse scale function $V \to D$ for free. This is the `pullback` function. Finally, there are also some functionalities we can implement on `Scale` directly, and thus simplify the interface for `Expanse`. These will be the subject of the next few sections, before we dive into `Expanse` properly. 
+I argue that this model provides several benefits. First of all, it makes the code easier to reason about. Since both the `domain` and `codomain` are of the same type, we only need to keep a single mental model of `Expanse` in mind. Second, if `domain` and `codomain` provide inverse functions (`unnormalize`), we get the inverse scale function $V \to D$ for free (this is just the `pullback` function). Finally, there is also some functionalities we can implement on `Scale` directly, and thus we can keep the interface for `Expanse` relatively simple. These common functionalities of `Scale` will be the subject of the next few sections, before we dive into `Expanse` proper. 
 
 ##### Zero and one
 
 Recall that in Section \@ref(simple-scale-limits), we ran into the problem of expanding axis limits. We solved the problem by adding an additional argument to the `simpleScale` function. However, is expanding the axis limits something that we would want to do for continuous scales only?
 
-Clearly, we may want to add margins to axes which do not represent continuous data too, such the the x-axis of a typical barplot. So, we do not want this functionality to be tied to the scale's `domain` (which represents the data). We could add it to the scale's `codomain`, however, then we would be breaking with our intention of representing both domain and codomain with the same generic `Expanse` type. So what can we do?
+Clearly, we may want to add margins to axes which do not represent continuous data too, such the the x-axis of a barplot. So, we do not want this functionality to be tied to the scale's `domain` (which represents the data). We could add it to the scale's `codomain`, however, then we would be breaking with our intention of representing both domain and codomain with the same generic `Expanse` type. So what can we do?
 
-We can put the functionality for expanding axis limits directly onto `Scale`. Specifically, notice that any values passing through scale will be first converted to the interval $[0, 1]$ and then back to the space of either the domain or codomain. If we re-normalize these normalized values, we can achieve the result of expanding or shrinking axis limits. As an analogy, if `Scale` represents the plumbing between the `domain` and `codomain`, we can imagine squeezing or stretching the pipe to allow more or less water to flow through.
+We can put the functionality for expanding axis limits directly onto `Scale`. Specifically, notice that any values passing through scale will be first converted to the interval $[0, 1]$ and then back to the space of either the domain or codomain:
 
-To do this, we can add two additional parameters to `Scale`, `zero` and `one`:
+$$D \to [0, 1] \to V$$
+
+If we re-normalize these normalized values in $[0, 1]$, we can achieve the result of expanding or shrinking axis limits. As an analogy, if `Scale` represents the plumbing between the `domain` and `codomain`, we can imagine squeezing or stretching the pipe to allow more or less water to flow through.
+
+To actually do this, we can add two additional parameters to `Scale`, `zero` and `one`:
 
 ```{ts}
 #| eval: false
-interface Scale<D, V> {
-  domain: Expanse<D>
-  codomain: Expanse<V>
+interface Scale<D extends Expanse, V extends Expanse> {
+  domain: D
+  codomain: V
   props: { // A dictionary of properties
     zero: number
     one: number
@@ -595,18 +610,145 @@ function pushforward<D, V>(scale: Scale<D, V>, value: D): V {
   const { domain, codomain, props } = scale;
   const { zero, one } = props
   let normalized = Expanse.normalize(domain, value)
-  normalize = zero + normalized * (one - zero) // Re-normalize
+  normalized = zero + normalized * (one - zero) // Re-normalize
   return Expanse.unnormalize(codomain, normalized)
 }
 ```
 
-The function's body is longer than before, however, the only real change is in the line with the comment. We push the normalized value up by the `zero` property and scale it by `(zero - one)` range. In other words, we can interpret `zero` as the proportion of the codomain range that the minimum data value will get mapped to, and `one` as the proportion of the codomain range that the maximum data value will get mapped to.
+The function's body is bit longer than before, however, the only real change is in the line with the comment. We push the normalized value up by the `zero` property and scale it by `(zero - one)` range. In other words, we can interpret `zero` as the proportion of the codomain range that the minimum data value will get mapped to, and `one` as the proportion of the codomain range that the maximum data value will get mapped to.
 
-We can use `zero` and `one` to implement margins. For example, by setting `zero` to 0.1 and `one` to 0.9, we can implement 10% margins on either side of the scale. That is, we get behavior similar to the `exp` argument from Section \@ref(simple-scale-limits), however, it will apply generically no matter what subtype of `Expanse` `domain` and `codomain` are, and we can manipulate each separately (for example, we could specify just a single margin).
+Now we can use `zero` and `one` to implement margins. For example, by setting `zero` to 0.1 and `one` to 0.9, we can implement 10% margins on either side of the scale. That is, we get the same behavior that we did with the `exp` argument from Section \@ref(simple-scale-limits). However, we will get this behavior generically, no matter what subtype of `Expanse` `domain` and `codomain` are. Also, we now have the freedom to manipulate each parameter separately (for example, we could specify just the "left" margin by setting `zero` to 0.1 and `one` to 1).
 
-However, we can do so much more with the `zero` and `one` properties. Firstly, even though the name is a bit suggestive, `zero` and `one` can both take values *less* than zero and *more* than one. For example, by setting `zero` to -0.5 and `one` to 1.5, then the minimum and maximum data values will get mapped 50% below and 50% above the limits of the codomain range, respectively. Further, the 25 and 75 data percentiles will get mapped to the minimum and maximum of the codomain range. If we apply this to the x- or y-axes, we've just implemented *zooming*^[Technically, there's still a bit of ceremony involved if we don't start from `zero = 0` and `one = 1`, e.g. if our plot already has margins or if we're zooming multiple levels deep. This took me some time to nail down, however, it's just algebra, the highschool kind not the abstract.].
+However, there is much more we can do with the `zero` and `one` than just margins. Firstly, despite the names being a bit suggestive, `zero` and `one` can both take values *less* than zero and *more* than one. For example, suppose we increment both `zero` and `one` by the same amount, e.g. we set `zero` to 0.1 and `one` to 1.1. Then, the minimum data value will get mapped to the 10% of the codomain range, and the maximum data value will get mapped to 110% of the codomain range (which may lie outside the space representable by the graphic device). If the codomain represents the x-axis position, then we have shifted all of the geometric objects 10% to the right. We have effectively implemented *panning*:
 
+```{ts}
+#| eval: false
+function move(scale: Scale, amount: number) {
+  scale.props.zero += amount;
+  scale.props.one += amount;
+}
+```
 
+That's it. We have implemented a functionality for panning which will work no matter if `domain` is transforms numbers, strings, or some more complicated data.
+
+We can also stretch or shrink `zero` and `one` in opposite directions. For example, by setting `zero` to -0.5 and `one` to 1.5, then the minimum and maximum data values will get mapped 50% below and 50% above the limits of the codomain range, respectively (hence, they may both become unrepresentable). Further, the 25 and 75 data percentiles will get mapped to the minimum and maximum of the codomain range. If we apply this to the x- or y-axes, we've just implemented *zooming*
+
+To be perfectly honest, there's a bit more ceremony involved with zooming. Specifically, if we don't start from `zero = 0` and `one = 1` (e.g. if our plot already has margins or if we're zooming in multiple levels deep), then we need to re-normalize within these values. This took me a bit of time to nail down, however, it's just (highschool) algebra:
+
+```{ts}
+function rangeInverse(min: number, max: number) {
+  return 1 / (max - min);
+}
+
+function invertRange(min: number, max: number) {
+  const ri = rangeInverse(min, max);
+  return [-min * ri, ri - min * ri];
+}
+
+namespace Scale {
+  export function expand(
+    scale: { props: { zero: number; one: number } },
+    zero: number,
+    one: number
+  ) {
+    const { zero: currentZero, one: currentOne } = scale.props;
+    const currentRange = currentOne - currentZero;
+    
+    // Re-normalize within current values
+    zero = (zero - currentZero) / currentRange;
+    one = (one - currentZero) / currentRange;
+
+    // Invert
+    [zero, one] = invertRange(zero, one);
+
+    scale.props.zero = zero;
+    scale.props.one = one;
+  }
+}
+
+const scale1 = { props: { zero: 0, one: 1 } }; // Mock of default scale
+const scale2 = { props: { zero: 0.1, one: 0.9 } }; // Mock of scale with margins
+
+// Zoom into the middle 50% of either scale
+Scale.expand(scale1, 0.25, 0.75);
+Scale.expand(scale2, 0.25, 0.75);
+
+console.log(`Zoomed in scale with no margins`, scale1.props);
+console.log(`Zoomed in scale with 10% margins`, scale2.props);
+```
+
+As you can see, zooming into the middle 50% of a scale that already includes margins has a smaller effect on `zero` and `one`, since the margins have effectively expanded the space we're zooming into (i.e., a scale with margins is already *zoomed out*, in a way).
+
+##### Direction
+
+In the same way we can think about expanding/shrinking axis limits in a way that is not coupled to any particular data representation or visual attribute, it may also be helpful to make direction a property of `Scale` rather than either of the `Expanse` components. 
+
+We *could* do this by manipulating the `zero` and `one` properties. For example, by setting `zero` to 1 and `one` to 0, we could effectively reverse the direction of the scale. However, in practice, this would complicate our logic and make it harder for someone to interpret the `Scale` properties. It is a better idea to add an explicit `direction` parameter instead:
+
+```{ts}
+#| eval: false
+interface Scale<D extends Expanse, V extends Expanse> {
+  domain: D
+  codomain: V
+  props: {
+    zero: number
+    one: number
+    direction: 1 | -1 // Extra parameter
+  }
+}
+```
+
+Like with `zero` and `one`, `direction` acts on the normalized values in $[0, 1]$. This means that we need to apply it in any transformations that use these values. For example, here's an updated version of the `move` function:
+
+```{ts}
+export function move(scale: Scale, amount: number) {
+  let { direction, zero, one } = scale.props;
+  zero += direction * amount;
+  one += direction * amount;
+}
+```
+
+Likewise, the `pushforward`, `pullback`, and `expand` functions also need to take `direction` into account. Either way, with this functionality in place, it becomes trivial to flip or reverse a scale:
+
+```{ts}
+export function flip(scale: Scale) {
+  scale.props.direction -= 1;
+}
+```
+
+##### Multipliers
+
+Finally, it may also be helpful to have the ability to shrink/expand the normalized values by some constant without having to modify properties of either the `domain` or `codomain`. Again, this could be done by using the `zero` and `one` properties, however, it's better to define explicit properties instead. Specifically, we can add *two* additional parameters:
+
+```{ts}
+#| eval: false
+interface Scale<D extends Expanse, V extends Expanse> {
+  domain: D
+  codomain: V
+  props: {
+    zero: number
+    one: number
+    direction: 1 | -1
+    scale: number // Extra parameter
+    mult: number // And another one
+  }
+}
+```
+
+The reason why we want two multiplier parameters instead of just a single one is that there are different reasons for why we may want to multiply values by some constant. Firstly, we may want to multiply the values by some constant value that remains static throughout the lifetime of the program/visualization. That is the job of the `scale` parameter. Conversely, we may want to also dynamically manipulate the constant by which the values are multiplied. That is what `mult` is for. Having two multipliers makes it easier to reason about the scale's behavior, as well as to apply changes such as restoring to defaults.
+
+A good example of this is the barplot. In a typical barplot, all bars have the same width, and this bar width is some fraction of the width of the entire plotting region. Clearly, this fraction needs to depend on the number of bars in the plot, such that, with $k$ categories/bars, the bar width will be proportional to $k$. However, we may also want to be able to make the bars wider/narrower interactively, e.g. by pressing the `+\-` keys. Thus, the width of the bars is proportional to $c \cdot k$ where $k$ is the static part of the constant (`scale`) and $c$ is the dynamic part of the constant (`mult`).
+
+We apply the constant to the normalized value each time we push/pull a value through a scale:
+
+```{ts}
+#| eval: false
+// This will be included in the body of pushforward(); see below for full example
+let normalized = Expanse.normalize(domain, value)
+normalized = normalized * scale * mult
+```
+
+Finally, we could hypothetically extend this idea of multipliers further and have an entire array of different multipliers, that would be reduced into a single constant each time we pushed a value through a scale. However, I found that having two, `scale` and `mult`, was enough to solve all of my scaling problems. Additionally, having an array of multipliers might make the scaling functions slightly less performant, if we have to reduce the array each time we `pushforward`/`pullback`, or it might make keeping track of the state of the `Scale` object slightly more complicated, if we roll these multipliers into one constant each time we update the array. We also lose the semantic distinction that we have with `scale` and `mult`. This might be a perfectly fine trade-off if our scales require more multipliers, however, I did not find this to be the case in my implementation.     
 
 ### Expanses
 
@@ -632,7 +774,6 @@ Also, while before we have discussed domains as subsets of $\mathbb{R}$, we can 
 How `normalize` and `unnormalize` are implemented will depend largely on the subtype of `Expanse`, as well as on the desired behavior. For example, as will be discussed later, in `plotscaper`, the normalize and unnormalize methods implemented for `ExpanseContinuous` (subtype of `Expanse<number>`) work largely the same way as in section [SECTION]. However, while `ExpansePoint` and `ExpanseBand` are both subtypes of `Expanse<string>`, they behave differently - `ExpansePoint` maps strings (factor levels) to equidistant points along $[0, 1]$, whereas `ExpanseBand` maps the strings into the middle of "buckets" along $[0, 1]$.   
 
 However, there is also some behavior that we may want to apply the same way across the different expanse subtypes. For example, it seems reasonable that the user should be able to zoom, pan, or reverse axes, regardless of whether a plot shows discrete or continuous data. As such, there may be some properties and functions common to the `Expanse` type. I will discuss these first.
-
 
 #### Zero and one
 
