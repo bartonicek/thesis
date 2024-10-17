@@ -8,31 +8,30 @@ editor_options:
 
 #### JSON {#JSON}
 
-Short for "JavaScript Object Notation", JSON is a flexible data format based on the JavaScript object type [@ecma2024; see also e.g. @bourhis2017; @pezoa2016]. On the highest level, a JSON is an dictionary (also known as object, struct, hash-table, or list in other languages) containing key-value pairs, where the keys are strings and the values can be any of the following types: string, number, boolean, null (an undefined/missing value), an array (which can contain any other valid JSON values), or another JSON object. 
+Short for "JavaScript Object Notation", JSON is a flexible data format based on the JavaScript object type [@ecma2024; see also e.g. @bourhis2017; @pezoa2016]. On the top level, a JSON is a key-value store (also known as dictionary, object, struct, hash-table, or list in other languages) with string keys and values of any of the following types: string, number, boolean, null (an undefined/missing value), an array (which can contain any other valid JSON values), or another JSON object. 
 
-For example, the following snippet is a valid JSON:
+For example, the following is a valid JSON:
 
-```
+```{ts}
+#| eval: false
 {
   "name": "Adam",
   "age": 30,
-  "friends": [{ "name": "Sam", "age": 30 }, { "name": "Franta", "age": 26}],
+  "friends": [{ "name": "Sam", "age": 30 }, { "name": "Franta", "age": 26 }],
   "can drive": true,
   "problems": null
 }
 ```
 
-JSON is more limited than a true JavaScript object type (as implemented in the browser and various JavaScript runtimes). JavaScript objects are very flexible and can have non-string keys (numbers or symbols) and contain a wider variety of values, most notably functions/methods (and, of course, both the keys and values can be changed during runtime). In contrast, JSON is a "simple" static data format designed for declaring and transporting data. Specifically, JSON is often used as the medium for sending data to and from Web APIs [@bourhis2017; @pezoa2016] as well as for configuration documents.
+The JSON specification is more restrictive compared to the full JavaScript object type (as implemented in the browser and various JavaScript runtimes). JavaScript runtime objects are very flexible - they can contain non-string keys (numbers or symbols) and non-primitive values such as functions/methods. In contrast, JSON is a fairly "simple" format designed for declaring and transporting data. For this reason, JSON is often used as the medium for sending data to and from Web APIs [@bourhis2017; @pezoa2016] as well as for configuration documents.
 
-The main advantages of JSON are that it is a simple, flexible, and human-readable format. Also, due to its recursive nature (JSON arrays and objects can contain other JSON arrays and objects), it can be used to express a wide variety of hierarchical data which would not be efficient to express in "flat" data formats such as CSV. However, this flexibility also comes with some disadvantages. The recursive nature of the format makes parsing JSON files inherently more time-intensive, and, since the values in a JSON can be of any type (as long as it is a valid JSON type), it is often necessary to validate JSON data inputs [@pezoa2016].      
+The main advantages of JSON are that it is a simple, flexible, and human-readable format. Also, due to its recursive nature (JSON arrays and objects can contain other JSON arrays and objects), it can be used to express a wide variety of hierarchical data structures which would not be efficient to express in "flat" data formats such as CSV. However, this flexibility also comes with some disadvantages. The recursive nature of the format makes parsing JSON files inherently more time- and compute-intensive, and, since the values in a JSON can be of any type (as long as it is a valid JSON type), it is often necessary to validate JSON inputs [@pezoa2016].      
 
 #### SVG
 
-Short for "Scalable Vector Graphics", SVG is a markup language for defining vector graphics [@mdn2024b]. Based on XML, SVG graphics can be specified via a hierarchy of elements enclosed by tags, which may be given attributes.
+Short for "Scalable Vector Graphics", SVG is a flexible markup language for defining vector graphics [@mdn2024b]. Based on XML, SVG graphics are specified as a hierarchy of elements enclosed by tags. These tags may be given attributes, further modifying their behavior.
 
 For example, the following is a valid SVG:
-
-
 
 ```
 <svg width="400" height="400">
@@ -49,8 +48,34 @@ And this is its output, as interpreted by a Web browser:
   <rect x="50" y="50" width="100" height="100" fill="firebrick"></rect>
 </svg>
 
-Compared to typical raster formats such as PNG or JPEG, in which the image is defined as an array of pixels or bytes, SVG has the advantage that its lossless: images can be arbitrarily scaled or transformed without loss of quality. SVG images can also be easily manipulated and animated by modifying the elements' attributes (for example, to move the red rectangle in the image above to the right, we could simply increment its "x" attribute). However, the main disadvantage of SVG is that the file size scales with the number of objects in the image. As such, SVG images with many small objects (such as points on a scatterplot) can become prohibitively large and slow to render. 
+Compared to typical raster formats such as PNG or JPEG, in which the image is defined as an array of bytes (pixels), SVG's primary advantage is its lossless quality: images can be arbitrarily scaled or transformed without affecting the image's quality. SVG images can also be easily manipulated and animated by modifying the elements' attributes (for example, to move the red rectangle in the image above to the right, we could simply increment its "x" attribute). However, the main disadvantage of SVG is that the file size scales with the number of objects in the image. As such, SVG images with many small objects (such as points on a scatterplot) can become prohibitively large and slow to render. 
 
+#### Array of Structs (AoS) vs. Struct of Arrays (SoA) {#SoA}
 
+Two-dimensional, tabular data is ubiquitous in data analytic workflows. However, since computer memory is fundamentally one-dimensional. Thus, when representing two-dimensional tables, we need to pick one of the dimensions as "primary" (and the other as "secondary"). This leads to two fundamentally different data representations.  
 
+First, we can represent our data as an array of rows, also known as Array of Structs (AoS). In this representation, the rows of the data set are represented as heterogeneous key-value stores (structs/maps/dictionaries) and the entire data set is simply an array of these rows. For example, suppose we are storing a data set of users, such that, for each user, we record their name, age, and gender. Then the AoS way of representing this data (in TypeScript) would be:
 
+```{ts}
+interface User {
+  name: string;
+  age: number;
+  gender: string;
+}
+
+type Users = User[];
+```
+
+Second, we can represent our data as a dictionary of columns, known also as the Struct of Arrays (SoA). In this representation, columns are stored as homogeneous arrays in a single key-value store, and rows are represented implicitly. For example, the way to represent the same data in the SoA format would be:  
+
+```{ts}
+interface Users {
+  name: string[];
+  age: number[];
+  gender: string[];
+}
+```
+
+The way how we choose to represent the data has an impact on various performance characteristics, primarily compute time and memory. The mechanisms underlying these differences are quite general and apply to both in-memory and on-disk data; hence why the topic is also studied in database design [see e.g. @abadi2013]. The SoA layout has (typically) smaller memory footprint and better performance in tight loops that operate on individual columns, thanks to cache locality [@abadi2013; @acton2014; @kelley2023]. The AoS layout has arguably better developer ergonomics and can perform better when retrieving individual records [hence why it is more common in traditional Online Transaction Processing databases, @abadi2013].    
+
+Generally, for data analytic workflows where we need to summarize values across many rows of data, the column-based SoA representation has the better performance characteristics, and hence why it is typically preferred in data analytic libraries, for example in base R's `data.frame` class or in the `pandas` `DataFrame` class [@r2024; @pandas2024]. However, this is not always the case: for example, in the popular JavaScript data visualization/transformation library D3, data sets are represented as arrays of (JSON) rows [@bostock2022]. 
