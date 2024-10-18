@@ -1,4 +1,4 @@
-# Design
+# High-level design
 
 This section contains a description of some of the high-level design decisions that went into making the system.
 

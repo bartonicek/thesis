@@ -6,23 +6,9 @@ editor_options:
 
 # Introduction
 
-## What even is interactive data visualization? {#what-is-interactive-visualization}
+## Brief history of interactive data visualization
 
-> If it looks like a duck, swims like a duck, and quacks like a duck, then it probably is a duck. 
->
-> [...] The irony is that while the phrase is often cited as proof of abductive reasoning, it is not proof, as the mechanical duck is still not a living duck
->
-> [Duck Test](https://en.wikipedia.org/wiki/Duck_test) entry, [@wikipedia2022] 
-
-What is interactive data visualization? Surprisingly, despite the widespread popularity of interactive visualizations, if you ask researchers, you may get many different and at times even incongruent answers [see e.g. @dimara2019; @elmqvist2011; @pike2009]. Within the literature, the terms "interactive" and "interaction" are used in many different ways and across a wide variety of contexts, with an explicit definition being rarely given. 
-
-The lack of a clear consensus about what "interactive data visualization" is makes the task of discussing existing work challenging. On one hand, ignoring the issue might leave the reader confused about the relevant concepts. On the other, a comprehensive account of the terminology surrounding interactive data visualization would almost surely become too dense; entire research papers have been dedicated to this topic [see e.g. @dimara2019; @elmqvist2011]. Therefore, in the following section, I have tried to strike a balance by providing a concise yet informative-enough account of how interactivity has been conceptualized within the existing literature. Ultimately, the goal is to provide the reader with context and define what the terms "interactive" and "interaction" should mean for the scope of the present thesis.
-
-The following section is laid out as follows. I start with a brief overview of the history of the field, of data visualization more generally and interactive data visualization more specifically. Then I discuss the different ways the term "interactive data visualization" has been used throughout the literature, and finally I arrive at a working definition of interactivity for the scope of the present thesis.
-
-### Brief history of interactive data visualization
-
-#### Early interactive data visualization: By statisticians for statisticians
+### Early interactive data visualization: By statisticians for statisticians
 
 Static data visualization has a rich and intricate history, and a full treatment would be beyond the scope of the current thesis [but see e.g. @dix1998; @friendly2006; @friendly2021; @young2011]. Suffice it to say, prior to the second half of the 20th century, data visualization was largely seen as, at best, secondary to "serious" statistical analysis, although there were indeed some prominent counter-examples [@friendly2006; @young2011]. However, beginning with the end of 1950's, a series of developments lead to a great increase in prominence of data visualization. Firstly, at the theoretical level, the work of Tukey [-@tukey1962; -@tukey1977] and Bertin [-@bertin1967] established data visualization as valuable discipline in its own right. Secondly, at the practical level, the development of personal computers [see e.g. @abbate1999] and high-level programming languages, most notably FORTRAN in 1954 [@backus1978], lead to the proliferation of powerful and widely available tools that made the process of rendering production-grade figures near-effortless, in comparison to the earlier hand-drawn techniques. Combined, these developments lead to a surge in the use and dissemination of data visualization.  
 
@@ -32,9 +18,9 @@ Later systems saw even greater flexibility and also integration into general sta
 
 What all of these interactive data visualization systems had in common is that they were designed by statisticians and with interesting, often ambitious interactive features in mind. High-level analytic features such as linked selection/brushing, rotation and projection, and interactive manipulation of model parameters made frequent appearances. While being a clear strength, the more complex nature of the systems may have also slowed their adoption, as they often demanded an expert user to take advantage of most fully.
 
-#### Interactive data visualization and the web: Interactivity for everyone
+### Interactive data visualization and the Web: World-wide interactivity
 
-The tail end of the millennium would mark the arrival of a whole new class of technologies that would have a significant impact on interactive data visualization, just as it had on almost every other field of human endeavor. The arrival of the internet in the mid 1990's, and the development of JavaScript in 1995 as a high-level programming language for the Web [for a thorough description of the history, see e.g. @wirfs-brock2020], saw the rise of interactive applications that could be accessed by anyone, from anywhere. This was aided by the dissemination of robust and standardized Web browsers. Soon, interactive data visualization became just one of many interactive technologies highly sought after within the fledgling Web ecosystem. 
+The tail end of the millennium would mark the arrival of a whole new class of technologies that had a significant impact on interactive data visualization, just as it had on almost every other field of human endeavor. The arrival of the internet in the mid 1990's, and the development of JavaScript in 1995 as a high-level programming language for the Web [for a thorough description of the history, see e.g. @wirfs-brock2020], saw the rise of interactive applications that could be accessed by anyone, from anywhere. This was aided by the dissemination of robust and standardized Web browsers. Soon, interactive data visualization became just one of many interactive technologies highly sought after within the fledgling Web ecosystem. 
 
 Early interactive data visualization systems for the Web, such as Prefuse [@heer2005] and Flare [developed around 2008, @flare2020] tended to relied on external plugins (Java and Adobe Flash Player, respectively). However, as browsers got faster at interpreting JavaScript, thanks to advances in compiler technologies, specifically Just In Time (JIT) compilation, it became possible to write entire data visualization libraries in JavaScript. In the late 2000's and early 2010's, several true Web-native interactive data visualization systems emerged. 
 
@@ -49,6 +35,20 @@ While these contemporary Web-based interactive data visualization systems offer 
 What all of the packages listed above have in common is that most featured interaction is typically surface-level and takes place within a single plot, and the few examples that feature interesting types of interactivity (linked or parametric) often require a complicated setup. The main reason for this is most likely that all of these packages have been designed to be very general-purpose and flexible, and the price to pay for this flexibility is that complex types of interactivity require complex code. Another reason is that these packages have been built for static visualizations first, and interactivity second. Further, since all of these packages are native to JavaScript, the expectation may be that if more interesting types of interactivity are desired, the interactive "back-end" may be written separately, outside of the package. Finally, the typical use case for these packages seems to be presentation, not EDA.  
 
 Be it as it may, there is a fairly high barrier for entry for creating interesting types of interactivity (i.e. linked or parametric) with these packages. This may not be an issue for large organizations which can afford to hire computer science specialists to work on complex interactive dashboards and visualizations full-time. However, to the average applied scientist or data scientist, the upfront cost of producing a useful interactive data visualization may be too high, especially if one is only interested in exploratory data analysis for one's own benefit. This may be the reason why interactive visualizations are nowadays mainly used for data communication, not data exploration [@batch2017]. On a higher level, the current options for interactive data visualization may reflect a broader cultural differences between Computer Science and Statistics, where Computer Science may be more oriented towards business and large-team collaboration, whereas Statistics may be more focused on applied research and individual/small-team workflow.    
+
+## What even is interactive data visualization? {#what-is-interactive-visualization}
+
+> If it looks like a duck, swims like a duck, and quacks like a duck, then it probably is a duck. 
+>
+> [...] The irony is that while the phrase is often cited as proof of abductive reasoning, it is not proof, as the mechanical duck is still not a living duck
+>
+> [Duck Test](https://en.wikipedia.org/wiki/Duck_test) entry, [@wikipedia2022] 
+
+What is interactive data visualization? Surprisingly, despite the widespread popularity of interactive visualizations, if you ask researchers, you may get many different and at times even incongruent answers [see e.g. @dimara2019; @elmqvist2011; @pike2009]. Within the literature, the terms "interactive" and "interaction" are used in many different ways and across a wide variety of contexts, with an explicit definition being rarely given. 
+
+The lack of a clear consensus about what "interactive data visualization" is makes the task of discussing existing work challenging. On one hand, ignoring the issue might leave the reader confused about the relevant concepts. On the other, a comprehensive account of the terminology surrounding interactive data visualization would almost surely become too dense; entire research papers have been dedicated to this topic [see e.g. @dimara2019; @elmqvist2011]. Therefore, in the following section, I have tried to strike a balance by providing a concise yet informative-enough account of how interactivity has been conceptualized within the existing literature. Ultimately, the goal is to provide the reader with context and define what the terms "interactive" and "interaction" should mean for the scope of the present thesis.
+
+The following section is laid out as follows. I start with a brief overview of the history of the field, of data visualization more generally and interactive data visualization more specifically. Then I discuss the different ways the term "interactive data visualization" has been used throughout the literature, and finally I arrive at a working definition of interactivity for the scope of the present thesis.
 
 ### Interactive vs. interacting with
 

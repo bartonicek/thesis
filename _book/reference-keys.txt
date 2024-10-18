@@ -22,7 +22,7 @@ introduction
 what-is-interactive-visualization
 brief-history-of-interactive-data-visualization
 early-interactive-data-visualization-by-statisticians-for-statisticians
-interactive-data-visualization-and-the-web-interactivity-for-everyone
+interactive-data-visualization-and-the-web-world-wide-interactivity
 interactive-vs.-interacting-with
 what-counts-as-interactive-enough
 complexity-of-interactive-features
@@ -58,8 +58,10 @@ data-oriented-programming
 encapsulation-1
 inheritance-1
 system-description
-indexable
-getter
+components
+Indexable
+Getter
+reactive
 dataframe
 factors
 product-factors
@@ -92,7 +94,5 @@ appendix
 dop-encapsulation
 references
 fig:unnamed-chunk-38
-components
-Indexable
-Getter
-reactive
+two-component-scales
+high-level-design

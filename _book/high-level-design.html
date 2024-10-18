@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>3 High-level design | Fluent Graphics</title>
+  <meta name="description" content="3 High-level design | Fluent Graphics" />
+  <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="3 High-level design | Fluent Graphics" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="3 High-level design | Fluent Graphics" />
+  
+  
+  
+
+<meta name="author" content="Adam Bartonicek" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="introduction.html"/>
+<link rel="next" href="system-description.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Abstract</a></li>
+<li class="chapter" data-level="2" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>2</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="introduction.html"><a href="introduction.html#brief-history-of-interactive-data-visualization"><i class="fa fa-check"></i><b>2.1</b> Brief history of interactive data visualization</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="introduction.html"><a href="introduction.html#early-interactive-data-visualization-by-statisticians-for-statisticians"><i class="fa fa-check"></i><b>2.1.1</b> Early interactive data visualization: By statisticians for statisticians</a></li>
+<li class="chapter" data-level="2.1.2" data-path="introduction.html"><a href="introduction.html#interactive-data-visualization-and-the-web-world-wide-interactivity"><i class="fa fa-check"></i><b>2.1.2</b> Interactive data visualization and the Web: World-wide interactivity</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="introduction.html"><a href="introduction.html#what-is-interactive-visualization"><i class="fa fa-check"></i><b>2.2</b> What even is interactive data visualization?</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="introduction.html"><a href="introduction.html#interactive-vs.-interacting-with"><i class="fa fa-check"></i><b>2.2.1</b> Interactive vs. interacting with</a></li>
+<li class="chapter" data-level="2.2.2" data-path="introduction.html"><a href="introduction.html#what-counts-as-interactive-enough"><i class="fa fa-check"></i><b>2.2.2</b> What counts as “interactive enough”?</a></li>
+<li class="chapter" data-level="2.2.3" data-path="introduction.html"><a href="introduction.html#complexity-of-interactive-features"><i class="fa fa-check"></i><b>2.2.3</b> Complexity of interactive features</a></li>
+<li class="chapter" data-level="2.2.4" data-path="introduction.html"><a href="introduction.html#working-definition"><i class="fa fa-check"></i><b>2.2.4</b> Working definition</a></li>
+<li class="chapter" data-level="2.2.5" data-path="introduction.html"><a href="introduction.html#list-of-common-interactive-features"><i class="fa fa-check"></i><b>2.2.5</b> List of common interactive features</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="introduction.html"><a href="introduction.html#mathematical-theory"><i class="fa fa-check"></i><b>2.3</b> Mathematical theory</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="introduction.html"><a href="introduction.html#past-application-of-category-theory-to-data-visualization"><i class="fa fa-check"></i><b>2.3.1</b> Past Application of Category Theory to Data Visualization</a></li>
+<li class="chapter" data-level="2.3.2" data-path="introduction.html"><a href="introduction.html#relations"><i class="fa fa-check"></i><b>2.3.2</b> Relations</a></li>
+<li class="chapter" data-level="2.3.3" data-path="introduction.html"><a href="introduction.html#functions"><i class="fa fa-check"></i><b>2.3.3</b> Functions</a></li>
+<li class="chapter" data-level="2.3.4" data-path="introduction.html"><a href="introduction.html#partitions"><i class="fa fa-check"></i><b>2.3.4</b> Partitions</a></li>
+<li class="chapter" data-level="2.3.5" data-path="introduction.html"><a href="introduction.html#preorders"><i class="fa fa-check"></i><b>2.3.5</b> Preorders</a></li>
+<li class="chapter" data-level="2.3.6" data-path="introduction.html"><a href="introduction.html#monoids"><i class="fa fa-check"></i><b>2.3.6</b> Monoids</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="introduction.html"><a href="introduction.html#components-of-a-data-visualization-system"><i class="fa fa-check"></i><b>2.4</b> Components of a data visualization system</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="introduction.html"><a href="introduction.html#scales"><i class="fa fa-check"></i><b>2.4.1</b> Scales</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="high-level-design.html"><a href="high-level-design.html"><i class="fa fa-check"></i><b>3</b> High-level design</a>
+<ul>
+<li class="chapter" data-level="3.0.1" data-path="high-level-design.html"><a href="high-level-design.html#user-profile"><i class="fa fa-check"></i><b>3.0.1</b> User profile</a></li>
+<li class="chapter" data-level="3.1" data-path="high-level-design.html"><a href="high-level-design.html#programming-paradigm"><i class="fa fa-check"></i><b>3.1</b> Programming paradigm</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="high-level-design.html"><a href="high-level-design.html#imperative-programming"><i class="fa fa-check"></i><b>3.1.1</b> Imperative programming</a></li>
+<li class="chapter" data-level="3.1.2" data-path="high-level-design.html"><a href="high-level-design.html#functional-programming"><i class="fa fa-check"></i><b>3.1.2</b> Functional programming</a></li>
+<li class="chapter" data-level="3.1.3" data-path="high-level-design.html"><a href="high-level-design.html#object-oriented-programming"><i class="fa fa-check"></i><b>3.1.3</b> Object oriented programming</a></li>
+<li class="chapter" data-level="3.1.4" data-path="high-level-design.html"><a href="high-level-design.html#data-oriented-programming"><i class="fa fa-check"></i><b>3.1.4</b> Data oriented programming</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="system-description.html"><a href="system-description.html"><i class="fa fa-check"></i><b>4</b> System description</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="system-description.html"><a href="system-description.html#components"><i class="fa fa-check"></i><b>4.1</b> Components</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="system-description.html"><a href="system-description.html#Indexable"><i class="fa fa-check"></i><b>4.1.1</b> Indexable</a></li>
+<li class="chapter" data-level="4.1.2" data-path="system-description.html"><a href="system-description.html#Getter"><i class="fa fa-check"></i><b>4.1.2</b> Getter</a></li>
+<li class="chapter" data-level="4.1.3" data-path="system-description.html"><a href="system-description.html#reactive"><i class="fa fa-check"></i><b>4.1.3</b> Reactive</a></li>
+<li class="chapter" data-level="4.1.4" data-path="system-description.html"><a href="system-description.html#dataframe"><i class="fa fa-check"></i><b>4.1.4</b> Dataframe</a></li>
+<li class="chapter" data-level="4.1.5" data-path="system-description.html"><a href="system-description.html#factors"><i class="fa fa-check"></i><b>4.1.5</b> Factors</a></li>
+<li class="chapter" data-level="4.1.6" data-path="system-description.html"><a href="system-description.html#reducers"><i class="fa fa-check"></i><b>4.1.6</b> Reducers</a></li>
+<li class="chapter" data-level="4.1.7" data-path="system-description.html"><a href="system-description.html#scales-1"><i class="fa fa-check"></i><b>4.1.7</b> Scales</a></li>
+<li class="chapter" data-level="4.1.8" data-path="system-description.html"><a href="system-description.html#expanses"><i class="fa fa-check"></i><b>4.1.8</b> Expanses</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>5</b> Glossary</a></li>
+<li class="chapter" data-level="6" data-path="appendix.html"><a href="appendix.html"><i class="fa fa-check"></i><b>6</b> Appendix</a></li>
+<li class="chapter" data-level="7" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>7</b> References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Fluent Graphics</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="high-level-design" class="section level1 hasAnchor" number="3">
+<h1><span class="header-section-number">3</span> High-level design<a href="high-level-design.html#high-level-design" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>This section contains a description of some of the high-level design decisions that went into making the system.</p>
+<blockquote>
+<p>The example code chunks in this section are written in both R and TypeScript. While I would prefer to use R for all code examples, due to its tight integration with RMarkdown, some of the concepts are much easier to explain in a language with static typing like TypeScript (particularly, type annotations and interfaces). However, since some examples can also be greatly enhanced by graphical output, I also wanted to use R.</p>
+<p>So, where graphical output is important, the code examples are written in R, and, where the code itself is the main focus, they are written in TypeScript. I hope this bilingualism is not too confusing. I have tried to use only the core features of each language to make the examples clear.</p>
+</blockquote>
+<div id="user-profile" class="section level3 hasAnchor" number="3.0.1">
+<h3><span class="header-section-number">3.0.1</span> User profile<a href="high-level-design.html#user-profile" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The profile of average user can also differ significantly, across systems and research areas. For example, some areas of interactive data visualization and HCI make no assumptions about the user’s level of experience or motivation, whereas others assume a highly motivated “expert” user with a sufficient level of domain knowledge <span class="citation">(<a href="#ref-dimara2019">Dimara and Perin 2019</a>)</span>.</p>
+<p>While designing my system, I have attempted to</p>
+</div>
+<div id="programming-paradigm" class="section level2 hasAnchor" number="3.1">
+<h2><span class="header-section-number">3.1</span> Programming paradigm<a href="high-level-design.html#programming-paradigm" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<blockquote>
+<p>“apex predator of grug is complexity</p>
+<p>complexity bad</p>
+<p>say again:</p>
+<p>complexity very bad</p>
+<p>you say now:</p>
+<p>complexity very, very bad</p>
+<p>given choice between complexity or one on one against t-rex, grug take t-rex: at least grug see t-rex”</p>
+<p>The Grug Brained Developer, <span class="citation">Gross (<a href="#ref-gross2024">2024</a>)</span></p>
+</blockquote>
+<p>It is often the case that the same task problem can be tackled in many different ways. Programs differ in how they decompose their core problem, how they represent and manipulate data, how explicit they are in handling low-level details versus relying on abstractions, and so on. These details matter since they can affect the program’s performance, reliability, readability, and maintainability. A wrong choice in one or more of them can result in poorly performing, unmaintainable software.</p>
+<p>However, there is a root concern that many of the programming details above share: complexity <span class="citation">(<a href="#ref-booch2008">Booch et al. 2008</a>)</span>. Any given problem comes with some level inherent complexity, and, absent of careful thought, more will be piled on by the developer <span class="citation">(<a href="#ref-moseley2006">Moseley and Marks 2006</a>)</span>. Without constant effort, software grows out of scope and becomes unmanageable. Preventing this, and coming up with a set of high-level principles for safeguarding against complexity is the job of programming paradigms <span class="citation">(<a href="#ref-chambers2014">Chambers 2014</a>; <a href="#ref-jordan2015">Jordan et al. 2015</a>; <a href="#ref-moseley2006">Moseley and Marks 2006</a>; <a href="#ref-van2009">Van Roy et al. 2009</a>)</span>.</p>
+<p>All programming paradigms offer techniques for decomposing code into smaller, more manageable parts, and delineating boundaries between those parts. However, the way they attempt this can differ considerably.</p>
+<p>Most programming languages are geared towards one specific programming paradigm, and typically support only one or two to a reasonable capacity <span class="citation">(<a href="#ref-van2009">Van Roy et al. 2009</a>)</span>. Fortunately, this is not the case for either JavaScript/TypeScript or R, since both are multiparadigm programming languages <span class="citation">(<a href="#ref-chambers2014">Chambers 2014</a>; <a href="#ref-mdn2024c">MDN 2024d</a>)</span>. Both languages support object-oriented programming, via prototype inheritance in the case of JavaScript <span class="citation">(<a href="#ref-mdn2024d">MDN 2024a</a>)</span> and the S3, S4, and R6 systems in the case of R <span class="citation">(<a href="#ref-wickham2019">Wickham 2019</a>)</span>, and treat functions as first class citizens, allowing for functional programming style <span class="citation">(<a href="#ref-chambers2014">Chambers 2014</a>; <a href="#ref-mdn2024e">MDN 2024c</a>)</span>. Further, as C based languages, both also support classical imperative/procedural programming style, and also provide some utilities for reflective metaprogramming.</p>
+<p>The flexibility of JavaScript and R had allowed me to experiment with different programming paradigms while developing my interactive data visualization package. I have rewritten the JavaScript side of the package multiple times from scratch, testing out several different programming paradigms and styles in the process. Below, I provide a rough sketch of the paradigms I have sampled, as well as an account of my experience of using each paradigm and some thoughts on its suitability for designing interactive data visualization systems.</p>
+<div id="imperative-programming" class="section level3 hasAnchor" number="3.1.1">
+<h3><span class="header-section-number">3.1.1</span> Imperative programming<a href="high-level-design.html#imperative-programming" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Imperative programming is one of the oldest and most classical programming paradigms. It conceptualizes the program as a sequence of discrete steps that manipulate some mutable state <span class="citation">(<a href="#ref-frame2014">Frame and Coffey 2014</a>)</span>. In this way, it closely resembles the way computer programs get executed on the underlying hardware <span class="citation">(barring some advanced techniques such as branch prediction and speculative execution, the CPU executes instructions sequentially, see e.g. <a href="#ref-parihar2015">Parihar 2015</a>; <a href="#ref-raghavan1998">Raghavan, Shachnai, and Yaniv 1998</a>)</span>.</p>
+</div>
+<div id="functional-programming" class="section level3 hasAnchor" number="3.1.2">
+<h3><span class="header-section-number">3.1.2</span> Functional programming<a href="high-level-design.html#functional-programming" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+</div>
+<div id="object-oriented-programming" class="section level3 hasAnchor" number="3.1.3">
+<h3><span class="header-section-number">3.1.3</span> Object oriented programming<a href="high-level-design.html#object-oriented-programming" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Object oriented programming (OOP) is currently one of the most popular programming paradigms. There are many different interpretation and implementations of OOP, so almost anything one can say about OOP will be wrong in some language. Nevertheless, there are some key ideas which are generally true across most OOP-oriented languages.</p>
+<p>The core idea of OOP is that programs should be modeled as networks of objects: units which bundle related data and code together, as properties (members) and methods, respectively <span class="citation">(<a href="#ref-booch2008">Booch et al. 2008</a>)</span>. Objects are self-contained, and own a hidden, private state; they expose only a limited public interface and, to communicate, they send each other messages <span class="citation">(<a href="#ref-meyer1997">Meyer 1997</a>)</span>. In this way, they behave similarly to networks of biological cells <span class="citation">(this was the inspiration for Alan Kay, one of the creators of Smalltalk, who also coined the term “object oriented,” <a href="#ref-kay1996">Kay 1996</a>)</span>. Each object is an instance of a class, a sort of a blueprint which provides the object with both a type as well as implementation of its methods. Classes can form hierarchies, where child classes (subclasses) inherit properties and methods from parent classes (superclasses).</p>
+<p>Here’s a typical example one might see in a text-book on OOP (animals, and especially mammals are popular in introductory OOP texts). We start with a base class (superclass) <code>Animal</code>:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb1-1"><a href="high-level-design.html#cb1-1" tabindex="-1"></a><span class="co">// Animal.ts</span></span>
+<span id="cb1-2"><a href="high-level-design.html#cb1-2" tabindex="-1"></a><span class="kw">type</span> Food <span class="op">=</span> { nutritionalValue<span class="op">:</span> <span class="dt">number</span> }<span class="op">;</span></span>
+<span id="cb1-3"><a href="high-level-design.html#cb1-3" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="high-level-design.html#cb1-4" tabindex="-1"></a><span class="co">// Abstract classes can declare certain methods without implementing them.</span></span>
+<span id="cb1-5"><a href="high-level-design.html#cb1-5" tabindex="-1"></a><span class="co">// Any subclasses must then implement these methods.</span></span>
+<span id="cb1-6"><a href="high-level-design.html#cb1-6" tabindex="-1"></a><span class="im">export</span> <span class="kw">abstract</span> <span class="kw">class</span> Animal {</span>
+<span id="cb1-7"><a href="high-level-design.html#cb1-7" tabindex="-1"></a>  x <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> <span class="co">// Class properties with default values</span></span>
+<span id="cb1-8"><a href="high-level-design.html#cb1-8" tabindex="-1"></a>  y <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1-9"><a href="high-level-design.html#cb1-9" tabindex="-1"></a>  nutrition <span class="op">=</span> <span class="dv">100</span><span class="op">;</span></span>
+<span id="cb1-10"><a href="high-level-design.html#cb1-10" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="high-level-design.html#cb1-11" tabindex="-1"></a>  <span class="fu">move</span>(dx<span class="op">:</span> <span class="dt">number</span><span class="op">,</span> dy<span class="op">:</span> <span class="dt">number</span>) { <span class="co">// A basic method</span></span>
+<span id="cb1-12"><a href="high-level-design.html#cb1-12" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">x</span> <span class="op">+=</span> dx<span class="op">;</span></span>
+<span id="cb1-13"><a href="high-level-design.html#cb1-13" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">y</span> <span class="op">+=</span> dy<span class="op">;</span></span>
+<span id="cb1-14"><a href="high-level-design.html#cb1-14" tabindex="-1"></a>  }</span>
+<span id="cb1-15"><a href="high-level-design.html#cb1-15" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="high-level-design.html#cb1-16" tabindex="-1"></a>  <span class="fu">eat</span>(food<span class="op">:</span> Food) {</span>
+<span id="cb1-17"><a href="high-level-design.html#cb1-17" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">nutrition</span> <span class="op">+=</span> food<span class="op">.</span><span class="at">nutritionalValue</span><span class="op">;</span></span>
+<span id="cb1-18"><a href="high-level-design.html#cb1-18" tabindex="-1"></a>  }</span>
+<span id="cb1-19"><a href="high-level-design.html#cb1-19" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="high-level-design.html#cb1-20" tabindex="-1"></a>  <span class="co">// Abstract method: subclass must implement this (every Animal has a sound)</span></span>
+<span id="cb1-21"><a href="high-level-design.html#cb1-21" tabindex="-1"></a>  <span class="kw">abstract</span> <span class="fu">getSound</span>()<span class="op">:</span> <span class="dt">string</span><span class="op">;</span></span>
+<span id="cb1-22"><a href="high-level-design.html#cb1-22" tabindex="-1"></a>}</span></code></pre></div>
+<p>Next, we subclass the <code>Animal</code> class and create a <code>Dog</code> class:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb2-1"><a href="high-level-design.html#cb2-1" tabindex="-1"></a><span class="im">import</span> { Animal } <span class="im">from</span> <span class="st">&quot;./Animal.ts&quot;</span></span>
+<span id="cb2-2"><a href="high-level-design.html#cb2-2" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="high-level-design.html#cb2-3" tabindex="-1"></a><span class="kw">type</span> Meat <span class="op">=</span> { type<span class="op">:</span> <span class="vs">`meat`</span><span class="op">;</span> nutritionalValue<span class="op">:</span> <span class="dt">number</span> }<span class="op">;</span></span>
+<span id="cb2-4"><a href="high-level-design.html#cb2-4" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="high-level-design.html#cb2-5" tabindex="-1"></a><span class="kw">class</span> Dog <span class="kw">extends</span> Animal {</span>
+<span id="cb2-6"><a href="high-level-design.html#cb2-6" tabindex="-1"></a>  <span class="fu">eat</span>(food<span class="op">:</span> Meat) { <span class="co">// Overwrite superclass method such that it only accepts Meat</span></span>
+<span id="cb2-7"><a href="high-level-design.html#cb2-7" tabindex="-1"></a>    <span class="kw">super</span><span class="op">.</span><span class="fu">eat</span>(food)<span class="op">;</span> <span class="co">// Call superclass method</span></span>
+<span id="cb2-8"><a href="high-level-design.html#cb2-8" tabindex="-1"></a>  }</span>
+<span id="cb2-9"><a href="high-level-design.html#cb2-9" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="high-level-design.html#cb2-10" tabindex="-1"></a>  <span class="fu">getSound</span>() { <span class="co">// Implement the abstract method</span></span>
+<span id="cb2-11"><a href="high-level-design.html#cb2-11" tabindex="-1"></a>    <span class="cf">return</span> <span class="vs">`Woof!`</span><span class="op">;</span></span>
+<span id="cb2-12"><a href="high-level-design.html#cb2-12" tabindex="-1"></a>  }</span>
+<span id="cb2-13"><a href="high-level-design.html#cb2-13" tabindex="-1"></a>}</span>
+<span id="cb2-14"><a href="high-level-design.html#cb2-14" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="high-level-design.html#cb2-15" tabindex="-1"></a><span class="kw">const</span> dog <span class="op">=</span> <span class="kw">new</span> <span class="fu">Dog</span>()<span class="op">;</span></span>
+<span id="cb2-16"><a href="high-level-design.html#cb2-16" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="high-level-design.html#cb2-17" tabindex="-1"></a>dog<span class="op">.</span><span class="fu">move</span>(<span class="op">-</span><span class="dv">10</span><span class="op">,</span> <span class="dv">10</span>)<span class="op">;</span> <span class="co">// Dog inherits all of the methods and properties of Animal</span></span>
+<span id="cb2-18"><a href="high-level-design.html#cb2-18" tabindex="-1"></a>dog<span class="op">.</span><span class="fu">eat</span>({ type<span class="op">:</span> <span class="vs">`meat`</span><span class="op">,</span> nutritionalValue<span class="op">:</span> <span class="dv">10</span> })<span class="op">;</span> <span class="co">// This is fine</span></span>
+<span id="cb2-19"><a href="high-level-design.html#cb2-19" tabindex="-1"></a><span class="co">// dog.eat({ nutritionalValue: 10 }); This would result in a TS compiler error</span></span>
+<span id="cb2-20"><a href="high-level-design.html#cb2-20" tabindex="-1"></a></span>
+<span id="cb2-21"><a href="high-level-design.html#cb2-21" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(dog<span class="op">.</span><span class="at">x</span><span class="op">,</span> dog<span class="op">.</span><span class="at">y</span><span class="op">,</span> dog<span class="op">.</span><span class="at">nutrition</span>)</span>
+<span id="cb2-22"><a href="high-level-design.html#cb2-22" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(dog<span class="op">.</span><span class="fu">getSound</span>())<span class="op">;</span></span></code></pre></div>
+<pre><code>## -10 10 110
+## Woof!</code></pre>
+<p>This is only a very basic example of how OOP can be done in practice. A more detailed explanation is outside of the scope of the present thesis. However, it is important to discuss some of the big ideas of OOP.</p>
+<div id="encapsulation" class="section level4 hasAnchor" number="3.1.3.1">
+<h4><span class="header-section-number">3.1.3.1</span> Encapsulation<a href="high-level-design.html#encapsulation" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Encapsulation or information hiding refers to the idea that some (if not most) properties of a class should not be accessible from the outside. Encapsulation is generally seen as one of the most important concepts in OOP, since it allows for continuity: by encapsulating data/functionality, the developer of an OOP system may modify these private properties without affecting the public interface <span class="citation">(<a href="#ref-meyer1997">Meyer 1997</a>)</span>. Note that the encapsulation does not mean that the hidden data or implementation has to be entirely <em>invisible</em> to the user, merely that the user should not be able to access the hidden data and rely on it in their application <span class="citation">(<a href="#ref-meyer1997">Meyer 1997</a>)</span>.</p>
+</div>
+<div id="open-closed-principle" class="section level4 hasAnchor" number="3.1.3.2">
+<h4><span class="header-section-number">3.1.3.2</span> Open-closed principle<a href="high-level-design.html#open-closed-principle" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Modules should be open to extension but close to modification.</p>
+</div>
+<div id="polymorphism" class="section level4 hasAnchor" number="3.1.3.3">
+<h4><span class="header-section-number">3.1.3.3</span> Polymorphism<a href="high-level-design.html#polymorphism" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>In other words, only the behavior of the object should matter <span class="citation">(<a href="#ref-black2013">Black 2013</a>)</span>.</p>
+</div>
+<div id="inheritance" class="section level4 hasAnchor" number="3.1.3.4">
+<h4><span class="header-section-number">3.1.3.4</span> Inheritance<a href="high-level-design.html#inheritance" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>“programming without inheritance is distinctly not object-oriented; that would merely be programming with abstract data types” <span class="citation">(<a href="#ref-booch2008">Booch et al. 2008</a>)</span>.</p>
+</div>
+<div id="domain-driven-design" class="section level4 hasAnchor" number="3.1.3.5">
+<h4><span class="header-section-number">3.1.3.5</span> Domain-driven design<a href="high-level-design.html#domain-driven-design" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>One concept that is not unique to OOP but has a strong tradition in it is domain-drive design: the idea that classes and object should model things in the business domain or the real world <span class="citation">(<a href="#ref-hadar2013">Hadar 2013</a>; <a href="#ref-meyer1997">Meyer 1997</a>)</span>. The stated benefit of this strategy is that this makes it easier to discover objects/classes and their relationships, by exploiting the mind’s capacity for thinking about the natural world <span class="citation">(<a href="#ref-booch2008">Booch et al. 2008</a>; <a href="#ref-hadar2013">Hadar 2013</a>; <a href="#ref-meyer1997">Meyer 1997</a>)</span>.</p>
+</div>
+<div id="criticism-of-oop" class="section level4 hasAnchor" number="3.1.3.6">
+<h4><span class="header-section-number">3.1.3.6</span> Criticism of OOP<a href="high-level-design.html#criticism-of-oop" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Small interfaces <span class="citation">(<a href="#ref-meyer1997">Meyer 1997</a>)</span>. In practice, the small interfaces idea is often not closely adhered to in OOP. It is common for class methods to receive pointers to other objects as arguments, effectively sending all of the information contained in the argument objects and defeating the principle of small interfaces <span class="citation">(<a href="#ref-will2016">Will 2016</a>)</span>.</p>
+</div>
+</div>
+<div id="data-oriented-programming" class="section level3 hasAnchor" number="3.1.4">
+<h3><span class="header-section-number">3.1.4</span> Data oriented programming<a href="high-level-design.html#data-oriented-programming" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<blockquote>
+<p>My second remark is that our intellectual powers are rather geared to master static relations and that our powers to visualize processes evolving in time are relatively poorly developed. For that reason we should do (as wise programmers aware of our limitations) our utmost to shorten the conceptual gap between the static program and the dynamic process, to make the correspondence between the program (spread out in text space) and the process (spread out in time) as trivial as possible.</p>
+<p>Edgar Dijkstra -<span class="citation">Dijkstra (<a href="#ref-dijkstra1968">1968</a>)</span></p>
+</blockquote>
+<p>Data oriented programming (DOP) and data oriented design (DOD) are two newer programming paradigms that have been slowly gaining a foothold in the recent years. While the terms are sometimes used interchangeably, there are some important differences: DOP focuses more on high-level principles such as structuring and organizing code <span class="citation">(<a href="#ref-sharvit2022">Sharvit 2022</a>; <a href="#ref-parlog2024">Nicolai Parlog 2024</a>)</span>, whereas DOD, having originated in the world of video-game development, tends to be more concerned with low-level optimization details such as memory layout and CPU access patterns <span class="citation">(<a href="#ref-acton2014">Acton 2014</a>; <a href="#ref-bayliss2022">Bayliss 2022</a>; <a href="#ref-kelley2023">Kelley 2023</a>; <a href="#ref-nikolov2018">Nikolov 2018</a>; <a href="#ref-fabian2018">Fabian 2018</a>)</span>. However, there is a considerable overlap the conclusions and high-level guidelines that the two programming paradigms provide. For this reason, I will discuss both DOP and DOD here, within the same section, and refer to both as “DOP” unless explicitly stated otherwise.</p>
+<p>The core idea of DOP is a data-first perspective. In the DOP view, programs should be viewed as transformations of data, nothing less, nothing more <span class="citation">(<a href="#ref-acton2014">Acton 2014</a>; <a href="#ref-fabian2018">Fabian 2018</a>; <a href="#ref-sharvit2022">Sharvit 2022</a>)</span>. As a result, every program is composed of two sets of components: stateful data and stateless functions that act on and transform this data <span class="citation">(<a href="#ref-fabian2018">Fabian 2018</a>)</span>. In other words, data and code should always be kept separate, such that both can be reasoned about in isolation. Code should live inside modules composed of pure (stateless) functions <span class="citation">(<a href="#ref-fabian2018">Fabian 2018</a>; <a href="#ref-sharvit2022">Sharvit 2022</a>)</span>. This strict segregation brings several benefits. The data becomes easy to pass around and serialize, and, since the code is composed of pure functions, it becomes easy to test and mock <span class="citation">(<a href="#ref-sharvit2022">Sharvit 2022</a>)</span>.</p>
+<p>Program is split between what <em>is</em> and what <em>does</em>.</p>
+<p>Data should be represented by plain data structures. These can formed by combining generic components, such as primitives, arrays, and maps/dictionaries/structs <span class="citation">(for example <a href="glossary.html#JSON">JSON</a>; <a href="#ref-sharvit2022">Sharvit 2022</a>)</span>. It may even be desirable that the data adheres to the relational model <span class="citation">(<a href="#ref-codd1970">Codd 1970</a>; <a href="#ref-moseley2006">Moseley and Marks 2006</a>; <a href="#ref-fabian2018">Fabian 2018</a>)</span>. This does not mean that the data has to actually <em>live</em> inside a relational database, just that its shape should be close to that of normalized relational database tables, with columns represented by generic arrays <span class="citation">(<a href="#ref-fabian2018">Fabian 2018</a>)</span>.</p>
+<p>Data represents just itself - data - and there is no obligation for it to model the real world or any kind of abstract entity. As a result, and we are free to represent data in any way we want, and this can in fact bring significant performance benefits <span class="citation">(<a href="#ref-acton2014">Acton 2014</a>; <a href="#ref-fabian2018">Fabian 2018</a>)</span>. A typical example of this in DOD is the Structure of Arrays (SoA; aka “parallel arrays” or “columnar format”) data structure <span class="citation">(<a href="#ref-acton2014">Acton 2014</a>, <a href="#ref-acton2019">2019</a>; <a href="#ref-kelley2023">Kelley 2023</a>)</span>, in which a list of records is stored as a single object, with the records’ properties being stored as homogeneous arrays (this is also how R’s <code>data.frame</code> class is implemented). This type of representation reduces memory footprint and can improve cache line utilization, resulting in faster runtime <span class="citation">(<a href="#ref-acton2014">Acton 2014</a>; <a href="#ref-fabian2018">Fabian 2018</a>; <a href="#ref-kelley2023">Kelley 2023</a>)</span>. Another example of idiosyncratic data representation that can lead to improved performance are Entity Component Systems in videogames <span class="citation">(<a href="#ref-harkonen2019">Härkönen 2019</a>)</span>. Either way, even if performance is not the nubmer one concern, another benefit data representing itself is that it allows us introduce abstraction only gradually, since we can get far by relying on generic data manipulation functions <span class="citation">(<a href="#ref-fabian2018">Fabian 2018</a>; <a href="#ref-sharvit2022">Sharvit 2022</a>)</span>.</p>
+<p>It may seem that many of the DOP principles directly contradict many popular OOP principles, specifically encapsulation, inheritance, polymorphism, and domain driven design. However, many of these principles can either be reconciled with DOP, or DOP in fact provides better alternatives. Below, I go over these principles and provide code examples that further illustrate how DOP works.</p>
+<div id="encapsulation-1" class="section level5 hasAnchor" number="3.1.4.0.1">
+<h5><span class="header-section-number">3.1.4.0.1</span> Encapsulation<a href="high-level-design.html#encapsulation-1" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>When it comes to encapsulation in DOP, we have to differentiate between encapsulating data and encapsulating code. Encapsulating code is easy in DOP - we can simply not export certain functions from the code modules. We are then free to modify the signature of these functions without affecting the public interface <span class="citation">(<a href="#ref-fabian2018">Fabian 2018</a>)</span>. Encapsulating data may require a bit more work. Depending on the language, generic data structures may not have property access modifiers <span class="citation">(although there does seem to be a trend in recent languages to support property access modifiers more generically, see e.g. <a href="#ref-rust2024">Rust Foundation 2024</a>; <a href="#ref-zig2024">Zig Software Foundation 2024</a>)</span>. For instance, in JavaScript, private properties can only be declared as part of a class declaration <span class="citation">(<a href="#ref-mdn2024e">MDN 2024c</a>)</span>. However, in most languages, it is still possible to use other language features and metaprogramming to achieve data encapsulation - for example, in JavaScript, we can use the Proxy class to emulate private property access (<a href="appendix.html#dop-encapsulation">see Appendix</a>).</p>
+<p>Thus, encapsulation of data is certainly possible in DOP. However, a question still remains whether it is a good idea. While in OOP, encapsulation is generally seen as a net positive, in DOP it is thought to come with trade-offs. It does provide an additional layer of security, however, it also makes systems more complex and harder to debug <span class="citation">(<a href="#ref-fabian2018">Fabian 2018</a>; <a href="#ref-sharvit2022">Sharvit 2022</a>)</span>. And, even with full encapsulation, users may still come to rely on hidden features of the system <span class="citation">(<a href="#ref-fabian2018">Fabian 2018</a>)</span>. Ultimately, it is necessary to weigh the pros and cons of encapsulating data within the context of the specific use-case.</p>
+<p>Some languages also have features which allow for a weak form encapsulation which is compatible with DOP. In JavaScript, this can be implemented by using symbol keys for object properties <span class="citation">(<a href="#ref-mdn2024f">MDN 2024b</a>)</span>. Symbols are builtin primitive in JavaScript and are guaranteed to be unique. If we assign a property to an object using an unexported symbol as the key, the user will still be able to inspect the object and see the property, however, they will not be able to access it without using reflection. This is actually in line with the data hiding concept as laid out by <span class="citation">Meyer (<a href="#ref-meyer1997">1997</a>)</span>.</p>
+<p>I actually found this form a weak encapsulation a good fit for <code>plotscape</code>. For example, here is how I implemented the <code>Meta</code> mixin which allows use to store arbitrary metadata on objects:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb4-1"><a href="high-level-design.html#cb4-1" tabindex="-1"></a><span class="co">// Meta.ts</span></span>
+<span id="cb4-2"><a href="high-level-design.html#cb4-2" tabindex="-1"></a><span class="kw">const</span> METADATA <span class="op">=</span> <span class="bu">Symbol</span>(<span class="st">&quot;metadata&quot;</span>)<span class="op">;</span></span>
+<span id="cb4-3"><a href="high-level-design.html#cb4-3" tabindex="-1"></a><span class="kw">type</span> METADATA <span class="op">=</span> <span class="kw">typeof</span> METADATA<span class="op">;</span></span>
+<span id="cb4-4"><a href="high-level-design.html#cb4-4" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="high-level-design.html#cb4-5" tabindex="-1"></a><span class="im">export</span> <span class="kw">interface</span> Meta<span class="op">&lt;</span>T <span class="kw">extends</span> <span class="bu">Record</span><span class="op">&lt;</span><span class="dt">string</span><span class="op">,</span> <span class="dt">any</span><span class="op">&gt;</span> <span class="op">=</span> <span class="dt">any</span><span class="op">&gt;</span> {</span>
+<span id="cb4-6"><a href="high-level-design.html#cb4-6" tabindex="-1"></a>  [METADATA]<span class="op">:</span> T<span class="op">;</span></span>
+<span id="cb4-7"><a href="high-level-design.html#cb4-7" tabindex="-1"></a>}</span>
+<span id="cb4-8"><a href="high-level-design.html#cb4-8" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="high-level-design.html#cb4-9" tabindex="-1"></a><span class="im">export</span> <span class="im">namespace</span> <span class="dt">Meta</span> {</span>
+<span id="cb4-10"><a href="high-level-design.html#cb4-10" tabindex="-1"></a>  <span class="im">export</span> <span class="kw">function</span> <span class="kw">of</span><span class="op">&lt;</span>T <span class="kw">extends</span> <span class="bu">Object</span><span class="op">&gt;</span>(object<span class="op">:</span> T) {</span>
+<span id="cb4-11"><a href="high-level-design.html#cb4-11" tabindex="-1"></a>    <span class="cf">return</span> { <span class="op">...</span><span class="kw">object</span><span class="op">,</span> [METADATA]<span class="op">:</span> {} }<span class="op">;</span></span>
+<span id="cb4-12"><a href="high-level-design.html#cb4-12" tabindex="-1"></a>  }</span>
+<span id="cb4-13"><a href="high-level-design.html#cb4-13" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="high-level-design.html#cb4-14" tabindex="-1"></a>  <span class="im">export</span> <span class="kw">function</span> <span class="kw">get</span><span class="op">&lt;</span>T <span class="kw">extends</span> Meta<span class="op">&gt;</span>(object<span class="op">:</span> T<span class="op">,</span> key<span class="op">:</span> <span class="kw">keyof</span> T[METADATA]) {</span>
+<span id="cb4-15"><a href="high-level-design.html#cb4-15" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">object</span>[METADATA][key]<span class="op">;</span></span>
+<span id="cb4-16"><a href="high-level-design.html#cb4-16" tabindex="-1"></a>  }</span>
+<span id="cb4-17"><a href="high-level-design.html#cb4-17" tabindex="-1"></a></span>
+<span id="cb4-18"><a href="high-level-design.html#cb4-18" tabindex="-1"></a>  <span class="im">export</span> <span class="kw">function</span> <span class="kw">set</span><span class="op">&lt;</span>T <span class="kw">extends</span> Meta<span class="op">,</span> K <span class="kw">extends</span> <span class="kw">keyof</span> T[METADATA]<span class="op">&gt;</span>(</span>
+<span id="cb4-19"><a href="high-level-design.html#cb4-19" tabindex="-1"></a>    object<span class="op">:</span> T<span class="op">,</span></span>
+<span id="cb4-20"><a href="high-level-design.html#cb4-20" tabindex="-1"></a>    key<span class="op">:</span> K<span class="op">,</span></span>
+<span id="cb4-21"><a href="high-level-design.html#cb4-21" tabindex="-1"></a>    value<span class="op">:</span> T[METADATA][K]</span>
+<span id="cb4-22"><a href="high-level-design.html#cb4-22" tabindex="-1"></a>  ) {</span>
+<span id="cb4-23"><a href="high-level-design.html#cb4-23" tabindex="-1"></a>    <span class="kw">object</span>[METADATA][key] <span class="op">=</span> value<span class="op">;</span></span>
+<span id="cb4-24"><a href="high-level-design.html#cb4-24" tabindex="-1"></a>  }</span>
+<span id="cb4-25"><a href="high-level-design.html#cb4-25" tabindex="-1"></a>}</span></code></pre></div>
+<p>Now we can import the module and use it to add secret metadata to arbitrary data objects:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb5-1"><a href="high-level-design.html#cb5-1" tabindex="-1"></a><span class="im">import</span> { Meta } <span class="im">from</span> <span class="st">&quot;./Meta.ts&quot;</span></span>
+<span id="cb5-2"><a href="high-level-design.html#cb5-2" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="high-level-design.html#cb5-3" tabindex="-1"></a><span class="kw">interface</span> User <span class="kw">extends</span> Meta<span class="op">&lt;</span>{ id<span class="op">:</span> <span class="dt">number</span> }<span class="op">&gt;</span> {</span>
+<span id="cb5-4"><a href="high-level-design.html#cb5-4" tabindex="-1"></a>  name<span class="op">:</span> <span class="dt">string</span><span class="op">;</span></span>
+<span id="cb5-5"><a href="high-level-design.html#cb5-5" tabindex="-1"></a>}</span>
+<span id="cb5-6"><a href="high-level-design.html#cb5-6" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="high-level-design.html#cb5-7" tabindex="-1"></a><span class="kw">const</span> user<span class="op">:</span> User <span class="op">=</span> Meta<span class="op">.</span><span class="fu">of</span>({ name<span class="op">:</span> <span class="st">&quot;Adam&quot;</span> })<span class="op">;</span></span>
+<span id="cb5-8"><a href="high-level-design.html#cb5-8" tabindex="-1"></a>Meta<span class="op">.</span><span class="fu">set</span>(user<span class="op">,</span> <span class="vs">`id`</span><span class="op">,</span> <span class="dv">1337</span>)<span class="op">;</span></span>
+<span id="cb5-9"><a href="high-level-design.html#cb5-9" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(user)</span>
+<span id="cb5-10"><a href="high-level-design.html#cb5-10" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(Meta<span class="op">.</span><span class="fu">get</span>(user<span class="op">,</span> <span class="vs">`id`</span>))<span class="op">;</span></span></code></pre></div>
+<pre><code>## {
+##   name: &quot;Adam&quot;,
+##   [Symbol(metadata)]: {
+##     id: 1337,
+##   },
+## }
+## 1337</code></pre>
+<p>We can now use the <code>Meta</code> module internally, and, if we do not export the module or the <code>METADATA</code> symbol, then the user will not be able to access those properties easily. The user can still inspect the object and see the associated metadata, however, they cannot access it without the symbol. They may still be able to retrieve the symbol using the via the <code>Reflect.ownKeys</code> and <code>Object.getOwnPropertySymbols</code> functions, and so this is not a strong form of encapsulation <span class="citation">(<a href="#ref-mdn2024f">MDN 2024b</a>)</span>. However, arguably, if the user goes this far as to retrive the symbol, and, assuming we are not storing any sensitive data (which is not the case in <code>plotscape</code>), it may be reasonable to allow them to access these “private” properties and suffer the consequences.</p>
+</div>
+<div id="inheritance-1" class="section level5 hasAnchor" number="3.1.4.0.2">
+<h5><span class="header-section-number">3.1.4.0.2</span> Inheritance<a href="high-level-design.html#inheritance-1" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>In OOP, the primary mechanism for code reuse is inheritance.</p>
+<p>In DOP, since data is generic and separate from behavior, we can call functions from any module as long as the data we provide it as arguments adheres to the module’s interface. This makes code reuse trivial. For example, here’s a simplified version of the <code>Reactive</code> interface (Observer pattern) from <code>plotscape</code>:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb7-1"><a href="high-level-design.html#cb7-1" tabindex="-1"></a></span>
+<span id="cb7-2"><a href="high-level-design.html#cb7-2" tabindex="-1"></a><span class="kw">const</span> LISTENERS <span class="op">=</span> <span class="bu">Symbol</span>(<span class="vs">`listeners`</span>)<span class="op">;</span> <span class="co">// A unique symbol, to avoid namespace clashes</span></span>
+<span id="cb7-3"><a href="high-level-design.html#cb7-3" tabindex="-1"></a><span class="kw">type</span> Dict <span class="op">=</span> <span class="bu">Record</span><span class="op">&lt;</span><span class="dt">string</span><span class="op">,</span> <span class="dt">any</span><span class="op">&gt;;</span> <span class="co">// Generic dictionary type</span></span>
+<span id="cb7-4"><a href="high-level-design.html#cb7-4" tabindex="-1"></a><span class="kw">type</span> Callback <span class="op">=</span> (data<span class="op">:</span> Dict) <span class="kw">=&gt;</span> <span class="dt">void</span><span class="op">;</span> <span class="co">// Generic callback function type</span></span>
+<span id="cb7-5"><a href="high-level-design.html#cb7-5" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="high-level-design.html#cb7-6" tabindex="-1"></a><span class="kw">interface</span> Reactive {</span>
+<span id="cb7-7"><a href="high-level-design.html#cb7-7" tabindex="-1"></a>  [LISTENERS]<span class="op">:</span> <span class="bu">Record</span><span class="op">&lt;</span><span class="dt">string</span><span class="op">,</span> Callback[]<span class="op">&gt;;</span></span>
+<span id="cb7-8"><a href="high-level-design.html#cb7-8" tabindex="-1"></a>}</span>
+<span id="cb7-9"><a href="high-level-design.html#cb7-9" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="high-level-design.html#cb7-10" tabindex="-1"></a><span class="im">namespace</span> <span class="dt">Reactive</span> {</span>
+<span id="cb7-11"><a href="high-level-design.html#cb7-11" tabindex="-1"></a>  <span class="im">export</span> <span class="kw">function</span> <span class="kw">of</span><span class="op">&lt;</span>T <span class="kw">extends</span> <span class="bu">Object</span><span class="op">&gt;</span>(object<span class="op">:</span> T)<span class="op">:</span> T <span class="op">&amp;</span> Reactive {</span>
+<span id="cb7-12"><a href="high-level-design.html#cb7-12" tabindex="-1"></a>    <span class="cf">return</span> { <span class="op">...</span><span class="kw">object</span><span class="op">,</span> [LISTENERS]<span class="op">:</span> {} }<span class="op">;</span></span>
+<span id="cb7-13"><a href="high-level-design.html#cb7-13" tabindex="-1"></a>  }</span>
+<span id="cb7-14"><a href="high-level-design.html#cb7-14" tabindex="-1"></a></span>
+<span id="cb7-15"><a href="high-level-design.html#cb7-15" tabindex="-1"></a>  <span class="im">export</span> <span class="kw">function</span> <span class="fu">listen</span>(object<span class="op">:</span> Reactive<span class="op">,</span> event<span class="op">:</span> <span class="dt">string</span><span class="op">,</span> cb<span class="op">:</span> Callback) {</span>
+<span id="cb7-16"><a href="high-level-design.html#cb7-16" tabindex="-1"></a>    <span class="cf">if</span> (<span class="op">!</span><span class="kw">object</span>[LISTENERS][<span class="bu">event</span>]) <span class="kw">object</span>[LISTENERS][<span class="bu">event</span>] <span class="op">=</span> []<span class="op">;</span></span>
+<span id="cb7-17"><a href="high-level-design.html#cb7-17" tabindex="-1"></a>    <span class="kw">object</span>[LISTENERS][<span class="bu">event</span>]<span class="op">.</span><span class="fu">push</span>(cb)<span class="op">;</span></span>
+<span id="cb7-18"><a href="high-level-design.html#cb7-18" tabindex="-1"></a>  }</span>
+<span id="cb7-19"><a href="high-level-design.html#cb7-19" tabindex="-1"></a></span>
+<span id="cb7-20"><a href="high-level-design.html#cb7-20" tabindex="-1"></a>  <span class="im">export</span> <span class="kw">function</span> <span class="fu">dispatch</span>(object<span class="op">:</span> Reactive<span class="op">,</span> event<span class="op">:</span> <span class="dt">string</span><span class="op">,</span> data<span class="op">:</span> Dict) {</span>
+<span id="cb7-21"><a href="high-level-design.html#cb7-21" tabindex="-1"></a>    <span class="cf">for</span> (<span class="kw">const</span> cb <span class="kw">of</span> <span class="kw">object</span>[LISTENERS][<span class="bu">event</span>] <span class="op">??</span> []) <span class="fu">cb</span>(data)<span class="op">;</span></span>
+<span id="cb7-22"><a href="high-level-design.html#cb7-22" tabindex="-1"></a>  }</span>
+<span id="cb7-23"><a href="high-level-design.html#cb7-23" tabindex="-1"></a>}</span>
+<span id="cb7-24"><a href="high-level-design.html#cb7-24" tabindex="-1"></a></span>
+<span id="cb7-25"><a href="high-level-design.html#cb7-25" tabindex="-1"></a><span class="kw">interface</span> Dog <span class="kw">extends</span> Reactive {</span>
+<span id="cb7-26"><a href="high-level-design.html#cb7-26" tabindex="-1"></a>  name<span class="op">:</span> <span class="dt">string</span></span>
+<span id="cb7-27"><a href="high-level-design.html#cb7-27" tabindex="-1"></a>}</span>
+<span id="cb7-28"><a href="high-level-design.html#cb7-28" tabindex="-1"></a></span>
+<span id="cb7-29"><a href="high-level-design.html#cb7-29" tabindex="-1"></a><span class="im">namespace</span> <span class="dt">Dog</span> {</span>
+<span id="cb7-30"><a href="high-level-design.html#cb7-30" tabindex="-1"></a>  <span class="im">export</span> <span class="kw">function</span> <span class="kw">of</span>(name<span class="op">:</span> <span class="dt">string</span>) {</span>
+<span id="cb7-31"><a href="high-level-design.html#cb7-31" tabindex="-1"></a>    <span class="cf">return</span> Reactive<span class="op">.</span><span class="fu">of</span>({ name })</span>
+<span id="cb7-32"><a href="high-level-design.html#cb7-32" tabindex="-1"></a>  }</span>
+<span id="cb7-33"><a href="high-level-design.html#cb7-33" tabindex="-1"></a>}</span>
+<span id="cb7-34"><a href="high-level-design.html#cb7-34" tabindex="-1"></a></span>
+<span id="cb7-35"><a href="high-level-design.html#cb7-35" tabindex="-1"></a><span class="kw">const</span> dog <span class="op">=</span> Dog<span class="op">.</span><span class="fu">of</span>(<span class="vs">`Terry`</span>)</span>
+<span id="cb7-36"><a href="high-level-design.html#cb7-36" tabindex="-1"></a>Reactive<span class="op">.</span><span class="fu">listen</span>(dog<span class="op">,</span> <span class="vs">`car goes by`</span><span class="op">,</span> () <span class="kw">=&gt;</span> <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="vs">`Woof!`</span>))</span>
+<span id="cb7-37"><a href="high-level-design.html#cb7-37" tabindex="-1"></a>Reactive<span class="op">.</span><span class="fu">dispatch</span>(dog<span class="op">,</span> <span class="vs">`car goes by`</span>)</span></code></pre></div>
+<pre><code>## Woof!</code></pre>
+
+</div>
+</div>
+</div>
+</div>
+<h3> References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-acton2014" class="csl-entry">
+Acton, Mike. 2014. <span>“Data-Oriented Design and c++.”</span> <em>Luento. CppCon</em>. <a href="https://www.youtube.com/watch?v=rX0ItVEVjHc">https://www.youtube.com/watch?v=rX0ItVEVjHc</a>.
+</div>
+<div id="ref-acton2019" class="csl-entry">
+———. 2019. <span>“Building a Data-Oriented Future.”</span> <em>WeAreDevelopers</em>. <a href="https://www.youtube.com/watch?v=u8B3j8rqYMw">https://www.youtube.com/watch?v=u8B3j8rqYMw</a>.
+</div>
+<div id="ref-bayliss2022" class="csl-entry">
+Bayliss, Jessica D. 2022. <span>“The Data-Oriented Design Process for Game Development.”</span> <em>Computer</em> 55 (5): 31–38.
+</div>
+<div id="ref-black2013" class="csl-entry">
+Black, Andrew P. 2013. <span>“Object-Oriented Programming: Some History, and Challenges for the Next Fifty Years.”</span> <em>Information and Computation</em> 231: 3–20.
+</div>
+<div id="ref-booch2008" class="csl-entry">
+Booch, Grady, Robert A Maksimchuk, Michael W Engle, Bobbi J Young, Jim Connallen, and Kelli A Houston. 2008. <span>“Object-Oriented Analysis and Design with Applications.”</span> <em>ACM SIGSOFT Software Engineering Notes</em> 33 (5): 29–29.
+</div>
+<div id="ref-chambers2014" class="csl-entry">
+Chambers, John M. 2014. <span>“Object-Oriented Programming, Functional Programming and r.”</span> <em>Statistical Science</em> 29 (2): 167–80. <a href="https://doi.org/10.1214/13-STS452">https://doi.org/10.1214/13-STS452</a>.
+</div>
+<div id="ref-codd1970" class="csl-entry">
+Codd, Edgar F. 1970. <span>“A Relational Model of Data for Large Shared Data Banks.”</span> <em>Communications of the ACM</em> 13 (6): 377–87.
+</div>
+<div id="ref-dijkstra1968" class="csl-entry">
+Dijkstra, Edsger W. 1968. <span>“Letters to the Editor: Go to Statement Considered Harmful.”</span> <em>Communications of the ACM</em> 11 (3): 147–48.
+</div>
+<div id="ref-dimara2019" class="csl-entry">
+Dimara, Evanthia, and Charles Perin. 2019. <span>“What Is Interaction for Data Visualization?”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em> 26 (1): 119–29.
+</div>
+<div id="ref-fabian2018" class="csl-entry">
+Fabian, Richard. 2018. <span>“Data-Oriented Design.”</span> <em>Framework</em> 21: 1–7.
+</div>
+<div id="ref-frame2014" class="csl-entry">
+Frame, Scott, and John W Coffey. 2014. <span>“A Comparison of Functional and Imperative Programming Techniques for Mathematical Software Development.”</span> <em>Journal of Systemics, Cybernetics and Informatics</em> 12 (2): 1–10.
+</div>
+<div id="ref-gross2024" class="csl-entry">
+Gross, Carson. 2024. <span>“The Grug Brained Developer.”</span> <a href="https://grugbrain.dev">https://grugbrain.dev</a>.
+</div>
+<div id="ref-hadar2013" class="csl-entry">
+Hadar, Irit. 2013. <span>“When Intuition and Logic Clash: The Case of the Object-Oriented Paradigm.”</span> <em>Science of Computer Programming</em> 78 (9): 1407–26.
+</div>
+<div id="ref-harkonen2019" class="csl-entry">
+Härkönen, Toni. 2019. <span>“Advantages and Implementation of Entity-Component-Systems.”</span>
+</div>
+<div id="ref-jordan2015" class="csl-entry">
+Jordan, Howell, Goetz Botterweck, John Noll, Andrew Butterfield, and Rem Collier. 2015. <span>“A Feature Model of Actor, Agent, Functional, Object, and Procedural Programming Languages.”</span> <em>Science of Computer Programming</em> 98: 120–39.
+</div>
+<div id="ref-kay1996" class="csl-entry">
+Kay, Alan C. 1996. <span>“The Early History of Smalltalk.”</span> In <em>History of Programming Languages—II</em>, 511–98.
+</div>
+<div id="ref-kelley2023" class="csl-entry">
+Kelley, Andew. 2023. <span>“A Practical Guide to Applying Data Oriented Design (DoD).”</span> <em>Handmade Seattle</em>. <a href="https://www.youtube.com/watch?v=IroPQ150F6c">https://www.youtube.com/watch?v=IroPQ150F6c</a>.
+</div>
+<div id="ref-mdn2024d" class="csl-entry">
+MDN. 2024a. <span>“Classes - JavaScript <span><span class="math inline">\(\vert\)</span></span> MDN.”</span> <em>MDN Web Docs</em>. <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes</a>.
+</div>
+<div id="ref-mdn2024f" class="csl-entry">
+———. 2024b. <span>“Symbol - JavaScript <span><span class="math inline">\(\vert\)</span></span> MDN.”</span> <em>MDN Web Docs</em>. <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol</a>.
+</div>
+<div id="ref-mdn2024e" class="csl-entry">
+———. 2024c. <span>“Functions - JavaScript <span><span class="math inline">\(\vert\)</span></span> MDN.”</span> <em>MDN Web Docs</em>. <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions</a>.
+</div>
+<div id="ref-mdn2024c" class="csl-entry">
+———. 2024d. <span>“JavaScript Language Overview - JavaScript <span><span class="math inline">\(\vert\)</span></span> MDN.”</span> <em>MDN Web Docs</em>. <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Language_overview">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Language_overview</a>.
+</div>
+<div id="ref-meyer1997" class="csl-entry">
+Meyer, Bertrand. 1997. <em>Object-Oriented Software Construction</em>. Vol. 2. Prentice hall Englewood Cliffs.
+</div>
+<div id="ref-moseley2006" class="csl-entry">
+Moseley, Ben, and Peter Marks. 2006. <span>“Out of the Tar Pit.”</span> <em>Software Practice Advancement (SPA)</em> 2006.
+</div>
+<div id="ref-parlog2024" class="csl-entry">
+Nicolai Parlog. 2024. <span>“Data Oriented Programming in Java 21.”</span> Devoxx. <a href="https://www.youtube.com/watch?v=8FRU_aGY4mY">https://www.youtube.com/watch?v=8FRU_aGY4mY</a>.
+</div>
+<div id="ref-nikolov2018" class="csl-entry">
+Nikolov, Stoyan. 2018. <span>“OOP Is Dead, Long Live Data-Oriented Design.”</span> <em>CppCon</em>. <a href="https://www.youtube.com/watch?v=yy8jQgmhbAU&amp;t=2810s">https://www.youtube.com/watch?v=yy8jQgmhbAU&amp;t=2810s</a>.
+</div>
+<div id="ref-parihar2015" class="csl-entry">
+Parihar, Raj. 2015. <span>“Branch Prediction Techniques and Optimizations.”</span> <em>University of Rochester, NY, USA</em>.
+</div>
+<div id="ref-raghavan1998" class="csl-entry">
+Raghavan, P., H. Shachnai, and M. Yaniv. 1998. <span>“Dynamic Schemes for Speculative Execution of Code.”</span> In <em>Proceedings. Sixth International Symposium on Modeling, Analysis and Simulation of Computer and Telecommunication Systems (Cat. No.98TB100247)</em>, 24. IEEE. <a href="https://doi.org/10.1109/MASCOT.1998.693711">https://doi.org/10.1109/MASCOT.1998.693711</a>.
+</div>
+<div id="ref-rust2024" class="csl-entry">
+Rust Foundation. 2024. <span>“Pub - Rust.”</span> <a href="https://doc.rust-lang.org/std/keyword.pub.html">https://doc.rust-lang.org/std/keyword.pub.html</a>.
+</div>
+<div id="ref-sharvit2022" class="csl-entry">
+Sharvit, Yehonathan. 2022. <em>Data-Oriented Programming: Reduce Software Complexity</em>. Simon; Schuster.
+</div>
+<div id="ref-van2009" class="csl-entry">
+Van Roy, Peter et al. 2009. <span>“Programming Paradigms for Dummies: What Every Programmer Should Know.”</span> <em>New Computational Paradigms for Computer Music</em> 104: 616–21.
+</div>
+<div id="ref-wickham2019" class="csl-entry">
+Wickham, Hadley. 2019. <em>Advanced r</em>. Chapman; Hall/CRC.
+</div>
+<div id="ref-will2016" class="csl-entry">
+Will, Brian. 2016. <span>“Object-Oriented Programming Is Bad.”</span> Youtube. <a href="https://www.youtube.com/watch?v=QM1iUe6IofM">https://www.youtube.com/watch?v=QM1iUe6IofM</a>.
+</div>
+<div id="ref-zig2024" class="csl-entry">
+Zig Software Foundation. 2024. <span>“Documentation - the Zig Programming Language.”</span> <a href="https://ziglang.org/documentation/master">https://ziglang.org/documentation/master</a>.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="introduction.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="system-description.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

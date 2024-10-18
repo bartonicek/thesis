@@ -9,7 +9,6 @@ bibliography: [references.bib]
 link-citations: true
 ---
 
-
 # Abstract 
 
 Something something about section.
