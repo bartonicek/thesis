@@ -2,24 +2,36 @@
 
 This section contains a description of the concrete system implementation ([plotscape](https://github.com/bartonicek/plotscape) and [plotscaper](https://github.com/bartonicek/plotscaper)).
 
+## Core requirements
+
+The system needs to be able to:
+
+- Split the raw data into a hierarchy of parts
+- Compute summary statistics on the parts
+- Further transform these summaries in a way that respects the hierarchy (e.g. stacking, normalizing by parent values)
+- Translate these summaries into visual attributes such as x- and y-position, width, height, area,...
+- Render geometric objects based on the visual attributes
+- Do all of the above reactively, in response to user input
+
+
 ## Components
 
 This section contains a detailed listing of the system's components.
 
 ### Indexable {#Indexable}
 
-Visualizing data involves . 
+Every data visualization involves data. In typical column-based data representation such as CSV, data is stored in contiguous arrays. 
 
-Indexable is one of the most fundamental types. It has the following signature:
+Thus, `Indexable` is one of the most fundamental types. It has the following signature:
 
 ```{ts}
 #| eval: false 
 Indexable<T = unknown> = T | T[] | ((index: number) => T)
 ```
 
-In plain words, `Indexable<T>` represents a variable-like object that we can use to extract values from by subsetting it with an index. It is meant to be used in combination with a `Getter`, which provides a uniform interface for extracting these values.
+In plain words, `Indexable<T>` can be one of three things: a constant, an array, or a callback that takes in an index and returns a value. It is meant to represent an "array-like" object that we can extract values from by a generalized form subsetting by an index. If the value is a constant, we always return it, regardless of index. If the value is an array, we subset it (using the usual square bracket notation). If the value is a callback, we pass it the index, and take whatever the callback returns as the extracted value. A uniform interface for extracting values in this way is provided by [`Getter`](#Getters).
 
-The `Indexable` type is useful because, while our data will typically come in the form of arrays, we also want the flexibility to be able to work with non-array values such as constants and functions. For example, in a typical barplot, the y-axis base is set to a constant value, typically zero. While we could hypothetically append a new array filled with zeros to the data, it is much more convenient and memory efficient to instead represent the data with a constant (`0`) or a thunk (`() => 0`).
+The `Indexable` type is useful because, while our data will typically come in the form of arrays, we also want the flexibility to be able to work with non-array-like values such as constants and callbacks. For example, in a typical barplot, the y-axis base is set to a constant value, typically zero. While we could hypothetically append a new array filled with zeros to the data, it is much more convenient and memory efficient to instead use a constant (`0`) or a thunk (`() => 0`). Likewise, we may sometimes want to represent an array with repeated values as an array of underlying unique values and an array of indices (similar to base R's `factor` class). We can use a callback which takes an index and returns a position in the unique array for this.
 
 ### Getter {#Getter}
 
@@ -54,7 +66,7 @@ console.log(getter3(0));
 
 Note that, by its type definition, every `Getter<T>` is also automatically an `Indexable<T>` (since it is a function `(index: number) => T`). This means that we can create new getters out of other getters.
 
-The `Getter` namespace also includes some other utility functions. One example is `Getter.constant` which takes in a value `T` and returns a thunk which always returns `T` (i.e. `() => T`). This is useful, for example, when `T` is an array and we always want to return the whole array, not just a single indexed element. Another utility function is `Getter.proxy`, which takes a `Getter` and an array of indices, and returns a new `Getter` which proxies the access to the original values through the array of indices:
+The `Getter` namespace also includes several utility functions. One example is `Getter.constant` which takes in a value `T` and returns a thunk which always returns `T` (i.e. `() => T`). This is useful, for example, when `T` is an array and we always want to return the whole array and not just a single indexed element. Another utility function is `Getter.proxy`, which takes a `Getter` and an array of indices, and returns a new `Getter` which proxies the access to the original values through the array of indices:
 
 ```{ts}
 #| echo: false
@@ -99,30 +111,79 @@ interface Dataframe {
 }
 ```
 
-In this way, a `Dataframe` is essentially just a [SoA](#SoA) data structure with a little bit of extra flexibility. Specifically, while in SoA data structures, all properties are typically arrays, in `Dataframe` they are instances of the `Indexable` type so they may also be constants or functions. For example, the following is a valid instance of a `Dataframe`:
+In this way, a `Dataframe` is essentially just a [SoA](#SoA) with a bit of extra flexibility. Specifically, while in typical SoA data structures, all properties are usually arrays, in `Dataframe` they are instances of the `Indexable` type, so they may also be constants or functions. For example, the following is a valid instance of a `Dataframe`:
 
 ```{ts}
 const data: Dataframe = {
   name: [`foo`, `bar`, `baz`],
   age: 99,
-  canDrive: (index: number) => index < 50 
+  canDrive: (index: number) => index < 1
 }
 
 ```
 
-The fact that the "columns" of a `Dataframe` can be constants and functions is useful, for example, when want every row to contain the same value (e.g. 0 for the base of a barplot), or when we want the value be lazily computed based on other values. This is also where the [SoA](#SoA) representation offers a unique advantage: to achieve the same behavior in [AoS](#SoA) layout, we would have to copy the value or function pointer to every row.   
+The fact that the "columns" of a `Dataframe` can be constants and functions is useful, for example, when want every row to contain the same value (e.g. 0 for the base of a barplot), or when we want the value be lazily computed based on other values. This is also where the [SoA](#SoA) representation offers a unique advantage: to achieve the same behavior in [AoS](#SoA) layout, we would have to have a copy of the value or function pointer in every row.   
 
-`Dataframe` should always contain at least one array and all arrays in a `Dataframe` should have the same length. This is necessary to determine the length of the `Dataframe` (the number of rows). For example, when rendering, we need to know how many objects to draw; as such, at least of one the dataframe's columns needs to have a fixed length (i.e. have an underlying array). 
+`Dataframe` should always contain at least one array and all arrays in a `Dataframe` should have the same length. This is because some operations are impossible if we do not know the length of the `Dataframe` (the number of rows). For example, when rendering a scatterplot, how do we decide how many points to draw if the x- and y-positions have length 19 and 20, or if they are both constants? Thus, at least of one the dataframe's columns needs to have a fixed length (i.e. have an underlying array) and there should not be multiple different lengths. 
 
-These fixed-length constraints are not enforced via any static check (such as during a constructor call), but are instead checked dynamically during runtime, whenever the integrity of a dataframe's length becomes a key concern (using utility functions such as `Dataframe.checkLength`). This is the case, for example, when initializing a `Scene` or when rendering. 
+In the current version of the system, these fixed-length constraints are not enforced via a static check (such as during a constructor call), but are instead checked dynamically during runtime, whenever the integrity of a dataframe's length becomes a key concern (using utility functions such as `Dataframe.checkLength`). This is the case, for example, when initializing a [`Scene`](#Scene) or when rendering. 
 
-I found these dynamic fixed-length checks to be the more convenient option. They allow us to represent data as a plain JavaScript object (POJO) rather than having to instantiate a class. Additionally, due to JavaScript's dynamic nature, this approach is also safer: if, during runtime, the user adds a property to a `Dataframe` which violates the fixed-length constraints, this approach will catch the error. Finally, for any reasonably-sized data set with typical dimensionality (more rows than columns, $p << n$), the tiny performance hit that may be incurred because of having to loop through the columns to find the length dynamically will be minuscule, compared to the cost of looping through the data set's rows and doing actual work. For high-dimensional datasets ($p >> n$), we could always extend the system to memoize the length/number of rows on the `Dataframe` object (although then we may lose the safety of the dynamic runtime checks).    
+I found the dynamic fixed-length checks to be the better option, for several reasons. First, they allow us to represent data as a plain JavaScript object (POJO) rather than having to instantiate a class. Second, due to JavaScript's dynamic nature, this approach is also safer: if, during runtime, the user adds a property to a `Dataframe` which violates the fixed-length constraints, this approach will catch the error. Third, and finally, for any data sets with typical dimensionality (more rows than columns, $p << n$), the tiny performance hit that may be incurred due to having to loop through the columns to find the length dynamically will be minuscule compared with the computational cost of looping through the data set's rows and doing work such as rendering or computing statistics. For high-dimensional datasets ($p >> n$), we could always extend the system to memoize the length/number of rows on the `Dataframe` object (although then we may lose the security of the dynamic runtime checks).    
 
-### Factors 
+### Factor
 
-Factors provide a way to partition the data into multiple disjoint parts. 
+When visualizing data, we often need to split the data into disjoint parts and compute summaries on these parts. The set of all of these parts forms a partition, and, an important fact about partitions in data visualization is that they may be organized in a hierarchy, such that the parts in a child partition "add up" to the parts on the parent partition. A `Factor` provides a way to represent one such partition, as well as the associated metadata. In this way, it is similar to base R's `factor` S3 class, although there are some differences.
 
-#### Product factors
+A `Factor` has the following interface:
+
+```{ts}
+interface Factor<T extends Dataframe> extends Reactive {
+  parent?: Factor;
+  cardinality: number;
+  indices: number[];
+  data: T
+}
+
+```
+
+The two important properties which define how a `Factor` partitions data are indices and cardinality. Cardinality represents the number of unique indices that the factor has. For example, if the factor represents boolean partition of the data, the cardinality will be 2, if it represents a partition of the data between three states (such as `"A"`, `"B"`, and `"C"`), the cardinality will be 3, if it represents a partition of the data between all countries in the world, the cardinality will be 195, and so on. Indices represent the actual assignment of cases (rows of the data) to the parts. For example, the array of indices `[1, 0, 1, 1, 2]` represents the first, third, and fourth case being assigned to part two, the second case being assigned to part one, and the fifth case being assigned to part three (keeping in mind JavaScript's zero-based indexing).
+
+A factor may have metadata associated with each part, which stored in the `data` property of type [`Dataframe`](#Dataframe). This is a departure from base R's `factor` class, which represents all metadata as the vector of `levels`. For instance:
+
+```{r}
+cut(1:10, breaks = c(0, 5, 10))
+```
+
+In my system, the same information would be represented as:
+
+```{ts}
+const factor: Factor = {
+  cardinality: 2,
+  indices: [0, 0, 0, 0, 0, 1, 1, 1, 1, 1],
+  data: {
+    binMin: [0, 5],
+    binMax: [5, 10],
+  },
+};
+```
+
+There are several reasons why it may be better to store `Factor` metadata in tables (`Dataframe`) as opposed to vectors. First, when partitioning data, we often want to associate several pieces of metadata with each part. For example, if we cut or bin some numeric variable, like in the example above, we want to store both the lower and upper bound of each part's bin. We can store both pieces of information as a single element (tuple) in an array/vector, the way that `cut` does it, however, this works well with only few pieces of metadata: once we start storing longer tuples, it becomes hard to tell what each tuple element represents. We could alleviate the problem by naming the tuple elements, but then we are essentially storing the metadata in an array of dictionaries, i.e. the [AoS](#SoA) data structure. We can do better by storing the metadata in a table. Second, if we store metadata in tables, it will be easier to combine when we take [a product of two or more factors](#Product factors). Since taking the product of multiple factors is a fundamental operation in an interactive data visualization system, underpinning operations such as linked brushing, it makes sense to use data representation which makes it convenient.
+
+The `Factor` namespace provides several functions (constructors) which create factors from various data. 
+
+#### Bijection factor
+
+`Factor.bijection` is the first of two trivial factor constructors. It assigns each case its individual part, such that the cardinality is simply equal to the number of cases. When we create a bijection factor, we need to specify the length of the data (the number of cases) it represents to create the array of `indices`. Technically, this is not strictly necessary: we could implement `indices` as a callback which simply takes an index and returns it (an indentity function). However, since the primary use of factors is for summarizing data, and we need to know how many data points to summarize, we do still need to store the length of the data somewhere. I found it convenient to simply create a dummy array of `indices`, as opposed to having to store additional length property.
+
+`Factor.bijection` can also have associated metadata. 
+
+Thus, the function signature of `Factor.bijection` is simply:
+
+```{ts}
+function bijection<T extends Dataframe>(n: number, data?: T): Factor<T> 
+```
+
+#### Product factor
 
 We can combine a factor with $j$ levels and another factor with $k$ levels into a product factor with up to $j \cdot k$ levels. 
 

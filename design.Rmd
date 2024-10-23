@@ -1,5 +1,9 @@
 # High-level design
 
+> "Designing is fundamentally about taking things apart [...] in such a way that they can be put back together. Separating things into things that can be composed."
+>
+> Rich Hickey [-@hickey2013]
+
 This section contains a description of some of the high-level design decisions that went into making the system.
 
 ```{r}
@@ -151,13 +155,13 @@ Small interfaces [@meyer1997]. In practice, the small interfaces idea is often n
 >
 > Edgar Dijkstra -@dijkstra1968
 
-Data oriented programming (DOP) and data oriented design (DOD) are two newer programming paradigms that have been slowly gaining a foothold in the recent years. While the terms are sometimes used interchangeably, there are some important differences: DOP focuses more on high-level principles such as structuring and organizing code [@sharvit2022; @parlog2024], whereas DOD, having originated in the world of video-game development, tends to be more concerned with low-level optimization details such as memory layout and CPU access patterns [@acton2014; @bayliss2022; @kelley2023; @nikolov2018; @fabian2018]. However, there is a considerable overlap the conclusions and high-level guidelines that the two programming paradigms provide. For this reason, I will discuss both DOP and DOD here, within the same section, and refer to both as "DOP" unless explicitly stated otherwise. 
+Data oriented programming (DOP) and data oriented design (DOD) are two newer programming paradigms that have been slowly gaining a foothold in the recent years. While the terms are sometimes used interchangeably, there are some important differences: DOP is inspired by the Clojure style of programming and focuses more on high-level principles such as the structure and organization of code [@hickey2011; @hickey2018; @sharvit2022; @parlog2024], whereas DOD originates in the world of video-game development and tends to be more concerned with low-level optimization details such as memory layout and CPU access patterns [@acton2014; @bayliss2022; @kelley2023; @nikolov2018; @fabian2018]. Nevertheless, there is a considerable overlap in the general conclusions and directions that the two programming paradigms provide. For this reason, I will discuss both DOP and DOD here simultaneously, within the same section, and refer to both as "DOP" unless explicitly stated otherwise. 
 
 The core idea of DOP is a data-first perspective. In the DOP view, programs should be viewed as transformations of data, nothing less, nothing more [@acton2014; @fabian2018; @sharvit2022]. As a result, every program is composed of two sets of components: stateful data and stateless functions that act on and transform this data [@fabian2018]. In other words, data and code should always be kept separate, such that both can be reasoned about in isolation. Code should live inside modules composed of pure (stateless) functions [@fabian2018; @sharvit2022]. This strict segregation brings several benefits. The data becomes easy to pass around and serialize, and, since the code is composed of pure functions, it becomes easy to test and mock [@sharvit2022]. 
 
 Program is split between what *is* and what *does*.
 
-Data should be represented by plain data structures. These can formed by combining generic components, such as primitives, arrays, and maps/dictionaries/structs [for example [JSON]\; @sharvit2022]. It may even be desirable that the data adheres to the relational model [@codd1970; @moseley2006; @fabian2018]. This does not mean that the data has to actually *live* inside a relational database, just that its shape should be close to that of normalized relational database tables, with columns represented by generic arrays [@fabian2018]. 
+Data should be represented by plain data structures. These can formed by combining generic components, such as primitives, arrays, and maps/dictionaries/structs [for example [JSON]\; @hickey2011; @hickey2018; @sharvit2022]. It may even be desirable that the data adheres to the relational model [@codd1970; @moseley2006; @fabian2018]. This does not mean that the data has to actually *live* inside a relational database, just that its shape should be close to that of normalized relational database tables, with columns represented by generic arrays [@fabian2018]. 
 
 Data represents just itself - data - and there is no obligation for it to model the real world or any kind of abstract entity. As a result, and we are free to represent data in any way we want, and this can in fact bring significant performance benefits [@acton2014; @fabian2018]. A typical example of this in DOD is the Structure of Arrays (SoA; aka "parallel arrays" or "columnar format") data structure [@acton2014; @acton2019; @kelley2023], in which a list of records is stored as a single object, with the records' properties being stored as homogeneous arrays (this is also how R's `data.frame` class is implemented). This type of representation reduces memory footprint and can improve cache line utilization, resulting in faster runtime [@acton2014; @fabian2018; @kelley2023]. Another example of idiosyncratic data representation that can lead to improved performance are Entity Component Systems in videogames [@harkonen2019]. Either way, even if performance is not the nubmer one concern, another benefit data representing itself is that it allows us introduce abstraction only gradually, since we can get far by relying on generic data manipulation functions [@fabian2018; @sharvit2022].
 
@@ -178,7 +182,7 @@ I actually found this form a weak encapsulation a good fit for `plotscape`. For 
 const METADATA = Symbol("metadata");
 type METADATA = typeof METADATA;
 
-export interface Meta<T extends Record<string, any> = any> {
+export interface Meta<T extends Record<string, any>> {
   [METADATA]: T;
 }
 
@@ -216,7 +220,7 @@ console.log(user)
 console.log(Meta.get(user, `id`));
 ```
 
-We can now use the `Meta` module internally, and, if we do not export the module or the `METADATA` symbol, then the user will not be able to access those properties easily. The user can still inspect the object and see the associated metadata, however, they cannot access it without the symbol. They may still be able to retrieve the symbol using the via the `Reflect.ownKeys` and `Object.getOwnPropertySymbols` functions, and so this is not a strong form of encapsulation [@mdn2024f]. However, arguably, if the user goes this far as to retrive the symbol, and, assuming we are not storing any sensitive data (which is not the case in `plotscape`), it may be reasonable to allow them to access these "private" properties and suffer the consequences.  
+We can now use the `Meta` module internally, and, if we do not export the module or the `METADATA` symbol, then the user will not be able to access those properties easily. The user can still inspect the object and see the associated metadata, however, they cannot access it without the symbol. They may still be able to retrieve the symbol using the via the `Reflect.ownKeys` and `Object.getOwnPropertySymbols` functions, and so this method does not provide a strong form of encapsulation [@mdn2024f]. Arguably, however, if the user goes as far as to retrieve the symbol using reflection, and, assuming we are not storing any sensitive data (which is not usually the case in data visualization systems), it may be reasonable to allow them to access these "private" properties and suffer the consequences.  
 
 ##### Inheritance
 
@@ -264,4 +268,8 @@ Reactive.listen(dog, `car goes by`, () => console.log(`Woof!`))
 Reactive.dispatch(dog, `car goes by`)
 ```
 
+## Reactivity
 
+## Row-based or column-based
+
+## Rendering engine

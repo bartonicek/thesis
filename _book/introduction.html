@@ -30,7 +30,7 @@
   
   
 <link rel="prev" href="index.html"/>
-<link rel="next" href="design.html"/>
+<link rel="next" href="high-level-design.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -53,10 +53,72 @@
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
 <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
-<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
-<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
 
 
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
 
 <style type="text/css">
   
@@ -123,34 +185,38 @@ div.csl-indent {
 <li class="chapter" data-level="2.3.5" data-path="introduction.html"><a href="introduction.html#preorders"><i class="fa fa-check"></i><b>2.3.5</b> Preorders</a></li>
 <li class="chapter" data-level="2.3.6" data-path="introduction.html"><a href="introduction.html#monoids"><i class="fa fa-check"></i><b>2.3.6</b> Monoids</a></li>
 </ul></li>
-<li class="chapter" data-level="2.4" data-path="introduction.html"><a href="introduction.html#components-of-a-data-visualization-system"><i class="fa fa-check"></i><b>2.4</b> Components of a data visualization system</a>
+<li class="chapter" data-level="2.4" data-path="introduction.html"><a href="introduction.html#theory-of-data-visualization-systems"><i class="fa fa-check"></i><b>2.4</b> Theory of data visualization systems</a>
 <ul>
 <li class="chapter" data-level="2.4.1" data-path="introduction.html"><a href="introduction.html#scales"><i class="fa fa-check"></i><b>2.4.1</b> Scales</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="design.html"><a href="design.html"><i class="fa fa-check"></i><b>3</b> Design</a>
+<li class="chapter" data-level="3" data-path="high-level-design.html"><a href="high-level-design.html"><i class="fa fa-check"></i><b>3</b> High-level design</a>
 <ul>
-<li class="chapter" data-level="3.0.1" data-path="design.html"><a href="design.html#user-profile"><i class="fa fa-check"></i><b>3.0.1</b> User profile</a></li>
-<li class="chapter" data-level="3.1" data-path="design.html"><a href="design.html#programming-paradigm"><i class="fa fa-check"></i><b>3.1</b> Programming paradigm</a>
+<li class="chapter" data-level="3.0.1" data-path="high-level-design.html"><a href="high-level-design.html#user-profile"><i class="fa fa-check"></i><b>3.0.1</b> User profile</a></li>
+<li class="chapter" data-level="3.1" data-path="high-level-design.html"><a href="high-level-design.html#programming-paradigm"><i class="fa fa-check"></i><b>3.1</b> Programming paradigm</a>
 <ul>
-<li class="chapter" data-level="3.1.1" data-path="design.html"><a href="design.html#imperative-programming"><i class="fa fa-check"></i><b>3.1.1</b> Imperative programming</a></li>
-<li class="chapter" data-level="3.1.2" data-path="design.html"><a href="design.html#functional-programming"><i class="fa fa-check"></i><b>3.1.2</b> Functional programming</a></li>
-<li class="chapter" data-level="3.1.3" data-path="design.html"><a href="design.html#object-oriented-programming"><i class="fa fa-check"></i><b>3.1.3</b> Object oriented programming</a></li>
-<li class="chapter" data-level="3.1.4" data-path="design.html"><a href="design.html#data-oriented-programming"><i class="fa fa-check"></i><b>3.1.4</b> Data oriented programming</a></li>
+<li class="chapter" data-level="3.1.1" data-path="high-level-design.html"><a href="high-level-design.html#imperative-programming"><i class="fa fa-check"></i><b>3.1.1</b> Imperative programming</a></li>
+<li class="chapter" data-level="3.1.2" data-path="high-level-design.html"><a href="high-level-design.html#functional-programming"><i class="fa fa-check"></i><b>3.1.2</b> Functional programming</a></li>
+<li class="chapter" data-level="3.1.3" data-path="high-level-design.html"><a href="high-level-design.html#object-oriented-programming"><i class="fa fa-check"></i><b>3.1.3</b> Object oriented programming</a></li>
+<li class="chapter" data-level="3.1.4" data-path="high-level-design.html"><a href="high-level-design.html#data-oriented-programming"><i class="fa fa-check"></i><b>3.1.4</b> Data oriented programming</a></li>
 </ul></li>
+<li class="chapter" data-level="3.2" data-path="high-level-design.html"><a href="high-level-design.html#reactivity"><i class="fa fa-check"></i><b>3.2</b> Reactivity</a></li>
+<li class="chapter" data-level="3.3" data-path="high-level-design.html"><a href="high-level-design.html#row-based-or-column-based"><i class="fa fa-check"></i><b>3.3</b> Row-based or column-based</a></li>
+<li class="chapter" data-level="3.4" data-path="high-level-design.html"><a href="high-level-design.html#rendering-engine"><i class="fa fa-check"></i><b>3.4</b> Rendering engine</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="system-description.html"><a href="system-description.html"><i class="fa fa-check"></i><b>4</b> System description</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="system-description.html"><a href="system-description.html#components"><i class="fa fa-check"></i><b>4.1</b> Components</a>
+<li class="chapter" data-level="4.1" data-path="system-description.html"><a href="system-description.html#core-requirements"><i class="fa fa-check"></i><b>4.1</b> Core requirements</a></li>
+<li class="chapter" data-level="4.2" data-path="system-description.html"><a href="system-description.html#components"><i class="fa fa-check"></i><b>4.2</b> Components</a>
 <ul>
-<li class="chapter" data-level="4.1.1" data-path="system-description.html"><a href="system-description.html#Indexable"><i class="fa fa-check"></i><b>4.1.1</b> Indexable</a></li>
-<li class="chapter" data-level="4.1.2" data-path="system-description.html"><a href="system-description.html#Getter"><i class="fa fa-check"></i><b>4.1.2</b> Getter</a></li>
-<li class="chapter" data-level="4.1.3" data-path="system-description.html"><a href="system-description.html#reactive"><i class="fa fa-check"></i><b>4.1.3</b> Reactive</a></li>
-<li class="chapter" data-level="4.1.4" data-path="system-description.html"><a href="system-description.html#dataframe"><i class="fa fa-check"></i><b>4.1.4</b> Dataframe</a></li>
-<li class="chapter" data-level="4.1.5" data-path="system-description.html"><a href="system-description.html#factors"><i class="fa fa-check"></i><b>4.1.5</b> Factors</a></li>
-<li class="chapter" data-level="4.1.6" data-path="system-description.html"><a href="system-description.html#reducers"><i class="fa fa-check"></i><b>4.1.6</b> Reducers</a></li>
-<li class="chapter" data-level="4.1.7" data-path="system-description.html"><a href="system-description.html#scales-1"><i class="fa fa-check"></i><b>4.1.7</b> Scales</a></li>
-<li class="chapter" data-level="4.1.8" data-path="system-description.html"><a href="system-description.html#expanses"><i class="fa fa-check"></i><b>4.1.8</b> Expanses</a></li>
+<li class="chapter" data-level="4.2.1" data-path="system-description.html"><a href="system-description.html#Indexable"><i class="fa fa-check"></i><b>4.2.1</b> Indexable</a></li>
+<li class="chapter" data-level="4.2.2" data-path="system-description.html"><a href="system-description.html#Getter"><i class="fa fa-check"></i><b>4.2.2</b> Getter</a></li>
+<li class="chapter" data-level="4.2.3" data-path="system-description.html"><a href="system-description.html#reactive"><i class="fa fa-check"></i><b>4.2.3</b> Reactive</a></li>
+<li class="chapter" data-level="4.2.4" data-path="system-description.html"><a href="system-description.html#dataframe"><i class="fa fa-check"></i><b>4.2.4</b> Dataframe</a></li>
+<li class="chapter" data-level="4.2.5" data-path="system-description.html"><a href="system-description.html#factor"><i class="fa fa-check"></i><b>4.2.5</b> Factor</a></li>
+<li class="chapter" data-level="4.2.6" data-path="system-description.html"><a href="system-description.html#reducers"><i class="fa fa-check"></i><b>4.2.6</b> Reducers</a></li>
+<li class="chapter" data-level="4.2.7" data-path="system-description.html"><a href="system-description.html#scales-1"><i class="fa fa-check"></i><b>4.2.7</b> Scales</a></li>
+<li class="chapter" data-level="4.2.8" data-path="system-description.html"><a href="system-description.html#expanses"><i class="fa fa-check"></i><b>4.2.8</b> Expanses</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>5</b> Glossary</a></li>
@@ -179,17 +245,18 @@ div.csl-indent {
 <h2><span class="header-section-number">2.1</span> Brief history of interactive data visualization<a href="introduction.html#brief-history-of-interactive-data-visualization" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div id="early-interactive-data-visualization-by-statisticians-for-statisticians" class="section level3 hasAnchor" number="2.1.1">
 <h3><span class="header-section-number">2.1.1</span> Early interactive data visualization: By statisticians for statisticians<a href="introduction.html#early-interactive-data-visualization-by-statisticians-for-statisticians" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Static data visualization has a rich and intricate history, and a full treatment would be beyond the scope of the current thesis <span class="citation">(but see e.g. <a href="#ref-dix1998">Dix and Ellis 1998</a>; <a href="#ref-friendly2006">Friendly 2006</a>; <a href="#ref-friendly2021">Friendly and Wainer 2021</a>; <a href="#ref-young2011">Young, Valero-Mora, and Friendly 2011</a>)</span>. Suffice it to say, prior to the second half of the 20th century, data visualization was largely seen as, at best, secondary to “serious” statistical analysis, although there were indeed some prominent counter-examples <span class="citation">(<a href="#ref-friendly2006">Friendly 2006</a>; <a href="#ref-young2011">Young, Valero-Mora, and Friendly 2011</a>)</span>. However, beginning with the end of 1950’s, a series of developments lead to a great increase in prominence of data visualization. Firstly, at the theoretical level, the work of Tukey <span class="citation">(<a href="#ref-tukey1962">1962</a>; <a href="#ref-tukey1977">1977</a>)</span> and Bertin <span class="citation">(<a href="#ref-bertin1967">1967</a>)</span> established data visualization as valuable discipline in its own right. Secondly, at the practical level, the development of personal computers <span class="citation">(see e.g. <a href="#ref-abbate1999">Abbate 1999</a>)</span> and high-level programming languages, most notably FORTRAN in 1954 <span class="citation">(<a href="#ref-backus1978">Backus 1978</a>)</span>, lead to the proliferation of powerful and widely available tools that made the process of rendering production-grade figures near-effortless, in comparison to the earlier hand-drawn techniques. Combined, these developments lead to a surge in the use and dissemination of data visualization.</p>
-<p>Interactive visualizations would not be left far behind. Early systems of the 1960’s and 1970’s tended to be designed for one specialized task, such as the one of Fowlkes <span class="citation">(<a href="#ref-fowlkes1969">1969</a>)</span> which allowed for interactive viewing of probability plots under different choices of parameters and transformations, and that of Kruskal <span class="citation">(<a href="#ref-kruskal1964">1965</a>)</span> which visualized multidimensional scaling. The first more general-purpose system was PRIM-9 <span class="citation">(<a href="#ref-fisherkeller1974">Fisherkeller, Friedman, and Tukey 1974</a>)</span>, which allowed for exploration of high-dimensional data via projection, rotation, subsetting and masking. The systems that came after grew to be even more general and ambitious. For example, MacSpin <span class="citation">(<a href="#ref-donoho1988">Donoho, Donoho, and Gasko 1988</a>)</span> and XGobi <span class="citation">(<a href="#ref-swayne1998">Swayne, Cook, and Buja 1998</a>)</span> provided features such as interactive scaling, rotation, linked selection (or “brushing”), and interactive plotting of smooth fits in scatterplots, as well as interactive parallel coordinate plots and grand tours (excellent video-documentaries of some of these early interactive data visualization systems are available at <a href="https://community.amstat.org/jointscsg-section/media/videos">ASA Statistical Graphics Video Library</a>).</p>
-<p>Later systems saw even greater flexibility and also integration into general statistical computing software. The successor system to XGobi, GGobi <span class="citation">(<a href="#ref-swayne2003">Swayne et al. 2003</a>)</span>, expanded on XGobi and made it directly embeddable in the R runtime. Mondrian <span class="citation">(<a href="#ref-theus2002">Theus 2002</a>)</span> written in Java allowed for sophisticated linked interaction between many different types of plots including scatteplots, histograms, barplots, scatterplot, mosaic plots, parallel coordinates plots, and maps. Finally, iPlots <span class="citation">(<a href="#ref-urbanek2003">Urbanek and Theus 2003</a>)</span> implemented a general framework for interactive plotting that was not only embedded in R but could be directly programmatically manipulated, and was later further expanded and made performant for big data in iPlots eXtreme <span class="citation">(<a href="#ref-urbanek2011">Urbanek 2011</a>)</span>.</p>
+<p>Static data visualization has a rich and intricate history, and a full treatment is beyond the scope of the present thesis <span class="citation">(but see e.g. <a href="#ref-dix1998">Dix and Ellis 1998</a>; <a href="#ref-friendly2006">Friendly 2006</a>; <a href="#ref-friendly2021">Friendly and Wainer 2021</a>; <a href="#ref-young2011">Young, Valero-Mora, and Friendly 2011</a>)</span>. Briefly, prior to the mid-20th century, data visualization was often considered as at best secondary to “serious” statistical analysis <span class="citation">(although there were also some counter-examples, see e.g. <a href="#ref-friendly2006">Friendly 2006</a>; <a href="#ref-young2011">Young, Valero-Mora, and Friendly 2011</a>)</span>. However, beginning in the late 1950’s, a series of developments took place which lead to a rise in the prominence and accessibility of data visualization. Firstly, at the theoretical level, the work of Tukey <span class="citation">(<a href="#ref-tukey1962">1962</a>; <a href="#ref-tukey1977">1977</a>)</span> and Bertin <span class="citation">(<a href="#ref-bertin1967">1967</a>)</span> established data visualization as valuable discipline in its own right. Secondly, at the practical level, the development of personal computers <span class="citation">(see e.g. <a href="#ref-abbate1999">Abbate 1999</a>)</span> and high-level programming languages such as FORTRAN in 1954 <span class="citation">(<a href="#ref-backus1978">Backus 1978</a>)</span>, made the process of rendering production-grade figures near-effortless in comparison to the earlier hand-drawn techniques. Combined, these developments lead to a surge in the use and dissemination of data visualization.</p>
+<p>With static data visualization on the rise in the 1950’s, interactive data visualization would not be left far behind. The very early interactive data visualization systems tended to be designed for niche, specialized tasks. For example, <span class="citation">Fowlkes (<a href="#ref-fowlkes1969">1969</a>)</span> designed a system which allowed the users to view probability plots under different configurations of parameters and transformations, whereas <span class="citation">Kruskal (<a href="#ref-kruskal1964">1965</a>)</span> created a tool for visualizing multidimensional scaling.</p>
+<p>However, soon, researchers began exploring interactive data visualization as a general-purpose tool for data exploration. The first such general-purpose system was PRIM-9 <span class="citation">(<a href="#ref-fisherkeller1974">Fisherkeller, Friedman, and Tukey 1974</a>)</span>. PRIM-9 allowed for exploration of multivariate data via interactive features such as projection, rotation, masking, and filtering. Subsequent systems strove to provide an even wider range of features. For example, MacSpin <span class="citation">(<a href="#ref-donoho1988">Donoho, Donoho, and Gasko 1988</a>)</span> and XGobi <span class="citation">(<a href="#ref-swayne1998">Swayne, Cook, and Buja 1998</a>)</span> implemented features such as interactive scaling, rotation, linked selection (or “brushing”), and interactive plotting of smooth fits in scatterplots, as well as interactive parallel coordinate plots and grand tours (excellent video-documentaries of some of these early interactive data visualization systems are available at <a href="https://community.amstat.org/jointscsg-section/media/videos">ASA Statistical Graphics Video Library</a>).</p>
+<p>Later, with the proliferation of open-source, general-purpose statistical computing software such as S and R, . The successor system to XGobi, GGobi <span class="citation">(<a href="#ref-swayne2003">Swayne et al. 2003</a>)</span>, expanded on XGobi and made it directly embeddable in the R runtime. Mondrian <span class="citation">(<a href="#ref-theus2002">Theus 2002</a>)</span> allowed for sophisticated linked interaction between many different types of plots including scatteplots, histograms, barplots, scatterplot, mosaic plots, parallel coordinates plots, and maps. Finally, iPlots <span class="citation">(<a href="#ref-urbanek2003">Urbanek and Theus 2003</a>)</span> implemented a general framework for interactive plotting that was not only embedded in R but could be directly programmatically manipulated, and was later further expanded and made performant for big data in iPlots eXtreme <span class="citation">(<a href="#ref-urbanek2011">Urbanek 2011</a>)</span>.</p>
 <p>What all of these interactive data visualization systems had in common is that they were designed by statisticians and with interesting, often ambitious interactive features in mind. High-level analytic features such as linked selection/brushing, rotation and projection, and interactive manipulation of model parameters made frequent appearances. While being a clear strength, the more complex nature of the systems may have also slowed their adoption, as they often demanded an expert user to take advantage of most fully.</p>
 </div>
 <div id="interactive-data-visualization-and-the-web-world-wide-interactivity" class="section level3 hasAnchor" number="2.1.2">
 <h3><span class="header-section-number">2.1.2</span> Interactive data visualization and the Web: World-wide interactivity<a href="introduction.html#interactive-data-visualization-and-the-web-world-wide-interactivity" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The tail end of the millennium would mark the arrival of a whole new class of technologies that had a significant impact on interactive data visualization, just as it had on almost every other field of human endeavor. The arrival of the internet in the mid 1990’s, and the development of JavaScript in 1995 as a high-level programming language for the Web <span class="citation">(for a thorough description of the history, see e.g. <a href="#ref-wirfs-brock2020">Wirfs-Brock and Eich 2020</a>)</span>, saw the rise of interactive applications that could be accessed by anyone, from anywhere. This was aided by the dissemination of robust and standardized Web browsers. Soon, interactive data visualization became just one of many interactive technologies highly sought after within the fledgling Web ecosystem.</p>
 <p>Early interactive data visualization systems for the Web, such as Prefuse <span class="citation">(<a href="#ref-heer2005">Heer, Card, and Landay 2005</a>)</span> and Flare <span class="citation">(developed around 2008, <a href="#ref-flare2020">Blokt 2020</a>)</span> tended to relied on external plugins (Java and Adobe Flash Player, respectively). However, as browsers got faster at interpreting JavaScript, thanks to advances in compiler technologies, specifically Just In Time (JIT) compilation, it became possible to write entire data visualization libraries in JavaScript. In the late 2000’s and early 2010’s, several true Web-native interactive data visualization systems emerged.</p>
-<p>Currently, the most prominent framework for data visualization on the Web, interactive or otherwise, is D3.js <span class="citation">(<a href="#ref-bostock2022">Bostock 2022</a>)</span>. D3 is a fairly general and low-level JavaScript framework for visualizing data, and consists of a suite of specialized modules designed for various aspects of the data visualization workflow, including parsing data, transformation, defining scales, interfacing with the DOM and handling interaction events, and even physics simulation and animation. Importantly, while D3 does provide methods for handling interactive events, it does not provide a system for dispatching and coordinating these events - it instead delegates this responsibility to the user and encourages the use of reactive Web frameworks such as React <span class="citation">(<a href="#ref-react2024">Meta 2024</a>)</span>, Vue <span class="citation">(<a href="#ref-vue2024">Evan You and the Vue Core Team 2024</a>)</span>, or Svelte <span class="citation">(<a href="#ref-svelte2024">Rich Harris and the Svelte Core Team 2024</a>)</span>. Finally, D3.js visualizations are rendered as Scalable Vector Graphics (SVG) by default, meaning that they can be scaled without loss of quality. However, a price to pay for this robustness is in performance, as visualizations can become slow to render at high data volumes. The modular nature of D3 means that the visualizations can be rendered by other, more performant devices, such as the HTML 5 Canvas element or WebGL, however, as of this date, the implementation of such an alternative rendering framework is left to the user and there are no official modules.</p>
-<p>Building upon the fairly low level framework provided by D3, many packages have been developed to provide a more high-level and opinionated interfaces. Prominent two among these are plotly.js <span class="citation">(<a href="#ref-plotly2022">Plotly Inc. 2022</a>)</span> and Highcharts <span class="citation">(<a href="#ref-highcharts2024">Highsoft 2024</a>)</span>. While D3 provides low-level utilities such as data transformations, scales, and geometric objects, these packages provide more high-level utilities such as functions for rendering complete plots and registering reactive events, which are under the hood automatically handled via systems based on the native DOM Event Target interface <span class="citation">(<a href="#ref-mdn2024a">MDN 2024</a>)</span>. Like D3, both plotly.js and Highcharts also render the graphics in SVG by default, however, unlike D3, they both also provide alternative rendering engines based on WebGL <span class="citation">(<a href="#ref-highschartsboost2022">Highsoft 2022</a>; <a href="#ref-plotly2024b">Plotly Inc. 2024</a>)</span>.</p>
+<p>Currently, the most prominent framework for data visualization on the Web, interactive or otherwise, is D3.js <span class="citation">(<a href="#ref-bostock2022">Mike Bostock 2022</a>)</span>. D3 is a fairly general and low-level JavaScript framework for visualizing data, and consists of a suite of specialized modules designed for various aspects of the data visualization workflow, including parsing data, transformation, defining scales, interfacing with the DOM and handling interaction events, and even physics simulation and animation. Importantly, while D3 does provide methods for handling interactive events, it does not provide a system for dispatching and coordinating these events - it instead delegates this responsibility to the user and encourages the use of reactive Web frameworks such as React <span class="citation">(<a href="#ref-react2024">Meta 2024</a>)</span>, Vue <span class="citation">(<a href="#ref-vue2024">Evan You and the Vue Core Team 2024</a>)</span>, or Svelte <span class="citation">(<a href="#ref-svelte2024">Rich Harris and the Svelte Core Team 2024</a>)</span>. Finally, D3.js visualizations are rendered as Scalable Vector Graphics (SVG) by default, meaning that they can be scaled without loss of quality. However, a price to pay for this robustness is in performance, as visualizations can become slow to render at high data volumes. The modular nature of D3 means that the visualizations can be rendered by other, more performant devices, such as the HTML 5 Canvas element or WebGL, however, as of this date, the implementation of such an alternative rendering framework is left to the user and there are no official modules.</p>
+<p>Building upon the fairly low level framework provided by D3, many packages have been developed to provide a more high-level and opinionated interfaces. Prominent two among these are plotly.js <span class="citation">(<a href="#ref-plotly2022">Plotly Inc. 2022</a>)</span> and Highcharts <span class="citation">(<a href="#ref-highcharts2024">Highsoft 2024</a>)</span>. While D3 provides low-level utilities such as data transformations, scales, and geometric objects, these packages provide more high-level utilities such as functions for rendering complete plots and registering reactive events, which are under the hood automatically handled via systems based on the native DOM Event Target interface <span class="citation">(<a href="#ref-mdn2024a">MDN 2024a</a>)</span>. Like D3, both plotly.js and Highcharts also render the graphics in SVG by default, however, unlike D3, they both also provide alternative rendering engines based on WebGL <span class="citation">(<a href="#ref-highschartsboost2022">Highsoft 2022</a>; <a href="#ref-plotly2024b">Plotly Inc. 2024</a>)</span>.</p>
 <p>A somewhat different approach is taken by another popular visualization package built partially on D3 - Vega <span class="citation">(<a href="#ref-satyanarayan2015">Satyanarayan et al. 2015</a>; <a href="#ref-vega2024a">Vega Project 2024b</a>)</span>. Vega provides a declarative framework for defining (interactive) data visualizations using a static <a href="glossary.html#JSON">JSON</a> schema. Compared to plotly.js or Highcharts, Vega is significantly more expressive, allowing for fine-grained customization of graphics and interactive behavior, standing essentially just one level above D3. However, as a consequence, it is also significantly more verbose. For example, a full specification of a scatterplot matrix with linked brushing takes over 300 lines of code <span class="citation">(JSON, not including the data and using default formatting such as would be created by calling <code>JSON.stringify(schema, null, "\t")</code>, <a href="#ref-vega2024b">Vega Project 2024a</a>)</span>.</p>
 <p>While these contemporary Web-based interactive data visualization systems offer great deal of flexibility and customizability, I argue that this comes at the cost of making them practical for applied researchers and data scientists. Most importantly, it seems that there is some ambiguity about what counts as interactive features. For example, in the <a href="https://r-graph-gallery.com/interactive-charts.html">R Graph Gallery entry on Interactive Charts</a> <span class="citation">(<a href="#ref-holtz2022">Holtz 2022</a>)</span>, which features several examples of interactive visualization derived from the above-mentioned JavaScript interactive data visualization libraries, the visualizations feature interactions such zooming, panning, hovering, 3D rotation, and repositioning a node within a network graph. However, in all of these examples, the user only manipulates surface-level graphical attributes of a single plot. In contrast, the <a href="https://dash.plotly.com/interactive-graphing">Plotly Dash documentation page on Interactive Visualizations</a> <span class="citation">(<a href="#ref-plotly2022">Plotly Inc. 2022</a>)</span> does feature two examples of linked hovering and cross-filtering, i.e. examples of linked interactivity. However, it should be noted that vast majority of visualizations in the <a href="https://plotly.com/r/">Plotly R Open Source Graphing Library documentation page</a> <span class="citation">(<a href="#ref-plotly2022">Plotly Inc. 2022</a>)</span> allow for only surface-level interactions. Similarly, <a href="https://vega.github.io/vega-lite/examples/#interactive-charts">VegaLite Gallery pages on Interactive Charts</a> and <a href="https://vega.github.io/vega-lite/examples/#interactive-multi-view-displays">Interactive Multiview Displays</a> <span class="citation">(<a href="#ref-vegalite2022">Vega Project 2022</a>)</span> feature many examples, however, only a few show limited examples of linked or parametric interactivity. Finally, the <a href="https://jkunst.com/highcharter/articles/showcase.html">Highcharter Showcase Page</a> <span class="citation">(<a href="#ref-kunst2022">Kunst 2022</a>)</span> does not feature any examples of linking or parametric interactivity.</p>
 <p>What all of the packages listed above have in common is that most featured interaction is typically surface-level and takes place within a single plot, and the few examples that feature interesting types of interactivity (linked or parametric) often require a complicated setup. The main reason for this is most likely that all of these packages have been designed to be very general-purpose and flexible, and the price to pay for this flexibility is that complex types of interactivity require complex code. Another reason is that these packages have been built for static visualizations first, and interactivity second. Further, since all of these packages are native to JavaScript, the expectation may be that if more interesting types of interactivity are desired, the interactive “back-end” may be written separately, outside of the package. Finally, the typical use case for these packages seems to be presentation, not EDA.</p>
@@ -319,7 +386,7 @@ The user can manipulate the parameters of some underlying mathematical model or 
 <h3><span class="header-section-number">2.3.2</span> Relations<a href="introduction.html#relations" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Relations are some of the simplest mathematical structures. Given two sets <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, a relation <span class="math inline">\(R\)</span> between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> is a subset of the Cartesian product of the two sets, <span class="math inline">\(R \subseteq X \times Y\)</span>. In other words, a relation can be thought of as the set of <span class="math inline">\((x, y)\)</span> pairs <span class="math inline">\(\in X \times Y\)</span> for which the condition that “<span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> relate” is true. Note that <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> can also be the same set, such that <span class="math inline">\(R \subseteq X \times X\)</span>.</p>
 <p>Since a relation is a subset of the product set <span class="math inline">\(X \times Y\)</span>, we can display it as a matrix with values of <span class="math inline">\(X\)</span> as rows and values of <span class="math inline">\(Y\)</span> as columns and the pairs <span class="math inline">\((x, y)\)</span> which relate marked in some specific way. For example, here’s how we can display the usual order relation <span class="math inline">\(\leq\)</span> on the set <span class="math inline">\(X = \{ 1, 2, 3 \}\)</span>:</p>
-<div class="figure"><span style="display:block;" id="fig:relations-subset"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:relations-subset"></span>
 <img src="_main_files/figure-html/relations-subset-1.png" alt="Relations as a subset of the Cartesian product on two sets. From the diagram, we see that 1 is less than or equal to every element of y, 2 is less than or equal to 2 and 3, and 3 is less than or equal to 3 only. Note the symmetry between rows and columns - this is due to the fact that we have the same set ($X$) on both dimensions. " width="2100" />
 <p class="caption">
 Figure 2.1: Relations as a subset of the Cartesian product on two sets. From the diagram, we see that 1 is less than or equal to every element of y, 2 is less than or equal to 2 and 3, and 3 is less than or equal to 3 only. Note the symmetry between rows and columns - this is due to the fact that we have the same set (<span class="math inline">\(X\)</span>) on both dimensions.
@@ -342,7 +409,7 @@ We can do a lot of things with relations. The next few sections will discuss thr
 <div id="functions" class="section level3 hasAnchor" number="2.3.3">
 <h3><span class="header-section-number">2.3.3</span> Functions<a href="introduction.html#functions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>A function is a special kind of relation that encodes a mapping between two sets. More specifically, let <span class="math inline">\(S\)</span> be the set of sources (also called the <em>domain</em>) and <span class="math inline">\(T\)</span> be the set of possible targets (also called the <em>codomain</em>). Then, we can think of a function as a relation <span class="math inline">\(F \subseteq S \times T\)</span> of valid source-target pairs <span class="math inline">\((s, t)\)</span>, such that for every <span class="math inline">\(s \in S\)</span> in there exists a unique <span class="math inline">\(t \in T\)</span> with <span class="math inline">\((s, t) \in F\)</span> (see Figure <a href="introduction.html#fig:function-subset">2.2</a>). In other words, every source relates to exactly one target, see Figure <a href="introduction.html#fig:function-subset">2.2</a>:</p>
-<div class="figure"><span style="display:block;" id="fig:function-subset"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:function-subset"></span>
 <img src="_main_files/figure-html/function-subset-1.png" alt="Function as a subset of the Cartesian product on domain ($S$) and codomain ($T$). The subset $F \subseteq S \times T$ is shown in red. In words, the function is $F: \{ 1, 2, 3 \} \to \{ 1, 2, 3 \}$, such that $F(1) = 1$, $F(2) = 1$, and $F(3) = 2$, e.g. $f(x) = \lfloor x / 2 \rceil$ (divide by two and round). Note that, for any function, there must be exactly one red dot in each column (each source maps to one and only one target), however, there may be zero or many red dots in any row (some target may not be reachable, or they may be reachable from multiple sources)." width="2100" />
 <p class="caption">
 Figure 2.2: Function as a subset of the Cartesian product on domain (<span class="math inline">\(S\)</span>) and codomain (<span class="math inline">\(T\)</span>). The subset <span class="math inline">\(F \subseteq S \times T\)</span> is shown in red. In words, the function is <span class="math inline">\(F: \{ 1, 2, 3 \} \to \{ 1, 2, 3 \}\)</span>, such that <span class="math inline">\(F(1) = 1\)</span>, <span class="math inline">\(F(2) = 1\)</span>, and <span class="math inline">\(F(3) = 2\)</span>, e.g. <span class="math inline">\(f(x) = \lfloor x / 2 \rceil\)</span> (divide by two and round). Note that, for any function, there must be exactly one red dot in each column (each source maps to one and only one target), however, there may be zero or many red dots in any row (some target may not be reachable, or they may be reachable from multiple sources).
@@ -360,7 +427,7 @@ Figure 2.2: Function as a subset of the Cartesian product on domain (<span class
 <div class="definition">
 <p><span id="def:unlabeled-div-4" class="definition"><strong>Definition 2.4  (Bijectivity) </strong></span>A function is a bijection and only if it is both surjective and injective, and if and only if it is invertible.</p>
 </div>
-<div class="figure"><span style="display:block;" id="fig:function-types"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:function-types"></span>
 <img src="_main_files/figure-html/function-types-1.png" alt="Types of functions. Left: in a *surjective* function, every target can be reached from some source. Middle: in an *injective* function, every target can only be reached from a unique source. Right: in a *bijection*, every target can be reached from, and only from, a unique source." width="2100" />
 <p class="caption">
 Figure 2.3: Types of functions. Left: in a <em>surjective</em> function, every target can be reached from some source. Middle: in an <em>injective</em> function, every target can only be reached from a unique source. Right: in a <em>bijection</em>, every target can be reached from, and only from, a unique source.
@@ -489,19 +556,19 @@ p_3(a) = \begin{cases}
 <p>This means that when we combine two things, we get back something that’s at least as big as the bigger of the two things. Summation of natural numbers <span class="math inline">\((\mathbb{N}, 0, +)\)</span> again works, but for example summation of integers <span class="math inline">\((\mathbb{Z}, 0, +)\)</span> or multiplication of reals <span class="math inline">\((\mathbb{R}, 1, \times)\)</span> does not.</p>
 </div>
 </div>
-<div id="components-of-a-data-visualization-system" class="section level2 hasAnchor" number="2.4">
-<h2><span class="header-section-number">2.4</span> Components of a data visualization system<a href="introduction.html#components-of-a-data-visualization-system" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="theory-of-data-visualization-systems" class="section level2 hasAnchor" number="2.4">
+<h2><span class="header-section-number">2.4</span> Theory of data visualization systems<a href="introduction.html#theory-of-data-visualization-systems" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div id="scales" class="section level3 hasAnchor" number="2.4.1">
 <h3><span class="header-section-number">2.4.1</span> Scales<a href="introduction.html#scales" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Every data visualization system needs some way of translating abstract data values into concrete graphical attributes such as position, size, or colour. Given the ubiquitous need for scales, one might expect them to be a “solved issue”, within the relevant literature. However, this is far from the truth. Specifically, the issues of scales and measurement present are still being grappled with the areas of mathematics and philosophy of science to this day <span class="citation">(for a gentle yet thorough introduction, see <a href="#ref-tal2015">Tal 2015</a>)</span>.</p>
+<p>Every data visualization system needs some way of translating abstract data values into concrete graphical attributes such as position, size, or colour. Given the ubiquitous need for scales, one might expect them to be a “solved issue”, within the relevant literature. However, this is far from the truth. Specifically, the issues of scales and measurement are still being grappled with in the areas of mathematics and philosophy of science to this day <span class="citation">(for a gentle yet thorough introduction, see <a href="#ref-tal2015">Tal 2015</a>)</span>.</p>
 <p>Scales are another area of data visualization in which there has been considerable debate, with many terms being overloaded and relating to concepts from different fields. This is due to the fact that the issue of how to compare, rank, and translate values has a long and complicated history. In particular, the issue of measurement has been hotly debated in the field of psychometrics and mathematical psychology, leading to the development of the <em>theory of measurement</em> (which has some overlap with, but is not the same as, <em>measurement theory</em> in mathematics).</p>
 <p>One paper that has been key to the debate around scales and measurement has been the seminal work of <span class="citation">Stevens (<a href="#ref-stevens1946">1946</a>)</span>. In this paper, Stevens defined a <em>scale</em> as a method of assigning numbers to values, allowing for various kinds of comparisons. Further, by considering transformations which preserve the comparisons, Stevens identified 4 types of scales: <em>nominal</em>, <em>ordinal</em>, <em>interval</em>, and <em>ratio</em> <span class="citation">(see also <a href="#ref-michell1986">Michell 1986</a>; <a href="#ref-velleman1993">Velleman and Wilkinson 1993</a>)</span>.</p>
 <table>
 <caption><span id="tab:scales">Table 2.3: </span>Types of scales identified by Stevens (1946)</caption>
 <colgroup>
-<col width="5%" />
-<col width="13%" />
-<col width="39%" />
+<col width="7%" />
+<col width="17%" />
+<col width="33%" />
 <col width="40%" />
 </colgroup>
 <thead>
@@ -517,25 +584,25 @@ p_3(a) = \begin{cases}
 <td align="left">Nominal</td>
 <td align="left">Equivalence relation</td>
 <td align="left">Are <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> the same?</td>
-<td align="left"><span class="math inline">\(x&#39; = f(x)\)</span> where <span class="math inline">\(f\)</span> is a bijection</td>
+<td align="left"><span class="math inline">\(x&#39; = f(x)\)</span>, where <span class="math inline">\(f\)</span> is a bijection</td>
 </tr>
 <tr class="even">
 <td align="left">Ordinal</td>
 <td align="left">Total order</td>
 <td align="left">Is <span class="math inline">\(x\)</span> is greater than <span class="math inline">\(y\)</span>?</td>
-<td align="left"><span class="math inline">\(x&#39; = f(x)\)</span> where <span class="math inline">\(f\)</span> is a monotonically increasing bijection</td>
+<td align="left"><span class="math inline">\(x&#39; = f(x)\)</span>, where <span class="math inline">\(f\)</span> is a monotonic bijection</td>
 </tr>
 <tr class="odd">
 <td align="left">Interval</td>
 <td align="left">Lebesque measure</td>
-<td align="left">Is the distance from <span class="math inline">\(x\)</span> to <span class="math inline">\(y\)</span> the same as from <span class="math inline">\(a\)</span> to <span class="math inline">\(b\)</span>?</td>
-<td align="left"><span class="math inline">\(x&#39; = ax + b\)</span></td>
+<td align="left">How far is <span class="math inline">\(x\)</span> from <span class="math inline">\(y\)</span>?</td>
+<td align="left"><span class="math inline">\(x&#39; = ax + b\)</span>, for <span class="math inline">\(a, b\)</span> real</td>
 </tr>
 <tr class="even">
 <td align="left">Ratio</td>
 <td align="left"></td>
 <td align="left">How many times is <span class="math inline">\(x\)</span> greater than <span class="math inline">\(y\)</span>?</td>
-<td align="left"><span class="math inline">\(x&#39; = ax\)</span></td>
+<td align="left"><span class="math inline">\(x&#39; = ax\)</span>, for <span class="math inline">\(a\)</span> real</td>
 </tr>
 </tbody>
 </table>
@@ -548,8 +615,8 @@ p_3(a) = \begin{cases}
 <li><em>Symmetry</em>: <span class="math inline">\(x \sim y \text{ if and only if } y \sim x\)</span></li>
 <li><em>Transitivity</em>: <span class="math inline">\(x \sim y \text{ and } y \sim z \text{ then } x \sim z\)</span></li>
 </ul>
-<p>Intuitively, we can think of the numbers on a nominal scale as “labels”, and the only question which we can ask a nominal scale is whether two labels are the same or different. A such, examples of variables with nominal scale include variables of which we typically think of as categorical, such as color, species, or political party. It does not make sense to say “blue is <em>more</em> than green” or “cat is <em>more</em> than dog” without specifying some other axis along which we compare. It does make sense, however, to say “Daisy and Molly are the same species of animal (cat)” or “these two glasses are of different colors”.</p>
-<p>The only transformations which are permissible for nominal scales are permutations <span class="citation">(<a href="#ref-stevens1946">Stevens 1946</a>)</span>. For example, if we use the numbers <span class="math inline">\(\{ 1, 2, 3 \}\)</span> to represent the species <span class="math inline">\(S = \{ \text{cat}, \text{dog}, \text{hamster} \}\)</span>, respectively, we can assign the numbers in any order we want and the properties of the scale are preserved.</p>
+<p>Intuitively, we can think of the numbers on a nominal scale as “labels”. Thus, the only question which we can ask a nominal scale is whether two labels are the same or different. Examples of variables with nominal scale include variables of which we typically think of as categorical, such as color, species, or political party. It does not make sense to say “blue is <em>more</em> than green” or “cat is <em>more</em> than dog” without specifying some other axis of comparison. It does make sense, however, to say “Daisy and Molly are the same species of animal (cat)” or “these two glasses are of different colors”.</p>
+<p>For nominal scales, any permutation is a valid transformation <span class="citation">(<a href="#ref-stevens1946">Stevens 1946</a>)</span>. For example, if we use the numbers <span class="math inline">\(\{ 1, 2, 3 \}\)</span> to represent the species <span class="math inline">\(S = \{ \text{cat}, \text{dog}, \text{hamster} \}\)</span>, respectively, we can re-assign the numbers in any order we want and the properties of the scale are preserved.</p>
 <p>It is arguable whether any nominal quantities exist in and of themselves or whether they only ever exists as abstract social constructions over underlying continuous reality. Color is a discretization of the visible light spectrum (frequency of electromagnetic radiation), and the pre-Darwinian concept of a species is likewise an abstraction over continuously varying distribution of genes <span class="citation">(although there have been some attempts to ground the definition of a discrete species in the theory of genetics, e.g. as a population of individuals which can produce viable offsprings, see <a href="#ref-mayr1999">Mayr 1999</a>)</span>. Further, even many subjective concepts which are typically described as discrete such as emotions may be abstractions over underlying continuous phenomena <span class="citation">(<a href="#ref-barrett2013">Barrett 2013</a>)</span>.</p>
 <p>However, even if nominal quantities are entirely socially constructed, this does not mean they are arbitrary or useless. SEARLE</p>
 </div>
@@ -564,13 +631,13 @@ p_3(a) = \begin{cases}
 </ol>
 <p>Examples of total orders include the usual ordering <span class="math inline">\(\leq\)</span> on natural numbers <span class="math inline">\(\mathbb{N}\)</span>: <span class="math inline">\(1 \leq 2 \leq 3 \leq \ldots\)</span> or the alphabetical order on letters: <span class="math inline">\(A \leq B \leq C \ldots \leq Z\)</span>.</p>
 <p>As total orders, ordinal scales allow us to rank quantities. A good example of an ordinal variable is placement in a race or competition. If Emma and Charlotte ran a marathon, and Emma placed 2nd and Charlotte 3rd, we can say that Charlotte ran finished the race earlier than Emma. However, we do not know whether she crossed the finish line 15 minutes or 2 hours earlier, or whether or not her average pace was less than half of that of Emma.</p>
-<p>Some authors have related ordinal scales to <em>weak orders</em> <span class="citation">(see <a href="#ref-michell1986">Michell 1986</a>)</span>. Weak orders <span class="citation">(also known as <em>total preorders</em>, see <a href="#ref-nlab2024d">nLab 2024a</a>)</span> generalize total orders by allowing for ties (properties 2. and 4. above do not need hold). While this could seem desirable, I opted to relate ordinal scales to total orders here instead, since there is currently some ambiguity in the literature in the way the term <em>weak order</em> is being used <span class="citation">(see e.g. <a href="#ref-nlab2024a">nLab 2024b</a>, <a href="#ref-nlab2024b">2024c</a>; <a href="#ref-stackexchange2024">Abrams 2024</a>)</span>, and, for practical data analysis, the distinction is fairly inconsequential. For instance, in the marathon example above, if Emma and Charlotte both placed second, after Lucy and before Lily, we could frame the outcome of the race as the following weak order on the set <span class="math inline">\(M\)</span> of marathoners: <span class="math inline">\(\text{Lucy} \leq \text{Emma, Charlotte} \leq \text{Lily} \leq ...\)</span>. However, the underlying set of ranks <span class="math inline">\(R \subset \mathbb{N}\)</span> still retains a total ordering: <span class="math inline">\(1 \leq 2 \leq 3 \leq \ldots\)</span> and we can specify a surjective monotonically increasing function <span class="math inline">\(r: M \to R\)</span> which maps each marathoner to her rank. Clearly, we can map any weak order to a total order by applying a functor which enforces anti-symmetry in this way <span class="citation">(<a href="#ref-fong2019">Fong and Spivak 2019</a>; <a href="#ref-nlab2024d">nLab 2024a</a>)</span>.</p>
+<p>Some authors have related ordinal scales to <em>weak orders</em> <span class="citation">(see <a href="#ref-michell1986">Michell 1986</a>)</span>. Weak orders <span class="citation">(also known as <em>total preorders</em>, see <a href="#ref-nlab2024d">nLab 2024a</a>)</span> generalize total orders by allowing for ties (properties 2. and 4. above do not need hold). While this seems like a useful property, I opted to relate ordinal scales to total orders here instead, since there is currently ambuiguity in the way the term <em>weak order</em> is used in the literature <span class="citation">(see e.g. <a href="#ref-nlab2024a">nLab 2024b</a>, <a href="#ref-nlab2024b">2024c</a>; <a href="#ref-stackexchange2024">Abrams 2024</a>)</span>, and, for practical data analysis, the distinction is fairly inconsequential. For instance, in the marathon example above, if Emma and Charlotte both placed second, after Lucy and before Lily, we could frame the outcome of the race as the following weak order on the set <span class="math inline">\(M\)</span> of marathoners: <span class="math inline">\(\text{Lucy} \leq \text{Emma, Charlotte} \leq \text{Lily} \leq ...\)</span>. However, the underlying set of ranks <span class="math inline">\(R \subset \mathbb{N}\)</span> still retains a total ordering: <span class="math inline">\(1 \leq 2 \leq 3 \leq \ldots\)</span> and we can specify a surjective monotonically increasing function <span class="math inline">\(r: M \to R\)</span> which maps each marathoner to her rank. Clearly, we can map any weak order to a total order by applying a functor which enforces anti-symmetry in this way <span class="citation">(<a href="#ref-fong2019">Fong and Spivak 2019</a>; <a href="#ref-nlab2024d">nLab 2024a</a>)</span>.</p>
 <p>The only transformations which are permissible for ordinal scales are those which preserve order, that is, monotonic increasing transformations <span class="citation">(<a href="#ref-stevens1946">Stevens 1946</a>; <a href="#ref-michell1986">Michell 1986</a>)</span>. For example, transforming our set of ranks <span class="math inline">\(R\)</span> by taking the log or square root of each rank leaves the order relations between them unchanged.</p>
 </div>
 <div id="interval-scales" class="section level5 hasAnchor" number="2.4.1.0.3">
 <h5><span class="header-section-number">2.4.1.0.3</span> Interval scales<a href="introduction.html#interval-scales" class="anchor-section" aria-label="Anchor link to header"></a></h5>
 <p><em>Interval</em> scales.</p>
-<p>Interval scales allow us to identify a distance between two points. However, they do not have a natural “zero point” or intercept. As such we cannot use them to determine the ratio between two quantities. Examples of interval scales include the calendar date and geographical position. It does not make sense to say that the year 1000 CE is “twice” that of 500 CE, since the birth of Jesus Christ is (one’s personal religious beliefs aside) an arbitrary zero point: we could set the point 0 CE to any other event, such as the founding of Athens or the release of Taylor Swift’s first album, and the ratios would be altered. Likewise, it does not make sense to say that 90° longitude is “three times” that of 30° longitude: the location of the prime meridian is also the product of arbitrary historical cirumstances.</p>
+<p>Interval scales allow us to calculate a distance between two points. However, they do not have a natural “zero point” or intercept. As such we cannot use them to determine the ratio between two quantities. Examples of interval scales include the calendar date and geographical position. It does not make sense to say that the year 1000 CE is “twice as much” as 500 CE, since the birth of Jesus Christ is (religious beliefs aside) an arbitrary zero point: we could set 0 CE at any other point in time, such as the founding of Athens or the release of Taylor Swift’s first album, and all of the properties we care about when tracking historical time would be preserved. Likewise, it does not make sense to say that 90° longitude is “three times” that of 30° longitude: the location of the prime meridian is also the product of arbitrary historical cirumstances.</p>
 <div id="ratio-scales" class="section level6 hasAnchor" number="2.4.1.0.3.1">
 <h6><span class="header-section-number">2.4.1.0.3.1</span> Ratio scales<a href="introduction.html#ratio-scales" class="anchor-section" aria-label="Anchor link to header"></a></h6>
 <p>Unlike interval scales, ratio scale have a well-defined natural zero point. For example,</p>
@@ -719,7 +786,7 @@ Leman, Scotland C, Leanna House, Dipayan Maiti, Alex Endert, and Chris North. 20
 Mayr, Ernst. 1999. <em>Systematics and the Origin of Species, from the Viewpoint of a Zoologist</em>. Harvard University Press.
 </div>
 <div id="ref-mdn2024a" class="csl-entry">
-MDN. 2024. <span>“EventTarget - Web APIs <span><span class="math inline">\(\vert\)</span></span> MDN.”</span> <em>MDN Web Docs</em>. <a href="https://developer.mozilla.org/en-US/docs/Web/API/EventTarget">https://developer.mozilla.org/en-US/docs/Web/API/EventTarget</a>.
+MDN. 2024a. <span>“EventTarget - Web APIs <span><span class="math inline">\(\vert\)</span></span> MDN.”</span> <em>MDN Web Docs</em>. <a href="https://developer.mozilla.org/en-US/docs/Web/API/EventTarget">https://developer.mozilla.org/en-US/docs/Web/API/EventTarget</a>.
 </div>
 <div id="ref-react2024" class="csl-entry">
 Meta. 2024. <span>“React.”</span> <a href="https://react.dev">https://react.dev</a>.
@@ -839,7 +906,7 @@ Young, Forrest W, Pedro M Valero-Mora, and Michael Friendly. 2011. <em>Visual St
         </div>
       </div>
 <a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="design.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="high-level-design.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
