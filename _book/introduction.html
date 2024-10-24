@@ -53,72 +53,10 @@
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
 <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
 
 
-<style type="text/css">
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-</style>
 
 <style type="text/css">
   
@@ -176,18 +114,21 @@ div.csl-indent {
 <li class="chapter" data-level="2.2.4" data-path="introduction.html"><a href="introduction.html#working-definition"><i class="fa fa-check"></i><b>2.2.4</b> Working definition</a></li>
 <li class="chapter" data-level="2.2.5" data-path="introduction.html"><a href="introduction.html#list-of-common-interactive-features"><i class="fa fa-check"></i><b>2.2.5</b> List of common interactive features</a></li>
 </ul></li>
-<li class="chapter" data-level="2.3" data-path="introduction.html"><a href="introduction.html#mathematical-theory"><i class="fa fa-check"></i><b>2.3</b> Mathematical theory</a>
+<li class="chapter" data-level="2.3" data-path="introduction.html"><a href="introduction.html#the-highlighting-problem"><i class="fa fa-check"></i><b>2.3</b> The highlighting problem</a>
 <ul>
-<li class="chapter" data-level="2.3.1" data-path="introduction.html"><a href="introduction.html#past-application-of-category-theory-to-data-visualization"><i class="fa fa-check"></i><b>2.3.1</b> Past Application of Category Theory to Data Visualization</a></li>
-<li class="chapter" data-level="2.3.2" data-path="introduction.html"><a href="introduction.html#relations"><i class="fa fa-check"></i><b>2.3.2</b> Relations</a></li>
-<li class="chapter" data-level="2.3.3" data-path="introduction.html"><a href="introduction.html#functions"><i class="fa fa-check"></i><b>2.3.3</b> Functions</a></li>
-<li class="chapter" data-level="2.3.4" data-path="introduction.html"><a href="introduction.html#partitions"><i class="fa fa-check"></i><b>2.3.4</b> Partitions</a></li>
-<li class="chapter" data-level="2.3.5" data-path="introduction.html"><a href="introduction.html#preorders"><i class="fa fa-check"></i><b>2.3.5</b> Preorders</a></li>
-<li class="chapter" data-level="2.3.6" data-path="introduction.html"><a href="introduction.html#monoids"><i class="fa fa-check"></i><b>2.3.6</b> Monoids</a></li>
+<li class="chapter" data-level="2.3.1" data-path="introduction.html"><a href="introduction.html#linked-selection-and-stacking"><i class="fa fa-check"></i><b>2.3.1</b> Linked selection and stacking</a></li>
 </ul></li>
-<li class="chapter" data-level="2.4" data-path="introduction.html"><a href="introduction.html#theory-of-data-visualization-systems"><i class="fa fa-check"></i><b>2.4</b> Theory of data visualization systems</a>
+<li class="chapter" data-level="2.4" data-path="introduction.html"><a href="introduction.html#mathematical-theory"><i class="fa fa-check"></i><b>2.4</b> Mathematical theory</a>
 <ul>
-<li class="chapter" data-level="2.4.1" data-path="introduction.html"><a href="introduction.html#scales"><i class="fa fa-check"></i><b>2.4.1</b> Scales</a></li>
+<li class="chapter" data-level="2.4.1" data-path="introduction.html"><a href="introduction.html#relations"><i class="fa fa-check"></i><b>2.4.1</b> Relations</a></li>
+<li class="chapter" data-level="2.4.2" data-path="introduction.html"><a href="introduction.html#functions"><i class="fa fa-check"></i><b>2.4.2</b> Functions</a></li>
+<li class="chapter" data-level="2.4.3" data-path="introduction.html"><a href="introduction.html#partitions"><i class="fa fa-check"></i><b>2.4.3</b> Partitions</a></li>
+<li class="chapter" data-level="2.4.4" data-path="introduction.html"><a href="introduction.html#preorders"><i class="fa fa-check"></i><b>2.4.4</b> Preorders</a></li>
+<li class="chapter" data-level="2.4.5" data-path="introduction.html"><a href="introduction.html#monoids"><i class="fa fa-check"></i><b>2.4.5</b> Monoids</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="introduction.html"><a href="introduction.html#theory-of-data-visualization-systems"><i class="fa fa-check"></i><b>2.5</b> Theory of data visualization systems</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="introduction.html"><a href="introduction.html#scales"><i class="fa fa-check"></i><b>2.5.1</b> Scales</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="high-level-design.html"><a href="high-level-design.html"><i class="fa fa-check"></i><b>3</b> High-level design</a>
@@ -255,8 +196,8 @@ div.csl-indent {
 <h3><span class="header-section-number">2.1.2</span> Interactive data visualization and the Web: World-wide interactivity<a href="introduction.html#interactive-data-visualization-and-the-web-world-wide-interactivity" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The tail end of the millennium would mark the arrival of a whole new class of technologies that had a significant impact on interactive data visualization, just as it had on almost every other field of human endeavor. The arrival of the internet in the mid 1990’s, and the development of JavaScript in 1995 as a high-level programming language for the Web <span class="citation">(for a thorough description of the history, see e.g. <a href="#ref-wirfs-brock2020">Wirfs-Brock and Eich 2020</a>)</span>, saw the rise of interactive applications that could be accessed by anyone, from anywhere. This was aided by the dissemination of robust and standardized Web browsers. Soon, interactive data visualization became just one of many interactive technologies highly sought after within the fledgling Web ecosystem.</p>
 <p>Early interactive data visualization systems for the Web, such as Prefuse <span class="citation">(<a href="#ref-heer2005">Heer, Card, and Landay 2005</a>)</span> and Flare <span class="citation">(developed around 2008, <a href="#ref-flare2020">Blokt 2020</a>)</span> tended to relied on external plugins (Java and Adobe Flash Player, respectively). However, as browsers got faster at interpreting JavaScript, thanks to advances in compiler technologies, specifically Just In Time (JIT) compilation, it became possible to write entire data visualization libraries in JavaScript. In the late 2000’s and early 2010’s, several true Web-native interactive data visualization systems emerged.</p>
-<p>Currently, the most prominent framework for data visualization on the Web, interactive or otherwise, is D3.js <span class="citation">(<a href="#ref-bostock2022">Mike Bostock 2022</a>)</span>. D3 is a fairly general and low-level JavaScript framework for visualizing data, and consists of a suite of specialized modules designed for various aspects of the data visualization workflow, including parsing data, transformation, defining scales, interfacing with the DOM and handling interaction events, and even physics simulation and animation. Importantly, while D3 does provide methods for handling interactive events, it does not provide a system for dispatching and coordinating these events - it instead delegates this responsibility to the user and encourages the use of reactive Web frameworks such as React <span class="citation">(<a href="#ref-react2024">Meta 2024</a>)</span>, Vue <span class="citation">(<a href="#ref-vue2024">Evan You and the Vue Core Team 2024</a>)</span>, or Svelte <span class="citation">(<a href="#ref-svelte2024">Rich Harris and the Svelte Core Team 2024</a>)</span>. Finally, D3.js visualizations are rendered as Scalable Vector Graphics (SVG) by default, meaning that they can be scaled without loss of quality. However, a price to pay for this robustness is in performance, as visualizations can become slow to render at high data volumes. The modular nature of D3 means that the visualizations can be rendered by other, more performant devices, such as the HTML 5 Canvas element or WebGL, however, as of this date, the implementation of such an alternative rendering framework is left to the user and there are no official modules.</p>
-<p>Building upon the fairly low level framework provided by D3, many packages have been developed to provide a more high-level and opinionated interfaces. Prominent two among these are plotly.js <span class="citation">(<a href="#ref-plotly2022">Plotly Inc. 2022</a>)</span> and Highcharts <span class="citation">(<a href="#ref-highcharts2024">Highsoft 2024</a>)</span>. While D3 provides low-level utilities such as data transformations, scales, and geometric objects, these packages provide more high-level utilities such as functions for rendering complete plots and registering reactive events, which are under the hood automatically handled via systems based on the native DOM Event Target interface <span class="citation">(<a href="#ref-mdn2024a">MDN 2024a</a>)</span>. Like D3, both plotly.js and Highcharts also render the graphics in SVG by default, however, unlike D3, they both also provide alternative rendering engines based on WebGL <span class="citation">(<a href="#ref-highschartsboost2022">Highsoft 2022</a>; <a href="#ref-plotly2024b">Plotly Inc. 2024</a>)</span>.</p>
+<p>Currently, the most prominent framework for data visualization on the Web, interactive or otherwise, is D3.js <span class="citation">(<a href="#ref-bostock2022">Bostock 2022</a>)</span>. D3 is a fairly general and low-level JavaScript framework for visualizing data, and consists of a suite of specialized modules designed for various aspects of the data visualization workflow, including parsing data, transformation, defining scales, interfacing with the DOM and handling interaction events, and even physics simulation and animation. Importantly, while D3 does provide methods for handling interactive events, it does not provide a system for dispatching and coordinating these events - it instead delegates this responsibility to the user and encourages the use of reactive Web frameworks such as React <span class="citation">(<a href="#ref-react2024">Meta 2024</a>)</span>, Vue <span class="citation">(<a href="#ref-vue2024">Evan You and the Vue Core Team 2024</a>)</span>, or Svelte <span class="citation">(<a href="#ref-svelte2024">Rich Harris and the Svelte Core Team 2024</a>)</span>. Finally, D3.js visualizations are rendered as Scalable Vector Graphics (SVG) by default, meaning that they can be scaled without loss of quality. However, a price to pay for this robustness is in performance, as visualizations can become slow to render at high data volumes. The modular nature of D3 means that the visualizations can be rendered by other, more performant devices, such as the HTML 5 Canvas element or WebGL, however, as of this date, the implementation of such an alternative rendering framework is left to the user and there are no official modules.</p>
+<p>Building upon the fairly low level framework provided by D3, many packages have been developed to provide a more high-level and opinionated interfaces. Prominent two among these are plotly.js <span class="citation">(<a href="#ref-plotly2022">Plotly Inc. 2022</a>)</span> and Highcharts <span class="citation">(<a href="#ref-highcharts2024">Highsoft 2024</a>)</span>. While D3 provides low-level utilities such as data transformations, scales, and geometric objects, these packages provide more high-level utilities such as functions for rendering complete plots and registering reactive events, which are under the hood automatically handled via systems based on the native DOM Event Target interface <span class="citation">(<a href="#ref-mdn2024a">MDN 2024</a>)</span>. Like D3, both plotly.js and Highcharts also render the graphics in SVG by default, however, unlike D3, they both also provide alternative rendering engines based on WebGL <span class="citation">(<a href="#ref-highschartsboost2022">Highsoft 2022</a>; <a href="#ref-plotly2024b">Plotly Inc. 2024</a>)</span>.</p>
 <p>A somewhat different approach is taken by another popular visualization package built partially on D3 - Vega <span class="citation">(<a href="#ref-satyanarayan2015">Satyanarayan et al. 2015</a>; <a href="#ref-vega2024a">Vega Project 2024b</a>)</span>. Vega provides a declarative framework for defining (interactive) data visualizations using a static <a href="glossary.html#JSON">JSON</a> schema. Compared to plotly.js or Highcharts, Vega is significantly more expressive, allowing for fine-grained customization of graphics and interactive behavior, standing essentially just one level above D3. However, as a consequence, it is also significantly more verbose. For example, a full specification of a scatterplot matrix with linked brushing takes over 300 lines of code <span class="citation">(JSON, not including the data and using default formatting such as would be created by calling <code>JSON.stringify(schema, null, "\t")</code>, <a href="#ref-vega2024b">Vega Project 2024a</a>)</span>.</p>
 <p>While these contemporary Web-based interactive data visualization systems offer great deal of flexibility and customizability, I argue that this comes at the cost of making them practical for applied researchers and data scientists. Most importantly, it seems that there is some ambiguity about what counts as interactive features. For example, in the <a href="https://r-graph-gallery.com/interactive-charts.html">R Graph Gallery entry on Interactive Charts</a> <span class="citation">(<a href="#ref-holtz2022">Holtz 2022</a>)</span>, which features several examples of interactive visualization derived from the above-mentioned JavaScript interactive data visualization libraries, the visualizations feature interactions such zooming, panning, hovering, 3D rotation, and repositioning a node within a network graph. However, in all of these examples, the user only manipulates surface-level graphical attributes of a single plot. In contrast, the <a href="https://dash.plotly.com/interactive-graphing">Plotly Dash documentation page on Interactive Visualizations</a> <span class="citation">(<a href="#ref-plotly2022">Plotly Inc. 2022</a>)</span> does feature two examples of linked hovering and cross-filtering, i.e. examples of linked interactivity. However, it should be noted that vast majority of visualizations in the <a href="https://plotly.com/r/">Plotly R Open Source Graphing Library documentation page</a> <span class="citation">(<a href="#ref-plotly2022">Plotly Inc. 2022</a>)</span> allow for only surface-level interactions. Similarly, <a href="https://vega.github.io/vega-lite/examples/#interactive-charts">VegaLite Gallery pages on Interactive Charts</a> and <a href="https://vega.github.io/vega-lite/examples/#interactive-multi-view-displays">Interactive Multiview Displays</a> <span class="citation">(<a href="#ref-vegalite2022">Vega Project 2022</a>)</span> feature many examples, however, only a few show limited examples of linked or parametric interactivity. Finally, the <a href="https://jkunst.com/highcharter/articles/showcase.html">Highcharter Showcase Page</a> <span class="citation">(<a href="#ref-kunst2022">Kunst 2022</a>)</span> does not feature any examples of linking or parametric interactivity.</p>
 <p>What all of the packages listed above have in common is that most featured interaction is typically surface-level and takes place within a single plot, and the few examples that feature interesting types of interactivity (linked or parametric) often require a complicated setup. The main reason for this is most likely that all of these packages have been designed to be very general-purpose and flexible, and the price to pay for this flexibility is that complex types of interactivity require complex code. Another reason is that these packages have been built for static visualizations first, and interactivity second. Further, since all of these packages are native to JavaScript, the expectation may be that if more interesting types of interactivity are desired, the interactive “back-end” may be written separately, outside of the package. Finally, the typical use case for these packages seems to be presentation, not EDA.</p>
@@ -369,27 +310,45 @@ The user can manipulate the parameters of some underlying mathematical model or 
 <p>This section describes several common types of interactive features that facilitate interactive data exploration.</p>
 </div>
 </div>
-<div id="mathematical-theory" class="section level2 hasAnchor" number="2.3">
-<h2><span class="header-section-number">2.3</span> Mathematical theory<a href="introduction.html#mathematical-theory" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>The main idea of the present thesis is that the mathematical properties of the statistical summaries underlying our visualizations determine which interactive features will be “well-behaved” and vice versa. Therefore, a foundational understanding of these properties is necessary to be able to delve into the problem deeper.</p>
-<p>It is important to note that the topic touches some fairly fundamental concepts, such as functions and orders, which may be already familiar to some readers. Thus, an overly detailed treatment may risk becoming tedious. On the other hand, too concise of a treatment may leave the connections to some of the more abstract mathematical structures, such as monoids, groups, and functors, unclear.</p>
-<p>To address this issue, I will try to present each concept in a concise but fairly thorough way. Readers already familiar with these concepts are encouraged to skip or skim the relevant sections.</p>
-<p>To discuss the core ideas of the present thesis, it is necessary to first lay out some relevant mathematical theory. Indeed, one of these core ideas is that the mathematical properties of the statistical summaries in our visualizations determine what types of interactions “make sense” and vice versa, and, as such, we cannot delve into the problem without first discussing these properties. However, since the topic at hand touches some fairly fundamental mathematical structures and concepts, such as functions and orders, a thorough treatment may run the risk of boring the reader who is already familiar with them. On the other hand, without a thorough treatment, the connections to some of the other concepts from the more abstract branches of mathematics (abstract algebra/group theory/category theory), such as monoids, groups, and functors, may be lost on some readers.</p>
-<p>To find a way out of this predicament, I propose the following: I will lay out the fundamental theory as thoroughly as I see fit. A reader who is familiar with these topics is advised to skip them. Throughout the rest of the text, I will make a heavy use of cross-references such that when the various concepts are mentioned, the reader can go and refer back to them.</p>
-<p>The material in this chapter follows mainly from <span class="citation">Fong and Spivak (<a href="#ref-fong2019">2019</a>)</span>, <span class="citation">Lawvere and Schanuel (<a href="#ref-lawvere2009">2009</a>)</span>, <span class="citation">Baez (<a href="#ref-baez2023">2023</a>)</span>, and <span class="citation">Milewski (<a href="#ref-milewski2018">2018</a>)</span>. Interested reader is advised to seek out these references, especially <span class="citation">Fong and Spivak (<a href="#ref-fong2019">2019</a>)</span> and <span class="citation">Lawvere and Schanuel (<a href="#ref-lawvere2009">2009</a>)</span>, as they provide an accessible introduction to the topic.</p>
-<div id="past-application-of-category-theory-to-data-visualization" class="section level3 hasAnchor" number="2.3.1">
-<h3><span class="header-section-number">2.3.1</span> Past Application of Category Theory to Data Visualization<a href="introduction.html#past-application-of-category-theory-to-data-visualization" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>I want to make a quick note on how data visualization has been related to category theory in the past. There have a few papers which have related category theory to data visualizations in a very abstract way, with the authors trying to lay down theoretical foundations for what it means to “visualize” <span class="citation">(<a href="#ref-beckmann1995">Beckmann 1995</a>)</span> or which visualizations can be considered well-formed perceptual representations of the data <span class="citation">(<a href="#ref-kindlmann2014">Kindlmann and Scheidegger 2014</a>)</span>. There have also a handful of papers which have discussed category theory and data visualization in the context of functional programming, with authors introducing new functional programming libraries and domain-specific languages which allow for constructing plots and figures in a functionally compositional style <span class="citation">(see e.g. <a href="#ref-yorgey2012">Yorgey 2012</a>; <a href="#ref-petricek2021">Petricek 2021</a>; <a href="#ref-smeltzer2014">Smeltzer, Erwig, and Metoyer 2014</a>; <a href="#ref-smeltzer2018">Smeltzer and Erwig 2018</a>)</span>.</p>
-<p>The present thesis attempts to do neither. The focus is neither on the more abstract questions about the visualization process, nor am I aiming to present a new functional programming library for data visualization; the R package accompanying the thesis is not written in a functional style, barring a few quirks and style choices made by the author. Instead, the focus is on the mathematical properties of one specific component of data visualizations: the statistical summaries underlying the visualizations.</p>
+<div id="the-highlighting-problem" class="section level2 hasAnchor" number="2.3">
+<h2><span class="header-section-number">2.3</span> The highlighting problem<a href="introduction.html#the-highlighting-problem" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>As was discussed in the previous section, linked selection is one of the most highly ranked interactive features in interactive data visualization. It allows us to mark specific cases in one plot, and see the corresponding summary statistics in all the other plots. In this way, it allows us to quickly explore different dynamically-generated subsets of our data, within the context of the whole data set.</p>
+<div id="linked-selection-and-stacking" class="section level3 hasAnchor" number="2.3.1">
+<h3><span class="header-section-number">2.3.1</span> Linked selection and stacking<a href="introduction.html#linked-selection-and-stacking" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>When we engage in linked selection, we want to highlight parts of objects corresponding to the selected cases. Thus, fundamentally, we need to break each object into parts. We then need some way of representing those parts, in a way that visually preserves the hierarchical nature of the relationship (it needs to be clear that the parts are still parts of the whole object).</p>
+<p>In data visualization, there are three common methods for dealing with objects that have been split into parts: stacking, dodging, and layering. Let’s briefly illustrate these on the example of the barplot. We start with the whole bars and then break each bar into multiple segments based on the levels of another variable (such as selection status). Now, what we do with these segments will differ based on the technique we use. When stacking, we plot the bar segments vertically on top of each other. When dodging, we plot the bars side-by-side, as “clusters”. Finally, when layering, we plot bar segments in separate graphical layers and use partial transparency to mitigate overplotting.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-1"></span>
+<img src="_main_files/figure-html/unnamed-chunk-1-1.png" alt="Examples of the three methods for dealing with objects that have been split into parts: stacking, dodging, and layering." width="672" />
+<p class="caption">
+Figure 2.1: Examples of the three methods for dealing with objects that have been split into parts: stacking, dodging, and layering.
+</p>
 </div>
-<div id="relations" class="section level3 hasAnchor" number="2.3.2">
-<h3><span class="header-section-number">2.3.2</span> Relations<a href="introduction.html#relations" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Relations are some of the simplest mathematical structures. Given two sets <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, a relation <span class="math inline">\(R\)</span> between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> is a subset of the Cartesian product of the two sets, <span class="math inline">\(R \subseteq X \times Y\)</span>. In other words, a relation can be thought of as the set of <span class="math inline">\((x, y)\)</span> pairs <span class="math inline">\(\in X \times Y\)</span> for which the condition that “<span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> relate” is true. Note that <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> can also be the same set, such that <span class="math inline">\(R \subseteq X \times X\)</span>.</p>
-<p>Since a relation is a subset of the product set <span class="math inline">\(X \times Y\)</span>, we can display it as a matrix with values of <span class="math inline">\(X\)</span> as rows and values of <span class="math inline">\(Y\)</span> as columns and the pairs <span class="math inline">\((x, y)\)</span> which relate marked in some specific way. For example, here’s how we can display the usual order relation <span class="math inline">\(\leq\)</span> on the set <span class="math inline">\(X = \{ 1, 2, 3 \}\)</span>:</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:relations-subset"></span>
+<p>Much has been written about the relative merits of stacking, dodging, and layering. For example, layering is only useful with few categories, as blending many colors can make it difficult to tell the categories apart <span class="citation">(<a href="#ref-franconeri2021">Franconeri et al. 2021</a>; <a href="#ref-wilke2019">Wilke 2019</a>)</span>. Further, in a landmark study, <span class="citation">Cleveland and McGill (<a href="#ref-cleveland1984">1984</a>)</span> showed that people tend to be less accurate when reading information from stacked bar charts as opposed to dodged bar charts. Specifically, since the lower y-axis coordinate of a stacked segment is pushed up by the cumulative height of the segments below, it becomes difficult to accurately compare segments’ length, both within and across bars <span class="citation">(<a href="#ref-cleveland1984">Cleveland and McGill 1984</a>)</span>. Subsequent research has independently validated these findings and expanded upon them <span class="citation">(see e.g. <a href="#ref-heer2010">Heer and Bostock 2010</a>; <a href="#ref-thudt2016">Thudt et al. 2016</a>; <a href="#ref-quadri2021">Quadri and Rosen 2021</a>)</span>. Due to this suboptimal statistical legibility, many data visualization researchers have urged caution about stacking <span class="citation">(see e.g. <a href="#ref-byron2008">Byron and Wattenberg 2008</a>; <a href="#ref-cairo2014">Cairo 2014</a>; <a href="#ref-franconeri2021">Franconeri et al. 2021</a>)</span>, and some have even discouraged its use altogether <span class="citation">(<a href="#ref-kosara2016">Kosara 2016</a>; <a href="#ref-wilke2019">Wilke 2019</a>)</span>.</p>
+<p>However, much of this research has been done with on static visualizations. I argue that, in interactive data visualization, there are additional constraints that affect the calculus of which method is the best.</p>
+<p>First, if we want to support the ability to interactively manipulate the alpha channel and do linked selection with multiple (3+) selection groups, we can effectively eliminate layering as an option. Having two different sources of alpha channel (layering and user input) would make the interaction confusing and limit its range (e.g. if we use 75% alpha to do layering, then the effective range of values the user can manipulate is 0-75%). Further, with multiple selection groups, it would become hard to tell the selection status apart. It is much better to keep the two interactive features (selection and alpha manipulation) orthogonal and use a separate visual attribute (color and transparency) for each.</p>
+<p>Thus, the choice is between stacking and dodging. While, as was discussed above, dodging is the preferred choice in static data visualization, I propose that</p>
+<p>First, I propose that stacking is the superior method for <em>displaying</em> selection. Thanks to the four Gestalt principles of proximity, similarity, closure, and common region, in a stacked barplot, each bar presents itself as a single visual entity. In other words, since the stacked segments are placed right on top of each other, and share width and a closed border, they are perceived as part of a unified whole (the bar). This remains true throughout selection - no matter how the heights of the highlighted segments change, the height of the whole stacked bar remains constant, and so does the overall outline of the plot.</p>
+<p>To address the highlighting problem, we need to first discuss some key mathematical theory.</p>
+</div>
+</div>
+<div id="mathematical-theory" class="section level2 hasAnchor" number="2.4">
+<h2><span class="header-section-number">2.4</span> Mathematical theory<a href="introduction.html#mathematical-theory" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>This section starts with some foundational mathematical concepts, such as functions, relations, and orders, and slowly builds up to more advanced topics such as categories, monoids, and functors. Readers familiar these ideas may feel free to skip ahead. However, even the fundamental concepts will be used throughout the thesis, so a refresher might be beneficial.</p>
+<p>The material covers topics from category theory and abstract algebra and follows primarily from <span class="citation">Fong and Spivak (<a href="#ref-fong2019">2019</a>)</span>, <span class="citation">Lawvere and Schanuel (<a href="#ref-lawvere2009">2009</a>)</span>, <span class="citation">Baez (<a href="#ref-baez2023">2023</a>)</span>, <span class="citation">Pinter (<a href="#ref-pinter2010">2010</a>)</span>, and <span class="citation">Milewski (<a href="#ref-milewski2018">2018</a>)</span>. For an accessible introduction to the topic, interested readers are encouraged to consult these references, particularly <span class="citation">Fong and Spivak (<a href="#ref-fong2019">2019</a>)</span> and <span class="citation">Lawvere and Schanuel (<a href="#ref-lawvere2009">2009</a>)</span>.</p>
+<div id="note-on-past-applications-of-category-theory-to-data-visualization" class="section level4 hasAnchor" number="2.4.0.1">
+<h4><span class="header-section-number">2.4.0.1</span> Note on past applications of category theory to data visualization<a href="introduction.html#note-on-past-applications-of-category-theory-to-data-visualization" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>There have been some applications of category theory to data visualization in the past. Specifically, several authors have used category theory to describe the more abstract aspects of data visualization, with some using it to try to lay down the theoretical foundations for what it means to “visualize” <span class="citation">(<a href="#ref-beckmann1995">Beckmann 1995</a>)</span> or for which visualizations can be considered well-formed perceptual representations of the data <span class="citation">(<a href="#ref-kindlmann2014">Kindlmann and Scheidegger 2014</a>)</span>. Handful of authors have also jointly discussed category theory and data visualization in the context of functional programming, introducing new functional programming libraries and domain-specific languages for data visualization <span class="citation">(see e.g. <a href="#ref-yorgey2012">Yorgey 2012</a>; <a href="#ref-petricek2021">Petricek 2021</a>; <a href="#ref-smeltzer2014">Smeltzer, Erwig, and Metoyer 2014</a>; <a href="#ref-smeltzer2018">Smeltzer and Erwig 2018</a>)</span>.</p>
+<p>The present thesis seeks to do neither. Instead, the goal is to use category theory to pin down the algebraic properties of the statistics underlying our visualizations, to determine which combinations of graphics, statistical summaries, and interactive features will work well together. Thus, the target is somewhere in the middle: provide a theoretical framework which will guide application.</p>
+</div>
+<div id="relations" class="section level3 hasAnchor" number="2.4.1">
+<h3><span class="header-section-number">2.4.1</span> Relations<a href="introduction.html#relations" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>A relation is one of the simplest mathematical structures. Given two sets <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, a relation <span class="math inline">\(R\)</span> between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> is a subset of the Cartesian product of the two sets, <span class="math inline">\(R \subseteq X \times Y\)</span>. In other words, a relation can be thought of as the subset of pairs <span class="math inline">\((x, y) \in X \times Y\)</span> for which the condition that “<span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> relate” holds.</p>
+<p>Depending on the relation, the condition “<span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> relate” might mean different things. For example, perhaps the most fundamental type of relation is equality; in this case, “<span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> relate” means that, for our purposes, <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> are the same, i.e. <span class="math inline">\(x = y\)</span>. Other examples of relations include the usual order relations <span class="math inline">\(&lt;\)</span>, <span class="math inline">\(\leq\)</span>, <span class="math inline">\(&gt;\)</span>, <span class="math inline">\(\geq\)</span>, or the divides operator <span class="math inline">\(\mid\)</span>. As a final note, <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> can also be the same set, such that <span class="math inline">\(R \subseteq X \times X\)</span>.</p>
+<p>Since a relation is a subset of the product set <span class="math inline">\(X \times Y\)</span>, we can display it as a matrix, with values of <span class="math inline">\(X\)</span> as rows, values of <span class="math inline">\(Y\)</span> as columns, and the related pairs <span class="math inline">\((x, y)\)</span> marked out in some specific way. For example, here’s how we can display the order relation <span class="math inline">\(\leq\)</span> on the set <span class="math inline">\(X = \{ 1, 2, 3 \}\)</span>:</p>
+<div class="figure"><span style="display:block;" id="fig:relations-subset"></span>
 <img src="_main_files/figure-html/relations-subset-1.png" alt="Relations as a subset of the Cartesian product on two sets. From the diagram, we see that 1 is less than or equal to every element of y, 2 is less than or equal to 2 and 3, and 3 is less than or equal to 3 only. Note the symmetry between rows and columns - this is due to the fact that we have the same set ($X$) on both dimensions. " width="2100" />
 <p class="caption">
-Figure 2.1: Relations as a subset of the Cartesian product on two sets. From the diagram, we see that 1 is less than or equal to every element of y, 2 is less than or equal to 2 and 3, and 3 is less than or equal to 3 only. Note the symmetry between rows and columns - this is due to the fact that we have the same set (<span class="math inline">\(X\)</span>) on both dimensions.
+Figure 2.2: Relations as a subset of the Cartesian product on two sets. From the diagram, we see that 1 is less than or equal to every element of y, 2 is less than or equal to 2 and 3, and 3 is less than or equal to 3 only. Note the symmetry between rows and columns - this is due to the fact that we have the same set (<span class="math inline">\(X\)</span>) on both dimensions.
 </p>
 </div>
 <p>Under some relation <span class="math inline">\(R\)</span>, if two elements <span class="math inline">\(x, y \in X\)</span> relate, i.e. if <span class="math inline">\((x, y) \in R\)</span>, we can write this using the infix notation using some infix symbol such as <span class="math inline">\(\star\)</span>: then, if <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> relate, we write <span class="math inline">\(x \star_R y\)</span> or <span class="math inline">\(x \star y\)</span> (<span class="math inline">\(R\)</span> implicit). For example, for common relations such as <span class="math inline">\(=\)</span>, <span class="math inline">\(\leq\)</span>, we write <span class="math inline">\(x = y\)</span> or <span class="math inline">\(x \leq y\)</span>. <span class="math inline">\(R\)</span> is also sometimes used, e.g. <span class="math inline">\(x R y\)</span>. If the elements do not relate, i.e. <span class="math inline">\((x, y) \not \in R\)</span>, we typically do not write this out explicitly.</p>
@@ -406,16 +365,16 @@ Figure 2.1: Relations as a subset of the Cartesian product on two sets. From the
 <p><span class="math display">\[[a] = \{ x \in X : x \sim a \}\]</span>
 We can do a lot of things with relations. The next few sections will discuss three important examples: functions, partitions, and preorders.</p>
 </div>
-<div id="functions" class="section level3 hasAnchor" number="2.3.3">
-<h3><span class="header-section-number">2.3.3</span> Functions<a href="introduction.html#functions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>A function is a special kind of relation that encodes a mapping between two sets. More specifically, let <span class="math inline">\(S\)</span> be the set of sources (also called the <em>domain</em>) and <span class="math inline">\(T\)</span> be the set of possible targets (also called the <em>codomain</em>). Then, we can think of a function as a relation <span class="math inline">\(F \subseteq S \times T\)</span> of valid source-target pairs <span class="math inline">\((s, t)\)</span>, such that for every <span class="math inline">\(s \in S\)</span> in there exists a unique <span class="math inline">\(t \in T\)</span> with <span class="math inline">\((s, t) \in F\)</span> (see Figure <a href="introduction.html#fig:function-subset">2.2</a>). In other words, every source relates to exactly one target, see Figure <a href="introduction.html#fig:function-subset">2.2</a>:</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:function-subset"></span>
+<div id="functions" class="section level3 hasAnchor" number="2.4.2">
+<h3><span class="header-section-number">2.4.2</span> Functions<a href="introduction.html#functions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>A function is a special kind of relation that encodes a mapping between two sets. More specifically, let <span class="math inline">\(S\)</span> be the set of sources (also called the <em>domain</em>) and <span class="math inline">\(T\)</span> be the set of possible targets (also called the <em>codomain</em>). Then, we can think of a function as a relation <span class="math inline">\(F \subseteq S \times T\)</span> of valid source-target pairs <span class="math inline">\((s, t)\)</span>, such that for every <span class="math inline">\(s \in S\)</span> in there exists a unique <span class="math inline">\(t \in T\)</span> with <span class="math inline">\((s, t) \in F\)</span> (see Figure <a href="introduction.html#fig:function-subset">2.3</a>). In other words, every source relates to exactly one target, see Figure <a href="introduction.html#fig:function-subset">2.3</a>:</p>
+<div class="figure"><span style="display:block;" id="fig:function-subset"></span>
 <img src="_main_files/figure-html/function-subset-1.png" alt="Function as a subset of the Cartesian product on domain ($S$) and codomain ($T$). The subset $F \subseteq S \times T$ is shown in red. In words, the function is $F: \{ 1, 2, 3 \} \to \{ 1, 2, 3 \}$, such that $F(1) = 1$, $F(2) = 1$, and $F(3) = 2$, e.g. $f(x) = \lfloor x / 2 \rceil$ (divide by two and round). Note that, for any function, there must be exactly one red dot in each column (each source maps to one and only one target), however, there may be zero or many red dots in any row (some target may not be reachable, or they may be reachable from multiple sources)." width="2100" />
 <p class="caption">
-Figure 2.2: Function as a subset of the Cartesian product on domain (<span class="math inline">\(S\)</span>) and codomain (<span class="math inline">\(T\)</span>). The subset <span class="math inline">\(F \subseteq S \times T\)</span> is shown in red. In words, the function is <span class="math inline">\(F: \{ 1, 2, 3 \} \to \{ 1, 2, 3 \}\)</span>, such that <span class="math inline">\(F(1) = 1\)</span>, <span class="math inline">\(F(2) = 1\)</span>, and <span class="math inline">\(F(3) = 2\)</span>, e.g. <span class="math inline">\(f(x) = \lfloor x / 2 \rceil\)</span> (divide by two and round). Note that, for any function, there must be exactly one red dot in each column (each source maps to one and only one target), however, there may be zero or many red dots in any row (some target may not be reachable, or they may be reachable from multiple sources).
+Figure 2.3: Function as a subset of the Cartesian product on domain (<span class="math inline">\(S\)</span>) and codomain (<span class="math inline">\(T\)</span>). The subset <span class="math inline">\(F \subseteq S \times T\)</span> is shown in red. In words, the function is <span class="math inline">\(F: \{ 1, 2, 3 \} \to \{ 1, 2, 3 \}\)</span>, such that <span class="math inline">\(F(1) = 1\)</span>, <span class="math inline">\(F(2) = 1\)</span>, and <span class="math inline">\(F(3) = 2\)</span>, e.g. <span class="math inline">\(f(x) = \lfloor x / 2 \rceil\)</span> (divide by two and round). Note that, for any function, there must be exactly one red dot in each column (each source maps to one and only one target), however, there may be zero or many red dots in any row (some target may not be reachable, or they may be reachable from multiple sources).
 </p>
 </div>
-<p>We can classify functions based on how their domains and codomains map onto each other (see Figure <a href="introduction.html#fig:function-types">2.3</a>). If every target in the function’s codomain has a path leading to it from some source, such that no target remains unreachable, then we call it a <em>surjective</em> or <em>onto</em> function. More formally:</p>
+<p>We can classify functions based on how their domains and codomains map onto each other (see Figure <a href="introduction.html#fig:function-types">2.4</a>). If every target in the function’s codomain has a path leading to it from some source, such that no target remains unreachable, then we call it a <em>surjective</em> or <em>onto</em> function. More formally:</p>
 <div class="definition">
 <p><span id="def:unlabeled-div-2" class="definition"><strong>Definition 2.2  (Surjectivity) </strong></span>A function <span class="math inline">\(f\)</span> is surjective if, for all <span class="math inline">\(t \in T\)</span>, there exists a <span class="math inline">\(s \in S\)</span> such that <span class="math inline">\(f(s) = t\)</span>.</p>
 </div>
@@ -427,10 +386,10 @@ Figure 2.2: Function as a subset of the Cartesian product on domain (<span class
 <div class="definition">
 <p><span id="def:unlabeled-div-4" class="definition"><strong>Definition 2.4  (Bijectivity) </strong></span>A function is a bijection and only if it is both surjective and injective, and if and only if it is invertible.</p>
 </div>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:function-types"></span>
+<div class="figure"><span style="display:block;" id="fig:function-types"></span>
 <img src="_main_files/figure-html/function-types-1.png" alt="Types of functions. Left: in a *surjective* function, every target can be reached from some source. Middle: in an *injective* function, every target can only be reached from a unique source. Right: in a *bijection*, every target can be reached from, and only from, a unique source." width="2100" />
 <p class="caption">
-Figure 2.3: Types of functions. Left: in a <em>surjective</em> function, every target can be reached from some source. Middle: in an <em>injective</em> function, every target can only be reached from a unique source. Right: in a <em>bijection</em>, every target can be reached from, and only from, a unique source.
+Figure 2.4: Types of functions. Left: in a <em>surjective</em> function, every target can be reached from some source. Middle: in an <em>injective</em> function, every target can only be reached from a unique source. Right: in a <em>bijection</em>, every target can be reached from, and only from, a unique source.
 </p>
 </div>
 <p>Bijections are special since they encode the idea of <em>reversibility</em> or <em>lossless transformation</em>. Any bijective function <span class="math inline">\(f\)</span> has an associated inverse function <span class="math inline">\(f^{-1}\)</span> such that <span class="math inline">\(f^{-1}(f(x)) = x\)</span> and <span class="math inline">\(f(f^{-1}(a)) = a\)</span> for all <span class="math inline">\(x\)</span> and <span class="math inline">\(a\)</span> in the function’s domain and codomain, respectively, and we can keep switching back and forth from domain to codomain and back without losing any information. We’ll generalize this idea later when we discuss <em>isomorphisms</em>.</p>
@@ -472,8 +431,8 @@ Now, suppose that Sam and Dominic went to Rome, and I ask:</p>
 <p>This weird relationship between the the image and the pre-image is due to the fact that the image is actually something called <em>left adjoint</em> <span class="citation">(<a href="#ref-baez2023">Baez 2023</a>; <a href="#ref-fong2019">Fong and Spivak 2019</a>)</span>. Adjoints can be thought of as the “best approximate answer to a problem that has no solution” <span class="citation">(no inverse, <a href="#ref-baez2023">Baez 2023</a>)</span>, and they come in pairs - a left and a right adjoint - with the left adjoint being more permissive or “liberal” and the right adjoint being more strict or “conservative” <span class="citation">(<a href="#ref-baez2023">Baez 2023</a>)</span>.</p>
 <p>Proper treatment of adjoint is beyond the scope of this thesis, however.</p>
 </div>
-<div id="partitions" class="section level3 hasAnchor" number="2.3.4">
-<h3><span class="header-section-number">2.3.4</span> Partitions<a href="introduction.html#partitions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="partitions" class="section level3 hasAnchor" number="2.4.3">
+<h3><span class="header-section-number">2.4.3</span> Partitions<a href="introduction.html#partitions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>One useful thing we can construct with functions (or equivalently, relations) are partitions. Partitions encode the idea of splitting elements of some some into distinct groups.</p>
 <div class="definition">
 <p><span id="def:unlabeled-div-8" class="definition"><strong>Definition 2.8  (Function definition of a partition) </strong></span>Given some set <span class="math inline">\(X\)</span>, a set of part labels <span class="math inline">\(P\)</span>, and a surjective function <span class="math inline">\(f: X \to P\)</span>, we can partition <span class="math inline">\(A\)</span> by assigning every element <span class="math inline">\(x \in X\)</span> a part label <span class="math inline">\(p \in P\)</span>, by simply applying the function: <span class="math inline">\(f(x) = p\)</span>.</p>
@@ -506,8 +465,8 @@ p_3(a) = \begin{cases}
 \end{cases}
 \]</span></p>
 </div>
-<div id="preorders" class="section level3 hasAnchor" number="2.3.5">
-<h3><span class="header-section-number">2.3.5</span> Preorders<a href="introduction.html#preorders" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="preorders" class="section level3 hasAnchor" number="2.4.4">
+<h3><span class="header-section-number">2.4.4</span> Preorders<a href="introduction.html#preorders" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="definition">
 <p><span id="def:unlabeled-div-10" class="definition"><strong>Definition 2.10  (Preorder) </strong></span>A preorder is a set <span class="math inline">\(X\)</span> equipped with a binary relation <span class="math inline">\(\leq\)</span> that conforms to two simple properties:</p>
 <ol style="list-style-type: decimal">
@@ -524,8 +483,8 @@ p_3(a) = \begin{cases}
 </ol>
 <p>If a preorder conforms to 3., we speak of a partially ordered set or <em>poset</em>. If it conforms to both 3. and 4., then it is a <em>total order</em>.</p>
 </div>
-<div id="monoids" class="section level3 hasAnchor" number="2.3.6">
-<h3><span class="header-section-number">2.3.6</span> Monoids<a href="introduction.html#monoids" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="monoids" class="section level3 hasAnchor" number="2.4.5">
+<h3><span class="header-section-number">2.4.5</span> Monoids<a href="introduction.html#monoids" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>A monoid is a tuple <span class="math inline">\((M, e, \otimes)\)</span> consisting of:</p>
 <ol style="list-style-type: lower-alpha">
 <li>A set of objects <span class="math inline">\(M\)</span></li>
@@ -556,10 +515,10 @@ p_3(a) = \begin{cases}
 <p>This means that when we combine two things, we get back something that’s at least as big as the bigger of the two things. Summation of natural numbers <span class="math inline">\((\mathbb{N}, 0, +)\)</span> again works, but for example summation of integers <span class="math inline">\((\mathbb{Z}, 0, +)\)</span> or multiplication of reals <span class="math inline">\((\mathbb{R}, 1, \times)\)</span> does not.</p>
 </div>
 </div>
-<div id="theory-of-data-visualization-systems" class="section level2 hasAnchor" number="2.4">
-<h2><span class="header-section-number">2.4</span> Theory of data visualization systems<a href="introduction.html#theory-of-data-visualization-systems" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="scales" class="section level3 hasAnchor" number="2.4.1">
-<h3><span class="header-section-number">2.4.1</span> Scales<a href="introduction.html#scales" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="theory-of-data-visualization-systems" class="section level2 hasAnchor" number="2.5">
+<h2><span class="header-section-number">2.5</span> Theory of data visualization systems<a href="introduction.html#theory-of-data-visualization-systems" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="scales" class="section level3 hasAnchor" number="2.5.1">
+<h3><span class="header-section-number">2.5.1</span> Scales<a href="introduction.html#scales" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Every data visualization system needs some way of translating abstract data values into concrete graphical attributes such as position, size, or colour. Given the ubiquitous need for scales, one might expect them to be a “solved issue”, within the relevant literature. However, this is far from the truth. Specifically, the issues of scales and measurement are still being grappled with in the areas of mathematics and philosophy of science to this day <span class="citation">(for a gentle yet thorough introduction, see <a href="#ref-tal2015">Tal 2015</a>)</span>.</p>
 <p>Scales are another area of data visualization in which there has been considerable debate, with many terms being overloaded and relating to concepts from different fields. This is due to the fact that the issue of how to compare, rank, and translate values has a long and complicated history. In particular, the issue of measurement has been hotly debated in the field of psychometrics and mathematical psychology, leading to the development of the <em>theory of measurement</em> (which has some overlap with, but is not the same as, <em>measurement theory</em> in mathematics).</p>
 <p>One paper that has been key to the debate around scales and measurement has been the seminal work of <span class="citation">Stevens (<a href="#ref-stevens1946">1946</a>)</span>. In this paper, Stevens defined a <em>scale</em> as a method of assigning numbers to values, allowing for various kinds of comparisons. Further, by considering transformations which preserve the comparisons, Stevens identified 4 types of scales: <em>nominal</em>, <em>ordinal</em>, <em>interval</em>, and <em>ratio</em> <span class="citation">(see also <a href="#ref-michell1986">Michell 1986</a>; <a href="#ref-velleman1993">Velleman and Wilkinson 1993</a>)</span>.</p>
@@ -607,8 +566,8 @@ p_3(a) = \begin{cases}
 </tbody>
 </table>
 <p>Table <a href="introduction.html#tab:scales">2.3</a> shows a loose reproduction of Table 1 from <span class="citation">Stevens (<a href="#ref-stevens1946">1946</a>)</span>. Note that the family of valid transformations gets smaller in each row, meaning that the scales carry more information <span class="citation">(<a href="#ref-velleman1993">Velleman and Wilkinson 1993</a>)</span>. Let’s discuss the scales individually.</p>
-<div id="nominal-scales" class="section level5 hasAnchor" number="2.4.1.0.1">
-<h5><span class="header-section-number">2.4.1.0.1</span> Nominal scales<a href="introduction.html#nominal-scales" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<div id="nominal-scales" class="section level5 hasAnchor" number="2.5.1.0.1">
+<h5><span class="header-section-number">2.5.1.0.1</span> Nominal scales<a href="introduction.html#nominal-scales" class="anchor-section" aria-label="Anchor link to header"></a></h5>
 <p><em>Nominal</em> scales correspond to equivalence relations. An equivalence relation is a binary relation <span class="math inline">\(\sim\)</span> on some set <span class="math inline">\(X\)</span> which, for all <span class="math inline">\(x, y, z \in X\)</span>, has the following properties:</p>
 <ul>
 <li><em>Reflexivity</em>: <span class="math inline">\(x \sim x\)</span></li>
@@ -620,8 +579,8 @@ p_3(a) = \begin{cases}
 <p>It is arguable whether any nominal quantities exist in and of themselves or whether they only ever exists as abstract social constructions over underlying continuous reality. Color is a discretization of the visible light spectrum (frequency of electromagnetic radiation), and the pre-Darwinian concept of a species is likewise an abstraction over continuously varying distribution of genes <span class="citation">(although there have been some attempts to ground the definition of a discrete species in the theory of genetics, e.g. as a population of individuals which can produce viable offsprings, see <a href="#ref-mayr1999">Mayr 1999</a>)</span>. Further, even many subjective concepts which are typically described as discrete such as emotions may be abstractions over underlying continuous phenomena <span class="citation">(<a href="#ref-barrett2013">Barrett 2013</a>)</span>.</p>
 <p>However, even if nominal quantities are entirely socially constructed, this does not mean they are arbitrary or useless. SEARLE</p>
 </div>
-<div id="ordinal-scales" class="section level5 hasAnchor" number="2.4.1.0.2">
-<h5><span class="header-section-number">2.4.1.0.2</span> Ordinal scales<a href="introduction.html#ordinal-scales" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<div id="ordinal-scales" class="section level5 hasAnchor" number="2.5.1.0.2">
+<h5><span class="header-section-number">2.5.1.0.2</span> Ordinal scales<a href="introduction.html#ordinal-scales" class="anchor-section" aria-label="Anchor link to header"></a></h5>
 <p><em>Ordinal</em> scales correspond to total orders. A total order is a relation <span class="math inline">\(\leq\)</span> on <span class="math inline">\(X\)</span> which, for all <span class="math inline">\(x, y, z \in X\)</span>, has the following properties:</p>
 <ol style="list-style-type: decimal">
 <li><em>Reflexivity</em>: <span class="math inline">\(x \leq x\)</span></li>
@@ -634,17 +593,17 @@ p_3(a) = \begin{cases}
 <p>Some authors have related ordinal scales to <em>weak orders</em> <span class="citation">(see <a href="#ref-michell1986">Michell 1986</a>)</span>. Weak orders <span class="citation">(also known as <em>total preorders</em>, see <a href="#ref-nlab2024d">nLab 2024a</a>)</span> generalize total orders by allowing for ties (properties 2. and 4. above do not need hold). While this seems like a useful property, I opted to relate ordinal scales to total orders here instead, since there is currently ambuiguity in the way the term <em>weak order</em> is used in the literature <span class="citation">(see e.g. <a href="#ref-nlab2024a">nLab 2024b</a>, <a href="#ref-nlab2024b">2024c</a>; <a href="#ref-stackexchange2024">Abrams 2024</a>)</span>, and, for practical data analysis, the distinction is fairly inconsequential. For instance, in the marathon example above, if Emma and Charlotte both placed second, after Lucy and before Lily, we could frame the outcome of the race as the following weak order on the set <span class="math inline">\(M\)</span> of marathoners: <span class="math inline">\(\text{Lucy} \leq \text{Emma, Charlotte} \leq \text{Lily} \leq ...\)</span>. However, the underlying set of ranks <span class="math inline">\(R \subset \mathbb{N}\)</span> still retains a total ordering: <span class="math inline">\(1 \leq 2 \leq 3 \leq \ldots\)</span> and we can specify a surjective monotonically increasing function <span class="math inline">\(r: M \to R\)</span> which maps each marathoner to her rank. Clearly, we can map any weak order to a total order by applying a functor which enforces anti-symmetry in this way <span class="citation">(<a href="#ref-fong2019">Fong and Spivak 2019</a>; <a href="#ref-nlab2024d">nLab 2024a</a>)</span>.</p>
 <p>The only transformations which are permissible for ordinal scales are those which preserve order, that is, monotonic increasing transformations <span class="citation">(<a href="#ref-stevens1946">Stevens 1946</a>; <a href="#ref-michell1986">Michell 1986</a>)</span>. For example, transforming our set of ranks <span class="math inline">\(R\)</span> by taking the log or square root of each rank leaves the order relations between them unchanged.</p>
 </div>
-<div id="interval-scales" class="section level5 hasAnchor" number="2.4.1.0.3">
-<h5><span class="header-section-number">2.4.1.0.3</span> Interval scales<a href="introduction.html#interval-scales" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<div id="interval-scales" class="section level5 hasAnchor" number="2.5.1.0.3">
+<h5><span class="header-section-number">2.5.1.0.3</span> Interval scales<a href="introduction.html#interval-scales" class="anchor-section" aria-label="Anchor link to header"></a></h5>
 <p><em>Interval</em> scales.</p>
 <p>Interval scales allow us to calculate a distance between two points. However, they do not have a natural “zero point” or intercept. As such we cannot use them to determine the ratio between two quantities. Examples of interval scales include the calendar date and geographical position. It does not make sense to say that the year 1000 CE is “twice as much” as 500 CE, since the birth of Jesus Christ is (religious beliefs aside) an arbitrary zero point: we could set 0 CE at any other point in time, such as the founding of Athens or the release of Taylor Swift’s first album, and all of the properties we care about when tracking historical time would be preserved. Likewise, it does not make sense to say that 90° longitude is “three times” that of 30° longitude: the location of the prime meridian is also the product of arbitrary historical cirumstances.</p>
-<div id="ratio-scales" class="section level6 hasAnchor" number="2.4.1.0.3.1">
-<h6><span class="header-section-number">2.4.1.0.3.1</span> Ratio scales<a href="introduction.html#ratio-scales" class="anchor-section" aria-label="Anchor link to header"></a></h6>
+<div id="ratio-scales" class="section level6 hasAnchor" number="2.5.1.0.3.1">
+<h6><span class="header-section-number">2.5.1.0.3.1</span> Ratio scales<a href="introduction.html#ratio-scales" class="anchor-section" aria-label="Anchor link to header"></a></h6>
 <p>Unlike interval scales, ratio scale have a well-defined natural zero point. For example,</p>
 </div>
 </div>
-<div id="criticism-of-on-the-theory-of-scales-of-measurement" class="section level5 hasAnchor" number="2.4.1.0.4">
-<h5><span class="header-section-number">2.4.1.0.4</span> Criticism of On the Theory of Scales of Measurement<a href="introduction.html#criticism-of-on-the-theory-of-scales-of-measurement" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<div id="criticism-of-on-the-theory-of-scales-of-measurement" class="section level5 hasAnchor" number="2.5.1.0.4">
+<h5><span class="header-section-number">2.5.1.0.4</span> Criticism of On the Theory of Scales of Measurement<a href="introduction.html#criticism-of-on-the-theory-of-scales-of-measurement" class="anchor-section" aria-label="Anchor link to header"></a></h5>
 <p>In the original paper, Stevens had also made the claim that the type of scale determined which statistical tests and summaries were “permissible” for the data. For example, according to Stevens, while mean is an appropriate summary of an interval scale (since expectation is linear), it would not be a permissible summary of ordinal data. This claim was later disputed by researchers</p>
 
 </div>
@@ -695,11 +654,17 @@ Brodbeck, Dominique, Riccardo Mazza, and Denis Lalanne. 2009. <span>“<span>Int
 <div id="ref-buja1996" class="csl-entry">
 Buja, Andreas, Dianne Cook, and Deborah F Swayne. 1996. <span>“Interactive High-Dimensional Data Visualization.”</span> <em>Journal of Computational and Graphical Statistics</em> 5 (1): 78–99.
 </div>
+<div id="ref-byron2008" class="csl-entry">
+Byron, Lee, and Martin Wattenberg. 2008. <span>“Stacked Graphs–Geometry &amp; Aesthetics.”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em> 14 (6): 1245–52.
+</div>
 <div id="ref-cairo2014" class="csl-entry">
 Cairo, Alberto. 2014. <span>“Graphics Lies, Misleading Visuals: Reflections on the Challenges and Pitfalls of Evidence-Driven Visual Communication.”</span> In <em>New Challenges for Data Design</em>, 103–16. Springer.
 </div>
 <div id="ref-cairo2019" class="csl-entry">
 ———. 2019. <em>How Charts Lie: Getting Smarter about Visual Information</em>. WW Norton &amp; Company.
+</div>
+<div id="ref-cleveland1984" class="csl-entry">
+Cleveland, William S, and Robert McGill. 1984. <span>“Graphical Perception: Theory, Experimentation, and Application to the Development of Graphical Methods.”</span> <em>Journal of the American Statistical Association</em> 79 (387): 531–54.
 </div>
 <div id="ref-dimara2019" class="csl-entry">
 Dimara, Evanthia, and Charles Perin. 2019. <span>“What Is Interaction for Data Visualization?”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em> 26 (1): 119–29.
@@ -740,6 +705,9 @@ Friendly, Michael, and Howard Wainer. 2021. <em>A History of Data Visualization 
 <div id="ref-gelman2013" class="csl-entry">
 Gelman, Andrew, and Antony Unwin. 2013. <span>“Infovis and Statistical Graphics: Different Goals, Different Looks.”</span> <em>Journal of Computational and Graphical Statistics</em> 22 (1): 2–28.
 </div>
+<div id="ref-heer2010" class="csl-entry">
+Heer, Jeffrey, and Michael Bostock. 2010. <span>“Crowdsourcing Graphical Perception: Using Mechanical Turk to Assess Visualization Design.”</span> In <em>Proceedings of the SIGCHI Conference on Human Factors in Computing Systems</em>, 203–12.
+</div>
 <div id="ref-heer2005" class="csl-entry">
 Heer, Jeffrey, Stuart K. Card, and James A. Landay. 2005. <span>“<span class="nocase">prefuse: a toolkit for interactive information visualization</span>.”</span> In <em><span class="nocase">CHI ’05: Proceedings of the SIGCHI Conference on Human Factors in Computing Systems</span></em>, 421–30. New York, NY, USA: Association for Computing Machinery. <a href="https://doi.org/10.1145/1054972.1055031">https://doi.org/10.1145/1054972.1055031</a>.
 </div>
@@ -770,6 +738,9 @@ Kelleher, Curran, and Haim Levkowitz. 2015. <span>“Reactive Data Visualization
 <div id="ref-kindlmann2014" class="csl-entry">
 Kindlmann, Gordon, and Carlos Scheidegger. 2014. <span>“An Algebraic Process for Visualization Design.”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em> 20 (12): 2181–90.
 </div>
+<div id="ref-kosara2016" class="csl-entry">
+Kosara, Robert. 2016. <span>“<span class="nocase">Stacked Bars Are the Worst</span>.”</span> <a href="https://eagereyes.org/blog/2016/stacked-bars-are-the-worst">https://eagereyes.org/blog/2016/stacked-bars-are-the-worst</a>.
+</div>
 <div id="ref-kruskal1964" class="csl-entry">
 Kruskal, J. B. 1965. <span>“<span>Multidimensional Scaling</span>.”</span> <a href="https://community.amstat.org/jointscsg-section/media/videos">https://community.amstat.org/jointscsg-section/media/videos</a>.
 </div>
@@ -786,7 +757,7 @@ Leman, Scotland C, Leanna House, Dipayan Maiti, Alex Endert, and Chris North. 20
 Mayr, Ernst. 1999. <em>Systematics and the Origin of Species, from the Viewpoint of a Zoologist</em>. Harvard University Press.
 </div>
 <div id="ref-mdn2024a" class="csl-entry">
-MDN. 2024a. <span>“EventTarget - Web APIs <span><span class="math inline">\(\vert\)</span></span> MDN.”</span> <em>MDN Web Docs</em>. <a href="https://developer.mozilla.org/en-US/docs/Web/API/EventTarget">https://developer.mozilla.org/en-US/docs/Web/API/EventTarget</a>.
+MDN. 2024. <span>“EventTarget - Web APIs <span><span class="math inline">\(\vert\)</span></span> MDN.”</span> <em>MDN Web Docs</em>. <a href="https://developer.mozilla.org/en-US/docs/Web/API/EventTarget">https://developer.mozilla.org/en-US/docs/Web/API/EventTarget</a>.
 </div>
 <div id="ref-react2024" class="csl-entry">
 Meta. 2024. <span>“React.”</span> <a href="https://react.dev">https://react.dev</a>.
@@ -811,6 +782,9 @@ Petricek, Tomas. 2021. <span>“Composable Data Visualizations.”</span> <em>Jo
 </div>
 <div id="ref-pike2009" class="csl-entry">
 Pike, William A, John Stasko, Remco Chang, and Theresa A O’connell. 2009. <span>“The Science of Interaction.”</span> <em>Information Visualization</em> 8 (4): 263–74.
+</div>
+<div id="ref-pinter2010" class="csl-entry">
+Pinter, Charles C. 2010. <em>A Book of Abstract Algebra</em>. Courier Corporation.
 </div>
 <div id="ref-plotly2022" class="csl-entry">
 Plotly Inc. 2022. <span>“<span class="nocase">Part 4. Interactive Graphing and Crossfiltering <span><span class="math inline">\(\vert\)</span></span> Dash for Python Documentation <span><span class="math inline">\(\vert\)</span></span> Plotly</span>.”</span> <a href="https://dash.plotly.com/interactive-graphing">https://dash.plotly.com/interactive-graphing</a>.
@@ -851,6 +825,9 @@ Tal, Eran. 2015. <span>“Measurement in Science.”</span>
 <div id="ref-theus2002" class="csl-entry">
 Theus, Martin. 2002. <span>“<span class="nocase">Interactive Data Visualization using Mondrian</span>.”</span> <em>J. Stat. Soft.</em> 7 (November): 1–9. <a href="https://doi.org/10.18637/jss.v007.i11">https://doi.org/10.18637/jss.v007.i11</a>.
 </div>
+<div id="ref-thudt2016" class="csl-entry">
+Thudt, Alice, Jagoda Walny, Charles Perin, Fateme Rajabiyazdi, Lindsay MacDonald, Diane Vardeleon, Saul Greenberg, and Sheelagh Carpendale. 2016. <span>“Assessing the Readability of Stacked Graphs.”</span> In <em>Proceedings of Graphics Interface Conference (GI)</em>.
+</div>
 <div id="ref-tufte2001" class="csl-entry">
 Tufte, Edward R. 2001. <em>The Visual Display of Quantitative Information</em>. Cheshire, Connecticut: Graphics Press LLC.
 </div>
@@ -883,6 +860,9 @@ Velleman, Paul F, and Leland Wilkinson. 1993. <span>“Nominal, Ordinal, Interva
 </div>
 <div id="ref-wikipedia2022" class="csl-entry">
 Wikipedia. 2022. <span>“<span class="nocase">Duck test - Wikipedia</span>.”</span> <a href="https://en.wikipedia.org/w/index.php?title=Duck_test&amp;oldid=1110781513">https://en.wikipedia.org/w/index.php?title=Duck_test&amp;oldid=1110781513</a>.
+</div>
+<div id="ref-wilke2019" class="csl-entry">
+Wilke, Claus O. 2019. <em>Fundamentals of Data Visualization: A Primer on Making Informative and Compelling Figures</em>. O’Reilly Media.
 </div>
 <div id="ref-wills2008" class="csl-entry">
 Wills, Graham. 2008. <span>“Linked Data Views.”</span> In <em>Handbook of Data Visualization</em>, 217–41. ch. II. 9. Springer Berlin/Heidelberg, Germany.

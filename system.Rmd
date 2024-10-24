@@ -169,11 +169,11 @@ const factor: Factor = {
 
 There are several reasons why it may be better to store `Factor` metadata in tables (`Dataframe`) as opposed to vectors. First, when partitioning data, we often want to associate several pieces of metadata with each part. For example, if we cut or bin some numeric variable, like in the example above, we want to store both the lower and upper bound of each part's bin. We can store both pieces of information as a single element (tuple) in an array/vector, the way that `cut` does it, however, this works well with only few pieces of metadata: once we start storing longer tuples, it becomes hard to tell what each tuple element represents. We could alleviate the problem by naming the tuple elements, but then we are essentially storing the metadata in an array of dictionaries, i.e. the [AoS](#SoA) data structure. We can do better by storing the metadata in a table. Second, if we store metadata in tables, it will be easier to combine when we take [a product of two or more factors](#Product factors). Since taking the product of multiple factors is a fundamental operation in an interactive data visualization system, underpinning operations such as linked brushing, it makes sense to use data representation which makes it convenient.
 
-The `Factor` namespace provides several functions (constructors) which create factors from various data. 
+There are several types of factors which differ semantically but are represented by the same underlying `Factor` data type. What differs are the constructor functions that are used to create these factors, and are exported by the `Factor` namespaces. These will be discussed in the following subsections.   
 
-#### Bijection factor
+#### Bijection factors
 
-`Factor.bijection` is the first of two trivial factor constructors. It assigns each case its individual part, such that the cardinality is simply equal to the number of cases. When we create a bijection factor, we need to specify the length of the data (the number of cases) it represents to create the array of `indices`. Technically, this is not strictly necessary: we could implement `indices` as a callback which simply takes an index and returns it (an indentity function). However, since the primary use of factors is for summarizing data, and we need to know how many data points to summarize, we do still need to store the length of the data somewhere. I found it convenient to simply create a dummy array of `indices`, as opposed to having to store additional length property.
+`Factor.bijection` is the first of two trivial factor constructors. It assigns each case its individual part, such that the cardinality is simply equal to the number of cases. When we create a bijection factor, we need to specify the length of the data (the number of cases) it represents to create the array of `indices`. Technically, this is not strictly necessary: we could implement `indices` as a callback which simply takes an index and returns it (an indentity function). However, since the primary use of factors is for summarizing data, and we need to know how many data points to summarize, we do still need to store the length of the data somewhere. I found it convenient to simply create a dummy array of `indices`, as opposed to having to store a separate `length` property.
 
 `Factor.bijection` can also have associated metadata. 
 
@@ -183,7 +183,31 @@ Thus, the function signature of `Factor.bijection` is simply:
 function bijection<T extends Dataframe>(n: number, data?: T): Factor<T> 
 ```
 
-#### Product factor
+#### Constant factors
+
+Constant factors, or `Factor.mono`, are the polar opposite of bijection factors. They assign all cases of the data to a single part (thus, the label function is a constant function, hence the name). The constructor signature is essentially the same as for bijection factor, so I will omit it here.
+
+#### Binned factors
+
+`Factor.bin` takes an array of numeric values and partitions them among a number of (typically equal-sized) bins. As such, serves as the fundamental building block for histograms.
+
+The constructor signature is the following:
+
+```{ts}
+function bin(
+  array: number[],
+  options: {
+    breaks?: number[];
+    nBins?: number;
+    width?: number;
+    anchor?: number;
+  },
+): Factor<{ binMin: number[]; binMax: number[] }>;
+```
+
+If `breaks` are provided, the constructor function uses those to construct the histogram. Otherwise it uses `nBins`, `width`, and `anchor` to determine the breaks, in the corresponding order of importance.
+
+#### Product factors
 
 We can combine a factor with $j$ levels and another factor with $k$ levels into a product factor with up to $j \cdot k$ levels. 
 

@@ -67,8 +67,10 @@ Getter
 reactive
 dataframe
 factor
-bijection-factor
-product-factor
+bijection-factors
+constant-factors
+binned-factors
+product-factors
 reducers
 scales-1
 overview
@@ -92,3 +94,9 @@ SoA
 appendix
 dop-encapsulation
 references
+the-stacking-problem
+the-highlighting-problem
+linked-selection-and-stacking
+fig:unnamed-chunk-1
+quick-note-on-past-applications-of-category-theory-to-data-visualization
+note-on-past-applications-of-category-theory-to-data-visualization

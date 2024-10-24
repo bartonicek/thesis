@@ -1,4 +1,26 @@
 ---
+title: "Fluent Graphics"
+author: "Adam Bartonicek"
+site: bookdown::bookdown_site
+documentclass: book
+output:
+  # bookdown::html_document2: default
+  bookdown::gitbook: default
+bibliography: [references.bib]
+link-citations: true
+editor_options: 
+  chunk_output_type: console
+---
+
+# Abstract 
+
+Placeholder
+
+
+
+<!--chapter:end:index.Rmd-->
+
+---
 output: html_document
 editor_options: 
   chunk_output_type: console
@@ -642,3 +664,95 @@ Unlike interval scales, ratio scale have a well-defined natural zero point. For 
 ##### Criticism of On the Theory of Scales of Measurement
 
 In the original paper, Stevens had also made the claim that the type of scale determined which statistical tests and summaries were "permissible" for the data. For example, according to Stevens, while mean is an appropriate summary of an interval scale (since expectation is linear), it would not be a permissible summary of ordinal data. This claim was later disputed by researchers      
+
+<!--chapter:end:intro.Rmd-->
+
+
+# High-level design
+
+Placeholder
+
+
+### User profile
+## Programming paradigm
+### Imperative programming
+### Functional programming
+### Object oriented programming
+#### Encapsulation
+#### Open-closed principle
+#### Polymorphism
+#### Inheritance
+#### Domain-driven design
+#### Criticism of OOP
+### Data oriented programming
+##### Encapsulation
+##### Inheritance
+## Reactivity
+## Row-based or column-based
+## Rendering engine
+
+<!--chapter:end:design.Rmd-->
+
+
+# System description
+
+Placeholder
+
+
+## Core requirements
+## Components
+### Indexable {#Indexable}
+### Getter {#Getter}
+### Reactive
+### Dataframe
+### Factor
+#### Bijection factors
+#### Constant factors
+#### Binned factors
+#### Product factors
+### Reducers
+### Scales
+#### Overview
+#### Limits of modeling scales as simple functions {#simple-scale-limits}
+#### Solution: Two-component scales {#two-component-scales}
+##### Beyond linear maps
+##### Inverses 
+##### Some other remarks about the two-component scale system
+#### Past implementations of scales
+#### Proposed model of scales
+##### Zero and one
+##### Direction
+##### Multipliers
+##### The Full Monty
+### Expanses
+#### Continuous expanses
+
+<!--chapter:end:system.Rmd-->
+
+
+# Glossary
+
+Placeholder
+
+
+#### JSON {#JSON}
+#### SVG
+#### Array of Structs (AoS) vs. Struct of Arrays (SoA) {#SoA}
+
+<!--chapter:end:glossary.Rmd-->
+
+
+# Appendix
+
+Placeholder
+
+
+#### Encapsulation in DOP {#dop-encapsulation}
+
+<!--chapter:end:appendix.Rmd-->
+
+# References
+
+
+<!--chapter:end:references.Rmd-->
+
