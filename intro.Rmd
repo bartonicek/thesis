@@ -209,7 +209,7 @@ Since a relation is a subset of the product set $X \times Y$, we can display it 
 #| echo: false
 #| dpi: 300
 #| fig-cap: "A relation is a subset of the Cartesian product of two sets.
-#| The diagram shows the usual order relation $\leq$.
+#| The diagram shows the usual order relation $\\leq$.
 #| We can see that 1 is less than or equal to every other element, 
 #| 2 is less than or equal to 2 and 3, and 3 is less than or equal to 3 only.
 #| Note the symmetry between rows and columns - this is due to the fact that

@@ -211,13 +211,11 @@ If `breaks` are provided, the constructor function uses those to construct the h
 
 We can combine a factor with $j$ levels and another factor with $k$ levels into a product factor with up to $j \cdot k$ levels. 
 
-I independently discovered a formula similar to [@wickham2013]:
+I've used a formula similar to one discussed in [@wickham2013]:
 
 $$i_{\text{product}} = i_1 + i_2 \cdot \max(j, k)$$
 
 ### Reducers
-
-[@gray1997] came up with OLAP data cube
 
 ### Scales
 
@@ -371,6 +369,8 @@ Such that:
 
 $$s(d) = u(n(d))$$
 :::
+
+Note that the terms *normalize* and *unnormalize* are arbitrary, however, I think they make for useful labels. They represent 1-D equivalent of vector normalization, mapping a value in the domain to and from a unit interval $[0, 1]$.   
 
 For the case of the linear mapping, we could rewrite this in code as follows:
 
@@ -831,29 +831,43 @@ This is the full definition of the `pushforward` function in `plotscape` as of `
 
 ### Expanses
 
-So far, we have discussed scales as a sort of bridge between two properties of type `Expanse` -  the domain and the codomain - however, we have left the precise nature of the `Expanse` type vague. Now it is time to finally time discuss the concrete implementations of the various `Expanse` subtypes.
+So far, we have discussed scales, and described them as a sort of bridge between two properties of type `Expanse` -  the domain and the codomain. However, we have left the precise nature of the `Expanse` type vague. Now it is finally time to discuss  `Expanse` and its various subtypes concretely.
 
-As discussed previously, the job of the `Expanse<T>` is to translate values in its data domain (`T`) to and from the interval $[0, 1]$. This makes `Expanse` essentially equivalent to the maps discussed in Section \@ref(two-component-scales), with some additional functionality. Thus, each subtype of `Expanse<T>` provides two important functions:
+As mentioned previously, the job of the `Expanse<T>` is to translate values of type `T` (its domain) to and from the interval $[0, 1]^n$. This makes `Expanse` similar to the maps discussed in Section \@ref(two-component-scales). The reason why the normalized interval is identified as $[0, 1]^n$ instead of the one-dimensional interval $[0, 1]$ is because, sometimes, we may want to map multi-dimensional values. For example, in the parallel-coordinates plot, we want to map values of several different variables to the y-axis. Typically, the dimensionality of the normalized values will be the same as that of `T`, however, we could imagine a situation where it might not be so, for example, we could imagine mapping 3-dimensional vectors to their (normalized) length.  
 
-- A *normalize* function $n: T \to [0, 1]$, mapping values from $T$ to $[0, 1]$
-- An *unnormalize* function $u: [0, 1] \to T$, mapping values from $[0, 1]$ to $T$
-
-Or, in code:
+Most of the functionality is implemented by the specific subtypes of `Expanse`, however, there is also some shared behavior. The simplified interface of `Expanse` is:
 
 ```{ts}
-#| eval: false
-function normalize<T>(expanse: Expanse<T>, value: T): number
-function unnnormalize<T>(expanse: Expanse<T>, value: number): T
+interface Expanse<T> {
+  value: T;
+  normalized: number | number[]
+}
 ```
 
-To implement their behavior, the functions rely on properties that are specific to each `Expanse` subtype. Besides the two functions, each subtype of the `Expanse` type also need to implement few additional functions, such as the `train` function which allows the `Expanse` to be trained on new data and the `breaks` functions which returns a list of breaks (an array of type `T[]`).  
+Here, the `value` and `normalized` properties are opaque types (used on type-level only), which simply indicate the domain type `T` and the dimensionality of the normalized values (`number | number[]`). 
+
+Each namespace corresponding to a subtype of `Expanse<T>` exports two important functions:
+
+- A *normalize* function $n: T \to [0, 1]^n$, mapping values from $T$ to $[0, 1]^n$
+- An *unnormalize* function $u: [0, 1]^n \to T$, mapping values from $[0, 1]^n$ to $T$
+
+There are two other important methods that each `Expanse` subtype must export: `train` and `breaks`. The `train` function allows the expanse to train on new data (for example, after a histogram binwidth has been changed). The `breaks` function simply returns an array of breaks of type `T`. Thus, each subtype of `Expanse` implements the following polymorphic methods:
+
+```{ts}
+interface ExpanseMethods<T> {
+  normalize(expanse: Expanse<T>, value: T): number | number[];
+  unnormalize(expanse: Expanse<T>, value: number | number[]): T;
+  train(expanse: Expanse<T>, values: T[], options?: Record<string, any>): void;
+  breaks(expanse: Expanse<T>, zero?: number, one?: number): T[] | number[];
+}
+```
 
 #### Continuous expanses
 
-A continuous expanse is a generalization of the linear mapping discussed in Section \@ref(two-component-scales). That is, it translates values to and from a continuous interval given (roughly) by $[\text{min}, \text{max}]$. To do this, it uses the following properties:
+A continuous expanse is a generalization of the linear mapping discussed in Section \@ref(two-component-scales). That is, it translates values to and from a continuous interval given (roughly) by $[\text{min}, \text{max}]$. Here is a simplified interface:
 
 ```{ts}
-interface Props {
+interface ExpanseContinuous {
   min: number;
   max: number;
   offset: number;
@@ -863,8 +877,149 @@ interface Props {
 }
 ```
 
-The `min` and `max` properties are fairly self-explanatory. The `offset` property allows us to move values by some constant, either before they have been normalized or after they have been unnormalized. This is useful, for example, when we want to ensure that the width of a spineplot bar is 1 pixel less than the available space. The `trans` and `inv` properties allow us to perform non-linear transformations (they should, intuitively, be inverses of each other). Finally, the `ratio` property is a simple boolean flag which indicates whether the expanse is part of a ratio scale. If this flag is set to `true`, this indicates that the `min` value of the expanse must always be zero and we cannot change it by, for example, training on new data.
+The `min` and `max` properties are fairly self-explanatory - they denote the minimum and maximum of the data. The `offset` property allows us to move values by some constant, either before they have been normalized or after they have been unnormalized. This is useful, for example, when we want to ensure that the width of a spineplot bar is exactly 1 pixel less than the available space. The `trans` and `inv` properties allow us to perform non-linear transformations (they should, intuitively, be inverses of each other). By default, they are both set to the identity function (`(x) => x`). Finally, the `ratio` property is a simple boolean flag which indicates whether the expanse is part of a ratio scale. If this flag is set to `true`, then the `min` value of the expanse must always be zero and we cannot change it by, for example, training on new data.
 
+The normalize and unnormalize functions in the `ExpanseContinuous` namespace are generalizations of the linear map:
+
+```{ts}
+// ExpanseContinuous.ts
+export namespace ExpanseContinuous {
+    export function normalize(expanse: ExpanseContinuous, value: number) {
+    const { min, max, offset, trans } = expanse;
+    return (trans(value - offset) - trans(min)) / (trans(max) - trans(min));
+  }
+
+  export function unnormalize(expanse: ExpanseContinuous, value: number) {
+    const { min, max, offset, trans, inv } = expanse;
+    return inv(trans(min) + value * (trans(max) - trans(min))) + offset;
+  }
+}
+```
+
+And these work as we would expect:
+
+```{ts}
+import { ExpanseContinuous } from "./ExpanseContinuous"
+
+const identity = (x) => x;
+// I could have defined a proper constructor above but opted not to to save lines
+const exp = { min: 1, max: 16, offset: 0, trans: identity, inv: identity };
+
+console.log(ExpanseContinuous.normalize(exp, 4));
+exp.trans = Math.sqrt; // Technically, we should also set inverse to square
+console.log(ExpanseContinuous.normalize(exp, 4));
+
+```
+
+Finally, the `ExpanseContinuous` namespace also export a `train` function, which goes through an array values and updates the min and max properties (max only if `ratio` is set to `true`), and a `breaks` function which returns a list of breaks, using an algorithm inspired by base R's `pretty` function.
+
+#### Point expanses
+
+A point expanse is the simplest type of discrete expanse. It simply places values at equidistant points along the $[0, 1]$ interval, based on an ordered array of labels. Here is a simplified interface:
+
+```{ts}
+interface ExpansePoint {
+    labels: string[];
+    order: number[];
+}
+```
+
+The `labels` array contains the all of the unique values that data take (strings). The `order` array is a simple array of indices which represent the order in which the labels get assigned to points in the $[0, 1]$ interval.
+
+The normalize and unnormalize functions in the `ExpansePoint` namespace simply use a label to find the corresponding point in $[0, 1]$ or the use a point to find the closest label, while respecting the `order`:
+
+
+```{ts}
+// ExpansePoint.ts
+export namespace ExpansePoint {
+  export function normalize(expanse: ExpansePoint, value: string) {
+    const { labels, order } = expanse;
+    const index = order[labels.indexOf(value)];
+    if (index === -1) return index;
+    return index / (labels.length - 1);
+  }
+
+  export function unnormalize(expanse: ExpansePoint, index: number) {
+    const { labels, order } = expanse;
+    index = Math.round(index * (labels.length - 1));
+    return labels[order[index]];
+  }
+}
+```
+
+Again, these functions work as we would expect:
+
+```{ts}
+import { ExpansePoint } from "./ExpansePoint"
+
+const cities = ["Berlin", "Prague", "Vienna"]
+
+const exp = {
+  labels: cities,
+  order: [0, 1, 2],
+};
+
+console.log(cities.map(city => ExpansePoint.normalize(exp, city)));
+exp.order[0] = 1; // Swap the order of the first two values
+exp.order[1] = 0;
+console.log(cities.map(city => ExpansePoint.normalize(exp, city)));
+```
+
+Like `ExpanseContinuous`, the `ExpansePoint` namespace also contains a `train` function, which loops through an array of labels and finds all of the unique values, as well as a `breaks` function, which simply returns ordered `labels`. Further, the namespace also contains a `reorder` function which mutates the `order` property based on an array of indices. 
+
+#### Band expanses
+
+While `ExpansePoint` places values at equidistant points along $[0, 1]$, `ExpanseBand` places values at the midpoints of corresponding bins or bands. These bands can have variable widths, which is useful, for example, when specifying the x-axis position in a barplot. The simplified interface of `ExpanseBand` is the following:
+
+```{ts}
+export interface ExpanseBand {
+  labels: string[];
+  order: number[];
+  weights: number[];
+  cumulativeWeights: number[];
+}
+```
+
+Like `ExpansePoint`, `ExpanseBand` has the `labels` and `order` properties, which work exactly the same way as before. However, additionally, it also has the `weights` and `cumulativeWeights` properties, which are numeric arrays that define the width of each band. `weights` record the width of each band, and `cumulativeWeights` record the cumulative sums of the weights, which are used in the `normalize` and `unnormalize` functions. Thus, each time we update `weights`, we need to also update `cumulativeWeights` as well.  
+
+The normalize and unnormalize functions in the `ExpanseBand` namespace map labels to and from the midpoint of their corresponding bands:
+
+```{ts}
+export namespace ExpanseBand {
+  export function normalize(expanse: ExpanseBand, value: string) {
+    const { labels } = expanse;
+    const index = labels.indexOf(value);
+    return getMidpoint(expanse, index);
+  }
+
+  export function unnormalize(expanse: ExpanseBand, value: number) {
+    const { labels, order, cumulativeWeights } = expanse;
+
+    const weight = value * last(cumulativeWeights);
+    let index = 0;
+
+    while (index < cumulativeWeights.length - 1) {
+      if (cumulativeWeights[index] >= weight) break;
+      index++;
+    }
+
+    return labels[order[index]];
+  }
+
+  function getMidpoint(expanse: ExpanseBand, index: number) {
+    const { order, cumulativeWeights } = expanse.props;
+    index = order[index];
+
+    const lower = cumulativeWeights[index - 1] ?? 0;
+    const upper = cumulativeWeights[index];
+    const max = last(cumulativeWeights);
+
+    return (lower + upper) / 2 / max;
+  }
+}
+```
+
+Notice that, because of the cumulative nature of the bands, the logic in the functions' bodies is a bit more complicated. First, to `normalize` a label, we need to first find the index of the label and then return the corresponding midpoint of the band, taking `weights` and `order` into account. Second, to `unnormalize`, we actually have to loop through the array of `cumulativeWeights` - there is no way to determine which bin a normalized value belongs to in $O(1)$ time (as far as I am aware). This is not much of a problem since the `ExpanseBand.unnormalize` is not used anywhere in the system (all scales implemented thus far use only `ExpanseBand.normalize`), however, it is important to be mindful of this.
 
 <!-- Notice that, whereas before we had considered *normalize* as mapping between $D \to [0, 1]$ and *unnormalize* as mapping between $[0, 1] \to V$, we now consider both as mapping between $[0, 1]$ and an arbitrary domain $X$. This domain can represent the data or the visual attribute - the expanse is agnostic about this. -->
 
