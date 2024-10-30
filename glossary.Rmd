@@ -6,6 +6,38 @@ editor_options:
 
 # Glossary
 
+#### Array of Structs (AoS) vs. Struct of Arrays (SoA) {#SoA}
+
+Two-dimensional, tabular data is ubiquitous in data analytic workflows. However, since computer memory is fundamentally one-dimensional. Thus, when representing two-dimensional tables, we need to pick one of the dimensions as "primary" (and the other as "secondary"). This leads to two fundamentally different data representations.  
+
+First, we can represent our data as an array of rows, also known as Array of Structs (AoS). In this representation, the rows of the data set are represented as heterogeneous key-value stores (structs/maps/dictionaries) and the entire data set is simply an array of these rows. For example, suppose we are storing a data set of users, such that, for each user, we record their name, age, and gender. Then the AoS way of representing this data (in TypeScript) would be:
+
+```{ts}
+interface User {
+  name: string;
+  age: number;
+  gender: string;
+}
+
+type Users = User[];
+```
+
+Second, we can represent our data as a dictionary of columns, known also as the Struct of Arrays (SoA). In this representation, columns are stored as homogeneous arrays in a single key-value store, and rows are represented implicitly. For example, the way to represent the same data in the SoA format would be:  
+
+```{ts}
+interface Users {
+  name: string[];
+  age: number[];
+  gender: string[];
+}
+```
+
+The way how we choose to represent the data has an impact on various performance characteristics, primarily compute time and memory. The mechanisms underlying these differences are quite general and apply to both in-memory and on-disk data; hence why the topic is also studied in database design [see e.g. @abadi2013]. The SoA layout has (typically) smaller memory footprint and better performance in tight loops that operate on individual columns, thanks to cache locality [@abadi2013; @acton2014; @kelley2023]. The AoS layout has arguably better developer ergonomics and can perform better when retrieving individual records [hence why it is more common in traditional Online Transaction Processing databases, @abadi2013].    
+
+Generally, for data analytic workflows where we need to summarize values across many rows of data, the column-based SoA representation has the better performance characteristics, and hence why it is typically preferred in data analytic libraries, for example in base R's `data.frame` class or in the `pandas` `DataFrame` class [@r2024; @pandas2024]. However, this is not always the case: for example, in the popular JavaScript data visualization/transformation library D3, data sets are represented as arrays of (JSON) rows [@bostock2022]. 
+
+A possible objection to worrying about data layout in high-level interpreted languages like JavaScript and R is that these languages may represent data completely differently under the hood anyway. For example, JavaScript engines such as V8 utilize hidden classes to lay out data in memory more efficiently [@bruni2017; @veight2024], such that even AoS data structures are backed by underlying arrays. However, despite this, there is still good evidence that packed arrays of plain values (such as integers and float), such as used in SoA, present better performance characteristics [@bruni2017; @stange2024].
+
 #### JSON {#JSON}
 
 Short for "JavaScript Object Notation", JSON is a flexible data format based on the JavaScript object type [@ecma2024; see also e.g. @bourhis2017; @pezoa2016]. On the top level, a JSON is a key-value store (also known as dictionary, object, struct, hash-table, or list in other languages) with string keys and values of any of the following types: string, number, boolean, null (an undefined/missing value), an array (which can contain any other valid JSON values), or another JSON object. 
@@ -50,32 +82,4 @@ And this is its output, as interpreted by a Web browser:
 
 Compared to typical raster formats such as PNG or JPEG, in which the image is defined as an array of bytes (pixels), SVG's primary advantage is its lossless quality: images can be arbitrarily scaled or transformed without affecting the image's quality. SVG images can also be easily manipulated and animated by modifying the elements' attributes (for example, to move the red rectangle in the image above to the right, we could simply increment its "x" attribute). However, the main disadvantage of SVG is that the file size scales with the number of objects in the image. As such, SVG images with many small objects (such as points on a scatterplot) can become prohibitively large and slow to render. 
 
-#### Array of Structs (AoS) vs. Struct of Arrays (SoA) {#SoA}
 
-Two-dimensional, tabular data is ubiquitous in data analytic workflows. However, since computer memory is fundamentally one-dimensional. Thus, when representing two-dimensional tables, we need to pick one of the dimensions as "primary" (and the other as "secondary"). This leads to two fundamentally different data representations.  
-
-First, we can represent our data as an array of rows, also known as Array of Structs (AoS). In this representation, the rows of the data set are represented as heterogeneous key-value stores (structs/maps/dictionaries) and the entire data set is simply an array of these rows. For example, suppose we are storing a data set of users, such that, for each user, we record their name, age, and gender. Then the AoS way of representing this data (in TypeScript) would be:
-
-```{ts}
-interface User {
-  name: string;
-  age: number;
-  gender: string;
-}
-
-type Users = User[];
-```
-
-Second, we can represent our data as a dictionary of columns, known also as the Struct of Arrays (SoA). In this representation, columns are stored as homogeneous arrays in a single key-value store, and rows are represented implicitly. For example, the way to represent the same data in the SoA format would be:  
-
-```{ts}
-interface Users {
-  name: string[];
-  age: number[];
-  gender: string[];
-}
-```
-
-The way how we choose to represent the data has an impact on various performance characteristics, primarily compute time and memory. The mechanisms underlying these differences are quite general and apply to both in-memory and on-disk data; hence why the topic is also studied in database design [see e.g. @abadi2013]. The SoA layout has (typically) smaller memory footprint and better performance in tight loops that operate on individual columns, thanks to cache locality [@abadi2013; @acton2014; @kelley2023]. The AoS layout has arguably better developer ergonomics and can perform better when retrieving individual records [hence why it is more common in traditional Online Transaction Processing databases, @abadi2013].    
-
-Generally, for data analytic workflows where we need to summarize values across many rows of data, the column-based SoA representation has the better performance characteristics, and hence why it is typically preferred in data analytic libraries, for example in base R's `data.frame` class or in the `pandas` `DataFrame` class [@r2024; @pandas2024]. However, this is not always the case: for example, in the popular JavaScript data visualization/transformation library D3, data sets are represented as arrays of (JSON) rows [@bostock2022]. 

@@ -20,28 +20,30 @@ This section contains a detailed listing of the system's components.
 
 ### Indexable {#Indexable}
 
-Every data visualization involves data. In typical column-based data representation such as CSV, data is stored in contiguous arrays. 
+As discussed in Section \@ref(row-based-or-column-based), when it comes to representing data, the column-based model offer several advantages over the row-based model. In this model, data is stored in a dictionary of contiguous arrays (as in, for example, a CSV file). Thus, the fundamental unit of data is the column, a fixed-length array of values.
 
-Thus, `Indexable` is one of the most fundamental types. It has the following signature:
+However, at times, it may be useful to have additional flexibility. Specifically, it may be useful to include in our definition of a "column" not only fixed-length arrays but also constants and callbacks. 
+This is where the `Indexable<T>` type comes in. It represents a single "column" of data, and is just a union of three primitive types:
 
 ```{ts}
 #| eval: false 
-Indexable<T = unknown> = T | T[] | ((index: number) => T)
+Indexable<T> = T | T[] | ((index: number) => T)
 ```
 
-In plain words, `Indexable<T>` can be one of three things: a constant, an array, or a callback that takes in an index and returns a value. It is meant to represent an "array-like" object that we can extract values from by a generalized form subsetting by an index. If the value is a constant, we always return it, regardless of index. If the value is an array, we subset it (using the usual square bracket notation). If the value is a callback, we pass it the index, and take whatever the callback returns as the extracted value. A uniform interface for extracting values in this way is provided by [`Getter`](#Getters).
+In plain words, an `Indexable<T>` can be one of three things: a constant of type `T`, an array of `T`, or a callback that takes an index and returns a `T`. To extract values from `Indexable<T>`, we use a generalized form of subsetting by an index, which is implemented differently for each type. First, if the value is an array, we subset it using the usual square bracket notation. Second, if the value is a constant, we always return it regardless of the index (we can think of the value as being repeated across all rows). Third and finally, if the value is a callback, then we call it with the index and simply take the returned value. A uniform interface for doing this generalized form of subsetting is provided by [`Getters`](#Getters).   
 
-The `Indexable` type is useful because, while our data will typically come in the form of arrays, we also want the flexibility to be able to work with non-array-like values such as constants and callbacks. For example, in a typical barplot, the y-axis base is set to a constant value, typically zero. While we could hypothetically append a new array filled with zeros to the data, it is much more convenient and memory efficient to instead use a constant (`0`) or a thunk (`() => 0`). Likewise, we may sometimes want to represent an array with repeated values as an array of underlying unique values and an array of indices (similar to base R's `factor` class). We can use a callback which takes an index and returns a position in the unique array for this.
+The advantage of the `Indexable<T>` type is that, while the raw data will typically come in the form of arrays, there are many places further down the data visualization pipeline where constants and callbacks are convenient. For example, in a typical barplot, the base of the y-axis is set to a constant value, typically zero. While we could hypothetically append a new array filled with zeros to the rendering data, it is more convenient and memory efficient to instead use a constant (`0`) or a thunk (`() => 0`). As another example, often, if we have an array of repeated values, it may be convenient to instead represent it as an array of underlying unique values and an array of indices (similar to R's `factor` class). We can then use a callback which takes an index and returns a position in the array of unique values.
 
 ### Getter {#Getter}
 
-A getter takes an [`Indexable<T>`](#Indexable) and returns a function, which, when given an index, returns a value of type `T`. Here is a slightly simplified implementation: 
+A `Getter<T>` is a function which takes an [`Indexable<T>`](#Indexable) as an argument and returns a new function, which, when given an index, returns a value of type `T`. For illustration, here is a slightly simplified implementation: 
 
 ```{ts}
 // Getter.ts
 export type Getter<T> = (index: number) => T;
 
 export namespace Getter {
+  // Constructor
   export function of<T>(x: Indexable<T>): Getter<T> {
     if (typeof x === `function`) return x;
     else if (Array.isArray(x)) return (index: number) => x[index];
@@ -56,15 +58,15 @@ we can then create and use `Getter`s like so:
 import { Getter } from "./Getter"
 
 const getter1 = Getter.of([1, 2, 3])
-const getter2 = Getter.of((index: number) => index - 1);
-const getter3 = Getter.of(99);
+const getter2 = Getter.of(99);
+const getter3 = Getter.of((index: number) => index - 1);
 
 console.log(getter1(0));
 console.log(getter2(0));
 console.log(getter3(0));
 ```
 
-Note that, by its type definition, every `Getter<T>` is also automatically an `Indexable<T>` (since it is a function `(index: number) => T`). This means that we can create new getters out of other getters.
+Note that, by definition, every `Getter<T>` is also automatically an `Indexable<T>` (since it is a callback `(index: number) => T`). This means that we can create new getters out of other getters.
 
 The `Getter` namespace also includes several utility functions. One example is `Getter.constant` which takes in a value `T` and returns a thunk which always returns `T` (i.e. `() => T`). This is useful, for example, when `T` is an array and we always want to return the whole array and not just a single indexed element. Another utility function is `Getter.proxy`, which takes a `Getter` and an array of indices, and returns a new `Getter` which proxies the access to the original values through the array of indices:
 
@@ -95,11 +97,11 @@ const proxyGetter = Getter.proxy([`A`, `B`, `C`], [2, 1, 1, 0, 0, 0]);
 console.log([0, 1, 2, 3, 4, 5].map(proxyGetter))
 ```
 
-The `Getter.proxy` function becomes particularly useful when using `Factor`s.
+The `Getter.proxy` function becomes particularly useful when implementing `Factor`s.
 
 ### Reactive
 
-`Reactive` is a fundamental mixin which is used in many parts of the system. It is essentially just an implementation of the Observer pattern with few extra bits.
+`Reactive` is a fundamental mixin that is used throughout the system. It is essentially just an implementation of the Observer/EventEmitter pattern.
 
 ### Dataframe
 
@@ -132,21 +134,22 @@ I found the dynamic fixed-length checks to be the better option, for several rea
 
 ### Factor
 
-When visualizing data, we often need to split the data into disjoint parts and compute summaries on these parts. The set of all of these parts forms a partition, and, an important fact about partitions in data visualization is that they may be organized in a hierarchy, such that the parts in a child partition "add up" to the parts on the parent partition. A `Factor` provides a way to represent one such partition, as well as the associated metadata. In this way, it is similar to base R's `factor` S3 class, although there are some differences.
+When visualizing data, we often need to split our data into several disjoint parts and compute summaries on these parts. Together, these parts forms a [partition](#Partitions) of the data, and these partitions may be organized in a hierarchy, such that one or more parts in a child partition "add up" to a part in the parent partition. 
 
-A `Factor` has the following interface:
+A `Factor` provides a way to represent such data partitions, as well as the associated metadata. In this way, it is similar to base R's `factor` S3 class, although there are some differences. It has the following interface:
 
 ```{ts}
 interface Factor<T extends Dataframe> extends Reactive {
-  parent?: Factor;
   cardinality: number;
   indices: number[];
   data: T
+  parent?: Factor;
 }
-
 ```
 
-The two important properties which define how a `Factor` partitions data are indices and cardinality. Cardinality represents the number of unique indices that the factor has. For example, if the factor represents boolean partition of the data, the cardinality will be 2, if it represents a partition of the data between three states (such as `"A"`, `"B"`, and `"C"`), the cardinality will be 3, if it represents a partition of the data between all countries in the world, the cardinality will be 195, and so on. Indices represent the actual assignment of cases (rows of the data) to the parts. For example, the array of indices `[1, 0, 1, 1, 2]` represents the first, third, and fourth case being assigned to part two, the second case being assigned to part one, and the fifth case being assigned to part three (keeping in mind JavaScript's zero-based indexing).
+The `cardinality` of a factor represents the number of unique parts (indices) that the partition the factor represents has. For example, if the factor represents boolean partition of the data into two parts, the cardinality will be 2, if it represents a partition of the data into three parts (e.g. `"A"`, `"B"`, and `"C"`), the cardinality will be 3, if it represents a partition of the data between all countries in the world, the cardinality will be 195, and so on. Technically, the same information as `cardinality` is implicitly represented in the array of `indices`, however, for some operations, it is useful to be able to access `cardinality` directly instead of having to loop through `indices` to find the number of unique values each time. 
+
+Indices represent the actual assignment of cases (rows of the data) to the parts. For example, the array of indices `[1, 0, 1, 1, 2]` represents the first, third, and fourth case being assigned to part two, the second case being assigned to part one, and the fifth case being assigned to part three (keeping in mind JavaScript's zero-based indexing). As was mentioned above, the number of unique values in `indices` has to match the factor's `cardinality`, and the length of `indices` has to match the number of rows of the data that the factor partitions.
 
 A factor may have metadata associated with each part, which stored in the `data` property of type [`Dataframe`](#Dataframe). This is a departure from base R's `factor` class, which represents all metadata as the vector of `levels`. For instance:
 
@@ -185,7 +188,13 @@ function bijection<T extends Dataframe>(n: number, data?: T): Factor<T>
 
 #### Constant factors
 
-Constant factors, or `Factor.mono`, are the polar opposite of bijection factors. They assign all cases of the data to a single part (thus, the label function is a constant function, hence the name). The constructor signature is essentially the same as for bijection factor, so I will omit it here.
+Constant factors, or `Factor.mono`, are the polar opposite of bijection factors. They assign all cases of the data to a single part (thus, the label function is a constant function, hence the name). The constructor signature is the same as for [bijection factor](#Bijection factors), so I will omit it here.
+
+#### String factors
+
+If we have an array of values which are either strings or objects that can be coerced to strings (using the `.toString()` method), we can turn this into a factor, and treat two values as the same factor level if the underlying string representations are the same. This is the basis of `Factor.from`.
+
+The metadata associated with `Factor.from` simply contains an array of `labels`.
 
 #### Binned factors
 
@@ -207,9 +216,40 @@ function bin(
 
 If `breaks` are provided, the constructor function uses those to construct the histogram. Otherwise it uses `nBins`, `width`, and `anchor` to determine the breaks, in the corresponding order of importance.
 
+`Factor.bin` produces metadata associated with the histogram bins, that is, the minimum and the maximum of each bin. That is, the result has the following shape:
+
+```{ts}
+{ 
+  cardinality: number, 
+  indices: number[], 
+  data: {
+    binMin: number[],
+    binMax: number[]
+  } 
+}
+```
+
 #### Product factors
 
-We can combine a factor with $j$ levels and another factor with $k$ levels into a product factor with up to $j \cdot k$ levels. 
+A fundamental operation that we need to be able to do with factors is to take their Cartesian product. That is, when we have two factors of same length, each with its corresponding array of indices, we need to be able to take the indices, combine them element-wise, and create a new factor that will have as its cardinality the number of unique pairwise combinations of indices.
+
+For example, take two factors represented by the following data:
+
+```{ts}
+{ cardinality: 2, indices: [0, 0, 1, 0, 1, 1] };
+{ cardinality: 3, indices: [0, 1, 2, 0, 1, 2] };
+```
+
+If we take their product, we should end up with the following factor:
+
+```{ts}
+{ cardinality: 4, indices: [0, 1, 3, 0, 2, 3] };
+```
+
+Notice that the cardinality of the new factor ($4$) is greater than that of either of the two constituent factors ($2$, $3$) but less than then their combined product ($2 \cdot 3 = 6$). This will be generally case: if the first factor has cardinality $i$ and the second cardinality $j$, the product of the two factors will have cardinality $k$, such that:
+
+- $k \geq i$ and $k \geq j$ (equality only if one or both of the factors are constant)
+- $k \leq i \cdot j$ (equality only if all element-wise index combinations are unique). 
 
 I've used a formula similar to one discussed in [@wickham2013]:
 

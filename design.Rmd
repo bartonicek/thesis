@@ -23,34 +23,25 @@ plot <- function(..., pch = 19, col = "grey80", cex = 2) {
 
 ### User profile
 
-The profile of average user can also differ significantly, across systems and research areas. For example, some areas of interactive data visualization and HCI make no assumptions about the user's level of experience or motivation, whereas others assume a highly motivated "expert" user with a sufficient level of domain knowledge [@dimara2019].
+When designing an interactive data visualization system, one important consideration is the profile of the average user. Among interactive data visualization systems, there can be significant differences in what the user is expected to know, across various implementations and research areas. For example, some general interactive data visualization systems make almost no assumptions about the user's level of experience or motivation, whereas others assume a highly motivated "expert" user with a sufficient level of domain knowledge [@dimara2019].
 
-While designing my system, I have attempted to 
+The goal of the project was to design a fairly versatile system for general data exploration. As such, the system was designed in such a way to make it possible for someone with fairly modest data science skills to pick up and make decent use of its basic features. At the same time, I also wanted to provide some more advanced features that experienced users could make use of.
+
+[Give examples].
 
 ## Programming paradigm
 
-> "apex predator of grug is complexity
->
-> complexity bad
->
-> say again:
->
-> complexity very bad
->
-> you say now:
->
-> complexity very, very bad
->
-> given choice between complexity or one on one against t-rex, grug take t-rex: at least grug see t-rex" 
+> "Apex predator of Grug is complexity. Complexity bad. Say again: complexity very bad. 
+You say now: complexity very, very bad. Given choice between complexity or one on one 
+against T-rex, Grug take T-rex: at least grug see T-rex." 
 >
 > The Grug Brained Developer, @gross2024
 
+It is often the case that single programming task can often be solved in many different ways, each with its own set of trade-offs. These trade-offs affect factors like performance, readability, reliability, and maintainability. With regards to these trade-offs, one of the most fundamental decisions is the choice of a programming paradigm.  
 
-It is often the case that the same task problem can be tackled in many different ways. Programs differ in how they decompose their core problem, how they represent and manipulate data, how explicit they are in handling low-level details versus relying on abstractions, and so on. These details matter since they can affect the program's performance, reliability, readability, and maintainability. A wrong choice in one or more of them can result in poorly performing, unmaintainable software.   
+Programming paradigms provide a set of high-level guidelines for thinking about and solving programming problems. They offer distinct approaches to issues such as data representation, code organization, and control flow. Underlying these are philosophical differences on topics such as data mutability, the fundamental unit of computation. These differences can produce programs of radically different shapes and styles.   
 
-However, there is a root concern that many of the programming details above share: complexity [@booch2008]. Any given problem comes with some level inherent complexity, and, absent of careful thought, more will be piled on by the developer [@moseley2006]. Without constant effort, software grows out of scope and becomes unmanageable. Preventing this, and coming up with a set of high-level principles for safeguarding against complexity is the job of programming paradigms [@chambers2014; @jordan2015; @moseley2006; @van2009].
-
-All programming paradigms offer techniques for decomposing code into smaller, more manageable parts, and delineating boundaries between those parts. However, the way they attempt this can differ considerably. 
+However, all programming paradigms ultimately share one fundamental concern: complexity [@booch2008]. Every programming problem comes with some inherent level of complexity. Without careful thought and constant effort, software has the tendency to grow out of scope and becomes unmanageable [@moseley2006]. Thus, all programming paradigms provide answers to the fundamental problem of complexity, each in their own idiosyncratic way [@chambers2014; @jordan2015; @moseley2006; @van2009].
 
 Most programming languages are geared towards one specific programming paradigm, and typically support only one or two to a reasonable capacity [@van2009]. Fortunately, this is not the case for either JavaScript/TypeScript or R, since both are multiparadigm programming languages [@chambers2014; @mdn2024c]. Both languages support object-oriented programming, via prototype inheritance in the case of JavaScript [@mdn2024d] and the S3, S4, and R6 systems in the case of R [@wickham2019], and treat functions as first class citizens, allowing for functional programming style [@chambers2014; @mdn2024e]. Further, as C based languages, both also support classical imperative/procedural programming style, and also provide some utilities for reflective metaprogramming.  
 
@@ -64,34 +55,35 @@ Imperative programming is one of the oldest and most classical programming parad
 
 ### Object oriented programming
 
-Object oriented programming (OOP) is currently one of the most popular programming paradigms. There are many different interpretation and implementations of OOP, so almost anything one can say about OOP will be wrong in some language. Nevertheless, there are some key ideas which are generally true across most OOP-oriented languages.  
+Object oriented programming (OOP) is a widely used programming paradigm. It first appeared in the late 1950's and early 1960's, with languages like Simula and Smalltalk [@black2013]. It then grew to prominence in the 1980's and 1990's, eventually becoming an industry standard. 
 
-The core idea of OOP is that programs should be modeled as networks of objects: units which bundle related data and code together, as properties (members) and methods, respectively [@booch2008]. Objects are self-contained, and own a hidden, private state; they expose only a limited public interface and, to communicate, they send each other messages [@meyer1997]. In this way, they behave similarly to networks of biological cells [this was the inspiration for Alan Kay, one of the creators of Smalltalk, who also coined the term "object oriented", @kay1996]. Each object is an instance of a class, a sort of a blueprint which provides the object with both a type as well as implementation of its methods. Classes can form hierarchies, where child classes (subclasses) inherit properties and methods from parent classes (superclasses). 
+While there are may different interpretations of OOP, there are several concepts which tend to be shared by most implementations. The core idea of OOP is that programs should be modeled as networks of objects: independent units of computation which bundle related data (properties, members) and code (methods, virtual functions) together [@booch2008]. Objects are self-contained, and own hidden, private state; they expose only a limited public interface. To communicate with each other, objects send each other messages [@meyer1997]. In this way, they behave similarly to networks of biological cells [this was the inspiration for Alan Kay, one of the creators of Smalltalk, who also coined the term "object oriented", @kay1996]. 
 
-Here's a typical example one might see in a text-book on OOP (animals, and especially mammals are popular in introductory OOP texts). We start with a base class (superclass) `Animal`:
+To create objects, programmers need to instantiate them using classes. A class is a sort of a blueprint which provides the object which provides the concrete instantiated objects with a type as well as implementation of their methods. A class (subclass) can inherit methods and properties from a parent class (superclass), such that the resulting implementation is shared. 
+
+Here's a typical example one might see in an introductory OOP text-book (for some reasons, animals are a popular metaphor in introductory OOP texts). We start with a base class `Animal`:
 
 ```{ts}
 // Animal.ts
-type Food = { nutritionalValue: number };
+type Food = { nutrition: number };
 
-// Abstract classes can declare certain methods without implementing them.
-// Any subclasses must then implement these methods.
-export abstract class Animal {
-  x = 0; // Class properties with default values
+export class Animal {
+  // Class properties with default values
+  x = 0; 
   y = 0;
   nutrition = 100;
+  private species = ``; // Private property - cannot be accessed outside of class
 
-  move(dx: number, dy: number) { // A basic method
+  // A basic method shared by all Animals
+  move(dx: number, dy: number) {
     this.x += dx;
     this.y += dy;
   }
 
+  // Default eat method
   eat(food: Food) {
-    this.nutrition += food.nutritionalValue;
+    this.nutrition += food.nutrition;
   }
-
-  // Abstract method: subclass must implement this (every Animal has a sound)
-  abstract getSound(): string;
 }
 ```
  
@@ -100,37 +92,45 @@ Next, we subclass the `Animal` class and create a `Dog` class:
 ```{ts}
 import { Animal } from "./Animal.ts"
 
-type Meat = { type: `meat`; nutritionalValue: number };
+type Meat = { type: `meat`; nutrition: number };
 
 class Dog extends Animal {
-  eat(food: Meat) { // Overwrite superclass method such that it only accepts Meat
+  // New private property - cannot be access outside of the class
+  private species = `Canis familiaris`; 
+  
+  // Overwrite superclass method - dogs only eat meat
+  eat(food: Meat) { 
     super.eat(food); // Call superclass method
   }
 
-  getSound() { // Implement the abstract method
+  // Dogs also makes a specific dog-like sound
+  getSound() { 
     return `Woof!`;
   }
 }
 
 const dog = new Dog();
 
-dog.move(-10, 10); // Dog inherits all of the methods and properties of Animal
-dog.eat({ type: `meat`, nutritionalValue: 10 }); // This is fine
-// dog.eat({ nutritionalValue: 10 }); This would result in a TS compiler error
+// Dog inherits all of the methods and properties of Animal
+dog.move(-10, 10); 
+dog.eat({ type: `meat`, nutrition: 10 }); // This is fine
+// dog.eat({ nutrition: 10 }); // This would result in a compiler error
 
-console.log(dog.x, dog.y, dog.nutrition)
+console.log([`x`, `y`, `nutrition`].map(e => `${e}: ${dog[e]}`).join(`, `))
 console.log(dog.getSound());
 ```
 
-This is only a very basic example of how OOP can be done in practice. A more detailed explanation is outside of the scope of the present thesis. However, it is important to discuss some of the big ideas of OOP. 
+This is only a very basic example of OOP code. Typically, when writing OOP code, one would also rely on more advanced language features such as interfaces, abstract classes, and generics, however, a detailed discussion of these features is outside of the scope of the present thesis. Nevertheless, what is important to discuss are some fundamental theoretical ideas behind OOP.
+
+#### Abstraction
+
+Abstraction is a fundamental concept in OOP. It refers to the idea that, after having built a system (class) out of components (other classes and properties), one should be able to "forget" all of the messy internal details and only rely on the exposed public interface. For instance, in the example above, the `Dog` class inherits from the `Animal` class: we should be able to use the methods inherited from `Animal` (such as `move`) without having to remember how these methods are implemented. Ultimately, the goal of abstraction is to make it possible to reason about a complex system without being overwhelmed [@booch2008].   
 
 #### Encapsulation
 
-Encapsulation or information hiding refers to the idea that some (if not most) properties of a class should not be accessible from the outside. Encapsulation is generally seen as one of the most important concepts in OOP, since it allows for continuity: by encapsulating data/functionality, the developer of an OOP system may modify these private properties without affecting the public interface [@meyer1997]. Note that the encapsulation does not mean that the hidden data or implementation has to be entirely *invisible* to the user, merely that the user should not be able to access the hidden data and rely on it in their application [@meyer1997].  
+Encapsulation (or information hiding) is closely related to abstraction and refers to the practice of controlling access to class properties. Specifically, to properly encapsulate its data, a class should expose only a limited number of properties/methods and the rest should be kept private [@booch2008]. The goal of encapsulation is continuity: by encapsulating private properties, the developer should be free to modify them while keeping the public interface intact [@booch2008; @meyer1997]. Note that the encapsulation does not mean that the hidden data or implementation has to be entirely *invisible* to the user, merely that the user should not be able to access the hidden data and rely on it in their application [@meyer1997].  
 
-#### Open-closed principle
-
-Modules should be open to extension but close to modification.
+Encapsulation is also closely related to the ideas of the *open-closed* principle and *small interfaces* [@meyer1997]. The open-closed principles states that modules should be open to extension but closed to modification. The idea of small interfaces suggests that, when communicating via messages (method calls), objects should exchange as little information as possible [@meyer1997]. This is meant to prevent coupling.
 
 #### Polymorphism
 
@@ -143,11 +143,11 @@ In other words, only the behavior of the object should matter [@black2013].
 
 #### Domain-driven design
 
-One concept that is not unique to OOP but has a strong tradition in it is domain-drive design: the idea that classes and object should model things in the business domain or the real world [@hadar2013; @meyer1997]. The stated benefit of this strategy is that this makes it easier to discover objects/classes and their relationships, by exploiting the mind's capacity for thinking about the natural world [@booch2008; @hadar2013; @meyer1997]. 
+One final concept that is not uniquely object-oriented but has a strong tradition in OOP is domain-drive design. This refers to the idea that components of a program (classes) should model things in the business domain or the real world [@hadar2013; @meyer1997]. The goal of this strategy is to make it easier to discover objects/classes and their relationships by exploiting the mind's capacity for thinking about the natural world [@booch2008; @hadar2013; @meyer1997]. 
 
 #### Criticism of OOP
 
-Small interfaces [@meyer1997]. In practice, the small interfaces idea is often not closely adhered to in OOP. It is common for class methods to receive pointers to other objects as arguments, effectively sending all of the information contained in the argument objects and defeating the principle of small interfaces [@will2016].
+Another OOP principle that is not always adhered to is the idea of small interfaces [@meyer1997]. In practice, it is common for class methods to receive pointers to other objects as arguments. However, this results in effectively sending all of the information contained in the argument object(s), defeating the principle of small interfaces [@will2016].
 
 ### Data oriented programming
 
@@ -155,15 +155,32 @@ Small interfaces [@meyer1997]. In practice, the small interfaces idea is often n
 >
 > Edgar Dijkstra -@dijkstra1968
 
-Data oriented programming (DOP) and data oriented design (DOD) are two newer programming paradigms that have been slowly gaining a foothold in the recent years. While the terms are sometimes used interchangeably, there are some important differences: DOP is inspired by the Clojure style of programming and focuses more on high-level principles such as the structure and organization of code [@hickey2011; @hickey2018; @sharvit2022; @parlog2024], whereas DOD originates in the world of video-game development and tends to be more concerned with low-level optimization details such as memory layout and CPU access patterns [@acton2014; @bayliss2022; @kelley2023; @nikolov2018; @fabian2018]. Nevertheless, there is a considerable overlap in the general conclusions and directions that the two programming paradigms provide. For this reason, I will discuss both DOP and DOD here simultaneously, within the same section, and refer to both as "DOP" unless explicitly stated otherwise. 
+Data-oriented programming (DOP) is a relatively new programming paradigm that has been gaining attention in certain programming communities over the recent years. Unfortunately, due to its novelty, there is some confusion in the terminology surrounding this paradigm. The term "DOP" is sometimes used interchangeably with Data Oriented Design (DOD), which shares a number of features. However, there are also important differences: DOP is inspired by the Clojure style of programming and focuses on high-level principles such as structure and organization of code [@hickey2011; @hickey2018; @sharvit2022; @parlog2024], whereas DOD originates in the world of video-game development and primarily concerns itself with low-level optimization details such as memory layout and CPU cache utilization [@acton2014; @bayliss2022; @kelley2023; @nikolov2018; @fabian2018]. Also, both paradigms share a connection to Value Oriented Design [VOD, @vaneerd2024] which emphasizes values and value semantics and has its roots in the work of Alexander Stepanov [see e.g. @stepanov2009; @stepanov2013].
 
-The core idea of DOP is a data-first perspective. In the DOP view, programs should be viewed as transformations of data, nothing less, nothing more [@acton2014; @fabian2018; @sharvit2022]. As a result, every program is composed of two sets of components: stateful data and stateless functions that act on and transform this data [@fabian2018]. In other words, data and code should always be kept separate, such that both can be reasoned about in isolation. Code should live inside modules composed of pure (stateless) functions [@fabian2018; @sharvit2022]. This strict segregation brings several benefits. The data becomes easy to pass around and serialize, and, since the code is composed of pure functions, it becomes easy to test and mock [@sharvit2022]. 
+Nevertheless, despite their differences, there is also a large common set of ideas that the above-mentioned paradigms share. Specifically, the high-level principles and guidelines they provide are remarkably similar, and there are even examples of explicit cross-polination [see e.g. @vaneerd2024]. For this reason, I have decided to use DOP as an umbrella term in this section and use it to refer to all three paradigms, unless specified otherwise.
 
-Program is split between what *is* and what *does*.
+#### Data first
 
-Data should be represented by plain data structures. These can formed by combining generic components, such as primitives, arrays, and maps/dictionaries/structs [for example [JSON]\; @hickey2011; @hickey2018; @sharvit2022]. It may even be desirable that the data adheres to the relational model [@codd1970; @moseley2006; @fabian2018]. This does not mean that the data has to actually *live* inside a relational database, just that its shape should be close to that of normalized relational database tables, with columns represented by generic arrays [@fabian2018]. 
+The main idea of DOP is a data-first perspective. Programs should be viewed as transformations of data, nothing less, nothing more [@acton2014; @fabian2018; @sharvit2022]. This view has several important consequences for design.
 
-Data represents just itself - data - and there is no obligation for it to model the real world or any kind of abstract entity. As a result, and we are free to represent data in any way we want, and this can in fact bring significant performance benefits [@acton2014; @fabian2018]. A typical example of this in DOD is the Structure of Arrays (SoA; aka "parallel arrays" or "columnar format") data structure [@acton2014; @acton2019; @kelley2023], in which a list of records is stored as a single object, with the records' properties being stored as homogeneous arrays (this is also how R's `data.frame` class is implemented). This type of representation reduces memory footprint and can improve cache line utilization, resulting in faster runtime [@acton2014; @fabian2018; @kelley2023]. Another example of idiosyncratic data representation that can lead to improved performance are Entity Component Systems in videogames [@harkonen2019]. Either way, even if performance is not the nubmer one concern, another benefit data representing itself is that it allows us introduce abstraction only gradually, since we can get far by relying on generic data manipulation functions [@fabian2018; @sharvit2022].
+First and foremost, programs should be partitioned into two classes of independent components: data and code [@fabian2018]. Data should be represented by generic data structures and code should live inside modules composed of stateless functions [@fabian2018; @sharvit2022]. The main benefit of this approach is that, by keeping data and code separate, we can use and reason about both in isolation, without entanglement [@vaneerd2024]. More specifically, data becomes easy to pass around and serialize, and, since the code is composed of pure functions, it becomes easy to test and mock [@sharvit2022]. In this way, programs can be thought of as being split between what *is* and what *does*.
+
+#### The data
+
+In the DOP view, data should be represented by plain data structures. These are any structures that can formed by combining generic components: primitives, arrays, and dictionaries [aka objects, maps, or structs, @hickey2011; @hickey2018; @sharvit2022]. A good example of such plain data is [JSON](#JSON). 
+
+The data should be organized in a way that makes logical sense and avoids duplicating information. It may even be desirable that the data adheres to the relational model [@codd1970; @moseley2006; @fabian2018]. This does not mean that the data has to actually *live* inside a relational database, just that its shape should resemble that of normalized database tables, with columns represented by generic arrays [@fabian2018]. 
+
+Since data represents just itself - data - there is no obligation for it to model the real world or any kind of abstract entity. This can bring significant performance benefits [@acton2014; @fabian2018]. An example typically discussed in DOD is the Structure of Arrays ([SoA](#SoA)) data structure [@acton2014; @acton2019; @kelley2023]. Storing a list of records as a single record of homogeneous arrays can dramatically reduce memory footprint and improve cache line utilization, resulting in better performance [@acton2014; @fabian2018; @kelley2023]. Another example of alternative data representation that can lead to improved performance are Entity Component Systems in videogames [@harkonen2019]. 
+
+Outside of performance, another benefit of plain data is that it allows us introduce abstraction gradually. When starting a new project, we should rely on generic data manipulation functions as much as possible [@fabian2018; @sharvit2022]. Only once we have settled on a good abstraction should we reify it as code.
+
+
+
+#### The code
+
+Separate calculating from doing in methods [@vaneerd2024].
+
 
 It may seem that many of the DOP principles directly contradict many popular OOP principles, specifically encapsulation, inheritance, polymorphism, and domain driven design. However, many of these principles can either be reconciled with DOP, or DOP in fact provides better alternatives. Below, I go over these principles and provide code examples that further illustrate how DOP works. 
 
@@ -220,13 +237,12 @@ console.log(user)
 console.log(Meta.get(user, `id`));
 ```
 
-We can now use the `Meta` module internally, and, if we do not export the module or the `METADATA` symbol, then the user will not be able to access those properties easily. The user can still inspect the object and see the associated metadata, however, they cannot access it without the symbol. They may still be able to retrieve the symbol using the via the `Reflect.ownKeys` and `Object.getOwnPropertySymbols` functions, and so this method does not provide a strong form of encapsulation [@mdn2024f]. Arguably, however, if the user goes as far as to retrieve the symbol using reflection, and, assuming we are not storing any sensitive data (which is not usually the case in data visualization systems), it may be reasonable to allow them to access these "private" properties and suffer the consequences.  
 
 ##### Inheritance
 
 In OOP, the primary mechanism for code reuse is inheritance.
 
-In DOP, since data is generic and separate from behavior, we can call functions from any module as long as the data we provide it as arguments adheres to the module's interface. This makes code reuse trivial. For example, here's a simplified version of the `Reactive` interface (Observer pattern) from `plotscape`:
+In DOP, since data is generic and separate from behavior, we can call functions from arbitrary modules with any kind of compatible data. This makes code reuse trivial. For example, here's a simplified version of the `Reactive` interface (Observer pattern) from `plotscape`:
  
 ```{ts}
 
