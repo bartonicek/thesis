@@ -14,6 +14,7 @@ def:unlabeled-div-8
 def:unlabeled-div-9
 def:unlabeled-div-10
 tab:scales
+fig:unnamed-chunk-26
 def:linear-mapping
 def:scale
 def:scale-inverse
@@ -72,7 +73,7 @@ Indexable
 Getter
 reactive
 dataframe
-factor
+factors
 bijection-factors
 constant-factors
 string-factors
@@ -103,3 +104,6 @@ svg
 appendix
 dop-encapsulation
 references
+fig:unnamed-chunk-17
+fig:barspine
+motivation

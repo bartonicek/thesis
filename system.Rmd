@@ -1,3 +1,8 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
 # System description
 
 This section contains a description of the concrete system implementation ([plotscape](https://github.com/bartonicek/plotscape) and [plotscaper](https://github.com/bartonicek/plotscaper)).
@@ -132,7 +137,7 @@ In the current version of the system, these fixed-length constraints are not enf
 
 I found the dynamic fixed-length checks to be the better option, for several reasons. First, they allow us to represent data as a plain JavaScript object (POJO) rather than having to instantiate a class. Second, due to JavaScript's dynamic nature, this approach is also safer: if, during runtime, the user adds a property to a `Dataframe` which violates the fixed-length constraints, this approach will catch the error. Third, and finally, for any data sets with typical dimensionality (more rows than columns, $p << n$), the tiny performance hit that may be incurred due to having to loop through the columns to find the length dynamically will be minuscule compared with the computational cost of looping through the data set's rows and doing work such as rendering or computing statistics. For high-dimensional datasets ($p >> n$), we could always extend the system to memoize the length/number of rows on the `Dataframe` object (although then we may lose the security of the dynamic runtime checks).    
 
-### Factor
+### Factors
 
 When visualizing data, we often need to split our data into several disjoint parts and compute summaries on these parts. Together, these parts forms a [partition](#Partitions) of the data, and these partitions may be organized in a hierarchy, such that one or more parts in a child partition "add up" to a part in the parent partition. 
 
@@ -293,6 +298,91 @@ Steps 1. and 3. require looping through the array of same length as the data, i.
 Since the operation of computing product factors represents a "hot" code path (it is required, for example, every time linked selection happens), having to loop through an array of the length of the data twice is not ideal. However, in JavaScript, there is likely no better alternative. While we could hypothetically wrap indices in objects, and store the pointers to those, the memory and data access overhead of this approach would most likely result in performance characteristic many times worse. One of the data types JavaScript engines such as V8 are best optimized to handle are packed arrays of small integers [called "smi's", @veight2017], and so, heuristically, it makes to keep the indices in this format. Additionally, compared to the overhead of other operations (primarily rendering), the cost of looping through an array of integers twice is likely to be miniscule. Personally, this is what I have seen while profiling the system.        
 
 ### Reducers
+
+#### Motivation
+
+When we visualize, we draw summary statistics computed on different parts of the data. For example, when drawing a typical barplot, we split the data based on the levels of some categorical variable, count up the number of cases in each part, and then draw bars of corresponding heights.
+
+In the preceding section, I discussed the component used to represent partitioning of the data into parts: [factors](#Factors). Now it is time to discuss the process of actually computing the statistical summaries representing these parts. Interestingly, while all visualizations rely on this process in one way or another, designing a generic pipeline for doing this presents some surprising challenges.
+
+As one example of such a challenge, in interactive data visualization, one interactive feature that is quite desirable is the ability to convert a specific plot type into a different representation. For example, a typical barplot represents counts along the y-axis. This is useful for comparing absolute counts, however, it is less useful for comparing proportions. As such, some interactive data visualization systems offer the feature of turning a barplot into a spineplot, a normalized version of the plot where the counts are instead presented along the x-axis, in a stacked order, and the y-axis represents proportion of counts, see Figure \@ref(fig:barspine).
+
+```{r barspine}
+#| echo: false
+#| fig-cap: "While barplot and spineplot represent the same underlying summaries, 
+#| each makes it easier to see different aspects of our data. 
+#| Barplot (left) makes it easier to compare absolute counts, 
+#| whereas spineplot (right) makes it easier to compare proportions. 
+#| Notice that the spineplot makes it much easier to see that 
+#| the proportions of blue cases in categories B and C are exactly the same."
+#| fig-align: "center"
+#| fig-height: 4
+
+
+library(ggplot2)
+library(dplyr)
+library(patchwork)
+
+# seed <- sample(1:1e4, 1)
+# set.seed(seed)
+set.seed(8311)
+
+mtcars2 <- mtcars
+mtcars2$cyl <- factor(mtcars2$cyl, labels = c("A", "B", "C"))
+mtcars2$am <- sample(mtcars2$am)
+mtcars2$am <- factor(mtcars2$am, levels = c(1, 0))
+
+mtcars_spine1 <- mtcars2 |> 
+  group_by(cyl) |>
+  count() |>
+  ungroup() |>
+  mutate(left = cumsum(lag(n, default = 0)), right = cumsum(n), 
+         position = (left + right) / 2)
+
+mtcars_spine <- mtcars2 |>
+  count(cyl, am, name = "n_prod") |>
+  left_join(mtcars_spine1, by = "cyl") |>
+  mutate(prop = n_prod / n) |>
+  group_by(cyl) |>
+  mutate(prop_cum = cumsum(prop))
+
+# Need to reorder the rows to make ggplot2 layer the bars in the right order
+mtcars_spine <- mtcars_spine[c(2 * 0:2 + 2, 2 * 0:2 + 1), ]
+
+mtcars3 <- mtcars2
+mtcars3$am <- factor(mtcars3$am, levels = c(0, 1))
+
+p1 <- ggplot(mtcars3, aes(cyl, fill = am)) +
+  geom_bar(col = "white") +
+  scale_fill_manual(values = pal_dark_3[2:1]) +
+  scale_y_continuous(breaks = seq(0, 14, by = 3)) +
+  guides(fill = "none") +
+  labs(x = NULL, y = NULL) +
+  my_theme
+
+p2 <- ggplot(mtcars_spine, aes(x = position, y = prop_cum, width = n, fill = am)) +
+  geom_bar(stat = "identity", position = position_identity(), col = "white") +
+  geom_text(data = mtcars_spine1, col = "white",
+            aes(x = position, y = 0.9, label = cyl, fill = NULL)) +
+  scale_x_continuous(breaks = c(0, mtcars_spine$right)) +
+  scale_fill_manual(values = pal_dark_3) +
+  guides(fill = "none") +
+  labs(x = NULL, y = NULL) +
+  my_theme
+
+p1 + plot_spacer() + p2 + plot_layout(widths = c(1, 0.05, 1))
+```
+
+However, despite the fact that both barplots and spineplots represent the same underlying summaries (counts), turning one into the other is not always a trivial exercise. For example, in `ggplot2`, it is easy to create a barplot using simple declarative syntax, however, there is no such simple recipe for spineplots - creating the right plot in Figure \@ref(fig:barspine) took over 10 lines of external data wrangling code (using standard `dplyr` syntax).
+
+What is so complicated about spineplots? First of all, both the x- and y-axes represent the same variable: counts. However, the way the variable is used is different:
+
+- Along the x-axis, we stack counts *within the levels of a single factor*
+- Along the y-axis, we stack counts *within the levels of a product of two factors* and normalize them by the counts *within the levels of the parent factor*.   
+
+In other words, the spineplot forces us to confront the fact that the summaries in our plots form a hierarchy. When we compute the summaries underlying a stacked barplot or spineplot, we are not merely computing a matrix of values where the rows and the columns have no underlying meaning - instead, we are implicitly saying that objects along the x-axis (whole bars) represent a coarser level of partitioning compared with the objects (stacked segments) along the y-axis. The only difference between a barplot and spineplot is, in the barplot, we can get away with treating the two factors as if they were independent (had the same "weight"), whereas in the spineplot this is no longer possible.
+
+This is why in declarative data visualization systems such as `ggplot2`, certain types of plots like spineplots are difficult to express. In these systems, the data is implicitly partitioned as a "flat" product of the factor variables. This makes it impossible to express the hierarchical structure that is encoded in plots like spineplots.    
 
 ### Scales
 

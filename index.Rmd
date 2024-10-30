@@ -21,7 +21,7 @@ An abstract will go here.
 
 knitr::opts_chunk$set(
   cache = TRUE,
-  fig.align = 'center'
+  fig.align = 'center',
 )
 
 directory <- tempdir()
@@ -64,8 +64,7 @@ pal_dark_3 <- palette.colors(6, "Paired")[2 * 1:3]
 my_theme <- theme_bw() +
   theme(
   axis.ticks = element_blank(),
-  panel.grid = element_blank(),
-  axis.text = element_text(family = "serif")
+  panel.grid = element_blank()
 )
 ```
 
