@@ -6,7 +6,7 @@ documentclass: book
 output:
   # bookdown::html_document2: default
   bookdown::gitbook: default
-bibliography: [references.bib]
+bibliography: [references-formatted.bib]
 link-citations: true
 editor_options: 
   chunk_output_type: console

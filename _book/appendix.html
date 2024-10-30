@@ -247,48 +247,48 @@ div.csl-indent {
 <div id="dop-encapsulation" class="section level4 hasAnchor" number="6.0.0.1">
 <h4><span class="header-section-number">6.0.0.1</span> Encapsulation in DOP<a href="appendix.html#dop-encapsulation" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>For example, here’s how we can emulate private property access in JavaScript using Proxy. We create a namespace with a single constructor function that takes an object and a namespace and returns a proxy of the object which prevents access to the object fields outside of the namespace:</p>
-<div class="sourceCode" id="cb77"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb77-1"><a href="appendix.html#cb77-1" tabindex="-1"></a><span class="co">// Private.ts</span></span>
-<span id="cb77-2"><a href="appendix.html#cb77-2" tabindex="-1"></a><span class="im">export</span> <span class="im">namespace</span> <span class="dt">Private</span> {</span>
-<span id="cb77-3"><a href="appendix.html#cb77-3" tabindex="-1"></a>  <span class="im">export</span> <span class="kw">function</span> <span class="kw">of</span><span class="op">&lt;</span>T <span class="kw">extends</span> <span class="bu">Object</span><span class="op">&gt;</span>(object<span class="op">:</span> T<span class="op">,</span> namespace<span class="op">:</span> <span class="bu">Object</span>) {</span>
-<span id="cb77-4"><a href="appendix.html#cb77-4" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">new</span> <span class="bu">Proxy</span>(<span class="kw">object</span><span class="op">,</span> {</span>
-<span id="cb77-5"><a href="appendix.html#cb77-5" tabindex="-1"></a>      <span class="kw">get</span><span class="op">:</span> (t<span class="op">,</span> k<span class="op">,</span> e) <span class="kw">=&gt;</span> (e <span class="op">===</span> <span class="im">namespace</span> ? <span class="dt">Reflect</span>.<span class="dt">get</span>(<span class="dt">t</span>, <span class="dt">k</span>) : <span class="dt">undefined</span>),</span>
-<span id="cb77-6"><a href="appendix.html#cb77-6" tabindex="-1"></a>      <span class="kw">set</span><span class="op">:</span> (t<span class="op">,</span> k<span class="op">,</span> v<span class="op">,</span> e) <span class="kw">=&gt;</span> (e <span class="op">===</span> <span class="im">namespace</span> ? (<span class="dt">Reflect</span>.<span class="dt">set</span>(<span class="dt">t</span>, <span class="dt">k</span>, <span class="dt">v</span>), <span class="dt">true</span>) : <span class="dt">true</span>),</span>
-<span id="cb77-7"><a href="appendix.html#cb77-7" tabindex="-1"></a>    })<span class="op">;</span></span>
-<span id="cb77-8"><a href="appendix.html#cb77-8" tabindex="-1"></a>  }</span>
-<span id="cb77-9"><a href="appendix.html#cb77-9" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb79"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb79-1"><a href="appendix.html#cb79-1" tabindex="-1"></a><span class="co">// Private.ts</span></span>
+<span id="cb79-2"><a href="appendix.html#cb79-2" tabindex="-1"></a><span class="im">export</span> <span class="im">namespace</span> <span class="dt">Private</span> {</span>
+<span id="cb79-3"><a href="appendix.html#cb79-3" tabindex="-1"></a>  <span class="im">export</span> <span class="kw">function</span> <span class="kw">of</span><span class="op">&lt;</span>T <span class="kw">extends</span> <span class="bu">Object</span><span class="op">&gt;</span>(object<span class="op">:</span> T<span class="op">,</span> namespace<span class="op">:</span> <span class="bu">Object</span>) {</span>
+<span id="cb79-4"><a href="appendix.html#cb79-4" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">new</span> <span class="bu">Proxy</span>(<span class="kw">object</span><span class="op">,</span> {</span>
+<span id="cb79-5"><a href="appendix.html#cb79-5" tabindex="-1"></a>      <span class="kw">get</span><span class="op">:</span> (t<span class="op">,</span> k<span class="op">,</span> e) <span class="kw">=&gt;</span> (e <span class="op">===</span> <span class="im">namespace</span> ? <span class="dt">Reflect</span>.<span class="dt">get</span>(<span class="dt">t</span>, <span class="dt">k</span>) : <span class="dt">undefined</span>),</span>
+<span id="cb79-6"><a href="appendix.html#cb79-6" tabindex="-1"></a>      <span class="kw">set</span><span class="op">:</span> (t<span class="op">,</span> k<span class="op">,</span> v<span class="op">,</span> e) <span class="kw">=&gt;</span> (e <span class="op">===</span> <span class="im">namespace</span> ? (<span class="dt">Reflect</span>.<span class="dt">set</span>(<span class="dt">t</span>, <span class="dt">k</span>, <span class="dt">v</span>), <span class="dt">true</span>) : <span class="dt">true</span>),</span>
+<span id="cb79-7"><a href="appendix.html#cb79-7" tabindex="-1"></a>    })<span class="op">;</span></span>
+<span id="cb79-8"><a href="appendix.html#cb79-8" tabindex="-1"></a>  }</span>
+<span id="cb79-9"><a href="appendix.html#cb79-9" tabindex="-1"></a>}</span></code></pre></div>
 <p>We can then use this namespace in the constructor functions of data we want to make private:</p>
-<div class="sourceCode" id="cb78"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb78-1"><a href="appendix.html#cb78-1" tabindex="-1"></a><span class="im">import</span> { Private } <span class="im">from</span> <span class="st">&quot;./Private.ts&quot;</span></span>
-<span id="cb78-2"><a href="appendix.html#cb78-2" tabindex="-1"></a></span>
-<span id="cb78-3"><a href="appendix.html#cb78-3" tabindex="-1"></a><span class="co">// Data type - container for stateful data</span></span>
-<span id="cb78-4"><a href="appendix.html#cb78-4" tabindex="-1"></a><span class="kw">interface</span> User {</span>
-<span id="cb78-5"><a href="appendix.html#cb78-5" tabindex="-1"></a>  firstName<span class="op">:</span> <span class="dt">string</span><span class="op">;</span></span>
-<span id="cb78-6"><a href="appendix.html#cb78-6" tabindex="-1"></a>  lastName<span class="op">:</span> <span class="dt">string</span><span class="op">;</span></span>
-<span id="cb78-7"><a href="appendix.html#cb78-7" tabindex="-1"></a>}</span>
-<span id="cb78-8"><a href="appendix.html#cb78-8" tabindex="-1"></a></span>
-<span id="cb78-9"><a href="appendix.html#cb78-9" tabindex="-1"></a><span class="co">// Code module - consists of stateless functions</span></span>
-<span id="cb78-10"><a href="appendix.html#cb78-10" tabindex="-1"></a><span class="im">namespace</span> <span class="dt">User</span> {</span>
-<span id="cb78-11"><a href="appendix.html#cb78-11" tabindex="-1"></a>  <span class="co">// Constructor function</span></span>
-<span id="cb78-12"><a href="appendix.html#cb78-12" tabindex="-1"></a>  <span class="im">export</span> <span class="kw">function</span> <span class="kw">of</span>(firstName<span class="op">:</span> <span class="dt">string</span><span class="op">,</span> lastName<span class="op">:</span> <span class="dt">string</span>)<span class="op">:</span> User {</span>
-<span id="cb78-13"><a href="appendix.html#cb78-13" tabindex="-1"></a>    <span class="cf">return</span> Private<span class="op">.</span><span class="fu">of</span>({firstName<span class="op">,</span> lastName}<span class="op">,</span> User)<span class="op">;</span></span>
-<span id="cb78-14"><a href="appendix.html#cb78-14" tabindex="-1"></a>  }</span>
-<span id="cb78-15"><a href="appendix.html#cb78-15" tabindex="-1"></a>  </span>
-<span id="cb78-16"><a href="appendix.html#cb78-16" tabindex="-1"></a>  <span class="co">// Internal getter function</span></span>
-<span id="cb78-17"><a href="appendix.html#cb78-17" tabindex="-1"></a>  <span class="kw">function</span> <span class="kw">get</span>(user<span class="op">:</span> User<span class="op">,</span> key<span class="op">:</span> <span class="kw">keyof</span> User) {</span>
-<span id="cb78-18"><a href="appendix.html#cb78-18" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">Reflect</span><span class="op">.</span><span class="fu">get</span>(user<span class="op">,</span> key<span class="op">,</span> User)<span class="op">;</span></span>
-<span id="cb78-19"><a href="appendix.html#cb78-19" tabindex="-1"></a>  }</span>
-<span id="cb78-20"><a href="appendix.html#cb78-20" tabindex="-1"></a>  <span class="co">// We could do the same thing for a private setter</span></span>
-<span id="cb78-21"><a href="appendix.html#cb78-21" tabindex="-1"></a>  </span>
-<span id="cb78-22"><a href="appendix.html#cb78-22" tabindex="-1"></a>  <span class="im">export</span> <span class="kw">function</span> <span class="fu">getFullName</span>(user<span class="op">:</span> User) {</span>
-<span id="cb78-23"><a href="appendix.html#cb78-23" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">get</span>(user<span class="op">,</span> <span class="vs">`firstName`</span>) <span class="op">+</span> <span class="vs">` `</span> <span class="op">+</span> <span class="kw">get</span>(user<span class="op">,</span> <span class="vs">`lastName`</span>)<span class="op">;</span></span>
-<span id="cb78-24"><a href="appendix.html#cb78-24" tabindex="-1"></a>  }</span>
-<span id="cb78-25"><a href="appendix.html#cb78-25" tabindex="-1"></a>}</span>
-<span id="cb78-26"><a href="appendix.html#cb78-26" tabindex="-1"></a></span>
-<span id="cb78-27"><a href="appendix.html#cb78-27" tabindex="-1"></a><span class="kw">const</span> user <span class="op">=</span> User<span class="op">.</span><span class="fu">of</span>(<span class="vs">`Adam`</span><span class="op">,</span> <span class="vs">`Bartonicek`</span>)<span class="op">;</span></span>
-<span id="cb78-28"><a href="appendix.html#cb78-28" tabindex="-1"></a></span>
-<span id="cb78-29"><a href="appendix.html#cb78-29" tabindex="-1"></a>user<span class="op">.</span><span class="at">firstName</span> <span class="op">=</span> <span class="vs">`Bob`</span></span>
-<span id="cb78-30"><a href="appendix.html#cb78-30" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(user)</span>
-<span id="cb78-31"><a href="appendix.html#cb78-31" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(user<span class="op">.</span><span class="at">lastName</span>)<span class="op">;</span></span>
-<span id="cb78-32"><a href="appendix.html#cb78-32" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(User<span class="op">.</span><span class="fu">getFullName</span>(user))<span class="op">;</span></span></code></pre></div>
+<div class="sourceCode" id="cb80"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb80-1"><a href="appendix.html#cb80-1" tabindex="-1"></a><span class="im">import</span> { Private } <span class="im">from</span> <span class="st">&quot;./Private.ts&quot;</span></span>
+<span id="cb80-2"><a href="appendix.html#cb80-2" tabindex="-1"></a></span>
+<span id="cb80-3"><a href="appendix.html#cb80-3" tabindex="-1"></a><span class="co">// Data type - container for stateful data</span></span>
+<span id="cb80-4"><a href="appendix.html#cb80-4" tabindex="-1"></a><span class="kw">interface</span> User {</span>
+<span id="cb80-5"><a href="appendix.html#cb80-5" tabindex="-1"></a>  firstName<span class="op">:</span> <span class="dt">string</span><span class="op">;</span></span>
+<span id="cb80-6"><a href="appendix.html#cb80-6" tabindex="-1"></a>  lastName<span class="op">:</span> <span class="dt">string</span><span class="op">;</span></span>
+<span id="cb80-7"><a href="appendix.html#cb80-7" tabindex="-1"></a>}</span>
+<span id="cb80-8"><a href="appendix.html#cb80-8" tabindex="-1"></a></span>
+<span id="cb80-9"><a href="appendix.html#cb80-9" tabindex="-1"></a><span class="co">// Code module - consists of stateless functions</span></span>
+<span id="cb80-10"><a href="appendix.html#cb80-10" tabindex="-1"></a><span class="im">namespace</span> <span class="dt">User</span> {</span>
+<span id="cb80-11"><a href="appendix.html#cb80-11" tabindex="-1"></a>  <span class="co">// Constructor function</span></span>
+<span id="cb80-12"><a href="appendix.html#cb80-12" tabindex="-1"></a>  <span class="im">export</span> <span class="kw">function</span> <span class="kw">of</span>(firstName<span class="op">:</span> <span class="dt">string</span><span class="op">,</span> lastName<span class="op">:</span> <span class="dt">string</span>)<span class="op">:</span> User {</span>
+<span id="cb80-13"><a href="appendix.html#cb80-13" tabindex="-1"></a>    <span class="cf">return</span> Private<span class="op">.</span><span class="fu">of</span>({firstName<span class="op">,</span> lastName}<span class="op">,</span> User)<span class="op">;</span></span>
+<span id="cb80-14"><a href="appendix.html#cb80-14" tabindex="-1"></a>  }</span>
+<span id="cb80-15"><a href="appendix.html#cb80-15" tabindex="-1"></a>  </span>
+<span id="cb80-16"><a href="appendix.html#cb80-16" tabindex="-1"></a>  <span class="co">// Internal getter function</span></span>
+<span id="cb80-17"><a href="appendix.html#cb80-17" tabindex="-1"></a>  <span class="kw">function</span> <span class="kw">get</span>(user<span class="op">:</span> User<span class="op">,</span> key<span class="op">:</span> <span class="kw">keyof</span> User) {</span>
+<span id="cb80-18"><a href="appendix.html#cb80-18" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">Reflect</span><span class="op">.</span><span class="fu">get</span>(user<span class="op">,</span> key<span class="op">,</span> User)<span class="op">;</span></span>
+<span id="cb80-19"><a href="appendix.html#cb80-19" tabindex="-1"></a>  }</span>
+<span id="cb80-20"><a href="appendix.html#cb80-20" tabindex="-1"></a>  <span class="co">// We could do the same thing for a private setter</span></span>
+<span id="cb80-21"><a href="appendix.html#cb80-21" tabindex="-1"></a>  </span>
+<span id="cb80-22"><a href="appendix.html#cb80-22" tabindex="-1"></a>  <span class="im">export</span> <span class="kw">function</span> <span class="fu">getFullName</span>(user<span class="op">:</span> User) {</span>
+<span id="cb80-23"><a href="appendix.html#cb80-23" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">get</span>(user<span class="op">,</span> <span class="vs">`firstName`</span>) <span class="op">+</span> <span class="vs">` `</span> <span class="op">+</span> <span class="kw">get</span>(user<span class="op">,</span> <span class="vs">`lastName`</span>)<span class="op">;</span></span>
+<span id="cb80-24"><a href="appendix.html#cb80-24" tabindex="-1"></a>  }</span>
+<span id="cb80-25"><a href="appendix.html#cb80-25" tabindex="-1"></a>}</span>
+<span id="cb80-26"><a href="appendix.html#cb80-26" tabindex="-1"></a></span>
+<span id="cb80-27"><a href="appendix.html#cb80-27" tabindex="-1"></a><span class="kw">const</span> user <span class="op">=</span> User<span class="op">.</span><span class="fu">of</span>(<span class="vs">`Adam`</span><span class="op">,</span> <span class="vs">`Bartonicek`</span>)<span class="op">;</span></span>
+<span id="cb80-28"><a href="appendix.html#cb80-28" tabindex="-1"></a></span>
+<span id="cb80-29"><a href="appendix.html#cb80-29" tabindex="-1"></a>user<span class="op">.</span><span class="at">firstName</span> <span class="op">=</span> <span class="vs">`Bob`</span></span>
+<span id="cb80-30"><a href="appendix.html#cb80-30" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(user)</span>
+<span id="cb80-31"><a href="appendix.html#cb80-31" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(user<span class="op">.</span><span class="at">lastName</span>)<span class="op">;</span></span>
+<span id="cb80-32"><a href="appendix.html#cb80-32" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(User<span class="op">.</span><span class="fu">getFullName</span>(user))<span class="op">;</span></span></code></pre></div>
 <pre><code>## {
 ##   firstName: &quot;Adam&quot;,
 ##   lastName: &quot;Bartonicek&quot;,
