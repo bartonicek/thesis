@@ -71,14 +71,15 @@ core-requirements
 components
 Indexable
 Getter
-reactive
 dataframe
+reactive
 factors
 bijection-factors
 constant-factors
 string-factors
 binned-factors
 product-factors
+computing-product-indices
 reducers
 motivation
 scales-1
@@ -98,6 +99,8 @@ expanses
 continuous-expanses
 point-expanses
 band-expanses
+applied-examples
+discussion
 glossary
 SoA
 JSON
@@ -105,4 +108,4 @@ svg
 appendix
 dop-encapsulation
 references
-computing-product-indices
+system-implementation

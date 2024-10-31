@@ -1,2 +1,4 @@
 
-# Applied example
+# Applied examples
+
+Examples of applied data analysis using plotscaper will go here.

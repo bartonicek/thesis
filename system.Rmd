@@ -3,7 +3,8 @@ output: html_document
 editor_options: 
   chunk_output_type: console
 ---
-# System description
+
+# System implementation
 
 This section contains a description of the concrete system implementation ([plotscape](https://github.com/bartonicek/plotscape) and [plotscaper](https://github.com/bartonicek/plotscaper)).
 
