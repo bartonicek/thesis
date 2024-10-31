@@ -14,7 +14,7 @@ def:unlabeled-div-8
 def:unlabeled-div-9
 def:unlabeled-div-10
 tab:scales
-fig:unnamed-chunk-26
+fig:barspine
 def:linear-mapping
 def:scale
 def:scale-inverse
@@ -80,6 +80,7 @@ string-factors
 binned-factors
 product-factors
 reducers
+motivation
 scales-1
 overview
 simple-scale-limits
@@ -104,6 +105,4 @@ svg
 appendix
 dop-encapsulation
 references
-fig:unnamed-chunk-17
-fig:barspine
-motivation
+computing-product-indices

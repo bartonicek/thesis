@@ -21,7 +21,7 @@ An abstract will go here.
 
 knitr::opts_chunk$set(
   cache = TRUE,
-  fig.align = 'center',
+  fig.align = 'center'
 )
 
 directory <- tempdir()
