@@ -43,7 +43,9 @@ In plain words, an `Indexable<T>` is one of three things:
 - An array of `T`s 
 - A callback that takes an index and returns a `T`. 
 
-To extract a value from `Indexable<T>`, we rely on a generalized form of indexed access. The way how this indexed access works depends on the type of the indexable. First, if the indexable is an array, we subset it using the usual square bracket notation. Second, if the indexable is a non-array-like variable (but not a function), we always return it, regardless of the index (we can think of it as the value as being repeated across all rows). Third and finally, if the indexable is a callback, then we call it with the index and take the returned value. A uniform interface for this generalization of indexed access is provided by [`Getter`](#Getter)s.   
+To extract a value from `Indexable<T>`, we rely on a generalized form of indexed access. The way how this indexed access works depends on the type of the indexable. First, if the indexable is an array, we subset it using the usual square bracket notation. Second, if the indexable is a non-array-like variable (but not a function), we always return it, regardless of the index (we can think of it as the value as being repeated across all rows). Third and finally, if the indexable is a callback, then we call it with the index and take the returned value. A uniform interface for this generalization of indexed access is provided by [`Getter`](#Getter)s.
+
+Altogether, this is similar to Leland Wilkinson's idea of a variable function [-@wilkinson2012].
 
 The main advantage of `Indexable<T>` is that, while the raw data will typically come in the form of arrays, there are many places further down the data visualization pipeline where constants and callbacks are useful. For example, in a typical barplot, the base of the y-axis is set to a constant value, typically zero. While we could hypothetically append an array filled with zeros to the rendering data, it is more convenient and memory efficient to instead use a constant (`0`), or a thunk (`() => 0`). As another example, often, if we have an array of several repeated values, it may be convenient to instead represent it as two arrays: a (short) underlying array of unique values or labels and an array of indices (similar to base R's `factor` class). When we need the actual values, we can use a callback to subset the array of labels.
 
@@ -438,7 +440,7 @@ p1 <- ggplot(mtcars3, aes(cyl, fill = am)) +
   scale_y_continuous(breaks = seq(0, 14, by = 3)) +
   guides(fill = "none") +
   labs(x = NULL, y = NULL) +
-  my_theme
+  clean_theme
 
 p2 <- ggplot(mtcars_spine, aes(x = position, y = prop_cum, width = n, fill = am)) +
   geom_bar(stat = "identity", position = position_identity(), col = "white") +
@@ -448,7 +450,7 @@ p2 <- ggplot(mtcars_spine, aes(x = position, y = prop_cum, width = n, fill = am)
   scale_fill_manual(values = pal_dark_3) +
   guides(fill = "none") +
   labs(x = NULL, y = NULL) +
-  my_theme
+  clean_theme
 
 p1 + plot_spacer() + p2 + plot_layout(widths = c(1, 0.05, 1))
 ```

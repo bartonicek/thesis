@@ -1,0 +1,156 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+knitr::opts_chunk$set(
+  fig.align = "center",
+  dpi = 300
+)
+```
+
+# Problem Set
+
+Designing an interactive data visualization system presents a unique set of challenges which need to be addressed. Some of these have been already mentioned in the [Introduction](#Introduction). This section discusses these inherent challenges in greater depth, and begins exploring avenues for possible solutions.
+
+## Data representation
+
+There is no data visualization without data. However, data can come to use in different shapes and sizes.
+
+## Data transformation
+
+When visualizing data, it is rarely the case that we can just draw the raw data as is. Often, the quantities underlying a specific plot type are instead summaries or aggregates of some kind. Take for example a typical barplot. To draw a barplot, we first need to divide the data into disjoint parts, each corresponding to one bar, and then summarize each part by some metric, usually either the number of cases (count) or the sum of some continuous variable. Similarly, in a histogram, we first need to divide the data into bins and then summarize them (typically by count). Thus, there are two fundamental operations involved in every visualization: splitting the data into parts and computing the summaries on these parts. 
+
+### Partitioning the data
+
+#### Leave nothing out
+
+One simple principle is that a faithful visualization should not arbitrarily leave some parts of the data out. 
+
+#### Disjoint parts
+
+The essence of data visualization is comparison. A seemingly trivial point is that, when making relative judgements, we often compare entities which are distinct or independent rather than ones which overlap. It may be useful to dwell on this a bit. 
+
+In data visualization, a fact that is so common that it is often overlooked is that the geometric objects we draw typically tend to represent disjoint subsets of the data [although there are counter-examples, see e.g. @alsallakh2014]. Take, for example, the following barplot representing vote share of the top 3 parties in the 2023 New Zealand general election [@election2023]:
+
+```{r}
+#| echo: false
+#| fig-height: 3
+
+# This is a truly terrible CSV
+df <- read.csv("./data/nz_general_election_2023.csv", skip = 2, nrows = 38)
+df <- df[-c(1:3), c(1, 3)]
+names(df) <- c("party", "votes")
+df$votes <- as.numeric(df$votes)
+df <- subset(df, !is.na(votes) & votes > 0)
+df <- df[order(-df$votes), ]
+
+df$party <- ifelse(df$votes >= df$votes[3], df$part, "Other")
+df <- aggregate(. ~ party, df, sum)
+df <- df[order(-df$votes), ]
+df$party <- factor(df$party, levels = c(setdiff(df$party, "Other"), "Other"))
+levels(df$party) <- c("National", "Labour", "Greens", "Other")
+
+colors <- c(palette.colors(6, "paired")[c(1, 3, 2) * 2], "grey80")
+
+ggplot(df, aes(party, votes, fill = party)) +
+  geom_bar(stat = "identity") +
+  scale_y_continuous(labels = scales::comma)  +
+  scale_fill_manual(values = colors) +
+  labs(x = "Party", y = "# of votes") +
+  guides(fill = "none") +
+  clean_theme +
+  theme(plot.margin = unit(c(0, 3, 0, 3), units = "cm"))
+
+```
+
+Each bar represents a unique set of voters and so the parts of the data represents by the bars are disjoint. Technically speaking, there is no physical law forcing us to do things this way. We could just as easily represent the same underlying data the following way:
+
+```{r}
+#| echo: false
+#| fig-height: 3
+
+library(colorspace)
+
+labour_index <- which(df$party == "Labour")
+
+df2 <- df
+df2$party <- as.character(df2$party)
+df2$party[labour_index] <- "National OR Labour"
+df2$votes[labour_index] <- df$votes[labour_index] + df$votes[which(df$party == "National")]
+
+df2 <- df2[order(-df2$votes), ]
+df2$party <- factor(df2$party, levels = c(setdiff(df2$party, "Other"), "Other"))
+
+colors2 <- c(palette.colors(6, "paired")[c(1, 3, 2) * 2], "grey80")
+colors2[1] <- rgb(t(rowMeans(col2rgb(colors2[1:2]))) / 255)
+
+ggplot(df2, aes(party, votes, fill = party)) +
+  geom_bar(stat = "identity") +
+  scale_y_continuous(labels = scales::comma)  +
+  scale_fill_manual(values = colors2) +
+  labs(x = "Party", y = "# of votes") +
+  guides(fill = "none") +
+  clean_theme +
+  theme(plot.margin = unit(c(0, 3, 0, 3), units = "cm"))
+
+```
+
+However, this way of representing data is quite unnatural. Part of it has to do with visualization goals. When visualizing election data, we are typically interested in the relative number of votes each party received. The second barplot makes this difficult. Specifically, in the second barplot, since the bar for National represents a subset of the bar for National OR Labour, it becomes difficult to compare absolute counts [@cleveland1985]. Further, the second barplot needlessly duplicates information; the number of votes the Blue party received is counted twice, once in the left bar and again in the right. This goes against the general principle of representing our data in the most parsimonious way [@tufte2001].
+
+One might object that the real question we may want to answer is the proportion of the total number of votes that the parties received. However, even here, a better representation is available:
+
+```{r}
+#| echo: false
+#| fig-height: 3
+
+ggplot(df, aes(x = 1, y = votes, fill = party)) +
+  geom_bar(stat = "identity",
+           position = position_fill(reverse = TRUE)) +
+  scale_x_discrete(breaks = NULL) +
+  scale_fill_manual(values = colors, guide = guide_legend(reverse = TRUE)) +
+  labs(x = NULL, y = "proportion of votes", fill = "Party") +
+  clean_theme +
+  theme(plot.margin = unit(c(0, 3, 0, 3), units = "cm"))
+```
+
+By stacking the bars on top of each other, we can easily compare proportion of the total number of votes while retaining a parsimonious representation of our data.
+
+A more challenging situation arises when there are multiple attributes of the data which can be simultaneously present or absent for each case. For example, in 2020, a joint referendum was held in New Zealand on the question of legalization of euthanasia and cannabis. The two issues were simultaneously included on the same ballot. The legalization of euthanasia was accepted by the voters, with 65.1% of votes supporting the decision, whereas the legalization of cannabis was rejected, with 50.7% of voters rejecting the decision [@referendum2020].
+
+The referendum data could be visualized in the following way:
+
+```{r}
+#| echo: false
+#| fig-height: 3
+
+df <- data.frame(x = rep(c("Euthanasia", "Cannabis"), each = 2),
+                 y = c(1893290, 979079, 1406973, 1474635), 
+                 fill = rep(c("For", "Against"), 2))
+
+df$x <- factor(df$x, levels = c("Euthanasia", "Cannabis"))
+df$fill <- factor(df$fill, levels = c("For", "Against"))
+
+ggplot(df, aes(x, y, fill = fill)) +
+  geom_bar(stat = "identity") +
+  scale_fill_manual(values = pal_dark_3) +
+  scale_y_continuous(labels = scales::comma) +
+  labs(x = NULL, y = "# of votes", fill = "Vote") +
+  clean_theme +
+  theme(plot.margin = unit(c(0.5, 4, 0, 4), units = "cm"))
+```
+
+By definition, both bars include votes which were cast by the same voter [ignoring the votes where no clear indication was given, @referendum2020].
+
+This type of display is fine for static data visualization, however, in interactive data visualization, it becomes problematic. Specifically, if we want to support linked selection, selecting an object in one plot should not highlight parts of other objects in the same plot. 
+
+Thus, the fundamental model for interactive data visualization is that of a partition. In other words, plots should adhere to the common heuristic that each geometric object in the plot represents a disjoint part of the data set, and the objects should jointly cover the entirety of the data. 
+
+
+[@wilkinson2012] Stacked bar is a partitioned bar
+
+## Scaling
+
+Information needs to be encoded in visual attributes [@cleveland1985]

@@ -1,6 +1,6 @@
 tab:definitions
 fig:unnamed-chunk-3
-fig:relations-subset
+fig:unnamed-chunk-4
 def:unlabeled-div-1
 fig:function-subset
 def:unlabeled-div-2
@@ -45,6 +45,13 @@ ordinal-scales
 interval-scales
 ratio-scales
 criticism-of-on-the-theory-of-scales-of-measurement
+problem-set
+data-representation
+data-transformation
+partitioning-the-data
+leave-nothing-out
+disjoint-parts
+scaling
 high-level-design
 user-profile
 programming-paradigm
@@ -108,4 +115,3 @@ svg
 appendix
 dop-encapsulation
 references
-system-implementation
