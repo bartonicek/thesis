@@ -17,7 +17,13 @@ Designing an interactive data visualization system presents a unique set of chal
 
 ## Data representation
 
-There is no data visualization without data. However, data can come to use in different shapes and sizes.
+There is no data visualization without data. However, all data is not equal. Data can come to use in various shapes and sizes, and this can affect various aspects of the system, including design, memory, and performance.
+
+In most data analytic languages, the default data model is that of two-dimensional table or dataframe. Examples include the S3 `data.frame` class in base R [@r2024], the `tbl_df` S3 class in the `tibble` package [@muller2023], the `DataFrame` class in the Python `pandas` package [@pandas2024], the `DataFrame` class in the `polars` library [@polars2024], or the `DataFrame` type in the Julia `DataFrame.jl` package [@bouchet-valat2023]. In this model, data is organized in columns, which are homogeneous arrays each storing values of the same type. Unlike in a matrix, the columns can be of different types (such as floats, integers, or strings). The dataframe object is then just a dictionary of columns, with some optional metadata, such as row names, column labels, or grouping structure [@r2024; @bouchet-valat2023].
+
+However, this column-based organization of data is not universal. For example, in the popular JavaScript data visualization and transformation library D3 [@bostock2022] ascribes to a row-based data model, such that data is organized as an array of rows, with each row being its own separate dictionary. 
+
+In a more general programming context, the column-based and row-based data layouts are also known as the struct of arrays (SoA) and array of structs (AoS) data structures, respectively. These data layouts have generally different performance characteristics, and hence why they are also studied in database design [see e.g. @abadi2013]. The SoA layout has (typically) smaller memory footprint and better performance in tight loops that operate on individual columns, thanks to cache locality [@abadi2013; @acton2014; @kelley2023]. The AoS layout can have arguably better developer ergonomics and can perform better when retrieving individual records/rows [hence why it is more common in traditional Online Transaction Processing databases, @abadi2013].    
 
 ## Data transformation
 
@@ -25,19 +31,47 @@ When visualizing data, it is rarely the case that we can just draw the raw data 
 
 ### Partitioning the data
 
-#### Leave nothing out
+#### Leave no data out
 
-One simple principle is that a faithful visualization should not arbitrarily leave some parts of the data out. 
-
-#### Disjoint parts
-
-The essence of data visualization is comparison. A seemingly trivial point is that, when making relative judgements, we often compare entities which are distinct or independent rather than ones which overlap. It may be useful to dwell on this a bit. 
-
-In data visualization, a fact that is so common that it is often overlooked is that the geometric objects we draw typically tend to represent disjoint subsets of the data [although there are counter-examples, see e.g. @alsallakh2014]. Take, for example, the following barplot representing vote share of the top 3 parties in the 2023 New Zealand general election [@election2023]:
+A common-sense guideline that many data visualization experts provide is that a faithful visualization should show the full data and leave nothing out. For instance, @cleveland1985 argues that axis limits should generally be expanded so that data points at or near these limits are not arbitrarily obscured. Take for example the following two scatterplots:
 
 ```{r}
 #| echo: false
 #| fig-height: 3
+#| fig-cap: "Without expanding axes, data points near the limits can become obscured. Left: axis limits match the data limits exactly, and so points at or near the axis limits (top-left and bottom-right corner of the plot) are represented by smaller area and become less salient. Right: by expanding axis limits, we can ensure that all data is represented faithfully."
+
+library(ggplot2)
+library(patchwork)
+
+p1 <- ggplot(mtcars, aes(wt, mpg)) +
+  geom_point(col = pal_dark_3[1]) +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0)) +
+  clean_theme
+
+p2 <- ggplot(mtcars, aes(wt, mpg)) +
+  geom_point(col = pal_dark_3[1]) +
+  clean_theme
+
+p1 + p2
+```
+
+In the left plot, the axis limits match the data limits exactly, whereas in the right plot, they are expanded by a small fraction [5%, `ggplot2` default, @wickham2016]. The problem with the left plot is that the data points near the axis limits (top-left and bottom-right corner) are represented only by a fraction of the area: for example, the point in the bottom-right corner lies simultaneously at the limits of the x- and y-axis, and is thus represented only by 1/4 of the area of the points in the center of the plot.
+
+The example above shows how data can be obscured visually, even after all of the data points have been included in the plot (rendering all rows of the data set). Clearly then, when complete data is available, leaving information out by arbitrarily dropping rows is even less acceptable. This issue becomes more complicated in the presence of missing or incomplete data, however, there exist ways of dealing with that as well, see e.g. @unwin1996, @tierney2023. Thus, ideally, the visualization should represent a surjective mapping from the space of the geometric objects to the underlying data set, such that there are no cases (rows of the data) that are left out of the figure [@ziemkiewicz2009].
+
+#### Splitting data into disjoint parts
+
+In data visualization, a practice so ubiquitous that it is often overlooked is that, in most types of plots, each geometric object represents a disjoint part of the data. That is, each point, bar, line, or polygon typically represents a unique set of cases (rows of the data), with no overlap with the sets represented by the other objects.
+
+Why is this the case? The reason for this unconscious "law" might be rooted in the fundamental purpose of data visualization: comparison. When we visualize, we draw our graphics with the ultimate goal of being able to compare our data along a set of visual channels, such as position, length, size, or colour [@bertin1983; @wilkinson2012; @franconeri2021; @wilke2019]. This mirrors the comparisons we make in the real world, where we generally tend to compare distinct entities rather than overlapping ones.
+
+To make this idea more concrete, take the following barplot representing vote share of the top three parties in the 2023 New Zealand general election [@election2023]:
+
+```{r disjoint-geoms}
+#| echo: false
+#| fig-height: 3
+#| fig-cap: "Geometric objects typically represent disjoint subsets of the data. The plot shows the vote share of the top three parties in the 2023 New Zealand general election, with each bar representing a unique subset of voters."
 
 # This is a truly terrible CSV
 df <- read.csv("./data/nz_general_election_2023.csv", skip = 2, nrows = 38)
@@ -66,11 +100,12 @@ ggplot(df, aes(party, votes, fill = party)) +
 
 ```
 
-Each bar represents a unique set of voters and so the parts of the data represents by the bars are disjoint. Technically speaking, there is no physical law forcing us to do things this way. We could just as easily represent the same underlying data the following way:
+Each bar represents a unique set of voters and thus the subsets of the data represented by the bars are disjoint. Technically, there is no hard and fast rule about having each geometric object represent a disjoint part of the data. For example, we could transform the first bar by taking a union of the votes of National and Labour parties, and represent the same underlying data the following way:
 
-```{r}
+```{r union-geoms}
 #| echo: false
 #| fig-height: 3
+#| fig-cap: "Hypothetically, there is nothing preventing us from encoding the same information in multiple objects, and showing non-disjoint parts of our data. The plot shows the same underlying data as \\@ref(fig:disjoint-geoms), with the leftmost bar representing a union of National and Labour voters. The National votes are thus counted twice, once in the leftmost bar and again in the second left bar, and thus the two bars do not represent mutually disjoint subsets of the data. For a more realistic example of non-disjoint geometric objects, see Figure \\@ref(fig:union-geoms2)."
 
 library(colorspace)
 
@@ -98,13 +133,14 @@ ggplot(df2, aes(party, votes, fill = party)) +
 
 ```
 
-However, this way of representing data is quite unnatural. Part of it has to do with visualization goals. When visualizing election data, we are typically interested in the relative number of votes each party received. The second barplot makes this difficult. Specifically, in the second barplot, since the bar for National represents a subset of the bar for National OR Labour, it becomes difficult to compare absolute counts [@cleveland1985]. Further, the second barplot needlessly duplicates information; the number of votes the Blue party received is counted twice, once in the left bar and again in the right. This goes against the general principle of representing our data in the most parsimonious way [@tufte2001].
+This way of representing the data has several problems, however. First, there is the issue of its suitability towards the main goal of the visualization. Specifically, when visualizing election data such as this one, we are typically interested in judging the relative number of votes each party received. The second barplot makes this comparison difficult. Specifically, in the second barplot, since the National bar represents a subset of the National OR Labour bar, we have to perform additional mental calculation if we want to find out how many votes Labour received and compare the absolute counts directly [@cleveland1985]. Second, we have metadata knowledge [see e.g. @wilkinson2012; @velleman1993] about the data being disjoint - we know that, in the New Zealand parliament electoral system, each voter can only cast one vote for a single party. Finally, there is the issue of duplicating information: in the second barplot, the number of votes the National party received is counted twice, once in the leftmost bar and again in the second-left bar. This goes against the general principle of representing our data in the most parsimonious way [@tufte2001].
 
-One might object that the real question we may want to answer is the proportion of the total number of votes that the parties received. However, even here, a better representation is available:
+Even when our goal is not to compare absolute counts, there are usually better disjoint data visualization techniques available. For example, if we were interested in visualizing the proportion of votes that each party received, we could draw the following plot: 
 
-```{r}
+```{r stacked-proportion}
 #| echo: false
 #| fig-height: 3
+#| fig-cap: "Even when proportions are of interest, there are usually disjoint data visualization techniques available. The plot shows proportion of vote share of the top three parties in the 2023 New Zealand general election, with each bar segment again representing a unique subset of voters."
 
 ggplot(df, aes(x = 1, y = votes, fill = party)) +
   geom_bar(stat = "identity",
@@ -116,15 +152,16 @@ ggplot(df, aes(x = 1, y = votes, fill = party)) +
   theme(plot.margin = unit(c(0, 3, 0, 3), units = "cm"))
 ```
 
-By stacking the bars on top of each other, we can easily compare proportion of the total number of votes while retaining a parsimonious representation of our data.
+By stacking the bar segments on top of each other, we can easily compare proportion of the total number of votes while retaining a parsimonious representation of our data. Each bar segments now again represents a unique subset of voters.
 
-A more challenging situation arises when there are multiple attributes of the data which can be simultaneously present or absent for each case. For example, in 2020, a joint referendum was held in New Zealand on the question of legalization of euthanasia and cannabis. The two issues were simultaneously included on the same ballot. The legalization of euthanasia was accepted by the voters, with 65.1% of votes supporting the decision, whereas the legalization of cannabis was rejected, with 50.7% of voters rejecting the decision [@referendum2020].
+The example above was fairly clear case of where a non-disjoint representation of the data would be the wrong choice, however, there are also more ambiguous situations. One such situation is when there are multiple attributes of the data which can be simultaneously present or absent for each case. For example, in 2020, a joint referendum was held in New Zealand on the question of legalization of euthanasia and cannabis. The two issues were simultaneously included on the same ballot. The legalization of euthanasia was accepted by the voters, with 65.1% of votes supporting the decision, whereas the legalization of cannabis was rejected, with 50.7% of voters rejecting the decision [@referendum2020].
 
-The referendum data could be visualized in the following way:
+The referendum data can be visualized in the following way:
 
-```{r}
+```{r union-geoms2}
 #| echo: false
 #| fig-height: 3
+#| fig-cap: "Realistic example of a non-disjoint data representation. The plot shows the vote share in the combined 2020 New Zealand referendum on euthanasia and cannabis, where the two issues were simultaneousy presented on the same ballot. The two bars each show (mostly) the same subset of ballot, with each ballot contributing to the height of one segment in each bar."
 
 df <- data.frame(x = rep(c("Euthanasia", "Cannabis"), each = 2),
                  y = c(1893290, 979079, 1406973, 1474635), 
@@ -142,14 +179,154 @@ ggplot(df, aes(x, y, fill = fill)) +
   theme(plot.margin = unit(c(0.5, 4, 0, 4), units = "cm"))
 ```
 
-By definition, both bars include votes which were cast by the same voter [ignoring the votes where no clear indication was given, @referendum2020].
+By definition, both bars include votes which were cast by the same voter [ignoring the votes where no preference was given for either issue, @referendum2020]. Thus, the sets of voters that the two bars and the four bar segments represent overlap.
 
-This type of display is fine for static data visualization, however, in interactive data visualization, it becomes problematic. Specifically, if we want to support linked selection, selecting an object in one plot should not highlight parts of other objects in the same plot. 
+In general, there is nothing inherently wrong with the plot above. Non-disjoint representations of the data can work well for certain data types such as set-typed data [see e.g. @alsallakh2014]. In the context of static data visualization, plots like these can serve useful roles. However, even here, there is a simple way of representing the same data in a disjoint way - draw two separate plots:  
 
-Thus, the fundamental model for interactive data visualization is that of a partition. In other words, plots should adhere to the common heuristic that each geometric object in the plot represents a disjoint part of the data set, and the objects should jointly cover the entirety of the data. 
+```{r}
+#| echo: false
+#| fig-height: 3
+#| fig-cap: "Non-disjoint data representations can often be recast into disjoint ones. The figure again shows the vote share in the combined 2020 New Zealand referendum on euthanasia and cannabis, however, now each issue is plotted in a separate plot, and thus each geometric object in each plot represents a unique subset of ballots/voters."
+
+df_euthanasia <- data.frame(x = c("For", "Against"), y = c(1893290, 979079))
+df_cannabis <- data.frame(x = c("For", "Against"), y = c(1406973, 1474635))
+
+df_euthanasia$x <- factor(df_euthanasia$x, levels = c("For", "Against"))
+df_cannabis$x <- factor(df_cannabis$x, levels = c("For", "Against"))
+
+p1 <- ggplot(df_euthanasia, aes(x, y, fill = x)) +
+  geom_bar(stat = "identity") +
+  scale_fill_manual(values = pal_dark_3) +
+  scale_y_continuous(labels = scales::comma) +
+  labs(x = NULL, y = "# of votes", fill = "Vote", title = "Euthanasia") +
+  guides(fill = "none") +
+  clean_theme
+
+p2 <- ggplot(df_cannabis, aes(x, y, fill = x)) +
+  geom_bar(stat = "identity") +
+  scale_fill_manual(values = pal_dark_3) +
+  scale_y_continuous(labels = scales::comma) +
+  labs(x = NULL, y = "# of votes", fill = "Vote", title = "Cannabis") +
+  guides(fill = "none") +
+  clean_theme
+
+p1 + p2
+```
+
+Why should we care about whether our representations of the data are disjoint or not? I argue that, for many types of plots, disjointness presents a simpler mental model: one geometric object for one unique set of things. If the objects in our plots do not represent disjoint subsets of the data, then we need to keep a model of *how* these objects are connected, in order to make correct inferences. This may be particularly true for interactive visualization. The natural correspondence between geometric objects and disjoint subsets of the data makes certain interactions more intuitive, and, conversely, having overlap between the cases represented by the objects introduces complications. For example, if a user clicks on a bar in a linked barplot, they might be surprised if parts of the other bars within the same plot get highlighted as well: they wanted to highlight *that* bar, not the others. Likewise, when querying, if our objects do not represent disjoint subsets of the data, we have to think about what querying means: are we querying the object or the cases corresponding to the object?  
 
 
-[@wilkinson2012] Stacked bar is a partitioned bar
+#### Plots as partitions
+
+In the two preceding sections, I have argued that the plots within our interactive data visualization system should fulfill two fundamental properties:
+
+- They should represents the full data (surjective mapping)
+- The geometric objects in these plots should represent distinct subsets of the data (disjoint parts)
+
+These two properties suggest a fundamental model for our plots: that of a [partition](#Partitions). 
+
+While I have not been able to find explicit references linking geometric objects to partitions, some authors have used the language of partitions. For example, Wilkinson describes a stacked bar as a partitioned bar [@wilkinson2012, pp 210].
+
+#### Partitions and products
+
+In a typical interactive plot, the data will be partitioned across multiple dimensions. Moreover, often, this multi-way partitioning will not form a single flat partition, but instead a hierarchy of partitions.
+
+To give a concrete example, suppose we want to draw the following barplot:
+
+```{r}
+#| echo: false
+#| message: false
+#| fig-height: 3
+
+df <- data.frame(group = factor(c("A", "B", "B", "A", "C", "A", "C", "C")), 
+                 selection = factor(c(1, 1, 2, 2, 2, 1, 1, 2)), 
+                 value = c(10, 15, 20, 10, 12, 21, 15, 11))
+df2 <- aggregate(value ~ group + selection, data = df, sum)
+
+ggplot(df2, aes(group, y = value, fill = selection)) +
+  geom_col() +
+  scale_fill_manual(values = pal_dark_3) +
+  guides(fill = "none", count = "none") +
+  labs(y = "Sum") +
+  clean_theme +
+  theme(plot.margin = unit(c(0, 4, 0, 4), units = "cm"))
+```
+
+We start with the following data, which includes a categorical variable (`group`) that we will plot along the x-axis, a variable representing selection status (`selection`) that we will color the bar segments with, and a continuous variable that we want to summarize (`value`):
+
+```{r}
+#| echo: false
+
+library(kableExtra)
+
+render_table <- function(x, ...) {
+  knitr::kable(x, ...) |> kable_styling(full_width = FALSE)
+} 
+
+render_tables <- function(x) {
+  n <- length(x)
+  n_pairs <- floor(n / 2)
+
+  for (i in seq_len(n_pairs)) {
+    cat(knitr::kables(lapply(x[(2 * i - 1):(2 * i)], render_table)))
+  }
+  
+  if (n %% 2 == 1) render_table(x[[length(x)]])
+}
+
+render_table(df, row.names = TRUE)
+```
+
+To draw the individual bar segments, we need to find the sum of the `value` variable across the cases corresponding to each segment. To do this, we first need to split our data into multiple small disjoint subsets according to the product of `group` and `selection` variables:
+
+```{r}
+#| results: "asis"
+# Using paste() here to simulate a product of two factors
+product_factor <- paste0(df$group, df$selection)
+split_dfs <- split(df, product_factor)
+render_tables(split_dfs)
+```
+
+We could then summarize each small data set by summing `value`:
+
+```{r}
+#| results: "asis"
+summarized_dfs <- lapply(split_dfs, function(x) {
+  aggregate(value ~ ., data = x, sum)
+})
+
+render_tables(summarized_dfs)
+```
+
+Finally, we need to combine the summaries back together, according to the levels of `group`, and take the cumulative sum in order to "stack" the segments on top of each other:
+
+```{r}
+#| results: "asis"
+grouped_dfs <- split(summarized_dfs, sapply(summarized_dfs, function(x) x$group))
+stacked_dfs <- lapply(grouped_dfs, function(x) {
+  x <- do.call(rbind, x)
+  x$value <- cumsum(x$value)
+  rownames(x) <- NULL
+  x
+})
+
+render_tables(stacked_dfs)
+```
+
+Now, we have shown how we can compute summary statistics for a stacked barplot using a split-apply-combine pipeline [@wickham2011]. For certain types of plots, a simple strategy like this might work fine. However, the reason why the example above is simple is because we have ignored or side-stepped certain issues. For example, how do we know if we are stacking the summaries in the right order? What if we need to transform the bar segments in some way, such as divide by the height of the parent bar? Once we start dealing with plots like spineplots or spinograms, it becomes clear that a simple "flat" partition structure is not enough.    
+
+#### Partitions and hierarchy
+
+
+#### Partition data structures
+
+### Computing summaries
+
+After we have partitioned our data, we need a way to summarize each part by a set of summary statistics. Moreover, since the partitions of our data (may) form a hierarchy, we also need a way of referring to parts across the levels of the hierarchy.
+
+#### Reducers
+
+Suppose we are summarizing a part consisting of $n$ data points.
 
 ## Scaling
 

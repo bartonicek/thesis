@@ -7,6 +7,7 @@ output:
   # bookdown::html_document2: default
   bookdown::gitbook: default
 bibliography: [references.bib]
+biblio-style: "apalike"
 link-citations: true
 editor_options: 
   chunk_output_type: console

@@ -1,4 +1,4 @@
-# High-level design
+# High-level principles
 
 > "Designing is fundamentally about taking things apart [...] in such a way that they can be put back together. Separating things into things that can be composed."
 >
@@ -157,15 +157,15 @@ Another issue is that, while elegant abstractions are undeniably powerful, it us
 >
 > Edgar Dijkstra -@dijkstra1968
 
-Data-oriented programming (DOP) is a relatively new programming paradigm that has been gaining attention in certain programming communities over the recent years. Unfortunately, due to its novelty, there is some confusion in the terminology surrounding this paradigm. The term "DOP" is often used interchangeably with Data Oriented Design (DOD), which shares a number of similarities. However, there are also important differences: whereas DOP is inspired by the Clojure style of programming and focuses on high-level principles such as structure and organization of code [@hickey2011; @hickey2018; @sharvit2022; @parlog2024], DOD originates in the world of video-game development and primarily concerns itself with low-level optimization details such as memory layout and CPU cache utilization [@acton2014; @bayliss2022; @kelley2023; @nikolov2018; @fabian2018]. Also, both paradigms share a connection to Value Oriented Design [VOD, @vaneerd2024] which emphasizes values and value semantics and has its roots in the work of Alexander Stepanov [see e.g. @stepanov2009; @stepanov2013].
+Data-oriented programming (DOP) is a relatively new programming paradigm that has been gaining attention in certain programming communities over the recent years. Unfortunately, due to its novelty, there is some confusion in the terminology surrounding this paradigm. The term "DOP" is often used interchangeably with Data Oriented Design (DOD), which shares a number of similarities. However, there are also important differences: whereas DOP is inspired by the Clojure style of programming and focuses on high-level principles such as structure and organization of code [@hickey2011; @hickey2018; @sharvit2022; @parlog2024], DOD originates in the world of video-game development and primarily concerns itself with low-level optimization details such as memory layout and CPU cache utilization [@acton2014; @bayliss2022; @kelley2023; @nikolov2018; @fabian2018]. Also, both paradigms share a connection to value semantics and Value Oriented Design [VOD, @parent2013; @parent2015; @vaneerd2021; @vaneerd2023; @vaneerd2024] which has its roots in the work of Alexander Stepanov [see e.g. @stepanov2009; @stepanov2013].
 
-Nevertheless, despite their differences, there is also a large common set of ideas that the above-mentioned paradigms share. Specifically, the high-level principles and guidelines they provide are remarkably similar, and there are even examples of explicit cross-polination [see e.g. @vaneerd2024]. For this reason, I have decided to use DOP as an umbrella term in this section and use it to refer to all three paradigms, unless specified otherwise.
+Nevertheless, despite the differences, there is also a large common set of ideas that the above-mentioned paradigms share. Specifically, the high-level principles and guidelines they provide are remarkably similar, and there are even examples of explicit cross-pollination and sharing of ideas [see e.g. @vaneerd2024]. Therefore, in this section, I have decided to use DOP as an umbrella term and use it to refer to all three paradigms, unless explicitly specified otherwise.
 
 #### Data first
 
 The main idea of DOP is a data-first perspective. Programs should be viewed as transformations of data, nothing less, nothing more [@acton2014; @fabian2018; @sharvit2022]. This view has several important consequences for design.
 
-First and foremost, programs should be partitioned into two classes of independent components: data and code [@fabian2018]. Data should be represented by generic data structures and code should live inside modules composed of stateless functions [@fabian2018; @sharvit2022]. The main benefit of this approach is that, by keeping data and code separate, we can use and reason about both in isolation, without entanglement [@vaneerd2024]. More specifically, data becomes easy to pass around and serialize, and, since the code is composed of pure functions, it becomes easy to test and mock [@sharvit2022]. In this way, programs can be thought of as being split between what *is* and what *does*.
+First and foremost, programs should be partitioned into two sets of independent components: data and code [@fabian2018]. Data should be represented by generic data structures and code should live inside modules composed of stateless functions [@fabian2018; @sharvit2022]. The main benefit of this approach is that, by keeping data and code separate, we can use and reason about both in isolation, without entanglement [@vaneerd2024]. More specifically, data becomes easy to pass around and serialize, and, since the code is composed of pure functions, it becomes easy to test and mock [@sharvit2022]. In this way, programs can be thought of as being split between what *is* and what *does*.
 
 #### The data
 
@@ -181,7 +181,7 @@ Outside of performance, another benefit of plain data is that it allows us intro
 
 #### The code
 
-Separate calculating from doing in methods [@vaneerd2024].
+Separate calculating from doing [@vaneerd2023; @vaneerd2024].
 
 
 It may seem that many of the DOP principles directly contradict many popular OOP principles, specifically encapsulation, inheritance, polymorphism, and domain driven design. However, many of these principles can either be reconciled with DOP, or DOP in fact provides better alternatives. Below, I go over these principles and provide code examples that further illustrate how DOP works. 

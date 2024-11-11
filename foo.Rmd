@@ -1,0 +1,15 @@
+---
+title: "Untitled"
+author: "Adam Bartonicek"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+
+```{r}
+
+df_split <- split(mtcars, mtcars$cyl)
+
+knitr::kable(df_split[[1]])
+
+```
