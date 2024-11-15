@@ -33,7 +33,7 @@ When visualizing data, it is rarely the case that we can just draw the raw data 
 
 #### Leave no data out
 
-A common-sense guideline that many data visualization experts provide is that a faithful visualization should show the full data and leave nothing out. For instance, @cleveland1985 argues that axis limits should generally be expanded so that data points at or near these limits are not arbitrarily obscured. Take for example the following two scatterplots:
+A common-sense guideline that many data visualization experts provide is that faithful visualizations should show the full data and leave nothing out. For instance, @cleveland1985 argues that axis limits should generally be expanded so that data points at or near these limits are not arbitrarily obscured. Take for example the following two scatterplots:
 
 ```{r}
 #| echo: false
@@ -58,15 +58,133 @@ p1 + p2
 
 In the left plot, the axis limits match the data limits exactly, whereas in the right plot, they are expanded by a small fraction [5%, `ggplot2` default, @wickham2016]. The problem with the left plot is that the data points near the axis limits (top-left and bottom-right corner) are represented only by a fraction of the area: for example, the point in the bottom-right corner lies simultaneously at the limits of the x- and y-axis, and is thus represented only by 1/4 of the area of the points in the center of the plot.
 
-The example above shows how data can be obscured visually, even after all of the data points have been included in the plot (rendering all rows of the data set). Clearly then, when complete data is available, leaving information out by arbitrarily dropping rows is even less acceptable. This issue becomes more complicated in the presence of missing or incomplete data, however, there exist ways of dealing with that as well, see e.g. @unwin1996, @tierney2023. Thus, ideally, the visualization should represent a surjective mapping from the space of the geometric objects to the underlying data set, such that there are no cases (rows of the data) that are left out of the figure [@ziemkiewicz2009].
+The example above shows how data can be obscured visually, even after all of the data points have been included in the plot (rendering all rows of the data set). Clearly then, when complete data is available, leaving information out by arbitrarily dropping rows is even less acceptable. This issue becomes more complicated in the presence of missing or incomplete data, however, there exist ways of dealing with that as well, see e.g. @unwin1996, @tierney2023. Thus, ideally, the visualization should represent a surjective mapping from the space of the geometric objects to the underlying data set, such that, by default, there are no cases (rows of the data) which are marginalized or left out of the figure entirely [@ziemkiewicz2009].
 
-#### Splitting data into disjoint parts
+#### Distinctness, disjointness, and comparison
 
-In data visualization, a practice so ubiquitous that it is often overlooked is that, in most types of plots, each geometric object represents a disjoint part of the data. That is, each point, bar, line, or polygon typically represents a unique set of cases (rows of the data), with no overlap with the sets represented by the other objects.
+> "To be truthful and revealing, data graphics must bear on the question at the heart of quantitative thinking: 'compared to what'?" [@tufte2001, pp. 74].
 
-Why is this the case? The reason for this unconscious "law" might be rooted in the fundamental purpose of data visualization: comparison. When we visualize, we draw our graphics with the ultimate goal of being able to compare our data along a set of visual channels, such as position, length, size, or colour [@bertin1983; @wilkinson2012; @franconeri2021; @wilke2019]. This mirrors the comparisons we make in the real world, where we generally tend to compare distinct entities rather than overlapping ones.
+> "Graphics are for comparison - comparison of one kind or another - not for access to individual amounts." [@tukey1993]
 
-To make this idea more concrete, take the following barplot representing vote share of the top three parties in the 2023 New Zealand general election [@election2023]:
+In data visualization, a practice so ubiquitous that it is often overlooked is that, in most types of plots, each geometric object represents one disjoint part of the data. That is, each point, bar, line, or polygon typically represents a unique set of cases (rows of the data), with no overlap with the cases represented by the other objects. 
+
+Why is this the case? This unconscious "law" might be rooted in the fundamental purpose of data visualization: comparison [@tufte2001; @tukey1993]. When we visualize, we draw our graphics with the ultimate goal of being able to compare our data along a set of visual channels, such as position, length, size, or colour [@bertin1983; @wilkinson2012; @franconeri2021; @wilke2019]. This mirrors the comparisons we make in the real world, where we compare physical objects along their respective dimensions or attributes.
+
+With disjoint parts, there is a natural correspondence or bijection between the subsets of the data and their visual representation, see figure \@ref(fig:disjoint-bijection). Specifically, if we imagine the act of taking an object and picking the corresponding set of cases as a function, then, with disjoint parts, this function is invertible: we can pick an object, identify the corresponding set of cases, and then use that set to get back the original object. In plots where the objects do not represent disjoint subsets of the data, this correspondence is broken: if we identify cases corresponding to a single object, there is no way to go back from these cases to the original object.
+
+```{r disjoint-bijection, engine='tikz'}
+#| echo: false
+#| fig-align: center
+#| fig-width: 5
+#| fig-cap: "Disjoint subsets provide a one-to-one correspondence (bijection) between geometric objects and the data. Suppose we mark out the cases corresponding to one object (the left most bar). Top row: if each geometric object (bar) represents unique set of cases, we can easily go back and forth between the object and its underlying data (middle panel). Thus, the function of picking a set of cases corresponding to an object is bijective. Bottom row: when there is an overlap between the cases represented by each object, once we pick the set of cases corresponding to that object, there is no simple way to use that set to get the corresponding object back."
+
+\usetikzlibrary{calc}
+\definecolor{blue}{HTML}{1F78B4}
+\definecolor{red}{HTML}{E31A1C}
+\definecolor{grey80}{HTML}{CCCCCC}
+
+\begin{tikzpicture}[scale=1.0]
+
+  \filldraw[white] (-2, -1) rectangle (13, 8);
+  
+  % START OF THE TOP ROW
+  
+  % BARS LEFT
+  \filldraw[red] (0.125, 4) rectangle ++(0.75, 2);
+  \filldraw[blue] (1.125, 4) rectangle ++(0.75, 2.5);
+  \filldraw[blue] (2.125, 4) rectangle ++(0.75, 1.5);
+
+  % BARS RIGHT
+  \filldraw[red] (8.125, 4) rectangle ++(0.75, 2);
+  \filldraw[blue] (9.125, 4) rectangle ++(0.75, 2.5);
+  \filldraw[blue] (10.125, 4) rectangle ++(0.75, 1.5);
+  
+  % SETS
+  \fill[blue] plot [smooth cycle, tension=0.75] coordinates { 
+    (4.25, 4.25) (4.35, 5.25) (5, 5) (5.25, 4.25) } -- cycle;
+  \foreach \point in {(4.5,4.5), (4.6, 4.9), (5, 4.4)}{
+    \node at \point {\textbullet};
+  }  
+    
+  \fill[red] plot [smooth cycle, tension=0.75] coordinates { 
+    (4.35, 6.5) (5.5, 6.75) (6.25, 6) (5.5, 5.85) (4.75, 5.5) } -- cycle; 
+  \foreach \point in {(4.6, 6.3), (5.5, 6.5), (5.9, 6.15), (4.85, 5.8)}{
+    \node at \point {\textbullet};
+  }
+    
+  \fill[blue] plot [smooth cycle, tension=0.75] coordinates { 
+    (5.5, 4.25) (6.75, 4.15) (6.75, 5) (5.75, 5.5) (5.75, 4.75) } -- cycle; 
+  \foreach \point in {(5.8, 4.4), (6.2, 4.3), (6.7, 4.4), (6.4, 4.9), (6, 5.25)}{
+    \node at \point {\textbullet};
+  }
+  
+  % ARROWS
+  \draw[->,line width=0.75,dashed] (0.5, 6) to[out=80, in=110] (5, 6.25);
+  \draw[->,line width=0.75,dashed] (5.1, 6.25) to[out=70, in=100] (8.5, 6);
+  
+  % BOXES
+  \draw[black] (0, 4) rectangle ++(3, 3);
+  \draw[black] (4, 4) rectangle ++(3, 3);
+  \draw[black] (8, 4) rectangle ++(3, 3);
+  
+  %%%%
+  
+  % START OF THE BOTTOM ROW
+  
+    % BARS LEFT
+  \filldraw[red] (0.125, 0) rectangle ++(0.75, 2);
+  \filldraw[blue] (1.125, 0) rectangle ++(0.75, 2.5);
+  \filldraw[red] (1.125, 0) rectangle ++(0.75, 1);
+  \filldraw[blue] (2.125, 0) rectangle ++(0.75, 1.5);
+  \filldraw[red] (2.125, 0) rectangle ++(0.75, 0.5);
+
+  % BARS RIGHT
+  \filldraw[red] (8.125, 0) rectangle ++(0.75, 2);
+  \filldraw[blue] (9.125, 0) rectangle ++(0.75, 2.5);
+  \filldraw[red] (9.125, 0) rectangle ++(0.75, 1);
+  \filldraw[blue] (10.125, 0) rectangle ++(0.75, 1.5);
+  \filldraw[red] (10.125, 0) rectangle ++(0.75, 0.5);
+
+  % SETS
+  \fill[grey80] plot [smooth cycle, tension=0.75] coordinates { 
+    (4.25, 0.25) (4.35, 1.25) (5, 1) (5.25, 0.25) } -- cycle;
+  \foreach \point in {(4.5,0.5), (5, 0.4)}{
+    \node at \point {\textbullet};
+  }
+  \node [red] at (4.6, 0.9) {\textbullet};
+    
+  \fill[grey80] plot [smooth cycle, tension=0.75] coordinates { 
+    (4.35, 2.5) (5.5, 2.75) (6.25, 2) (5.5, 1.85) (4.75, 1.5) } -- cycle; 
+  \foreach \point in {(4.6, 2.3), (5.5, 2.5), (5.9, 2.15), (4.85, 1.8)}{
+    \node [red] at \point {\textbullet};
+  }
+    
+  \fill[grey80] plot [smooth cycle, tension=0.75] coordinates { 
+    (5.5, 0.25) (6.75, 0.15) (6.75, 1) (5.75, 1.5) (5.75, 0.75) } -- cycle; 
+  \foreach \point in {(5.8, 0.4), (6.4, 0.9), (6, 1.25)}{
+    \node at \point {\textbullet};
+  }
+  \node [red] at (6.2, 0.3) {\textbullet};
+  \node [red] at (6.7, 0.4) {\textbullet};
+
+  
+  % ARROWS
+  \draw[->,line width=0.75,dashed] (0.5, 2) to[out=80, in=110] (5.1, 2.25);
+  \draw[->,line width=0.75,dashed] (0.5, 0) to[out=320, in=220] (6.5, 0.25);
+  \draw[->,line width=0.75,dashed] (0.5, 1) to[out=60, in=140] (4.45, 1.1);
+
+  
+  % BOXES
+  \draw[black] (0, 0) rectangle ++(3, 3);
+  \draw[black] (4, 0) rectangle ++(3, 3);
+  \draw[black] (8, 0) rectangle ++(3, 3);
+
+  \node at (7.5, 1.5) {?};
+
+\end{tikzpicture}
+```
+
+To illustrate this idea on concrete data, take the following barplot representing vote share among the top three parties in the 2023 New Zealand general election [@election2023]:
 
 ```{r disjoint-geoms}
 #| echo: false
@@ -105,7 +223,7 @@ Each bar represents a unique set of voters and thus the subsets of the data repr
 ```{r union-geoms}
 #| echo: false
 #| fig-height: 3
-#| fig-cap: "Hypothetically, there is nothing preventing us from encoding the same information in multiple objects, and showing non-disjoint parts of our data. The plot shows the same underlying data as \\@ref(fig:disjoint-geoms), with the leftmost bar representing a union of National and Labour voters. The National votes are thus counted twice, once in the leftmost bar and again in the second left bar, and thus the two bars do not represent mutually disjoint subsets of the data. For a more realistic example of non-disjoint geometric objects, see Figure \\@ref(fig:union-geoms2)."
+#| fig-cap: "Hypothetically, there is nothing preventing us from encoding the same information in multiple objects, and showing non-disjoint parts of our data. The plot shows the same underlying data as \\@ref(fig:disjoint-geoms), with the leftmost bar representing a union of National and Labour voters. The two leftmost bars thus do not represent disjoint subsets of the data. For a more realistic example, see Figure \\@ref(fig:union-geoms2)."
 
 library(colorspace)
 
@@ -213,19 +331,22 @@ p2 <- ggplot(df_cannabis, aes(x, y, fill = x)) +
 p1 + p2
 ```
 
-Why should we care about whether our representations of the data are disjoint or not? I argue that, for many types of plots, disjointness presents a simpler mental model: one geometric object for one unique set of things. If the objects in our plots do not represent disjoint subsets of the data, then we need to keep a model of *how* these objects are connected, in order to make correct inferences. This may be particularly true for interactive visualization. The natural correspondence between geometric objects and disjoint subsets of the data makes certain interactions more intuitive, and, conversely, having overlap between the cases represented by the objects introduces complications. For example, if a user clicks on a bar in a linked barplot, they might be surprised if parts of the other bars within the same plot get highlighted as well: they wanted to highlight *that* bar, not the others. Likewise, when querying, if our objects do not represent disjoint subsets of the data, we have to think about what querying means: are we querying the object or the cases corresponding to the object?  
+Why should we care about whether our representations of the data are disjoint or not? I argue that, for many types of plots, disjointness presents a better mental model: one geometric object for one unique set of observational units or "things". Conversely, if the objects in our plots do not represent disjoint subsets, then we need to keep track of *how* these objects are related. 
 
+This issue may be particularly true for interactive visualization. The natural correspondence between geometric objects and disjoint subsets of the data makes certain interactions more intuitive. Conversely, overlapping subsets introduce complications. For instance, when a user clicks on a bar in a linked barplot, they might be surprised if parts of the other bars within the same plot get highlighted as well: they intended to highlight *that* bar, not the others. Likewise, when querying, if our objects do not represent disjoint subsets of the data, we have to think about what querying means: are we querying the objects or the cases corresponding to the objects? Disjoint partitions simplify our mental model, and this may be the reason why some authors discuss interactive features in the context of partitions [see e.g. @buja1996; @keim2002].    
+
+SQL aggregation queries (`GROUP BY`) are based on partitions [@hellerstein1999].
 
 #### Plots as partitions
 
-In the two preceding sections, I have argued that the plots within our interactive data visualization system should fulfill two fundamental properties:
+In the two preceding sections, I have argued that our interactive data visualization system should fulfill two fundamental properties:
 
-- They should represents the full data (surjective mapping)
-- The geometric objects in these plots should represent distinct subsets of the data (disjoint parts)
+- Plots should show the full data (surjective mapping)
+- Geometric objects should represent distinct subsets of the data (disjoint parts)
 
-These two properties suggest a fundamental model for our plots: that of a [partition](#Partitions). 
+These two properties suggest a fundamental model for plots - that of a [partition](#Partitions). 
 
-While I have not been able to find explicit references linking geometric objects to partitions, some authors have used the language of partitions. For example, Wilkinson describes a stacked bar as a partitioned bar [@wilkinson2012, pp 210].
+While I have not been able to find explicit references linking geometric objects to partitions, some authors have used the language of partitions. For example, Wilkinson [-@wilkinson2012, pp 210] and @keim2002 have linked stacked plots to (hierarchical) partitions.
 
 #### Partitions and products
 
@@ -240,11 +361,11 @@ To give a concrete example, suppose we want to draw the following barplot:
 
 df <- data.frame(group = factor(c("A", "B", "B", "A", "C", "A", "C", "C")), 
                  selection = factor(c(1, 1, 2, 2, 2, 1, 1, 2)), 
-                 value = c(10, 15, 20, 10, 12, 21, 15, 11))
+                 value = c(12, 15, 21, 10, 17, 21, 13, 11))
 df2 <- aggregate(value ~ group + selection, data = df, sum)
 
 ggplot(df2, aes(group, y = value, fill = selection)) +
-  geom_col() +
+  geom_col(position = position_stack(reverse = TRUE)) +
   scale_fill_manual(values = pal_dark_3) +
   guides(fill = "none", count = "none") +
   labs(y = "Sum") +
@@ -277,7 +398,9 @@ render_tables <- function(x) {
 render_table(df, row.names = TRUE)
 ```
 
-To draw the individual bar segments, we need to find the sum of the `value` variable across the cases corresponding to each segment. To do this, we first need to split our data into multiple small disjoint subsets according to the product of `group` and `selection` variables:
+
+
+To draw the individual bar segments, we need to sum the `value` variable across the cases corresponding to each segment. To do this, we first need to split our data into multiple small disjoint subsets according to the product of `group` and `selection` variables:
 
 ```{r}
 #| results: "asis"
@@ -298,7 +421,7 @@ summarized_dfs <- lapply(split_dfs, function(x) {
 render_tables(summarized_dfs)
 ```
 
-Finally, we need to combine the summaries back together, according to the levels of `group`, and take the cumulative sum in order to "stack" the segments on top of each other:
+Finally, to "stack" the segments on top of each other, we need to combine the summaries back together, according to the levels of `group` variable, and take the cumulative sum:
 
 ```{r}
 #| results: "asis"
@@ -313,10 +436,22 @@ stacked_dfs <- lapply(grouped_dfs, function(x) {
 render_tables(stacked_dfs)
 ```
 
+Now, we can combine the tables into one data set and render:
+
+```{r}
+combined_df <- do.call(rbind, stacked_dfs)
+combined_df$selection <- factor(combined_df$selection, levels = c(1, 2))
+
+ggplot(combined_df[6:1, ], aes(x = group, y = value, fill = selection)) +
+  geom_col(position = position_identity())
+
+```
+
 Now, we have shown how we can compute summary statistics for a stacked barplot using a split-apply-combine pipeline [@wickham2011]. For certain types of plots, a simple strategy like this might work fine. However, the reason why the example above is simple is because we have ignored or side-stepped certain issues. For example, how do we know if we are stacking the summaries in the right order? What if we need to transform the bar segments in some way, such as divide by the height of the parent bar? Once we start dealing with plots like spineplots or spinograms, it becomes clear that a simple "flat" partition structure is not enough.    
 
 #### Partitions and hierarchy
 
+@keim2002 stacked plots are suited for hierarchically-partitioned data. 
 
 #### Partition data structures
 
