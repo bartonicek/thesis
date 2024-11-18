@@ -182,6 +182,7 @@ With disjoint parts, there is a natural correspondence or bijection between the 
   \node at (7.5, 1.5) {?};
 
 \end{tikzpicture}
+```{}
 ```
 
 To illustrate this idea on concrete data, take the following barplot representing vote share among the top three parties in the 2023 New Zealand general election [@election2023]:

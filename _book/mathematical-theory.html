@@ -276,8 +276,8 @@ Figure 4.3: Types of functions. Left: in a <em>surjective</em> function, each ta
 </div>
 <p>Throughout this thesis, I will use the bracket notation (<span class="math inline">\(h(x) = g(f(x))\)</span>) when explicitly referring to the variable, and the postfix/fat semicolon notation (<span class="math inline">\(h = f ⨾ g\)</span>) otherwise.</p>
 <p>Surjectivity, injectivity, and bijectivity propagate through composition: composition of two surjective functions is surjective, composition of two injective functions is injective, and composition of two bijective functions is bijective. However, the converse does not necessarily hold: a bijective function does not have to be composed of two bijections:</p>
-<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-2"></span>
-<img src="_main_files/figure-html/unnamed-chunk-2-1.png" alt="A bijection does not necessarily have to be composed of bijections. The function $f$ is not surjective, and the function $g$ is not injective, nevertheless, their composition $f ⨾ g$ yields a bijective function." width="2100" />
+<div class="figure"><span style="display:block;" id="fig:bijection"></span>
+<img src="_main_files/figure-html/bijection-1.png" alt="A bijection does not necessarily have to be composed of bijections. The function $f$ is not surjective, and the function $g$ is not injective, nevertheless, their composition $f ⨾ g$ yields a bijective function." width="2100" />
 <p class="caption">
 Figure 4.4: A bijection does not necessarily have to be composed of bijections. The function <span class="math inline">\(f\)</span> is not surjective, and the function <span class="math inline">\(g\)</span> is not injective, nevertheless, their composition <span class="math inline">\(f ⨾ g\)</span> yields a bijective function.
 </p>
@@ -356,18 +356,34 @@ p_3(a) = \begin{cases}
 <li><em>Transitivity</em>: if <span class="math inline">\(x \leq y\)</span> and <span class="math inline">\(y \leq z\)</span>, then <span class="math inline">\(x \leq z\)</span>, for all <span class="math inline">\(x, y, z \in X\)</span></li>
 </ol>
 </div>
-<p>Notice here, we are not just speaking of the relation, but also the underlying set <span class="math inline">\(X\)</span>.</p>
-<p>Simply speaking, this means that between any two elements in <span class="math inline">\(X\)</span>, there either is a relation and the elements relate (one element is somehow “less than or equal” to the other), or the two elements do not relate.</p>
-<p>An example of a preorder is the family tree, with the underlying set being the set of family members: <span class="math inline">\(X = \{  daughter, son, mother, father, grandmother, ... \}\)</span> and the binary relation being ancestry or familial relation. Thus, for example, <span class="math inline">\(\textbf{daughter} \leq \textbf{father}\)</span>, since the daughter is related to the father, and <span class="math inline">\(\textbf{father} \leq \textbf{father}\)</span>, since a person is related to themselves. However, there is no relation (<span class="math inline">\(\leq\)</span>) between <span class="math inline">\(\textbf{father}\)</span> and <span class="math inline">\(\textbf{mother}\)</span> since they are not related. Finally, since <span class="math inline">\(\textbf{daughter} \leq \textbf{father}\)</span> and <span class="math inline">\(\textbf{father} \leq \textbf{grandmother}\)</span>, then, by reflexivity, <span class="math inline">\(\textbf{daughter} \leq \textbf{grandmother}\)</span>.</p>
+<p>Simply speaking, this means that, if we pick any two elements in the set <span class="math inline">\(X\)</span>, they either relate and one element is “less than or equal to” the other, in some sense, or they do not relate at all.</p>
+<p>One simple example of a preorder is the family tree, see Figure <a href="mathematical-theory.html#fig:family-tree">4.5</a>. Here, the underlying set is the family: <span class="math inline">\(X = \{  daughter, son, mother, father, grandmother, ... \}\)</span> and the binary relation is ancestry or familial relation. Thus, for example, <span class="math inline">\(daughter \leq father\)</span>, since the daughter is related to (is offspring of) the father, and <span class="math inline">\(father \leq father\)</span>, since a person is related to themselves (for the sake of this example). However, there is no relation (<span class="math inline">\(\leq\)</span>) between <span class="math inline">\(father\)</span> and <span class="math inline">\(mother\)</span> since they are not related. Finally, since <span class="math inline">\(daughter \leq father\)</span> and <span class="math inline">\(father \leq grandmother\)</span>, then, by reflexivity, <span class="math inline">\(daughter \leq grandmother\)</span>.</p>
+<div class="figure"><span style="display:block;" id="fig:family-tree"></span>
+<img src="_main_files/figure-html/family-tree-1.png" alt="An example of a simple preorder: family tree ordered by familial relation." width="672" />
+<p class="caption">
+Figure 4.5: An example of a simple preorder: family tree ordered by familial relation.
+</p>
+</div>
+<p>Another common example of a preorder is the set of natural numbers <span class="math inline">\(\mathbb{N}\)</span>, ordered by the usual order relation, or by the division relation: <span class="math inline">\(x \leq y\)</span> iff <span class="math inline">\(x \mid y\)</span> (<span class="math inline">\(x\)</span> divides <span class="math inline">\(y\)</span> without remainder).</p>
 <p>We can further restrict preorders by imposing additional properties, such as:</p>
 <ol start="3" style="list-style-type: decimal">
 <li>If <span class="math inline">\(x \leq y\)</span> and <span class="math inline">\(y \leq x\)</span>, then <span class="math inline">\(x = y\)</span> (anti-symmetry)</li>
 <li>Either <span class="math inline">\(x \leq y\)</span> or <span class="math inline">\(y \leq x\)</span> (comparability)</li>
 </ol>
-<p>If a preorder conforms to 3., we speak of a partially ordered set or <em>poset</em>. If it conforms to both 3. and 4., then it is a <em>total order</em>.</p>
+<p>If a preorder conforms to property 3, we speak of a partially ordered set or <em>poset</em>. If it conforms to both 3 and 4, then it is a <em>total order</em>.</p>
+<p>Preorders are interesting because they give us a first taste of something we will be discussing a lot throughout this thesis: structure-preserving maps. Specifically, if we have two preorders <span class="math inline">\((X, \leq_X)\)</span> and <span class="math inline">\((Y, \leq_Y)\)</span>, and a set of functions <span class="math inline">\(F\)</span> which map values between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, we can classify the functions in <span class="math inline">\(F\)</span> by whether they preserve the order in <span class="math inline">\(X\)</span> or not. That is, we call a function <span class="math inline">\(f \in F\)</span> order-preserving or a “monotone map”, if:</p>
+<div class="definition">
+<p><span id="def:unlabeled-div-12" class="definition"><strong>Definition 4.12  (Monotone map) </strong></span>A monotone map <span class="math inline">\(f: X \to Y\)</span> is a function between two preorders <span class="math inline">\((X, \leq_X)\)</span> and <span class="math inline">\((Y, \leq_Y)\)</span>, such that, for all <span class="math inline">\(x_1, x_2 \in X\)</span>:</p>
+<p><span class="math display">\[\text{if} \;\; x_1 \leq_X x_2 \;\; \text{then} \;\; f(x_1) \leq_Y f(x_2) \]</span></p>
+</div>
+<p>For example, suppose we have a set of functions mapping between the set of natural numbers ordered by the usual order relation, <span class="math inline">\((\mathbb{N}, \leq)\)</span>, and the set of reals, again ordered by the usual order relation <span class="math inline">\((\mathbb{R}, \leq)\)</span>. Then the function <span class="math inline">\(f(x) = \log(x)\)</span> is a monotone map, since:</p>
+<p><span class="math display">\[\text{if} \;\; x_1 \leq_{\mathbb{N}} x_2 \;\; \text{then} \;\; \log(x_1) \leq_{\mathbb{R}} \log(x_2)\]</span></p>
+<p>However, there are many other types of functions which do not preserve order, e.g. <span class="math inline">\(g(x) = \sin(x)\)</span> or <span class="math inline">\(h(x) = -x\)</span>. As another example, if we take as our domain the powerset of some set <span class="math inline">\(X\)</span>, ordered by inclusion relation, <span class="math inline">\((\mathcal{P}(X), \leq)\)</span>, then one order preserving map is the cardinality of the sets.</p>
+<p>Monotone maps compose: if <span class="math inline">\(f: X \to Y\)</span> is a monotone map, and <span class="math inline">\(g: Y \to Z\)</span> is a monotone map, then their composite <span class="math inline">\(h: X \to Z\)</span> is also a monotone map.</p>
 </div>
 <div id="monoids" class="section level3 hasAnchor" number="4.0.5">
 <h3><span class="header-section-number">4.0.5</span> Monoids<a href="mathematical-theory.html#monoids" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>In the previous subsection, we discussed preorders as an example of taking a set <span class="math inline">\(X\)</span> and imposing some type of structure on it: namely, order. However, there are other types of structure than order. One such type of structure, which encodes the idea of combining or merging elements together, is a monoid.</p>
 <p>A monoid is a tuple <span class="math inline">\((M, e, \otimes)\)</span> consisting of:</p>
 <ol style="list-style-type: lower-alpha">
 <li>A set of objects <span class="math inline">\(M\)</span></li>
@@ -379,7 +395,7 @@ p_3(a) = \begin{cases}
 <li><span class="math inline">\(m \otimes e = e \otimes m = m\)</span> for all <span class="math inline">\(m \in M\)</span> (unitality)</li>
 <li><span class="math inline">\(m_1 \otimes (m_2 \otimes m_3) = (m_1 \otimes m_2) \otimes m_3 = m_1 \otimes m_2 \otimes m_3\)</span> for all <span class="math inline">\(m_1, m_2, m_3 \in M\)</span> (associativity)</li>
 </ol>
-<p>In simple terms, monoids encapsulate the idea that <em>the whole is exactly the “sum” of its parts</em> (where “sum” can be replaced by the monoidal product). Specifically, we have some elements and a way to combine them, and when we combine the same elements, no matter where we put the brackets we always get the same result (i.e. something like “the order does not matter”, although that is not precisely right, more on that later). Finally, we have some neutral element that when combined with an element yields back the same element.</p>
+<p>In simple terms, monoids encapsulate the idea that <em>the whole is exactly the “sum” of its parts</em> (where “sum” can be replaced by the monoidal product). Specifically, when we have a monoid <span class="math inline">\((M, \otimes, e)\)</span>, we have some elements <span class="math inline">\(m \in M\)</span> and a way to combine them, such that, when we combine the same elements, we always get the same result, no matter in what order we do it in (brackets do not matter). We also have some neutral element that when combined with an element yields back the same element.</p>
 <p>For example, take summation on natural numbers, <span class="math inline">\((\mathbb{N}, 0, +)\)</span>:</p>
 <p><span class="math display">\[1 + 0 = 0 + 1 = 1 \qquad \text{(unitality)}\]</span>
 <span class="math display">\[1 + (2 + 3) = (1 + 2) + 3 = 1 + 2 + 3 \qquad \text{(associativity)}\]</span></p>

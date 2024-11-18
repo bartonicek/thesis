@@ -89,14 +89,21 @@ The `Getter` namespace also includes several other utility functions. One exampl
 #| echo: false
 // Getter.ts
 export namespace Getter {
+  export function of<T>(x: Indexable<T>): Getter<T> {
+    if (typeof x === `function`) return x;
+    else if (Array.isArray(x)) return (index: number) => x[index];
+    else return () => x
+  }
+  
   export function constant(indexable: Indeable<T>) {
     return () => indexable;
   }
+  
   export function proxy<T>(
     indexable: Indexable<T>,
     indices: number[],
   ): Getter<T> {
-    const getter = Getter.of(indexable);
+    const getter = of(indexable);
     const proxyGetter = (index: number) => getter(indices[index]);
     return proxyGetter;
   }
