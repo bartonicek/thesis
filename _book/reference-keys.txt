@@ -153,3 +153,9 @@ appendix
 dop-encapsulation
 references
 fig:unnamed-chunk-1
+prp:unlabeled-div-18
+def:unlabeled-div-18
+prp:unlabeled-div-19
+prp:unlabeled-div-20
+structures-as-categories
+algebraic-structures-as-categories

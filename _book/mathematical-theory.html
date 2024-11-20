@@ -274,15 +274,15 @@ Figure 4.3: Types of functions. Left: in a <em>surjective</em> function, each ta
 <ol style="list-style-type: decimal">
 <li><span class="math inline">\(h = g \circ f\)</span> (read: “apply <span class="math inline">\(g\)</span> after <span class="math inline">\(f\)</span>”)</li>
 <li><span class="math inline">\(h = gf\)</span> (same as above)</li>
-<li><span class="math inline">\(h = f ⨾ g\)</span> (read “apply <span class="math inline">\(f\)</span> then <span class="math inline">\(g\)</span>”)</li>
+<li><span class="math inline">\(h = f ⨾g\)</span> (read “apply <span class="math inline">\(f\)</span> then <span class="math inline">\(g\)</span>”)</li>
 </ol>
 </div>
-<p>Throughout this thesis, I will use the bracket notation (<span class="math inline">\(h(x) = g(f(x))\)</span>) when explicitly referring to the variable, and the postfix/fat semicolon notation (<span class="math inline">\(h = f ⨾ g\)</span>) otherwise.</p>
+<p>Throughout this thesis, I will use the bracket notation (<span class="math inline">\(h(x) = g(f(x))\)</span>) when explicitly referring to the variable, and the postfix/fat semicolon notation (<span class="math inline">\(h = f ⨾g\)</span>) otherwise.</p>
 <p>Surjectivity, injectivity, and bijectivity propagate through composition: composition of two surjective functions is surjective, composition of two injective functions is injective, and composition of two bijective functions is bijective. However, the converse does not necessarily hold: a bijective function does not have to be composed of two bijections:</p>
 <div class="figure"><span style="display:block;" id="fig:bijection"></span>
-<img src="_main_files/figure-html/bijection-1.png" alt="A bijection does not necessarily have to be composed of bijections. The function $f$ is not surjective, and the function $g$ is not injective, nevertheless, their composition $f ⨾ g$ yields a bijective function." width="2100" />
+<img src="_main_files/figure-html/bijection-1.png" alt="A bijection does not necessarily have to be composed of bijections. The function $f$ is not surjective, and the function $g$ is not injective, nevertheless, their composition $f   hen g$ yields a bijective function." width="2100" />
 <p class="caption">
-Figure 4.4: A bijection does not necessarily have to be composed of bijections. The function <span class="math inline">\(f\)</span> is not surjective, and the function <span class="math inline">\(g\)</span> is not injective, nevertheless, their composition <span class="math inline">\(f ⨾ g\)</span> yields a bijective function.
+Figure 4.4: A bijection does not necessarily have to be composed of bijections. The function <span class="math inline">\(f\)</span> is not surjective, and the function <span class="math inline">\(g\)</span> is not injective, nevertheless, their composition <span class="math inline">\(f   hen g\)</span> yields a bijective function.
 </p>
 </div>
 <p>For other interesting examples of inverse function composition problems, see <span class="citation">Lawvere and Schanuel (<a href="#ref-lawvere2009">2009</a>)</span>.</p>
@@ -425,10 +425,17 @@ Figure 4.5: An example of a simple preorder: family tree ordered by familial rel
 <span class="math display">\[\begin{aligned}
 
 1 \cdot 2 = 2 \cdot 1 = 2 &amp; \qquad \text{(unitality)} \\
-1 \cdot (2 \cdot 3) = (1 \cdot 2) \cdot 3 = 1 \cdot 2 \cdot 3 &amp; \qquad \text{(associativity)}
+2 \cdot (2 \cdot 3) = (1 \cdot 2) \cdot 3 = 1 \cdot 2 \cdot 3 &amp; \qquad \text{(associativity)}
 
 \end{aligned}\]</span>
-<p>However, not every mathematical operation forms a monoid. One counterexample is exponentiation. Exponentiation does not meet the definition of a monoid, since it is not associative:</p>
+<p>Even the maximum and minimum operators are monoids, as long as we take the extended real/natural numbers as our set <span class="math inline">\(M\)</span>. Here’s an example with the maximum operator on the extended real number line, <span class="math inline">\((\mathbb{R}, -\infty, \max)\)</span>:</p>
+<span class="math display">\[\begin{aligned}
+
+\max(x, -\infty) = \max(-\infty, x) = x &amp; \qquad \text{(unitality)} \\
+\max(x, \max(y, z)) = \max(\max(x, y), z) &amp; \qquad \text{(associativity)}
+
+\end{aligned}\]</span>
+<p>However, there are also many mathemamatical operators which do not conform to the definition of a monoid. One such counterexample is exponentiation. Exponentiation does not meet the definition of a monoid, since it is not associative:</p>
 <p><span class="math display">\[x^{(y^z)} \neq (x^y)^z\]</span></p>
 <p>and there is no two-sided neutral element:</p>
 <p><span class="math display">\[x^1 = x \qquad \text{but} \qquad 1^x \neq x\]</span></p>
@@ -449,6 +456,7 @@ Figure 4.5: An example of a simple preorder: family tree ordered by familial rel
 (\text{&quot;quick&quot;} + \text{&quot;brown&quot;}) + \text{&quot;fox&quot;} = \text{&quot;quick&quot;} + (\text{&quot;brown&quot;} + \text{&quot;fox&quot;}) &amp; \qquad \text{(associativity)}
 
 \end{aligned}\]</span>
+<p>Likewise, the concatenation of lists or arrays also forms a monoid <span class="citation">(see <a href="#ref-milewski2018">Milewski 2018</a>)</span>.</p>
 </div>
 <div id="specializing-monoids" class="section level4 hasAnchor" number="4.0.5.3">
 <h4><span class="header-section-number">4.0.5.3</span> Specializing monoids<a href="mathematical-theory.html#specializing-monoids" class="anchor-section" aria-label="Anchor link to header"></a></h4>
@@ -479,6 +487,17 @@ Figure 4.5: An example of a simple preorder: family tree ordered by familial rel
 <p>To give an example of a monoid homomorphism, suppose that our first monoid is string concatenation, <span class="math inline">\((String, &quot;&quot;, ++)\)</span> and the second is natural numbers with addition, <span class="math inline">\((\mathbb{N}, 0, +)\)</span>. Then, one simple monoid homomorphism <span class="math inline">\(f\)</span> is simply counting the number of characters in a string:</p>
 <p><span class="math display">\[10 = f(\text{&quot;helloworld&quot;}) = f(\text{&quot;hello&quot;} \text{++} \text{&quot;world&quot;}) = f(\text{&quot;hello&quot;}) + f(\text{&quot;world&quot;}) = 5 + 5\]</span>
 <span class="math display">\[e_N = 0 = f(&quot;&quot;) = f(e_M)\]</span></p>
+<p>Like monotone maps, monoid homomorphisms also compose. Proof: suppose <span class="math inline">\(f: X \to Y\)</span> and <span class="math inline">\(g: Y \to Z\)</span> are monoid homomorphisms. Then the composite function <span class="math inline">\(f ⨾g\)</span> preserves the product:</p>
+<span class="math display">\[\begin{aligned}
+
+(f ⨾g)(x_1 \otimes x_2) &amp; = g(f(x_1 \otimes_X x_2)) \\
+&amp; = g(f(x_1) \otimes_Y f(x_2)) \\
+&amp; = g(f(x_1)) \otimes_Z g(f(x_2)) \\
+&amp; = (f ⨾g)(x_1) \otimes_Z (f ⨾g)(x_2)
+
+\end{aligned}\]</span>
+<p>As well as the identity element:</p>
+<p><span class="math display">\[(f ⨾g)(e_X) = g(f(e_X)) = g(e_Y) = e_Z\]</span></p>
 </div>
 </div>
 <div id="groups" class="section level3 hasAnchor" number="4.0.6">
@@ -490,11 +509,12 @@ Figure 4.5: An example of a simple preorder: family tree ordered by familial rel
 <li>Unitality: <span class="math inline">\(m \otimes e = e \otimes m = m\)</span>, for all <span class="math inline">\(m \in M\)</span></li>
 <li>Associativity: <span class="math inline">\(m_1 \otimes (m_2 \otimes m_3) = (m_1 \otimes m_2) \otimes m_3 = m_1 \otimes m_2 \otimes m_3\)</span>, for all <span class="math inline">\(m_1, m_2, m_3 \in M\)</span></li>
 </ol>
-<p>Additionally, the monoidal product <span class="math inline">\(\otimes\)</span> has an inverse <span class="math inline">\(\otimes^{-1}\)</span>, such that the following property holds<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>:</p>
+<p>Additionally, the monoidal product <span class="math inline">\(\otimes\)</span> has an inverse<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> <span class="math inline">\(\otimes^{-1}\)</span>, such that the following property holds:</p>
 <ol start="3" style="list-style-type: decimal">
 <li>Invertibility: <span class="math inline">\(m \otimes^{-1} m = e\)</span>, for all <span class="math inline">\(m \in M\)</span></li>
 </ol>
 </div>
+<p>Invertibility implies that, when we take a product of any two elements, we can always recover either one by “subtracting it away” via the inverse product with the other.</p>
 </div>
 <div id="categories" class="section level3 hasAnchor" number="4.0.7">
 <h3><span class="header-section-number">4.0.7</span> Categories<a href="mathematical-theory.html#categories" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -505,17 +525,44 @@ Figure 4.5: An example of a simple preorder: family tree ordered by familial rel
 <li>A collection of objects <span class="math inline">\(\text{Ob}(\mathcal{C})\)</span></li>
 <li>For every two objects <span class="math inline">\(c, d \in \text{Ob}(\mathcal{C})\)</span>, we define a set of morphisms (arrows) <span class="math inline">\(\mathcal{C}(c, d)\)</span></li>
 <li>For any object <span class="math inline">\(c \in \text{Ob}(\mathcal{C})\)</span>, we define a special morphism <span class="math inline">\(\text{id}_c \in \mathcal{C}(c, c)\)</span>, called the identity morphism</li>
-<li>For every three objects <span class="math inline">\(c_1, c_2, c_3 \in \text{Ob}(\mathcal{C})\)</span> and two morphisms <span class="math inline">\(f \in \mathcal{C}(c_1, c_2)\)</span> and <span class="math inline">\(g \in \mathcal{C}(c_2, c_3)\)</span>, we define a composite morphism <span class="math inline">\(f ⨾ g \in \mathcal{C}(c_1, c_3)\)</span></li>
+<li>For every three objects <span class="math inline">\(c_1, c_2, c_3 \in \text{Ob}(\mathcal{C})\)</span> and two morphisms <span class="math inline">\(f \in \mathcal{C}(c_1, c_2)\)</span> and <span class="math inline">\(g \in \mathcal{C}(c_2, c_3)\)</span>, we define a composite morphism <span class="math inline">\(f ⨾g \in \mathcal{C}(c_1, c_3)\)</span></li>
 </ul>
 <p>Such that the composition operation is:</p>
 <ol style="list-style-type: decimal">
-<li>Unital: <span class="math inline">\(\text{id}_{c_1} ⨾ f = f\)</span> and <span class="math inline">\(f ⨾ \text{id}_{c_2}=f\)</span></li>
-<li>Associative: <span class="math inline">\((f ⨾ g)⨾ h = f ⨾ (g ⨾ h) = f ⨾ g ⨾ h\)</span></li>
+<li>Unital: <span class="math inline">\(\text{id}_{c_1} ⨾f = f\)</span>, and <span class="math inline">\(f ⨾\text{id}_{c_2}=f\)</span></li>
+<li>Associative: <span class="math inline">\((f ⨾g) ⨾h = f ⨾(g ⨾h) = f ⨾g ⨾h\)</span></li>
 </ol>
 <p>(for all <span class="math inline">\(f \in \mathcal{C}(c_1, c2)\)</span>, <span class="math inline">\(g \in \mathcal{C}(c_2, c3)\)</span>, and <span class="math inline">\(f \in \mathcal{C}(c_3, c4)\)</span>, and <span class="math inline">\(c_1, c_2, c_3, c_4 \in \text{Ob}(\mathcal{C})\)</span>)</p>
 </div>
 <p>The definition above may look daunting, because of the introduction of new notation and the use of abstract terms like “collection”, “objects”, and “morphisms”. However, it is really nothing new. To simplify things, we can think of the collection of objects as a set, and the morphisms/arrows as functions, and we retain most of the original meaning; the abstract definition above simply gives us more flexibility.</p>
-<p>In other words, all that the definition of a category says is that we have some objects <span class="math inline">\(c \in \text{Ob}(\mathcal{C})\)</span> which relate to each other via morphisms, and these morphisms obey some common sense properties. First, the morpshisms compose: if we can get from <span class="math inline">\(c_1\)</span> to <span class="math inline">\(c_2\)</span> and <span class="math inline">\(c_2\)</span> to <span class="math inline">\(c_3\)</span>, we can get from <span class="math inline">\(c_1\)</span> to <span class="math inline">\(c_3\)</span>. Second the composition is associative, meaning that the order in which we compose does not matter. Finally, we always have a way of “staying in the same place”, which is the identity morphism.</p>
+<p>The put in in different terms, the definition of a category says that we have some objects <span class="math inline">\(c \in \text{Ob}(\mathcal{C})\)</span> which relate to each other via morphisms, and these morphisms obey some common sense properties. First, the morpshisms compose: if we can get from <span class="math inline">\(c_1\)</span> to <span class="math inline">\(c_2\)</span> and <span class="math inline">\(c_2\)</span> to <span class="math inline">\(c_3\)</span>, we can get from <span class="math inline">\(c_1\)</span> to <span class="math inline">\(c_3\)</span>. Second the composition is associative, meaning that the order in which we compose does not matter. Finally, we always have a way of “staying in the same place”, which is the identity morphism.</p>
+<p>As we will shortly see, despite the definition being quite broad and abstract, there are some quite interesting things we can do with categories. However, first, it is important to define one more crucial concept:</p>
+<div class="definition">
+<p><span id="def:unlabeled-div-18" class="definition"><strong>Definition 4.17  (Isomorphism) </strong></span>A morphism <span class="math inline">\(f: X \to Y\)</span> is called an isomorphism if there exists another morphism <span class="math inline">\(g: Y \to X\)</span> such that:</p>
+<ul>
+<li><span class="math inline">\(f ⨾g = \text{id_X}\)</span></li>
+<li><span class="math inline">\(g ⨾f = \text{id_Y}\)</span></li>
+</ul>
+<p><span class="math inline">\(f\)</span> and <span class="math inline">\(g\)</span> are then inverses to each other, such that <span class="math inline">\(f = g^{-1}\)</span> and <span class="math inline">\(g = f^{-1}\)</span>, equivalently.</p>
+</div>
+<div id="algebraic-structures-as-categories" class="section level4 hasAnchor" number="4.0.7.1">
+<h4><span class="header-section-number">4.0.7.1</span> Algebraic structures as categories<a href="mathematical-theory.html#algebraic-structures-as-categories" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>It might not seem as if this broad, abstract definition buys us much. However, as we will see, it allows us to reason about all of the algebraic structures we have discussed so far. For example:</p>
+<div class="proposition">
+<p><span id="prp:unlabeled-div-19" class="proposition"><strong>Proposition 4.1  </strong></span>A preorder is a category where there is at most one morphism between any two objects.</p>
+</div>
+<p>We discussed preorders as tuples of a set and a relation, <span class="math inline">\((X, \leq)\)</span>, which fulfills two fundamental properties: reflexivity and associatvity. If we cast preorder as a category, these properties automatically fall out of the definition. Specifically, let the elements <span class="math inline">\(x \in X\)</span> be the objects in the category <span class="math inline">\(\mathcal{X}\)</span> corresponding to the preorder <span class="math inline">\((X, \leq)\)</span>, and let the relation <span class="math inline">\(leq\)</span> be represented by presence of a morphism between two objects (of which can there be only one).</p>
+<ol style="list-style-type: decimal">
+<li>Reflexity: <span class="math inline">\(x \leq x\)</span> for all <span class="math inline">\(x \in X\)</span>. This is just the identity morphism <span class="math inline">\(\text{id}_x\)</span>, which always exists and is the only morphism in <span class="math inline">\(\mathcal{X}(x, x)\)</span> for all <span class="math inline">\(x \in X = \text{Ob}(\mathcal{X})\)</span></li>
+<li>Associativity: <span class="math inline">\(x \leq y\)</span> and <span class="math inline">\(y \leq z\)</span> <span class="math inline">\(\implies x \leq z\)</span>. This is the consequence of associativity of composition in categories: if there is a morphism <span class="math inline">\(x \to y\)</span> and <span class="math inline">\(y \to z\)</span>, then we automaticlly get a morphism <span class="math inline">\(f ⨾g: x \to z\)</span>.</li>
+</ol>
+<p>But what do we mean when we say that a preorder “is” a category?</p>
+<p>The example with preorder was fairly intuitive, since the elements <span class="math inline">\(x \in X\)</span> mapped to objects and the relation <span class="math inline">\(\leq\)</span> mapped to morphisms. However, this is not the only way that we can recast algebraic objects as categories. For example:</p>
+<div class="proposition">
+<p><span id="prp:unlabeled-div-20" class="proposition"><strong>Proposition 4.2  </strong></span>A monoid is a category with a single object.</p>
+</div>
+<p>Here, we need to break away from the intuitive way of thinking of objects as elements in a set and morphisms as functions, and instead take a more creative approach.</p>
+</div>
 </div>
 <div id="functors" class="section level3 hasAnchor" number="4.0.8">
 <h3><span class="header-section-number">4.0.8</span> Functors<a href="mathematical-theory.html#functors" class="anchor-section" aria-label="Anchor link to header"></a></h3>

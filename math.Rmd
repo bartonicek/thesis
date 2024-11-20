@@ -218,12 +218,14 @@ $$h(x) = g(f(x))$$
 
 There are several different ways to denote function composition. One is to write out the composition explicitly using the variable $x$ as in the example above. However, mathematical texts often omit the explicit reference to the variable ($x$) and write the composition in one of several ways:
 
+\newcommand\then{⨾}
+
 1. $h = g \circ f$ (read: "apply $g$ after $f$")
 2. $h = gf$ (same as above)
-3. $h = f ⨾ g$ (read "apply $f$ then $g$")
+3. $h = f \then g$ (read "apply $f$ then $g$")
 :::
 
-Throughout this thesis, I will use the bracket notation ($h(x) = g(f(x))$) when explicitly referring to the variable, and the postfix/fat semicolon notation ($h = f ⨾ g$) otherwise. 
+Throughout this thesis, I will use the bracket notation ($h(x) = g(f(x))$) when explicitly referring to the variable, and the postfix/fat semicolon notation ($h = f \then g$) otherwise. 
 
 Surjectivity, injectivity, and bijectivity propagate through composition: composition of two surjective functions is surjective, composition of two injective functions is injective, and composition of two bijective functions is bijective. However, the converse does not necessarily hold: a bijective function does not have to be composed of two bijections:
 
@@ -231,7 +233,7 @@ Surjectivity, injectivity, and bijectivity propagate through composition: compos
 #| echo: false
 #| dpi: 300
 #| fig-height: 3
-#| fig-cap: "A bijection does not necessarily have to be composed of bijections. The function $f$ is not surjective, and the function $g$ is not injective, nevertheless, their composition $f ⨾ g$ yields a bijective function."
+#| fig-cap: "A bijection does not necessarily have to be composed of bijections. The function $f$ is not surjective, and the function $g$ is not injective, nevertheless, their composition $f \then g$ yields a bijective function."
 
 library(ggplot2)
 normalize <- function(x) (x - min(x)) / (max(x) - min(x))
@@ -463,11 +465,20 @@ Another example of a monoid are products of real numbers $(\mathbb{R}, 1, \times
 \begin{aligned} 
 
 1 \cdot 2 = 2 \cdot 1 = 2 & \qquad \text{(unitality)} \\
-1 \cdot (2 \cdot 3) = (1 \cdot 2) \cdot 3 = 1 \cdot 2 \cdot 3 & \qquad \text{(associativity)}
+2 \cdot (2 \cdot 3) = (1 \cdot 2) \cdot 3 = 1 \cdot 2 \cdot 3 & \qquad \text{(associativity)}
 
 \end{aligned}
 
-However, not every mathematical operation forms a monoid. One counterexample is exponentiation. Exponentiation does not meet the definition of a monoid, since it is not associative:
+Even the maximum and minimum operators are monoids, as long as we take the extended real/natural numbers as our set $M$. Here's an example with the maximum operator on the extended real number line, $(\mathbb{R}, -\infty, \max)$:
+
+\begin{aligned}
+
+\max(x, -\infty) = \max(-\infty, x) = x & \qquad \text{(unitality)} \\
+\max(x, \max(y, z)) = \max(\max(x, y), z) & \qquad \text{(associativity)}
+
+\end{aligned}
+
+However, there are also many mathemamatical operators which do not conform to the definition of a monoid. One such counterexample is exponentiation. Exponentiation does not meet the definition of a monoid, since it is not associative:
 
 $$x^{(y^z)} \neq (x^y)^z$$
 
@@ -499,6 +510,8 @@ Even completely non-number like entities can form monoids. For example, the oper
 (\text{"quick"} + \text{"brown"}) + \text{"fox"} = \text{"quick"} + (\text{"brown"} + \text{"fox"}) & \qquad \text{(associativity)}
 
 \end{aligned}
+
+Likewise, the concatenation of lists or arrays also forms a monoid [see @milewski2018].
 
 #### Specializing monoids
 
@@ -536,6 +549,22 @@ To give an example of a monoid homomorphism, suppose that our first monoid is st
 $$10 = f(\text{"helloworld"}) = f(\text{"hello"} \text{++} \text{"world"}) = f(\text{"hello"}) + f(\text{"world"}) = 5 + 5$$
 $$e_N = 0 = f("") = f(e_M)$$
 
+Like monotone maps, monoid homomorphisms also compose. Proof: suppose $f: X \to Y$ and $g: Y \to Z$ are monoid homomorphisms. Then the composite function $f \then g$ preserves the product:
+
+\begin{aligned}
+
+(f \then g)(x_1 \otimes x_2) & = g(f(x_1 \otimes_X x_2)) \\
+& = g(f(x_1) \otimes_Y f(x_2)) \\
+& = g(f(x_1)) \otimes_Z g(f(x_2)) \\
+& = (f \then g)(x_1) \otimes_Z (f \then g)(x_2)
+
+\end{aligned}
+
+As well as the identity element:
+
+$$(f \then g)(e_X) = g(f(e_X)) = g(e_Y) = e_Z$$
+
+
 ### Groups
 
 Another well-known example of algebraic structures are groups. Groups are studied in group theory, and encode the idea of reversible transformations. Despite the different term, groups are really just a monoid with one additional property.
@@ -546,12 +575,12 @@ A group is a monoid with an inverse operator. Specifically, as with a monoid, we
 1. Unitality: $m \otimes e = e \otimes m = m$, for all $m \in M$
 2. Associativity: $m_1 \otimes (m_2 \otimes m_3) = (m_1 \otimes m_2) \otimes m_3 = m_1 \otimes m_2 \otimes m_3$, for all $m_1, m_2, m_3 \in M$
 
-Additionally, the monoidal product $\otimes$ has an inverse $\otimes^{-1}$, such that the following property holds^[Note, that in group theory, it is common to omit explicit references to the operator and write the group products without it, such that, e.g. $m \otimes n$ is written as $mn$. In that case, instead of the inverse *operator*, we speak of inverse *elements*, such that, for each $m \in M$ there is an $m^{-1}$ such that $m^{-1}m = mm^{-1} = e$. However, this really is a distinction without difference since we can easily define the inverse element using the inverse operator and the neutral element: $m^{-1} = (e \otimes^{-1}m)$. Thus, for the sake of keeping with the notation in the previous sections, I will use the inverse operator explicitly.]:
+Additionally, the monoidal product $\otimes$ has an inverse^[Note, that in group theory, it is common to omit explicit references to the operator and write the group products without it, such that, e.g. $m \otimes n$ is written as $mn$. In that case, instead of the inverse *operator*, we speak of inverse *elements*, such that, for each $m \in M$ there is an $m^{-1}$ such that $m^{-1}m = mm^{-1} = e$. However, this really is a distinction without difference since we can easily define the inverse element using the inverse operator and the neutral element: $m^{-1} = (e \otimes^{-1}m)$. Thus, for the sake of keeping with the notation in the previous sections, I will use the inverse operator explicitly.] $\otimes^{-1}$, such that the following property holds:
 
 3. Invertibility: $m \otimes^{-1} m = e$, for all $m \in M$
 :::
 
-
+Invertibility implies that, when we take a product of any two elements, we can always recover either one by "subtracting it away" via the inverse product with the other.
 
 ### Categories
 
@@ -564,12 +593,12 @@ To define a category $\mathcal{C}$, we specify:
 - A collection of objects $\text{Ob}(\mathcal{C})$
 - For every two objects $c, d \in \text{Ob}(\mathcal{C})$, we define a set of morphisms (arrows) $\mathcal{C}(c, d)$ 
 - For any object $c \in \text{Ob}(\mathcal{C})$, we define a special morphism $\text{id}_c \in \mathcal{C}(c, c)$, called the identity morphism
-- For every three objects $c_1, c_2, c_3 \in \text{Ob}(\mathcal{C})$ and two morphisms $f \in \mathcal{C}(c_1, c_2)$ and $g \in \mathcal{C}(c_2, c_3)$, we define a composite morphism $f ⨾ g \in \mathcal{C}(c_1, c_3)$  
+- For every three objects $c_1, c_2, c_3 \in \text{Ob}(\mathcal{C})$ and two morphisms $f \in \mathcal{C}(c_1, c_2)$ and $g \in \mathcal{C}(c_2, c_3)$, we define a composite morphism $f \then g \in \mathcal{C}(c_1, c_3)$  
 
 Such that the composition operation is:
 
-1. Unital: $\text{id}_{c_1} ⨾ f = f$ and $f ⨾ \text{id}_{c_2}=f$
-2. Associative: $(f ⨾ g)⨾ h = f ⨾ (g ⨾ h) = f ⨾ g ⨾ h$
+1. Unital: $\text{id}_{c_1} \then f = f$, and $f \then \text{id}_{c_2}=f$
+2. Associative: $(f \then g) \then h = f \then (g \then h) = f \then g \then h$
 
 (for all $f \in \mathcal{C}(c_1, c2)$, $g \in \mathcal{C}(c_2, c3)$, and $f \in \mathcal{C}(c_3, c4)$, and $c_1, c_2, c_3, c_4 \in \text{Ob}(\mathcal{C})$)
 
@@ -577,7 +606,41 @@ Such that the composition operation is:
 
 The definition above may look daunting, because of the introduction of new notation and the use of abstract terms like "collection", "objects", and "morphisms". However, it is really nothing new. To simplify things, we can think of the collection of objects as a set, and the morphisms/arrows as functions, and we retain most of the original meaning; the abstract definition above simply gives us more flexibility.
 
-In other words, all that the definition of a category says is that we have some objects $c \in \text{Ob}(\mathcal{C})$ which relate to each other via morphisms, and these morphisms obey some common sense properties. First, the morpshisms compose: if we can get from $c_1$ to $c_2$ and $c_2$ to $c_3$, we can get from $c_1$ to $c_3$. Second the composition is associative, meaning that the order in which we compose does not matter. Finally, we always have a way of "staying in the same place", which is the identity morphism.  
+The put in in different terms, the definition of a category says that we have some objects $c \in \text{Ob}(\mathcal{C})$ which relate to each other via morphisms, and these morphisms obey some common sense properties. First, the morpshisms compose: if we can get from $c_1$ to $c_2$ and $c_2$ to $c_3$, we can get from $c_1$ to $c_3$. Second the composition is associative, meaning that the order in which we compose does not matter. Finally, we always have a way of "staying in the same place", which is the identity morphism.
+
+As we will shortly see, despite the definition being quite broad and abstract, there are some quite interesting things we can do with categories. However, first, it is important to define one more crucial concept:
+
+::: {.definition name="Isomorphism"}
+A morphism $f: X \to Y$ is called an isomorphism if there exists another morphism $g: Y \to X$ such that:
+
+- $f \then g = \text{id_X}$
+- $g \then f = \text{id_Y}$
+
+$f$ and $g$ are then inverses to each other, such that $f = g^{-1}$ and $g = f^{-1}$, equivalently.
+:::
+
+#### Algebraic structures as categories
+
+It might not seem as if this broad, abstract definition buys us much. However, as we will see, it allows us to reason about all of the algebraic structures we have discussed so far. For example:
+
+:::{.proposition}
+A preorder is a category where there is at most one morphism between any two objects.
+:::
+
+We discussed preorders as tuples of a set and a relation, $(X, \leq)$, which fulfills two fundamental properties: reflexivity and associatvity. If we cast preorder as a category, these properties automatically fall out of the definition. Specifically, let the elements $x \in X$ be the objects in the category $\mathcal{X}$ corresponding to the preorder $(X, \leq)$, and let the relation $leq$ be represented by presence of a morphism between two objects (of which can there be only one). 
+
+1. Reflexity: $x \leq x$ for all $x \in X$. This is just the identity morphism $\text{id}_x$, which always exists and is the only morphism in $\mathcal{X}(x, x)$ for all $x \in X = \text{Ob}(\mathcal{X})$
+2. Associativity: $x \leq y$ and $y \leq z$ $\implies x \leq z$. This is the consequence of associativity of composition in categories: if there is a morphism $x \to y$ and $y \to z$, then we automaticlly get a morphism $f \then g: x \to z$.
+
+But what do we mean when we say that a preorder "is" a category? 
+
+The example with preorder was fairly intuitive, since the elements $x \in X$ mapped to objects and the relation $\leq$ mapped to morphisms. However, this is not the only way that we can recast algebraic objects as categories. For example:
+
+::: {.proposition}
+A monoid is a category with a single object.
+:::
+
+Here, we need to break away from the intuitive way of thinking of objects as elements in a set and morphisms as functions, and instead take a more creative approach.
 
 
 ### Functors
