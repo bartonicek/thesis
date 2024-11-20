@@ -137,6 +137,9 @@ div.csl-indent {
 <li class="chapter" data-level="4.0.3" data-path="mathematical-theory.html"><a href="mathematical-theory.html#partitions"><i class="fa fa-check"></i><b>4.0.3</b> Partitions</a></li>
 <li class="chapter" data-level="4.0.4" data-path="mathematical-theory.html"><a href="mathematical-theory.html#preorders"><i class="fa fa-check"></i><b>4.0.4</b> Preorders</a></li>
 <li class="chapter" data-level="4.0.5" data-path="mathematical-theory.html"><a href="mathematical-theory.html#monoids"><i class="fa fa-check"></i><b>4.0.5</b> Monoids</a></li>
+<li class="chapter" data-level="4.0.6" data-path="mathematical-theory.html"><a href="mathematical-theory.html#groups"><i class="fa fa-check"></i><b>4.0.6</b> Groups</a></li>
+<li class="chapter" data-level="4.0.7" data-path="mathematical-theory.html"><a href="mathematical-theory.html#categories"><i class="fa fa-check"></i><b>4.0.7</b> Categories</a></li>
+<li class="chapter" data-level="4.0.8" data-path="mathematical-theory.html"><a href="mathematical-theory.html#functors"><i class="fa fa-check"></i><b>4.0.8</b> Functors</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="high-level-principles.html"><a href="high-level-principles.html"><i class="fa fa-check"></i><b>5</b> High-level principles</a>
 <ul>
@@ -365,13 +368,18 @@ Figure 4.5: An example of a simple preorder: family tree ordered by familial rel
 </p>
 </div>
 <p>Another common example of a preorder is the set of natural numbers <span class="math inline">\(\mathbb{N}\)</span>, ordered by the usual order relation, or by the division relation: <span class="math inline">\(x \leq y\)</span> iff <span class="math inline">\(x \mid y\)</span> (<span class="math inline">\(x\)</span> divides <span class="math inline">\(y\)</span> without remainder).</p>
-<p>We can further restrict preorders by imposing additional properties, such as:</p>
+<div id="specializing-preorders" class="section level4 hasAnchor" number="4.0.4.1">
+<h4><span class="header-section-number">4.0.4.1</span> Specializing preorders<a href="mathematical-theory.html#specializing-preorders" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>We can specialize preorders by imposing additional properties, such as:</p>
 <ol start="3" style="list-style-type: decimal">
 <li>If <span class="math inline">\(x \leq y\)</span> and <span class="math inline">\(y \leq x\)</span>, then <span class="math inline">\(x = y\)</span> (anti-symmetry)</li>
 <li>Either <span class="math inline">\(x \leq y\)</span> or <span class="math inline">\(y \leq x\)</span> (comparability)</li>
 </ol>
-<p>If a preorder conforms to property 3, we speak of a partially ordered set or <em>poset</em>. If it conforms to both 3 and 4, then it is a <em>total order</em>.</p>
-<p>Preorders are interesting because they give us a first taste of something we will be discussing a lot throughout this thesis: structure-preserving maps. Specifically, if we have two preorders <span class="math inline">\((X, \leq_X)\)</span> and <span class="math inline">\((Y, \leq_Y)\)</span>, and a set of functions <span class="math inline">\(F\)</span> which map values between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, we can classify the functions in <span class="math inline">\(F\)</span> by whether they preserve the order in <span class="math inline">\(X\)</span> or not. That is, we call a function <span class="math inline">\(f \in F\)</span> order-preserving or a “monotone map”, if:</p>
+<p>If a preorder conforms to property 3, we speak of a partially ordered set or <em>poset</em>. If it conforms to both 3 and 4, then it is called a <em>total order</em>.</p>
+</div>
+<div id="preserving-structure-monotone-maps" class="section level4 hasAnchor" number="4.0.4.2">
+<h4><span class="header-section-number">4.0.4.2</span> Preserving structure: Monotone maps<a href="mathematical-theory.html#preserving-structure-monotone-maps" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Preorders are interesting because they give us a first taste of something will be discussed a lot throughout this thesis: structure-preserving maps. Specifically, if we have two preorders <span class="math inline">\((X, \leq_X)\)</span> and <span class="math inline">\((Y, \leq_Y)\)</span>, and a set of functions <span class="math inline">\(F\)</span> which map values between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, we can classify the functions in <span class="math inline">\(F\)</span> by whether they preserve the order in <span class="math inline">\(X\)</span> or not. That is, we call a function <span class="math inline">\(f \in F\)</span> order-preserving or a “monotone map”, if:</p>
 <div class="definition">
 <p><span id="def:unlabeled-div-12" class="definition"><strong>Definition 4.12  (Monotone map) </strong></span>A monotone map <span class="math inline">\(f: X \to Y\)</span> is a function between two preorders <span class="math inline">\((X, \leq_X)\)</span> and <span class="math inline">\((Y, \leq_Y)\)</span>, such that, for all <span class="math inline">\(x_1, x_2 \in X\)</span>:</p>
 <p><span class="math display">\[\text{if} \;\; x_1 \leq_X x_2 \;\; \text{then} \;\; f(x_1) \leq_Y f(x_2) \]</span></p>
@@ -381,37 +389,136 @@ Figure 4.5: An example of a simple preorder: family tree ordered by familial rel
 <p>However, there are many other types of functions which do not preserve order, e.g. <span class="math inline">\(g(x) = \sin(x)\)</span> or <span class="math inline">\(h(x) = -x\)</span>. As another example, if we take as our domain the powerset of some set <span class="math inline">\(X\)</span>, ordered by inclusion relation, <span class="math inline">\((\mathcal{P}(X), \leq)\)</span>, then one order preserving map is the cardinality of the sets.</p>
 <p>Monotone maps compose: if <span class="math inline">\(f: X \to Y\)</span> is a monotone map, and <span class="math inline">\(g: Y \to Z\)</span> is a monotone map, then their composite <span class="math inline">\(h: X \to Z\)</span> is also a monotone map.</p>
 </div>
+</div>
 <div id="monoids" class="section level3 hasAnchor" number="4.0.5">
 <h3><span class="header-section-number">4.0.5</span> Monoids<a href="mathematical-theory.html#monoids" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>In the previous subsection, we discussed preorders as an example of taking a set <span class="math inline">\(X\)</span> and imposing some type of structure on it: namely, order. However, there are other types of structure than order. One such type of structure, which encodes the idea of combining or merging elements together, is a monoid.</p>
-<p>A monoid is a tuple <span class="math inline">\((M, e, \otimes)\)</span> consisting of:</p>
-<ol style="list-style-type: lower-alpha">
+<p>In the previous subsection, we discussed one example of taking a set and imposing some kind of structure on it: namely, we took a set and imposed an order relation on it and called the result a preorder. However, we can impose many other kinds of structure on collections of objects (sets). One such type of a structure is a monoid.</p>
+<p>A monoid is an algebraic structure that represents a “whole equal to the sum of its parts”, if we relax our idea about what it means to “sum”. More formally:</p>
+<div class="definition">
+<p><span id="def:unlabeled-div-13" class="definition"><strong>Definition 4.13  (Monoid) </strong></span>A monoid is a tuple <span class="math inline">\((M, e, \otimes)\)</span> consisting of:</p>
+<ul>
 <li>A set of objects <span class="math inline">\(M\)</span></li>
 <li>A neutral element <span class="math inline">\(e\)</span> called the <em>monoidal unit</em></li>
-<li>A binary function <span class="math inline">\(\otimes: M \times M \to M\)</span> called the <em>monoidal product</em></li>
-</ol>
-<p>Such that:</p>
+<li>A binary operation (function) <span class="math inline">\(\otimes: M \times M \to M\)</span> called the <em>monoidal product</em></li>
+</ul>
+<p>Such that the binary operation <span class="math inline">\(\otimes\)</span> has the following properties:</p>
 <ol style="list-style-type: decimal">
-<li><span class="math inline">\(m \otimes e = e \otimes m = m\)</span> for all <span class="math inline">\(m \in M\)</span> (unitality)</li>
-<li><span class="math inline">\(m_1 \otimes (m_2 \otimes m_3) = (m_1 \otimes m_2) \otimes m_3 = m_1 \otimes m_2 \otimes m_3\)</span> for all <span class="math inline">\(m_1, m_2, m_3 \in M\)</span> (associativity)</li>
+<li>Unitality: <span class="math inline">\(m \otimes e = e \otimes m = m\)</span> for all <span class="math inline">\(m \in M\)</span></li>
+<li>Associativity: <span class="math inline">\(m_1 \otimes (m_2 \otimes m_3) = (m_1 \otimes m_2) \otimes m_3 = m_1 \otimes m_2 \otimes m_3\)</span> for all <span class="math inline">\(m_1, m_2, m_3 \in M\)</span></li>
 </ol>
-<p>In simple terms, monoids encapsulate the idea that <em>the whole is exactly the “sum” of its parts</em> (where “sum” can be replaced by the monoidal product). Specifically, when we have a monoid <span class="math inline">\((M, \otimes, e)\)</span>, we have some elements <span class="math inline">\(m \in M\)</span> and a way to combine them, such that, when we combine the same elements, we always get the same result, no matter in what order we do it in (brackets do not matter). We also have some neutral element that when combined with an element yields back the same element.</p>
-<p>For example, take summation on natural numbers, <span class="math inline">\((\mathbb{N}, 0, +)\)</span>:</p>
-<p><span class="math display">\[1 + 0 = 0 + 1 = 1 \qquad \text{(unitality)}\]</span>
-<span class="math display">\[1 + (2 + 3) = (1 + 2) + 3 = 1 + 2 + 3 \qquad \text{(associativity)}\]</span></p>
-<p>Likewise, products of real numbers <span class="math inline">\((\mathbb{R}, 1, \times)\)</span> are also a monoid, and so is multiplication of <span class="math inline">\(n \times n\)</span> square matrices <span class="math inline">\((\mathbf{M}_{n \in \mathbb{Z}}, \mathbf{I}, \cdot)\)</span>, where <span class="math inline">\(\mathbf{I}\)</span> is the identity matrix and <span class="math inline">\(\cdot\)</span> stands for an infix operator that is usually omitted. As a counterexample, exponentiation does not meet the definition of a monoid, since it is not associative: <span class="math inline">\(x^{(y^z)} \neq (x^y)^z\)</span>.</p>
-<p>There are more exotic forms of monoids as well. For example, the operation of appending a value to a vector and taking the Euclidean norm can also be recast as a monoid:</p>
+</div>
+<p>In simple terms, when we have a monoid <span class="math inline">\((M, \otimes, e)\)</span>, we have some elements <span class="math inline">\(m \in M\)</span> and a way to combine them, such that, when we combine the same group of elements, we always get back the same result, no matter in what order we do it in (associativity: brackets do not matter). We also have some neutral element <span class="math inline">\(e\)</span> that, when combined with any other element, does nothing and simply yields back the original element.</p>
+<div class="theorem">
+<p><span id="thm:unlabeled-div-14" class="theorem"><strong>Theorem 4.1  (Uniqueness of the neutral element) </strong></span>The neutral element in a monoid is always unique.</p>
+</div>
+<p>Proof: suppose <span class="math inline">\(e_1\)</span> and <span class="math inline">\(e_2\)</span> are elements in <span class="math inline">\(M\)</span> that have the unital property. Then <span class="math inline">\(e_1 \otimes e_2 = e_1\)</span> but also <span class="math inline">\(e_1 \otimes e_2 = e_2\)</span> (treating either as “the” neutral element). So, <span class="math inline">\(e_1 = e_2\)</span>.</p>
+<div id="simple-examples-of-monoids" class="section level4 hasAnchor" number="4.0.5.1">
+<h4><span class="header-section-number">4.0.5.1</span> Simple examples of monoids<a href="mathematical-theory.html#simple-examples-of-monoids" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>One common example of a monoid is summation on natural numbers (including zero), <span class="math inline">\((\mathbb{N}, 0, +)\)</span>:</p>
+<span class="math display">\[\begin{aligned}
+
+1 + 0 = 0 + 1 = 1 &amp; \qquad \text{(unitality)} \\
+1 + (2 + 3) = (1 + 2) + 3 = 1 + 2 + 3 &amp; \qquad \text{(associativity)}
+
+\end{aligned}\]</span>
+<p>Another example of a monoid are products of real numbers <span class="math inline">\((\mathbb{R}, 1, \times)\)</span>:</p>
+<span class="math display">\[\begin{aligned}
+
+1 \cdot 2 = 2 \cdot 1 = 2 &amp; \qquad \text{(unitality)} \\
+1 \cdot (2 \cdot 3) = (1 \cdot 2) \cdot 3 = 1 \cdot 2 \cdot 3 &amp; \qquad \text{(associativity)}
+
+\end{aligned}\]</span>
+<p>However, not every mathematical operation forms a monoid. One counterexample is exponentiation. Exponentiation does not meet the definition of a monoid, since it is not associative:</p>
+<p><span class="math display">\[x^{(y^z)} \neq (x^y)^z\]</span></p>
+<p>and there is no two-sided neutral element:</p>
+<p><span class="math display">\[x^1 = x \qquad \text{but} \qquad 1^x \neq x\]</span></p>
+<p>Likewise, the operation of taking an average of two numbers is not associative:</p>
+<p><span class="math display">\[\frac{\frac{x + y}{2} + z}{2} \neq \frac{x + \frac{y + z}{2}}{2} \\\]</span></p>
+<p>And there is no neutral element since there is no number that we could average <span class="math inline">\(x\)</span> with to get back the same value (that does not depend on <span class="math inline">\(x\)</span>):</p>
+<p><span class="math display">\[\not\exists c \; \text{s.t.} \; \frac{x + c}{2} = x\]</span></p>
+<p>Therefore, the average operator is not a monoid either.</p>
+</div>
+<div id="beyond-numbers" class="section level4 hasAnchor" number="4.0.5.2">
+<h4><span class="header-section-number">4.0.5.2</span> Beyond numbers<a href="mathematical-theory.html#beyond-numbers" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>However, the definition of a monoid is broader than just simple operations on numbers, and can extend to far more exotic structures. For example, multiplication of <span class="math inline">\(n \times n\)</span> square matrices <span class="math inline">\((\mathbf{M}_{n \in \mathbb{Z}}, \mathbf{I}, \cdot)\)</span>, is a monoid. Also, the operation of appending a value to a vector and taking the Euclidean norm can too be recast as a monoid <span class="citation">(<a href="#ref-stepanov2009">Stepanov and McJones 2009</a>)</span>:</p>
 <p><span class="math display">\[||(||(x, y)||_2, z)||_2 = \sqrt{\bigg(\sqrt{(x^2 + y^2)}\bigg)^2 + z^2} = \sqrt{(x^2 + y^2) + z^2} = ||(x, y, z)||_2\]</span></p>
-<p>We may want to impose further restrictions on monoids, for example:</p>
+<p>Even completely non-number like entities can form monoids. For example, the operation of concatenating strings is a monoid, since it is associative and comes equipped with a neutral element (the empty string):</p>
+<span class="math display">\[\begin{aligned}
+
+\text{&quot;hello&quot;} + \text{&quot;&quot;} = \text{&quot;&quot;} + \text{&quot;hello&quot;} = \text{&quot;hello&quot;} &amp; \qquad \text{(unitality)} \\
+(\text{&quot;quick&quot;} + \text{&quot;brown&quot;}) + \text{&quot;fox&quot;} = \text{&quot;quick&quot;} + (\text{&quot;brown&quot;} + \text{&quot;fox&quot;}) &amp; \qquad \text{(associativity)}
+
+\end{aligned}\]</span>
+</div>
+<div id="specializing-monoids" class="section level4 hasAnchor" number="4.0.5.3">
+<h4><span class="header-section-number">4.0.5.3</span> Specializing monoids<a href="mathematical-theory.html#specializing-monoids" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>As with <a href="#Preorders">preorders</a>, we can make more specialized version of monoids by imposing additional properties. One such property is commutativity:</p>
 <ol start="3" style="list-style-type: decimal">
-<li><span class="math inline">\(m_1 \otimes m_2 = m_2 \otimes m_1\)</span> for all <span class="math inline">\(m_1, m_2 \in M\)</span> (commutativity)</li>
+<li>Commutativity: <span class="math inline">\(m_1 \otimes m_2 = m_2 \otimes m_1\)</span> for all <span class="math inline">\(m_1, m_2 \in M\)</span></li>
 </ol>
-<p>Both commutativity and associativity can both be viewed as a kind of “order does not matter” rule, however, they are fundamentally different. Let’s imagine our set of objects consists of three wires of different colours <span class="math inline">\(\{ \textbf{red}, \textbf{green}, \textbf{blue} \}\)</span> and the monoidal product consists of connecting wires. Let’s also imagine that the <span class="math inline">\(\textbf{red}\)</span> wire is connected to a power source and the <span class="math inline">\(\textbf{blue}\)</span> wire is connected to a lightbulb, and the blue wire amplifies the current from the power source such that it is enough to power the light bulb. To turn on the lightbulb, we need to connect <span class="math inline">\(\textbf{red} \to \textbf{green}\)</span> and <span class="math inline">\(\textbf{green} \to \textbf{blue}\)</span>. The time order in which we connect the three wires does not matter: we can connect <span class="math inline">\(\textbf{green} \to \textbf{blue}\)</span> first and <span class="math inline">\(\textbf{red} \to \textbf{green}\)</span> second or vice versa, either way we get the same result (lightbulb turns on). However, the spatial order in which we connect the wires <em>does</em> matter: if we connect <span class="math inline">\(\textbf{red} \to \textbf{blue}\)</span>, then the current will not be enough to power the lightbulb. Hence, the operation is associative (temporal order does not matter) but not commutative (spatial order does matter).</p>
-<p>If <span class="math inline">\(M\)</span> is a preorder, another restriction we may want to impose is that the monoidal product is strictly increasing:</p>
+<p>Both associativity and commutativity can both be viewed as saying “order does not matter” in some sense, however, they are fundamentally different. While associativity is about the “temporal” order of operations, commutativity is about the “spatial” order of terms. Let’s illustrate this on an example.</p>
+<p>Suppose we have three wires of different colours <span class="math inline">\(\{ \text{red}, \text{green}, \text{blue} \}\)</span>. We can connect these wires, and let’s call this operation our monoidal product. Let’s also imagine that the <span class="math inline">\(\text{red}\)</span> wire is connected to a power source and the <span class="math inline">\(\text{blue}\)</span> wire is connected to a light bulb, and the <span class="math inline">\(\text{green}\)</span> wire amplifies the current from the power source such that it is enough to power the light bulb. To turn on the lightbulb, we need to connect the wires in the following order: <span class="math inline">\(\text{red} \to \text{green} \to \text{blue}\)</span>. The temporal order in which we do this does not matter: we can connect <span class="math inline">\(\text{green} \to \text{blue}\)</span> first and <span class="math inline">\(\text{red} \to \text{green}\)</span> second or vice versa, either way we get the same result (the lightbulb turns on). However, the spatial order in which we connect the wires <em>does</em> matter: if we connect <span class="math inline">\(\text{red} \to \text{blue}\)</span>, then the current will not be enough to power the light bulb. Hence, the operation is associative (temporal order does not matter) but not commutative (spatial order matters).</p>
+<p>Further interesting kinds of structure can arise when the set <span class="math inline">\(M\)</span> is itself a part of a preorder <span class="math inline">\((M, \leq)\)</span>. Then, we may want the monoidal product to be monotonic, such that it does not break the ordering imposed by <span class="math inline">\(\leq\)</span>:</p>
 <ol start="4" style="list-style-type: decimal">
-<li><span class="math inline">\(m_1 \leq m_1 \otimes m_2\)</span> and <span class="math inline">\(m_2 \leq m_1 \otimes m_2\)</span> for all <span class="math inline">\(m_1, m_2 \in M\)</span> (monotonicity)</li>
+<li>Monotonicity: <span class="math inline">\(m_1 \leq m_1 \otimes m_2\)</span> and <span class="math inline">\(m_2 \leq m_1 \otimes m_2\)</span> for all <span class="math inline">\(m_1, m_2 \in M\)</span></li>
 </ol>
-<p>This means that when we combine two things, we get back something that’s at least as big as the bigger of the two things. Summation of natural numbers <span class="math inline">\((\mathbb{N}, 0, +)\)</span> again works, but for example summation of integers <span class="math inline">\((\mathbb{Z}, 0, +)\)</span> or multiplication of reals <span class="math inline">\((\mathbb{R}, 1, \times)\)</span> does not.</p>
+<p>This means that when we combine two things, we get back something that’s at least as big as the bigger of the two things. Summation of natural numbers <span class="math inline">\((\mathbb{N}, \leq, 0, +)\)</span> again works, but for example summation of integers <span class="math inline">\((\mathbb{Z}, 0, +)\)</span> or multiplication of reals <span class="math inline">\((\mathbb{R}, \leq, 1, \times)\)</span> does not.</p>
+<p>Mathematicians tend to give these structures with different sets of properties different names. For example, the tuple <span class="math inline">\((M, \leq, e, \otimes)\)</span>, where the monoidal product <span class="math inline">\(\otimes\)</span> has the properties of unitality, associativity, commutativity, and monotonicity is called a symmetric monoidal preorder <span class="citation">(<a href="#ref-fong2019">Fong and Spivak 2019</a>)</span>. For our purposes here, I will not dive too deep into this taxonomy, however, interested reader should consult <span class="citation">Fong and Spivak (<a href="#ref-fong2019">2019</a>)</span> or <a href="https://ncatlab.org/nlab/show/HomePage">nLab</a>.</p>
+</div>
+<div id="structure-preserving-maps-monoid-homomorphisms" class="section level4 hasAnchor" number="4.0.5.4">
+<h4><span class="header-section-number">4.0.5.4</span> Structure preserving maps: Monoid homomorphisms<a href="mathematical-theory.html#structure-preserving-maps-monoid-homomorphisms" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>As with preorders, when we have functions which map from one monoid to another, we can ask whether they preserve properties we care about. Before, this was order; now, we want the operations to preserve the fundamental properties of the monoidal product, unitality and associativity:</p>
+<div class="definition">
+<p><span id="def:unlabeled-div-15" class="definition"><strong>Definition 4.14  (Monoid homomorphism) </strong></span>Let <span class="math inline">\((M, e_M, \otimes_M)\)</span> and <span class="math inline">\((N, e_N, \otimes_N)\)</span> be monoids. A function <span class="math inline">\(f: M \to N\)</span> is called a monoid homomorphism if it:</p>
+<ol style="list-style-type: decimal">
+<li>Preserves product: <span class="math inline">\(f(m_1 \otimes_M m_2) = f(m_1) \otimes_N f(m_2)\)</span></li>
+<li>Preserves unitality: <span class="math inline">\(f(e_M) = e_N\)</span></li>
+</ol>
+</div>
+<p>(technically, 2. can be deduced from 1., if we let <span class="math inline">\(m_1\)</span> or <span class="math inline">\(m_2\)</span> equal <span class="math inline">\(e_M\)</span>)</p>
+<p>To give an example of a monoid homomorphism, suppose that our first monoid is string concatenation, <span class="math inline">\((String, &quot;&quot;, ++)\)</span> and the second is natural numbers with addition, <span class="math inline">\((\mathbb{N}, 0, +)\)</span>. Then, one simple monoid homomorphism <span class="math inline">\(f\)</span> is simply counting the number of characters in a string:</p>
+<p><span class="math display">\[10 = f(\text{&quot;helloworld&quot;}) = f(\text{&quot;hello&quot;} \text{++} \text{&quot;world&quot;}) = f(\text{&quot;hello&quot;}) + f(\text{&quot;world&quot;}) = 5 + 5\]</span>
+<span class="math display">\[e_N = 0 = f(&quot;&quot;) = f(e_M)\]</span></p>
+</div>
+</div>
+<div id="groups" class="section level3 hasAnchor" number="4.0.6">
+<h3><span class="header-section-number">4.0.6</span> Groups<a href="mathematical-theory.html#groups" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Another well-known example of algebraic structures are groups. Groups are studied in group theory, and encode the idea of reversible transformations. Despite the different term, groups are really just a monoid with one additional property.</p>
+<div class="definition">
+<p><span id="def:unlabeled-div-16" class="definition"><strong>Definition 4.15  (Group) </strong></span>A group is a monoid with an inverse operator. Specifically, as with a monoid, we have the tuple <span class="math inline">\((M, e, \otimes)\)</span>, which includes the set <span class="math inline">\(M\)</span>, the neutral element <span class="math inline">\(e\)</span>, and the product <span class="math inline">\(\otimes\)</span>, and the product fullfills the following properties:</p>
+<ol style="list-style-type: decimal">
+<li>Unitality: <span class="math inline">\(m \otimes e = e \otimes m = m\)</span>, for all <span class="math inline">\(m \in M\)</span></li>
+<li>Associativity: <span class="math inline">\(m_1 \otimes (m_2 \otimes m_3) = (m_1 \otimes m_2) \otimes m_3 = m_1 \otimes m_2 \otimes m_3\)</span>, for all <span class="math inline">\(m_1, m_2, m_3 \in M\)</span></li>
+</ol>
+<p>Additionally, the monoidal product <span class="math inline">\(\otimes\)</span> has an inverse <span class="math inline">\(\otimes^{-1}\)</span>, such that the following property holds<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>:</p>
+<ol start="3" style="list-style-type: decimal">
+<li>Invertibility: <span class="math inline">\(m \otimes^{-1} m = e\)</span>, for all <span class="math inline">\(m \in M\)</span></li>
+</ol>
+</div>
+</div>
+<div id="categories" class="section level3 hasAnchor" number="4.0.7">
+<h3><span class="header-section-number">4.0.7</span> Categories<a href="mathematical-theory.html#categories" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>While discussing mathematical structures like preorders, monoids, and groups, some common have been cropping up: namely, structure and structure-preserving maps. Now it is time to shift gears and define these common themes more generally. To do this, we can make use of one powerful concept: categories <span class="citation">(<a href="#ref-fong2019">Fong and Spivak 2019</a>; <a href="#ref-lawvere2009">Lawvere and Schanuel 2009</a>)</span>.</p>
+<div class="definition">
+<p><span id="def:unlabeled-div-17" class="definition"><strong>Definition 4.16  (Category) </strong></span>To define a category <span class="math inline">\(\mathcal{C}\)</span>, we specify:</p>
+<ul>
+<li>A collection of objects <span class="math inline">\(\text{Ob}(\mathcal{C})\)</span></li>
+<li>For every two objects <span class="math inline">\(c, d \in \text{Ob}(\mathcal{C})\)</span>, we define a set of morphisms (arrows) <span class="math inline">\(\mathcal{C}(c, d)\)</span></li>
+<li>For any object <span class="math inline">\(c \in \text{Ob}(\mathcal{C})\)</span>, we define a special morphism <span class="math inline">\(\text{id}_c \in \mathcal{C}(c, c)\)</span>, called the identity morphism</li>
+<li>For every three objects <span class="math inline">\(c_1, c_2, c_3 \in \text{Ob}(\mathcal{C})\)</span> and two morphisms <span class="math inline">\(f \in \mathcal{C}(c_1, c_2)\)</span> and <span class="math inline">\(g \in \mathcal{C}(c_2, c_3)\)</span>, we define a composite morphism <span class="math inline">\(f ⨾ g \in \mathcal{C}(c_1, c_3)\)</span></li>
+</ul>
+<p>Such that the composition operation is:</p>
+<ol style="list-style-type: decimal">
+<li>Unital: <span class="math inline">\(\text{id}_{c_1} ⨾ f = f\)</span> and <span class="math inline">\(f ⨾ \text{id}_{c_2}=f\)</span></li>
+<li>Associative: <span class="math inline">\((f ⨾ g)⨾ h = f ⨾ (g ⨾ h) = f ⨾ g ⨾ h\)</span></li>
+</ol>
+<p>(for all <span class="math inline">\(f \in \mathcal{C}(c_1, c2)\)</span>, <span class="math inline">\(g \in \mathcal{C}(c_2, c3)\)</span>, and <span class="math inline">\(f \in \mathcal{C}(c_3, c4)\)</span>, and <span class="math inline">\(c_1, c_2, c_3, c_4 \in \text{Ob}(\mathcal{C})\)</span>)</p>
+</div>
+<p>The definition above may look daunting, because of the introduction of new notation and the use of abstract terms like “collection”, “objects”, and “morphisms”. However, it is really nothing new. To simplify things, we can think of the collection of objects as a set, and the morphisms/arrows as functions, and we retain most of the original meaning; the abstract definition above simply gives us more flexibility.</p>
+<p>In other words, all that the definition of a category says is that we have some objects <span class="math inline">\(c \in \text{Ob}(\mathcal{C})\)</span> which relate to each other via morphisms, and these morphisms obey some common sense properties. First, the morpshisms compose: if we can get from <span class="math inline">\(c_1\)</span> to <span class="math inline">\(c_2\)</span> and <span class="math inline">\(c_2\)</span> to <span class="math inline">\(c_3\)</span>, we can get from <span class="math inline">\(c_1\)</span> to <span class="math inline">\(c_3\)</span>. Second the composition is associative, meaning that the order in which we compose does not matter. Finally, we always have a way of “staying in the same place”, which is the identity morphism.</p>
+</div>
+<div id="functors" class="section level3 hasAnchor" number="4.0.8">
+<h3><span class="header-section-number">4.0.8</span> Functors<a href="mathematical-theory.html#functors" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 
 </div>
 </div>
@@ -453,9 +560,18 @@ Smeltzer, Karl, and Martin Erwig. 2018. <span>“A Domain-Specific Language for 
 <div id="ref-smeltzer2014" class="csl-entry">
 Smeltzer, Karl, Martin Erwig, and Ronald Metoyer. 2014. <span>“A Transformational Approach to Data Visualization.”</span> In <em>Proceedings of the 2014 International Conference on Generative Programming: Concepts and Experiences</em>, 53–62.
 </div>
+<div id="ref-stepanov2009" class="csl-entry">
+Stepanov, Alexander A, and Paul McJones. 2009. <em>Elements of Programming</em>. Addison-Wesley Professional.
+</div>
 <div id="ref-yorgey2012" class="csl-entry">
 Yorgey, Brent A. 2012. <span>“Monoids: Theme and Variations (Functional Pearl).”</span> <em>ACM SIGPLAN Notices</em> 47 (12): 105–16.
 </div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="1">
+<li id="fn1"><p>Note, that in group theory, it is common to omit explicit references to the operator and write the group products without it, such that, e.g. <span class="math inline">\(m \otimes n\)</span> is written as <span class="math inline">\(mn\)</span>. In that case, instead of the inverse <em>operator</em>, we speak of inverse <em>elements</em>, such that, for each <span class="math inline">\(m \in M\)</span> there is an <span class="math inline">\(m^{-1}\)</span> such that <span class="math inline">\(m^{-1}m = mm^{-1} = e\)</span>. However, this really is a distinction without difference since we can easily define the inverse element using the inverse operator and the neutral element: <span class="math inline">\(m^{-1} = (e \otimes^{-1}m)\)</span>. Thus, for the sake of keeping with the notation in the previous sections, I will use the inverse operator explicitly.<a href="mathematical-theory.html#fnref1" class="footnote-back">↩︎</a></p></li>
+</ol>
 </div>
             </section>
 

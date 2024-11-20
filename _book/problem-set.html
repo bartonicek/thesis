@@ -205,6 +205,9 @@ div.csl-indent {
 <li class="chapter" data-level="4.0.3" data-path="mathematical-theory.html"><a href="mathematical-theory.html#partitions"><i class="fa fa-check"></i><b>4.0.3</b> Partitions</a></li>
 <li class="chapter" data-level="4.0.4" data-path="mathematical-theory.html"><a href="mathematical-theory.html#preorders"><i class="fa fa-check"></i><b>4.0.4</b> Preorders</a></li>
 <li class="chapter" data-level="4.0.5" data-path="mathematical-theory.html"><a href="mathematical-theory.html#monoids"><i class="fa fa-check"></i><b>4.0.5</b> Monoids</a></li>
+<li class="chapter" data-level="4.0.6" data-path="mathematical-theory.html"><a href="mathematical-theory.html#groups"><i class="fa fa-check"></i><b>4.0.6</b> Groups</a></li>
+<li class="chapter" data-level="4.0.7" data-path="mathematical-theory.html"><a href="mathematical-theory.html#categories"><i class="fa fa-check"></i><b>4.0.7</b> Categories</a></li>
+<li class="chapter" data-level="4.0.8" data-path="mathematical-theory.html"><a href="mathematical-theory.html#functors"><i class="fa fa-check"></i><b>4.0.8</b> Functors</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="high-level-principles.html"><a href="high-level-principles.html"><i class="fa fa-check"></i><b>5</b> High-level principles</a>
 <ul>
@@ -308,14 +311,14 @@ Figure 3.2: Disjoint subsets provide a one-to-one correspondence (bijection) bet
 Figure 3.3: Geometric objects typically represent disjoint subsets of the data. The plot shows the vote share of the top three parties in the 2023 New Zealand general election, with each bar representing a unique subset of voters.
 </p>
 </div>
-<p>Each bar represents a unique set of voters and thus the subsets of the data represented by the bars are disjoint. Technically, there is no hard and fast rule about having each geometric object represent a disjoint part of the data. For example, we could transform the first bar by taking a union of the votes of National and Labour parties, and represent the same underlying data the following way:</p>
+<p>Each bar represents a unique set of voters and thus the subsets of the data represented by the bars are disjoint. Technically, there is no hard and fast rule about this. For example, we could transform the first bar by taking a union of the votes of National and Labour parties, and represent the same underlying data the following way:</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:union-geoms"></span>
 <img src="_main_files/figure-html/union-geoms-1.png" alt="Hypothetically, there is nothing preventing us from encoding the same information in multiple objects, and showing non-disjoint parts of our data. The plot shows the same underlying data as \@ref(fig:disjoint-geoms), with the leftmost bar representing a union of National and Labour voters. The two leftmost bars thus do not represent disjoint subsets of the data. For a more realistic example, see Figure \@ref(fig:union-geoms2)." width="2100" />
 <p class="caption">
 Figure 3.4: Hypothetically, there is nothing preventing us from encoding the same information in multiple objects, and showing non-disjoint parts of our data. The plot shows the same underlying data as <a href="problem-set.html#fig:disjoint-geoms">3.3</a>, with the leftmost bar representing a union of National and Labour voters. The two leftmost bars thus do not represent disjoint subsets of the data. For a more realistic example, see Figure <a href="problem-set.html#fig:union-geoms2">3.6</a>.
 </p>
 </div>
-<p>This way of representing the data has several problems, however. First, there is the issue of its suitability towards the main goal of the visualization. Specifically, when visualizing election data such as this one, we are typically interested in judging the relative number of votes each party received. The second barplot makes this comparison difficult. Specifically, in the second barplot, since the National bar represents a subset of the National OR Labour bar, we have to perform additional mental calculation if we want to find out how many votes Labour received and compare the absolute counts directly <span class="citation">(<a href="#ref-cleveland1985">Cleveland 1985</a>)</span>. Second, we have metadata knowledge <span class="citation">(see e.g. <a href="#ref-wilkinson2012">Wilkinson 2012</a>; <a href="#ref-velleman1993">Velleman and Wilkinson 1993</a>)</span> about the data being disjoint - we know that, in the New Zealand parliament electoral system, each voter can only cast one vote for a single party. Finally, there is the issue of duplicating information: in the second barplot, the number of votes the National party received is counted twice, once in the leftmost bar and again in the second-left bar. This goes against the general principle of representing our data in the most parsimonious way <span class="citation">(<a href="#ref-tufte2001">Tufte 2001</a>)</span>.</p>
+<p>However, this way of representing the data has several problems. First, there is the issue of its suitability towards the main goal of the visualization. Specifically, when visualizing election data such as this one, we are typically interested in judging the relative number of votes each party received. The second barplot makes this comparison difficult. Specifically, in the second barplot, since the National bar represents a subset of the National OR Labour bar, we have to perform additional mental calculation if we want to find out how many votes Labour received and compare the absolute counts directly <span class="citation">(<a href="#ref-cleveland1985">Cleveland 1985</a>)</span>. Second, we have metadata knowledge <span class="citation">(see e.g. <a href="#ref-wilkinson2012">Wilkinson 2012</a>; <a href="#ref-velleman1993">Velleman and Wilkinson 1993</a>)</span> about the data being disjoint - we know that, in the New Zealand parliament electoral system, each voter can only cast one vote for a single party. Finally, there is the issue of duplicating information: in the second barplot, the number of votes the National party received is counted twice, once in the leftmost bar and again in the second-left bar. This goes against the general principle of representing our data in the most parsimonious way <span class="citation">(<a href="#ref-tufte2001">Tufte 2001</a>)</span>.</p>
 <p>Even when our goal is not to compare absolute counts, there are usually better disjoint data visualization techniques available. For example, if we were interested in visualizing the proportion of votes that each party received, we could draw the following plot:</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:stacked-proportion"></span>
 <img src="_main_files/figure-html/stacked-proportion-1.png" alt="Even when proportions are of interest, there are usually disjoint data visualization techniques available. The plot shows proportion of vote share of the top three parties in the 2023 New Zealand general election, with each bar segment again representing a unique subset of voters." width="2100" />
@@ -346,18 +349,17 @@ Figure 3.7: Non-disjoint data representations can often be recast into disjoint 
 </div>
 <div id="plots-as-partitions" class="section level4 hasAnchor" number="3.2.1.3">
 <h4><span class="header-section-number">3.2.1.3</span> Plots as partitions<a href="problem-set.html#plots-as-partitions" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>In the two preceding sections, I have argued that our interactive data visualization system should fulfill two fundamental properties:</p>
+<p>In the two preceding sections, I have argued that our interactive data visualization system should have fulfill have two fundamental properties:</p>
 <ul>
 <li>Plots should show the full data (surjective mapping)</li>
-<li>Geometric objects should represent distinct subsets of the data (disjoint parts)</li>
+<li>Geometric objects within these plots should represent distinct subsets (disjoint parts)</li>
 </ul>
-<p>These two properties suggest a fundamental model for plots - that of a <a href="#Partitions">partition</a>.</p>
+<p>These two properties suggest a fundamental model for plots: that of a <a href="#Partitions">partitions</a>.</p>
 <p>While I have not been able to find explicit references linking geometric objects to partitions, some authors have used the language of partitions. For example, Wilkinson <span class="citation">(<a href="#ref-wilkinson2012">2012</a>, pp 210)</span> and <span class="citation">Keim (<a href="#ref-keim2002">2002</a>)</span> have linked stacked plots to (hierarchical) partitions.</p>
 </div>
 <div id="partitions-and-products" class="section level4 hasAnchor" number="3.2.1.4">
 <h4><span class="header-section-number">3.2.1.4</span> Partitions and products<a href="problem-set.html#partitions-and-products" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>In a typical interactive plot, the data will be partitioned across multiple dimensions. Moreover, often, this multi-way partitioning will not form a single flat partition, but instead a hierarchy of partitions.</p>
-<p>To give a concrete example, suppose we want to draw the following barplot:</p>
+<p>In a typical interactive plot, the data will be partitioned across multiple dimensions. To give a concrete example, suppose we want to draw the following barplot:</p>
 <p><img src="_main_files/figure-html/unnamed-chunk-7-1.png" width="2100" style="display: block; margin: auto;" /></p>
 <p>We start with the following data, which includes a categorical variable (<code>group</code>) that we will plot along the x-axis, a variable representing selection status (<code>selection</code>) that we will color the bar segments with, and a continuous variable that we want to summarize (<code>value</code>):</p>
 <table class="table" style="color: black; width: auto !important; margin-left: auto; margin-right: auto;">
@@ -396,24 +398,10 @@ A
 2
 </td>
 <td style="text-align:left;">
-B
+A
 </td>
 <td style="text-align:left;">
 1
-</td>
-<td style="text-align:right;">
-15
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-3
-</td>
-<td style="text-align:left;">
-B
-</td>
-<td style="text-align:left;">
-2
 </td>
 <td style="text-align:right;">
 21
@@ -421,7 +409,7 @@ B
 </tr>
 <tr>
 <td style="text-align:left;">
-4
+3
 </td>
 <td style="text-align:left;">
 A
@@ -435,16 +423,30 @@ A
 </tr>
 <tr>
 <td style="text-align:left;">
+4
+</td>
+<td style="text-align:left;">
+B
+</td>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:right;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
 5
 </td>
 <td style="text-align:left;">
-C
+B
 </td>
 <td style="text-align:left;">
 2
 </td>
 <td style="text-align:right;">
-17
+15
 </td>
 </tr>
 <tr>
@@ -452,13 +454,13 @@ C
 6
 </td>
 <td style="text-align:left;">
-A
+C
 </td>
 <td style="text-align:left;">
 1
 </td>
 <td style="text-align:right;">
-21
+15
 </td>
 </tr>
 <tr>
@@ -469,10 +471,10 @@ A
 C
 </td>
 <td style="text-align:left;">
-1
+2
 </td>
 <td style="text-align:right;">
-13
+12
 </td>
 </tr>
 <tr>
@@ -486,13 +488,13 @@ C
 2
 </td>
 <td style="text-align:right;">
-11
+13
 </td>
 </tr>
 </tbody>
 </table>
 <p>To draw the individual bar segments, we need to sum the <code>value</code> variable across the cases corresponding to each segment. To do this, we first need to split our data into multiple small disjoint subsets according to the product of <code>group</code> and <code>selection</code> variables:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="problem-set.html#cb2-1" tabindex="-1"></a><span class="co"># Using paste() here to simulate a product of two factors</span></span>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="problem-set.html#cb2-1" tabindex="-1"></a><span class="co"># Using paste0() here to simulate a product of two factors</span></span>
 <span id="cb2-2"><a href="problem-set.html#cb2-2" tabindex="-1"></a>product_factor <span class="ot">&lt;-</span> <span class="fu">paste0</span>(df<span class="sc">$</span>group, df<span class="sc">$</span>selection)</span>
 <span id="cb2-3"><a href="problem-set.html#cb2-3" tabindex="-1"></a>split_dfs <span class="ot">&lt;-</span> <span class="fu">split</span>(df, product_factor)</span>
 <span id="cb2-4"><a href="problem-set.html#cb2-4" tabindex="-1"></a><span class="fu">render_tables</span>(split_dfs)</span></code></pre></div>
@@ -503,8 +505,6 @@ C
 <table class="table" style="color: black; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
-<th style="text-align:left;">
-</th>
 <th style="text-align:left;">
 group
 </th>
@@ -518,9 +518,6 @@ value
 </thead>
 <tbody>
 <tr>
-<td style="text-align:left;">
-1
-</td>
 <td style="text-align:left;">
 A
 </td>
@@ -533,9 +530,6 @@ A
 </tr>
 <tr>
 <td style="text-align:left;">
-6
-</td>
-<td style="text-align:left;">
 A
 </td>
 <td style="text-align:left;">
@@ -568,7 +562,7 @@ value
 <tbody>
 <tr>
 <td style="text-align:left;">
-4
+3
 </td>
 <td style="text-align:left;">
 A
@@ -609,7 +603,7 @@ value
 <tbody>
 <tr>
 <td style="text-align:left;">
-2
+4
 </td>
 <td style="text-align:left;">
 B
@@ -618,7 +612,7 @@ B
 1
 </td>
 <td style="text-align:right;">
-15
+9
 </td>
 </tr>
 </tbody>
@@ -644,7 +638,7 @@ value
 <tbody>
 <tr>
 <td style="text-align:left;">
-3
+5
 </td>
 <td style="text-align:left;">
 B
@@ -653,7 +647,7 @@ B
 2
 </td>
 <td style="text-align:right;">
-21
+15
 </td>
 </tr>
 </tbody>
@@ -685,7 +679,7 @@ value
 <tbody>
 <tr>
 <td style="text-align:left;">
-7
+6
 </td>
 <td style="text-align:left;">
 C
@@ -694,7 +688,7 @@ C
 1
 </td>
 <td style="text-align:right;">
-13
+15
 </td>
 </tr>
 </tbody>
@@ -720,7 +714,7 @@ value
 <tbody>
 <tr>
 <td style="text-align:left;">
-5
+7
 </td>
 <td style="text-align:left;">
 C
@@ -729,7 +723,7 @@ C
 2
 </td>
 <td style="text-align:right;">
-17
+12
 </td>
 </tr>
 <tr>
@@ -743,7 +737,7 @@ C
 2
 </td>
 <td style="text-align:right;">
-11
+13
 </td>
 </tr>
 </tbody>
@@ -851,7 +845,7 @@ B
 1
 </td>
 <td style="text-align:right;">
-15
+9
 </td>
 </tr>
 </tbody>
@@ -881,7 +875,7 @@ B
 2
 </td>
 <td style="text-align:right;">
-21
+15
 </td>
 </tr>
 </tbody>
@@ -917,7 +911,7 @@ C
 1
 </td>
 <td style="text-align:right;">
-13
+15
 </td>
 </tr>
 </tbody>
@@ -947,7 +941,7 @@ C
 2
 </td>
 <td style="text-align:right;">
-28
+25
 </td>
 </tr>
 </tbody>
@@ -1034,7 +1028,7 @@ B
 1
 </td>
 <td style="text-align:right;">
-15
+9
 </td>
 </tr>
 <tr>
@@ -1045,7 +1039,7 @@ B
 2
 </td>
 <td style="text-align:right;">
-36
+24
 </td>
 </tr>
 </tbody>
@@ -1077,7 +1071,7 @@ C
 1
 </td>
 <td style="text-align:right;">
-13
+15
 </td>
 </tr>
 <tr>
@@ -1088,26 +1082,46 @@ C
 2
 </td>
 <td style="text-align:right;">
-41
+40
 </td>
 </tr>
 </tbody>
 </table>
 <p>Now, we can combine the tables into one data set and render:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="problem-set.html#cb5-1" tabindex="-1"></a>combined_df <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, stacked_dfs)</span>
-<span id="cb5-2"><a href="problem-set.html#cb5-2" tabindex="-1"></a>combined_df<span class="sc">$</span>selection <span class="ot">&lt;-</span> <span class="fu">factor</span>(combined_df<span class="sc">$</span>selection, <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
-<span id="cb5-3"><a href="problem-set.html#cb5-3" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="problem-set.html#cb5-4" tabindex="-1"></a><span class="fu">ggplot</span>(combined_df[<span class="dv">6</span><span class="sc">:</span><span class="dv">1</span>, ], <span class="fu">aes</span>(<span class="at">x =</span> group, <span class="at">y =</span> value, <span class="at">fill =</span> selection)) <span class="sc">+</span></span>
-<span id="cb5-5"><a href="problem-set.html#cb5-5" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">position =</span> <span class="fu">position_identity</span>())</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-12-1.png" width="2100" style="display: block; margin: auto;" /></p>
-<p>Now, we have shown how we can compute summary statistics for a stacked barplot using a split-apply-combine pipeline <span class="citation">(<a href="#ref-wickham2011">Wickham 2011</a>)</span>. For certain types of plots, a simple strategy like this might work fine. However, the reason why the example above is simple is because we have ignored or side-stepped certain issues. For example, how do we know if we are stacking the summaries in the right order? What if we need to transform the bar segments in some way, such as divide by the height of the parent bar? Once we start dealing with plots like spineplots or spinograms, it becomes clear that a simple “flat” partition structure is not enough.</p>
+<span id="cb5-2"><a href="problem-set.html#cb5-2" tabindex="-1"></a>combined_df<span class="sc">$</span>selection <span class="ot">&lt;-</span> <span class="fu">factor</span>(combined_df<span class="sc">$</span>selection, <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">1</span>))</span>
+<span id="cb5-3"><a href="problem-set.html#cb5-3" tabindex="-1"></a><span class="co"># Need to reverse data order for ggplot2 to layer segments appropriately</span></span>
+<span id="cb5-4"><a href="problem-set.html#cb5-4" tabindex="-1"></a>combined_df <span class="ot">&lt;-</span> combined_df[<span class="dv">6</span><span class="sc">:</span><span class="dv">1</span>, ] </span>
+<span id="cb5-5"><a href="problem-set.html#cb5-5" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="problem-set.html#cb5-6" tabindex="-1"></a><span class="fu">ggplot</span>(combined_df, <span class="fu">aes</span>(<span class="at">x =</span> group, <span class="at">y =</span> value, <span class="at">fill =</span> selection)) <span class="sc">+</span></span>
+<span id="cb5-7"><a href="problem-set.html#cb5-7" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">position =</span> <span class="fu">position_identity</span>(), <span class="at">col =</span> <span class="st">&quot;white&quot;</span>) <span class="sc">+</span></span>
+<span id="cb5-8"><a href="problem-set.html#cb5-8" tabindex="-1"></a>  custom_theme</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-13-1.png" width="2100" style="display: block; margin: auto;" /></p>
+<p>Now, we have shown how we can compute summary statistics for a stacked barplot using a simple split-apply-combine pipeline <span class="citation">(<a href="#ref-wickham2011">Wickham 2011</a>)</span>. This is in fact what happens implicitly in most <code>ggplot2</code> plots:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="problem-set.html#cb6-1" tabindex="-1"></a><span class="fu">ggplot</span>(data, <span class="fu">aes</span>(x, y, <span class="at">fill =</span> fill)) <span class="sc">+</span></span>
+<span id="cb6-2"><a href="problem-set.html#cb6-2" tabindex="-1"></a>  <span class="fu">geom_bar</span>()</span></code></pre></div>
+<p>In the call above, we partition the data set by the Cartesian product of the <code>x</code>, <code>y</code>, and <code>fill</code> variables. That is, we break the data into parts based on the unique combinations of these variables, and then compute whatever statistical transformation we need. See the following comment from the <a href="https://github.com/tidyverse/ggplot2/blob/f46805349d6ca8ca7a99f8966cfa0f29279c2f6c/R/grouping.R#L7"><code>ggplot2</code> documentation</a> <span class="citation">(<a href="#ref-wickham2016">Wickham 2016</a>)</span>:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="problem-set.html#cb7-1" tabindex="-1"></a><span class="co"># If the `group` variable is not present, then a new group</span></span>
+<span id="cb7-2"><a href="problem-set.html#cb7-2" tabindex="-1"></a><span class="co"># variable is generated from the interaction of all discrete (factor or</span></span>
+<span id="cb7-3"><a href="problem-set.html#cb7-3" tabindex="-1"></a><span class="co"># character) vectors, excluding `label`.</span></span></code></pre></div>
 </div>
-<div id="partitions-and-hierarchy" class="section level4 hasAnchor" number="3.2.1.5">
-<h4><span class="header-section-number">3.2.1.5</span> Partitions and hierarchy<a href="problem-set.html#partitions-and-hierarchy" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div id="limits-of-simple-product-partitions" class="section level4 hasAnchor" number="3.2.1.5">
+<h4><span class="header-section-number">3.2.1.5</span> Limits of simple product partitions<a href="problem-set.html#limits-of-simple-product-partitions" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>For many types of plots, the strategy of taking products to form a single “flat” partition of the data works reasonably well. However, for other types of plots, this simple model breaks. For example, returning back to the example of the barplot from the section above, we may want to represent the same underlying data in a different way:</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:barplot-spineplot"></span>
+<img src="_main_files/figure-html/barplot-spineplot-1.png" alt="The same underlying data that can be represented by a barplot (left) can be represented by a spineplot (right)." width="2100" />
+<p class="caption">
+Figure 3.8: The same underlying data that can be represented by a barplot (left) can be represented by a spineplot (right).
+</p>
+</div>
+<p>The reason for this is because we have ignored or side-stepped certain issues. For example, how do we know if we are stacking the summaries in the right order? What if we need to transform the bar segments in some way, such as divide by the height of the parent bar, to show proportions rather than absolute counts? Once we start dealing with plots like spineplots or spinograms, it becomes clear that the flat partition structure is not enough.</p>
+</div>
+<div id="partitions-and-hierarchy" class="section level4 hasAnchor" number="3.2.1.6">
+<h4><span class="header-section-number">3.2.1.6</span> Partitions and hierarchy<a href="problem-set.html#partitions-and-hierarchy" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p><span class="citation">Keim (<a href="#ref-keim2002">2002</a>)</span> stacked plots are suited for hierarchically-partitioned data.</p>
 </div>
-<div id="partition-data-structures" class="section level4 hasAnchor" number="3.2.1.6">
-<h4><span class="header-section-number">3.2.1.6</span> Partition data structures<a href="problem-set.html#partition-data-structures" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div id="partition-data-structures" class="section level4 hasAnchor" number="3.2.1.7">
+<h4><span class="header-section-number">3.2.1.7</span> Partition data structures<a href="problem-set.html#partition-data-structures" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 </div>
 </div>
 <div id="computing-summaries" class="section level3 hasAnchor" number="3.2.2">
@@ -1122,6 +1136,8 @@ C
 <div id="scaling" class="section level2 hasAnchor" number="3.3">
 <h2><span class="header-section-number">3.3</span> Scaling<a href="problem-set.html#scaling" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Information needs to be encoded in visual attributes <span class="citation">(<a href="#ref-cleveland1985">Cleveland 1985</a>)</span></p>
+<p>Transformation is a critical tool for visualization or for any other mode of data analysis
+because it can substantially simplify the structure of a set of data <span class="citation">(<a href="#ref-cleveland1993">Cleveland 1993, 48</a>)</span></p>
 
 </div>
 </div>
@@ -1150,6 +1166,9 @@ Buja, Andreas, Dianne Cook, and Deborah F Swayne. 1996. <span>“Interactive Hig
 </div>
 <div id="ref-cleveland1985" class="csl-entry">
 Cleveland, William S. 1985. <em>The Elements of Graphing Data</em>. Wadsworth Publ. Co.
+</div>
+<div id="ref-cleveland1993" class="csl-entry">
+———. 1993. <em>Visualizing Data</em>. Hobart press.
 </div>
 <div id="ref-referendum2020" class="csl-entry">
 Electoral Commission New Zealand. 2020. <span>“Official Referendum Results Released.”</span> <a href="https://elections.nz/media-and-news/2020/official-referendum-results-released">https://elections.nz/media-and-news/2020/official-referendum-results-released</a>.

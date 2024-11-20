@@ -69,5 +69,7 @@ clean_theme <- theme_bw() +
   axis.ticks = element_blank(),
   panel.grid = element_blank()
 )
+
+theme_set(clean_theme)
 ```
 

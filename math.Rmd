@@ -393,14 +393,18 @@ One simple example of a preorder is the family tree, see Figure \@ref(fig:family
 
 Another common example of a preorder is the set of natural numbers $\mathbb{N}$, ordered by the usual order relation, or by the division relation: $x \leq y$ iff $x \mid y$ ($x$ divides $y$ without remainder).
 
-We can further restrict preorders by imposing additional properties, such as:
+#### Specializing preorders
+
+We can specialize preorders by imposing additional properties, such as:
 
 3. If $x \leq y$ and $y \leq x$, then $x = y$ (anti-symmetry)
 4. Either $x \leq y$ or $y \leq x$ (comparability)
 
-If a preorder conforms to property 3, we speak of a partially ordered set or *poset*. If it conforms to both 3 and 4, then it is a *total order*. 
+If a preorder conforms to property 3, we speak of a partially ordered set or *poset*. If it conforms to both 3 and 4, then it is called a *total order*. 
 
-Preorders are interesting because they give us a first taste of something we will be discussing a lot throughout this thesis: structure-preserving maps. Specifically, if we have two preorders $(X, \leq_X)$ and $(Y, \leq_Y)$, and a set of functions $F$ which map values between $X$ and $Y$, we can classify the functions in $F$ by whether they preserve the order in $X$ or not. That is, we call a function $f \in F$ order-preserving or a "monotone map", if:
+#### Preserving structure: Monotone maps
+
+Preorders are interesting because they give us a first taste of something will be discussed a lot throughout this thesis: structure-preserving maps. Specifically, if we have two preorders $(X, \leq_X)$ and $(Y, \leq_Y)$, and a set of functions $F$ which map values between $X$ and $Y$, we can classify the functions in $F$ by whether they preserve the order in $X$ or not. That is, we call a function $f \in F$ order-preserving or a "monotone map", if:
 
 ::: {.definition name="Monotone map"}
 A monotone map $f: X \to Y$ is a function between two preorders $(X, \leq_X)$ and $(Y, \leq_Y)$, such that, for all $x_1, x_2 \in X$:
@@ -418,40 +422,162 @@ Monotone maps compose: if $f: X \to Y$ is a monotone map, and $g: Y \to Z$ is a 
 
 ### Monoids
 
-In the previous subsection, we discussed preorders as an example of taking a set $X$ and imposing some type of structure on it: namely, order. However, there are other types of structure than order. One such type of structure, which encodes the idea of combining or merging elements together, is a monoid.  
+In the previous subsection, we discussed one example of taking a set and imposing some kind of structure on it: namely, we took a set and imposed an order relation on it and called the result a preorder. However, we can impose many other kinds of structure on collections of objects (sets). One such type of a structure is a monoid.  
 
+A monoid is an algebraic structure that represents a "whole equal to the sum of its parts", if we relax our idea about what it means to "sum". More formally:
+
+::: {.definition name="Monoid"}
 A monoid is a tuple $(M, e, \otimes)$ consisting of:
 
-a. A set of objects $M$
-b. A neutral element $e$ called the *monoidal unit*
-c. A binary function $\otimes: M \times M \to M$ called the *monoidal product*
+- A set of objects $M$
+- A neutral element $e$ called the *monoidal unit*
+- A binary operation (function) $\otimes: M \times M \to M$ called the *monoidal product*
 
-Such that:
+Such that the binary operation $\otimes$ has the following properties:
 
-1. $m \otimes e = e \otimes m = m$ for all $m \in M$ (unitality)
-2. $m_1 \otimes (m_2 \otimes m_3) = (m_1 \otimes m_2) \otimes m_3 = m_1 \otimes m_2 \otimes m_3$ for all $m_1, m_2, m_3 \in M$ (associativity)
+1. Unitality: $m \otimes e = e \otimes m = m$ for all $m \in M$
+2. Associativity: $m_1 \otimes (m_2 \otimes m_3) = (m_1 \otimes m_2) \otimes m_3 = m_1 \otimes m_2 \otimes m_3$ for all $m_1, m_2, m_3 \in M$
+:::
 
-In simple terms, monoids encapsulate the idea that *the whole is exactly the "sum" of its parts* (where "sum" can be replaced by the monoidal product). Specifically, when we have a monoid $(M, \otimes, e)$, we have some elements $m \in M$ and a way to combine them, such that, when we combine the same elements, we always get the same result, no matter in what order we do it in (brackets do not matter). We also have some neutral element that when combined with an element yields back the same element.  
+In simple terms, when we have a monoid $(M, \otimes, e)$, we have some elements $m \in M$ and a way to combine them, such that, when we combine the same group of elements, we always get back the same result, no matter in what order we do it in (associativity: brackets do not matter). We also have some neutral element $e$ that, when combined with any other element, does nothing and simply yields back the original element. 
 
-For example, take summation on natural numbers, $(\mathbb{N}, 0, +)$:
+::: {.theorem name="Uniqueness of the neutral element"}
+The neutral element in a monoid is always unique. 
+:::
 
-$$1 + 0 = 0 + 1 = 1 \qquad \text{(unitality)}$$
-$$1 + (2 + 3) = (1 + 2) + 3 = 1 + 2 + 3 \qquad \text{(associativity)}$$
+Proof: suppose $e_1$ and $e_2$ are elements in $M$ that have the unital property. Then $e_1 \otimes e_2 = e_1$ but also $e_1 \otimes e_2 = e_2$ (treating either as "the" neutral element). So, $e_1 = e_2$.
 
-Likewise, products of real numbers $(\mathbb{R}, 1, \times)$ are also a monoid, and so is multiplication of $n \times n$ square matrices $(\mathbf{M}_{n \in \mathbb{Z}}, \mathbf{I}, \cdot)$, where $\mathbf{I}$ is the identity matrix and $\cdot$ stands for an infix operator that is usually omitted. As a counterexample, exponentiation does not meet the definition of a monoid, since it is not associative: $x^{(y^z)} \neq (x^y)^z$. 
+#### Simple examples of monoids
 
-There are more exotic forms of monoids as well. For example, the operation of appending a value to a vector and taking the Euclidean norm can also be recast as a monoid:
+One common example of a monoid is summation on natural numbers (including zero), $(\mathbb{N}, 0, +)$:
+
+\begin{aligned}
+
+1 + 0 = 0 + 1 = 1 & \qquad \text{(unitality)} \\
+1 + (2 + 3) = (1 + 2) + 3 = 1 + 2 + 3 & \qquad \text{(associativity)}
+
+\end{aligned}
+
+Another example of a monoid are products of real numbers $(\mathbb{R}, 1, \times)$:
+
+\begin{aligned} 
+
+1 \cdot 2 = 2 \cdot 1 = 2 & \qquad \text{(unitality)} \\
+1 \cdot (2 \cdot 3) = (1 \cdot 2) \cdot 3 = 1 \cdot 2 \cdot 3 & \qquad \text{(associativity)}
+
+\end{aligned}
+
+However, not every mathematical operation forms a monoid. One counterexample is exponentiation. Exponentiation does not meet the definition of a monoid, since it is not associative:
+
+$$x^{(y^z)} \neq (x^y)^z$$
+
+and there is no two-sided neutral element:
+
+$$x^1 = x \qquad \text{but} \qquad 1^x \neq x$$
+
+Likewise, the operation of taking an average of two numbers is not associative:
+
+$$\frac{\frac{x + y}{2} + z}{2} \neq \frac{x + \frac{y + z}{2}}{2} \\$$
+
+And there is no neutral element since there is no number that we could average $x$ with to get back the same value (that does not depend on $x$):
+
+$$\not\exists c \; \text{s.t.} \; \frac{x + c}{2} = x$$
+
+Therefore, the average operator is not a monoid either.
+
+#### Beyond numbers
+
+However, the definition of a monoid is broader than just simple operations on numbers, and can extend to far more exotic structures. For example, multiplication of $n \times n$ square matrices $(\mathbf{M}_{n \in \mathbb{Z}}, \mathbf{I}, \cdot)$, is a monoid. Also, the operation of appending a value to a vector and taking the Euclidean norm can too be recast as a monoid [@stepanov2009]:
 
 $$||(||(x, y)||_2, z)||_2 = \sqrt{\bigg(\sqrt{(x^2 + y^2)}\bigg)^2 + z^2} = \sqrt{(x^2 + y^2) + z^2} = ||(x, y, z)||_2$$
 
-We may want to impose further restrictions on monoids, for example:
+Even completely non-number like entities can form monoids. For example, the operation of concatenating strings is a monoid, since it is associative and comes equipped with a neutral element (the empty string):
 
-3. $m_1 \otimes m_2 = m_2 \otimes m_1$ for all $m_1, m_2 \in M$ (commutativity)
+\begin{aligned}
 
-Both commutativity and associativity can both be viewed as a kind of "order does not matter" rule, however, they are fundamentally different. Let's imagine our set of objects consists of three wires of different colours $\{ \textbf{red}, \textbf{green}, \textbf{blue} \}$ and the monoidal product consists of connecting wires. Let's also imagine that the $\textbf{red}$ wire is connected to a power source and the $\textbf{blue}$ wire is connected to a lightbulb, and the blue wire amplifies the current from the power source such that it is enough to power the light bulb. To turn on the lightbulb, we need to connect $\textbf{red} \to \textbf{green}$ and $\textbf{green} \to \textbf{blue}$. The time order in which we connect the three wires does not matter: we can connect $\textbf{green} \to \textbf{blue}$ first and $\textbf{red} \to \textbf{green}$ second or vice versa, either way we get the same result (lightbulb turns on). However, the spatial order in which we connect the wires *does* matter: if we connect $\textbf{red} \to \textbf{blue}$, then the current will not be enough to power the lightbulb. Hence, the operation is associative (temporal order does not matter) but not commutative (spatial order does matter).      
+\text{"hello"} + \text{""} = \text{""} + \text{"hello"} = \text{"hello"} & \qquad \text{(unitality)} \\ 
+(\text{"quick"} + \text{"brown"}) + \text{"fox"} = \text{"quick"} + (\text{"brown"} + \text{"fox"}) & \qquad \text{(associativity)}
 
-If $M$ is a preorder, another restriction we may want to impose is that the monoidal product is strictly increasing:
+\end{aligned}
 
-4. $m_1 \leq m_1 \otimes m_2$ and $m_2 \leq m_1 \otimes m_2$ for all $m_1, m_2 \in M$ (monotonicity)
+#### Specializing monoids
 
-This means that when we combine two things, we get back something that's at least as big as the bigger of the two things. Summation of natural numbers $(\mathbb{N}, 0, +)$ again works, but for example summation of integers $(\mathbb{Z}, 0, +)$ or multiplication of reals $(\mathbb{R}, 1, \times)$ does not. 
+As with [preorders](#Preorders), we can make more specialized version of monoids by imposing additional properties. One such property is commutativity:
+
+3. Commutativity: $m_1 \otimes m_2 = m_2 \otimes m_1$ for all $m_1, m_2 \in M$
+
+Both associativity and commutativity can both be viewed as saying "order does not matter" in some sense, however, they are fundamentally different. While associativity is about the "temporal" order of operations, commutativity is about the "spatial" order of terms. Let's illustrate this on an example. 
+
+Suppose we have three wires of different colours $\{ \text{red}, \text{green}, \text{blue} \}$. We can connect these wires, and let's call this operation our monoidal product. Let's also imagine that the $\text{red}$ wire is connected to a power source and the $\text{blue}$ wire is connected to a light bulb, and the $\text{green}$ wire amplifies the current from the power source such that it is enough to power the light bulb. To turn on the lightbulb, we need to connect the wires in the following order: $\text{red} \to \text{green} \to \text{blue}$. The temporal order in which we do this does not matter: we can connect $\text{green} \to \text{blue}$ first and $\text{red} \to \text{green}$ second or vice versa, either way we get the same result (the lightbulb turns on). However, the spatial order in which we connect the wires *does* matter: if we connect $\text{red} \to \text{blue}$, then the current will not be enough to power the light bulb. Hence, the operation is associative (temporal order does not matter) but not commutative (spatial order matters).  
+
+Further interesting kinds of structure can arise when the set $M$ is itself a part of a preorder $(M, \leq)$. Then, we may want the monoidal product to be monotonic, such that it does not break the ordering imposed by $\leq$:  
+
+4. Monotonicity: $m_1 \leq m_1 \otimes m_2$ and $m_2 \leq m_1 \otimes m_2$ for all $m_1, m_2 \in M$
+
+This means that when we combine two things, we get back something that's at least as big as the bigger of the two things. Summation of natural numbers $(\mathbb{N}, \leq, 0, +)$ again works, but for example summation of integers $(\mathbb{Z}, 0, +)$ or multiplication of reals $(\mathbb{R}, \leq, 1, \times)$ does not. 
+
+Mathematicians tend to give these structures with different sets of properties different names. For example, the tuple $(M, \leq, e, \otimes)$, where the monoidal product $\otimes$ has the properties of unitality, associativity, commutativity, and monotonicity is called a symmetric monoidal preorder [@fong2019]. For our purposes here, I will not dive too deep into this taxonomy, however, interested reader should consult @fong2019 or [nLab](https://ncatlab.org/nlab/show/HomePage).   
+
+#### Structure preserving maps: Monoid homomorphisms
+
+As with preorders, when we have functions which map from one monoid to another, we can ask whether they preserve properties we care about. Before, this was order; now, we want the operations to preserve the fundamental properties of the monoidal product, unitality and associativity:
+
+:::{.definition name="Monoid homomorphism"}
+Let $(M, e_M, \otimes_M)$ and $(N, e_N, \otimes_N)$ be monoids. A function $f: M \to N$ is called a monoid homomorphism if it:
+
+1. Preserves product: $f(m_1 \otimes_M m_2) = f(m_1) \otimes_N f(m_2)$
+2. Preserves unitality: $f(e_M) = e_N$
+:::
+
+(technically, 2. can be deduced from 1., if we let $m_1$ or $m_2$ equal $e_M$)
+
+To give an example of a monoid homomorphism, suppose that our first monoid is string concatenation, $(String, "", ++)$ and the second is natural numbers with addition, $(\mathbb{N}, 0, +)$. Then, one simple monoid homomorphism $f$ is simply counting the number of characters in a string:
+
+$$10 = f(\text{"helloworld"}) = f(\text{"hello"} \text{++} \text{"world"}) = f(\text{"hello"}) + f(\text{"world"}) = 5 + 5$$
+$$e_N = 0 = f("") = f(e_M)$$
+
+### Groups
+
+Another well-known example of algebraic structures are groups. Groups are studied in group theory, and encode the idea of reversible transformations. Despite the different term, groups are really just a monoid with one additional property.
+
+:::{.definition name="Group"}
+A group is a monoid with an inverse operator. Specifically, as with a monoid, we have the tuple $(M, e, \otimes)$, which includes the set $M$, the neutral element $e$, and the product $\otimes$, and the product fullfills the following properties:
+
+1. Unitality: $m \otimes e = e \otimes m = m$, for all $m \in M$
+2. Associativity: $m_1 \otimes (m_2 \otimes m_3) = (m_1 \otimes m_2) \otimes m_3 = m_1 \otimes m_2 \otimes m_3$, for all $m_1, m_2, m_3 \in M$
+
+Additionally, the monoidal product $\otimes$ has an inverse $\otimes^{-1}$, such that the following property holds^[Note, that in group theory, it is common to omit explicit references to the operator and write the group products without it, such that, e.g. $m \otimes n$ is written as $mn$. In that case, instead of the inverse *operator*, we speak of inverse *elements*, such that, for each $m \in M$ there is an $m^{-1}$ such that $m^{-1}m = mm^{-1} = e$. However, this really is a distinction without difference since we can easily define the inverse element using the inverse operator and the neutral element: $m^{-1} = (e \otimes^{-1}m)$. Thus, for the sake of keeping with the notation in the previous sections, I will use the inverse operator explicitly.]:
+
+3. Invertibility: $m \otimes^{-1} m = e$, for all $m \in M$
+:::
+
+
+
+### Categories
+
+While discussing mathematical structures like preorders, monoids, and groups, some common have been cropping up: namely, structure and structure-preserving maps. Now it is time to shift gears and define these common themes more generally. To do this, we can make use of one powerful concept: categories [@fong2019; @lawvere2009].
+
+:::{.definition name="Category"}
+
+To define a category $\mathcal{C}$, we specify:
+
+- A collection of objects $\text{Ob}(\mathcal{C})$
+- For every two objects $c, d \in \text{Ob}(\mathcal{C})$, we define a set of morphisms (arrows) $\mathcal{C}(c, d)$ 
+- For any object $c \in \text{Ob}(\mathcal{C})$, we define a special morphism $\text{id}_c \in \mathcal{C}(c, c)$, called the identity morphism
+- For every three objects $c_1, c_2, c_3 \in \text{Ob}(\mathcal{C})$ and two morphisms $f \in \mathcal{C}(c_1, c_2)$ and $g \in \mathcal{C}(c_2, c_3)$, we define a composite morphism $f ⨾ g \in \mathcal{C}(c_1, c_3)$  
+
+Such that the composition operation is:
+
+1. Unital: $\text{id}_{c_1} ⨾ f = f$ and $f ⨾ \text{id}_{c_2}=f$
+2. Associative: $(f ⨾ g)⨾ h = f ⨾ (g ⨾ h) = f ⨾ g ⨾ h$
+
+(for all $f \in \mathcal{C}(c_1, c2)$, $g \in \mathcal{C}(c_2, c3)$, and $f \in \mathcal{C}(c_3, c4)$, and $c_1, c_2, c_3, c_4 \in \text{Ob}(\mathcal{C})$)
+
+:::
+
+The definition above may look daunting, because of the introduction of new notation and the use of abstract terms like "collection", "objects", and "morphisms". However, it is really nothing new. To simplify things, we can think of the collection of objects as a set, and the morphisms/arrows as functions, and we retain most of the original meaning; the abstract definition above simply gives us more flexibility.
+
+In other words, all that the definition of a category says is that we have some objects $c \in \text{Ob}(\mathcal{C})$ which relate to each other via morphisms, and these morphisms obey some common sense properties. First, the morpshisms compose: if we can get from $c_1$ to $c_2$ and $c_2$ to $c_3$, we can get from $c_1$ to $c_3$. Second the composition is associative, meaning that the order in which we compose does not matter. Finally, we always have a way of "staying in the same place", which is the identity morphism.  
+
+
+### Functors

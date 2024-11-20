@@ -8,7 +8,8 @@ fig:union-geoms
 fig:stacked-proportion
 fig:union-geoms2
 fig:unnamed-chunk-6
-fig:unnamed-chunk-13
+fig:barplot-spineplot
+fig:unnamed-chunk-16
 def:unlabeled-div-1
 def:unlabeled-div-2
 fig:function-subset
@@ -23,6 +24,13 @@ def:unlabeled-div-8
 def:unlabeled-div-9
 def:unlabeled-div-10
 def:unlabeled-div-11
+fig:family-tree
+def:unlabeled-div-12
+def:unlabeled-div-13
+thm:unlabeled-div-14
+def:unlabeled-div-15
+def:unlabeled-div-16
+def:unlabeled-div-17
 fig:barspine
 def:linear-mapping
 def:scale
@@ -56,6 +64,7 @@ leave-no-data-out
 distinctness-disjointness-and-comparison
 plots-as-partitions
 partitions-and-products
+limits-of-simple-product-partitions
 partitions-and-hierarchy
 partition-data-structures
 computing-summaries
@@ -70,7 +79,16 @@ composition
 the-image-and-the-pre-image
 partitions
 preorders
+specializing-preorders
+preserving-structure-monotone-maps
 monoids
+simple-examples-of-monoids
+beyond-numbers
+specializing-monoids
+structure-preserving-maps-monoid-homomorphisms
+groups
+categories
+functors
 high-level-principles
 user-profile
 programming-paradigm
@@ -135,5 +153,3 @@ appendix
 dop-encapsulation
 references
 fig:unnamed-chunk-1
-fig:family-tree
-def:unlabeled-div-12
