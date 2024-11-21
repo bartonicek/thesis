@@ -51,8 +51,76 @@
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
 
 
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
 
 <style type="text/css">
   
@@ -208,8 +276,8 @@ div.csl-indent {
 <p>A relation is one of the simplest mathematical structures. Given two sets <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, a relation <span class="math inline">\(R\)</span> between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> is a subset of the Cartesian product of the two sets, <span class="math inline">\(R \subseteq X \times Y\)</span>. In other words, a relation can be thought of as the subset of pairs <span class="math inline">\((x, y) \in X \times Y\)</span> for which the condition “<span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> relate” holds. Note that <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> can be the same set, such that <span class="math inline">\(R \subseteq X \times X\)</span>.</p>
 <p>There are many different types of relations. One of the most fundamental relations is equality; in this case, “<span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> relate” means that, for our purposes, <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> are the same, i.e. <span class="math inline">\(x = y\)</span>. Other examples of relations include the usual order relations <span class="math inline">\(&lt;\)</span>, <span class="math inline">\(\leq\)</span>, <span class="math inline">\(&gt;\)</span>, or <span class="math inline">\(\geq\)</span>, and the divides operator <span class="math inline">\(\mid\)</span> (<span class="math inline">\(x \mid y\)</span> means “<span class="math inline">\(x\)</span> divides <span class="math inline">\(y\)</span> without remainder”).</p>
 <p>Since a relation is a subset of the product set <span class="math inline">\(X \times Y\)</span>, we can visualize it as a matrix, with values of <span class="math inline">\(X\)</span> as rows, values of <span class="math inline">\(Y\)</span> as columns, and the related pairs <span class="math inline">\((x, y)\)</span> marked out in some specific way. For example, here’s how we can display the order relation <span class="math inline">\(\leq\)</span> on the set <span class="math inline">\(X = \{ 1, 2, 3 \}\)</span>:</p>
-<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-1"></span>
-<img src="_main_files/figure-html/unnamed-chunk-1-1.png" alt="A relation is a subset of the Cartesian product of two sets. The diagram shows the usual order relation $\leq$. We can see that 1 is less than or equal to every other element, 2 is less than or equal to 2 and 3, and 3 is less than or equal to 3 only. Note the symmetry between rows and columns - this is due to the fact that the same set ($X$) is display on both dimensions." width="2100" />
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-15"></span>
+<img src="figures/relations.png" alt="A relation is a subset of the Cartesian product of two sets. The diagram shows the usual order relation $\leq$. We can see that 1 is less than or equal to every other element, 2 is less than or equal to 2 and 3, and 3 is less than or equal to 3 only. Note the symmetry between rows and columns - this is due to the fact that the same set ($X$) is display on both dimensions." width="450" />
 <p class="caption">
 Figure 4.1: A relation is a subset of the Cartesian product of two sets. The diagram shows the usual order relation <span class="math inline">\(\leq\)</span>. We can see that 1 is less than or equal to every other element, 2 is less than or equal to 2 and 3, and 3 is less than or equal to 3 only. Note the symmetry between rows and columns - this is due to the fact that the same set (<span class="math inline">\(X\)</span>) is display on both dimensions.
 </p>
@@ -234,8 +302,8 @@ Figure 4.1: A relation is a subset of the Cartesian product of two sets. The dia
 <div id="functions" class="section level3 hasAnchor" number="4.0.2">
 <h3><span class="header-section-number">4.0.2</span> Functions<a href="mathematical-theory.html#functions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>A function is a special kind of relation which encodes a mapping between two sets. More specifically, let <span class="math inline">\(S\)</span> be the set of sources (also called the <em>domain</em>) and <span class="math inline">\(T\)</span> be the set of possible targets (also called the <em>codomain</em>). Then, we can think of a function as a relation <span class="math inline">\(F \subseteq S \times T\)</span> of valid source-target pairs <span class="math inline">\((s, t)\)</span>, such that for every <span class="math inline">\(s \in S\)</span> in there exists a unique <span class="math inline">\(t \in T\)</span> with <span class="math inline">\((s, t) \in F\)</span> (see Figure <a href="mathematical-theory.html#fig:function-subset">4.2</a>). In other words, every source relates to exactly one target:</p>
-<div class="figure"><span style="display:block;" id="fig:function-subset"></span>
-<img src="_main_files/figure-html/function-subset-1.png" alt="A function is a type of relation. Specifically, it is a subset of the Cartesian product of its domain ($S$) and codomain ($T$), such that each element in the domain marks out exactly one element in the codomain (shown in red). The depicted function has the following characteristics: $F: \{ 1, 2, 3 \} \to \{ 1, 2, 3 \}$, such that $F(1) = 1$, $F(2) = 1$, and $F(3) = 2$. One possible example of a function which conforms to this diagram might be $f(x) = \lfloor x / 2 \rceil$ (divide $x$ by two and round to the nearest whole number). Note that, for any function, each source maps to exactly one target (exactly one dot in each column), however, some targets may not be reached from any source and others may be reachable from many sources (zero or multiple dots in any row)." width="2100" />
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:function-subset"></span>
+<img src="figures/functions-subset.png" alt="A function is a type of relation. Specifically, it is a subset of the Cartesian product of its domain ($S$) and codomain ($T$), such that each element in the domain marks out exactly one element in the codomain (shown in red). The depicted function has the following characteristics: $F: \{ 1, 2, 3 \} \to \{ 1, 2, 3 \}$, such that $F(1) = 1$, $F(2) = 1$, and $F(3) = 2$. One possible example of a function which conforms to this diagram might be $f(x) = \lfloor x / 2 \rceil$ (divide $x$ by two and round to the nearest whole number). Note that, for any function, each source maps to exactly one target (exactly one dot in each column), however, some targets may not be reached from any source and others may be reachable from many sources (zero or multiple dots in any row)." width="450" />
 <p class="caption">
 Figure 4.2: A function is a type of relation. Specifically, it is a subset of the Cartesian product of its domain (<span class="math inline">\(S\)</span>) and codomain (<span class="math inline">\(T\)</span>), such that each element in the domain marks out exactly one element in the codomain (shown in red). The depicted function has the following characteristics: <span class="math inline">\(F: \{ 1, 2, 3 \} \to \{ 1, 2, 3 \}\)</span>, such that <span class="math inline">\(F(1) = 1\)</span>, <span class="math inline">\(F(2) = 1\)</span>, and <span class="math inline">\(F(3) = 2\)</span>. One possible example of a function which conforms to this diagram might be <span class="math inline">\(f(x) = \lfloor x / 2 \rceil\)</span> (divide <span class="math inline">\(x\)</span> by two and round to the nearest whole number). Note that, for any function, each source maps to exactly one target (exactly one dot in each column), however, some targets may not be reached from any source and others may be reachable from many sources (zero or multiple dots in any row).
 </p>
@@ -252,8 +320,8 @@ Figure 4.2: A function is a type of relation. Specifically, it is a subset of th
 <div class="definition">
 <p><span id="def:unlabeled-div-5" class="definition"><strong>Definition 4.5  (Bijectivity) </strong></span>A function is a bijection and only if it is both surjective and injective, which is also the case if and only if it is invertible.</p>
 </div>
-<div class="figure"><span style="display:block;" id="fig:function-types"></span>
-<img src="_main_files/figure-html/function-types-1.png" alt="Types of functions. Left: in a *surjective* function, each target can be reached from some source. Middle: in an *injective* function, there is a unique source for each target. Right: in a *bijection*, each target can be reached from, and only from, a unique source." width="2100" />
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:function-types"></span>
+<img src="figures/functions-types.png" alt="Types of functions. Left: in a *surjective* function, each target can be reached from some source. Middle: in an *injective* function, there is a unique source for each target. Right: in a *bijection*, each target can be reached from, and only from, a unique source." width="750" />
 <p class="caption">
 Figure 4.3: Types of functions. Left: in a <em>surjective</em> function, each target can be reached from some source. Middle: in an <em>injective</em> function, there is a unique source for each target. Right: in a <em>bijection</em>, each target can be reached from, and only from, a unique source.
 </p>
@@ -279,10 +347,10 @@ Figure 4.3: Types of functions. Left: in a <em>surjective</em> function, each ta
 </div>
 <p>Throughout this thesis, I will use the bracket notation (<span class="math inline">\(h(x) = g(f(x))\)</span>) when explicitly referring to the variable, and the postfix/fat semicolon notation (<span class="math inline">\(h = f ⨾g\)</span>) otherwise.</p>
 <p>Surjectivity, injectivity, and bijectivity propagate through composition: composition of two surjective functions is surjective, composition of two injective functions is injective, and composition of two bijective functions is bijective. However, the converse does not necessarily hold: a bijective function does not have to be composed of two bijections:</p>
-<div class="figure"><span style="display:block;" id="fig:bijection"></span>
-<img src="_main_files/figure-html/bijection-1.png" alt="A bijection does not necessarily have to be composed of bijections. The function $f$ is not surjective, and the function $g$ is not injective, nevertheless, their composition $f   hen g$ yields a bijective function." width="2100" />
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:bijection"></span>
+<img src="figures/bijection-composition.png" alt="A bijection does not necessarily have to be composed of bijections. The function $f$ is not surjective, and the function $g$ is not injective, nevertheless, their composition $f \then g$ yields a bijective function." width="750" />
 <p class="caption">
-Figure 4.4: A bijection does not necessarily have to be composed of bijections. The function <span class="math inline">\(f\)</span> is not surjective, and the function <span class="math inline">\(g\)</span> is not injective, nevertheless, their composition <span class="math inline">\(f   hen g\)</span> yields a bijective function.
+Figure 4.4: A bijection does not necessarily have to be composed of bijections. The function <span class="math inline">\(f\)</span> is not surjective, and the function <span class="math inline">\(g\)</span> is not injective, nevertheless, their composition <span class="math inline">\(f ⨾g\)</span> yields a bijective function.
 </p>
 </div>
 <p>For other interesting examples of inverse function composition problems, see <span class="citation">Lawvere and Schanuel (<a href="#ref-lawvere2009">2009</a>)</span>.</p>
@@ -359,10 +427,10 @@ p_3(a) = \begin{cases}
 <li><em>Transitivity</em>: if <span class="math inline">\(x \leq y\)</span> and <span class="math inline">\(y \leq z\)</span>, then <span class="math inline">\(x \leq z\)</span>, for all <span class="math inline">\(x, y, z \in X\)</span></li>
 </ol>
 </div>
-<p>Simply speaking, this means that, if we pick any two elements in the set <span class="math inline">\(X\)</span>, they either relate and one element is “less than or equal to” the other, in some sense, or they do not relate at all.</p>
-<p>One simple example of a preorder is the family tree, see Figure <a href="mathematical-theory.html#fig:family-tree">4.5</a>. Here, the underlying set is the family: <span class="math inline">\(X = \{  daughter, son, mother, father, grandmother, ... \}\)</span> and the binary relation is ancestry or familial relation. Thus, for example, <span class="math inline">\(daughter \leq father\)</span>, since the daughter is related to (is offspring of) the father, and <span class="math inline">\(father \leq father\)</span>, since a person is related to themselves (for the sake of this example). However, there is no relation (<span class="math inline">\(\leq\)</span>) between <span class="math inline">\(father\)</span> and <span class="math inline">\(mother\)</span> since they are not related. Finally, since <span class="math inline">\(daughter \leq father\)</span> and <span class="math inline">\(father \leq grandmother\)</span>, then, by reflexivity, <span class="math inline">\(daughter \leq grandmother\)</span>.</p>
-<div class="figure"><span style="display:block;" id="fig:family-tree"></span>
-<img src="_main_files/figure-html/family-tree-1.png" alt="An example of a simple preorder: family tree ordered by familial relation." width="672" />
+<p>Simply speaking, this means that, if we pick any two elements in the set <span class="math inline">\(X\)</span>, they either relate and one element is “less than or equal to” the other (in whatever sense we care about), or they do not relate at all.</p>
+<p>One simple example of a preorder is the family tree, see Figure <a href="mathematical-theory.html#fig:family-tree">4.5</a>. Here, the underlying set is the family: <span class="math inline">\(X = \{  \text{daughter, son, mother, father, grandmother, ...} \}\)</span> and the binary relation is ancestry or familial relation. Thus, for example, <span class="math inline">\(\text{daughter} \leq \text{father}\)</span>, since the daughter is related to (is offspring of) the father, and <span class="math inline">\(\text{father} \leq \text{father}\)</span>, since a person is related to themselves (for the sake of this example). However, there is no relation (<span class="math inline">\(\leq\)</span>) between <span class="math inline">\(\text{father}\)</span> and <span class="math inline">\(\text{mother}\)</span> since they are not related. Finally, since <span class="math inline">\(\text{daughter} \leq \text{father}\)</span> and <span class="math inline">\(\text{father} \leq \text{grandmother}\)</span>, then, by reflexivity, <span class="math inline">\(\text{daughter} \leq \text{grandmother}\)</span>.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:family-tree"></span>
+<img src="figures/family-tree.png" alt="An example of a simple preorder: family tree ordered by familial relation." width="532" />
 <p class="caption">
 Figure 4.5: An example of a simple preorder: family tree ordered by familial relation.
 </p>
@@ -377,8 +445,8 @@ Figure 4.5: An example of a simple preorder: family tree ordered by familial rel
 </ol>
 <p>If a preorder conforms to property 3, we speak of a partially ordered set or <em>poset</em>. If it conforms to both 3 and 4, then it is called a <em>total order</em>.</p>
 </div>
-<div id="preserving-structure-monotone-maps" class="section level4 hasAnchor" number="4.0.4.2">
-<h4><span class="header-section-number">4.0.4.2</span> Preserving structure: Monotone maps<a href="mathematical-theory.html#preserving-structure-monotone-maps" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div id="structure-preserving-maps-monotone-maps" class="section level4 hasAnchor" number="4.0.4.2">
+<h4><span class="header-section-number">4.0.4.2</span> Structure preserving maps: Monotone maps<a href="mathematical-theory.html#structure-preserving-maps-monotone-maps" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>Preorders are interesting because they give us a first taste of something will be discussed a lot throughout this thesis: structure-preserving maps. Specifically, if we have two preorders <span class="math inline">\((X, \leq_X)\)</span> and <span class="math inline">\((Y, \leq_Y)\)</span>, and a set of functions <span class="math inline">\(F\)</span> which map values between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, we can classify the functions in <span class="math inline">\(F\)</span> by whether they preserve the order in <span class="math inline">\(X\)</span> or not. That is, we call a function <span class="math inline">\(f \in F\)</span> order-preserving or a “monotone map”, if:</p>
 <div class="definition">
 <p><span id="def:unlabeled-div-12" class="definition"><strong>Definition 4.12  (Monotone map) </strong></span>A monotone map <span class="math inline">\(f: X \to Y\)</span> is a function between two preorders <span class="math inline">\((X, \leq_X)\)</span> and <span class="math inline">\((Y, \leq_Y)\)</span>, such that, for all <span class="math inline">\(x_1, x_2 \in X\)</span>:</p>

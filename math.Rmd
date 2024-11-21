@@ -29,7 +29,6 @@ Since a relation is a subset of the product set $X \times Y$, we can visualize i
 
 ```{r}
 #| echo: false
-#| dpi: 300
 #| fig-cap: "A relation is a subset of the Cartesian product of two sets.
 #| The diagram shows the usual order relation $\\leq$.
 #| We can see that 1 is less than or equal to every other element, 
@@ -37,23 +36,7 @@ Since a relation is a subset of the product set $X \times Y$, we can visualize i
 #| Note the symmetry between rows and columns - this is due to the fact that
 #| the same set ($X$) is display on both dimensions." 
 
-library(ggplot2)
-
-df_relation <- expand.grid(x = 1:3, y = 1:3)
-df_relation$rel <- df_relation$x <= df_relation$y
-
-ggplot(df_relation, aes(x, y, col = factor(rel))) +
-  geom_point(size = 25) +
-  scale_x_continuous(breaks = 1:3, limits = c(0.5, 3.5)) +
-  scale_y_continuous(breaks = 1:3, limits = c(0.5, 3.5)) +
-  scale_color_manual(values = c("white", "indianred")) +
-  labs(x = "X", y = "X") +
-  guides(col = "none") +
-  clean_theme +
-  theme(panel.background = element_rect(fill = "antiquewhite"),
-        panel.border = element_blank(),
-        axis.title.y = element_text(angle = 0, vjust = 0.5),
-        axis.title = element_text(colour = "grey60"))
+knitr::include_graphics("./figures/relations.png")
 ```
 
 A relation $R$ can be signified with an infix symbol (such as $\star$), such that, if $x$ and $y$ relate, $(x, y) \in R$, then we write $x \star_R y$ or $x \star y$ ($R$ implicit), for example, $x = y$, $x \leq y$, and so on. Alternatively, for less common types of relations, $R$ can also be used as the infix symbol, such that $x R y$ means "$x$ and $y$ relate under $R$". If two elements do not relate, $(x, y) \not \in R$, we typically do not write this out explicitly - the lack of relation is indicated by its absence.
@@ -84,7 +67,6 @@ A function is a special kind of relation which encodes a mapping between two set
 
 ```{r function-subset}
 #| echo: false
-#| dpi: 300
 #| fig-cap: "A function is a type of relation.
 #|  Specifically, it is a subset of the Cartesian product of its domain ($S$) and codomain ($T$),
 #|  such that each element in the domain marks out exactly one element in the codomain (shown in red). 
@@ -98,23 +80,7 @@ A function is a special kind of relation which encodes a mapping between two set
 #|  however, some targets may not be reached from any source and others
 #|  may be reachable from many sources (zero or multiple dots in any row)."
 
-library(ggplot2)
-
-df_relation <- expand.grid(x = 1:3, y = 1:3)
-df_relation$rel <- with(df_relation, round(x / 2 + 0.1) == y)
-
-ggplot(df_relation, aes(x, y, col = factor(rel))) +
-  geom_point(size = 25) +
-  scale_x_continuous(breaks = 1:3, limits = c(0.5, 3.5)) +
-  scale_y_continuous(breaks = 1:3, limits = c(0.5, 3.5)) +
-  scale_color_manual(values = c("white", "indianred")) +
-  labs(x = "S", y = "T") +
-  guides(col = "none") +
-  clean_theme +
-  theme(panel.background = element_rect(fill = "antiquewhite"),
-        panel.border = element_blank(),
-        axis.title.y = element_text(angle = 0, vjust = 0.5),
-        axis.title = element_text(colour = "grey60"))
+knitr::include_graphics("./figures/functions-subset.png")
 ```
 
 We can classify functions based on the shape of the relation between the domain and the codomain (see Figure \@ref(fig:function-types)). If every target in the function's codomain has a path leading to it from some source, such that no target is unreachable, then we call the function *surjective* or *onto*. More formally:
@@ -138,65 +104,12 @@ A function is a bijection and only if it is both surjective and injective, which
 
 ```{r, function-types}
 #| echo: false
-#| dpi: 300
 #| fig-cap: "Types of functions. 
 #| Left: in a *surjective* function, each target can be reached from some source. 
 #| Middle: in an *injective* function, there is a unique source for each target.
 #| Right: in a *bijection*, each target can be reached from, and only from, a unique source."
- 
-library(ggplot2)
-library(patchwork)
 
-normalize <- function(x) (x - min(x)) / (max(x) - min(x))
-
-plot_function <- function(mapping, codomain_size = NULL) {
-  
-  codomain_size <- ifelse(is.null(codomain_size), max(mapping), codomain_size)
-  
-  domain <- 1:length(mapping)
-  codomain <- 1:codomain_size
-  
-  # Center on the same value
-  diff <- mean(domain) - mean(codomain)
-  domain <- domain - diff / 2
-  codomain <- codomain + diff / 2
-  
-  domain <- normalize(domain)
-  codomain <- normalize(codomain)
-  
-  point_data <- data.frame(x = c(domain, codomain), 
-                           y = rep(c(1, 0), sapply(list(domain, codomain), length)))
-  arrow_data <- data.frame(x = domain, xend = codomain[mapping], 
-                           y = 1, yend = 0)
-  
-  h <- 0.25
-  
-  ggplot(point_data, aes(x, y)) +
-    geom_rect(aes(xmin = -0.2, xmax = 1.2, ymin = 0 - h / 2, ymax = 0 + h / 2),
-              fill = "antiquewhite") +
-    geom_rect(aes(xmin = -0.2, xmax = 1.2, ymin = 1 - h / 2, ymax = 1 + h / 2),
-              fill = "antiquewhite") +
-    geom_text(x = -0.1, y = 1.08, label = "S", size = 4, col = "grey60") +
-    geom_text(x = -0.1, y = -0.08, label = "T", size = 4, col = "grey60") +
-    geom_point(size = 5, col = "indianred") +
-    geom_segment(data = arrow_data, aes(x = x, xend = xend, y = y, yend = yend),
-                 arrow = arrow(angle = 30, length = unit(0.025, "npc")),
-                 col = "steelblue") +
-    scale_x_continuous(limits = c(-0.2, 1.2)) +
-    scale_y_continuous(limits = c(-0.2, 1.2)) +
-    clean_theme +
-    theme(panel.border = element_blank(),
-          axis.text = element_blank(),
-          axis.title = element_blank(),
-          plot.title = element_text(vjust = -5, hjust = 0.5))
-}
-
-p1 <- plot_function(c(1, 2, 1, 3, 4, 4)) + labs(title = "Surjective")
-p2 <- plot_function(c(3, 4, 2, 5), 6) + labs(title = "Injective")
-p3 <- plot_function(c(4, 2, 6, 3, 1, 5)) + labs(title = "Bijective")
- 
-p1 + p2 + p3
-
+knitr::include_graphics("./figures/functions-types.png") 
 ```
 
 #### More on bijections
@@ -231,42 +144,9 @@ Surjectivity, injectivity, and bijectivity propagate through composition: compos
 
 ```{r bijection}
 #| echo: false
-#| dpi: 300
-#| fig-height: 3
-#| fig-cap: "A bijection does not necessarily have to be composed of bijections. The function $f$ is not surjective, and the function $g$ is not injective, nevertheless, their composition $f \then g$ yields a bijective function."
+#| fig-cap: "A bijection does not necessarily have to be composed of bijections. The function $f$ is not surjective, and the function $g$ is not injective, nevertheless, their composition $f \\then g$ yields a bijective function."
 
-library(ggplot2)
-normalize <- function(x) (x - min(x)) / (max(x) - min(x))
-
-df <- data.frame(
-  x = c(rep(1:3, c(3, 4, 3))),
-  y = c(1:3 + 0.5, 1:4, 1:3 + 0.5)
-)
-
-arrow_df <- data.frame(
-  x = rep(1:2, c(3, 4)) + 0.0125,
-  xend = rep(c(2, 3), c(3, 4)) - 0.0125,
-  y = c(1:3 + 0.5, 1:4),
-  yend = c(c(1, 2, 4), c(1, 2, 2, 3) + 0.5)
-)
-
-ggplot(df, aes(x, y)) +
-  geom_rect(xmin = 0.8, xmax = 1.2, ymin = 1, ymax = 4, fill = "antiquewhite") +
-  geom_rect(xmin = 1.8, xmax = 2.2, ymin = 0.5, ymax = 4.5, fill = "antiquewhite") +
-  geom_rect(xmin = 2.8, xmax = 3.2, ymin = 1, ymax = 4, fill = "antiquewhite") +
-  geom_point(size = 5, col = "indianred") +
-  geom_segment(data = arrow_df, aes(x = x, xend = xend, y = y, yend = yend),
-               arrow = arrow(angle = 30, length = unit(0.025, "npc")),
-               col = "steelblue") +
-  geom_text(x = 1.5, y = 2.5, label = "f") +
-  geom_text(x = 2.5, y = 2.5, label = "g") +
-  scale_x_continuous(limits = c(0.5, 3.5)) +
-  scale_y_continuous(limits = c(0.5, 4.5)) +
-  clean_theme +
-  theme(panel.border = element_blank(),
-        axis.text = element_blank(),
-        axis.title = element_blank())
-
+knitr::include_graphics("./figures/bijection-composition.png")
 ```
 
 For other interesting examples of inverse function composition problems, see @lawvere2009.
@@ -364,33 +244,15 @@ A preorder is a set $X$ equipped with a binary relation $\leq$ that conforms to 
 2. *Transitivity*: if $x \leq y$ and $y \leq z$, then $x \leq z$, for all $x, y, z \in X$
 :::
 
-Simply speaking, this means that, if we pick any two elements in the set $X$, they either relate and one element is "less than or equal to" the other, in some sense, or they do not relate at all.
+Simply speaking, this means that, if we pick any two elements in the set $X$, they either relate and one element is "less than or equal to" the other (in whatever sense we care about), or they do not relate at all.
 
-One simple example of a preorder is the family tree, see Figure \@ref(fig:family-tree). Here, the underlying set is the family: $X = \{  daughter, son, mother, father, grandmother, ... \}$ and the binary relation is ancestry or familial relation. Thus, for example, $daughter \leq father$, since the daughter is related to (is offspring of) the father, and $father \leq father$, since a person is related to themselves (for the sake of this example). However, there is no relation ($\leq$) between $father$ and $mother$ since they are not related. Finally, since $daughter \leq father$ and $father \leq grandmother$, then, by reflexivity, $daughter \leq grandmother$.
+One simple example of a preorder is the family tree, see Figure \@ref(fig:family-tree). Here, the underlying set is the family: $X = \{  \text{daughter, son, mother, father, grandmother, ...} \}$ and the binary relation is ancestry or familial relation. Thus, for example, $\text{daughter} \leq \text{father}$, since the daughter is related to (is offspring of) the father, and $\text{father} \leq \text{father}$, since a person is related to themselves (for the sake of this example). However, there is no relation ($\leq$) between $\text{father}$ and $\text{mother}$ since they are not related. Finally, since $\text{daughter} \leq \text{father}$ and $\text{father} \leq \text{grandmother}$, then, by reflexivity, $\text{daughter} \leq \text{grandmother}$.
 
-```{r family-tree, engine='tikz'}
+```{r family-tree}
 #| echo: false
-#| fig-height: 3
 #| fig-cap: "An example of a simple preorder: family tree ordered by familial relation."
 
-\begin{tikzpicture}
-
-  \filldraw[white] (-5, -1) rectangle (4, 5);
-
-  \node (s) at (-1, 0) [draw] {Son};
-  \node (d) at (1, 0) [draw] {Daughter};
-  \node (f) at (-1, 2) [draw] {Father};
-  \node (m) at (1, 2) [draw] {Mother};
-  \node (g) at (-1, 4) [draw] {Grandmother};
-
-  \draw[->] (s.north) to (f.south);
-  \draw[->] (s.70) -- (m.250);
-  \draw[->] (d.110) -- (f.290);
-  \draw[->] (d.north) -- (m.south);
-  \draw[->] (f.north) -- (g.south);
-
-\end{tikzpicture}
-```{}
+knitr::include_graphics("./figures/family-tree.png")
 ```
 
 Another common example of a preorder is the set of natural numbers $\mathbb{N}$, ordered by the usual order relation, or by the division relation: $x \leq y$ iff $x \mid y$ ($x$ divides $y$ without remainder).
@@ -404,7 +266,7 @@ We can specialize preorders by imposing additional properties, such as:
 
 If a preorder conforms to property 3, we speak of a partially ordered set or *poset*. If it conforms to both 3 and 4, then it is called a *total order*. 
 
-#### Preserving structure: Monotone maps
+#### Structure preserving maps: Monotone maps
 
 Preorders are interesting because they give us a first taste of something will be discussed a lot throughout this thesis: structure-preserving maps. Specifically, if we have two preorders $(X, \leq_X)$ and $(Y, \leq_Y)$, and a set of functions $F$ which map values between $X$ and $Y$, we can classify the functions in $F$ by whether they preserve the order in $X$ or not. That is, we call a function $f \in F$ order-preserving or a "monotone map", if:
 

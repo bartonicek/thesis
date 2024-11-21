@@ -21,8 +21,7 @@ An abstract will go here.
 #| echo: false
 
 knitr::opts_chunk$set(
-  fig.align = "center",
-  dpi = 300
+  fig.align = "center"
 )
 
 directory <- tempdir()
@@ -73,4 +72,4 @@ clean_theme <- theme_bw() +
 theme_set(clean_theme)
 ```
 
-\newcommand\then{⨾}
+

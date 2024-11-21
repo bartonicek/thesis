@@ -4,13 +4,6 @@ editor_options:
   chunk_output_type: console
 ---
 
-```{r}
-knitr::opts_chunk$set(
-  fig.align = "center",
-  dpi = 300
-)
-```
-
 # Problem Set
 
 Designing an interactive data visualization system presents a unique set of challenges which need to be addressed. Some of these have been already mentioned in the [Introduction](#Introduction). This section discusses these inherent challenges in greater depth, and begins exploring avenues for possible solutions.
@@ -33,27 +26,13 @@ When visualizing data, it is rarely the case that we can just draw the raw data 
 
 #### Leave no data out
 
-A common-sense guideline that many data visualization experts provide is that faithful visualizations should show the full data and leave nothing out. For instance, @cleveland1985 argues that axis limits should generally be expanded so that data points at or near these limits are not arbitrarily obscured. Take for example the following two scatterplots:
+A common-sense guideline that many data visualization experts provide is that faithful visualizations should show the full data and leave nothing out. For instance, @cleveland1985 argues that axis limits should generally be expanded so that data points at or near these limits are not arbitrarily obscured. Take, for example, the following two scatterplots:
 
 ```{r}
 #| echo: false
-#| fig-height: 3
 #| fig-cap: "Without expanding axes, data points near the limits can become obscured. Left: axis limits match the data limits exactly, and so points at or near the axis limits (top-left and bottom-right corner of the plot) are represented by smaller area and become less salient. Right: by expanding axis limits, we can ensure that all data is represented faithfully."
 
-library(ggplot2)
-library(patchwork)
-
-p1 <- ggplot(mtcars, aes(wt, mpg)) +
-  geom_point(col = pal_dark_3[1]) +
-  scale_x_continuous(expand = c(0, 0)) +
-  scale_y_continuous(expand = c(0, 0)) +
-  clean_theme
-
-p2 <- ggplot(mtcars, aes(wt, mpg)) +
-  geom_point(col = pal_dark_3[1]) +
-  clean_theme
-
-p1 + p2
+knitr::include_graphics("./figures/expand-scatterplot.png")
 ```
 
 In the left plot, the axis limits match the data limits exactly, whereas in the right plot, they are expanded by a small fraction [5%, `ggplot2` default, @wickham2016]. The problem with the left plot is that the data points near the axis limits (top-left and bottom-right corner) are represented only by a fraction of the area: for example, the point in the bottom-right corner lies simultaneously at the limits of the x- and y-axis, and is thus represented only by 1/4 of the area of the points in the center of the plot.
@@ -70,186 +49,31 @@ In data visualization, a practice so ubiquitous that it is often overlooked is t
 
 Why is this the case? This unconscious "law" might be rooted in the fundamental purpose of data visualization: comparison [@tufte2001; @tukey1993]. When we visualize, we draw our graphics with the ultimate goal of being able to compare our data along a set of visual channels, such as position, length, size, or colour [@bertin1983; @wilkinson2012; @franconeri2021; @wilke2019]. This mirrors the comparisons we make in the real world, where we compare physical objects along their respective dimensions or attributes.
 
-With disjoint parts, there is a natural correspondence or bijection between the subsets of the data and their visual representation, see figure \@ref(fig:disjoint-bijection). Specifically, if we imagine the act of taking an object and picking the corresponding set of cases as a function, then, with disjoint parts, this function is invertible: we can pick an object, identify the corresponding set of cases, and then use that set to get back the original object. In plots where the objects do not represent disjoint subsets of the data, this correspondence is broken: if we identify cases corresponding to a single object, there is no way to go back from these cases to the original object.
+With disjoint parts, there is a natural correspondence or bijection between the subsets of the data and their visual representation, see figure \@ref(fig:geoms-bijection). Specifically, if we imagine the act of taking an object and picking the corresponding set of cases as a function, then, with disjoint parts, this function is invertible: we can pick an object, identify the corresponding set of cases, and then use that set to get back the original object. In plots where the objects do not represent disjoint subsets of the data, this correspondence is broken: if we identify cases corresponding to a single object, there is no way to go back from these cases to the original object.
 
-```{r disjoint-bijection, engine='tikz'}
+```{r geoms-bijection}
 #| echo: false
-#| fig-align: center
-#| fig-width: 5
 #| fig-cap: "Disjoint subsets provide a one-to-one correspondence (bijection) between geometric objects and the data. Suppose we mark out the cases corresponding to one object (the left most bar). Top row: if each geometric object (bar) represents unique set of cases, we can easily go back and forth between the object and its underlying data (middle panel). Thus, the function of picking a set of cases corresponding to an object is bijective. Bottom row: when there is an overlap between the cases represented by each object, once we pick the set of cases corresponding to that object, there is no simple way to use that set to get the corresponding object back."
 
-\usetikzlibrary{calc}
-\definecolor{blue}{HTML}{1F78B4}
-\definecolor{red}{HTML}{E31A1C}
-\definecolor{grey80}{HTML}{CCCCCC}
-
-\begin{tikzpicture}[scale=1.0]
-
-  \filldraw[white] (-2, -1) rectangle (13, 8);
-  
-  % START OF THE TOP ROW
-  
-  % BARS LEFT
-  \filldraw[red] (0.125, 4) rectangle ++(0.75, 2);
-  \filldraw[blue] (1.125, 4) rectangle ++(0.75, 2.5);
-  \filldraw[blue] (2.125, 4) rectangle ++(0.75, 1.5);
-
-  % BARS RIGHT
-  \filldraw[red] (8.125, 4) rectangle ++(0.75, 2);
-  \filldraw[blue] (9.125, 4) rectangle ++(0.75, 2.5);
-  \filldraw[blue] (10.125, 4) rectangle ++(0.75, 1.5);
-  
-  % SETS
-  \fill[blue] plot [smooth cycle, tension=0.75] coordinates { 
-    (4.25, 4.25) (4.35, 5.25) (5, 5) (5.25, 4.25) } -- cycle;
-  \foreach \point in {(4.5,4.5), (4.6, 4.9), (5, 4.4)}{
-    \node at \point {\textbullet};
-  }  
-    
-  \fill[red] plot [smooth cycle, tension=0.75] coordinates { 
-    (4.35, 6.5) (5.5, 6.75) (6.25, 6) (5.5, 5.85) (4.75, 5.5) } -- cycle; 
-  \foreach \point in {(4.6, 6.3), (5.5, 6.5), (5.9, 6.15), (4.85, 5.8)}{
-    \node at \point {\textbullet};
-  }
-    
-  \fill[blue] plot [smooth cycle, tension=0.75] coordinates { 
-    (5.5, 4.25) (6.75, 4.15) (6.75, 5) (5.75, 5.5) (5.75, 4.75) } -- cycle; 
-  \foreach \point in {(5.8, 4.4), (6.2, 4.3), (6.7, 4.4), (6.4, 4.9), (6, 5.25)}{
-    \node at \point {\textbullet};
-  }
-  
-  % ARROWS
-  \draw[->,line width=0.75,dashed] (0.5, 6) to[out=80, in=110] (5, 6.25);
-  \draw[->,line width=0.75,dashed] (5.1, 6.25) to[out=70, in=100] (8.5, 6);
-  
-  % BOXES
-  \draw[black] (0, 4) rectangle ++(3, 3);
-  \draw[black] (4, 4) rectangle ++(3, 3);
-  \draw[black] (8, 4) rectangle ++(3, 3);
-  
-  %%%%
-  
-  % START OF THE BOTTOM ROW
-  
-    % BARS LEFT
-  \filldraw[red] (0.125, 0) rectangle ++(0.75, 2);
-  \filldraw[blue] (1.125, 0) rectangle ++(0.75, 2.5);
-  \filldraw[red] (1.125, 0) rectangle ++(0.75, 1);
-  \filldraw[blue] (2.125, 0) rectangle ++(0.75, 1.5);
-  \filldraw[red] (2.125, 0) rectangle ++(0.75, 0.5);
-
-  % BARS RIGHT
-  \filldraw[red] (8.125, 0) rectangle ++(0.75, 2);
-  \filldraw[blue] (9.125, 0) rectangle ++(0.75, 2.5);
-  \filldraw[red] (9.125, 0) rectangle ++(0.75, 1);
-  \filldraw[blue] (10.125, 0) rectangle ++(0.75, 1.5);
-  \filldraw[red] (10.125, 0) rectangle ++(0.75, 0.5);
-
-  % SETS
-  \fill[grey80] plot [smooth cycle, tension=0.75] coordinates { 
-    (4.25, 0.25) (4.35, 1.25) (5, 1) (5.25, 0.25) } -- cycle;
-  \foreach \point in {(4.5,0.5), (5, 0.4)}{
-    \node at \point {\textbullet};
-  }
-  \node [red] at (4.6, 0.9) {\textbullet};
-    
-  \fill[grey80] plot [smooth cycle, tension=0.75] coordinates { 
-    (4.35, 2.5) (5.5, 2.75) (6.25, 2) (5.5, 1.85) (4.75, 1.5) } -- cycle; 
-  \foreach \point in {(4.6, 2.3), (5.5, 2.5), (5.9, 2.15), (4.85, 1.8)}{
-    \node [red] at \point {\textbullet};
-  }
-    
-  \fill[grey80] plot [smooth cycle, tension=0.75] coordinates { 
-    (5.5, 0.25) (6.75, 0.15) (6.75, 1) (5.75, 1.5) (5.75, 0.75) } -- cycle; 
-  \foreach \point in {(5.8, 0.4), (6.4, 0.9), (6, 1.25)}{
-    \node at \point {\textbullet};
-  }
-  \node [red] at (6.2, 0.3) {\textbullet};
-  \node [red] at (6.7, 0.4) {\textbullet};
-
-  
-  % ARROWS
-  \draw[->,line width=0.75,dashed] (0.5, 2) to[out=80, in=110] (5.1, 2.25);
-  \draw[->,line width=0.75,dashed] (0.5, 0) to[out=320, in=220] (6.5, 0.25);
-  \draw[->,line width=0.75,dashed] (0.5, 1) to[out=60, in=140] (4.45, 1.1);
-
-  
-  % BOXES
-  \draw[black] (0, 0) rectangle ++(3, 3);
-  \draw[black] (4, 0) rectangle ++(3, 3);
-  \draw[black] (8, 0) rectangle ++(3, 3);
-
-  \node at (7.5, 1.5) {?};
-
-\end{tikzpicture}
-```{}
+knitr::include_graphics("./figures/geoms-bijection.png")
 ```
 
 To illustrate this idea on concrete data, take the following barplot representing vote share among the top three parties in the 2023 New Zealand general election [@election2023]:
 
-```{r disjoint-geoms}
+```{r barplot-bijection}
 #| echo: false
-#| fig-height: 3
 #| fig-cap: "Geometric objects typically represent disjoint subsets of the data. The plot shows the vote share of the top three parties in the 2023 New Zealand general election, with each bar representing a unique subset of voters."
 
-# This is a truly terrible CSV
-df <- read.csv("./data/nz_general_election_2023.csv", skip = 2, nrows = 38)
-df <- df[-c(1:3), c(1, 3)]
-names(df) <- c("party", "votes")
-df$votes <- as.numeric(df$votes)
-df <- subset(df, !is.na(votes) & votes > 0)
-df <- df[order(-df$votes), ]
-
-df$party <- ifelse(df$votes >= df$votes[3], df$part, "Other")
-df <- aggregate(. ~ party, df, sum)
-df <- df[order(-df$votes), ]
-df$party <- factor(df$party, levels = c(setdiff(df$party, "Other"), "Other"))
-levels(df$party) <- c("National", "Labour", "Greens", "Other")
-
-colors <- c(palette.colors(6, "paired")[c(1, 3, 2) * 2], "grey80")
-
-ggplot(df, aes(party, votes, fill = party)) +
-  geom_bar(stat = "identity") +
-  scale_y_continuous(labels = scales::comma)  +
-  scale_fill_manual(values = colors) +
-  labs(x = "Party", y = "# of votes") +
-  guides(fill = "none") +
-  clean_theme +
-  theme(plot.margin = unit(c(0, 3, 0, 3), units = "cm"))
-
+knitr::include_graphics("./figures/barplot-bijection.png")
 ```
 
 Each bar represents a unique set of voters and thus the subsets of the data represented by the bars are disjoint. Technically, there is no hard and fast rule about this. For example, we could transform the first bar by taking a union of the votes of National and Labour parties, and represent the same underlying data the following way:
 
 ```{r union-geoms}
 #| echo: false
-#| fig-height: 3
-#| fig-cap: "Hypothetically, there is nothing preventing us from encoding the same information in multiple objects, and showing non-disjoint parts of our data. The plot shows the same underlying data as \\@ref(fig:disjoint-geoms), with the leftmost bar representing a union of National and Labour voters. The two leftmost bars thus do not represent disjoint subsets of the data. For a more realistic example, see Figure \\@ref(fig:union-geoms2)."
+#| fig-cap: "Hypothetically, there is nothing preventing us from encoding the same information in multiple objects, and showing non-disjoint parts of our data. The plot shows the same underlying data as \\@ref(fig:geoms-bijection), with the leftmost bar representing a union of National and Labour voters. The two leftmost bars thus do not represent disjoint subsets of the data. For a more realistic example, see Figure \\@ref(fig:union-geoms2)."
 
-library(colorspace)
-
-labour_index <- which(df$party == "Labour")
-
-df2 <- df
-df2$party <- as.character(df2$party)
-df2$party[labour_index] <- "National OR Labour"
-df2$votes[labour_index] <- df$votes[labour_index] + df$votes[which(df$party == "National")]
-
-df2 <- df2[order(-df2$votes), ]
-df2$party <- factor(df2$party, levels = c(setdiff(df2$party, "Other"), "Other"))
-
-colors2 <- c(palette.colors(6, "paired")[c(1, 3, 2) * 2], "grey80")
-colors2[1] <- rgb(t(rowMeans(col2rgb(colors2[1:2]))) / 255)
-
-ggplot(df2, aes(party, votes, fill = party)) +
-  geom_bar(stat = "identity") +
-  scale_y_continuous(labels = scales::comma)  +
-  scale_fill_manual(values = colors2) +
-  labs(x = "Party", y = "# of votes") +
-  guides(fill = "none") +
-  clean_theme +
-  theme(plot.margin = unit(c(0, 3, 0, 3), units = "cm"))
-
+knitr::include_graphics("./figures/barplot-notbijection.png")
 ```
 
 However, this way of representing the data has several problems. First, there is the issue of its suitability towards the main goal of the visualization. Specifically, when visualizing election data such as this one, we are typically interested in judging the relative number of votes each party received. The second barplot makes this comparison difficult. Specifically, in the second barplot, since the National bar represents a subset of the National OR Labour bar, we have to perform additional mental calculation if we want to find out how many votes Labour received and compare the absolute counts directly [@cleveland1985]. Second, we have metadata knowledge [see e.g. @wilkinson2012; @velleman1993] about the data being disjoint - we know that, in the New Zealand parliament electoral system, each voter can only cast one vote for a single party. Finally, there is the issue of duplicating information: in the second barplot, the number of votes the National party received is counted twice, once in the leftmost bar and again in the second-left bar. This goes against the general principle of representing our data in the most parsimonious way [@tufte2001].
@@ -258,17 +82,9 @@ Even when our goal is not to compare absolute counts, there are usually better d
 
 ```{r stacked-proportion}
 #| echo: false
-#| fig-height: 3
 #| fig-cap: "Even when proportions are of interest, there are usually disjoint data visualization techniques available. The plot shows proportion of vote share of the top three parties in the 2023 New Zealand general election, with each bar segment again representing a unique subset of voters."
 
-ggplot(df, aes(x = 1, y = votes, fill = party)) +
-  geom_bar(stat = "identity",
-           position = position_fill(reverse = TRUE)) +
-  scale_x_discrete(breaks = NULL) +
-  scale_fill_manual(values = colors, guide = guide_legend(reverse = TRUE)) +
-  labs(x = NULL, y = "proportion of votes", fill = "Party") +
-  clean_theme +
-  theme(plot.margin = unit(c(0, 3, 0, 3), units = "cm"))
+knitr::include_graphics("./figures/barplot-bijection-proportions.png")
 ```
 
 By stacking the bar segments on top of each other, we can easily compare proportion of the total number of votes while retaining a parsimonious representation of our data. Each bar segments now again represents a unique subset of voters.
@@ -282,20 +98,7 @@ The referendum data can be visualized in the following way:
 #| fig-height: 3
 #| fig-cap: "Realistic example of a non-disjoint data representation. The plot shows the vote share in the combined 2020 New Zealand referendum on euthanasia and cannabis, where the two issues were simultaneousy presented on the same ballot. The two bars each show (mostly) the same subset of ballot, with each ballot contributing to the height of one segment in each bar."
 
-df <- data.frame(x = rep(c("Euthanasia", "Cannabis"), each = 2),
-                 y = c(1893290, 979079, 1406973, 1474635), 
-                 fill = rep(c("For", "Against"), 2))
-
-df$x <- factor(df$x, levels = c("Euthanasia", "Cannabis"))
-df$fill <- factor(df$fill, levels = c("For", "Against"))
-
-ggplot(df, aes(x, y, fill = fill)) +
-  geom_bar(stat = "identity") +
-  scale_fill_manual(values = pal_dark_3) +
-  scale_y_continuous(labels = scales::comma) +
-  labs(x = NULL, y = "# of votes", fill = "Vote") +
-  clean_theme +
-  theme(plot.margin = unit(c(0.5, 4, 0, 4), units = "cm"))
+knitr::include_graphics("./figures/referendum-notbijection.png")
 ```
 
 By definition, both bars include votes which were cast by the same voter [ignoring the votes where no preference was given for either issue, @referendum2020]. Thus, the sets of voters that the two bars and the four bar segments represent overlap.
@@ -307,29 +110,7 @@ In general, there is nothing inherently wrong with the plot above. Non-disjoint 
 #| fig-height: 3
 #| fig-cap: "Non-disjoint data representations can often be recast into disjoint ones. The figure again shows the vote share in the combined 2020 New Zealand referendum on euthanasia and cannabis, however, now each issue is plotted in a separate plot, and thus each geometric object in each plot represents a unique subset of ballots/voters."
 
-df_euthanasia <- data.frame(x = c("For", "Against"), y = c(1893290, 979079))
-df_cannabis <- data.frame(x = c("For", "Against"), y = c(1406973, 1474635))
-
-df_euthanasia$x <- factor(df_euthanasia$x, levels = c("For", "Against"))
-df_cannabis$x <- factor(df_cannabis$x, levels = c("For", "Against"))
-
-p1 <- ggplot(df_euthanasia, aes(x, y, fill = x)) +
-  geom_bar(stat = "identity") +
-  scale_fill_manual(values = pal_dark_3) +
-  scale_y_continuous(labels = scales::comma) +
-  labs(x = NULL, y = "# of votes", fill = "Vote", title = "Euthanasia") +
-  guides(fill = "none") +
-  clean_theme
-
-p2 <- ggplot(df_cannabis, aes(x, y, fill = x)) +
-  geom_bar(stat = "identity") +
-  scale_fill_manual(values = pal_dark_3) +
-  scale_y_continuous(labels = scales::comma) +
-  labs(x = NULL, y = "# of votes", fill = "Vote", title = "Cannabis") +
-  guides(fill = "none") +
-  clean_theme
-
-p1 + p2
+knitr::include_graphics("./figures/referendum-bijection.png")
 ```
 
 Why should we care about whether our representations of the data are disjoint or not? I argue that, for many types of plots, disjointness presents a better mental model: one geometric object for one unique set of observational units or "things". Conversely, if the objects in our plots do not represent disjoint subsets, then we need to keep track of *how* these objects are related. 
@@ -356,21 +137,15 @@ In a typical interactive plot, the data will be partitioned across multiple dime
 ```{r}
 #| echo: false
 #| message: false
-#| fig-height: 3
 
-df <- data.frame(group = factor(c("A", "A", "A", "B", "B", "C", "C", "C")), 
-                 selection = factor(c(1, 1, 2, 1, 2, 1, 2, 2)), 
+df <- data.frame(group = factor(c("A", "A", "A", "B", "B", "C", "C", "C")),
+                 selection = factor(c(1, 1, 2, 1, 2, 1, 2, 2)),
                  value = c(12, 21, 10, 9, 15, 15, 12, 13))
 df2 <- aggregate(value ~ group + selection, data = df, sum)
 
-ggplot(df2, aes(group, y = value, fill = selection)) +
-  geom_col(position = position_stack(), col = "white") +
-  scale_fill_manual(values = pal_dark_3) +
-  guides(fill = "none", count = "none") +
-  labs(x = NULL, y = "Sum") +
-  clean_theme +
-  theme(plot.margin = unit(c(0, 4, 0, 4), units = "cm"))
+knitr::include_graphics("./figures/barplot-partitions-products.png")
 ```
+
 
 We start with the following data, which includes a categorical variable (`group`) that we will plot along the x-axis, a variable representing selection status (`selection`) that we will color the bar segments with, and a continuous variable that we want to summarize (`value`):
 
@@ -438,26 +213,23 @@ render_tables(stacked_dfs)
 Now, we can combine the tables into one data set and render:
 
 ```{r}
-#| echo: false
-custom_theme <- list(
-  scale_fill_manual(values = pal_dark_3),
-  guides(fill = "none", count = "none"),
-  labs(x = NULL, y = "Sum"),
-  theme(plot.margin = unit(c(0, 4, 0, 4), units = "cm"))
-)
-```
-
-```{r}
-#| fig-height: 3
+#| eval: false
 combined_df <- do.call(rbind, stacked_dfs)
 combined_df$selection <- factor(combined_df$selection, levels = c(2, 1))
 # Need to reverse data order for ggplot2 to layer segments appropriately
 combined_df <- combined_df[6:1, ] 
 
 ggplot(combined_df, aes(x = group, y = value, fill = selection)) +
-  geom_col(position = position_identity(), col = "white") +
-  custom_theme
+  geom_col(position = position_identity(), col = "white")
 ```
+
+```{r}
+#| echo: false
+#| message: false
+
+knitr::include_graphics("./figures/barplot-partitions-products.png")
+```
+
 
 Now, we have shown how we can compute summary statistics for a stacked barplot using a simple split-apply-combine pipeline [@wickham2011]. This is in fact what happens implicitly in most `ggplot2` plots:
 
@@ -477,55 +249,20 @@ In the call above, we partition the data set by the Cartesian product of the `x`
 
 #### Limits of simple product partitions
 
-For many types of plots, the strategy of taking products to form a single "flat" partition of the data works reasonably well. However, for other types of plots, this simple model breaks. For example, returning back to the example of the barplot from the section above, we may want to represent the same underlying data in a different way:
+For many types of plots, the strategy of taking products of factors to form a single "flat" partition of the data works reasonably well. However, for other types of plots, this simple model breaks. For example, returning back to the example of the barplot from the section above, we may want to represent the same underlying data in a different way, as a spineplot:
 
 ```{r barplot-spineplot}
 #| echo: false
-#| message: false
-#| fig-height: 3
 #| fig-cap: "The same underlying data that can be represented by a barplot (left) can be represented by a spineplot (right)."
 
-library(ggplot2)
-library(patchwork)
-library(dplyr)
-
-df_spine1 <- df |>
-  group_by(group) |>
-  summarize(sum = sum(value)) |>
-  ungroup() |>
-  mutate(left = cumsum(lag(sum, default = 0)), right = cumsum(sum), 
-         position = (left + right) / 2)
-
-df_spine2 <- df |>
-  group_by(group, selection) |>
-  summarize(sum_prod = sum(value)) |>
-  left_join(df_spine1, by = "group") |>
-  mutate(prop = sum_prod / sum) |>
-  group_by(group) |>
-  mutate(prop_cum = cumsum(prop))
-
-# Need to reorder the rows to make ggplot2 layer the bars in the right order
-df_spine2 <- df_spine2[c(2 * 0:2 + 2, 2 * 0:2 + 1), ]
-
-p1 <- ggplot(combined_df, aes(x = group, y = value, fill = selection)) +
-  geom_col(position = position_identity(), col = "white") +
-  custom_theme +
-  theme(plot.margin = unit(c(0, 0.5, 0, 0.5), units = "cm"))
-
-p2 <- ggplot(df_spine2, aes(position, prop_cum, width = sum, fill = selection)) +
-  geom_bar(stat = "identity", position = "identity", col = "white") +
-  geom_text(data = df_spine1, aes(x = position, y = 0.9, label = group, fill = NULL),
-            col = "white") +
-  scale_x_continuous(breaks = c(0, df_spine2$right)) +
-  custom_theme +
-  scale_fill_manual(values = pal_dark_3[2:1]) +
-  labs(x = "Count", y = "Proportion") +
-  theme(plot.margin = unit(c(0, 0.5, 0, 0.5), units = "cm"))
-
-p1 + p2
+knitr::include_graphics("./figures/barplot-spineplot.png")
 ```
 
+In a spineplot, the underlying summary statistics (sum, in this case) gets mapped to two aesthetics: the y-axis position/height and the bar width. Specifically, the y-axis position represents proportion of the summary (sum), normalized within each bar, and bar width represents the absolute value of the summary. This type of representation is very useful for comparing proportions. Notice that the spineplot in Figure \@ref(fig:barplot-spineplot), makes it much easier to see that the proportions of the red cases are same across the B and C groups.
 
+Both aesthetics are stacked: width horizontally, *across bars*, y-axis position vertically, *across bar segments*.  
+
+The important thing to notice that, 
 
 The reason for this is because we have ignored or side-stepped certain issues. For example, how do we know if we are stacking the summaries in the right order? What if we need to transform the bar segments in some way, such as divide by the height of the parent bar, to show proportions rather than absolute counts? Once we start dealing with plots like spineplots or spinograms, it becomes clear that the flat partition structure is not enough.    
 
