@@ -249,16 +249,24 @@ In the call above, we partition the data set by the Cartesian product of the `x`
 
 #### Limits of simple product partitions
 
-For many types of plots, the strategy of taking products of factors to form a single "flat" partition of the data works reasonably well. However, for other types of plots, this simple model breaks. For example, returning back to the example of the barplot from the section above, we may want to represent the same underlying data in a different way, as a spineplot:
+For many types of plots, the simple strategy of taking products of factors to form a single "flat" partition of the data works reasonably well. However, for other types of plots, this flat model is not enough. 
+
+To give a concrete example, let's turn back to the barplot from the section \@ref(plots-as-partitions). To draw the barplot, we first split our data into smaller tables, summarized each table by summing up the values, stacked the summaries by taking their cumulative sum, and finally used these to draw the bar segments. This gave us a good visualization for comparing absolute counts across the categories. However, what if we wanted to compare proportions?
+
+It turns out there is another type of visualization, called spineplot, which can be used to represent the same underlying data that barplot can, however, is much more useful for comparing proportions:  
 
 ```{r barplot-spineplot}
 #| echo: false
-#| fig-cap: "The same underlying data that can be represented by a barplot (left) can be represented by a spineplot (right)."
+#| fig-cap: "The same underlying data represented as a barplot (left) and a spineplot (right)."
 
 knitr::include_graphics("./figures/barplot-spineplot.png")
 ```
 
-In a spineplot, the underlying summary statistics (sum, in this case) gets mapped to two aesthetics: the y-axis position/height and the bar width. Specifically, the y-axis position represents proportion of the summary (sum), normalized within each bar, and bar width represents the absolute value of the summary. This type of representation is very useful for comparing proportions. Notice that the spineplot in Figure \@ref(fig:barplot-spineplot), makes it much easier to see that the proportions of the red cases are same across the B and C groups.
+A spineplot represents the same underlying statistic as a barplot (usually sums of counts). However, unlike in barplot, where the underlying statistic gets mapped to the y-axis position/bar height, in spineplot, the underlying summary statistic gets mapped to two aesthetics: the y-axis position and the bar width. Further, the y-axis position gets normalized, such that the heights of the different segments add up to one. The result is a visualization that makes it easy to compare relative proportions across the categories.
+
+The fact that the spineplot makes it easy to see relative proportions makes it a very useful visualization. Notice how, in Figure \@ref(fig:barplot-spineplot), the spineplot makes it much easier to see that the proportions of the red cases are same across the B and C groups. Thus, spineplot is a definitely desirable type of representation for categorical data, especially if we can easily switch between it and the barplot.
+
+However, despite the fact that both the barplot and the spineplot represent the same underlying summaries, turning one into the other is not a always trivial exercise. For example, in `ggplot2`, while it is easy to create a barplot using the simple declarative syntax, there is no such simple recipe for spineplots. To create the spineplot in Figure \@ref(fig:barplot-spineplot) took over 10 lines of external data wrangling code (using standard `dplyr` syntax).
 
 Both aesthetics are stacked: width horizontally, *across bars*, y-axis position vertically, *across bar segments*.  
 
