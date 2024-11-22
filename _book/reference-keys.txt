@@ -8,6 +8,7 @@ fig:union-geoms
 fig:stacked-proportion
 fig:union-geoms2
 fig:unnamed-chunk-5
+fig:barplot-spineplot
 fig:unnamed-chunk-15
 def:unlabeled-div-1
 def:unlabeled-div-2
@@ -31,8 +32,9 @@ def:unlabeled-div-15
 def:unlabeled-div-16
 def:unlabeled-div-17
 def:unlabeled-div-18
-prp:unlabeled-div-19
+def:unlabeled-div-19
 prp:unlabeled-div-20
+prp:unlabeled-div-21
 fig:barspine
 def:linear-mapping
 def:scale
@@ -87,9 +89,12 @@ monoids
 simple-examples-of-monoids
 beyond-numbers
 specializing-monoids
-structure-preserving-maps-monoid-homomorphisms
+monoid-homomorphism
 groups
+simple-examples-of-groups
+group-homomorphism
 categories
+isomorphism
 algebraic-structures-as-categories
 functors
 high-level-principles
@@ -156,5 +161,5 @@ appendix
 dop-encapsulation
 references
 fig:unnamed-chunk-1
-fig:unnamed-chunk-2
-fig:barplot-spineplot
+prp:unlabeled-div-22
+def:unlabeled-div-23

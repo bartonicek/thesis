@@ -11,6 +11,8 @@ biblio-style: "apalike"
 link-citations: true
 editor_options: 
   chunk_output_type: console
+header-includes:
+  - \usepackage{tikz-cd}
 ---
 
 # Abstract 
