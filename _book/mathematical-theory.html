@@ -51,8 +51,76 @@
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
 
 
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
 
 <style type="text/css">
   
@@ -194,13 +262,13 @@ div.csl-indent {
             <section class="normal" id="section-">
 <div id="mathematical-theory" class="section level1 hasAnchor" number="4">
 <h1><span class="header-section-number">4</span> Mathematical theory<a href="mathematical-theory.html#mathematical-theory" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>This chapter provides an overview of essential concepts from category theory, abstract algebra, and general mathematics. Starting with some foundational topics, such as functions, relations, and orders, it slowly builds up to more advanced concepts such as categories, monoids, and functors. Readers familiar these concepts may feel free to skip ahead. However, even the fundamental concepts will be used throughout the thesis, so a refresher might be beneficial.</p>
+<p>This chapter provides an overview of essential concepts from category theory and abstract algebra, as well as more general mathematics. Starting with some foundational topics, such as functions, relations, and orders, it slowly builds up to more advanced concepts such as categories, monoids, and functors. Readers familiar these concepts may feel free to skip ahead. However, even the fundamental concepts will be used throughout the thesis, so a refresher might be beneficial.</p>
 <p>The material follows primarily from <span class="citation">Fong and Spivak (<a href="#ref-fong2019">2019</a>)</span>, <span class="citation">Lawvere and Schanuel (<a href="#ref-lawvere2009">2009</a>)</span>, <span class="citation">Baez (<a href="#ref-baez2023">2023</a>)</span>, <span class="citation">Pinter (<a href="#ref-pinter2010">2010</a>)</span>, and <span class="citation">Milewski (<a href="#ref-milewski2018">2018</a>)</span>. For an accessible introduction to the topic, interested readers are encouraged to consult these references, particularly <span class="citation">Fong and Spivak (<a href="#ref-fong2019">2019</a>)</span> and <span class="citation">Lawvere and Schanuel (<a href="#ref-lawvere2009">2009</a>)</span>.</p>
-<div id="note-on-past-applications-of-abstract-algebra-and-category-theory" class="section level4 hasAnchor" number="4.0.0.1">
-<h4><span class="header-section-number">4.0.0.1</span> Note on past applications of abstract algebra and category theory<a href="mathematical-theory.html#note-on-past-applications-of-abstract-algebra-and-category-theory" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>Abstract algebra and category theory have been applied to data visualization in the past, in a limited way. Handful authors have used concepts from either field to describe the more abstract aspects of data visualization. For example, <span class="citation">Beckmann (<a href="#ref-beckmann1995">1995</a>)</span> had used categories and functors to lay down a broad theoretical framework for visualization, <span class="citation">Hutchins (<a href="#ref-hutchins1999">1999</a>)</span> attempted the same with algebras, <span class="citation">Kindlmann and Scheidegger (<a href="#ref-kindlmann2014">2014</a>)</span> used functors to define valid perceptual representations of the data, and <span class="citation">Hibbard, Dyer, and Paul (<a href="#ref-hibbard1994">1994</a>)</span> used lattice theory to describe data visualization in the presence of incomplete or approximate data (such as finite-precision floating-point numbers).</p>
-<p>Several authors have also discussed category theory and data visualization in a more applied context, by way of functional programming. Specifically, there have been a number of libraries and domain-specific languages (DSLs) for data visualization which have relied on functional programming concepts and have thus been linked to category theory. For some examples, see <span class="citation">Yorgey (<a href="#ref-yorgey2012">2012</a>)</span>, <span class="citation">Petricek (<a href="#ref-petricek2021">2021</a>)</span>, <span class="citation">Smeltzer, Erwig, and Metoyer (<a href="#ref-smeltzer2014">2014</a>)</span>, or <span class="citation">Smeltzer and Erwig (<a href="#ref-smeltzer2018">2018</a>)</span>.</p>
-<p>In contrast to these prior works, this thesis leverages category theory to address certain practical problems that arise during interactive data visualization, without introducing a specific functional programming model or DSL. Specifically, the goal is to use concepts from category theory to reason about combinations of graphics, statistical summaries, and interactive features. Ultimately, I argue that these algebraic concepts can help us make well-founded statements about which interactive data visualizations will behave in sensible ways and which ones will not.</p>
+<div id="note-on-past-applications-of-abstract-algebra-and-category-theory-to-data-visualization" class="section level4 hasAnchor" number="4.0.0.1">
+<h4><span class="header-section-number">4.0.0.1</span> Note on past applications of abstract algebra and category theory to data visualization<a href="mathematical-theory.html#note-on-past-applications-of-abstract-algebra-and-category-theory-to-data-visualization" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Category theory and abstract algebra have been applied to data visualization in the past. Handful of researchers have used these concepts to describe the broader philosophical aspects of data visualization. For example, <span class="citation">Beckmann (<a href="#ref-beckmann1995">1995</a>)</span>, <span class="citation">Hutchins (<a href="#ref-hutchins1999">1999</a>)</span>, and <span class="citation">Vickers, Faith, and Rossiter (<a href="#ref-vickers2012">2012</a>)</span> had used concepts such as categories, functors, and algebras to lay down a theoretical framework for what it means to visualize. Similarly, <span class="citation">Kindlmann and Scheidegger (<a href="#ref-kindlmann2014">2014</a>)</span> used functors to define valid perceptual representations of the data, and <span class="citation">Hibbard, Dyer, and Paul (<a href="#ref-hibbard1994">1994</a>)</span> used lattice theory to describe visualization in the presence of incomplete or approximate data (such as finite-precision floating-point numbers).</p>
+<p>Other researchers have linked category theory and data visualization in a more applied context, by way of functional programming. Specifically, there have been a handful of functional libraries and domain-specific languages (DSLs) for data visualization developed over the recent years, which have used category theory as the foundational programming model. Examples include <span class="citation">Yorgey (<a href="#ref-yorgey2012">2012</a>)</span>, <span class="citation">Petricek (<a href="#ref-petricek2021">2021</a>)</span>, <span class="citation">Smeltzer, Erwig, and Metoyer (<a href="#ref-smeltzer2014">2014</a>)</span>, and <span class="citation">Smeltzer and Erwig (<a href="#ref-smeltzer2018">2018</a>)</span>.</p>
+<p>This thesis leverages category theory in a different way, by using it to shed light on certain practical problems that arise during (interactive) data visualization, without introducing a specific functional programming model or DSL. Specifically, the goal is to use concepts from category theory to reason about combinations of graphics, statistical summaries, and interactive features. Ultimately, I argue that these algebraic concepts are essential for reasoning about the coherence of interactive graphics.</p>
 <p>And now for the theory.</p>
 </div>
 <div id="relations" class="section level3 hasAnchor" number="4.0.1">
@@ -208,7 +276,7 @@ div.csl-indent {
 <p>A relation is one of the simplest mathematical structures. Given two sets <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, a relation <span class="math inline">\(R\)</span> between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> is a subset of the Cartesian product of the two sets, <span class="math inline">\(R \subseteq X \times Y\)</span>. In other words, a relation can be thought of as the subset of pairs <span class="math inline">\((x, y) \in X \times Y\)</span> for which the condition “<span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> relate” holds. Note that <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> can be the same set, such that <span class="math inline">\(R \subseteq X \times X\)</span>.</p>
 <p>There are many different types of relations. One of the most fundamental relations is equality; in this case, “<span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> relate” means that, for our purposes, <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> are the same, i.e. <span class="math inline">\(x = y\)</span>. Other examples of relations include the usual order relations <span class="math inline">\(&lt;\)</span>, <span class="math inline">\(\leq\)</span>, <span class="math inline">\(&gt;\)</span>, or <span class="math inline">\(\geq\)</span>, and the divides operator <span class="math inline">\(\mid\)</span> (<span class="math inline">\(x \mid y\)</span> means “<span class="math inline">\(x\)</span> divides <span class="math inline">\(y\)</span> without remainder”).</p>
 <p>Since a relation is a subset of the product set <span class="math inline">\(X \times Y\)</span>, we can visualize it as a matrix, with values of <span class="math inline">\(X\)</span> as rows, values of <span class="math inline">\(Y\)</span> as columns, and the related pairs <span class="math inline">\((x, y)\)</span> marked out in some specific way. For example, here’s how we can display the order relation <span class="math inline">\(\leq\)</span> on the set <span class="math inline">\(X = \{ 1, 2, 3 \}\)</span>:</p>
-<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-1"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-15"></span>
 <img src="figures/relations.png" alt="A relation is a subset of the Cartesian product of two sets. The diagram shows the usual order relation $\leq$. We can see that 1 is less than or equal to every other element, 2 is less than or equal to 2 and 3, and 3 is less than or equal to 3 only. Note the symmetry between rows and columns - this is due to the fact that the same set ($X$) is display on both dimensions." width="450" />
 <p class="caption">
 Figure 4.1: A relation is a subset of the Cartesian product of two sets. The diagram shows the usual order relation <span class="math inline">\(\leq\)</span>. We can see that 1 is less than or equal to every other element, 2 is less than or equal to 2 and 3, and 3 is less than or equal to 3 only. Note the symmetry between rows and columns - this is due to the fact that the same set (<span class="math inline">\(X\)</span>) is display on both dimensions.
@@ -217,7 +285,7 @@ Figure 4.1: A relation is a subset of the Cartesian product of two sets. The dia
 <p>A relation <span class="math inline">\(R\)</span> can be signified with an infix symbol (such as <span class="math inline">\(\star\)</span>), such that, if <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> relate, <span class="math inline">\((x, y) \in R\)</span>, then we write <span class="math inline">\(x \star_R y\)</span> or <span class="math inline">\(x \star y\)</span> (<span class="math inline">\(R\)</span> implicit), for example, <span class="math inline">\(x = y\)</span>, <span class="math inline">\(x \leq y\)</span>, and so on. Alternatively, for less common types of relations, <span class="math inline">\(R\)</span> can also be used as the infix symbol, such that <span class="math inline">\(x R y\)</span> means “<span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> relate under <span class="math inline">\(R\)</span>”. If two elements do not relate, <span class="math inline">\((x, y) \not \in R\)</span>, we typically do not write this out explicitly - the lack of relation is indicated by its absence.</p>
 <p>Relations can have properties. For example, some types of relations are <em>reflexive</em>, such that every element relates to itself: <span class="math inline">\(x \star x\)</span> for all <span class="math inline">\(x \in X\)</span>. This is the case for equivalence relations. In fact, we can define equivalence relations using just three properties:</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-1" class="definition"><strong>Definition 4.1  (Equivalence relation) </strong></span>A relation <span class="math inline">\(\sim\)</span> on <span class="math inline">\(X\)</span> is called an equivalence relation if it is:</p>
+<p><span id="def:unlabeled-div-2" class="definition"><strong>Definition 4.1  (Equivalence relation) </strong></span>A relation <span class="math inline">\(\sim\)</span> on <span class="math inline">\(X\)</span> is called an equivalence relation if it is:</p>
 <ol style="list-style-type: decimal">
 <li><em>Reflexive</em>: <span class="math inline">\(x \sim x\)</span> for all <span class="math inline">\(x \in X\)</span></li>
 <li><em>Symmetric</em>: <span class="math inline">\(x \sim y\)</span> if and only if <span class="math inline">\(y \sim x\)</span> for all <span class="math inline">\(x, y \in X\)</span></li>
@@ -226,7 +294,7 @@ Figure 4.1: A relation is a subset of the Cartesian product of two sets. The dia
 </div>
 <p>Equivalence relations encode the notion that two things are the same, <em>for whatever our purpose is</em>. We can further use them to assign objects in <span class="math inline">\(X\)</span> to <em>equivalence classes</em>, which divide <span class="math inline">\(X\)</span> into groups of equivalent objects:</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-2" class="definition"><strong>Definition 4.2  (Equivalence class) </strong></span>Given a set <span class="math inline">\(X\)</span> and an element <span class="math inline">\(a \in X\)</span>, an equivalence class of <span class="math inline">\(a\)</span> is defined as follows:</p>
+<p><span id="def:unlabeled-div-3" class="definition"><strong>Definition 4.2  (Equivalence class) </strong></span>Given a set <span class="math inline">\(X\)</span> and an element <span class="math inline">\(a \in X\)</span>, an equivalence class of <span class="math inline">\(a\)</span> is defined as follows:</p>
 <p><span class="math display">\[[a] = \{ x \in X : x \sim a \}\]</span></p>
 </div>
 <p>While relations might seem like very simple constructions, they are incredibly versatile. The next few sections will discuss three important examples of relations: functions, partitions, and preorders.</p>
@@ -234,7 +302,7 @@ Figure 4.1: A relation is a subset of the Cartesian product of two sets. The dia
 <div id="functions" class="section level3 hasAnchor" number="4.0.2">
 <h3><span class="header-section-number">4.0.2</span> Functions<a href="mathematical-theory.html#functions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>A function is a special kind of relation which encodes a mapping between two sets. More specifically, let <span class="math inline">\(S\)</span> be the set of sources (also called the <em>domain</em>) and <span class="math inline">\(T\)</span> be the set of possible targets (also called the <em>codomain</em>). Then, we can think of a function as a relation <span class="math inline">\(F \subseteq S \times T\)</span> of valid source-target pairs <span class="math inline">\((s, t)\)</span>, such that for every <span class="math inline">\(s \in S\)</span> in there exists a unique <span class="math inline">\(t \in T\)</span> with <span class="math inline">\((s, t) \in F\)</span> (see Figure <a href="mathematical-theory.html#fig:function-subset">4.2</a>). In other words, every source relates to exactly one target:</p>
-<div class="figure"><span style="display:block;" id="fig:function-subset"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:function-subset"></span>
 <img src="figures/functions-subset.png" alt="A function is a type of relation. Specifically, it is a subset of the Cartesian product of its domain ($S$) and codomain ($T$), such that each element in the domain marks out exactly one element in the codomain (shown in red). The depicted function has the following characteristics: $F: \{ 1, 2, 3 \} \to \{ 1, 2, 3 \}$, such that $F(1) = 1$, $F(2) = 1$, and $F(3) = 2$. One possible example of a function which conforms to this diagram might be $f(x) = \lfloor x / 2 \rceil$ (divide $x$ by two and round to the nearest whole number). Note that, for any function, each source maps to exactly one target (exactly one dot in each column), however, some targets may not be reached from any source and others may be reachable from many sources (zero or multiple dots in any row)." width="450" />
 <p class="caption">
 Figure 4.2: A function is a type of relation. Specifically, it is a subset of the Cartesian product of its domain (<span class="math inline">\(S\)</span>) and codomain (<span class="math inline">\(T\)</span>), such that each element in the domain marks out exactly one element in the codomain (shown in red). The depicted function has the following characteristics: <span class="math inline">\(F: \{ 1, 2, 3 \} \to \{ 1, 2, 3 \}\)</span>, such that <span class="math inline">\(F(1) = 1\)</span>, <span class="math inline">\(F(2) = 1\)</span>, and <span class="math inline">\(F(3) = 2\)</span>. One possible example of a function which conforms to this diagram might be <span class="math inline">\(f(x) = \lfloor x / 2 \rceil\)</span> (divide <span class="math inline">\(x\)</span> by two and round to the nearest whole number). Note that, for any function, each source maps to exactly one target (exactly one dot in each column), however, some targets may not be reached from any source and others may be reachable from many sources (zero or multiple dots in any row).
@@ -242,17 +310,17 @@ Figure 4.2: A function is a type of relation. Specifically, it is a subset of th
 </div>
 <p>We can classify functions based on the shape of the relation between the domain and the codomain (see Figure <a href="mathematical-theory.html#fig:function-types">4.3</a>). If every target in the function’s codomain has a path leading to it from some source, such that no target is unreachable, then we call the function <em>surjective</em> or <em>onto</em>. More formally:</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-3" class="definition"><strong>Definition 4.3  (Surjectivity) </strong></span>A function <span class="math inline">\(f\)</span> is surjective if, for all <span class="math inline">\(t \in T\)</span>, there exists a <span class="math inline">\(s \in S\)</span> such that <span class="math inline">\(f(s) = t\)</span>.</p>
+<p><span id="def:unlabeled-div-4" class="definition"><strong>Definition 4.3  (Surjectivity) </strong></span>A function <span class="math inline">\(f\)</span> is surjective if, for all <span class="math inline">\(t \in T\)</span>, there exists a <span class="math inline">\(s \in S\)</span> such that <span class="math inline">\(f(s) = t\)</span>.</p>
 </div>
 <p>Alternatively, if each source in the function’s domain leads to a unique target, such that no two sources map to the same target, then we call such a function <em>injective</em> or <em>one-to-one</em>. That is:</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-4" class="definition"><strong>Definition 4.4  (Injectivity) </strong></span>A function is injective if, for all <span class="math inline">\(s_1, s_2 \in S\)</span>, if <span class="math inline">\(f(s_1) = t\)</span> and <span class="math inline">\(f(s_2) = t\)</span>, then <span class="math inline">\(s_1 = s_2\)</span>.</p>
+<p><span id="def:unlabeled-div-5" class="definition"><strong>Definition 4.4  (Injectivity) </strong></span>A function is injective if, for all <span class="math inline">\(s_1, s_2 \in S\)</span>, if <span class="math inline">\(f(s_1) = t\)</span> and <span class="math inline">\(f(s_2) = t\)</span>, then <span class="math inline">\(s_1 = s_2\)</span>.</p>
 </div>
 <p>Finally, if a function is both surjective and injective, meaning that every target can be reached from, and only from, a unique source, then we call such a function <em>bijective</em> or a <em>bijection</em>.</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-5" class="definition"><strong>Definition 4.5  (Bijectivity) </strong></span>A function is a bijection and only if it is both surjective and injective, which is also the case if and only if it is invertible.</p>
+<p><span id="def:unlabeled-div-6" class="definition"><strong>Definition 4.5  (Bijectivity) </strong></span>A function is a bijection and only if it is both surjective and injective, which is also the case if and only if it is invertible.</p>
 </div>
-<div class="figure"><span style="display:block;" id="fig:function-types"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:function-types"></span>
 <img src="figures/functions-types.png" alt="Types of functions. Left: in a *surjective* function, each target can be reached from some source. Middle: in an *injective* function, there is a unique source for each target. Right: in a *bijection*, each target can be reached from, and only from, a unique source." width="750" />
 <p class="caption">
 Figure 4.3: Types of functions. Left: in a <em>surjective</em> function, each target can be reached from some source. Middle: in an <em>injective</em> function, there is a unique source for each target. Right: in a <em>bijection</em>, each target can be reached from, and only from, a unique source.
@@ -268,7 +336,7 @@ Figure 4.3: Types of functions. Left: in a <em>surjective</em> function, each ta
 <h4><span class="header-section-number">4.0.2.2</span> Composition<a href="mathematical-theory.html#composition" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>An important property of functions is that they can be composed. Specifically, if the domain of one function matches the codomain of another, the functions can be composed by piping the output of the first function as the input of the second. We then end up with a new, composite function:</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-6" class="definition"><strong>Definition 4.6  (Function composition) </strong></span>Given two functions <span class="math inline">\(f: X \to Y\)</span> and <span class="math inline">\(g: Y \to Z\)</span>, we can form a new function <span class="math inline">\(h: X \to Z\)</span> by composing the two functions together such that:</p>
+<p><span id="def:unlabeled-div-7" class="definition"><strong>Definition 4.6  (Function composition) </strong></span>Given two functions <span class="math inline">\(f: X \to Y\)</span> and <span class="math inline">\(g: Y \to Z\)</span>, we can form a new function <span class="math inline">\(h: X \to Z\)</span> by composing the two functions together such that:</p>
 <p><span class="math display">\[h(x) = g(f(x))\]</span></p>
 <p>There are several different ways to denote function composition. One is to write out the composition explicitly using the variable <span class="math inline">\(x\)</span> as in the example above. However, mathematical texts often omit the explicit reference to the variable (<span class="math inline">\(x\)</span>) and write the composition in one of several ways:</p>
 <ol style="list-style-type: decimal">
@@ -279,7 +347,7 @@ Figure 4.3: Types of functions. Left: in a <em>surjective</em> function, each ta
 </div>
 <p>Throughout this thesis, I will use the bracket notation (<span class="math inline">\(h(x) = g(f(x))\)</span>) when explicitly referring to the variable, and the postfix/fat semicolon notation (<span class="math inline">\(h = f ⨾g\)</span>) otherwise.</p>
 <p>Surjectivity, injectivity, and bijectivity propagate through composition: composition of two surjective functions is surjective, composition of two injective functions is injective, and composition of two bijective functions is bijective. However, the converse does not necessarily hold: a bijective function does not have to be composed of two bijections:</p>
-<div class="figure"><span style="display:block;" id="fig:bijection"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:bijection"></span>
 <img src="figures/bijection-composition.png" alt="A bijection does not necessarily have to be composed of bijections. The function $f$ is not surjective, and the function $g$ is not injective, nevertheless, their composition $f \then g$ yields a bijective function." width="750" />
 <p class="caption">
 Figure 4.4: A bijection does not necessarily have to be composed of bijections. The function <span class="math inline">\(f\)</span> is not surjective, and the function <span class="math inline">\(g\)</span> is not injective, nevertheless, their composition <span class="math inline">\(f ⨾g\)</span> yields a bijective function.
@@ -291,11 +359,11 @@ Figure 4.4: A bijection does not necessarily have to be composed of bijections. 
 <h4><span class="header-section-number">4.0.2.3</span> The image and the pre-image<a href="mathematical-theory.html#the-image-and-the-pre-image" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>There are other things we can do with functions. For example, given a subset of sources, we can ask about the <em>image</em> - the set of targets we can reach from those sources:</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-7" class="definition"><strong>Definition 4.7  (Image) </strong></span>For some subset <span class="math inline">\(S_i \subseteq S\)</span>, its image under <span class="math inline">\(f\)</span> is defined as <span class="math inline">\(f_!(S_i) = \{ f(s) \in T \lvert s \in S_i \}\)</span>.</p>
+<p><span id="def:unlabeled-div-8" class="definition"><strong>Definition 4.7  (Image) </strong></span>For some subset <span class="math inline">\(S_i \subseteq S\)</span>, its image under <span class="math inline">\(f\)</span> is defined as <span class="math inline">\(f_!(S_i) = \{ f(s) \in T \lvert s \in S_i \}\)</span>.</p>
 </div>
 <p>Likewise, given a subset of targets, we can ask about the <em>pre-image</em> - the set of sources that could have produced those targets. That is:</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-8" class="definition"><strong>Definition 4.8  (Pre-image) </strong></span>For some subset <span class="math inline">\(T_i \subseteq T\)</span>, its pre-image under <span class="math inline">\(f\)</span> is defined as <span class="math inline">\(f^*(T_i) = \{ s \in S \lvert f(s) \in T_i \}\)</span>.</p>
+<p><span id="def:unlabeled-div-9" class="definition"><strong>Definition 4.8  (Pre-image) </strong></span>For some subset <span class="math inline">\(T_i \subseteq T\)</span>, its pre-image under <span class="math inline">\(f\)</span> is defined as <span class="math inline">\(f^*(T_i) = \{ s \in S \lvert f(s) \in T_i \}\)</span>.</p>
 </div>
 <p>An important fact to note is that, although the pre-image <span class="math inline">\(f^*\)</span> is also sometimes called the “inverse image”, it is <em>not</em> the inverse of the image <span class="math inline">\(f_!\)</span>, for most functions (ones which are not bijections). That is, by applying the pre-image after image or vice versa, we cannot expect to always come up with the same set as we started with. Specifically, if we have a non-injective function and apply the pre-image after the image, we may come up with <em>more</em> sources that we started with, <span class="math inline">\(S_i \subseteq f^*(f_!(S_i))\)</span> (equality if injective), and similarly, if we have a non-surjective function and apply the image after the pre-image, we might end up with <em>fewer</em> targets than we started with, <span class="math inline">\(f_!(f^*(T_i)) \subseteq T_i\)</span> (again, equality if surjective).</p>
 <p>As an example, suppose again I have the function <span class="math inline">\(f\)</span> which maps each friend to a holiday destination. The image of that function, <span class="math inline">\(f_!\)</span>, maps a set of friends to the set of all cities that at least one of them went to, and similarly, the pre-image, <span class="math inline">\(f^*\)</span>, maps a set of cities to the set of friends that went to them.<br />
@@ -311,23 +379,22 @@ Now, suppose that Sam and Dominic went to Rome, and I ask:</p>
 </blockquote>
 <p>then I will get Rome only, since</p>
 <p><span class="math display">\[f_!(f^*(\{Paris, Rome \})) = f_!(\{ Sam, Dominic \}) = \{ Rome \}\]</span></p>
-<p>This odd relationship between the the image and the pre-image is due to the fact that the image is actually something called <em>left adjoint</em> <span class="citation">(<a href="#ref-baez2023">Baez 2023</a>; <a href="#ref-fong2019">Fong and Spivak 2019</a>)</span>. Adjoints can be thought of as the “best approximate answer to a problem that has no solution” <span class="citation">(no inverse, <a href="#ref-baez2023">Baez 2023</a>)</span>, and they come in pairs - a left and a right adjoint - with the left adjoint being more permissive or “liberal” and the right adjoint being more strict or “conservative” <span class="citation">(<a href="#ref-baez2023">Baez 2023</a>)</span>.</p>
-<p>Proper treatment of adjoints is beyond the scope of this thesis, however.</p>
+<p>This odd relationship between the the image and the pre-image is due to the fact that the image is actually something called <em>left adjoint</em> <span class="citation">(<a href="#ref-baez2023">Baez 2023</a>; <a href="#ref-fong2019">Fong and Spivak 2019</a>)</span>. Adjoints can be thought of as the “best approximate answer to a problem that has no solution” <span class="citation">(no inverse, <a href="#ref-baez2023">Baez 2023</a>)</span>, and they come in pairs - a left and a right adjoint - with the left adjoint being more permissive or “liberal” and the right adjoint being more strict or “conservative” <span class="citation">(<a href="#ref-baez2023">Baez 2023</a>)</span>. Proper treatment of adjoints is beyond the scope of this thesis, however.</p>
 </div>
 </div>
 <div id="partitions" class="section level3 hasAnchor" number="4.0.3">
 <h3><span class="header-section-number">4.0.3</span> Partitions<a href="mathematical-theory.html#partitions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Another interesting simple mathematical constructions are partitions. Like functions, partitions are a type of relation, and can in fact be constructed using functions. That is, if we have a “labeling” function <span class="math inline">\(f\)</span>, we can construct a partition as follows:</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-9" class="definition"><strong>Definition 4.9  (Function definition of a partition) </strong></span>Given some set <span class="math inline">\(X\)</span>, a set of part labels <span class="math inline">\(P\)</span>, and a surjective function <span class="math inline">\(f: X \to P\)</span>, we can partition <span class="math inline">\(A\)</span> by assigning every element <span class="math inline">\(x \in X\)</span> a part label <span class="math inline">\(p \in P\)</span>, by simply applying the function: <span class="math inline">\(f(x) = p\)</span>.</p>
+<p><span id="def:unlabeled-div-10" class="definition"><strong>Definition 4.9  (Function definition of a partition) </strong></span>Given some set <span class="math inline">\(X\)</span>, a set of part labels <span class="math inline">\(P\)</span>, and a surjective function <span class="math inline">\(f: X \to P\)</span>, we can partition <span class="math inline">\(A\)</span> by assigning every element <span class="math inline">\(x \in X\)</span> a part label <span class="math inline">\(p \in P\)</span>, by simply applying the function: <span class="math inline">\(f(x) = p\)</span>.</p>
 </div>
 <p>We can also define partitions using equivalence classes. By taking any part label <span class="math inline">\(p \in P\)</span>, we can recover the corresponding subset of <span class="math inline">\(X\)</span> by pulling out its pre-image: <span class="math inline">\(f^*(\{p\}) = X_p \subseteq X\)</span>. We can then define a partition without reference to <span class="math inline">\(f\)</span>:</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-10" class="definition"><strong>Definition 4.10  (Equivalence class definition of a partition) </strong></span>A partition of <span class="math inline">\(A\)</span> consists of a set of part labels <span class="math inline">\(P\)</span>, such that, for all <span class="math inline">\(p \in P\)</span>, there is a non-empty subset <span class="math inline">\(A_p \subseteq A\)</span> which forms an equivalence class on <span class="math inline">\(A\)</span> and:</p>
+<p><span id="def:unlabeled-div-11" class="definition"><strong>Definition 4.10  (Equivalence class definition of a partition) </strong></span>A partition of <span class="math inline">\(A\)</span> consists of a set of part labels <span class="math inline">\(P\)</span>, such that, for all <span class="math inline">\(p \in P\)</span>, there is a non-empty subset <span class="math inline">\(A_p \subseteq A\)</span> which forms an equivalence class on <span class="math inline">\(A\)</span> and:</p>
 <p><span class="math display">\[X = \bigcup_{p \in P} X_p \qquad \text{and} \qquad \text{if } p \neq q, \text{ then } X_p \cap X_q = \varnothing\]</span>
 I.e. the parts <span class="math inline">\(X_p\)</span> jointly cover the entirety of <span class="math inline">\(X\)</span> and parts cannot share any elements.</p>
 </div>
-<p>We can rank partitions by their coarseness. That is, for any set <span class="math inline">\(X\)</span>, the coarsest partition is one with only one part label <span class="math inline">\(P = \{ 1 \}\)</span>, such that each element of <span class="math inline">\(X\)</span> gets assigned <span class="math inline">\(1\)</span> as label. Conversely, the finest partition is one where each element gets assigned its own unique part label, such that <span class="math inline">\(\lvert X \lvert = \lvert P \lvert\)</span>.</p>
+<p>We can rank partitions by their coarseness. For any set <span class="math inline">\(X\)</span>, the coarsest partition is one with only one part label <span class="math inline">\(P = \{ 1 \}\)</span>, such that each element of <span class="math inline">\(X\)</span> gets assigned <span class="math inline">\(1\)</span> as label. Conversely, the finest partition is one where each element gets assigned its own unique part label, such that <span class="math inline">\(\lvert X \lvert = \lvert P \lvert\)</span>.</p>
 <p>Given two partitions, we can form a finer (or at least as fine) partition by taking their intersection, i.e. by taking the set of all unique pairs of labels that co-occur for any <span class="math inline">\(x \in X\)</span> as the new part labels. For example, suppose <span class="math inline">\(X = \{ 1, 2, 3 \}\)</span> and partition 1 assigns part labels:</p>
 <p><span class="math display">\[p_1(x) = \begin{cases}
 a &amp; \text{if } x = 1 \text{ or } x = 2 \\
@@ -353,7 +420,7 @@ p_3(a) = \begin{cases}
 <h3><span class="header-section-number">4.0.4</span> Preorders<a href="mathematical-theory.html#preorders" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Another important class of relations are ones that have to do with order. Among these, one of the simplest constructions is a preorder:</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-11" class="definition"><strong>Definition 4.11  (Preorder) </strong></span>A preorder is a set <span class="math inline">\(X\)</span> equipped with a binary relation <span class="math inline">\(\leq\)</span> that conforms to the following two properties:</p>
+<p><span id="def:unlabeled-div-12" class="definition"><strong>Definition 4.11  (Preorder) </strong></span>A preorder is a set <span class="math inline">\(X\)</span> equipped with a binary relation <span class="math inline">\(\leq\)</span> that conforms to the following two properties:</p>
 <ol style="list-style-type: decimal">
 <li><em>Reflexivity</em>: <span class="math inline">\(x \leq x\)</span> for all <span class="math inline">\(x \in X\)</span></li>
 <li><em>Transitivity</em>: if <span class="math inline">\(x \leq y\)</span> and <span class="math inline">\(y \leq z\)</span>, then <span class="math inline">\(x \leq z\)</span>, for all <span class="math inline">\(x, y, z \in X\)</span></li>
@@ -361,7 +428,7 @@ p_3(a) = \begin{cases}
 </div>
 <p>Simply speaking, this means that, if we pick any two elements in the set <span class="math inline">\(X\)</span>, they either relate and one element is “less than or equal to” the other (in whatever sense we care about), or they do not relate at all.</p>
 <p>One simple example of a preorder is the family tree, see Figure <a href="mathematical-theory.html#fig:family-tree">4.5</a>. Here, the underlying set is the family: <span class="math inline">\(X = \{  \text{daughter, son, mother, father, grandmother, ...} \}\)</span> and the binary relation is ancestry or familial relation. Thus, for example, <span class="math inline">\(\text{daughter} \leq \text{father}\)</span>, since the daughter is related to (is offspring of) the father, and <span class="math inline">\(\text{father} \leq \text{father}\)</span>, since a person is related to themselves (for the sake of this example). However, there is no relation (<span class="math inline">\(\leq\)</span>) between <span class="math inline">\(\text{father}\)</span> and <span class="math inline">\(\text{mother}\)</span> since they are not related. Finally, since <span class="math inline">\(\text{daughter} \leq \text{father}\)</span> and <span class="math inline">\(\text{father} \leq \text{grandmother}\)</span>, then, by reflexivity, <span class="math inline">\(\text{daughter} \leq \text{grandmother}\)</span>.</p>
-<div class="figure"><span style="display:block;" id="fig:family-tree"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:family-tree"></span>
 <img src="figures/family-tree.png" alt="An example of a simple preorder: family tree ordered by familial relation." width="532" />
 <p class="caption">
 Figure 4.5: An example of a simple preorder: family tree ordered by familial relation.
@@ -381,7 +448,7 @@ Figure 4.5: An example of a simple preorder: family tree ordered by familial rel
 <h4><span class="header-section-number">4.0.4.2</span> Structure preserving maps: Monotone maps<a href="mathematical-theory.html#structure-preserving-maps-monotone-maps" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>Preorders are interesting because they give us a first taste of something will be discussed a lot throughout this thesis: structure-preserving maps. Specifically, if we have two preorders <span class="math inline">\((X, \leq_X)\)</span> and <span class="math inline">\((Y, \leq_Y)\)</span>, and a function <span class="math inline">\(f: X \to Y\)</span>, we can classify this function based on whether it preserves the order in <span class="math inline">\((X, \leq_X)\)</span> or not. That is, we call a function <span class="math inline">\(f\)</span> order-preserving or a “monotone map”, if:</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-12" class="definition"><strong>Definition 4.12  (Monotone map) </strong></span>A monotone map <span class="math inline">\(f: X \to Y\)</span> is a function between two preorders <span class="math inline">\((X, \leq_X)\)</span> and <span class="math inline">\((Y, \leq_Y)\)</span>, such that, for all <span class="math inline">\(x_1, x_2 \in X\)</span>:</p>
+<p><span id="def:unlabeled-div-13" class="definition"><strong>Definition 4.12  (Monotone map) </strong></span>A monotone map <span class="math inline">\(f: X \to Y\)</span> is a function between two preorders <span class="math inline">\((X, \leq_X)\)</span> and <span class="math inline">\((Y, \leq_Y)\)</span>, such that, for all <span class="math inline">\(x_1, x_2 \in X\)</span>:</p>
 <p><span class="math display">\[\text{if} \;\; x_1 \leq_X x_2 \;\; \text{then} \;\; f(x_1) \leq_Y f(x_2) \]</span></p>
 </div>
 <p>For example, suppose we are interested in the set of functions <span class="math inline">\(\mathbb{R} \to \mathbb{R}\)</span> mapping from and to the preorder of reals ordered by the usual order relation <span class="math inline">\(\leq\)</span>, <span class="math inline">\((\mathbb{R}, \leq)\)</span>. Then, the function <span class="math inline">\(f(x) = \log(x)\)</span> is an example of a monotone map, since:</p>
@@ -395,7 +462,7 @@ Figure 4.5: An example of a simple preorder: family tree ordered by familial rel
 <p>In the previous subsection, we discussed one example of taking a set and imposing some kind of structure on it: namely, we took a set and imposed an order relation on it and called the result a preorder. However, we can impose many other kinds of structure on collections of objects (sets). One such type of a structure is a monoid.</p>
 <p>A monoid is an algebraic structure that represents a “whole equal to the sum of its parts”, if we relax our idea about what it means to “sum”. More formally:</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-13" class="definition"><strong>Definition 4.13  (Monoid) </strong></span>A monoid is a tuple <span class="math inline">\((M, e, \otimes)\)</span> consisting of:</p>
+<p><span id="def:unlabeled-div-14" class="definition"><strong>Definition 4.13  (Monoid) </strong></span>A monoid is a tuple <span class="math inline">\((M, e, \otimes)\)</span> consisting of:</p>
 <ul>
 <li>A set of objects <span class="math inline">\(M\)</span></li>
 <li>A neutral element <span class="math inline">\(e\)</span> called the <em>monoidal unit</em></li>
@@ -409,7 +476,7 @@ Figure 4.5: An example of a simple preorder: family tree ordered by familial rel
 </div>
 <p>In simple terms, when we have a monoid <span class="math inline">\((M, \otimes, e)\)</span>, we have some elements <span class="math inline">\(m \in M\)</span> and a way to combine them, such that, when we combine the same group of elements, we always get back the same result, no matter in what order we do it in (associativity: brackets do not matter). We also have some neutral element <span class="math inline">\(e\)</span> that, when combined with any other element, does nothing and simply yields back the original element.</p>
 <div class="theorem">
-<p><span id="thm:unlabeled-div-14" class="theorem"><strong>Theorem 4.1  (Uniqueness of the neutral element) </strong></span>The neutral element in a monoid is always unique.</p>
+<p><span id="thm:unlabeled-div-15" class="theorem"><strong>Theorem 4.1  (Uniqueness of the neutral element) </strong></span>The neutral element in a monoid is always unique.</p>
 </div>
 <p>Proof: suppose <span class="math inline">\(e_1\)</span> and <span class="math inline">\(e_2\)</span> are elements in <span class="math inline">\(M\)</span> that have the unital property. Then <span class="math inline">\(e_1 \otimes e_2 = e_1\)</span> but also <span class="math inline">\(e_1 \otimes e_2 = e_2\)</span> (treating either as “the” neutral element). So, <span class="math inline">\(e_1 = e_2\)</span>.</p>
 <div id="simple-examples-of-monoids" class="section level4 hasAnchor" number="4.0.5.1">
@@ -477,7 +544,7 @@ Figure 4.5: An example of a simple preorder: family tree ordered by familial rel
 <h4><span class="header-section-number">4.0.5.4</span> Structure preserving maps: Monoid homomorphisms<a href="mathematical-theory.html#monoid-homomorphism" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>As with preorders, when we have functions which map from one monoid to another, we can ask whether they preserve properties we care about. Before, this was order; now, we want the operations to preserve the fundamental properties of the monoidal product, unitality and associativity:</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-15" class="definition"><strong>Definition 4.14  (Monoid homomorphism) </strong></span>Let <span class="math inline">\((M, e_M, \otimes_M)\)</span> and <span class="math inline">\((N, e_N, \otimes_N)\)</span> be monoids. A function <span class="math inline">\(f: M \to N\)</span> is called a monoid homomorphism if it:</p>
+<p><span id="def:unlabeled-div-16" class="definition"><strong>Definition 4.14  (Monoid homomorphism) </strong></span>Let <span class="math inline">\((M, e_M, \otimes_M)\)</span> and <span class="math inline">\((N, e_N, \otimes_N)\)</span> be monoids. A function <span class="math inline">\(f: M \to N\)</span> is called a monoid homomorphism if it:</p>
 <ol style="list-style-type: decimal">
 <li>Preserves product: <span class="math inline">\(f(m_1 \otimes_M m_2) = f(m_1) \otimes_N f(m_2)\)</span></li>
 <li>Preserves unitality: <span class="math inline">\(f(e_M) = e_N\)</span></li>
@@ -505,7 +572,7 @@ Figure 4.5: An example of a simple preorder: family tree ordered by familial rel
 <h3><span class="header-section-number">4.0.6</span> Groups<a href="mathematical-theory.html#groups" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Another well-known example of algebraic structures are groups. Groups are studied in group theory, and encode the idea of reversible transformations and symmetry. Despite the difference in term, groups are really just a monoid with one additional property:</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-16" class="definition"><strong>Definition 4.15  (Group) </strong></span>A group is a monoid with an inverse operator. Specifically, as with a monoid, we have the tuple <span class="math inline">\((G, e, \otimes)\)</span>, which includes a set <span class="math inline">\(G\)</span>, a neutral element <span class="math inline">\(e\)</span>, and a product <span class="math inline">\(\otimes\)</span>, and the product fullfills the following properties:</p>
+<p><span id="def:unlabeled-div-17" class="definition"><strong>Definition 4.15  (Group) </strong></span>A group is a monoid with an inverse operator. Specifically, as with a monoid, we have the tuple <span class="math inline">\((G, e, \otimes)\)</span>, which includes a set <span class="math inline">\(G\)</span>, a neutral element <span class="math inline">\(e\)</span>, and a product <span class="math inline">\(\otimes\)</span>, and the product fullfills the following properties:</p>
 <ol style="list-style-type: decimal">
 <li>Unitality: <span class="math inline">\(g \otimes e = e \otimes g = g\)</span>, for all <span class="math inline">\(g \in G\)</span></li>
 <li>Associativity: <span class="math inline">\(g_1 \otimes (g_2 \otimes g_3) = (g_1 \otimes g_2) \otimes g_3 = g_1 \otimes g_2 \otimes g_3\)</span>, for all <span class="math inline">\(g_1, g_2, g_3 \in G\)</span></li>
@@ -528,7 +595,7 @@ Figure 4.5: An example of a simple preorder: family tree ordered by familial rel
 <h4><span class="header-section-number">4.0.6.2</span> Structure preserving maps: Group homomorphisms<a href="mathematical-theory.html#group-homomorphism" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>Like with monoids, groups can be transformed in ways that respect the group structure. Most of the setup is the same as it was for monoids, in Section <a href="mathematical-theory.html#monoid-homomorphism">4.0.5.4</a>, however, there is one more requirement on the function <span class="math inline">\(f: G \to H\)</span>:</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-17" class="definition"><strong>Definition 4.16  (Group homomorphism) </strong></span>Group homomorphism is a <a href="mathematical-theory.html#monoid-homomorphism">monoid homomorphism</a> where the product <span class="math inline">\(\otimes\)</span> has one additional property:</p>
+<p><span id="def:unlabeled-div-18" class="definition"><strong>Definition 4.16  (Group homomorphism) </strong></span>Group homomorphism is a <a href="mathematical-theory.html#monoid-homomorphism">monoid homomorphism</a> where the product <span class="math inline">\(\otimes\)</span> has one additional property:</p>
 <ol start="3" style="list-style-type: decimal">
 <li>Preserves inverses<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>: <span class="math inline">\(f(e_G \otimes^{-1} g) = e_H \otimes^{-1}f(g)\)</span></li>
 </ol>
@@ -540,7 +607,7 @@ Figure 4.5: An example of a simple preorder: family tree ordered by familial rel
 <h3><span class="header-section-number">4.0.7</span> Categories<a href="mathematical-theory.html#categories" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>While discussing mathematical structures like preorders, monoids, and groups, some common have been cropping up: namely, structure, equality, and structure-preserving maps. Now it is time to shift gears and define these common themes more generally. To do this, we can make use of one powerful concept: categories <span class="citation">(<a href="#ref-fong2019">Fong and Spivak 2019</a>; <a href="#ref-lawvere2009">Lawvere and Schanuel 2009</a>)</span>.</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-18" class="definition"><strong>Definition 4.17  (Category) </strong></span>To define a category <span class="math inline">\(\mathcal{C}\)</span>, we specify:</p>
+<p><span id="def:unlabeled-div-19" class="definition"><strong>Definition 4.17  (Category) </strong></span>To define a category <span class="math inline">\(\mathcal{C}\)</span>, we specify:</p>
 <ul>
 <li>A collection of objects <span class="math inline">\(\text{Ob}(\mathcal{C})\)</span></li>
 <li>For every two objects <span class="math inline">\(c, d \in \text{Ob}(\mathcal{C})\)</span>, we define a set of morphisms (arrows) <span class="math inline">\(\mathcal{C}(c, d)\)</span></li>
@@ -554,13 +621,17 @@ Figure 4.5: An example of a simple preorder: family tree ordered by familial rel
 </ol>
 <p>(for all <span class="math inline">\(f \in \mathcal{C}(c_1, c2)\)</span>, <span class="math inline">\(g \in \mathcal{C}(c_2, c3)\)</span>, and <span class="math inline">\(f \in \mathcal{C}(c_3, c4)\)</span>, and <span class="math inline">\(c_1, c_2, c_3, c_4 \in \text{Ob}(\mathcal{C})\)</span>)</p>
 </div>
-<p>The definition above may look daunting, because of the introduction of new notation and the use of abstract terms like “collection”, “objects”, and “morphisms”. However, it is really nothing new. To simplify things, we can think of the collection of objects as a set, and the morphisms/arrows as functions, and we retain most of the original meaning; the abstract definition above simply gives us more flexibility.</p>
-<p>The put in in different terms, the definition of a category says that we have some objects <span class="math inline">\(c \in \text{Ob}(\mathcal{C})\)</span> which relate to each other via morphisms, and these morphisms obey some common sense properties. First, the morpshisms compose: if we can get from <span class="math inline">\(c_1\)</span> to <span class="math inline">\(c_2\)</span> and <span class="math inline">\(c_2\)</span> to <span class="math inline">\(c_3\)</span>, we can get from <span class="math inline">\(c_1\)</span> to <span class="math inline">\(c_3\)</span>. Second the composition is associative, meaning that the order in which we compose does not matter. Finally, we always have a way of “staying in the same place”, which is the identity morphism.</p>
+<p>In simple terms, when we have a category says, we have some objects <span class="math inline">\(c \in \text{Ob}(\mathcal{C})\)</span> which relate to each other via the morphisms, and these morphisms obey some common sense properties. First, the morpshisms compose: if we can get from <span class="math inline">\(c_1\)</span> to <span class="math inline">\(c_2\)</span> and <span class="math inline">\(c_2\)</span> to <span class="math inline">\(c_3\)</span>, we can get from <span class="math inline">\(c_1\)</span> to <span class="math inline">\(c_3\)</span>. Second the composition is associative, meaning that the order in which we compose does not matter. Finally, we always have a way of “staying in the same place”, which is the identity morphism.</p>
+<p>To give a concrete example, here is a diagram of a simple category with two objects and a non-identity morphism, typically denoted as <span class="math inline">\(\underline{\textbf{2}}\)</span>:</p>
+<p><img src="figures/category-two.png" width="214" style="display: block; margin: auto;" /></p>
+<p>The properties of a category simply tells us that staying in one place before or after moving to a different place is that same as just moving, <span class="math inline">\(\text{id}_1 ⨾f = f ⨾\text{id}_2 = f\)</span>, and that how we choose to “lump” the different parts of our journey together does not matter, <span class="math inline">\((\text{id}_1 ⨾f) ⨾\text{id}_2 = \text{id}_1 ⨾(f ⨾\text{id}_2)\)</span>.</p>
+<p>The power of categories is their flexibility. This lies in the definitions of “objects” and “morphisms”, which are left vague on purpose. The result is that we can use categories to define a broad class of structures, even very simple, familiar one. For instance, we could define a category where the objects can be elements in a set, and the morphisms can serve as indicator of some kind of relationship. Then the category would encode a <a href="mathematical-theory.html#relations">relation</a>.</p>
+<p>However, there is nothing stopping us from defining categories with more complex objects and relations. For example, as we will see, it is possible to define categories where the objects themselves are other categories, and the morphisms are <a href="mathematical-theory.html#functors">transformations between categories</a>.</p>
 <div id="isomorphism" class="section level4 hasAnchor" number="4.0.7.1">
-<h4><span class="header-section-number">4.0.7.1</span> Isomporphisms in categories<a href="mathematical-theory.html#isomorphism" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>Before we go on to discuss specific examples of categories, there is one more important concept we need to discuss. We have been speaking of isomorphism as a bijection that “preserves structure”. Now it is time to define what this means, and categories provide a good way to do this:</p>
+<h4><span class="header-section-number">4.0.7.1</span> Isomorphisms within categories<a href="mathematical-theory.html#isomorphism" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Before we go on to discuss specific examples of categories, there is one more important concept we need to mention. So far, we have been speaking of isomorphisms in fairly vague terms, as bijections which “preserve structure”. Now it is time to define what this structure-preserving bijection means, and categories provide one way of doing just this:</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-19" class="definition"><strong>Definition 4.18  (Isomorphism) </strong></span>Within a category, a morphism <span class="math inline">\(f: x \to y\)</span> is called an isomorphism if there exists another morphism <span class="math inline">\(g: y \to x\)</span> such that:</p>
+<p><span id="def:unlabeled-div-20" class="definition"><strong>Definition 4.18  (Isomorphism) </strong></span>Within a category, a morphism <span class="math inline">\(f: x \to y\)</span> is called an isomorphism if there exists another morphism <span class="math inline">\(g: y \to x\)</span> such that:</p>
 <ul>
 <li><span class="math inline">\(f ⨾g = \text{id}_X\)</span></li>
 <li><span class="math inline">\(g ⨾f = \text{id}_Y\)</span></li>
@@ -568,12 +639,13 @@ Figure 4.5: An example of a simple preorder: family tree ordered by familial rel
 <p><span class="math inline">\(f\)</span> and <span class="math inline">\(g\)</span> are then inverses to each other, such that <span class="math inline">\(f = g^{-1}\)</span> and <span class="math inline">\(g = f^{-1}\)</span>, equivalently.</p>
 </div>
 <p>Notice that the definition above is similar to that of a bijection, however, we are gently stripping away reference to specific elements, such as with <span class="math inline">\(g(f(x)) = x\)</span> and are instead only referring to the morphisms <span class="math inline">\(f ⨾g = id_{x}\)</span>. While this difference might seem superficial, it is important, because it turns out we can encode more information in morphisms than we can in elements. Specifically, while before we talked about transformations which preserve the identity of elements <em>and</em> some additional structure, defining isomorphisms purely in terms of morphisms allows us to do away with this distinction.</p>
+<p>Note that I have mentioned that the definition above is <em>one</em> way of defining isomorphisms, <em>within a category</em>. Without getting ahead of ourselves too much, it turns out there is another way of defining isomorphisms, <em>between categories</em>. This duality of definition of isomorphism does not cause problems, since, as was mentioned above, the definition of a category is broad enough such that the objects in a category can be other categories, and the morphisms can be transformations between categories. More on this later.</p>
 </div>
 <div id="algebraic-structures-as-categories" class="section level4 hasAnchor" number="4.0.7.2">
 <h4><span class="header-section-number">4.0.7.2</span> Algebraic structures as categories<a href="mathematical-theory.html#algebraic-structures-as-categories" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>It might not seem that the broad, abstract definition of a category can buy us much. However, as we will see, it allows us to reason about all of the algebraic structures we have discussed so far. To start off:</p>
 <div class="proposition">
-<p><span id="prp:unlabeled-div-20" class="proposition"><strong>Proposition 4.1  </strong></span>A preorder is a category where there is at most one morphism between any two objects.</p>
+<p><span id="prp:unlabeled-div-21" class="proposition"><strong>Proposition 4.1  </strong></span>A preorder is a category where there is at most one morphism between any two objects.</p>
 </div>
 <p>Before, we defined a preorder as tuple consisting of a set and a relation, <span class="math inline">\((X, \leq)\)</span>. Further, we had to specify two additional properties that the relation has to uphold: namely, reflexivity and associativity.</p>
 <p>It turns out, if we define preorder as a category with at most one morphism between each pair of objects, the properties of reflexivity and associativity automatically fall out of the definition. Specifically, let the elements <span class="math inline">\(x \in X\)</span> be the objects in the category <span class="math inline">\(\mathcal{X}\)</span> corresponding to the preorder <span class="math inline">\((X, \leq)\)</span>, and let the relation <span class="math inline">\(leq\)</span> be represented by presence of a morphism between two objects (of which can there be only one).</p>
@@ -583,13 +655,13 @@ Figure 4.5: An example of a simple preorder: family tree ordered by familial rel
 </ol>
 <p>The example above of casting a preorder as a category was fairly intuitive, since the elements <span class="math inline">\(x \in X\)</span> mapped to objects and the relation <span class="math inline">\(\leq\)</span> mapped to morphisms. However, with other types of algebraic structures, the mapping can be a bit more intricate. For example:</p>
 <div class="proposition">
-<p><span id="prp:unlabeled-div-21" class="proposition"><strong>Proposition 4.2  </strong></span>A monoid is a category with a single object.</p>
+<p><span id="prp:unlabeled-div-22" class="proposition"><strong>Proposition 4.2  </strong></span>A monoid is a category with a single object.</p>
 </div>
 <p>Here, we need to break away from the intuitive way of thinking of objects as elements in a set and morphisms as functions, and instead take a more creative approach. Specifically, we can take a monoid <span class="math inline">\((M, e, \otimes)\)</span> and define it as a category with a single “dummy” object and morphisms to and from this object. For example, here’s how we can define summation of natural numbers <span class="math inline">\((\mathbb{N}, 0, +)\)</span> as a category:</p>
-<p><img src="figures/monoid-category.png" width="87" /></p>
+<p><img src="figures/monoid-category.png" width="87" style="display: block; margin: auto;" /></p>
 <p>Here, the object in the category does not really represent anything, and all of the information is encoded in morphisms and their composition. Specifically, the identity morphism is equal to the monoidal unit zero, and the only other morphism, <span class="math inline">\(1\)</span>, represents the number one. Composition of morphisms represents addition. Then, any natural number <span class="math inline">\(n \in \mathbb{N}\)</span> can be represented as a composition of arrows, <span class="math inline">\(1 = 1\)</span>, <span class="math inline">\(2 = 1 ⨾1\)</span>, <span class="math inline">\(3 = 1 ⨾1 ⨾1\)</span>, etc… <span class="citation">(this is in fact similar to Peano axiomatization, see <a href="#ref-stepanov2014">Stepanov and Rose 2014</a>)</span>.</p>
 <div class="proposition">
-<p><span id="prp:unlabeled-div-22" class="proposition"><strong>Proposition 4.3  </strong></span>A group is a category with one object where every morphism is an isomorphism</p>
+<p><span id="prp:unlabeled-div-23" class="proposition"><strong>Proposition 4.3  </strong></span>A group is a category with one object where every morphism is an isomorphism</p>
 </div>
 </div>
 </div>
@@ -597,7 +669,7 @@ Figure 4.5: An example of a simple preorder: family tree ordered by familial rel
 <h3><span class="header-section-number">4.0.8</span> Functors<a href="mathematical-theory.html#functors" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Now it is time for a precise and general definition of structure preserving maps. This is what a functor is.</p>
 <div class="definition">
-<p><span id="def:unlabeled-div-23" class="definition"><strong>Definition 4.19  (Functor) </strong></span>Given two categories <span class="math inline">\(\mathcal{C}\)</span> and <span class="math inline">\(\mathcal{D}\)</span>, to specify a functor <span class="math inline">\(F: \mathcal{C} \to D\)</span>, we define:</p>
+<p><span id="def:unlabeled-div-24" class="definition"><strong>Definition 4.19  (Functor) </strong></span>Given two categories <span class="math inline">\(\mathcal{C}\)</span> and <span class="math inline">\(\mathcal{D}\)</span>, to specify a functor <span class="math inline">\(F: \mathcal{C} \to D\)</span>, we define:</p>
 <ul>
 <li>For every object <span class="math inline">\(c \in \text{Ob}(\mathcal{C})\)</span>, an object <span class="math inline">\(F(c) \in \text{Ob}(\mathcal{D})\)</span></li>
 <li>For every morphism <span class="math inline">\(f: c_1 \to c_2\)</span> in <span class="math inline">\(\mathcal{C}(c_1, c_2)\)</span>, a morphism <span class="math inline">\(F(f): F(c_1) \to F(c_2)\)</span></li>
@@ -654,6 +726,9 @@ Stepanov, Alexander A, and Paul McJones. 2009. <em>Elements of Programming</em>.
 </div>
 <div id="ref-stepanov2014" class="csl-entry">
 Stepanov, Alexander A, and Daniel E Rose. 2014. <em>From Mathematics to Generic Programming</em>. Pearson Education.
+</div>
+<div id="ref-vickers2012" class="csl-entry">
+Vickers, Paul, Joe Faith, and Nick Rossiter. 2012. <span>“Understanding Visualization: A Formal Approach Using Category Theory and Semiotics.”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em> 19 (6): 1048–61.
 </div>
 <div id="ref-yorgey2012" class="csl-entry">
 Yorgey, Brent A. 2012. <span>“Monoids: Theme and Variations (Functional Pearl).”</span> <em>ACM SIGPLAN Notices</em> 47 (12): 105–16.

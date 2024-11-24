@@ -6,21 +6,33 @@ editor_options:
 
 # Problem Set
 
-Designing an interactive data visualization system presents a unique set of challenges which need to be addressed. Some of these have been already mentioned in the [Introduction](#Introduction). This section discusses these inherent challenges in greater depth, and begins exploring avenues for possible solutions.
+Designing an interactive data visualization system presents a unique set of challenges. Some of these have been already touched on in the [Introduction](#Introduction). This section discusses these inherent challenges in greater depth, and begins exploring avenues for possible solutions.
 
 ## Data representation
 
-There is no data visualization without data. However, all data is not equal. Data can come to use in various shapes and sizes, and this can affect various aspects of the system, including design, memory, and performance.
+Data visualization is, first and foremost, about data (it's in the name). However, all data is not created equal. Information can come to us in various shapes and sizes, and the way the data is structured can have a significant impact on various aspects of the visualization system, including ease of use, maintainability, and performance.
 
-In most data analytic languages, the default data model is that of two-dimensional table or dataframe. Examples include the S3 `data.frame` class in base R [@r2024], the `tbl_df` S3 class in the `tibble` package [@muller2023], the `DataFrame` class in the Python `pandas` package [@pandas2024], the `DataFrame` class in the `polars` library [@polars2024], or the `DataFrame` type in the Julia `DataFrame.jl` package [@bouchet-valat2023]. In this model, data is organized in columns, which are homogeneous arrays each storing values of the same type. Unlike in a matrix, the columns can be of different types (such as floats, integers, or strings). The dataframe object is then just a dictionary of columns, with some optional metadata, such as row names, column labels, or grouping structure [@r2024; @bouchet-valat2023].
+#### Row-based vs. column-based
 
-However, this column-based organization of data is not universal. For example, in the popular JavaScript data visualization and transformation library D3 [@bostock2022] ascribes to a row-based data model, such that data is organized as an array of rows, with each row being its own separate dictionary. 
+A common model in many data analytic languages is that of two-dimensional table or data frame. Here, the data is organized in a dictionary of columns, with each column being a homogeneous array containing values of the same type. However, unlike in a matrix data structure, different columns can store values of different types (such as floats, integers, or strings). The dataframe object can also store optional metadata, such as row names, column labels, or grouping structure [@r2024; @bouchet-valat2023]. Popular examples of this design include the S3 `data.frame` class in base R [@r2024], the `tbl_df` S3 class in the `tibble` package [@muller2023], the `DataFrame` class in the Python `pandas` package [@pandas2024], the `DataFrame` class in the `polars` library [@polars2024], or the `DataFrame` type in the Julia `DataFrame.jl` package [@bouchet-valat2023]. 
 
-In a more general programming context, the column-based and row-based data layouts are also known as the struct of arrays (SoA) and array of structs (AoS) data structures, respectively. These data layouts have generally different performance characteristics, and hence why they are also studied in database design [see e.g. @abadi2013]. The SoA layout has (typically) smaller memory footprint and better performance in tight loops that operate on individual columns, thanks to cache locality [@abadi2013; @acton2014; @kelley2023]. The AoS layout can have arguably better developer ergonomics and can perform better when retrieving individual records/rows [hence why it is more common in traditional Online Transaction Processing databases, @abadi2013].    
+However, the column-based organization of data is not universal. For example, the popular JavaScript data visualization and transformation library D3 [@bostock2022] models data frames as arrays of rows, with each row being its own separate dictionary. Likewise, certain types of databases store tables as lists of records, with each record having the shape of a dictionary [@abadi2013].
+
+Within a broader programming context, these two fundamental data layouts are referred to as the struct of arrays (SoA, also known as "parallel arrays") versus the array of structs (AoS) data structures. SoA store data in a dictionary of arrays, similar to the column-based layout, whereas AoS store data in an arrays of dictionaries, similar to row-based layout. The distinction between SoA and AoS is a bit more nuanced, since structs can store a wider class of types than just plain data, such as functions and pointers, and this makes either layout better suited to certain [programming styles](#programming-paradigms). For example, in object oriented programming, data is encapsulated alongside behavior in objects, and this makes the AoS data structure the more natural choice in this programming paradigm [replicating the same functionality with SoA is awkward, although some modern languages offer features which make this more convenient, see e.g. @zig2024].     
+
+#### Performance
+
+The two data layouts also offer distinct performance characteristics.
+
+The column-based (SoA) layout is generally considered to be the one better for performance [see e.g. @acton2014; @kelley2023]. Specifically, it benefits from two important features: better memory alignment and improved cache locality. First, homogeneous arrays offer better memory characteristics than heterogeneous structs. This is because they can be stored as contiguous blocks of memory with the same alignment, eliminating the need for padding and potentially leading to a significant reduction in memory footprint [see e.g. @rentzsch2005; @kelley2023]. Second, the column-based data layout is better suited for pre-fetching. Specifically, when performing column-wise operations, the CPU can cache the contiguously-stored values more easily, often resulting in a greatly improved performance [@abadi2013; @acton2014; @kelley2023]. 
+
+However, the row-based (AoS) layout can also perform well in certain situations. Specifically, it can outperform column-based stores when retrieving individual records/rows is key, hence why it is commonly used in traditional Online Transaction Processing databases [OLTP, @abadi2013]. Additionally, it could be argued that the row-based layout can be more "natural" and offer better developer ergonomics for certain programming styles such as OOP.     
 
 ## Data transformation
 
-When visualizing data, it is rarely the case that we can just draw the raw data as is. Often, the quantities underlying a specific plot type are instead summaries or aggregates of some kind. Take for example a typical barplot. To draw a barplot, we first need to divide the data into disjoint parts, each corresponding to one bar, and then summarize each part by some metric, usually either the number of cases (count) or the sum of some continuous variable. Similarly, in a histogram, we first need to divide the data into bins and then summarize them (typically by count). Thus, there are two fundamental operations involved in every visualization: splitting the data into parts and computing the summaries on these parts. 
+When visualizing data, we rarely plot the raw data directly. Instead, the quantities we visualize are often summaries or aggregates of some kind. Take for example a typical barplot. To draw the barplot, we first need to divide the data into parts, summarize each part by some metric, usually either count or sum of some variable, and finally, render the summaries as individual bars. Likewise, many other types of plots like boxplots or histograms include two distinct steps: splitting the data into parts and computing the summaries on these parts. 
+
+This section discusses these two fundamental parts of the data visualization pipeline - partitioning and aggregation - and explores challenges associated with their implementation in an interactive data visualization system. While these operations might seem straightforward, my goal is to make the case that they actually come equipped with a lot of subtle structure, more than might necessarily meet the eye. 
 
 ### Partitioning the data
 
@@ -108,27 +120,35 @@ In general, there is nothing inherently wrong with the plot above. Non-disjoint 
 ```{r}
 #| echo: false
 #| fig-height: 3
-#| fig-cap: "Non-disjoint data representations can often be recast into disjoint ones. The figure again shows the vote share in the combined 2020 New Zealand referendum on euthanasia and cannabis, however, now each issue is plotted in a separate plot, and thus each geometric object in each plot represents a unique subset of ballots/voters."
+#| fig-cap: "Non-disjoint data representations can often be turned into disjoint ones. The figure again shows the vote share in the combined 2020 New Zealand referendum on euthanasia and cannabis, however, now each issue is plotted in a separate plot, and thus each geometric object in each plot represents a unique subset of ballots/voters."
 
 knitr::include_graphics("./figures/referendum-bijection.png")
 ```
 
-Why should we care about whether our representations of the data are disjoint or not? I argue that, for many types of plots, disjointness presents a better mental model: one geometric object for one unique set of observational units or "things". Conversely, if the objects in our plots do not represent disjoint subsets, then we need to keep track of *how* these objects are related. 
+Why should we care about whether our representations of the data are disjoint or not? I argue that, for many types of plots, disjointness presents a fundamentally better mental model: each geometric object encodes one unique set of observational units. Conversely, if the objects in our plots do not represent disjoint subsets, then we need to keep an additional model of *how* they are related in our head. 
 
-This issue may be particularly true for interactive visualization. The natural correspondence between geometric objects and disjoint subsets of the data makes certain interactions more intuitive. Conversely, overlapping subsets introduce complications. For instance, when a user clicks on a bar in a linked barplot, they might be surprised if parts of the other bars within the same plot get highlighted as well: they intended to highlight *that* bar, not the others. Likewise, when querying, if our objects do not represent disjoint subsets of the data, we have to think about what querying means: are we querying the objects or the cases corresponding to the objects? Disjoint partitions simplify our mental model, and this may be the reason why some authors discuss interactive features in the context of partitions [see e.g. @buja1996; @keim2002].    
+This issue is particularly important in interactive visualization. The natural correspondence between geometric objects and disjoint subsets of the data makes certain interactions more intuitive, and conversely, overlapping subsets induce surprising behavior. For instance, when a user clicks on a bar in a linked barplot, they might be surprised if parts of the other bars within the same plot get highlighted as well: they intended to highlight *that* bar, not the others. Likewise, when querying, if our objects do not represent disjoint subsets of the data, we have to think about what querying means: are we querying the objects or the cases corresponding to the objects? Disjoint partitions simplify our mental model, and this may be the reason why some authors discuss interactive features in the context of partitions [see e.g. @buja1996; @keim2002].    
 
 SQL aggregation queries (`GROUP BY`) are based on partitions [@hellerstein1999].
 
 #### Plots as partitions
 
-In the two preceding sections, I have argued that our interactive data visualization system should have fulfill have two fundamental properties:
+In the two preceding sections, I have argued the plots in our interactive data visualization system should have have two fundamental properties:
 
 - Plots should show the full data (surjective mapping)
 - Geometric objects within these plots should represent distinct subsets (disjoint parts)
 
-These two properties suggest a fundamental model for plots: that of a [partitions](#Partitions). 
+These two properties suggest a fundamental model for plots: that of [partitions](#Partitions). Specifically, I propose the following definition of a *regular plot*:
 
-While I have not been able to find explicit references linking geometric objects to partitions, some authors have used the language of partitions. For example, Wilkinson [-@wilkinson2012, pp 210] and @keim2002 have linked stacked plots to (hierarchical) partitions.
+:::{.definition name="Regular plot"}
+Regular plot is a plot where the geometric objects within one layer represent a partition of the data, such that there is a natural bijection between these objects and (possibly aggregated) parts of the original data.   
+:::
+
+While, I have not been able to find references explicitly conceptualizing plots as partitions, some data visualization researchers have used the language of bijections when discussing graphics. For example, @dastani2002 discusses plots as bijections (homomorphisms) between data tables and visual attribute tables, however, this is already in the context of aggregated data (e.g. rows of the data table for barplot already being sums/counts). Similarly, @ziemkiewicz2009 and @vickers2012 argued that, in order to be visually unambiguous, plots should represent bijections of the underlying data. However, under this strict view, only one-to-one representations of the data such as scatterplots and parallel coordinate plots would be permitted [and the authors do admit that aggregation can at times present an acceptable trade-off, despite the information loss, @ziemkiewicz2009]. 
+
+The approach I take is slightly different. Instead of modeling plots as bijections between cases and the geometric objects, I model them as bijections between *parts of data* and the geometric objects. In other words, the bijection is not between rows of the original data table and the geometric objects, but between subtables of the original data table and the geometric objects. This approach has the advantage that aggregation can be considered as part of the bijection. 
+
+Finally, Wilkinson [-@wilkinson2012, pp 210] and @keim2002 have linked stacked plots to (hierarchical) partitions.
 
 #### Partitions and products
 
@@ -253,7 +273,7 @@ For many types of plots, the simple strategy of taking products of factors to fo
 
 To give a concrete example, let's turn back to the barplot from the section \@ref(plots-as-partitions). To draw the barplot, we first split our data into smaller tables, summarized each table by summing up the values, stacked the summaries by taking their cumulative sum, and finally used these to draw the bar segments. This gave us a good visualization for comparing absolute counts across the categories. However, what if we wanted to compare proportions?
 
-It turns out there is another type of visualization, called spineplot, which can be used to represent the same underlying data that barplot can, however, is much more useful for comparing proportions:  
+It turns out there is another type of visualization, called spineplot, which can be used to represent the same underlying as a barplot, however, is much more useful for comparing proportions:  
 
 ```{r barplot-spineplot}
 #| echo: false
@@ -264,17 +284,20 @@ knitr::include_graphics("./figures/barplot-spineplot.png")
 
 A spineplot represents the same underlying statistic as a barplot (usually sums of counts). However, unlike in barplot, where the underlying statistic gets mapped to the y-axis position/bar height, in spineplot, the underlying summary statistic gets mapped to two aesthetics: the y-axis position and the bar width. Further, the y-axis position gets normalized, such that the heights of the different segments add up to one. The result is a visualization that makes it easy to compare relative proportions across the categories.
 
-The fact that the spineplot makes it easy to see relative proportions makes it a very useful visualization. Notice how, in Figure \@ref(fig:barplot-spineplot), the spineplot makes it much easier to see that the proportions of the red cases are same across the B and C groups. Thus, spineplot is a definitely desirable type of representation for categorical data, especially if we can easily switch between it and the barplot.
+The fact that the spineplot makes it easy to see relative proportions makes it a very useful visualization. Notice how, in Figure \@ref(fig:barplot-spineplot), the spineplot makes it much easier to see that the proportions of the red cases are same across the B and C groups. Thus, spineplot is a definitely desirable type of representation for categorical data, especially if we can use interactiveity easily switch between it and the barplot.
 
-However, despite the fact that both the barplot and the spineplot represent the same underlying summaries, turning one into the other is not a always trivial exercise. For example, in `ggplot2`, while it is easy to create a barplot using the simple declarative syntax, there is no such simple recipe for spineplots. To create the spineplot in Figure \@ref(fig:barplot-spineplot) took over 10 lines of external data wrangling code (using standard `dplyr` syntax).
+However, despite the fact that barplot and spineplot are closely related visualizations, turning one into the other is not always a trivial exercise. Specifically, many declarative data visualization systems lack simple syntax for creating spineplots. For example, in `ggplot2`, there is currently no simple declarative way to define a spineplot. To create the right panel in Figure \@ref(fig:barplot-spineplot), the data had to first be wrangled into the right shape outside of the `ggplot2` call, and the entire process took over 10 lines of code (using standard `dplyr` syntax).
 
-Both aesthetics are stacked: width horizontally, *across bars*, y-axis position vertically, *across bar segments*.  
+Why are spineplots tricky? The reason is that they force us to confront the hierarchical nature of graphics. Specifically, in a spineplot, the x- and y-axes represent the same data, however, this data is summarized and transformed along different levels of aggregation:
 
-The important thing to notice that, 
+- Along the x-axis, we stack the summaries *across the levels of a single factor*
+- Along the y-axis, we stack the summaries *across the levels of a product of two factors* and normalize them by the values *within the levels of the parent factor*.   
 
-The reason for this is because we have ignored or side-stepped certain issues. For example, how do we know if we are stacking the summaries in the right order? What if we need to transform the bar segments in some way, such as divide by the height of the parent bar, to show proportions rather than absolute counts? Once we start dealing with plots like spineplots or spinograms, it becomes clear that the flat partition structure is not enough.    
+So, in a spineplot, it is not enough to simply break our data into $j \cdot k$ tables; instead, we need to break it into $j$ tables on one level, $j \cdot k$ tables on another level, and preserve this hierarchical relationship in some way, such that 
 
 #### Partitions and hierarchy
+
+
 
 @keim2002 stacked plots are suited for hierarchically-partitioned data. 
 

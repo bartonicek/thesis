@@ -5,17 +5,17 @@ editor_options:
 ---
 # Mathematical theory
 
-This chapter provides an overview of essential concepts from category theory, abstract algebra, and general mathematics. Starting with some foundational topics, such as functions, relations, and orders, it slowly builds up to more advanced concepts such as categories, monoids, and functors. Readers familiar these concepts may feel free to skip ahead. However, even the fundamental concepts will be used throughout the thesis, so a refresher might be beneficial. 
+This chapter provides an overview of essential concepts from category theory and abstract algebra, as well as more general mathematics. Starting with some foundational topics, such as functions, relations, and orders, it slowly builds up to more advanced concepts such as categories, monoids, and functors. Readers familiar these concepts may feel free to skip ahead. However, even the fundamental concepts will be used throughout the thesis, so a refresher might be beneficial. 
 
 The material follows primarily from @fong2019, @lawvere2009, @baez2023, @pinter2010, and @milewski2018. For an accessible introduction to the topic, interested readers are encouraged to consult these references, particularly @fong2019 and @lawvere2009.
 
-#### Note on past applications of abstract algebra and category theory
+#### Note on past applications of abstract algebra and category theory to data visualization
 
-Abstract algebra and category theory have been applied to data visualization in the past, in a limited way. Handful authors have used concepts from either field to describe the more abstract aspects of data visualization. For example, @beckmann1995 had used categories and functors to lay down a broad theoretical framework for visualization, @hutchins1999 attempted the same with algebras, @kindlmann2014 used functors to define valid perceptual representations of the data, and @hibbard1994 used lattice theory to describe data visualization in the presence of incomplete or approximate data (such as finite-precision floating-point numbers). 
+Category theory and abstract algebra have been applied to data visualization in the past. Handful of researchers have used these concepts to describe the broader philosophical aspects of data visualization. For example, @beckmann1995, @hutchins1999, and @vickers2012 had used concepts such as categories, functors, and algebras to lay down a theoretical framework for what it means to visualize. Similarly, @kindlmann2014 used functors to define valid perceptual representations of the data, and @hibbard1994 used lattice theory to describe visualization in the presence of incomplete or approximate data (such as finite-precision floating-point numbers). 
 
-Several authors have also discussed category theory and data visualization in a more applied context, by way of functional programming. Specifically, there have been a number of libraries and domain-specific languages (DSLs) for data visualization which have relied on functional programming concepts and have thus been linked to category theory. For some examples, see @yorgey2012, @petricek2021, @smeltzer2014, or @smeltzer2018. 
+Other researchers have linked category theory and data visualization in a more applied context, by way of functional programming. Specifically, there have been a handful of functional libraries and domain-specific languages (DSLs) for data visualization developed over the recent years, which have used category theory as the foundational programming model. Examples include @yorgey2012, @petricek2021, @smeltzer2014, and @smeltzer2018. 
 
-In contrast to these prior works, this thesis leverages category theory to address certain practical problems that arise during interactive data visualization, without introducing a specific functional programming model or DSL. Specifically, the goal is to use concepts from category theory to reason about combinations of graphics, statistical summaries, and interactive features. Ultimately, I argue that these algebraic concepts can help us make well-founded statements about which interactive data visualizations will behave in sensible ways and which ones will not.
+This thesis leverages category theory in a different way, by using it to shed light on certain practical problems that arise during (interactive) data visualization, without introducing a specific functional programming model or DSL. Specifically, the goal is to use concepts from category theory to reason about combinations of graphics, statistical summaries, and interactive features. Ultimately, I argue that these algebraic concepts are essential for reasoning about the coherence of interactive graphics.
 
 And now for the theory.
 
@@ -184,9 +184,7 @@ then I will get Rome only, since
 
 $$f_!(f^*(\{Paris, Rome \})) = f_!(\{ Sam, Dominic \}) = \{ Rome \}$$
 
-This odd relationship between the the image and the pre-image is due to the fact that the image is actually something called *left adjoint* [@baez2023; @fong2019]. Adjoints can be thought of as the "best approximate answer to a problem that has no solution" [no inverse, @baez2023], and they come in pairs - a left and a right adjoint - with the left adjoint being more permissive or "liberal" and the right adjoint being more strict or "conservative" [@baez2023].
-
-Proper treatment of adjoints is beyond the scope of this thesis, however.
+This odd relationship between the the image and the pre-image is due to the fact that the image is actually something called *left adjoint* [@baez2023; @fong2019]. Adjoints can be thought of as the "best approximate answer to a problem that has no solution" [no inverse, @baez2023], and they come in pairs - a left and a right adjoint - with the left adjoint being more permissive or "liberal" and the right adjoint being more strict or "conservative" [@baez2023]. Proper treatment of adjoints is beyond the scope of this thesis, however.
 
 ### Partitions
 
@@ -205,7 +203,7 @@ $$X = \bigcup_{p \in P} X_p \qquad \text{and} \qquad \text{if } p \neq q, \text{
 I.e. the parts $X_p$ jointly cover the entirety of $X$ and parts cannot share any elements.
 :::
 
-We can rank partitions by their coarseness. That is, for any set $X$, the coarsest partition is one with only one part label $P = \{ 1 \}$, such that each element of $X$ gets assigned $1$ as label. Conversely, the finest partition is one where each element gets assigned its own unique part label, such that $\lvert X \lvert = \lvert P \lvert$. 
+We can rank partitions by their coarseness. For any set $X$, the coarsest partition is one with only one part label $P = \{ 1 \}$, such that each element of $X$ gets assigned $1$ as label. Conversely, the finest partition is one where each element gets assigned its own unique part label, such that $\lvert X \lvert = \lvert P \lvert$. 
 
 Given two partitions, we can form a finer (or at least as fine) partition by taking their intersection, i.e. by taking the set of all unique pairs of labels that co-occur for any $x \in X$ as the new part labels. For example, suppose $X = \{ 1, 2, 3 \}$ and partition 1 assigns part labels:
 
@@ -491,13 +489,24 @@ Such that the composition operation is:
 
 :::
 
-The definition above may look daunting, because of the introduction of new notation and the use of abstract terms like "collection", "objects", and "morphisms". However, it is really nothing new. To simplify things, we can think of the collection of objects as a set, and the morphisms/arrows as functions, and we retain most of the original meaning; the abstract definition above simply gives us more flexibility.
+In simple terms, when we have a category says, we have some objects $c \in \text{Ob}(\mathcal{C})$ which relate to each other via the morphisms, and these morphisms obey some common sense properties. First, the morpshisms compose: if we can get from $c_1$ to $c_2$ and $c_2$ to $c_3$, we can get from $c_1$ to $c_3$. Second the composition is associative, meaning that the order in which we compose does not matter. Finally, we always have a way of "staying in the same place", which is the identity morphism.
 
-The put in in different terms, the definition of a category says that we have some objects $c \in \text{Ob}(\mathcal{C})$ which relate to each other via morphisms, and these morphisms obey some common sense properties. First, the morpshisms compose: if we can get from $c_1$ to $c_2$ and $c_2$ to $c_3$, we can get from $c_1$ to $c_3$. Second the composition is associative, meaning that the order in which we compose does not matter. Finally, we always have a way of "staying in the same place", which is the identity morphism.
+To give a concrete example, here is a diagram of a simple category with two objects and a non-identity morphism, typically denoted as $\underline{\textbf{2}}$:
 
-#### Isomporphisms in categories {#isomorphism}
+```{r category-two}
+#| echo: false
+knitr::include_graphics("./figures/category-two.png")
+```
 
-Before we go on to discuss specific examples of categories, there is one more important concept we need to discuss. We have been speaking of isomorphism as a bijection that "preserves structure". Now it is time to define what this means, and categories provide a good way to do this:
+The properties of a category simply tells us that staying in one place before or after moving to a different place is that same as just moving, $\text{id}_1 \then f = f \then \text{id}_2 = f$, and that how we choose to "lump" the different parts of our journey together does not matter, $(\text{id}_1 \then f) \then \text{id}_2 = \text{id}_1 \then (f \then \text{id}_2)$.
+
+The power of categories is their flexibility. This lies in the definitions of "objects" and "morphisms", which are left vague on purpose. The result is that we can use categories to define a broad class of structures, even very simple, familiar one. For instance, we could define a category where the objects can be elements in a set, and the morphisms can serve as indicator of some kind of relationship. Then the category would encode a [relation](#relations). 
+
+However, there is nothing stopping us from defining categories with more complex objects and relations. For example, as we will see, it is possible to define categories where the objects themselves are other categories, and the morphisms are [transformations between categories](#functors).
+
+#### Isomorphisms within categories {#isomorphism}
+
+Before we go on to discuss specific examples of categories, there is one more important concept we need to mention. So far, we have been speaking of isomorphisms in fairly vague terms, as bijections which "preserve structure". Now it is time to define what this structure-preserving bijection means, and categories provide one way of doing just this:
 
 ::: {.definition name="Isomorphism"}
 Within a category, a morphism $f: x \to y$ is called an isomorphism if there exists another morphism $g: y \to x$ such that:
@@ -509,6 +518,8 @@ $f$ and $g$ are then inverses to each other, such that $f = g^{-1}$ and $g = f^{
 :::
 
 Notice that the definition above is similar to that of a bijection, however, we are gently stripping away reference to specific elements, such as with $g(f(x)) = x$ and are instead only referring to the morphisms $f \then g = id_{x}$. While this difference might seem superficial, it is important, because it turns out we can encode more information in morphisms than we can in elements. Specifically, while before we talked about transformations which preserve the identity of elements *and* some additional structure, defining isomorphisms purely in terms of morphisms allows us to do away with this distinction.   
+
+Note that I have mentioned that the definition above is *one* way of defining isomorphisms, *within a category*. Without getting ahead of ourselves too much, it turns out there is another way of defining isomorphisms, *between categories*. This duality of definition of isomorphism does not cause problems, since, as was mentioned above, the definition of a category is broad enough such that the objects in a category can be other categories, and the morphisms can be transformations between categories. More on this later.   
 
 #### Algebraic structures as categories
 
