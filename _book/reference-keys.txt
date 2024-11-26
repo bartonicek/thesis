@@ -79,6 +79,11 @@ partition-data-structures
 computing-summaries
 reducers
 scaling
+theory-of-scales
+philosophy-psychology-and-measurement
+visual-perception
+applied-scales
+scale-transformation
 mathematical-theory
 note-on-past-applications-of-abstract-algebra-and-category-theory-to-data-visualization
 relations
@@ -167,3 +172,9 @@ dop-encapsulation
 references
 fig:unnamed-chunk-1
 fig:unnamed-chunk-2
+tab:stevens-scales
+thm:unlabeled-div-13
+def:unlabeled-div-15
+prp:unlabeled-div-19
+prp:unlabeled-div-20
+def:unlabeled-div-22

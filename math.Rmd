@@ -43,7 +43,7 @@ A relation $R$ can be signified with an infix symbol (such as $\star$), such tha
 
 Relations can have properties. For example, some types of relations are *reflexive*, such that every element relates to itself: $x \star x$ for all $x \in X$. This is the case for equivalence relations. In fact, we can define equivalence relations using just three properties:
 
-::: {.definition name="Equivalence relation"}
+::: {.definition name="Equivalence relation"} {#equivalence-relations}
 A relation $\sim$ on $X$ is called an equivalence relation if it is:
 
 1. *Reflexive*: $x \sim x$ for all $x \in X$
@@ -531,7 +531,7 @@ A preorder is a category where there is at most one morphism between any two obj
 
 Before, we defined a preorder as tuple consisting of a set and a relation, $(X, \leq)$. Further, we had to specify two additional properties that the relation has to uphold: namely, reflexivity and associativity. 
 
-It turns out, if we define preorder as a category with at most one morphism between each pair of objects, the properties of reflexivity and associativity automatically fall out of the definition. Specifically, let the elements $x \in X$ be the objects in the category $\mathcal{X}$ corresponding to the preorder $(X, \leq)$, and let the relation $leq$ be represented by presence of a morphism between two objects (of which can there be only one). 
+It turns out, if we define preorder as a category with at most one morphism between each pair of objects, the properties of reflexivity and associativity automatically fall out of the definition. Specifically, let the elements $x \in X$ be the objects in the category $\mathcal{X}$ corresponding to the preorder $(X, \leq)$, and let the relation $\leq$ be represented by presence of a morphism between two objects (of which can there be only one). 
 
 1. Reflexity: $x \leq x$ for all $x \in X$. This is just the identity morphism $\text{id}_x$, which always exists and is the only morphism in $\mathcal{X}(x, x)$ for all $x \in X = \text{Ob}(\mathcal{X})$
 2. Associativity: $x \leq y$ and $y \leq z$ $\implies x \leq z$. This is the consequence of associativity of composition in categories: if there is a morphism $x \to y$ and $y \to z$, then we automatically get a morphism $f \then g: x \to z$.
@@ -549,7 +549,7 @@ Here, we need to break away from the intuitive way of thinking of objects as ele
 knitr::include_graphics("./figures/monoid-category.png")
 ```
 
-Here, the object in the category does not really represent anything, and all of the information is encoded in morphisms and their composition. Specifically, the identity morphism is equal to the monoidal unit zero, and the only other morphism, $1$, represents the number one. Composition of morphisms represents addition. Then, any natural number $n \in \mathbb{N}$ can be represented as a composition of arrows, $1 = 1$, $2 = 1 \then 1$, $3 = 1 \then 1 \then 1$, etc... [this is in fact similar to Peano axiomatization, see @stepanov2014]. 
+Here, the object in the category does not really represent anything, and all of the information is encoded in morphisms and their composition. Specifically, the identity morphism is equal to the monoidal unit zero, and the only other morphism, $1$, represents the number one. Composition of morphisms represents addition. Then, any natural number $n \in \mathbb{N}$ can be represented as a composition of arrows, $1 = 1$, $2 = 1 \then 1$, $3 = 1 \then 1 \then 1$, etc... [this is in fact similar to Peano axiomatization of natural numbers, see @stepanov2014]. 
 
 ::: {.proposition}
 A group is a category with one object where every morphism is an isomorphism
@@ -573,3 +573,5 @@ Such the action of the functor $F$ on the morphisms in $\mathcal{C}$:
 2. Preserves composition: for every three objects $c_1, c_2, c_3 \in \text{Ob}(\mathcal{C})$ and two morphisms $f: c_1 \to c_2$ and $g: c_2 \to c_3$, $F(f \then g) = F(f) \then F(g)$
 
 :::
+
+

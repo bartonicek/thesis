@@ -18,19 +18,19 @@ A common model in many data analytic languages is that of two-dimensional table 
 
 However, the column-based organization of data is not universal. For example, the popular JavaScript data visualization and transformation library D3 [@bostock2022] models data frames as arrays of rows, with each row being its own separate dictionary. Likewise, certain types of databases store tables as lists of records, with each record having the shape of a dictionary [@abadi2013].
 
-Within a broader programming context, these two fundamental data layouts are referred to as the struct of arrays (SoA, also known as "parallel arrays") versus the array of structs (AoS) data structures. SoA store data in a dictionary of arrays, similar to the column-based layout, whereas AoS store data in an arrays of dictionaries, similar to row-based layout. The distinction between SoA and AoS is a bit more nuanced, since structs can store a wider class of types than just plain data, such as functions and pointers, and this makes either layout better suited to certain [programming styles](#programming-paradigms). For example, in object oriented programming, data is encapsulated alongside behavior in objects, and this makes the AoS data structure the more natural choice in this programming paradigm [replicating the same functionality with SoA is awkward, although some modern languages offer features which make this more convenient, see e.g. @zig2024].     
+Within a broader programming context, these two fundamental data layouts are referred to as the struct of arrays (SoA, also known as "parallel arrays") versus the array of structs (AoS) data structures. SoA store data in a dictionary of arrays, similar to the column-based layout, whereas AoS store data in an arrays of dictionaries, similar to row-based layout. The distinction between SoA and AoS is a bit more nuanced, since structs can store a wider class of types than just plain data, such as functions and pointers, and this makes either layout better suited to certain [programming styles](#programming-paradigms). For example, in object oriented programming, behaviour is encapsulated alongside data in objects (via methods/member functions), and this makes the AoS the more natural data structure within this programming paradigm [replicating the same functionality with SoA is awkward, although some modern languages offer features which make this more convenient, see e.g. @zig2024].     
 
 #### Performance
 
-The two data layouts also offer distinct performance characteristics.
+The two data layouts also offer distinct performance characteristics. 
 
-The column-based (SoA) layout is generally considered to be the one better for performance [see e.g. @acton2014; @kelley2023]. Specifically, it benefits from two important features: better memory alignment and improved cache locality. First, homogeneous arrays offer better memory characteristics than heterogeneous structs. This is because they can be stored as contiguous blocks of memory with the same alignment, eliminating the need for padding and potentially leading to a significant reduction in memory footprint [see e.g. @rentzsch2005; @kelley2023]. Second, the column-based data layout is better suited for pre-fetching. Specifically, when performing column-wise operations, the CPU can cache the contiguously-stored values more easily, often resulting in a greatly improved performance [@abadi2013; @acton2014; @kelley2023]. 
+The column-based (SoA) layout is generally considered to be the one better for performance [see e.g. @acton2014; @kelley2023]. Specifically, it benefits from two important features: better memory alignment and improved cache locality. First, homogeneous arrays offer better memory characteristics than heterogeneous structs. This is because they can be stored as contiguous blocks of memory with the same alignment, eliminating the need for padding and potentially leading to a significant reduction in memory footprint [see e.g. @rentzsch2005; @kelley2023]. Second, the column-based data layout is better suited for pre-fetching. Specifically, when performing column-wise operations, the CPU can cache the contiguously-stored values more easily, often resulting in greatly improved performance [@abadi2013; @acton2014; @kelley2023]. 
 
-However, the row-based (AoS) layout can also perform well in certain situations. Specifically, it can outperform column-based stores when retrieving individual records/rows is key, hence why it is commonly used in traditional Online Transaction Processing databases [OLTP, @abadi2013]. Additionally, it could be argued that the row-based layout can be more "natural" and offer better developer ergonomics for certain programming styles such as OOP.     
+However, the row-based (AoS) layout can also perform well in certain situations. Specifically, it can outperform column-based stores when retrieving individual records/rows is key, hence why it is commonly used in traditional Online Transaction Processing databases [OLTP, @abadi2013]. Additionally, it could be argued that the row-based layout can be more "natural" and offer better developer ergonomics for certain programming styles.     
 
 ## Data transformation
 
-When visualizing data, we rarely plot the raw data directly. Instead, the quantities we visualize are often summaries or aggregates of some kind. Take for example a typical barplot. To draw the barplot, we first need to divide the data into parts, summarize each part by some metric, usually either count or sum of some variable, and finally, render the summaries as individual bars. Likewise, many other types of plots like boxplots or histograms include two distinct steps: splitting the data into parts and computing the summaries on these parts. 
+As was already hinted at in the previous section, when visualizing data, we rarely plot the raw data directly. Instead, the quantities we visualize are often summaries or aggregates of some kind. Take for example a typical barplot. To draw the barplot, we first need to divide the data into parts, summarize each part by some metric, usually either count or sum of some variable, and finally, render the summaries as individual bars. Likewise, many other types of plots like boxplots or histograms include two distinct steps: splitting the data into parts and computing the summaries on these parts. 
 
 This section discusses these two fundamental parts of the data visualization pipeline - partitioning and aggregation - and explores challenges associated with their implementation in an interactive data visualization system. While these operations might seem straightforward, my goal is to make the case that they actually come equipped with a lot of subtle structure, more than might necessarily meet the eye. 
 
@@ -42,7 +42,7 @@ A common-sense guideline that many data visualization experts provide is that fa
 
 ```{r}
 #| echo: false
-#| fig-cap: "Without expanding axes, data points near the limits can become obscured. Left: axis limits match the data limits exactly, and so points at or near the axis limits (top-left and bottom-right corner of the plot) are represented by smaller area and become less salient. Right: by expanding axis limits, we can ensure that all data is represented faithfully."
+#| fig-cap: "Without expanding axes, objects near the limits can become occluded. Left: axis limits match the data limits exactly, and so points at or near the axis limits (top-left and bottom-right corner of the plot) are \"cut-off\" and represented by smaller area, becoming less salient. Right: by expanding axis limits, we can ensure that all data is represented faithfully."
 
 knitr::include_graphics("./figures/expand-scatterplot.png")
 ```
@@ -305,15 +305,78 @@ So, in a spineplot, it is not enough to simply break our data into $j \cdot k$ t
 
 ### Computing summaries
 
-After we have partitioned our data, we need a way to summarize each part by a set of summary statistics. Moreover, since the partitions of our data (may) form a hierarchy, we also need a way of referring to parts across the levels of the hierarchy.
+
+
+
+After we have partitioned our data, we need a way to summarize each part by a set of one or more summary statistics.
 
 #### Reducers
 
-Suppose we are summarizing a part consisting of $n$ data points.
-
 ## Scaling
 
-Information needs to be encoded in visual attributes [@cleveland1985]
+Suppose we have partitioned our data and computed the relevant summary statistics. Now we need a way to to encode these summaries into visual attributes that we can then present on the computer screen.  In most data visualization systems, this is done by specialized components called scales or coordinate systems [see e.g. @murrell2005; @wickham2016; @wilkinson2012]. 
 
-Transformation is a critical tool for visualization or for any other mode of data analysis
-because it can substantially simplify the structure of a set of data [@cleveland1993, pp. 48]
+### Theory of scales
+
+Within the data visualization literature, there exists a fairly large body of research on the theoretical properties of scales. A full treatment is beyond the scope of the present thesis. However, in this section, I will attempt to briefly summarize some important findings and concepts, and .
+
+#### Philosophy, psychology, and measurement
+
+One challenge when discussing scales in data visualization is that the topic unavoidably intersects with a research area that has a particularly long and contentious history: theory of measurement [see e.g. @hand1996; @michell1986; @tal2025]. Theory of measurement (not to be confused with measure theory, with which it nevertheless shares some overlap) is the research area which tries to answer the deceptively simple question: what does it mean to measure something? This seemingly trivial problem has inspired long and fiery debates within the fields of mathematics, philosophy, and social science. Particularly, in psychology, where assigning numerical values non-physical phenomena such as moods and mental states is a central concern, the topic has garnered a significant amount of attention, creating a dense body of research [see e.g. @humphry2013; @michell2021].
+
+Arguably, the most influential work in this field has been that of @stevens1946. In this fairly concise paper, Stevens defined a *scale* as method of assigning numbers to values, and introduced a four-fold classification classification, namely: nominal, ordinal, interval, and ratio scales (see Table \@ref(tab:stevens-scales)).
+
+```{r stevens-scales}
+#| echo: false
+
+tab <- data.frame(
+  v1 = c("Nominal", "Ordinal", "Interval", "Ratio"),
+  v2 = c("Isomorphism",
+         "Monotone map",
+         "Affine transformation",
+         "Linear map"),
+  v3 = c("Are $x$ and $y$ the same?", 
+         "Is $x$ is greater than $y$?", 
+         "How far is $x$ from $y$?",
+         "How many times is $x$ greater than $y$?"),
+  v4 = c("$x' = f(x)$, where $f$ is a bijection", 
+         "$x' = f(x)$, where $f$ is a monotone bijection", 
+         "$x' = ax + b$, for $a, b \\in \\mathbb{R}$", 
+         "$x' = ax$, for $a \\in \\mathbb{R}$")
+)
+
+col_names <- c("Scale", 
+               "Structure",
+               "Comparison", 
+               "Valid transformations")
+knitr::kable(tab, col.names = col_names, 
+             caption = "Types of scales identified by Stevens (1946)")
+
+```
+
+The Steven's [-@stevens1946] typology is based on invariance under transformation. Specifically, for each class of scales, we define a set of transformations that preserve valid comparisons. The set of valid transformations shrinks as we move from one class of scales to another.  
+
+For nominal scales, any kind of bijective transformation is valid. Intuitively, we can think of the scale as assigning labels to values, and any kind re-labeling is valid, as long as it preserves equality of the underlying values. For instance, given a nominal scale with three values, we can assign the labels $\{ \text{red}, \text{green}, \text{blue} \}$ or $\{ \text{monday}, \text{tuesday}, \text{wednesday} \}$ in any way we like, as long as each value maps to a unique label. This identifies the underlying mathematical structure as an isomorphism.
+
+Ordinal scales are more restrictive, since, on top of preserving equality, transformations also need to preserve order. For example, if we want to assign the labels $\{ \text{monday}, \text{tuesday}, \text{wednesday} \}$ to an ordinal scale with three values, there is only one way to do it that preserves the underlying order: assign the least values to $\text{monday}$, the middle value to $\text{tuesday}$, and the greatest value to $\text{wednesday}$ (assuming we order the labels/days in the usual day-of-week order). However, there is no notion of distance between the labels: we could just as well assign the values labels in $\mathbb{N}$ such as $\{ 10, 20, 30 \}$, $\{1, 2, 9999 \}$, and so on. Thus, the fundamental mathematical structure is that of a monotone map.
+
+Interval scales need to additionally preserve equality of intervals. This means that, for any three values $a, b,$ and $c$, if the distances between $a$ and $b$ and $b$ and $c$ are equal, $d(a, b) = d(b, c)$, then so should be the distances between the scaled labels, $d^*(f(a), f(b)) = d^*(f(b), f(c)$. For most real applications, this limits interval scales to the class affine transformations of the form $f(x) = ax + b$. A canonical example of an interval scale is the conversion formula of degrees Celsius to Fahrenheit: $f(c) = 9/5 \cdot c + 32$ [@stevens1946].
+
+Finally, ratio scales also need to preserve the equality of ratios. Specifically, if $a/b = b/c$ then $f(a)/f(b) = f(b) / f(c)$. As a consequence, this also means that the scale must have a well-defined zero-point.
+
+Steven's [-@stevens1946] typology inspired a considerable debate that I will touch on here only briefly. First, despite some monumental efforts towards unification, such as that by @krantz1971, measurement has to this day remained a hotly debated topic, with many diverging philosophical views and theories [see e.g. @michell2021; @tal2025]. Second, more relevant to statistics, some authors used the theory to define "permissible" classes of statistical summaries of data. For example, some have suggested that the practice of taking the mean of values defined on an ordinal scale is not permissible, since the meaning of the average operator is not preserved under monotone transformations [@stevens1951; @luce1959]. However, this issue was hotly contested by others such as @lord1953, @tukey1986, and @velleman1993, who argued that there are many well-established statistical practices which rely on "impermissible" statistics, such as rank-based tests, and that, more broadly, data derives its meaning from the statistical questions it is being used to answer.        
+
+Ultimately, the discussion around measurement may have at this point become far too dense and theoretical for applied disciplines such as data visualization. Nevertheless, it does periodically crop up in some applied issues, such as the perennial problem of whether the base of a barplot should always start at zero [see e.g. @cleveland1985; @wilkinson2012]. Thus, I thought it prudent to mention it here.   
+
+#### Visual perception
+
+Another important area in which there has been considerable amount of research is how scales apply to visual perception. Specifically, given that we use visual attributes such as position, color, length, or area to encode attributes of our data, an important question is 
+
+### Applied scales
+
+#### Scale transformation
+
+> "Transformation is a critical tool for visualization or for any other mode of data analysis
+because it can substantially simplify the structure of a set of data."
+> 
+> @cleveland1993, pp. 48
