@@ -237,7 +237,7 @@ div.csl-indent {
 <li class="chapter" data-level="6.2.3" data-path="system-description.html"><a href="system-description.html#dataframe"><i class="fa fa-check"></i><b>6.2.3</b> Dataframe</a></li>
 <li class="chapter" data-level="6.2.4" data-path="system-description.html"><a href="system-description.html#reactive"><i class="fa fa-check"></i><b>6.2.4</b> Reactive</a></li>
 <li class="chapter" data-level="6.2.5" data-path="system-description.html"><a href="system-description.html#factors"><i class="fa fa-check"></i><b>6.2.5</b> Factors</a></li>
-<li class="chapter" data-level="6.2.6" data-path="system-description.html"><a href="system-description.html#reducers-1"><i class="fa fa-check"></i><b>6.2.6</b> Reducers</a></li>
+<li class="chapter" data-level="6.2.6" data-path="system-description.html"><a href="system-description.html#reducers"><i class="fa fa-check"></i><b>6.2.6</b> Reducers</a></li>
 <li class="chapter" data-level="6.2.7" data-path="system-description.html"><a href="system-description.html#scales-1"><i class="fa fa-check"></i><b>6.2.7</b> Scales</a></li>
 <li class="chapter" data-level="6.2.8" data-path="system-description.html"><a href="system-description.html#expanses"><i class="fa fa-check"></i><b>6.2.8</b> Expanses</a></li>
 </ul></li>
@@ -1148,15 +1148,121 @@ Figure 3.8: The same underlying data represented as a barplot (left) and a spine
 <h4><span class="header-section-number">3.2.1.6</span> Partitions and hierarchy<a href="problem-set.html#partitions-and-hierarchy" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p><span class="citation">Keim (<a href="#ref-keim2002">2002</a>)</span> stacked plots are suited for hierarchically-partitioned data.</p>
 </div>
-<div id="partition-data-structures" class="section level4 hasAnchor" number="3.2.1.7">
-<h4><span class="header-section-number">3.2.1.7</span> Partition data structures<a href="problem-set.html#partition-data-structures" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-</div>
 </div>
 <div id="computing-summaries" class="section level3 hasAnchor" number="3.2.2">
 <h3><span class="header-section-number">3.2.2</span> Computing summaries<a href="problem-set.html#computing-summaries" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>After we have partitioned our data, we need a way to summarize each part by a set of one or more summary statistics.</p>
-<div id="reducers" class="section level4 hasAnchor" number="3.2.2.1">
-<h4><span class="header-section-number">3.2.2.1</span> Reducers<a href="problem-set.html#reducers" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>After we have split our data into parts, we need a way of summarizing each part via some set of summary statistics. While the computing summaries may seem like a fairly straightforward part of the data visualization pipeline, there is more complexity than meets the eye. This section explores this problem in more depth.</p>
+<div id="graphics-and-statistics-are-not-independent" class="section level4 hasAnchor" number="3.2.2.1">
+<h4><span class="header-section-number">3.2.2.1</span> Graphics and statistics are not independent<a href="problem-set.html#graphics-and-statistics-are-not-independent" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>One appealing concept in data visualization is that of composing graphics out of independent, modular components. This idea was first introduced in Wilkinson’s Grammar of Graphics <span class="citation">(<a href="#ref-wilkinson2012">2012</a>)</span>, and has gained widespread popularity since, leading numerous implementations <span class="citation">(see e.g. <a href="#ref-mcnutt2022">McNutt 2022</a>; <a href="#ref-kim2022">Kim et al. 2022</a>; <a href="#ref-vanderplas2020">Vanderplas, Cook, and Hofmann 2020</a>; <a href="#ref-wickham2010">Wickham 2010</a>; <a href="#ref-satyanarayan2014">Satyanarayan, Wongsuphasawat, and Heer 2014</a>; <a href="#ref-satyanarayan2016">Satyanarayan et al. 2016</a>)</span>. One prominent example of such implementation is the popular <code>ggplot2</code> library <span class="citation">(<a href="#ref-wickham2010">Wickham 2010</a>)</span>. In <code>ggplot2</code>, plots are built out of components such as geometric objects (called <code>geoms</code>), statistical summaries (<code>stats</code>), and scales. These components can be combined at will, allowing the user to express a wide range of graphics using just few primitives.</p>
+<p>The grammar-based model offers many great advantages, including simplicity, flexibility, and expressiveness. However, it also suffers from one fundamental flaw: graphics and statistics are not independent. Let’s illustrate this point on a real-world example.</p>
+<p>For this example, I will use data from the results of the men’s and women’s sport’s climbing semifinale in the Paris Summer Olympics, 2024 <span class="citation">(<a href="#ref-olympics2024a">International Olympic Committee 2024a</a>, <a href="#ref-olympics2024b">2024b</a>)</span>. Twenty men and twenty women from seventeen countries competed within the semifinale, in two different disciplines: bouldering and lead. The climbers could earn up to 100 points from each discipline, and the points were summed up into a total score that was then used to establish ranking and determine who would qualify for the finale.</p>
+<p>For illustration, here are five random rows of the data set:</p>
+<table>
+<colgroup>
+<col width="7%" />
+<col width="12%" />
+<col width="23%" />
+<col width="12%" />
+<col width="7%" />
+<col width="9%" />
+<col width="15%" />
+<col width="10%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="right">rank</th>
+<th align="left">country</th>
+<th align="left">name</th>
+<th align="right">boulder</th>
+<th align="right">lead</th>
+<th align="right">total</th>
+<th align="left">qualified</th>
+<th align="left">gender</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">7</td>
+<td align="left">USA</td>
+<td align="left">Colin DUFFY</td>
+<td align="right">33.8</td>
+<td align="right">54.1</td>
+<td align="right">87.9</td>
+<td align="left">TRUE</td>
+<td align="left">male</td>
+</tr>
+<tr class="even">
+<td align="right">16</td>
+<td align="left">GER</td>
+<td align="left">Lucia DOERFFEL</td>
+<td align="right">29.2</td>
+<td align="right">51.1</td>
+<td align="right">80.3</td>
+<td align="left">FALSE</td>
+<td align="left">female</td>
+</tr>
+<tr class="odd">
+<td align="right">18</td>
+<td align="left">ITA</td>
+<td align="left">Laura ROGORA</td>
+<td align="right">13.2</td>
+<td align="right">57.1</td>
+<td align="right">70.3</td>
+<td align="left">FALSE</td>
+<td align="left">female</td>
+</tr>
+<tr class="even">
+<td align="right">10</td>
+<td align="left">JPN</td>
+<td align="left">Tomoa NARASAKI</td>
+<td align="right">54.4</td>
+<td align="right">12.1</td>
+<td align="right">66.5</td>
+<td align="left">FALSE</td>
+<td align="left">male</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="left">CZE</td>
+<td align="left">Adam ONDRA</td>
+<td align="right">48.7</td>
+<td align="right">68.1</td>
+<td align="right">116.8</td>
+<td align="left">TRUE</td>
+<td align="left">male</td>
+</tr>
+</tbody>
+</table>
+<p>To visualize the number of climbers of each country and gender, we could use the ordinary stacked barplot:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="problem-set.html#cb7-1" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb7-2"><a href="problem-set.html#cb7-2" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="problem-set.html#cb7-3" tabindex="-1"></a><span class="fu">ggplot</span>(climbers, <span class="fu">aes</span>(country, <span class="at">fill =</span> gender)) <span class="sc">+</span></span>
+<span id="cb7-4"><a href="problem-set.html#cb7-4" tabindex="-1"></a>  <span class="fu">geom_bar</span>()</span></code></pre></div>
+<p><img src="figures/grammar-barplot-counts.png" width="750" /></p>
+<p>The plot above is a perfectly fine representation of the data. However, what if we are interested in another summary statistic, such as the average score across climbers? A data visualization novice might be tempted to do something like this:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="problem-set.html#cb8-1" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb8-2"><a href="problem-set.html#cb8-2" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="problem-set.html#cb8-3" tabindex="-1"></a><span class="fu">ggplot</span>(climbers, <span class="fu">aes</span>(<span class="at">x =</span> country, <span class="at">y =</span> total, <span class="at">fill =</span> gender)) <span class="sc">+</span></span>
+<span id="cb8-4"><a href="problem-set.html#cb8-4" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">&quot;summary&quot;</span>, <span class="at">fun =</span> <span class="st">&quot;mean&quot;</span>)</span></code></pre></div>
+<p><img src="figures/grammar-barplot-means.png" width="750" /></p>
+<p>At a glance, the plot above looks fine. However, what do the heights of the stacked bars represent? Each bar segment represents a mean of the <code>total</code> variable, grouped by the levels defined by the product of the <code>country</code> and <code>gender</code> variables. Thus, when we stack the segments on top of one another, we are essentially summing up the average score across country and gender. However, herein lies the problem. The sum of group means is not a meaningful summary statistic - it is not something that most consumers of data visualizations would care about or know how to interpret.</p>
+<p>To someone familiar with data visualization, the problem of stacking invalid statistics is nothing new. Many data visualization researchers have warned about this:</p>
+<blockquote>
+<p>“Stacking is useful when the sum of the amounts represented by the individual stacked bars is in itself a meaningful amount” <span class="citation">(<a href="#ref-wilke2019">Wilke 2019, 52</a>)</span>.</p>
+</blockquote>
+<blockquote>
+<p>“Because this gives the visual impression of one element that is the sum of several others, it is very important that if the element’s size is used to display a statistic, then that statistic must be summable. Stacking bars that represent counts, sums, or percentages are fine, but a stacked bar chart where bars show average values is generally meaningless.” <span class="citation">(<a href="#ref-wills2011">Wills 2011, 112</a>)</span>.</p>
+</blockquote>
+<blockquote>
+<p>“[…] We do this to ensure that aggregate statistics are always computed over the input data, and so users do not inadvertantly compute e.g., averages of averages, which can easily lead to misinterpretation.” <span class="citation">(<a href="#ref-wu2022">Wu 2022</a>)</span></p>
+</blockquote>
+<p>So does this mean we can only ever stack counts and sums? Take a look at the following plot:</p>
+<p><img src="figures/grammar-barplot-maximums.png" width="750" /></p>
+<p>aa</p>
+</div>
+<div id="transforming-summaries" class="section level4 hasAnchor" number="3.2.2.2">
+<h4><span class="header-section-number">3.2.2.2</span> Transforming summaries<a href="problem-set.html#transforming-summaries" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 </div>
 </div>
 </div>
@@ -1165,11 +1271,11 @@ Figure 3.8: The same underlying data represented as a barplot (left) and a spine
 <p>Suppose we have partitioned our data and computed the relevant summary statistics. Now we need a way to to encode these summaries into visual attributes that we can then present on the computer screen. In most data visualization systems, this is done by specialized components called scales or coordinate systems <span class="citation">(see e.g. <a href="#ref-murrell2005">Murrell 2005</a>; <a href="#ref-wickham2016">Wickham 2016</a>; <a href="#ref-wilkinson2012">Wilkinson 2012</a>)</span>.</p>
 <div id="theory-of-scales" class="section level3 hasAnchor" number="3.3.1">
 <h3><span class="header-section-number">3.3.1</span> Theory of scales<a href="problem-set.html#theory-of-scales" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Within the data visualization literature, there exists a fairly large body of research on the theoretical properties of scales. A full treatment is beyond the scope of the present thesis. However, in this section, I will attempt to briefly summarize some important findings and concepts, and .</p>
+<p>Within the data visualization literature, there exists a fairly large body of research on the theoretical properties of scales. A full treatment is beyond the scope of the present thesis. However, in this section, I will attempt to briefly summarize some important findings and concepts.</p>
 <div id="philosophy-psychology-and-measurement" class="section level4 hasAnchor" number="3.3.1.1">
 <h4><span class="header-section-number">3.3.1.1</span> Philosophy, psychology, and measurement<a href="problem-set.html#philosophy-psychology-and-measurement" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>One challenge when discussing scales in data visualization is that the topic unavoidably intersects with a research area that has a particularly long and contentious history: theory of measurement <span class="citation">(see e.g. <a href="#ref-hand1996">Hand 1996</a>; <a href="#ref-michell1986">Michell 1986</a>; <a href="#ref-tal2025">Tal 2025</a>)</span>. Theory of measurement (not to be confused with measure theory, with which it nevertheless shares some overlap) is the research area which tries to answer the deceptively simple question: what does it mean to measure something? This seemingly trivial problem has inspired long and fiery debates within the fields of mathematics, philosophy, and social science. Particularly, in psychology, where assigning numerical values non-physical phenomena such as moods and mental states is a central concern, the topic has garnered a significant amount of attention, creating a dense body of research <span class="citation">(see e.g. <a href="#ref-humphry2013">Humphry 2013</a>; <a href="#ref-michell2021">Michell 2021</a>)</span>.</p>
-<p>Arguably, the most influential work in this field has been that of <span class="citation">Stevens (<a href="#ref-stevens1946">1946</a>)</span>. In this fairly concise paper, Stevens defined a <em>scale</em> as method of assigning numbers to values, and introduced a four-fold classification classification, namely: nominal, ordinal, interval, and ratio scales (see Table <a href="problem-set.html#tab:stevens-scales">3.1</a>).</p>
+<p>Arguably, the most influential work in this field has been that of <span class="citation">Stevens (<a href="#ref-stevens1946">1946</a>)</span>. In his fairly concise paper, Stevens defined a <em>scale</em> as method of assigning numbers to values, and introduced a four-fold classification classification, namely: nominal, ordinal, interval, and ratio scales (see Table <a href="problem-set.html#tab:stevens-scales">3.1</a>).</p>
 <table>
 <caption><span id="tab:stevens-scales">Table 3.1: </span>Types of scales identified by Stevens (1946)</caption>
 <colgroup>
@@ -1216,14 +1322,16 @@ Figure 3.8: The same underlying data represented as a barplot (left) and a spine
 <p>The Steven’s <span class="citation">(<a href="#ref-stevens1946">1946</a>)</span> typology is based on invariance under transformation. Specifically, for each class of scales, we define a set of transformations that preserve valid comparisons. The set of valid transformations shrinks as we move from one class of scales to another.</p>
 <p>For nominal scales, any kind of bijective transformation is valid. Intuitively, we can think of the scale as assigning labels to values, and any kind re-labeling is valid, as long as it preserves equality of the underlying values. For instance, given a nominal scale with three values, we can assign the labels <span class="math inline">\(\{ \text{red}, \text{green}, \text{blue} \}\)</span> or <span class="math inline">\(\{ \text{monday}, \text{tuesday}, \text{wednesday} \}\)</span> in any way we like, as long as each value maps to a unique label. This identifies the underlying mathematical structure as an isomorphism.</p>
 <p>Ordinal scales are more restrictive, since, on top of preserving equality, transformations also need to preserve order. For example, if we want to assign the labels <span class="math inline">\(\{ \text{monday}, \text{tuesday}, \text{wednesday} \}\)</span> to an ordinal scale with three values, there is only one way to do it that preserves the underlying order: assign the least values to <span class="math inline">\(\text{monday}\)</span>, the middle value to <span class="math inline">\(\text{tuesday}\)</span>, and the greatest value to <span class="math inline">\(\text{wednesday}\)</span> (assuming we order the labels/days in the usual day-of-week order). However, there is no notion of distance between the labels: we could just as well assign the values labels in <span class="math inline">\(\mathbb{N}\)</span> such as <span class="math inline">\(\{ 10, 20, 30 \}\)</span>, <span class="math inline">\(\{1, 2, 9999 \}\)</span>, and so on. Thus, the fundamental mathematical structure is that of a monotone map.</p>
-<p>Interval scales need to additionally preserve equality of intervals. This means that, for any three values <span class="math inline">\(a, b,\)</span> and <span class="math inline">\(c\)</span>, if the distances between <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> and <span class="math inline">\(b\)</span> and <span class="math inline">\(c\)</span> are equal, <span class="math inline">\(d(a, b) = d(b, c)\)</span>, then so should be the distances between the scaled labels, <span class="math inline">\(d^*(f(a), f(b)) = d^*(f(b), f(c)\)</span>. For most real applications, this limits interval scales to the class affine transformations of the form <span class="math inline">\(f(x) = ax + b\)</span>. A canonical example of an interval scale is the conversion formula of degrees Celsius to Fahrenheit: <span class="math inline">\(f(c) = 9/5 \cdot c + 32\)</span> <span class="citation">(<a href="#ref-stevens1946">Stevens 1946</a>)</span>.</p>
-<p>Finally, ratio scales also need to preserve the equality of ratios. Specifically, if <span class="math inline">\(a/b = b/c\)</span> then <span class="math inline">\(f(a)/f(b) = f(b) / f(c)\)</span>. As a consequence, this also means that the scale must have a well-defined zero-point.</p>
-<p>Steven’s <span class="citation">(<a href="#ref-stevens1946">1946</a>)</span> typology inspired a considerable debate that I will touch on here only briefly. First, despite some monumental efforts towards unification, such as that by <span class="citation">Krantz et al. (<a href="#ref-krantz1971">1971</a>)</span>, measurement has to this day remained a hotly debated topic, with many diverging philosophical views and theories <span class="citation">(see e.g. <a href="#ref-michell2021">Michell 2021</a>; <a href="#ref-tal2025">Tal 2025</a>)</span>. Second, more relevant to statistics, some authors used the theory to define “permissible” classes of statistical summaries of data. For example, some have suggested that the practice of taking the mean of values defined on an ordinal scale is not permissible, since the meaning of the average operator is not preserved under monotone transformations <span class="citation">(<a href="#ref-stevens1951">Stevens 1951</a>; <a href="#ref-luce1959">Luce 1959</a>)</span>. However, this issue was hotly contested by others such as <span class="citation">Lord (<a href="#ref-lord1953">1953</a>)</span>, <span class="citation">Tukey (<a href="#ref-tukey1986">1986</a>)</span>, and <span class="citation">Velleman and Wilkinson (<a href="#ref-velleman1993">1993</a>)</span>, who argued that there are many well-established statistical practices which rely on “impermissible” statistics, such as rank-based tests, and that, more broadly, data derives its meaning from the statistical questions it is being used to answer.</p>
-<p>Ultimately, the discussion around measurement may have at this point become far too dense and theoretical for applied disciplines such as data visualization. Nevertheless, it does periodically crop up in some applied issues, such as the perennial problem of whether the base of a barplot should always start at zero <span class="citation">(see e.g. <a href="#ref-cleveland1985">Cleveland 1985</a>; <a href="#ref-wilkinson2012">Wilkinson 2012</a>)</span>. Thus, I thought it prudent to mention it here.</p>
+<p>Interval scales need to additionally preserve equality of intervals. This means that, for any three values <span class="math inline">\(a, b,\)</span> and <span class="math inline">\(c\)</span>, if the distances between <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> and <span class="math inline">\(b\)</span> and <span class="math inline">\(c\)</span> are equal, <span class="math inline">\(d(a, b) = d(b, c)\)</span>, then so should be the distances between the scaled labels, <span class="math inline">\(d^*(f(a), f(b)) = d^*(f(b), f(c)\)</span>. For most real applications, this limits interval scales to the class of affine transformations of the form <span class="math inline">\(f(x) = ax + b\)</span>. A canonical example of an interval scale is the conversion formula of degrees Celsius to Fahrenheit: <span class="math inline">\(f(c) = 9/5 \cdot c + 32\)</span> <span class="citation">(<a href="#ref-stevens1946">Stevens 1946</a>)</span>. This example also highlights an important property of interval scales: the zero point can be arbitrary and ratios are not meaningful. Specifically, since the zero points of both Celsius and Fahrenheit scales were chosen based on arbitrary metrics (freezing temperatures of water and brine, respectively), it does not make sense to say that, e.g. 20°C is “twice as hot” as 10°C, in the same way that it does not make sense to say that 2000 CE is “twice as late” as 1000 CE.</p>
+<p>Finally, ratio scales also need to preserve the equality of ratios. Specifically, if <span class="math inline">\(a/b = b/c\)</span> then <span class="math inline">\(f(a)/f(b) = f(b) / f(c)\)</span>. As a consequence, this also means that the scale must have a well-defined zero-point. Examples of ratio scales include physical magnitudes such as height and weight, which have a well-defined zero point <span class="citation">(<a href="#ref-stevens1946">Stevens 1946</a>)</span>.</p>
+<p>Steven’s <span class="citation">(<a href="#ref-stevens1946">1946</a>)</span> typology sparked a considerable debate, on multiple fronts. First, since the original publication, many authors have sought to either expand upon or criticize Steven’s typology. However, despite some monumental efforts towards a unified theory, such as that of <span class="citation">Krantz et al. (<a href="#ref-krantz1971">1971</a>)</span>, measurement has remained a hotly debated topic to this day <span class="citation">(see e.g. <a href="#ref-michell2021">Michell 2021</a>; <a href="#ref-tal2025">Tal 2025</a>)</span>. Second, more relevant to statistics, some authors such as <span class="citation">Stevens (<a href="#ref-stevens1951">1951</a>)</span> and <span class="citation">Luce (<a href="#ref-luce1959">1959</a>)</span> used the theory to define come up with prescriptive rules for statistical transformations. For example, some have suggested that taking the mean of an ordinal variable is not permissible, since the meaning of the average is not preserved under monotone transformation. However, this issue was hotly contested by others such as <span class="citation">Lord (<a href="#ref-lord1953">1953</a>)</span>, <span class="citation">Tukey (<a href="#ref-tukey1986">1986</a>)</span>, and <span class="citation">Velleman and Wilkinson (<a href="#ref-velleman1993">1993</a>)</span>, who argued that many well-established statistical practices, such as rank-based tests and coefficients of variations, rely on “impermissible” statistics but can nevertheless yield valuable insights. More broadly, these authors also argued that data is not really meaningful on its own, but instead derives its meaning from the statistical questions it is being used to answer <span class="citation">(see also <a href="#ref-wilkinson2012">Wilkinson 2012</a>)</span>.</p>
+<p>At this point, the discussion around measurement has become far too dense and theoretical, and most data visualization researchers seem to avoid delving into it too deeply <span class="citation">(see e.g. <a href="#ref-wilkinson2012">Wilkinson 2012</a>)</span>. Nevertheless, there are still some areas where the issues of measurement and Steven’s typology do crop up. For instance, when scaling area based on a continuous variable, a common recommendation is to start the scale at zero to ensure accurate representations of ratios <span class="citation">(see e.g. <a href="#ref-wickham2024">Hadley Wickham 2024</a>)</span>, aligning with Steven’s definition of a ratio scale. Likewise, the long-standing debate around whether the base of a barplot should always start at zero <span class="citation">(see e.g. <a href="#ref-cleveland1985">Cleveland 1985</a>; <a href="#ref-wilkinson2012">Wilkinson 2012</a>)</span> also carries echoes of the measurement debate. Ultimately, it may yet require long time to settle the issues around measurement, however, there are definitely some ideas in the literature that data visualization can benefit from.</p>
 </div>
-<div id="visual-perception" class="section level4 hasAnchor" number="3.3.1.2">
-<h4><span class="header-section-number">3.3.1.2</span> Visual perception<a href="problem-set.html#visual-perception" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>Another important area in which there has been considerable amount of research is how scales apply to visual perception. Specifically, given that we use visual attributes such as position, color, length, or area to encode attributes of our data, an important question is</p>
+<div id="visual-perception-and-encodings" class="section level4 hasAnchor" number="3.3.1.2">
+<h4><span class="header-section-number">3.3.1.2</span> Visual perception and encodings<a href="problem-set.html#visual-perception-and-encodings" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Another important research area is how scales apply to visual perception. Specifically, given that we use visual attributes such as position, color, length, or area to encode various aspects of our data, researchers have tried to answer the question of how to use these attributes in a way that best leverages the human visual system. Fortunately, this research has been quite fruitful, yielding precise and actionable guidelines <span class="citation">(for a review, see <a href="#ref-franconeri2021">Franconeri et al. 2021</a>; <a href="#ref-quadri2021">Quadri and Rosen 2021</a>)</span>.</p>
+<p>A landmark work in this area has been that of <span class="citation">Cleveland and McGill (<a href="#ref-cleveland1984">1984</a>)</span>. In this study, the authors conducted a series of empirical experiments in which they investigated people’s ability to accurately judge quantities based on different visual encodings. They found that judgments based on position along a common scale were the most accurate, followed by length-based comparisons, and then angle-based comparisons.</p>
+<p>The findings were later corroborated by other authors. <span class="citation">Heer and Bostock (<a href="#ref-heer2010">2010</a>)</span> replicated the <span class="citation">Cleveland and McGill (<a href="#ref-cleveland1984">1984</a>)</span> study, and included judgements of circular and rectangular areas which were found to be less accurate than position, length, or angle. Other authors have extended these experiments to other visual encodings, such as color or density <span class="citation">(e.g. <a href="#ref-demiralp2014">Demiralp, Bernstein, and Heer 2014</a>; <a href="#ref-saket2017">Saket et al. 2017</a>; <a href="#ref-reda2018">Reda, Nalawade, and Ansah-Koi 2018</a>)</span>. Together, these findings have been used to create rankings of visual encodings, with researchers generally agreeing on the following ordered list: position, length, area, angle, and intensity <span class="citation">(from most effective to least, <a href="#ref-mackinlay1986">Mackinlay 1986</a>; <a href="#ref-franconeri2021">Franconeri et al. 2021</a>; <a href="#ref-quadri2021">Quadri and Rosen 2021</a>)</span>.</p>
 </div>
 </div>
 <div id="applied-scales" class="section level3 hasAnchor" number="3.3.2">
@@ -1269,8 +1377,14 @@ Cleveland, William S. 1985. <em>The Elements of Graphing Data</em>. Wadsworth Pu
 <div id="ref-cleveland1993" class="csl-entry">
 ———. 1993. <em>Visualizing Data</em>. Hobart press.
 </div>
+<div id="ref-cleveland1984" class="csl-entry">
+Cleveland, William S, and Robert McGill. 1984. <span>“Graphical Perception: Theory, Experimentation, and Application to the Development of Graphical Methods.”</span> <em>Journal of the American Statistical Association</em> 79 (387): 531–54.
+</div>
 <div id="ref-dastani2002" class="csl-entry">
 Dastani, Mehdi. 2002. <span>“The Role of Visual Perception in Data Visualization.”</span> <em>Journal of Visual Languages &amp; Computing</em> 13 (6): 601–22.
+</div>
+<div id="ref-demiralp2014" class="csl-entry">
+Demiralp, Çağatay, Michael S Bernstein, and Jeffrey Heer. 2014. <span>“Learning Perceptual Kernels for Visualization Design.”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em> 20 (12): 1933–42.
 </div>
 <div id="ref-referendum2020" class="csl-entry">
 Electoral Commission New Zealand. 2020. <span>“Official Referendum Results Released.”</span> <a href="https://elections.nz/media-and-news/2020/official-referendum-results-released">https://elections.nz/media-and-news/2020/official-referendum-results-released</a>.
@@ -1281,8 +1395,14 @@ Electoral Commission New Zealand. 2020. <span>“Official Referendum Results Rel
 <div id="ref-franconeri2021" class="csl-entry">
 Franconeri, Steven L, Lace M Padilla, Priti Shah, Jeffrey M Zacks, and Jessica Hullman. 2021. <span>“The Science of Visual Data Communication: What Works.”</span> <em>Psychological Science in the Public Interest</em> 22 (3): 110–61.
 </div>
+<div id="ref-wickham2024" class="csl-entry">
+Hadley Wickham, Danielle Navarro. 2024. <em>Ggplot2: Elegant Graphics for Data Analysis (3e)</em>. <a href="https://ggplot2-book.org">https://ggplot2-book.org</a>.
+</div>
 <div id="ref-hand1996" class="csl-entry">
 Hand, David J. 1996. <span>“Statistics and the Theory of Measurement.”</span> <em>Journal of the Royal Statistical Society: Series A (Statistics in Society)</em> 159 (3): 445–73.
+</div>
+<div id="ref-heer2010" class="csl-entry">
+Heer, Jeffrey, and Michael Bostock. 2010. <span>“Crowdsourcing Graphical Perception: Using Mechanical Turk to Assess Visualization Design.”</span> In <em>Proceedings of the SIGCHI Conference on Human Factors in Computing Systems</em>, 203–12.
 </div>
 <div id="ref-hellerstein1999" class="csl-entry">
 Hellerstein, J. M., R. Avnur, A. Chou, C. Hidber, C. Olston, and V. Raman. 1999. <span>“<span class="nocase">Interactive data analysis: the Control project</span>.”</span> <em>Computer</em> 32 (8): 51–59. <a href="https://doi.org/10.1109/2.781635">https://doi.org/10.1109/2.781635</a>.
@@ -1290,11 +1410,20 @@ Hellerstein, J. M., R. Avnur, A. Chou, C. Hidber, C. Olston, and V. Raman. 1999.
 <div id="ref-humphry2013" class="csl-entry">
 Humphry, Stephen. 2013. <span>“Understanding Measurement in Light of Its Origins.”</span> <em>Frontiers in Psychology</em> 4: 113.
 </div>
+<div id="ref-olympics2024a" class="csl-entry">
+International Olympic Committee. 2024a. <span>“<span class="nocase">Men’s Boulder <span>&amp;</span> Lead, Semifinal Lead - Sport Climbing <span><span class="math inline">\(\vert\)</span></span> Paris 2024 Olympics</span>.”</span> <a href="https://olympics.com/en/paris-2024/results/sport-climbing/men-s-boulder-and-lead/sfnl000200--">https://olympics.com/en/paris-2024/results/sport-climbing/men-s-boulder-and-lead/sfnl000200--</a>.
+</div>
+<div id="ref-olympics2024b" class="csl-entry">
+———. 2024b. <span>“<span class="nocase">Women’s Boulder <span>&amp;</span> Lead, Semifinal Lead - Sport Climbing <span><span class="math inline">\(\vert\)</span></span> Paris 2024 Olympics</span>.”</span> <a href="https://olympics.com/en/paris-2024/results/sport-climbing/women-s-boulder-and-lead/sfnl000200--">https://olympics.com/en/paris-2024/results/sport-climbing/women-s-boulder-and-lead/sfnl000200--</a>.
+</div>
 <div id="ref-keim2002" class="csl-entry">
 Keim, Daniel A. 2002. <span>“Information Visualization and Visual Data Mining.”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em> 8 (1): 1–8.
 </div>
 <div id="ref-kelley2023" class="csl-entry">
 Kelley, Andew. 2023. <span>“A Practical Guide to Applying Data Oriented Design (DoD).”</span> <em>Handmade Seattle</em>. <a href="https://www.youtube.com/watch?v=IroPQ150F6c">https://www.youtube.com/watch?v=IroPQ150F6c</a>.
+</div>
+<div id="ref-kim2022" class="csl-entry">
+Kim, Hyeok, Ryan Rossi, Fan Du, Eunyee Koh, Shunan Guo, Jessica Hullman, and Jane Hoffswell. 2022. <span>“Cicero: A Declarative Grammar for Responsive Visualization.”</span> In <em>Proceedings of the 2022 CHI Conference on Human Factors in Computing Systems</em>, 1–15.
 </div>
 <div id="ref-krantz1971" class="csl-entry">
 Krantz, David H, Patrick Suppes, Duncan R Luce, and Amos Tversky. 1971. <em>Foundations of Measurement Volume 1: Additive and Polynomial Representations</em>. New York: Academic Press.
@@ -1304,6 +1433,12 @@ Lord, Frederic M. 1953. <span>“On the Statistical Treatment of Football Number
 </div>
 <div id="ref-luce1959" class="csl-entry">
 Luce, R Duncan. 1959. <span>“On the Possible Psychophysical Laws.”</span> <em>Psychological Review</em> 66 (2): 81.
+</div>
+<div id="ref-mackinlay1986" class="csl-entry">
+Mackinlay, Jock. 1986. <span>“Automating the Design of Graphical Presentations of Relational Information.”</span> <em>Acm Transactions On Graphics (Tog)</em> 5 (2): 110–41.
+</div>
+<div id="ref-mcnutt2022" class="csl-entry">
+McNutt, Andrew M. 2022. <span>“No Grammar to Rule Them All: A Survey of Json-Style Dsls for Visualization.”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em> 29 (1): 160–70.
 </div>
 <div id="ref-michell1986" class="csl-entry">
 Michell, Joel. 1986. <span>“Measurement Scales and Statistics: A Clash of Paradigms.”</span> <em>Psychological Bulletin</em> 100 (3): 398.
@@ -1320,11 +1455,26 @@ Murrell, Paul. 2005. <em>R Graphics</em>. Chapman; Hall/CRC.
 <div id="ref-pandas2024" class="csl-entry">
 Pandas Core Team. 2024. <span>“DataFrame <span>—</span> Pandas 2.2.3 Documentation.”</span> <a href="https://pandas.pydata.org/docs/reference/frame.html">https://pandas.pydata.org/docs/reference/frame.html</a>.
 </div>
+<div id="ref-quadri2021" class="csl-entry">
+Quadri, Ghulam Jilani, and Paul Rosen. 2021. <span>“A Survey of Perception-Based Visualization Studies by Task.”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em>.
+</div>
 <div id="ref-r2024" class="csl-entry">
 R Core Team. 2024. <em>R: A Language and Environment for Statistical Computing</em>. Vienna, Austria: R Foundation for Statistical Computing. <a href="https://www.R-project.org/">https://www.R-project.org/</a>.
 </div>
+<div id="ref-reda2018" class="csl-entry">
+Reda, Khairi, Pratik Nalawade, and Kate Ansah-Koi. 2018. <span>“Graphical Perception of Continuous Quantitative Maps: The Effects of Spatial Frequency and Colormap Design.”</span> In <em>Proceedings of the 2018 CHI Conference on Human Factors in Computing Systems</em>, 1–12.
+</div>
 <div id="ref-rentzsch2005" class="csl-entry">
 Rentzsch, Jonathan. 2005. <span>“Data Alignment: Straighten up and Fly Right.”</span> <em>IBM Developer</em>. <a href="https://developer.ibm.com/articles/pa-dalign">https://developer.ibm.com/articles/pa-dalign</a>.
+</div>
+<div id="ref-saket2017" class="csl-entry">
+Saket, Bahador, Arjun Srinivasan, Eric D Ragan, and Alex Endert. 2017. <span>“Evaluating Interactive Graphical Encodings for Data Visualization.”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em> 24 (3): 1316–30.
+</div>
+<div id="ref-satyanarayan2016" class="csl-entry">
+Satyanarayan, Arvind, Dominik Moritz, Kanit Wongsuphasawat, and Jeffrey Heer. 2016. <span>“Vega-Lite: A Grammar of Interactive Graphics.”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em> 23 (1): 341–50.
+</div>
+<div id="ref-satyanarayan2014" class="csl-entry">
+Satyanarayan, Arvind, Kanit Wongsuphasawat, and Jeffrey Heer. 2014. <span>“Declarative Interaction Design for Data Visualization.”</span> In <em>Proceedings of the 27th Annual ACM Symposium on User Interface Software and Technology</em>, 669–78.
 </div>
 <div id="ref-stevens1946" class="csl-entry">
 Stevens, Stanley Smith. 1946. <span>“On the Theory of Scales of Measurement.”</span> <em>Science</em> 103 (2684): 677–80.
@@ -1353,23 +1503,35 @@ Tukey, John W. 1986. <span>“Data Analysis and Behavioral Science or Learning t
 <div id="ref-unwin1996" class="csl-entry">
 Unwin, Antony, George Hawkins, Heike Hofmann, and Bernd Siegl. 1996. <span>“<span class="nocase">Interactive Graphics for Data Sets with Missing Values<span>—</span>MANET</span>.”</span> <em>J. Comput. Graph. Stat.</em>, June. <a href="https://www.tandfonline.com/doi/abs/10.1080/10618600.1996.10474700">https://www.tandfonline.com/doi/abs/10.1080/10618600.1996.10474700</a>.
 </div>
+<div id="ref-vanderplas2020" class="csl-entry">
+Vanderplas, Susan, Dianne Cook, and Heike Hofmann. 2020. <span>“Testing Statistical Charts: What Makes a Good Graph?”</span> <em>Annual Review of Statistics and Its Application</em> 7: 61–88.
+</div>
 <div id="ref-velleman1993" class="csl-entry">
 Velleman, Paul F, and Leland Wilkinson. 1993. <span>“Nominal, Ordinal, Interval, and Ratio Typologies Are Misleading.”</span> <em>The American Statistician</em> 47 (1): 65–72.
 </div>
 <div id="ref-vickers2012" class="csl-entry">
 Vickers, Paul, Joe Faith, and Nick Rossiter. 2012. <span>“Understanding Visualization: A Formal Approach Using Category Theory and Semiotics.”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em> 19 (6): 1048–61.
 </div>
+<div id="ref-wickham2010" class="csl-entry">
+Wickham, Hadley. 2010. <span>“A Layered Grammar of Graphics.”</span> <em>Journal of Computational and Graphical Statistics</em> 19 (1): 3–28.
+</div>
 <div id="ref-wickham2011" class="csl-entry">
-Wickham, Hadley. 2011. <span>“The Split-Apply-Combine Strategy for Data Analysis.”</span> <em>Journal of Statistical Software</em> 40: 1–29.
+———. 2011. <span>“The Split-Apply-Combine Strategy for Data Analysis.”</span> <em>Journal of Statistical Software</em> 40: 1–29.
 </div>
 <div id="ref-wickham2016" class="csl-entry">
-———. 2016. <em>Ggplot2: Elegant Graphics for Data Analysis</em>. Springer-Verlag New York. <a href="https://ggplot2.tidyverse.org">https://ggplot2.tidyverse.org</a>.
+———. 2016. <em>Ggplot2: Elegant Graphics for Data Analysis (2e)</em>. Springer-Verlag New York. <a href="https://ggplot2.tidyverse.org">https://ggplot2.tidyverse.org</a>.
 </div>
 <div id="ref-wilke2019" class="csl-entry">
 Wilke, Claus O. 2019. <em>Fundamentals of Data Visualization: A Primer on Making Informative and Compelling Figures</em>. O’Reilly Media.
 </div>
 <div id="ref-wilkinson2012" class="csl-entry">
 Wilkinson, Leland. 2012. <em>The Grammar of Graphics</em>. Springer.
+</div>
+<div id="ref-wills2011" class="csl-entry">
+Wills, Graham. 2011. <em>Visualizing Time: Designing Graphical Representations for Statistical Data</em>. Springer Science &amp; Business Media.
+</div>
+<div id="ref-wu2022" class="csl-entry">
+Wu, Eugene. 2022. <span>“View Composition Algebra for Ad Hoc Comparison.”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em> 28 (6): 2470–85.
 </div>
 <div id="ref-ziemkiewicz2009" class="csl-entry">
 Ziemkiewicz, Caroline, and Robert Kosara. 2009. <span>“Embedding Information Visualization Within Visual Representation.”</span> In <em>Advances in Information and Intelligent Systems</em>, 307–26. Springer.

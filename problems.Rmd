@@ -301,16 +301,78 @@ So, in a spineplot, it is not enough to simply break our data into $j \cdot k$ t
 
 @keim2002 stacked plots are suited for hierarchically-partitioned data. 
 
-#### Partition data structures
-
 ### Computing summaries
 
+After we have split our data into parts, we need a way of summarizing each part via some set of summary statistics. While the computing summaries may seem like a fairly straightforward part of the data visualization pipeline, there is more complexity than meets the eye. This section explores this problem in more depth.
 
+#### Graphics and statistics are not independent
 
+One appealing concept in data visualization is that of composing graphics out of independent, modular components. This idea was first introduced in Wilkinson's Grammar of Graphics [-@wilkinson2012], and has gained widespread popularity since, leading numerous implementations [see e.g. @mcnutt2022; @kim2022; @vanderplas2020; @wickham2010; @satyanarayan2014; @satyanarayan2016]. One prominent example of such implementation is the popular `ggplot2` library [@wickham2010]. In `ggplot2`, plots are built out of components such as geometric objects (called `geoms`), statistical summaries (`stats`), and scales. These components can be combined at will, allowing the user to express a wide range of graphics using just few primitives. 
 
-After we have partitioned our data, we need a way to summarize each part by a set of one or more summary statistics.
+The grammar-based model offers many great advantages, including simplicity, flexibility, and expressiveness. However, it also suffers from one fundamental flaw: graphics and statistics are not independent. Let's illustrate this point on a real-world example.
 
-#### Reducers
+For this example, I will use data from the results of the men's and women's sport's climbing semifinale in the Paris Summer Olympics, 2024 [@olympics2024a; @olympics2024b]. Twenty men and twenty women from seventeen countries competed within the semifinale, in two different disciplines: bouldering and lead. The climbers could earn up to 100 points from each discipline, and the points were summed up into a total score that was then used to establish ranking and determine who would qualify for the finale.
+
+For illustration, here are five random rows of the data set:
+
+```{r}
+#| echo: false
+climbers <- read.csv("./data/climbers.csv")
+set.seed(123456)
+
+knitr::kable(climbers[sample(1:40, 5), ], row.names = FALSE)
+```
+
+To visualize the number of climbers of each country and gender, we could use the ordinary stacked barplot:
+
+```{r}
+#| eval: false
+library(ggplot2)
+
+ggplot(climbers, aes(country, fill = gender)) +
+  geom_bar()
+```
+
+```{r}
+#| echo: false
+knitr::include_graphics("./figures/grammar-barplot-counts.png")
+```
+
+The plot above is a perfectly fine representation of the data. However, what if we are interested in another summary statistic, such as the average score across climbers? A data visualization novice might be tempted to do something like this: 
+
+```{r}
+#| eval: false
+library(ggplot2)
+
+ggplot(climbers, aes(x = country, y = total, fill = gender)) +
+  geom_bar(stat = "summary", fun = "mean")
+```
+
+```{r}
+#| echo: false
+knitr::include_graphics("./figures/grammar-barplot-means.png")
+```
+
+At a glance, the plot above looks fine. However, what do the heights of the stacked bars represent? Each bar segment represents a mean of the `total` variable, grouped by the levels defined by the product of the `country` and `gender` variables. Thus, when we stack the segments on top of one another, we are essentially summing up the average score across country and gender. However, herein lies the problem. The sum of group means is not a meaningful summary statistic - it is not something that most consumers of data visualizations would care about or know how to interpret.
+
+To someone familiar with data visualization, the problem of stacking invalid statistics is nothing new. Many data visualization researchers have warned about this:
+
+>"Stacking is useful when the sum of the amounts represented by the individual stacked bars is in itself a meaningful amount" [@wilke2019, p. 52].
+
+>"Because this gives the visual impression of one element that is the sum of several others, it is very important that if the element’s size is used to display a statistic, then that statistic must be summable. Stacking bars that represent counts, sums, or percentages are fine, but a stacked bar chart where bars show average values is generally meaningless." [@wills2011, p. 112].
+
+>"[...] We do this to ensure that aggregate statistics are always computed over the input data, and so users do not inadvertantly compute e.g., averages of averages, which can easily lead to misinterpretation." [@wu2022]
+
+So does this mean we can only ever stack counts and sums? Take a look at the following plot:
+
+```{r}
+#| echo: false
+knitr::include_graphics("./figures/grammar-barplot-maximums.png")
+```
+
+aa
+
+#### Transforming summaries
 
 ## Scaling
 
@@ -318,13 +380,13 @@ Suppose we have partitioned our data and computed the relevant summary statistic
 
 ### Theory of scales
 
-Within the data visualization literature, there exists a fairly large body of research on the theoretical properties of scales. A full treatment is beyond the scope of the present thesis. However, in this section, I will attempt to briefly summarize some important findings and concepts, and .
+Within the data visualization literature, there exists a fairly large body of research on the theoretical properties of scales. A full treatment is beyond the scope of the present thesis. However, in this section, I will attempt to briefly summarize some important findings and concepts.
 
 #### Philosophy, psychology, and measurement
 
 One challenge when discussing scales in data visualization is that the topic unavoidably intersects with a research area that has a particularly long and contentious history: theory of measurement [see e.g. @hand1996; @michell1986; @tal2025]. Theory of measurement (not to be confused with measure theory, with which it nevertheless shares some overlap) is the research area which tries to answer the deceptively simple question: what does it mean to measure something? This seemingly trivial problem has inspired long and fiery debates within the fields of mathematics, philosophy, and social science. Particularly, in psychology, where assigning numerical values non-physical phenomena such as moods and mental states is a central concern, the topic has garnered a significant amount of attention, creating a dense body of research [see e.g. @humphry2013; @michell2021].
 
-Arguably, the most influential work in this field has been that of @stevens1946. In this fairly concise paper, Stevens defined a *scale* as method of assigning numbers to values, and introduced a four-fold classification classification, namely: nominal, ordinal, interval, and ratio scales (see Table \@ref(tab:stevens-scales)).
+Arguably, the most influential work in this field has been that of @stevens1946. In his fairly concise paper, Stevens defined a *scale* as method of assigning numbers to values, and introduced a four-fold classification classification, namely: nominal, ordinal, interval, and ratio scales (see Table \@ref(tab:stevens-scales)).
 
 ```{r stevens-scales}
 #| echo: false
@@ -360,17 +422,21 @@ For nominal scales, any kind of bijective transformation is valid. Intuitively, 
 
 Ordinal scales are more restrictive, since, on top of preserving equality, transformations also need to preserve order. For example, if we want to assign the labels $\{ \text{monday}, \text{tuesday}, \text{wednesday} \}$ to an ordinal scale with three values, there is only one way to do it that preserves the underlying order: assign the least values to $\text{monday}$, the middle value to $\text{tuesday}$, and the greatest value to $\text{wednesday}$ (assuming we order the labels/days in the usual day-of-week order). However, there is no notion of distance between the labels: we could just as well assign the values labels in $\mathbb{N}$ such as $\{ 10, 20, 30 \}$, $\{1, 2, 9999 \}$, and so on. Thus, the fundamental mathematical structure is that of a monotone map.
 
-Interval scales need to additionally preserve equality of intervals. This means that, for any three values $a, b,$ and $c$, if the distances between $a$ and $b$ and $b$ and $c$ are equal, $d(a, b) = d(b, c)$, then so should be the distances between the scaled labels, $d^*(f(a), f(b)) = d^*(f(b), f(c)$. For most real applications, this limits interval scales to the class affine transformations of the form $f(x) = ax + b$. A canonical example of an interval scale is the conversion formula of degrees Celsius to Fahrenheit: $f(c) = 9/5 \cdot c + 32$ [@stevens1946].
+Interval scales need to additionally preserve equality of intervals. This means that, for any three values $a, b,$ and $c$, if the distances between $a$ and $b$ and $b$ and $c$ are equal, $d(a, b) = d(b, c)$, then so should be the distances between the scaled labels, $d^*(f(a), f(b)) = d^*(f(b), f(c)$. For most real applications, this limits interval scales to the class of affine transformations of the form $f(x) = ax + b$. A canonical example of an interval scale is the conversion formula of degrees Celsius to Fahrenheit: $f(c) = 9/5 \cdot c + 32$ [@stevens1946]. This example also highlights an important property of interval scales: the zero point can be arbitrary and ratios are not meaningful. Specifically, since the zero points of both Celsius and Fahrenheit scales were chosen based on arbitrary metrics (freezing temperatures of water and brine, respectively), it does not make sense to say that, e.g. 20°C is "twice as hot" as 10°C, in the same way that it does not make sense to say that 2000 CE is "twice as late" as 1000 CE.  
 
-Finally, ratio scales also need to preserve the equality of ratios. Specifically, if $a/b = b/c$ then $f(a)/f(b) = f(b) / f(c)$. As a consequence, this also means that the scale must have a well-defined zero-point.
+Finally, ratio scales also need to preserve the equality of ratios. Specifically, if $a/b = b/c$ then $f(a)/f(b) = f(b) / f(c)$. As a consequence, this also means that the scale must have a well-defined zero-point. Examples of ratio scales include physical magnitudes such as height and weight, which have a well-defined zero point [@stevens1946].
 
-Steven's [-@stevens1946] typology inspired a considerable debate that I will touch on here only briefly. First, despite some monumental efforts towards unification, such as that by @krantz1971, measurement has to this day remained a hotly debated topic, with many diverging philosophical views and theories [see e.g. @michell2021; @tal2025]. Second, more relevant to statistics, some authors used the theory to define "permissible" classes of statistical summaries of data. For example, some have suggested that the practice of taking the mean of values defined on an ordinal scale is not permissible, since the meaning of the average operator is not preserved under monotone transformations [@stevens1951; @luce1959]. However, this issue was hotly contested by others such as @lord1953, @tukey1986, and @velleman1993, who argued that there are many well-established statistical practices which rely on "impermissible" statistics, such as rank-based tests, and that, more broadly, data derives its meaning from the statistical questions it is being used to answer.        
+Steven's [-@stevens1946] typology sparked a considerable debate, on multiple fronts. First, since the original publication, many authors have sought to either expand upon or criticize Steven's typology. However, despite some monumental efforts towards a unified theory, such as that of @krantz1971, measurement has remained a hotly debated topic to this day [see e.g. @michell2021; @tal2025]. Second, more relevant to statistics, some authors such as @stevens1951 and @luce1959 used the theory to define come up with prescriptive rules for statistical transformations. For example, some have suggested that taking the mean of an ordinal variable is not permissible, since the meaning of the average is not preserved under monotone transformation. However, this issue was hotly contested by others such as @lord1953, @tukey1986, and @velleman1993, who argued that many well-established statistical practices, such as rank-based tests and coefficients of variations, rely on "impermissible" statistics but can nevertheless yield valuable insights. More broadly, these authors also argued that data is not really meaningful on its own, but instead derives its meaning from the statistical questions it is being used to answer [see also @wilkinson2012].        
 
-Ultimately, the discussion around measurement may have at this point become far too dense and theoretical for applied disciplines such as data visualization. Nevertheless, it does periodically crop up in some applied issues, such as the perennial problem of whether the base of a barplot should always start at zero [see e.g. @cleveland1985; @wilkinson2012]. Thus, I thought it prudent to mention it here.   
+At this point, the discussion around measurement has become far too dense and theoretical, and most data visualization researchers seem to avoid delving into it too deeply [see e.g. @wilkinson2012]. Nevertheless, there are still some areas where the issues of measurement and Steven's typology do crop up. For instance, when scaling area based on a continuous variable, a common recommendation is to start the scale at zero to ensure accurate representations of ratios [see e.g. @wickham2024], aligning with Steven's definition of a ratio scale. Likewise, the long-standing debate around whether the base of a barplot should always start at zero [see e.g. @cleveland1985; @wilkinson2012] also carries echoes of the measurement debate. Ultimately, it may yet require long time to settle the issues around measurement, however, there are definitely some ideas in the literature that data visualization can benefit from.    
 
-#### Visual perception
+#### Visual perception and encodings
 
-Another important area in which there has been considerable amount of research is how scales apply to visual perception. Specifically, given that we use visual attributes such as position, color, length, or area to encode attributes of our data, an important question is 
+Another important research area is how scales apply to visual perception. Specifically, given that we use visual attributes such as position, color, length, or area to encode various aspects of our data, researchers have tried to answer the question of how to use these attributes in a way that best leverages the human visual system. Fortunately, this research has been quite fruitful, yielding precise and actionable guidelines [for a review, see @franconeri2021; @quadri2021].
+
+A landmark work in this area has been that of @cleveland1984. In this study, the authors conducted a series of empirical experiments in which they investigated people's ability to accurately judge quantities based on different visual encodings. They found that judgments based on position along a common scale were the most accurate, followed by length-based comparisons, and then angle-based comparisons. 
+
+The findings were later corroborated by other authors. @heer2010 replicated the @cleveland1984 study, and included judgements of circular and rectangular areas which were found to be less accurate than position, length, or angle. Other authors have extended these experiments to other visual encodings, such as color or density [e.g. @demiralp2014; @saket2017; @reda2018]. Together, these findings have been used to create rankings of visual encodings, with researchers generally agreeing on the following ordered list: position, length, area, angle, and intensity [from most effective to least, @mackinlay1986; @franconeri2021; @quadri2021].    
 
 ### Applied scales
 

@@ -9,11 +9,9 @@ pal_paired_3 <- palette.colors(6, "Paired")[c(1, 2, 5, 6, 3, 4)]
 pal_light_3 <- pal_paired_3[1:3]
 pal_dark_3 <- pal_paired_3[2 * 1:3]
 
-clean_theme <-
-  theme_bw(base_size = 6) +
-  theme(axis.ticks = element_blank(),
-        panel.grid = element_blank(),
-  )
+theme_set(theme_bw(base_size = 6) +
+          theme(axis.ticks = element_blank(),
+                panel.grid = element_blank()))
 
 tex_to_png <- function(filename) {
   tinytex::pdflatex(paste0("./figures/", filename,".tex"))
