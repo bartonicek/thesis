@@ -30,26 +30,37 @@ However, the row-based (AoS) layout can also perform well in certain situations.
 
 ## Data transformation
 
-As was already hinted at in the previous section, when visualizing data, we rarely plot the raw data directly. Instead, the quantities we visualize are often summaries or aggregates of some kind. Take for example a typical barplot. To draw the barplot, we first need to divide the data into parts, summarize each part by some metric, usually either count or sum of some variable, and finally, render the summaries as individual bars. Likewise, many other types of plots like boxplots or histograms include two distinct steps: splitting the data into parts and computing the summaries on these parts. 
+As was already hinted at in the previous section, when visualizing data, we rarely plot the raw data directly. Instead, the quantities we visualize are often summaries or aggregates of some kind. Take for example the typical barplot. To draw the barplot, we first need to divide the data into parts, summarize each part by some metric, usually either count or sum of some variable, and finally, render the summaries as individual bars. Likewise, many other types of plots such as boxplots or histograms include two distinct steps: splitting the data into parts and computing summaries on these parts. And, as we will see, even the plot types which show one-to-one representations of the data, such as scatterplots and parallel coordinates plots, can be viewed through the lens of partitions.  
 
-This section discusses these two fundamental parts of the data visualization pipeline - partitioning and aggregation - and explores challenges associated with their implementation in an interactive data visualization system. While these operations might seem straightforward, my goal is to make the case that they actually come equipped with a lot of subtle structure, more than might necessarily meet the eye. 
+This section discusses these two fundamental parts of the data visualization pipeline - partitioning and aggregation - and explores challenges associated with their implementation in an interactive data visualization system. While these operations might seem straightforward, I will make the case that they actually encode more structure than meets the eye. 
 
 ### Partitioning the data
 
-#### Leave no data out
+The initial step of the data visualization pipeline involves splitting data into parts. When working with typical two-dimensional tables or data frames, this operation can be imagined as slicing the table into smaller subsets of rows. Even during this simple process, two fundamental questions arise:
 
-A common-sense guideline that many data visualization experts provide is that faithful visualizations should show the full data and leave nothing out. For instance, @cleveland1985 argues that axis limits should generally be expanded so that data points at or near these limits are not arbitrarily obscured. Take, for example, the following two scatterplots:
+- How much of the original data should the subsets contain?
+- What should be the relationship between these subsets?
+
+#### Leave nothing out
+
+> "If someone hides data from you, it’s probably because he has something to hide." [@cairo2016, pp. 47]
+
+A common recommendation that many data visualization experts provide is that faithful representations should show the full data and leave nothing out. Visualizations which hide or obscure information, be it by negligence or by intent, cannot be considered truthful representations of the underlying data [@cairo2016; @cairo2019]. 
+
+Data hiding can occur in multiple ways. First, the data itself can be cherry-picked or massaged [see e.g. @lisnic2024]. This is arguably the most egregious case, and can in some cases amount to malicious statistical practices such as HARKing or p-hacking [see e.g. @kerr1998; @lisnic2024; @head2015]. Second, even when showing the full data, some visualizations can obscure or downplay certain data features by incorrect utilization of design and visual encodings [@cairo2016; @cairo2019; @cleveland1985; @ziemkiewicz2009]. Finally, there is the issue of missing or incomplete data, where some data cannot be represented because it simply is not there.      
+
+To give a concrete example of data hiding, consider axis limits. @cleveland1985 argues that axis limits should generally be expanded to avoid inadvertently obscuring data near these limits. Take the following two scatterplots:
 
 ```{r}
 #| echo: false
-#| fig-cap: "Without expanding axes, objects near the limits can become occluded. Left: axis limits match the data limits exactly, and so points at or near the axis limits (top-left and bottom-right corner of the plot) are \"cut-off\" and represented by smaller area, becoming less salient. Right: by expanding axis limits, we can ensure that all data is represented faithfully."
+#| fig-cap: "Without expanding axis limits, objects at or near the limits become less salient. Left: axis limits match the data limits exactly, and so the points in the top-left and bottom-right corner of the plot) are represented by smaller area and the overall trend is distorted. Right: by expanding axis limits, we can ensure that trend is represented faithfully."
 
 knitr::include_graphics("./figures/expand-scatterplot.png")
 ```
 
-In the left plot, the axis limits match the data limits exactly, whereas in the right plot, they are expanded by a small fraction [5%, `ggplot2` default, @wickham2016]. The problem with the left plot is that the data points near the axis limits (top-left and bottom-right corner) are represented only by a fraction of the area: for example, the point in the bottom-right corner lies simultaneously at the limits of the x- and y-axis, and is thus represented only by 1/4 of the area of the points in the center of the plot.
+In the left scatterplot, the axis limits match the data limits exactly, whereas in the right plot, they are expanded by a small fraction [5%, `ggplot2` default, @wickham2016]. The left scatterplot provides a misleading representation of the underlying trend, as data points near the axis limits (top-left and bottom-right corners) are represented by a smaller area, compared to points near the centre of the plot. For instance, the point in the bottom-right corner of the plot lies simultaneously at the limits of the x- and y-axis, and is thus represented by one-quarter of the area of the points in the center.
 
-The example above shows how data can be obscured visually, even after all of the data points have been included in the plot (rendering all rows of the data set). Clearly then, when complete data is available, leaving information out by arbitrarily dropping rows is even less acceptable. This issue becomes more complicated in the presence of missing or incomplete data, however, there exist ways of dealing with that as well, see e.g. @unwin1996, @tierney2023. Thus, ideally, the visualization should represent a surjective mapping from the space of the geometric objects to the underlying data set, such that, by default, there are no cases (rows of the data) which are marginalized or left out of the figure entirely [@ziemkiewicz2009].
+Clearly then, we can dismiss the first two data-hiding issues - cherry picking and incorrect use of design - as they involve deliberate misrepresentation. Unless there is a clear and justifiable reason, no data should be arbitrarily removed or discarded, and we should take care to provide good representations such that all data is represented faithfully. The issue of missing or incomplete data is a bit more complicated. While techniques of visualizing data with missing values do exist [see e.g. @unwin1996; @tierney2023], these methods often depend on the specific visualization type and style. Nevertheless, the ideal model of a visualization should be that of a bijection, such that there is a clear mapping between the visualization and the data [@ziemkiewicz2009]. 
 
 #### Distinctness, disjointness, and comparison
 
@@ -57,11 +68,13 @@ The example above shows how data can be obscured visually, even after all of the
 
 > "Graphics are for comparison - comparison of one kind or another - not for access to individual amounts." [@tukey1993]
 
-In data visualization, a practice so ubiquitous that it is often overlooked is that, in most types of plots, each geometric object represents one disjoint part of the data. That is, each point, bar, line, or polygon typically represents a unique set of cases (rows of the data), with no overlap with the cases represented by the other objects. 
+An overwhelmingly common practice in data visualization is to use geometric objects to represent distinct subsets of data. That is, in most common types of plots, each point, bar, line, or polygon typically represents a unique set of data points (rows of the data), with no overlap between objects within the same graphical layer. Despite being so common to border on a rule, this practice is often overlooked.
 
-Why is this the case? This unconscious "law" might be rooted in the fundamental purpose of data visualization: comparison [@tufte2001; @tukey1993]. When we visualize, we draw our graphics with the ultimate goal of being able to compare our data along a set of visual channels, such as position, length, size, or colour [@bertin1983; @wilkinson2012; @franconeri2021; @wilke2019]. This mirrors the comparisons we make in the real world, where we compare physical objects along their respective dimensions or attributes.
+Yet, is this practice universal? If it really were a rule, it would be vulnerable to a single counter-example, and indeed, such counter do exists. For example, certain visualizations of set-like data "double up" the contribution of data subsets, such that one subset of the data may be reflected in multiple objects [see e.g. @alsallakh2013; @alsallakh2014]. However, these types of visualizations are the exception rather than the norm.   
 
-With disjoint parts, there is a natural correspondence or bijection between the subsets of the data and their visual representation, see figure \@ref(fig:geoms-bijection). Specifically, if we imagine the act of taking an object and picking the corresponding set of cases as a function, then, with disjoint parts, this function is invertible: we can pick an object, identify the corresponding set of cases, and then use that set to get back the original object. In plots where the objects do not represent disjoint subsets of the data, this correspondence is broken: if we identify cases corresponding to a single object, there is no way to go back from these cases to the original object.
+So where does this unconscious "law" of using objects to represent disjoint parts of the data come from? I would like to argue that it is be rooted in the fundamental purpose of data visualization: comparison [@tufte2001; @tukey1993]. When we visualize, we draw our graphics with the ultimate goal of being able to compare our data along a set of visual channels, such as position, length, size, or colour [@bertin1983; @wilkinson2012; @franconeri2021; @wilke2019]. This mirrors the comparisons we make in the real world, where we compare physical objects along their respective dimensions or attributes.
+
+With disjoint parts, there is a natural correspondence or bijection between the subsets of the data and their visual representation, see Figure \@ref(fig:geoms-bijection). Specifically, if our objects represents disjoint parts of the data, the function mapping the data parts to the geometric objects is invertible: we can pick an object, identify the corresponding subset of cases, and then use this subset to get back the original object. In plots where the objects do not represent disjoint subsets of the data, this correspondence is broken: if we identify cases corresponding to a single object, there is no simple way to map these cases back to the original object.
 
 ```{r geoms-bijection}
 #| echo: false

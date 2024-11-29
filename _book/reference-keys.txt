@@ -11,7 +11,7 @@ fig:unnamed-chunk-5
 def:unlabeled-div-1
 fig:barplot-spineplot
 tab:stevens-scales
-fig:unnamed-chunk-20
+fig:unnamed-chunk-21
 def:unlabeled-div-2
 fig:function-subset
 def:unlabeled-div-3
@@ -172,3 +172,4 @@ dop-encapsulation
 references
 fig:unnamed-chunk-1
 fig:unnamed-chunk-2
+leave-nothing-out

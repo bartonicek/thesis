@@ -285,21 +285,31 @@ div.csl-indent {
 </div>
 <div id="data-transformation" class="section level2 hasAnchor" number="3.2">
 <h2><span class="header-section-number">3.2</span> Data transformation<a href="problem-set.html#data-transformation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>As was already hinted at in the previous section, when visualizing data, we rarely plot the raw data directly. Instead, the quantities we visualize are often summaries or aggregates of some kind. Take for example a typical barplot. To draw the barplot, we first need to divide the data into parts, summarize each part by some metric, usually either count or sum of some variable, and finally, render the summaries as individual bars. Likewise, many other types of plots like boxplots or histograms include two distinct steps: splitting the data into parts and computing the summaries on these parts.</p>
-<p>This section discusses these two fundamental parts of the data visualization pipeline - partitioning and aggregation - and explores challenges associated with their implementation in an interactive data visualization system. While these operations might seem straightforward, my goal is to make the case that they actually come equipped with a lot of subtle structure, more than might necessarily meet the eye.</p>
+<p>As was already hinted at in the previous section, when visualizing data, we rarely plot the raw data directly. Instead, the quantities we visualize are often summaries or aggregates of some kind. Take for example the typical barplot. To draw the barplot, we first need to divide the data into parts, summarize each part by some metric, usually either count or sum of some variable, and finally, render the summaries as individual bars. Likewise, many other types of plots such as boxplots or histograms include two distinct steps: splitting the data into parts and computing summaries on these parts. And, as we will see, even the plot types which show one-to-one representations of the data, such as scatterplots and parallel coordinates plots, can be viewed through the lens of partitions.</p>
+<p>This section discusses these two fundamental parts of the data visualization pipeline - partitioning and aggregation - and explores challenges associated with their implementation in an interactive data visualization system. While these operations might seem straightforward, I will make the case that they actually encode more structure than meets the eye.</p>
 <div id="partitioning-the-data" class="section level3 hasAnchor" number="3.2.1">
 <h3><span class="header-section-number">3.2.1</span> Partitioning the data<a href="problem-set.html#partitioning-the-data" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div id="leave-no-data-out" class="section level4 hasAnchor" number="3.2.1.1">
-<h4><span class="header-section-number">3.2.1.1</span> Leave no data out<a href="problem-set.html#leave-no-data-out" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>A common-sense guideline that many data visualization experts provide is that faithful visualizations should show the full data and leave nothing out. For instance, <span class="citation">Cleveland (<a href="#ref-cleveland1985">1985</a>)</span> argues that axis limits should generally be expanded so that data points at or near these limits are not arbitrarily obscured. Take, for example, the following two scatterplots:</p>
+<p>The initial step of the data visualization pipeline involves splitting data into parts. When working with typical two-dimensional tables or data frames, this operation can be imagined as slicing the table into smaller subsets of rows. Even during this simple process, two fundamental questions arise:</p>
+<ul>
+<li>How much of the original data should the subsets contain?</li>
+<li>What should be the relationship between these subsets?</li>
+</ul>
+<div id="leave-nothing-out" class="section level4 hasAnchor" number="3.2.1.1">
+<h4><span class="header-section-number">3.2.1.1</span> Leave nothing out<a href="problem-set.html#leave-nothing-out" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<blockquote>
+<p>“If someone hides data from you, it’s probably because he has something to hide.” <span class="citation">(<a href="#ref-cairo2016">Cairo 2016, 47</a>)</span></p>
+</blockquote>
+<p>A common recommendation that many data visualization experts provide is that faithful representations should show the full data and leave nothing out. Visualizations which hide or obscure information, be it by negligence or by intent, cannot be considered truthful representations of the underlying data <span class="citation">(<a href="#ref-cairo2016">Cairo 2016</a>, <a href="#ref-cairo2019">2019</a>)</span>.</p>
+<p>Data hiding can occur in multiple ways. First, the data itself can be cherry-picked or massaged <span class="citation">(see e.g. <a href="#ref-lisnic2024">Lisnic et al. 2024</a>)</span>. This is arguably the most egregious case, and can in some cases amount to malicious statistical practices such as HARKing or p-hacking <span class="citation">(see e.g. <a href="#ref-kerr1998">Kerr 1998</a>; <a href="#ref-lisnic2024">Lisnic et al. 2024</a>; <a href="#ref-head2015">Head et al. 2015</a>)</span>. Second, even when showing the full data, some visualizations can obscure or downplay certain data features by incorrect utilization of design and visual encodings <span class="citation">(<a href="#ref-cairo2016">Cairo 2016</a>, <a href="#ref-cairo2019">2019</a>; <a href="#ref-cleveland1985">Cleveland 1985</a>; <a href="#ref-ziemkiewicz2009">Ziemkiewicz and Kosara 2009</a>)</span>. Finally, there is the issue of missing or incomplete data, where some data cannot be represented because it simply is not there.</p>
+<p>To give a concrete example of data hiding, consider axis limits. <span class="citation">Cleveland (<a href="#ref-cleveland1985">1985</a>)</span> argues that axis limits should generally be expanded to avoid inadvertently obscuring data near these limits. Take the following two scatterplots:</p>
 <div class="figure"><span style="display:block;" id="fig:unnamed-chunk-1"></span>
-<img src="figures/expand-scatterplot.png" alt="Without expanding axes, objects near the limits can become occluded. Left: axis limits match the data limits exactly, and so points at or near the axis limits (top-left and bottom-right corner of the plot) are &quot;cut-off&quot; and represented by smaller area, becoming less salient. Right: by expanding axis limits, we can ensure that all data is represented faithfully." width="750" />
+<img src="figures/expand-scatterplot.png" alt="Without expanding axis limits, objects at or near the limits become less salient. Left: axis limits match the data limits exactly, and so the points in the top-left and bottom-right corner of the plot) are represented by smaller area and the overall trend is distorted. Right: by expanding axis limits, we can ensure that trend is represented faithfully." width="750" />
 <p class="caption">
-Figure 3.1: Without expanding axes, objects near the limits can become occluded. Left: axis limits match the data limits exactly, and so points at or near the axis limits (top-left and bottom-right corner of the plot) are “cut-off” and represented by smaller area, becoming less salient. Right: by expanding axis limits, we can ensure that all data is represented faithfully.
+Figure 3.1: Without expanding axis limits, objects at or near the limits become less salient. Left: axis limits match the data limits exactly, and so the points in the top-left and bottom-right corner of the plot) are represented by smaller area and the overall trend is distorted. Right: by expanding axis limits, we can ensure that trend is represented faithfully.
 </p>
 </div>
-<p>In the left plot, the axis limits match the data limits exactly, whereas in the right plot, they are expanded by a small fraction <span class="citation">(5%, <code>ggplot2</code> default, <a href="#ref-wickham2016">Wickham 2016</a>)</span>. The problem with the left plot is that the data points near the axis limits (top-left and bottom-right corner) are represented only by a fraction of the area: for example, the point in the bottom-right corner lies simultaneously at the limits of the x- and y-axis, and is thus represented only by 1/4 of the area of the points in the center of the plot.</p>
-<p>The example above shows how data can be obscured visually, even after all of the data points have been included in the plot (rendering all rows of the data set). Clearly then, when complete data is available, leaving information out by arbitrarily dropping rows is even less acceptable. This issue becomes more complicated in the presence of missing or incomplete data, however, there exist ways of dealing with that as well, see e.g. <span class="citation">Unwin et al. (<a href="#ref-unwin1996">1996</a>)</span>, <span class="citation">Tierney and Cook (<a href="#ref-tierney2023">2023</a>)</span>. Thus, ideally, the visualization should represent a surjective mapping from the space of the geometric objects to the underlying data set, such that, by default, there are no cases (rows of the data) which are marginalized or left out of the figure entirely <span class="citation">(<a href="#ref-ziemkiewicz2009">Ziemkiewicz and Kosara 2009</a>)</span>.</p>
+<p>In the left scatterplot, the axis limits match the data limits exactly, whereas in the right plot, they are expanded by a small fraction <span class="citation">(5%, <code>ggplot2</code> default, <a href="#ref-wickham2016">Wickham 2016</a>)</span>. The left scatterplot provides a misleading representation of the underlying trend, as data points near the axis limits (top-left and bottom-right corners) are represented by a smaller area, compared to points near the centre of the plot. For instance, the point in the bottom-right corner of the plot lies simultaneously at the limits of the x- and y-axis, and is thus represented by one-quarter of the area of the points in the center.</p>
+<p>Clearly then, we can dismiss the first two data-hiding issues - cherry picking and incorrect use of design - as they involve deliberate misrepresentation. Unless there is a clear and justifiable reason, no data should be arbitrarily removed or discarded, and we should take care to provide good representations such that all data is represented faithfully. The issue of missing or incomplete data is a bit more complicated. While techniques of visualizing data with missing values do exist <span class="citation">(see e.g. <a href="#ref-unwin1996">Unwin et al. 1996</a>; <a href="#ref-tierney2023">Tierney and Cook 2023</a>)</span>, these methods often depend on the specific visualization type and style. Nevertheless, the ideal model of a visualization should be that of a bijection, such that there is a clear mapping between the visualization and the data <span class="citation">(<a href="#ref-ziemkiewicz2009">Ziemkiewicz and Kosara 2009</a>)</span>.</p>
 </div>
 <div id="distinctness-disjointness-and-comparison" class="section level4 hasAnchor" number="3.2.1.2">
 <h4><span class="header-section-number">3.2.1.2</span> Distinctness, disjointness, and comparison<a href="problem-set.html#distinctness-disjointness-and-comparison" class="anchor-section" aria-label="Anchor link to header"></a></h4>
@@ -309,9 +319,10 @@ Figure 3.1: Without expanding axes, objects near the limits can become occluded.
 <blockquote>
 <p>“Graphics are for comparison - comparison of one kind or another - not for access to individual amounts.” <span class="citation">(<a href="#ref-tukey1993">Tukey 1993</a>)</span></p>
 </blockquote>
-<p>In data visualization, a practice so ubiquitous that it is often overlooked is that, in most types of plots, each geometric object represents one disjoint part of the data. That is, each point, bar, line, or polygon typically represents a unique set of cases (rows of the data), with no overlap with the cases represented by the other objects.</p>
-<p>Why is this the case? This unconscious “law” might be rooted in the fundamental purpose of data visualization: comparison <span class="citation">(<a href="#ref-tufte2001">Tufte 2001</a>; <a href="#ref-tukey1993">Tukey 1993</a>)</span>. When we visualize, we draw our graphics with the ultimate goal of being able to compare our data along a set of visual channels, such as position, length, size, or colour <span class="citation">(<a href="#ref-bertin1983">Bertin 1983</a>; <a href="#ref-wilkinson2012">Wilkinson 2012</a>; <a href="#ref-franconeri2021">Franconeri et al. 2021</a>; <a href="#ref-wilke2019">Wilke 2019</a>)</span>. This mirrors the comparisons we make in the real world, where we compare physical objects along their respective dimensions or attributes.</p>
-<p>With disjoint parts, there is a natural correspondence or bijection between the subsets of the data and their visual representation, see figure <a href="problem-set.html#fig:geoms-bijection">3.2</a>. Specifically, if we imagine the act of taking an object and picking the corresponding set of cases as a function, then, with disjoint parts, this function is invertible: we can pick an object, identify the corresponding set of cases, and then use that set to get back the original object. In plots where the objects do not represent disjoint subsets of the data, this correspondence is broken: if we identify cases corresponding to a single object, there is no way to go back from these cases to the original object.</p>
+<p>An overwhelmingly common practice in data visualization is to use geometric objects to represent distinct subsets of data. That is, in most common types of plots, each point, bar, line, or polygon typically represents a unique set of data points (rows of the data), with no overlap between objects within the same graphical layer. Despite being so common to border on a rule, this practice is often overlooked.</p>
+<p>Yet, is this practice universal? If it really were a rule, it would be vulnerable to a single counter-example, and indeed, such counter do exists. For example, certain visualizations of set-like data “double up” the contribution of data subsets, such that one subset of the data may be reflected in multiple objects <span class="citation">(see e.g. <a href="#ref-alsallakh2013">Alsallakh et al. 2013</a>, <a href="#ref-alsallakh2014">2014</a>)</span>. However, these types of visualizations are the exception rather than the norm.</p>
+<p>So where does this unconscious “law” of using objects to represent disjoint parts of the data come from? I would like to argue that it is be rooted in the fundamental purpose of data visualization: comparison <span class="citation">(<a href="#ref-tufte2001">Tufte 2001</a>; <a href="#ref-tukey1993">Tukey 1993</a>)</span>. When we visualize, we draw our graphics with the ultimate goal of being able to compare our data along a set of visual channels, such as position, length, size, or colour <span class="citation">(<a href="#ref-bertin1983">Bertin 1983</a>; <a href="#ref-wilkinson2012">Wilkinson 2012</a>; <a href="#ref-franconeri2021">Franconeri et al. 2021</a>; <a href="#ref-wilke2019">Wilke 2019</a>)</span>. This mirrors the comparisons we make in the real world, where we compare physical objects along their respective dimensions or attributes.</p>
+<p>With disjoint parts, there is a natural correspondence or bijection between the subsets of the data and their visual representation, see Figure <a href="problem-set.html#fig:geoms-bijection">3.2</a>. Specifically, if our objects represents disjoint parts of the data, the function mapping the data parts to the geometric objects is invertible: we can pick an object, identify the corresponding subset of cases, and then use this subset to get back the original object. In plots where the objects do not represent disjoint subsets of the data, this correspondence is broken: if we identify cases corresponding to a single object, there is no simple way to map these cases back to the original object.</p>
 <div class="figure"><span style="display:block;" id="fig:geoms-bijection"></span>
 <img src="figures/geoms-bijection.png" alt="Disjoint subsets provide a one-to-one correspondence (bijection) between geometric objects and the data. Suppose we mark out the cases corresponding to one object (the left most bar). Top row: if each geometric object (bar) represents unique set of cases, we can easily go back and forth between the object and its underlying data (middle panel). Thus, the function of picking a set of cases corresponding to an object is bijective. Bottom row: when there is an overlap between the cases represented by each object, once we pick the set of cases corresponding to that object, there is no simple way to use that set to get the corresponding object back." width="886" />
 <p class="caption">
@@ -1356,6 +1367,9 @@ Abadi, Daniel, Peter Boncz, Stavros Harizopoulos, Stratos Idreos, Samuel Madden,
 <div id="ref-acton2014" class="csl-entry">
 Acton, Mike. 2014. <span>“Data-Oriented Design and c++.”</span> <em>Luento. CppCon</em>. <a href="https://www.youtube.com/watch?v=rX0ItVEVjHc">https://www.youtube.com/watch?v=rX0ItVEVjHc</a>.
 </div>
+<div id="ref-alsallakh2013" class="csl-entry">
+Alsallakh, Bilal, Wolfgang Aigner, Silvia Miksch, and Helwig Hauser. 2013. <span>“Radial Sets: Interactive Visual Analysis of Large Overlapping Sets.”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em> 19 (12): 2496–2505.
+</div>
 <div id="ref-alsallakh2014" class="csl-entry">
 Alsallakh, Bilal, Luana Micallef, Wolfgang Aigner, Helwig Hauser, Silvia Miksch, and Peter Rodgers. 2014. <span>“Visualizing Sets and Set-Typed Data: State-of-the-Art and Future Challenges.”</span> <em>Eurographics Conference on Visualization (EuroVis)</em>.
 </div>
@@ -1370,6 +1384,12 @@ Bouchet-Valat, Milan, and Bogumił Kamiński. 2023. <span>“DataFrames.jl: Flex
 </div>
 <div id="ref-buja1996" class="csl-entry">
 Buja, Andreas, Dianne Cook, and Deborah F Swayne. 1996. <span>“Interactive High-Dimensional Data Visualization.”</span> <em>Journal of Computational and Graphical Statistics</em> 5 (1): 78–99.
+</div>
+<div id="ref-cairo2016" class="csl-entry">
+Cairo, Alberto. 2016. <em>The Truthful Art: Data, Charts, and Maps for Communication</em>. New Riders.
+</div>
+<div id="ref-cairo2019" class="csl-entry">
+———. 2019. <em>How Charts Lie: Getting Smarter about Visual Information</em>. WW Norton &amp; Company.
 </div>
 <div id="ref-cleveland1985" class="csl-entry">
 Cleveland, William S. 1985. <em>The Elements of Graphing Data</em>. Wadsworth Publ. Co.
@@ -1401,6 +1421,9 @@ Hadley Wickham, Danielle Navarro. 2024. <em>Ggplot2: Elegant Graphics for Data A
 <div id="ref-hand1996" class="csl-entry">
 Hand, David J. 1996. <span>“Statistics and the Theory of Measurement.”</span> <em>Journal of the Royal Statistical Society: Series A (Statistics in Society)</em> 159 (3): 445–73.
 </div>
+<div id="ref-head2015" class="csl-entry">
+Head, Megan L, Luke Holman, Rob Lanfear, Andrew T Kahn, and Michael D Jennions. 2015. <span>“The Extent and Consequences of p-Hacking in Science.”</span> <em>PLoS Biology</em> 13 (3): e1002106.
+</div>
 <div id="ref-heer2010" class="csl-entry">
 Heer, Jeffrey, and Michael Bostock. 2010. <span>“Crowdsourcing Graphical Perception: Using Mechanical Turk to Assess Visualization Design.”</span> In <em>Proceedings of the SIGCHI Conference on Human Factors in Computing Systems</em>, 203–12.
 </div>
@@ -1422,11 +1445,17 @@ Keim, Daniel A. 2002. <span>“Information Visualization and Visual Data Mining.
 <div id="ref-kelley2023" class="csl-entry">
 Kelley, Andew. 2023. <span>“A Practical Guide to Applying Data Oriented Design (DoD).”</span> <em>Handmade Seattle</em>. <a href="https://www.youtube.com/watch?v=IroPQ150F6c">https://www.youtube.com/watch?v=IroPQ150F6c</a>.
 </div>
+<div id="ref-kerr1998" class="csl-entry">
+Kerr, Norbert L. 1998. <span>“HARKing: Hypothesizing After the Results Are Known.”</span> <em>Personality and Social Psychology Review</em> 2 (3): 196–217.
+</div>
 <div id="ref-kim2022" class="csl-entry">
 Kim, Hyeok, Ryan Rossi, Fan Du, Eunyee Koh, Shunan Guo, Jessica Hullman, and Jane Hoffswell. 2022. <span>“Cicero: A Declarative Grammar for Responsive Visualization.”</span> In <em>Proceedings of the 2022 CHI Conference on Human Factors in Computing Systems</em>, 1–15.
 </div>
 <div id="ref-krantz1971" class="csl-entry">
 Krantz, David H, Patrick Suppes, Duncan R Luce, and Amos Tversky. 1971. <em>Foundations of Measurement Volume 1: Additive and Polynomial Representations</em>. New York: Academic Press.
+</div>
+<div id="ref-lisnic2024" class="csl-entry">
+Lisnic, Maxim, Zach Cutler, Marina Kogan, and Alexander Lex. 2024. <span>“Visualization Guardrails: Designing Interventions Against Cherry-Picking in Interactive Data Explorers.”</span> <a href="https://osf.io/preprints/osf/4j9nr">https://osf.io/preprints/osf/4j9nr</a>.
 </div>
 <div id="ref-lord1953" class="csl-entry">
 Lord, Frederic M. 1953. <span>“On the Statistical Treatment of Football Numbers.”</span>
