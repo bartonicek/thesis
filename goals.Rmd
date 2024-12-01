@@ -1,0 +1,16 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+# Goals and Principles
+
+This section contains a list of goals and high-level design principles that served as the basis of the data interactive visualization system that was implemented as part of this doctoral project.
+
+## User profile
+
+When designing any system, an important first consideration is what the average user will be like. The expectations about the expertise, motivations, and goals of the average user should inform every step of the design process.
+
+Among interactive data visualization systems, there are significant differences among the target audience. Some interactive data visualization systems make almost no assumptions about the user's level of experience or motivation. Others assume a highly motivated "expert" user with a sufficient level of domain expertise [@dimara2019].
+
