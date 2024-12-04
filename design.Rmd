@@ -288,6 +288,24 @@ Reactive.dispatch(dog, `car goes by`)
 
 ## Reactivity
 
-## Row-based or column-based
+## Data representation
+
+Data visualization is, first and foremost, about data (it's in the name). However, all data is not created equal. Information can come to us in various shapes and sizes, and the way the data is structured can have a significant impact on various aspects of the visualization system, including ease of use, maintainability, and performance.
+
+#### Row-based vs. column-based
+
+A common model in many data analytic languages is that of two-dimensional table or data frame. Here, the data is organized in a dictionary of columns, with each column being a homogeneous array containing values of the same type. However, unlike in a matrix data structure, different columns can store values of different types (such as floats, integers, or strings). The dataframe object can also store optional metadata, such as row names, column labels, or grouping structure [@r2024; @bouchet-valat2023]. Popular examples of this design include the S3 `data.frame` class in base R [@r2024], the `tbl_df` S3 class in the `tibble` package [@muller2023], the `DataFrame` class in the Python `pandas` package [@pandas2024], the `DataFrame` class in the `polars` library [@polars2024], or the `DataFrame` type in the Julia `DataFrame.jl` package [@bouchet-valat2023]. 
+
+However, the column-based organization of data is not universal. For example, the popular JavaScript data visualization and transformation library D3 [@bostock2022] models data frames as arrays of rows, with each row being its own separate dictionary. Likewise, certain types of databases store tables as lists of records, with each record having the shape of a dictionary [@abadi2013].
+
+Within a broader programming context, these two fundamental data layouts are referred to as the struct of arrays (SoA, also known as "parallel arrays") versus the array of structs (AoS) data structures. SoA store data in a dictionary of arrays, similar to the column-based layout, whereas AoS store data in an arrays of dictionaries, similar to row-based layout. The distinction between SoA and AoS is a bit more nuanced, since structs can store a wider class of types than just plain data, such as functions and pointers, and this makes either layout better suited to certain [programming styles](#programming-paradigms). For example, in object oriented programming, behaviour is encapsulated alongside data in objects (via methods/member functions), and this makes the AoS the more natural data structure within this programming paradigm [replicating the same functionality with SoA is awkward, although some modern languages offer features which make this more convenient, see e.g. @zig2024].     
+
+#### Performance
+
+The two data layouts also offer distinct performance characteristics. 
+
+The column-based (SoA) layout is generally considered to be the one better for performance [see e.g. @acton2014; @kelley2023]. Specifically, it benefits from two important features: better memory alignment and improved cache locality. First, homogeneous arrays offer better memory characteristics than heterogeneous structs. This is because they can be stored as contiguous blocks of memory with the same alignment, eliminating the need for padding and potentially leading to a significant reduction in memory footprint [see e.g. @rentzsch2005; @kelley2023]. Second, the column-based data layout is better suited for pre-fetching. Specifically, when performing column-wise operations, the CPU can cache the contiguously-stored values more easily, often resulting in greatly improved performance [@abadi2013; @acton2014; @kelley2023]. 
+
+However, the row-based (AoS) layout can also perform well in certain situations. Specifically, it can outperform column-based stores when retrieving individual records/rows is key, hence why it is commonly used in traditional Online Transaction Processing databases [OLTP, @abadi2013]. Additionally, it could be argued that the row-based layout can be more "natural" and offer better developer ergonomics for certain programming styles.     
 
 ## Rendering engine

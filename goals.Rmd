@@ -14,3 +14,8 @@ When designing any system, an important first consideration is what the average 
 
 Among interactive data visualization systems, there are significant differences among the target audience. Some interactive data visualization systems make almost no assumptions about the user's level of experience or motivation. Others assume a highly motivated "expert" user with a sufficient level of domain expertise [@dimara2019].
 
+> "It only works ﬁne when we have individual plot symbols for each observation, as in scatterplots for example, where some attributes are changed by the user interaction. But even when replacing plot parameters the user loses the possibility to compare the current plot with previous versions. The
+user can only compare the current image with a mental copy of the previous image and hence the comparison might get distorted."
+>
+> [@wilhelm2008, pp. 210]
+

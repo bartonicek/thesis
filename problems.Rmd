@@ -8,48 +8,32 @@ editor_options:
 
 Designing an interactive data visualization system presents a unique set of challenges. Some of these have been already touched on in the [Introduction](#Introduction). This section discusses these inherent challenges in greater depth, and begins exploring avenues for possible solutions.
 
-## Data representation
+## Data visualization pipeline
 
-Data visualization is, first and foremost, about data (it's in the name). However, all data is not created equal. Information can come to us in various shapes and sizes, and the way the data is structured can have a significant impact on various aspects of the visualization system, including ease of use, maintainability, and performance.
+When visualizing data, it is rarely the case that the raw data arrives to us in a form that we can render directly. Instead, there are typically multiple distinct stages through which the data has to pass sequentially before it can be rendered. Together, these form a data visualization pipeline [see e.g. @chi2000; @wickham2009].   
 
-#### Row-based vs. column-based
+Take for example the typical barplot. To draw a barplot, there are several steps we need to take. First, we have to divide the data into parts, based on the levels of some categorical variable. Second, we need to summarize or aggregate each part by some metric, usually either sum or count. Third, we need to take these summaries and map them to visual encodings, such as x-axis position, y-axis position, and length. Finally, we use these encodings to render the individual bars. 
 
-A common model in many data analytic languages is that of two-dimensional table or data frame. Here, the data is organized in a dictionary of columns, with each column being a homogeneous array containing values of the same type. However, unlike in a matrix data structure, different columns can store values of different types (such as floats, integers, or strings). The dataframe object can also store optional metadata, such as row names, column labels, or grouping structure [@r2024; @bouchet-valat2023]. Popular examples of this design include the S3 `data.frame` class in base R [@r2024], the `tbl_df` S3 class in the `tibble` package [@muller2023], the `DataFrame` class in the Python `pandas` package [@pandas2024], the `DataFrame` class in the `polars` library [@polars2024], or the `DataFrame` type in the Julia `DataFrame.jl` package [@bouchet-valat2023]. 
+The next few sections discus four fundamental steps of the data visualization pipeline - partitioning, aggregation, scaling and encoding, and rendering - and explores challenges related to their implementation. Particularly, some unique issues that come up in interactive data visualization are pointed out and discussed. Ultimately, my goal is to argue that certain parts of the pipeline, particularly the aggregation step, involve a lot of hidden structure, especially when interaction is involved. 
 
-However, the column-based organization of data is not universal. For example, the popular JavaScript data visualization and transformation library D3 [@bostock2022] models data frames as arrays of rows, with each row being its own separate dictionary. Likewise, certain types of databases store tables as lists of records, with each record having the shape of a dictionary [@abadi2013].
+## Partitioning
 
-Within a broader programming context, these two fundamental data layouts are referred to as the struct of arrays (SoA, also known as "parallel arrays") versus the array of structs (AoS) data structures. SoA store data in a dictionary of arrays, similar to the column-based layout, whereas AoS store data in an arrays of dictionaries, similar to row-based layout. The distinction between SoA and AoS is a bit more nuanced, since structs can store a wider class of types than just plain data, such as functions and pointers, and this makes either layout better suited to certain [programming styles](#programming-paradigms). For example, in object oriented programming, behaviour is encapsulated alongside data in objects (via methods/member functions), and this makes the AoS the more natural data structure within this programming paradigm [replicating the same functionality with SoA is awkward, although some modern languages offer features which make this more convenient, see e.g. @zig2024].     
+The initial step of any data visualization pipeline is splitting data into parts or chunks. When working with typical two-dimensional tables or data frames, this operation can be imagined as slicing the table into smaller subsets of rows. Even during this arguably simple process, two fundamental questions arise:
 
-#### Performance
-
-The two data layouts also offer distinct performance characteristics. 
-
-The column-based (SoA) layout is generally considered to be the one better for performance [see e.g. @acton2014; @kelley2023]. Specifically, it benefits from two important features: better memory alignment and improved cache locality. First, homogeneous arrays offer better memory characteristics than heterogeneous structs. This is because they can be stored as contiguous blocks of memory with the same alignment, eliminating the need for padding and potentially leading to a significant reduction in memory footprint [see e.g. @rentzsch2005; @kelley2023]. Second, the column-based data layout is better suited for pre-fetching. Specifically, when performing column-wise operations, the CPU can cache the contiguously-stored values more easily, often resulting in greatly improved performance [@abadi2013; @acton2014; @kelley2023]. 
-
-However, the row-based (AoS) layout can also perform well in certain situations. Specifically, it can outperform column-based stores when retrieving individual records/rows is key, hence why it is commonly used in traditional Online Transaction Processing databases [OLTP, @abadi2013]. Additionally, it could be argued that the row-based layout can be more "natural" and offer better developer ergonomics for certain programming styles.     
-
-## Data transformation
-
-As was already hinted at in the previous section, when visualizing data, we rarely plot the raw data directly. Instead, the quantities we visualize are often summaries or aggregates of some kind. Take for example the typical barplot. To draw the barplot, we first need to divide the data into parts, summarize each part by some metric, usually either count or sum of some variable, and finally, render the summaries as individual bars. Likewise, many other types of plots such as boxplots or histograms include two distinct steps: splitting the data into parts and computing summaries on these parts. And, as we will see, even the plot types which show one-to-one representations of the data, such as scatterplots and parallel coordinates plots, can be viewed through the lens of partitions.  
-
-This section discusses these two fundamental parts of the data visualization pipeline - partitioning and aggregation - and explores challenges associated with their implementation in an interactive data visualization system. While these operations might seem straightforward, I will make the case that they actually encode more structure than meets the eye. 
-
-### Partitioning the data
-
-The initial step of the data visualization pipeline involves splitting data into parts. When working with typical two-dimensional tables or data frames, this operation can be imagined as slicing the table into smaller subsets of rows. Even during this simple process, two fundamental questions arise:
-
-- How much of the original data should the subsets contain?
+- How much of the original data should these subsets contain?
 - What should be the relationship between these subsets?
 
-#### Leave nothing out
+While these questions may seem simple, answering them requires making assumptions about the data and visualization goals. Common data visualization practices, whether consciously or not, are based on these assumptions, and so it is crucial to discuss them.
+
+### Show the full data
 
 > "If someone hides data from you, it’s probably because he has something to hide." [@cairo2016, pp. 47]
 
-A common recommendation that many data visualization experts provide is that faithful representations should show the full data and leave nothing out. Visualizations which hide or obscure information, be it by negligence or by intent, cannot be considered truthful representations of the underlying data [@cairo2016; @cairo2019]. 
+A common recommendation that many data visualization experts provide is that faithful visual representations should show the full data and leave nothing out. The issue seems fairly intuitive. Visualizations which hide or obscure information, be it by negligence or by intent, cannot be considered truthful representations of the underlying data [@cairo2016; @cairo2019]. 
 
-Data hiding can occur in multiple ways. First, the data itself can be cherry-picked or massaged [see e.g. @lisnic2024]. This is arguably the most egregious case, and can in some cases amount to malicious statistical practices such as HARKing or p-hacking [see e.g. @kerr1998; @lisnic2024; @head2015]. Second, even when showing the full data, some visualizations can obscure or downplay certain data features by incorrect utilization of design and visual encodings [@cairo2016; @cairo2019; @cleveland1985; @ziemkiewicz2009]. Finally, there is the issue of missing or incomplete data, where some data cannot be represented because it simply is not there.      
+However, data hiding can occur in multiple ways. First, the data itself can be cherry-picked or massaged [see e.g. @lisnic2024]. This is arguably the most egregious case, and can in some cases amount to malicious statistical practices such as HARKing or p-hacking [see e.g. @kerr1998; @lisnic2024; @head2015]. Second, even when showing the full data, some visualizations can obscure or downplay certain data features by incorrect utilization of design and visual encodings [@cairo2016; @cairo2019; @cleveland1985; @ziemkiewicz2009]. Finally, there is the issue of missing or incomplete data, where some data cannot be represented because it simply is not there.      
 
-To give a concrete example of data hiding, consider axis limits. @cleveland1985 argues that axis limits should generally be expanded to avoid inadvertently obscuring data near these limits. Take the following two scatterplots:
+To give one concrete example of data hiding, consider axis limits. @cleveland1985 argues that axis limits should generally be expanded to avoid inadvertently obscuring data near these limits [see also e.g. @chen2008, pp. 64]. Take the following two scatterplots:
 
 ```{r}
 #| echo: false
@@ -60,43 +44,47 @@ knitr::include_graphics("./figures/expand-scatterplot.png")
 
 In the left scatterplot, the axis limits match the data limits exactly, whereas in the right plot, they are expanded by a small fraction [5%, `ggplot2` default, @wickham2016]. The left scatterplot provides a misleading representation of the underlying trend, as data points near the axis limits (top-left and bottom-right corners) are represented by a smaller area, compared to points near the centre of the plot. For instance, the point in the bottom-right corner of the plot lies simultaneously at the limits of the x- and y-axis, and is thus represented by one-quarter of the area of the points in the center.
 
-Clearly then, we can dismiss the first two data-hiding issues - cherry picking and incorrect use of design - as they involve deliberate misrepresentation. Unless there is a clear and justifiable reason, no data should be arbitrarily removed or discarded, and we should take care to provide good representations such that all data is represented faithfully. The issue of missing or incomplete data is a bit more complicated. While techniques of visualizing data with missing values do exist [see e.g. @unwin1996; @tierney2023], these methods often depend on the specific visualization type and style. Nevertheless, the ideal model of a visualization should be that of a bijection, such that there is a clear mapping between the visualization and the data [@ziemkiewicz2009]. 
+Clearly then, we can dismiss the first two data-hiding issues - cherry picking and incorrect use of design - as they involve deliberate misrepresentation. Unless there is a clear and justifiable reason, no data should be arbitrarily removed or discarded, and we should take care to provide good representations such that all data is represented faithfully. The issue of missing or incomplete data is a bit more complicated. While techniques of visualizing data with missing values do exist [see e.g. @unwin1996; @tierney2023], these methods often depend on the specific visualization type and style. Nevertheless, in the ideal case, the visualization should present a clear and unambiguous mapping between the graphics and the data [@ziemkiewicz2009]. 
 
-#### Distinctness, disjointness, and comparison
+### Disjointness and comparison
 
 > "To be truthful and revealing, data graphics must bear on the question at the heart of quantitative thinking: 'compared to what'?" [@tufte2001, pp. 74].
 
 > "Graphics are for comparison - comparison of one kind or another - not for access to individual amounts." [@tukey1993]
 
-An overwhelmingly common practice in data visualization is to use geometric objects to represent distinct subsets of data. That is, in most common types of plots, each point, bar, line, or polygon typically represents a unique set of data points (rows of the data), with no overlap between objects within the same graphical layer. Despite being so common to border on a rule, this practice is often overlooked.
+An interesting yet underappreciated fact is that, in many common types of visualizations, geometric objects tend to represent distinct subsets of the data. That is, in most plots, each point, bar, line, or polygon typically represents a unique set of data points (rows of the data), with no overlap between objects within the same graphical layer. Despite being so common to border on a rule, this practice is often overlooked.
 
-The practice of visualizing disjoint subsets of the data is not universal and counterexamples do exist. For instance, certain visualizations of set-typed data "double up" the contribution of data subsets, such that the same subset of the data may appear in multiple objects [see e.g. @alsallakh2013; @alsallakh2014; @conway2017; @lex2014]. However, these types of visualizations are the exception rather than the norm.   
+We can find counterexamples of this practice. For instance, certain visualizations of set-typed data "double up" the contribution of data subsets, such that the same subset of the data may appear in multiple objects [see e.g. @alsallakh2013; @alsallakh2014; @conway2017; @lex2014]. However, these types of visualizations are the exception rather than the norm. In other words, when we see a barplot, we expect each bar to represent a unique set of cases.   
 
-So where does this unconscious "law" of representing disjoint parts of the data come from? I would like to argue that it is be rooted in the fundamental purpose of data visualization: comparison [@tufte2001; @tukey1993]. When we visualize, we draw our graphics with the ultimate goal of being able to compare our data along a set of visual channels, such as position, length, size, or colour [@bertin1983; @wilkinson2012; @franconeri2021; @wilke2019]. This mirrors the comparisons we make in the real world, where we compare objects along their respective physical dimensions or attributes.
+So where does this unconscious "law" of showing disjoint parts of the data come from? I believe that it is rooted in the fundamental purpose of data visualization: comparison [@tufte2001; @tukey1993]. When we visualize, we draw our graphics with the ultimate goal of comparing our data along a set of visual channels [@bertin1983; @wilkinson2012; @franconeri2021; @wilke2019]. This mirrors the comparisons we make in the real world, where we compare properties of physical objects. And, as I would like to argue, it is often far easier to reason about multiple objects when they are independent or disjoint. In statistics, we see a example of this in the sum and product rules of probability, which require independence as pre-requisite [@kolmogorov2018]. Likewise, in psychology, is now-all-too-famous experimental evidence that people struggle with comparing non-disjoint events [the "Linda experiment", @tversky1983]. Thus, disjointness presents a more intuitive, "natural" model.
 
-With disjoint parts, there is a natural correspondence or bijection between the subsets of the data and their visual representation, see Figure \@ref(fig:geoms-bijection). Specifically, if our objects represents disjoint parts of the data, the function mapping the data parts to the geometric objects is invertible: we can pick an object, identify the corresponding subset of cases, and then use this subset to get back the original object. In plots where the objects do not represent disjoint subsets of the data, this correspondence is broken: if we identify cases corresponding to a single object, there is no simple way to map these cases back to the original object.
+Fundamentally, the intuitive appeal of disjoint parts may originate in the fact that they reflect a structure which mathematicians have long considered natural: a bijection [see e.g. @fong2019; @lawvere2009]. Specifically, if we take a set, split it into disjoint subsets, and then label these subsets, then there is a one-to-one correspondence between the subsets and the labels (i.e. the parts form an [equivalence class](#partition)). This makes it so that we can go back and forth between the subsets and the labels, without losing any information.
+
+An example of this natural correspondence is shown in Figure \@ref(fig:geoms-bijection). Specifically, when drawing a barplot, if we divide our data into disjoint subsets and draw one bar corresponding to each part, then the function mapping the objects (bars) to the data subsets is invertible: we can pick a bar, identify the corresponding subset of cases, and then use this subset to pick out the original bar. In plots where the objects do not represent disjoint subsets of the data, this correspondence is broken: if we identify cases corresponding to a single bar, there is necessarily no simple way to pick out the original bar from the cases alone.
 
 ```{r geoms-bijection}
 #| echo: false
-#| fig-cap: "Disjoint subsets provide a one-to-one correspondence (bijection) between geometric objects and the data. Suppose we mark out the cases corresponding to one object (the left most bar). Top row: if each geometric object (bar) represents unique set of cases, we can easily go back and forth between the object and its underlying data (middle panel). Thus, the function of picking a set of cases corresponding to an object is bijective. Bottom row: when there is an overlap between the cases represented by each object, once we pick the set of cases corresponding to that object, there is no simple way to use that set to get the corresponding object back."
+#| fig-cap: "Disjoint subsets provide a one-to-one correspondence (bijection) between geometric objects and the data. Suppose we mark out the cases corresponding to one object (the left most bar, shown in red). Top row: if each geometric object (bar) represents unique subset of cases, we can easily go back and forth between the object and its underlying data (middle panel). Thus, the function of picking the subset corresponding to an object is invertible. Bottom row: if there is an overlap between the cases represented by each object, then there may be no simple way to identify the original object after we have picked out the corresponding cases."
 
 knitr::include_graphics("./figures/geoms-bijection.png")
 ```
 
-To illustrate this idea on concrete data, take the following barplot representing vote share among the top three parties in the 2023 New Zealand general election [@election2023]:
+#### Real data example
+
+To illustrate the idea of disjoint parts on concrete, real-world data, take the following barplot representing the vote share among the top three parties in the 2023 New Zealand general election [@election2023]:
 
 ```{r barplot-bijection}
 #| echo: false
-#| fig-cap: "Geometric objects typically represent disjoint subsets of the data. The plot shows the vote share of the top three parties in the 2023 New Zealand general election, with each bar representing a unique subset of voters."
+#| fig-cap: "Barplot showing disjoint subsets of the data. The bars show the vote share among the top three parties in the 2023 New Zealand general election, with each bar representing a unique subset of voters."
 
 knitr::include_graphics("./figures/barplot-bijection.png")
 ```
 
-Each bar represents a unique set of voters and thus the subsets of the data represented by the bars are disjoint. Technically, there is no hard and fast rule about this. For example, we could transform the first bar by taking a union of the votes of National and Labour parties, and represent the same underlying data the following way:
+Each bar represents a unique subset of voters and thus the bars show disjoint data. This is the type of data representation that we encounter most often, however, there are few explicit guidelines about this. Hypothetically, we could transform our data, and, for example, take the union of the votes of National and Labour parties:
 
 ```{r union-geoms}
 #| echo: false
-#| fig-cap: "Hypothetically, there is nothing preventing us from encoding the same information in multiple objects, and showing non-disjoint parts of our data. The plot shows the same underlying data as \\@ref(fig:geoms-bijection), with the leftmost bar representing a union of National and Labour voters. The two leftmost bars thus do not represent disjoint subsets of the data. For a more realistic example, see Figure \\@ref(fig:union-geoms2)."
+#| fig-cap: "Barplot showing non-disjoint subsets of the data. Most of the bars show the same data as in Figure \\@ref(fig:geoms-bijection), however, the leftmost bar representing a union of National and Labour voters. The two leftmost bars are thus not disjoint. For a more realistic example, see Figure \\@ref(fig:union-geoms2)."
 
 knitr::include_graphics("./figures/barplot-notbijection.png")
 ```
@@ -114,37 +102,39 @@ knitr::include_graphics("./figures/barplot-bijection-proportions.png")
 
 By stacking the bar segments on top of each other, we can easily compare proportion of the total number of votes while retaining a parsimonious representation of our data. Each bar segments now again represents a unique subset of voters.
 
-The example above was fairly clear case of where a non-disjoint representation of the data would be the wrong choice, however, there are also more ambiguous situations. One such situation is when there are multiple attributes of the data which can be simultaneously present or absent for each case. For example, in 2020, a joint referendum was held in New Zealand on the question of legalization of euthanasia and cannabis. The two issues were simultaneously included on the same ballot. The legalization of euthanasia was accepted by the voters, with 65.1% of votes supporting the decision, whereas the legalization of cannabis was rejected, with 50.7% of voters rejecting the decision [@referendum2020].
+The example above was fairly clear-cut case of where non-disjoint data representation makes no sense. However, there are also more ambiguous situations. One such situation is when there are multiple attributes of the data which can be simultaneously present or absent for each case. Take, for example, the 2020 New Zealand joint referendum on the legalization of euthanasia and cannabis. In this referendum, the two issues were included on the same ballot and voters would vote on them simultaneously. The legalization of euthanasia was accepted by the voters, with 65.1% of votes supporting the decision, whereas the legalization of cannabis was rejected, with 50.7% of voters rejecting the decision [@referendum2020].
 
 The referendum data can be visualized in the following way:
 
 ```{r union-geoms2}
 #| echo: false
 #| fig-height: 3
-#| fig-cap: "Realistic example of a non-disjoint data representation. The plot shows the vote share in the combined 2020 New Zealand referendum on euthanasia and cannabis, where the two issues were simultaneousy presented on the same ballot. The two bars each show (mostly) the same subset of ballot, with each ballot contributing to the height of one segment in each bar."
+#| fig-cap: "Barplot showing a more realistic example of non-disjoint data representation. The bars show the vote share cast by New Zealand voters in the joint 2020 referendum on euthanasia and cannabis. The two bars show (mostly) the same set of ballots, with each single ballot contributing to the height of one segment in each bar."
 
 knitr::include_graphics("./figures/referendum-notbijection.png")
 ```
 
-By definition, both bars include votes which were cast by the same voter [ignoring the votes where no preference was given for either issue, @referendum2020]. Thus, the sets of voters that the two bars and the four bar segments represent overlap.
-
-In general, there is nothing inherently wrong with the plot above. Non-disjoint representations of the data can work well for certain data types such as set-typed data [see e.g. @alsallakh2014]. In the context of static data visualization, plots like these can serve useful roles. However, even here, there is a simple way of representing the same data in a disjoint way - draw two separate plots:  
+Here, both bars include votes which were cast by the same voter [ignoring the votes where no preference was given for either issue, @referendum2020], making the representation non-disjoint. In 
+this case, the visualization works, since the underlying data is genuinely not disjoint (each person voted twice). If we had information about individual votes, it might be interesting to see how many people voted for both euthanasia and cannabis, how many voted for euthanasia but against cannabis, and so on. Similar types of visualization can work well for set-typed data [see e.g. @alsallakh2014]. 
+However, even though the data here is fundamentally non-disjoint, there is a way to represent it in a disjoint way that preserves most of the desirable properties - draw separate plots or small multiples [@tufte2001]:  
 
 ```{r}
 #| echo: false
 #| fig-height: 3
-#| fig-cap: "Non-disjoint data representations can often be turned into disjoint ones. The figure again shows the vote share in the combined 2020 New Zealand referendum on euthanasia and cannabis, however, now each issue is plotted in a separate plot, and thus each geometric object in each plot represents a unique subset of ballots/voters."
+#| fig-cap: "Small multiple figure showing the non-disjoint data represented as disjoint bars. The bars again show the vote share cast by New Zealand voters in the joint 2020 referendum on euthanasia and cannabis, however, this time, each bar within one plot represents a unique subset of the cases."
 
 knitr::include_graphics("./figures/referendum-bijection.png")
 ```
 
-Why should we care about whether our representations of the data are disjoint or not? I argue that, for many types of plots, disjointness presents a fundamentally better mental model: each geometric object encodes one unique set of observational units. Conversely, if the objects in our plots do not represent disjoint subsets, then we need to keep an additional model of *how* they are related in our head. 
+#### Disjointness and interaction
 
-This issue is particularly important in interactive visualization. The natural correspondence between geometric objects and disjoint subsets of the data makes certain interactions more intuitive, and conversely, overlapping subsets induce surprising behavior. For instance, when a user clicks on a bar in a linked barplot, they might be surprised if parts of the other bars within the same plot get highlighted as well: they intended to highlight *that* bar, not the others. Likewise, when querying, if our objects do not represent disjoint subsets of the data, we have to think about what querying means: are we querying the objects or the cases corresponding to the objects? Disjoint partitions simplify our mental model, and this may be the reason why some authors discuss interactive features in the context of partitions [see e.g. @buja1996; @keim2002].    
+As I have argued above, disjoint subsets offer a simpler mental model for understanding data visualizations. When each geometric object represents a unique set of data points, it becomes easier to reason about the comparisons being made. In contrast, when objects overlap or share data points, it requires additional cognitive effort to track the relationships between them.
+
+I would also argue that disjointness presents a particularly good model for interactive visualization. The natural correspondence between geometric objects and disjoint subsets of the data makes certain interactions more intuitive, and conversely, overlapping subsets can produce surprising behavior. For instance, when a user clicks on a bar in a linked barplot, they expect to highlight that particular bar and its corresponding cases. If they see parts of other bars within the same plot get highlighted as well, they might have to stop and think about the relationship between the bars and the data, since it is no longer bijective. Similarly, when implementing querying, if our objects do not represent disjoint subsets of the data, we have to think carefully about what querying means: should the user query the objects or the corresponding cases? Disjoint partitions simplify our mental model, and this may be the reason why some authors discuss interactive features in the context of partitions [see e.g. @buja1996; @keim2002].    
 
 SQL aggregation queries (`GROUP BY`) are based on partitions [@hellerstein1999].
 
-#### Plots as partitions
+### Plots as partitions
 
 In the two preceding sections, I have argued the plots in our interactive data visualization system should have have two fundamental properties:
 
@@ -157,13 +147,17 @@ These two properties suggest a fundamental model for plots: that of [partitions]
 Regular plot is a plot where the geometric objects within one layer represent a partition of the data, such that there is a natural bijection between these objects and (possibly aggregated) parts of the original data.   
 :::
 
-While, I have not been able to find references explicitly conceptualizing plots as partitions, some data visualization researchers have used the language of bijections when discussing graphics. For example, @dastani2002 discusses plots as bijections (homomorphisms) between data tables and visual attribute tables, however, this is already in the context of aggregated data (e.g. rows of the data table for barplot already being sums/counts). Similarly, @ziemkiewicz2009 and @vickers2012 argued that, in order to be visually unambiguous, plots should represent bijections of the underlying data. However, under this strict view, only one-to-one representations of the data such as scatterplots and parallel coordinate plots would be permitted [and the authors do admit that aggregation can at times present an acceptable trade-off, despite the information loss, @ziemkiewicz2009]. 
+While, I have not been able to find references explicitly conceptualizing plots as partitions, some data visualization researchers have used the language of bijections when discussing graphics. For example, @dastani2002 discusses plots as bijections (homomorphisms) between data tables and visual attribute tables. Similarly, @ziemkiewicz2009 and @vickers2012 argue that, in order to be visually unambiguous, plots should represent bijections of the underlying data.
 
-The approach I take is slightly different. Instead of modeling plots as bijections between cases and the geometric objects, I model them as bijections between *parts of data* and the geometric objects. In other words, the bijection is not between rows of the original data table and the geometric objects, but between subtables of the original data table and the geometric objects. This approach has the advantage that aggregation can be considered as part of the bijection. 
+However, this model skirts around the issue of aggregation. If we assume that the data comes to us pre-aggregated, then modeling plots as a bijection between cases/rows and geometric objects makes perfect sense. However, if we do admit that aggregation is not a completely independent process and is instead a part of the data visualization pipeline [@chi2000; @wickham2016], then we have a problem. 
+
+Aggregation is, by definition, a one-way process - after we have aggregated our data into a set of summaries, we cannot recover the original cases. However, many popular plots such as barplots and histograms rely on aggregation. Under the model proposed by @dastani2002, @ziemkiewicz2009, and @vickers2012, these types of plots would be impermissible. @ziemkiewicz2009 are aware of this and do admit that, at times, aggregation can be an acceptable trade-off, despite the inherent information loss.
+
+I propose the following way out of the conundrum. Instead of modeling plots as bijections between *cases* and the geometric objects, I model them as bijections between *parts of data* and the geometric objects. In other words, the domain of the bijection are not individual rows of the original data table, but entire "chunks" of rows. With this approach, aggregation can be considered as part of the bijection, since, if we split our data into ten tables and aggregate each table, we are still left with ten tables of one row each.   
 
 Finally, Wilkinson [-@wilkinson2012, pp 210] and @keim2002 have linked stacked plots to (hierarchical) partitions.
 
-#### Partitions and products
+#### Partitions and products 
 
 In a typical interactive plot, the data will be partitioned across multiple dimensions. To give a concrete example, suppose we want to draw the following barplot:
 
@@ -314,61 +308,98 @@ So, in a spineplot, it is not enough to simply break our data into $j \cdot k$ t
 
 @keim2002 stacked plots are suited for hierarchically-partitioned data. 
 
-### Computing summaries
+## Aggregation
+
+> “This system cannot produce a meaningless graphic, however. This is a strong claim, vulnerable to a single counter-example. It is a claim based on the formal rules of the system, however, not on the evaluation of specific graphics it may produce.” 
+>
+> “Some of the combinations of graphs and statistical methods may be degenerate or bizarre, but there is no moral reason to restrict them.”
+>
+> @wilkinson2012, The Grammar of Graphics, pp. 15 and 112. 
 
 After we have split our data into parts, we need a way of summarizing each part via some set of summary statistics. While the computing summaries may seem like a fairly straightforward part of the data visualization pipeline, there is more complexity than meets the eye. This section explores this problem in more depth.
 
-#### Graphics and statistics are not independent
+### Graphics and statistics are not independent
 
-One appealing concept in data visualization is that of composing graphics out of independent, modular components. This idea was first introduced in Wilkinson's Grammar of Graphics [-@wilkinson2012], and has gained widespread popularity since, leading numerous implementations [see e.g. @mcnutt2022; @kim2022; @vanderplas2020; @wickham2010; @satyanarayan2014; @satyanarayan2016]. One prominent example of such implementation is the popular `ggplot2` library [@wickham2010]. In `ggplot2`, plots are built out of components such as geometric objects (called `geoms`), statistical summaries (`stats`), and scales. These components can be combined at will, allowing the user to express a wide range of graphics using just few primitives. 
+A popular approach in data visualization involves composing graphics out of independent, modular components. This is the core idea of the so-called "grammar-based" model of visualization, introduced by Wilkinson in his Grammar of Graphics [-@wilkinson2012]. Since its inception, this model has gained widespread popularity, and has been implemented in numerous data visualization systems [see e.g. @mcnutt2022; @kim2022; @vanderplas2020; @wickham2010; @satyanarayan2014; @satyanarayan2016]. Its popularity is likely due to the many benefits it offers, including simplicity, flexibility, and expressive power. 
 
-The grammar-based model offers many great advantages, including simplicity, flexibility, and expressiveness. However, it also suffers from one fundamental flaw: graphics and statistics are not independent. Let's illustrate this point on a real-world example.
+A prominent example of a grammar-based data visualization system is the famous `ggplot2` package [@wickham2010]. In `ggplot2`, plots are built out of components such as geometric objects (called `geoms`), statistical summaries (`stats`), and scales. These components can be combined at will, allowing the user to express a wide range of graphics using just few primitives. The expressive power of `ggplot2` has made it one of the most popular R packages.^[Being the top most downloaded CRAN package as of 4th of December 2024, @rmeta2024]
 
-For this example, I will use data from the results of the men's and women's sport's climbing semifinale in the Paris Summer Olympics, 2024 [@olympics2024a; @olympics2024b]. Twenty men and twenty women from seventeen countries competed within the semifinale, in two different disciplines: bouldering and lead. The climbers could earn up to 100 points from each discipline, and the points were summed up into a total score that was then used to establish ranking and determine who would qualify for the finale.
+However, despite all its advantages, the grammar-based model also suffers from one fundamental flaw: graphics and statistics are not independent. Instead, the way we choose to represent the data has to align with the properties of the data. Let's illustrate this point on a real-world example.
 
-For illustration, here are five random rows of the data set:
+##### Stacking: not (only) about graphics
 
-```{r}
-#| echo: false
-climbers <- read.csv("./data/climbers.csv")
-set.seed(123456)
+For this example, I will use now-famous data set from a study on the effect of smoking on child lung capacity [@tager1979; @kahn2005]. In the study, the researchers measured children's forced expiratory volume (FEV), and recorded it alongside age, height, sex, and smoking status.
 
-knitr::kable(climbers[sample(1:40, 5), ], row.names = FALSE)
-```
-
-To visualize the number of climbers of each country and gender, we could use the ordinary stacked barplot:
+A rather surprising feature of this data set is that, at a glance, the children who smoked actually had greater lung volume than non-smokers. In `ggplot2`, we can easily create a boxplot showing the relationship between smoking status and FEV using the following short code snippet:
 
 ```{r}
 #| eval: false
+#| fig: "Lung FEV of smokers and non-smokers within the @tager1979 study. Surprisingly, smokers seem to have greater lung volume on average compared with non-smokers."
+fev <- read.csv("./data/fev.csv")
+
 library(ggplot2)
 
-ggplot(climbers, aes(country, fill = gender)) +
+ggplot(fev, aes(smoke, fev, fill = smoke)) +
+  geom_boxplot()
+# There is actually a bit more code involved in producing the plot below,
+# but it all just has to do with design/aesthetic flair
+```
+
+```{r}
+#| echo: false
+knitr::include_graphics("./figures/grammar-boxplot.png")
+```
+
+Before we start extolling the benefits of smoking for juvenile lung health, it may be a good idea to first look at some confounding variables. Lung volume develops with age, and the researchers had collected data from children ages three and up. Clearly, there were not going to be many smokers among three-year olds, so we should make sure age is not a confounder. 
+
+We can verify that there indeed is a strong relationship between age and FEV like so:
+
+```{r}
+#| eval: false
+ggplot(fev, aes(age, fev, fill = smoke)) +
+  geom_point()
+```
+
+```{r}
+#| echo: false
+knitr::include_graphics("./figures/grammar-scatterplot.png")
+```
+
+From the plot above, we can see that age and FEV correlate strongly, and also that the smokers tend to be quite a bit older than the non-smokers. To visualize the distribution of smokers and non-smokers across age a bit more clearly, we can draw an ordinary stacked barplot:
+
+```{r}
+#| eval: false
+ggplot(fev, aes(age, fev, fill = smoke)) +
   geom_bar()
 ```
 
-```{r}
+```{r grammar-barplot-counts}
 #| echo: false
+#| fig-cap: "The number of participants by age and smoking status. Notice that the bar segments \"stack\", such that the height of the whole bar correctly represents the number of smokers and non-smokers combined."
 knitr::include_graphics("./figures/grammar-barplot-counts.png")
 ```
 
-The plot above is a perfectly fine representation of the data. However, what if we are interested in another summary statistic, such as the average score across climbers? A data visualization novice might be tempted to do something like this: 
+The plot above clearly shows that there were a lot more smokers than non-smokers, and that smokers tended to be on average older than the non-smokers. This provides a support for our confounding hypothesis.
+
+Now, what if we wanted to compare the distribution of FEV across the different ages? A data visualization novice might do something like this:
 
 ```{r}
 #| eval: false
-library(ggplot2)
-
-ggplot(climbers, aes(x = country, y = total, fill = gender)) +
+ggplot(fev, aes(age, fev, fill = smoke)) +
   geom_bar(stat = "summary", fun = "mean")
 ```
 
-```{r}
+```{r grammar-barplot-means}
 #| echo: false
+#| fig-cap: "A poor visualization of the average FEV by age and smoking status. Notice that the height of the stacked bars is meaningless: it represents the sum of the group averages, which is not a valid summary of the combined smoker and non-smoker data."
 knitr::include_graphics("./figures/grammar-barplot-means.png")
 ```
 
-At a glance, the plot above looks fine. However, what do the heights of the stacked bars represent? Each bar segment represents a mean of the `total` variable, grouped by the levels defined by the product of the `country` and `gender` variables. Thus, when we stack the segments on top of one another, we are essentially summing up the average score across country and gender. However, herein lies the problem. The sum of group means is not a meaningful summary statistic - it is not something that most consumers of data visualizations would care about or know how to interpret.
+At a glance, the plot above looks fine. However, what do the heights of the stacked bars represent? Each coloured bar segment represents a mean of the `fev` variable, grouped by the levels defined by the product of the `age` and `smoke` variables. By stacking the bars on top of each other, we are essentially summing up the average FEV of smokers and non-smokers, within the given age category.
 
-To someone familiar with data visualization, the problem of stacking invalid statistics is nothing new. Many data visualization researchers have warned about this:
+However, this type of visualization is problematic, because the sum of group means is not a meaningful summary statistic. In other words, it is not something that most consumers of data visualizations would care about or know how to interpret. Before, in Figure \@ref(fig:grammar-barplot-counts), we had stacked counts, and the height of the stacked bars represented a valid overall count - the number of smokers and non-smokers within a given age category combined. This is not the case here - in Figure \@ref(fig:grammar-barplot-means), the sum of the group means is different from the mean of the combined cases (and so would be the mean of group means).   
+
+This problem is familiar to data visualization researchers and many have explicitly warned about this:
 
 >"Stacking is useful when the sum of the amounts represented by the individual stacked bars is in itself a meaningful amount" [@wilke2019, p. 52].
 
@@ -376,26 +407,47 @@ To someone familiar with data visualization, the problem of stacking invalid sta
 
 >"[...] We do this to ensure that aggregate statistics are always computed over the input data, and so users do not inadvertantly compute e.g., averages of averages, which can easily lead to misinterpretation." [@wu2022]
 
-So does this mean we can only ever stack counts and sums? Take a look at the following plot:
+Does this mean we can only ever stack counts and sums? Take a look at the following plot:
+
+```{r}
+# Code is not included because this type of plot cannot be made 
+# with a simple ggplot2 call (without pre-processing)
+```
 
 ```{r}
 #| echo: false
 knitr::include_graphics("./figures/grammar-barplot-maximums.png")
 ```
 
-aa
+Here we plot the maximum FEV for smokers and non-smokers across the different ages. From this plot, we can see that in most of the age categories which included smokers (age 9 and up), the FEV of the non-smoker with the highest lung capacity was greater than that of a smoker with the greatest lung capacity, although there are several exceptions (ages 11, 16, and 18). 
+
+However, notice one important feature of the plot above: the heights of the "stacked" bars represent a valid overall summary. That is, *the maximum of the maximums is a valid maximum of the combined cases*. This suggests that other statistics may be "stackable", besides counts and sums.
+
+#### The case for stacking in interactive visualization
+
+But before we go on to discuss what makes statistics stackable, one important issue that we should address is why we should put special attention to stacking in the first place. Specifically, some might argue that stacking is only one way of presenting partitioned data, and that we could equally well present the averages in Figure \@ref(fig:grammar-barplot-means) by plotting the corresponding bars side by side (a technique know as dodging), or by plotting them on top of each other in semi-transparent layers:
+
+```{r}
+#| echo: false
+#| fig-cap: "Two alternative means of displaying partitioned data: dodging and stacking."
+knitr::include_graphics("./figures/grammar-dodging-layering.png") 
+```
+
+These techniques work perfectly well in static data visualization, however, in the context of interactive data visualization, they present certain problems [see @roberts2000; @wilhelm2008]. 
 
 #### Transforming summaries
 
 ## Scaling
 
-Suppose we have partitioned our data and computed the relevant summary statistics. Now we need a way to to encode these summaries into visual attributes that we can then present on the computer screen.  In most data visualization systems, this is done by specialized components called scales or coordinate systems [see e.g. @murrell2005; @wickham2016; @wilkinson2012]. 
+Suppose we have partitioned our data and computed the relevant summary statistics. Now we need a way to to encode these summaries into visual attributes that we can then present on the computer screen. In most data visualization systems, this is done by specialized components called scales or coordinate systems [see e.g. @murrell2005; @wickham2016; @wilkinson2012; @petricek2020].
+
+Scales involve two important challenges: the theoretical problem of mapping data to visual encodings, and the more applied problem of implementing such a scaling system. While much has been written on the theoretical properties of scales, considerably less information is available on the practical implementation of scales. Further, interactive data visualization presents some fairly unique and interesting problems for the implementation of scales, and these are also rarely discussed. For this reason, I provide only a brief overview of some of the key areas of the theory of scales, and devote more space to the applied problems, as I feel these deserve equal share of attention.   
 
 ### Theory of scales
 
 Within the data visualization literature, there exists a fairly large body of research on the theoretical properties of scales. A full treatment is beyond the scope of the present thesis. However, in this section, I will attempt to briefly summarize some important findings and concepts.
 
-#### Philosophy, psychology, and measurement
+#### Philosophy, psychology, and measurement {#theory-of-measurement}
 
 One challenge when discussing scales in data visualization is that the topic unavoidably intersects with a research area that has a particularly long and contentious history: theory of measurement [see e.g. @hand1996; @michell1986; @tal2025]. Theory of measurement (not to be confused with measure theory, with which it nevertheless shares some overlap) is the research area which tries to answer the deceptively simple question: what does it mean to measure something? This seemingly trivial problem has inspired long and fiery debates within the fields of mathematics, philosophy, and social science. Particularly, in psychology, where assigning numerical values non-physical phenomena such as moods and mental states is a central concern, the topic has garnered a significant amount of attention, creating a dense body of research [see e.g. @humphry2013; @michell2021].
 
@@ -439,9 +491,9 @@ Interval scales need to additionally preserve equality of intervals. This means 
 
 Finally, ratio scales also need to preserve the equality of ratios. Specifically, if $a/b = b/c$ then $f(a)/f(b) = f(b) / f(c)$. As a consequence, this also means that the scale must have a well-defined zero-point. Examples of ratio scales include physical magnitudes such as height and weight, which have a well-defined zero point [@stevens1946].
 
-Steven's [-@stevens1946] typology sparked a considerable debate, on multiple fronts. First, since the original publication, many authors have sought to either expand upon or criticize Steven's typology. However, despite some monumental efforts towards a unified theory, such as that of @krantz1971, measurement has remained a hotly debated topic to this day [see e.g. @michell2021; @tal2025]. Second, more relevant to statistics, some authors such as @stevens1951 and @luce1959 used the theory to define come up with prescriptive rules for statistical transformations. For example, some have suggested that taking the mean of an ordinal variable is not permissible, since the meaning of the average is not preserved under monotone transformation. However, this issue was hotly contested by others such as @lord1953, @tukey1986, and @velleman1993, who argued that many well-established statistical practices, such as rank-based tests and coefficients of variations, rely on "impermissible" statistics but can nevertheless yield valuable insights. More broadly, these authors also argued that data is not really meaningful on its own, but instead derives its meaning from the statistical questions it is being used to answer [see also @wilkinson2012].        
+Steven's [-@stevens1946] typology sparked a considerable debate, on multiple fronts. First, since the original publication, many authors have sought to either expand upon or criticize Steven's typology. However, despite some monumental efforts towards a unified theory, such as that of @krantz1971, measurement has remained a hotly debated topic to this day [see e.g. @michell2021; @tal2025]. Second, more relevant to statistics, some authors such as @stevens1951 and @luce1959 used the theory to define come up with prescriptive rules for statistical transformations, suggesting that, for example, taking the mean of an ordinal variable is wrong since the meaning of the average operator is not preserved under monotone transformations. However, this issue was hotly contested by statisticians such as @lord1953, @tukey1986, and @velleman1993, who argued that many well-established statistical practices, such as rank-based tests and coefficients of variations, rely on such "impermissible" statistics but can nevertheless yield valuable insights. More broadly, these authors also argued that data is not really meaningful on its own, but instead derives its meaning from the statistical questions it is used to answer [see also @wilkinson2012].        
 
-At this point, the discussion around measurement has become far too dense and theoretical, and most data visualization researchers seem to avoid delving into it too deeply [see e.g. @wilkinson2012]. Nevertheless, there are still some areas where the issues of measurement and Steven's typology do crop up. For instance, when scaling area based on a continuous variable, a common recommendation is to start the scale at zero to ensure accurate representations of ratios [see e.g. @wickham2024], aligning with Steven's definition of a ratio scale. Likewise, the long-standing debate around whether the base of a barplot should always start at zero [see e.g. @cleveland1985; @wilkinson2012] also carries echoes of the measurement debate. Ultimately, it may yet require long time to settle the issues around measurement, however, there are definitely some ideas in the literature that data visualization can benefit from.    
+At this point, the discussion around measurement has become far too dense and theoretical, and most data visualization researchers seem to avoid delving into it too deeply [see e.g. @wilkinson2012]. Nevertheless, there are still some areas where the issues of measurement and Steven's typology do crop up. For instance, when scaling area based on a continuous variable, a common recommendation is to start the scale at zero to ensure accurate representations of ratios [see e.g. @wickham2024], aligning with Steven's definition of a ratio scale. Likewise, the long-standing debate around whether the base of a barplot should always start at zero [see e.g. @cleveland1985; @wilkinson2012] also carries echoes of the measurement debate. Ultimately, it may yet require long time to settle the issues around measurement, however, there are definitely some ideas within the literature that data visualization can benefit from.    
 
 #### Visual perception and encodings
 
@@ -451,11 +503,26 @@ A landmark work in this area has been that of @cleveland1984. In this study, the
 
 The findings were later corroborated by other authors. @heer2010 replicated the @cleveland1984 study, and included judgements of circular and rectangular areas which were found to be less accurate than position, length, or angle. Other authors have extended these experiments to other visual encodings, such as color or density [e.g. @demiralp2014; @saket2017; @reda2018]. Together, these findings have been used to create rankings of visual encodings, with researchers generally agreeing on the following ordered list: position, length, area, angle, and intensity [from most effective to least, @mackinlay1986; @franconeri2021; @quadri2021].    
 
-### Applied scales
-
-#### Scale transformation
+#### Scale transformations
 
 > "Transformation is a critical tool for visualization or for any other mode of data analysis
 because it can substantially simplify the structure of a set of data."
 > 
 > @cleveland1993, pp. 48
+
+
+### Scales in practice
+
+While there exists a large body of literature concerned with what we should and should not do with scales, information about what scales actually are and how to implement them is scarce. Partly to blame may be fatigue from the endless debates around theory of measurement (see Section \@ref(theory-of-measurement)). Be it as it may, many data visualization researchers seem content to talk about scales in fairly abstract terms, making an occasional nod to Steven's -@stevens1946 typology [see e.g. @aparicio2015; @dastani2002; for some rare counter-examples see e.g. @murrell2005; @petricek2020; @ziemkiewicz2009].  
+
+However, the reality of real-world data visualization code-bases is quite different. Here, a significant portion of effort is dedicated to implementing scales and coordinate systems. For instance, within the `ggplot2` codebase, the file containing the definition of the `Scale` class has the greatest number of lines, by quite a significant margin [as of 4th of December 2024, @ggplot2repo2024], see Figure \@ref(fig:ggplot2-linecounts):
+
+```{r ggplot2-linecounts}
+#| echo: false
+#| fig-cap: "The top 10 longest source files within the `ggplot2` codebase. Notice that `scale-.R` files contains significantly more lines than the other files."
+knitr::include_graphics("./figures/ggplot2-linecounts.png")
+```
+
+
+From a high-level perspective, a scale is just a function $s: D \to V$ which translates values of the data $d \in D$ to values of some visual attribute $v \in V$, such as the x- and y-position, length, area, radius, or color [@wilkinson2012; @petricek2020]. 
+

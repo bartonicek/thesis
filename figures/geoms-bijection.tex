@@ -58,23 +58,20 @@
   \filldraw[red] (0.125, 0) rectangle ++(0.75, 2);
   \filldraw[blue] (1.125, 0) rectangle ++(0.75, 2.5);
   \filldraw[red] (1.125, 0) rectangle ++(0.75, 1);
-  \filldraw[blue] (2.125, 0) rectangle ++(0.75, 1.5);
-  \filldraw[red] (2.125, 0) rectangle ++(0.75, 0.5);
+  \filldraw[red] (2.125, 0) rectangle ++(0.75, 1.5);
 
   % BARS RIGHT
   \filldraw[red] (8.125, 0) rectangle ++(0.75, 2);
   \filldraw[blue] (9.125, 0) rectangle ++(0.75, 2.5);
   \filldraw[red] (9.125, 0) rectangle ++(0.75, 1);
-  \filldraw[blue] (10.125, 0) rectangle ++(0.75, 1.5);
-  \filldraw[red] (10.125, 0) rectangle ++(0.75, 0.5);
+  \filldraw[red] (10.125, 0) rectangle ++(0.75, 1.5);
 
   % SETS
   \fill[grey80] plot [smooth cycle, tension=0.75] coordinates {
     (4.25, 0.25) (4.35, 1.25) (5, 1) (5.25, 0.25) } -- cycle;
-  \foreach \point in {(4.5,0.5), (5, 0.4)}{
-    \node at \point {\textbullet};
+  \foreach \point in {(4.5,0.5), (5, 0.4), (4.6, 0.9)}{
+    \node [red] at \point {\textbullet};
   }
-  \node [red] at (4.6, 0.9) {\textbullet};
 
   \fill[grey80] plot [smooth cycle, tension=0.75] coordinates {
     (4.35, 2.5) (5.5, 2.75) (6.25, 2) (5.5, 1.85) (4.75, 1.5) } -- cycle;
@@ -87,6 +84,7 @@
   \foreach \point in {(5.8, 0.4), (6.4, 0.9), (6, 1.25)}{
     \node at \point {\textbullet};
   }
+
   \node [red] at (6.2, 0.3) {\textbullet};
   \node [red] at (6.7, 0.4) {\textbullet};
 

@@ -1,16 +1,14 @@
 source("./figures/defaults.R")
 
-climbers <- read.csv("./data/climbers.csv")
-climbers2 <- aggregate(total ~ country + gender, max, data = climbers)
-climbers3 <- aggregate(total ~ country, max, data = climbers2)
-climbers3 <- climbers3[order(climbers3$total), ]
+fev <- read.csv("./data/fev.csv")
+fev$smoke <- factor(fev$smoke, labels = c("No", "Yes"))
 
-climbers2$country <- factor(climbers2$country, climbers3$country)
+fev2 <- aggregate(fev ~ age + smoke, FUN = max, data = fev)
 
-p <- ggplot(climbers2, aes(country, total, fill = gender)) +
+p <- ggplot(fev2, aes(age, fev, fill = smoke)) +
   geom_bar(stat = "identity", position = "identity", col = "white") +
-  scale_fill_manual(values = pal_dark_3[2:1]) +
-  labs(x = "Country", y = "Maximum score", fill = "Gender") +
+  scale_fill_manual(values = pal_dark_3) +
+  labs(x = "Age", y = "Max FEV", fill = "Smoke") +
   theme(plot.margin = unit(c(0, 2, 0, 2), units = "cm"),
         legend.position = c(0.1, 0.875))
 

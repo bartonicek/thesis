@@ -190,13 +190,13 @@ This odd relationship between the the image and the pre-image is due to the fact
 
 Another interesting simple mathematical constructions are partitions. Like functions, partitions are a type of relation, and can in fact be constructed using functions. That is, if we have a "labeling" function $f$, we can construct a partition as follows:
 
-::: {.definition name="Function definition of a partition"}
+::: {.definition name="Partition as function"}
 Given some set $X$, a set of part labels $P$, and a surjective function $f: X \to P$, we can partition $A$ by assigning every element $x \in X$ a part label $p \in P$, by simply applying the function: $f(x) = p$.
 :::
 
 We can also define partitions using equivalence classes. By taking any part label $p \in P$, we can recover the corresponding subset of $X$ by pulling out its pre-image: $f^*(\{p\}) = X_p \subseteq X$. We can then define a partition without reference to $f$:
 
-::: {.definition name="Equivalence class definition of a partition"}
+::: {.definition name="Partition as equivalence class"}
 A partition of $A$ consists of a set of part labels $P$, such that, for all $p \in P$, there is a non-empty subset $A_p \subseteq A$ which forms an equivalence class on $A$ and:
 
 $$X = \bigcup_{p \in P} X_p \qquad \text{and} \qquad \text{if } p \neq q, \text{ then } X_p \cap X_q = \varnothing$$
