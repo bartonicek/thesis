@@ -13,7 +13,9 @@ def:unlabeled-div-1
 fig:barplot-spineplot
 fig:grammar-barplot-counts
 fig:grammar-barplot-means
+fig:unnamed-chunk-24
 tab:stevens-scales
+fig:ggplot2-linecounts
 fig:barspine
 def:linear-mapping
 def:scale
@@ -82,7 +84,7 @@ partitions-and-hierarchy
 aggregation
 graphics-and-statistics-are-not-independent
 stacking-not-only-about-graphics
-the-case-for-stacking-in-interactive-data-visualization
+the-case-for-stacking-in-interactive-visualization
 transforming-summaries
 scaling
 theory-of-scales
@@ -181,6 +183,9 @@ references
 fig:unnamed-chunk-1
 fig:unnamed-chunk-2
 fig:unnamed-chunk-20
-the-case-for-stacking-in-interactive-visualization
+bijection-on-cases-vs.-bijection-on-subsets
+partition-products
+limits-of-product-partitions
 fig:unnamed-chunk-21
-fig:ggplot2-linecounts
+fig:unnamed-chunk-12
+fig:spineplot-tree
