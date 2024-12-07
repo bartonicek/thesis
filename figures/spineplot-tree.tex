@@ -1,23 +1,27 @@
 \documentclass[tikz]{standalone}
 \usetikzlibrary{calc}
 
-\definecolor{blue}{HTML}{1F78B4}
-\definecolor{red}{HTML}{E31A1C}
-\definecolor{grey80}{HTML}{CCCCCC}
+\definecolor{blue}{HTML}{6baed6}
+\definecolor{red}{HTML}{9ecae1}
+\definecolor{grey80}{HTML}{c6dbef}
 
 \begin{document}
 \begin{tikzpicture}[scale=1.0]
 
-  \node (data) at (7, 6) {Whole data set};
-  \node (bar1) at (3, 3) {Bar};
-  \node (bar2) at (7, 3) {Bar};
-  \node (bar3) at (11, 3) {Bar};
-  \node (seg1) at (2, 0) {Segment};
-  \node (seg2) at (4, 0) {Segment};
-  \node (seg3) at (6, 0) {Segment};
-  \node (seg4) at (8, 0) {Segment};
-  \node (seg5) at (10, 0) {Segment};
-  \node (seg6) at (12, 0) {Segment};
+  \fill[blue] (1, 4.5) rectangle (13, 7.5);
+  \fill[red] (1, 1.5) rectangle (13, 4.5);
+  \fill[grey80] (1, -1.5) rectangle (13, 1.5);
+
+  \node[fill=white] (data) at (7, 6) {Whole data set};
+  \node[fill=white] (bar1) at (3, 3) {Bar};
+  \node[fill=white] (bar2) at (7, 3) {Bar};
+  \node[fill=white] (bar3) at (11, 3) {Bar};
+  \node[fill=white] (seg1) at (2, 0) {Segment};
+  \node[fill=white] (seg2) at (4, 0) {Segment};
+  \node[fill=white] (seg3) at (6, 0) {Segment};
+  \node[fill=white] (seg4) at (8, 0) {Segment};
+  \node[fill=white] (seg5) at (10, 0) {Segment};
+  \node[fill=white] (seg6) at (12, 0) {Segment};
 
   \draw (bar1) edge[->] (data);
   \draw (bar2) edge[->] (data);
