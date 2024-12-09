@@ -4,7 +4,7 @@ author: "Adam Bartonicek"
 site: bookdown::bookdown_site
 documentclass: book
 output:
-  # bookdown::html_document2: default
+  #bookdown::html_document2: default
   bookdown::gitbook: default
 bibliography: [references.bib]
 biblio-style: "apalike"

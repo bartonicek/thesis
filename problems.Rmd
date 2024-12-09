@@ -299,7 +299,15 @@ Like barplots, spineplots represent some summary statistic (usually counts), agg
 
 However, despite the fact that barplot and spineplot represent the same underlying data, turning one into the other is not always trivial. Specifically, while many grammar-based visualization systems offer a simple declarative syntax for defining barplots, they lack such simple syntax for spineplots. For example, in `ggplot2`, there is currently no way to define a spineplot without first having to reshape the data, and creating the plot right panel in Figure \@ref(fig:barplot-spineplot) took over 10 lines of external code (using standard `dplyr` syntax).
 
-#### Partitions and hierarchy
+#### Partitions and hierarchy: The graph behind the graph
+
+```{r}
+#| echo: false
+#| fig-cap: "A joke image shared in the Mathematical Mathematics Memes Facebook group on the 28th of March, 2024 [@mathematicalmathematics2024]. In this section, I would like to make the case that charts (right) do in fact have a graph structure, in other words, graphs are graphs, not \"delusional cosplayers\"."
+#| out-extra: 'style="border:1px solid black;"'
+#| out-width: 75%
+knitr::include_graphics("./figures/graphs-cosplayers.jpg")
+```
 
 Why are spineplots so tricky? The reason is that they force us to confront the hierarchical nature of graphics. Specifically, while in a barplot, we can get away with a single flat partition of the data, in a spineplot, the data is summarized and transformed *along and across* different levels of aggregation [@wu2024]:
 
@@ -457,9 +465,18 @@ However, I argue that, in the context of interactive visualization, stacking has
 
 For instance, in a stacked barplot, the heights of the individual segments add up to the height of the whole bars. This is useful when combined with linked selection, since, even when the heights of the highlighted segments change, the heights of the whole bars remain the same. As a result, we can keep the upper y-axis limit fixed. The same is not true for dodging and layering. Here, the heights of the bars are not necessarily bound by any value. For instance, in a dodged barplot the heights of the highlighted segments may become greater than those of the unselected segments. This means that we either have to make the upper y-axis limits reactive in response to selection, losing the context that the limit provides, or risk the bars "overflowing" beyond the bounds of the plot.  
 
-This issue is also discussed by @wilhelm2008, who conceptualizes it as three linked visualizations strategies: replacement, overlaying, and repetition. Overlaying and repetition are essentially equivalent to stacking and dodging, whereas replacement means that the entire visualization gets replaced whenever linked selection occurs. Wilhelm argues that replacement is a flawed strategy, since it means that the context of the previous visualization such as axis limits is lost whenever selection occurs. Likewise, he suggests that repetition is a less popular strategy since it requires the plot to be re-arranged when selection happens. Finally, he also points out two problems with overlaying: the fact that plot parameters are inherited from the plot representing the whole data set, and that parts of the original plot may become obscured by the highlighted subset. Overall, he seems to favour repetition over the other two methods. 
+This issue is also discussed by @wilhelm2008, who conceptualizes it as three linked visualizations strategies: replacement, overlaying, and repetition. Overlaying and repetition are essentially equivalent to stacking and dodging, whereas replacement means that the entire visualization gets replaced whenever linked selection occurs. Wilhelm argues that replacement is a flawed strategy, since it means that the context of the previous visualization such as axis limits is lost whenever selection occurs. Likewise, he suggests that repetition is a less popular strategy since it requires the plot to be re-arranged when selection happens. Finally, he also points out two problems with overlaying: the fact that plot parameters are inherited from the plot representing the whole data set, and that parts of the original plot may become obscured by the highlighted subset. Overall, he seems to favor repetition over the other two methods. 
 
-My conclusion is different from that of @wilhelm2008: I argue that, while overlaying/stacking is less flexible than the other two methods, it is nevertheless the best, since it ensures that the context of the whole data is always preserved. Conversely, repetition/dodging suffers from the same problem that replacement does. Specifically, if we draw highlighted subsets as separate objects, then we either have to make the axis limits reactive (leading to a loss of context), or risk that the highlighted objects may extend beyond these limits. What @wilhelm2008 sees as one of the problems of overlaying - the fact that plot parameters are inherited from the whole data - I instead see as a fundamental strength.      
+My conclusion is different from that of @wilhelm2008: I argue that, while overlaying/stacking is less flexible than the other two methods, it is nevertheless the best, since it ensures that the context of the whole data is always preserved. Conversely, repetition/dodging suffers from the same problem that replacement does. Specifically, if we draw highlighted subsets as separate objects, then we either have to make the axis limits reactive (leading to a loss of context), or risk that the highlighted objects may extend beyond these limits. What @wilhelm2008 sees as one of the problems of overlaying - the fact that plot parameters are inherited from the whole data - I instead see as a fundamental strength. The part-whole relationship between the highlighted segments ensures that interaction preserves context, and also reduces the amount of computation that needs to be done.
+
+### Stackable summaries
+
+Now it is finally time to discuss what makes certain statistics stackable. To do this, I will use some fundamental concepts from category. These concepts are described at greater length in the [Appendix: Mathematical Theory](#mathematical-theory) - the reader is advised to consult this section if they are unfamiliar with this material.
+
+In section \@ref(partitioning), I discussed the idea of modeling our plots as a hierarchy of partitions. Specifically, starting with the full data, we can divide the data into disjoint subsets, each representing one geometric objects, and then divide these subsets again, representing parts of geometric objects (such as induced by selection status). Thus, as was discussed in Section [REFERENCE], this hierarchical partitioning results in a tree-like structure.
+
+I further posit that, when aggregating our data into summaries, we want to choose summary statistics which preserve this hierarchical structure. In other words, statistics which are stackable preserve the preorder relation on the subsets of the data, whereas statistics which are not do not.
+
 
 #### Transforming summaries
 
