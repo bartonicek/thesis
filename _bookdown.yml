@@ -1,4 +1,4 @@
-rmd_files: ["index.Rmd", "intro.Rmd", "goals.Rmd",
+rmd_files: ["index.Rmd", "litreview.Rmd", "goals.Rmd",
             "problems.Rmd", "design.Rmd",
             "system.Rmd", "example.Rmd", "discussion.Rmd",
             "glossary.Rmd", "appendix.Rmd", "math.Rmd", "references.Rmd"]

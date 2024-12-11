@@ -1,5 +1,9 @@
 fig:unnamed-chunk-3
 tab:definitions
+fig:zooming
+fig:panning
+fig:querying
+fig:linked-selection
 fig:unnamed-chunk-4
 tab:scales
 fig:unnamed-chunk-5
@@ -51,7 +55,7 @@ prp:unlabeled-div-22
 prp:unlabeled-div-23
 def:unlabeled-div-24
 abstract
-introduction
+literature-review
 brief-history-of-interactive-data-visualization
 static-data-visualization-from-ancient-times-to-the-space-age
 early-interactive
@@ -61,7 +65,10 @@ interactive-vs.-interacting-with
 what-is-interactive-enough
 complexity-of-interactive-features
 working-definition
-brief-taxonomy-of-common-interactive-features
+common-interactive-features
+zooming-and-panning
+querying
+linked-selection
 the-highlighting-problem
 linked-selection-and-stacking
 theory-of-data-visualization-systems
@@ -187,8 +194,5 @@ functors
 references
 fig:unnamed-chunk-1
 fig:unnamed-chunk-2
-common-interactive-features
-zooming-and-panning
-fig:zooming
-fig:panning
-querying
+switching-representation
+representation-switching
