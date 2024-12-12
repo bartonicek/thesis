@@ -68,6 +68,7 @@ working-definition
 common-interactive-features
 zooming-and-panning
 querying
+representation-switching
 linked-selection
 the-highlighting-problem
 linked-selection-and-stacking
@@ -194,5 +195,5 @@ functors
 references
 fig:unnamed-chunk-1
 fig:unnamed-chunk-2
-switching-representation
-representation-switching
+fig:barplot-spineplot1
+changing-size-and-alpha

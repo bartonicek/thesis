@@ -164,11 +164,17 @@ That is not to say that purely graphical interactive features are not useful. Fo
 
 This section describes several common types of interactive features that tend to make frequent appearance across interactive data visualization systems. It is only meant as an overview [for comprehensive taxonomies of interactive features, see @dimara2019; @yi2007]. For each feature, I highlight its properties, common uses, and implementation requirements. 
 
+#### Changing size and alpha
+
+One of the simplest and most widely-implemented interactive features is the ability to adjust the size and transparency of geometric objects. In other words, the user may dynamically shrink or grow the objects and make them more or less opaque. This can be particularly useful at high data volumes, as reducing the size or alpha might show certain trends that would be otherwise hidden. For example, in scatterplots, shrinking points and making them semi-transparent reduces overplotting and can provide an approximation to a 2D kernel density plot [see e.g. @dang2010]. Similar technique can work for parallel coordinates plot as well [@theus2008].
+
+This feature is usually quite simple to implement, since it involves the visual attributes of geometric objects only. In other, when we manipulate size or alpha of geometric objects in our plots, we usually do not need to worry about where the data underlying these objects came from. 
+
 #### Zooming and panning
 
 Zooming and panning are two fundamental interactive features, often used in tandem. Because of their association, and the fact that they both involve interactive manipulation of scale limits, I discuss them here simultaneously, in a single subsection.
 
-Zooming, depicted in Figure \@ref(fig:zooming), allows the user to magnify a specific region of a single plot. Typically, this is done creating a rectangular selection and the plot scales are then automatically adjusted to match this region. Zooming allows the user to get a better sense of the trend within the magnified region, and discover patterns that may be otherwise obscured due to overplotting or improper aspect ratio [see e.g. @buja1996; @dix1998; @unwin1999; @theus2008; @yi2003]. 
+Zooming, depicted in Figure \@ref(fig:zooming), allows the user to magnify a specific region of a single plot. Typically, this is done creating a rectangular selection and the plot scales are then automatically adjusted to match this region. Zooming allows the user to get a better sense of the trend within the magnified region, and discover patterns that may be otherwise obscured due to overplotting or improper aspect ratio [see e.g. @buja1996; @dix1998; @unwin1999; @theus2008; @yi2007]. 
 
 ```{r zooming}
 #| echo: false
@@ -184,7 +190,7 @@ However, after zooming into a region, it is often helpful retain the ability to 
 knitr::include_graphics("./figures/panning.png")
 ```
 
-Since these features can be implemented with scales only, implementing zooming and panning might seem relatively straightforward, however, even here, there are few issues to consider. First, whereas continuous axes can be be zoomed and/or panned by simply modifying the axis limits, other types of scales such as discrete axes require a bit more thought. Second, with nested zooming, maintaining a reversible history of previous states is essential [@unwin1999]. Third, at times, it can be useful to link scale updates across multiple plots, such that, for example, zooming or panning a plot in a scatterplot matrix produces the same updates in other plots with the same variables on one of the axes. Finally, an advanced feature that can be also quite useful when combined with hierarchical data such as geographic information is logical or semantic zooming [@keim2002; @unwin1999; @yi2007]. In logical zooming, magnification does not only increase the size of the zoomed-in objects, but also the level of detail. Clearly, this makes it a more complex feature than general zooming involving scales.
+Since these features can be implemented with scales only, implementing zooming and panning might seem relatively straightforward, however, even here, there are few issues to consider. First, whereas continuous axes can be be zoomed and/or panned by simply modifying the axis limits, zooming other types of scales such as discrete ones require a bit more consideration [see e.g. @wilkinson2012]. Second, with nested zooming, maintaining a reversible history of previous states is essential [@unwin1999]. Third, at times, it can be useful to link scale updates across multiple plots, such that, for example, zooming or panning a plot in a scatterplot matrix produces the same updates in other plots with the same variables on one of the axes. Finally, an advanced feature that can be also quite useful when combined with hierarchical data such as geographic information is logical or semantic zooming [@keim2002; @unwin1999; @yi2007]. In logical zooming, magnification does not only increase the size of the zoomed-in objects, but also the level of detail the objects show, making this a more complex feature than general zooming involving scales only.
 
 #### Querying
 
@@ -204,7 +210,19 @@ While querying one-to-one representations of the data such as points in a scatte
 
 #### Representation switching
 
-Most data can be represented by many different sets visual encodings [@wilkinson2012]. However, depending on our visualization goals, some sets of encodings can serve better to answer certain questions than others. By giving the user the ability to interactively switch between these representations, we empower them to explore the data more deeply and answer a wider range of questions [@yi2007].
+The same data can often by visualized in multiple ways, by employing different sets of visual encodings [@wilkinson2012]. However, some encodings may work better for answering certain questions than others. By enabling users to dynamically switch between different visual representations, we empower them to delve deeper into the data and answer a wider array of questions [@yi2007].
+
+A typical example is switching between a barplot and a spineplot, see Figure \@ref(fig:barplot-spineplot1). Barplots are an effective representation for comparing absolute quantities. Specifically, by encoding a categorical variable as the x-axis position and a continuous variable as the y-axis position/bar length, we can easily compare the y-axis quantities across the levels of the x-axis variable. Often, we further split the bars into segments and encode a second categorical variable as the segment colour, to be able to compare quantities within subgroups. 
+
+```{r barplot-spineplot1}
+#| echo: false
+#| fig-cap: "Switching representations can be an effective way to derive new insights from the data. A barplot (left) represents the same underlying data as a spineplot (right), however, the former is better for comparing absolute counts whereas the latter is better for comparing proportions. Note that in the spineplot, it is much easier to see that the proportion of the red cases is the same in categories B and C."
+knitr::include_graphics("./figures/barplot-spineplot.png")
+```
+
+However, barplots are less effective for comparing proportions. Since the heights of the bars are different, it is difficult to compare relative proportions of segments across bars. Spineplot, on the other hand, presents a way of visualizing the same sort of data as a barplot while making it much easier to compare proportions. Specifically, in a spineplot, the heights of the bars are all normalized to 1, such that the segments show a proportion, and the absolute values are instead encoded as the bar width. The fixed height of bars makes it easy to compare the proportions the segments represent.
+
+Other examples of switching of representations include the spineplot (a normalized version of the histogram).
 
 #### Linked selection
 
@@ -216,7 +234,7 @@ Linked selection, also known as linked brushing, highlighting, or views, is ofte
 knitr::include_graphics("./figures/linked-selection.png")
 ```
 
-Despite the fact that the user experience of linked selection is usually fairly intuitive, there are many subtle considerations that go into implementing the feature [for a good overview, see @wilhelm2008]. First, there is the issue of how the user makes the selection. Typically, clicking selects a single objects and clicking-and-dragging selects multiple objects in a rectangular region (similar to how selecting files and folders works on desktop GUIs of most operating systems). In some systems, the users may also drag the selection region around ("brushing"), form a continuous "lasso" selection, or select points based on distance from a centroid [@wills2008]. Further, when one variables is continuous and the other is derived (such as the x- and y-axes in a histogram), the interaction may also be simplified by restricting selection/brushing to the primary axis [@satyanarayan2016]. Finally, the selections can be combined by various operators such as OR, AND, NOT, and XOR, to form unions, intersections, and other types of logical subsets [@theus2002; @urbanek2003; @wills2008]. 
+Despite the fact that the user experience of linked selection is usually fairly intuitive, there are many subtle considerations that go into implementing the feature [for a good overview, see @wilhelm2008]. First, there is the issue of how the user makes the selection. Typically, clicking selects a single objects and clicking-and-dragging selects multiple objects in a rectangular region (similar to how selecting files and folders works on desktop GUIs of most operating systems). In some systems, the users may also drag the selection region around ("brushing"), form a continuous "lasso" selection, select lines in a particular angular range, or points at a particular distance from a centroid [see e.g. @hauser2002; @splechtna2018; @wills2008]. Further, when one variables is continuous and the other is derived (such as the x- and y-axes in a histogram), the interaction may also be simplified by restricting selection/brushing to the primary axis [@satyanarayan2016]. Finally, the selections can be combined by various operators such as OR, AND, NOT, and XOR, to form unions, intersections, and other types of logical subsets [@theus2002; @urbanek2003; @wills2008]. 
 
 Second, there is the issue of who should dispatch and respond to selection events. In presentation-focused interactive data visualization and dashboarding systems, this responsibility is kept flexible, such that some plots may only dispatch, only respond, do both, or neither [@satyanarayan2015; @satyanarayan2016]. However, in systems focused on data exploration, the convention is typically for all plots to both dispatch and respond to selection events, such that they may be interacted with in the same way. [@theus2002; @urbanek2003; @urbanek2011].
 
