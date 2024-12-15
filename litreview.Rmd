@@ -42,17 +42,121 @@ The proliferation of open-source, general-purpose statistical computing software
 
 A common thread among these interactive data visualization systems is that they were designed by statisticians with primary focus on data exploration. High-level analytic features such as linked views, rotation/projection, and interactive manipulation of model parameters made frequent appearance. While these features were powerful, they also contributed to a steeper learning curve, potentially limiting adoption by users without a strong data analytic background. Additionally, these tools often had fairly limited options for customization, making them less well suited for data presentation.
 
-### Interactive data visualization and the web: World-wide interactivity
+### Interactive data visualization and the internet: Web-based interactivity
 
 The end of the millennium marked the arrival of a new class of technologies which impacted interactive data visualization just as much as almost every other field of human endeavor. The rise of the internet in the mid 1990's made it possible to create interactive applications that could be accessed by anyone, from anywhere. This was aided by the dissemination of robust and standardized web browsers, as well as the development of JavaScript as a high-level programming language for the web  [for a tour of the history, see @wirfs-brock2020]. Soon, interactive visualizations became just one of many emerging technologies within the burgeoning web ecosystem. 
 
 Early web-based interactive data visualization systems tended to rely on external plugins. Examples of these include Prefuse [@heer2005] and Flare [developed around 2008, @flare2020], which leveraged the Java runtime and Adobe Flash Player, respectively. However, as browser technologies advanced, particularly as JavaScript's performance improved thanks to advances in just-in-time compilation [JIT, see e.g. @clark2017; @dao2020], it became possible to create complex interactive experiences directly in the browser. This led to the emergence of several popular web-native interactive data visualization systems in the early 2010s, many of which remain widely used today. 
 
-D3.js [@bostock2022] is one of the oldest and most influential web-based visualization systems still in use today. As a general, low-level framework for visualizing data, D3 provides of a suite of specialized JavaScript modules for various aspects of the data visualization workflow, including data parsing, transformation, scaling, and DOM interaction. While D3 does provide methods for handling interactive events, it does not itself provide a system for dispatching and coordinating these events - it instead delegates this responsibility to the user and encourages the use of reactive Web frameworks such as React [@react2024], Vue [@vue2024], or Svelte [@svelte2024]. Finally, D3.js visualizations are rendered as Scalable Vector Graphics (SVG) by default, ensuring lossless scaling but impacting performance at high data volumes. While various unofficial alternative rendering engines, based on the HTML 5 Canvas element or WebGL, do exist, as of this date, no such official libraries exist as of this date.
+#### D3
 
-Building upon the low-level infrastructure that D3 provides, many packages such as plotly.js [@plotly2022] and Highcharts [@highcharts2024] provide high-level abstractions which make the process of building complex interactive figures more streamlined for the average user. The difference between these systems and D3 is that, while D3 provides low-level utilities such as data transformations, scales, and geometric objects, these packages provide functions for rendering complete plots and registering reactive events, which are under the hood automatically handled via systems based on the native DOM Event Target interface [@mdn2024a]. Like D3, both plotly.js and Highcharts also render the graphics in SVG by default, however, unlike D3, they both also provide alternative rendering engines based on WebGL [@highschartsboost2022; @plotly2024b]. 
+D3.js [@bostock2022] is one of the earliest and most influential web-based visualization systems. As a general, low-level framework for visualizing data, D3 provides of a suite of specialized JavaScript modules for various aspects of the data visualization workflow, including data parsing, transformation, scaling, and DOM interaction. 
 
-Vega [@satyanarayan2015; @vega2024a] is another popular package, which, despite also being built partially upon the foundation of D3, takes a different approach. It provides a declarative framework for defining (interactive) data visualizations using a static [JSON] schema. Compared to plotly.js and Highcharts, Vega offers significantly more granular customization of graphics and interactive behavior, making it significantly more expressive but also more verbose. For example, specifying a scatterplot matrix with linked selection in Vega requires over 300 lines of JSON, not including the data and using default formatting [@vega2024b]. 
+For instance, here's how to create a scatterplot in D3:
+
+```{js}
+#| eval: false
+import * as d3 from "d3";
+
+const app = document.querySelector<HTMLDivElement>("#app")!;
+const url =
+  `https://raw.githubusercontent.com/holtzy/` +
+  `data_to_viz/master/Example_dataset/2_TwoNum.csv`;
+const data = await d3.csv(url);
+const [x, y] = [`GrLivArea`, `SalePrice`]; // The x, y variable keys
+
+const margin = { top: 10, right: 30, bottom: 30, left: 60 };
+const width = parseFloat(app.style.width);
+const height = parseFloat(app.style.height);
+
+// Create a SVG element, resize it, and append it to #app
+const svg = d3
+  .select("#app")
+  .append("svg")
+  .attr("width", width + margin.left + margin.right)
+  .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+// Create x and y scales and append them to the plot
+const scaleX = d3.scaleLinear().domain([0, 4000]).range([0, width]);
+const scaleY = d3.scaleLinear().domain([500000, 0]).range([0, height]);
+svg
+  .append("g")
+  .attr("transform", "translate(0," + height + ")")
+  .call(d3.axisBottom(scaleX));
+svg.append("g").call(d3.axisLeft(scaleY));
+
+// Add points
+svg
+  .append("g")
+  .selectAll("dot")
+  .data(data)
+  .enter()
+  .append("circle")
+  .attr("cx", (d) => scaleX(d[x]))
+  .attr("cy", (d) => scaleY(d[y]))
+  .attr("r", 1);
+```
+
+```{r d3-scatterplot}
+#| echo: false
+#| fig-cap: "Example of a scatterplot in D3.js. The code was taken from D3 Graph Gallery [@holtz2022b] and adjusted to use ES6 syntax and slightly more informative variable names/comments."
+knitr::include_graphics("./figures/d3-scatterplot.png")
+```
+
+As you can see from Figure \@ref(fig:d3-scatterplot), D3 is a fairly low-level framework. Notice that, compared with high-level plotting capabilities such as those provided by base R or `ggplot2` [@r2024; @wickham2016], the user has to handle many low-level details such as scaling and appending of primitives explicitly. This is also the case with interaction. While D3 does provide methods for handling interactive DOM events, it does not itself provide a system for dispatching and coordinating these events - it instead delegates this responsibility to the user and encourages the use of reactive Web frameworks such as React [@react2024], Vue [@vue2024], or Svelte [@svelte2024]. 
+
+Finally, D3.js visualizations are rendered as Scalable Vector Graphics (SVG) by default. This ensures lossless scaling but may impact rendering performance at high data volumes. While various unofficial alternative rendering engines based on the HTML 5 Canvas element or WebGL, do exist, there are no such official libraries as of this date.
+
+#### Plotly and Highcharts
+
+Building upon the low-level infrastructure that D3 provides, many packages such as Plotly.js [@plotly2022] and Highcharts [@highcharts2024] provide high-level abstractions which make the process of building complex interactive figures more streamlined for the average user. Unlike D3 which provides low-level utilities such as data transformations, scales, and geometric objects, these packages provide functions for rendering entire plots and registering reactive events, built on the native DOM Event Target interface [@mdn2024a].
+
+For example, here's how to render a scatterplot in Plotly:
+
+```{js}
+#| eval: false
+const data = [{
+  x: [1, 2, 3, 4],
+  y: [10, 15, 13, 17],
+  mode: 'markers',
+  type: 'scatter'
+}];
+
+Plotly.newPlot('app', data);
+```
+
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
+<div id="app" style="width: 500px; height: 500px"></div>
+
+```{js}
+#| echo: false
+const data = [{
+  x: [1, 2, 3, 4],
+  y: [10, 15, 13, 17],
+  mode: 'markers',
+  type: 'scatter'
+}];
+Plotly.newPlot('app', data);
+```
+<!-- This is a dummy code chunk to provide a figure label to the JS block above -->
+```{r plotly-scatterplot}
+#| echo: false
+#| out-width: 0px
+#| out-height: 0px
+#| fig-cap: "Example of a scatterplot in Plotly.js. The code was taken from the official Plotly documentation [@plotly2024c] and slightly simplified."
+plot(0, 0)
+```
+As you can see, compared with the D3 code used to create Figure \@ref(fig:d3-scatterplot), the code for creating Figure \@ref(fig:plotly-scatterplot) is much terser. Many details, such as the axis limits and margins, point size and colour, gridlines, and widgets, are handled implicitly. Also, notice that the figure provides some interactive features by default, such the ability to zoom and pan and a tooltip on hover.
+
+Finally, like D3, both plotly.js and Highcharts also render the graphics in SVG by default. However, unlike D3, they both also provide alternative rendering engines based on WebGL [@highschartsboost2022; @plotly2024b]. This makes them more ergonomic for use with large data sets. 
+
+#### Vega and Vegalite
+
+Vega [@satyanarayan2015; @vega2024a] is another popular package, which, despite also being built partially upon the foundation of D3, takes a different approach. It provides a declarative framework for defining (interactive) data visualizations using a static [JSON] schema. Compared to Plotly.js and Highcharts, Vega offers significantly more granular customization of graphics and interactive behavior, making it significantly more expressive but also more verbose. For example, specifying a scatterplot matrix with linked selection in Vega requires over 300 lines of JSON, not including the data and using default formatting [@vega2024b]. 
+
+#### Some conclusions
 
 In general, these contemporary web-based interactive data visualization systems offer a great deal of flexibility and customizability, making the well suited for modern data presentation. However, all of this expressiveness does come at a cost. Compared to the earlier statistical graphics systems, described in Section \@ref(early-interactive), many of the more advanced features that used to be common are now either missing or require so much effort to implement that they are only accessible to power-users, as evidenced by their absence in the documentation and gallery pages of the corresponding packages. For instance, the [R Graph Gallery entry on Interactive Charts](https://r-graph-gallery.com/interactive-charts.html) [@holtz2022] features multiple interactive figures implemented in the above-mentioned JavaScript libraries, however, they all feature only surface-level single-plot interactive features such zooming, panning, hovering, 3D rotation, and node repositioning. The [Plotly Dash documentation page on Interactive Visualizations](https://dash.plotly.com/interactive-graphing) [@plotly2022] does feature two examples of simple linked cross-filtering, however, the vast majority of visualizations in the [Plotly R Open Source Graphing Library documentation page](https://plotly.com/r/) [@plotly2022] show examples only surface-level interactivity. Similarly, [VegaLite Gallery pages on Interactive Charts](https://vega.github.io/vega-lite/examples/#interactive-charts) and [Interactive Multiview Displays](https://vega.github.io/vega-lite/examples/#interactive-multi-view-displays)  [@vegalite2022] feature many examples, however, there are only few, limited examples of linked or parametric interactivity. Finally, the [Highcharter Showcase Page ](https://jkunst.com/highcharter/articles/showcase.html) [@kunst2022] does not feature any examples of linking.
 
@@ -108,7 +212,7 @@ tab <- data.frame(
   details = c("The user can interactively manipulate the figure in some way",
               "The user's interactions propagate into the visualization with little to no lag",
               'The user can interactively explore different parts of the data set by doing actions which effectively amount to "subsetting" rows of the data (e.g. zooming, panning, and filtering)',
-              r"(The visualization consists of connected or "linked" parts and the user's interactions with one part propagate to the other parts (e.g. linked highlighting))",
+              r"(The user's interaction propagate across multiple plots (e.g. linked highlighting))",
               "The user can manipulate the parameters of some underlying mathematical model or algorithm (e.g. histogram bins, grand tour projections, etc...)"),
   papers = c("@brodbeck2009", 
              "@becker1987, @buja1996, @jankun2007, and @rheingans2002", 
@@ -132,7 +236,7 @@ knitr::kable(tab, caption = "Summary of the perspectives on interactivity") |> k
 
 ### Complexity of interactive features
 
-The way we define interactivity has an impact on implementation requirements.
+The way we define interactivity is not just a matter of taste or preference: it has a significant impact on the complexity and feasibility of our systems. Some simple features, such as zooming or changing size and alpha, are fairly simple to implement and require just a thin interactive layer over a static data visualization system. Other more advanced features, such as linked selection, demand a significant overhead, reaching all the way to fundamental data processing steps.
 
 To start with a perhaps slightly over-exaggerated example, many programming languages come equipped with a read-evaluate-print loop (REPL) which can be used to interactively execute code from the command line. The user writes code, presses ENTER, and the language interpreter evaluates the code, returns any output, and waits for more input from the user. Now, if the language in question supports plotting, then, under the permissive "user interaction" definition, it could be argued that even the act of running code from a command line to produce new plots could be considered an "interactive data visualization system", since the user's interaction with the REPL produces changes to the visual output. And, hypothetically, if the user could type fast enough, they would see the updates appear almost instantly, satisfying the "real-time update" definition.
 
@@ -168,7 +272,7 @@ This section describes several common types of interactive features that tend to
 
 One of the simplest and most widely-implemented interactive features is the ability to adjust the size and transparency of geometric objects. In other words, the user may dynamically shrink or grow the objects and make them more or less opaque. This can be particularly useful at high data volumes, as reducing the size or alpha might show certain trends that would be otherwise hidden. For example, in scatterplots, shrinking points and making them semi-transparent reduces overplotting and can provide an approximation to a 2D kernel density plot [see e.g. @dang2010]. Similar technique can work for parallel coordinates plot as well [@theus2008].
 
-This feature is usually quite simple to implement, since it involves the visual attributes of geometric objects only. In other, when we manipulate size or alpha of geometric objects in our plots, we usually do not need to worry about where the data underlying these objects came from. 
+This feature is usually quite easy to implement, since it involves the visual attributes only. In other words, when we manipulate size or alpha of geometric objects in our plots, we usually do not need to worry about what data these objects represent or where it came from. As such, it is relatively simple to implement this feature "on top" of an existing static visualization layer [see @bracsoveanu2017].
 
 #### Zooming and panning
 
@@ -208,9 +312,9 @@ Additionally, querying also allow us to show more information than can be displa
 
 While querying one-to-one representations of the data such as points in a scatterplot is relatively simple, querying aggregate objects such as bars in a barplot/histograms presents some challenges. In the case of one-to-one representations, we can always simply retrieve the corresponding row of the data, however, in the case of aggregate objects, a single object may correspond to multiple rows and there may be no obvious way to summarize them. For instance, when querying a continuous variable corresponding to a bar in a barplot, should we return its sum, its maximum, the set of all unique values, or perhaps something entirely different? Likewise, querying objects in the presence of selection or higlighting presents some problems.
 
-#### Representation switching
+#### Switching representations
 
-The same data can often by visualized in multiple ways, by employing different sets of visual encodings [@wilkinson2012]. However, some encodings may work better for answering certain questions than others. By enabling users to dynamically switch between different visual representations, we empower them to delve deeper into the data and answer a wider array of questions [@yi2007].
+The same data can often by visualized in multiple ways, by representing it via different sets of visual encodings [@wilkinson2012]. However, some encodings may work better for answering certain questions than others. By enabling the users to switch the visual representation, we empower them to explore their data with grater flexibility [@yi2007].
 
 A typical example is switching between a barplot and a spineplot, see Figure \@ref(fig:barplot-spineplot1). Barplots are an effective representation for comparing absolute quantities. Specifically, by encoding a categorical variable as the x-axis position and a continuous variable as the y-axis position/bar length, we can easily compare the y-axis quantities across the levels of the x-axis variable. Often, we further split the bars into segments and encode a second categorical variable as the segment colour, to be able to compare quantities within subgroups. 
 
@@ -220,7 +324,7 @@ A typical example is switching between a barplot and a spineplot, see Figure \@r
 knitr::include_graphics("./figures/barplot-spineplot.png")
 ```
 
-However, barplots are less effective for comparing proportions. Since the heights of the bars are different, it is difficult to compare relative proportions of segments across bars. Spineplot, on the other hand, presents a way of visualizing the same sort of data as a barplot while making it much easier to compare proportions. Specifically, in a spineplot, the heights of the bars are all normalized to 1, such that the segments show a proportion, and the absolute values are instead encoded as the bar width. The fixed height of bars makes it easy to compare the proportions the segments represent.
+However, since the heights of the bars are different, barplots are not very effective for comparing proportions, especially when the bar heights vary significantly. Spineplots, on the other hand, present a way of visualizing the same sort of data as a barplot while making it much easier to compare proportions. Specifically, in a spineplot, the heights of the bars are all normalized to 1, such that the segments show a proportion of the total, and the absolute values are instead encoded as the bar width. The fixed height of bars makes it easy to compare the proportions the segments represent.
 
 Other examples of switching of representations include the spineplot (a normalized version of the histogram).
 

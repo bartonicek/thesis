@@ -3,6 +3,7 @@ tab:definitions
 fig:zooming
 fig:panning
 fig:querying
+fig:barplot-spineplot1
 fig:linked-selection
 fig:unnamed-chunk-4
 tab:scales
@@ -66,9 +67,10 @@ what-is-interactive-enough
 complexity-of-interactive-features
 working-definition
 common-interactive-features
+changing-size-and-alpha
 zooming-and-panning
 querying
-representation-switching
+switching-representations
 linked-selection
 the-highlighting-problem
 linked-selection-and-stacking
@@ -194,6 +196,10 @@ algebraic-structures-as-categories
 functors
 references
 fig:unnamed-chunk-1
-fig:unnamed-chunk-2
-fig:barplot-spineplot1
-changing-size-and-alpha
+d3
+plotly-and-highcharts
+fig:d3-scatterplot
+vega-and-vegalite
+fig:plotly-scatterplot
+interactive-data-visualization-and-the-internet-web-based-interactivity
+some-conclusions
