@@ -6,7 +6,7 @@ editor_options:
 
 # Literature review
 
-## Brief history of interactive data visualization
+## Brief history of interactive data visualization {#brief-history}
 
 Data visualization has a rich and intricate history, and a comprehensive treatment is beyond the scope of the present thesis. Nevertheless, in this section, I will provide a brief overview, with a particular focus on the later developments related to interactive visualization. For a more detailed historical account, readers should refer to @beniger1978, @dix1998, @friendly2006, @friendly2021, or @young2011.
 
@@ -38,7 +38,11 @@ With the boom of static data visualization in the 1950's, interactive data visua
 
 However, soon, researchers soon recognized the potential of interactive data visualization as a general-purpose tool for exploring data. The first such general-purpose system was PRIM-9 [@fisherkeller1974]. PRIM-9 allowed for exploration of multivariate data via interactive features such as projection, rotation, masking, and filtering. Following PRIM-9, the late 1980's saw the emergence of a new generation of systems which provided an even wider range of capabilities. Tools like MacSpin [@donoho1988], Data Desk [@velleman1989], LISP-Stat [@tierney1990], and XGobi [@swayne1998] introduced features such as interactive scaling, rotation, linked views, and grand tours (for a glimpse into these systems, excellent video-documentaries are available at [ASA Statistical Graphics Video Library](https://community.amstat.org/jointscsg-section/media/videos)).
 
+#### Open-source Statistical Computing
+
 The proliferation of open-source, general-purpose statistical computing software such as S and R further democratized the access to interactive data visualization tools. Building on XGobi's foundation, GGobi [@swayne2003], expanded upon on XGobi and provided an integration layer for R. Other tools like Mondrian [@theus2002] introduced sophisticated linked interaction between many different types of plots including scatteplots, histograms, barplots, scatterplot, mosaic plots, parallel coordinates plots, and maps. Additionally, iPlots [@urbanek2003] implemented a general framework for interactive plotting in R, allowing not only for one-shot rendering interactive figures from R but also for direct programmatic manipulation. This package was later expanded expanded for big data capabilities in iPlots eXtreme [@urbanek2011].      
+
+#### Some conclusions
 
 A common thread among these interactive data visualization systems is that they were designed by statisticians with primary focus on data exploration. High-level analytic features such as linked views, rotation/projection, and interactive manipulation of model parameters made frequent appearance. While these features were powerful, they also contributed to a steeper learning curve, potentially limiting adoption by users without a strong data analytic background. Additionally, these tools often had fairly limited options for customization, making them less well suited for data presentation.
 
@@ -52,35 +56,37 @@ Early web-based interactive data visualization systems tended to rely on externa
 
 D3.js [@bostock2022] is one of the earliest and most influential web-based visualization systems. As a general, low-level framework for visualizing data, D3 provides of a suite of specialized JavaScript modules for various aspects of the data visualization workflow, including data parsing, transformation, scaling, and DOM interaction. 
 
-For instance, here's how to create a scatterplot in D3:
+For instance, here's how to create a basic scatterplot in D3:
 
 ```{js}
 #| eval: false
 import * as d3 from "d3";
 
-const app = document.querySelector<HTMLDivElement>("#app")!;
-const url =
-  `https://raw.githubusercontent.com/holtzy/` +
-  `data_to_viz/master/Example_dataset/2_TwoNum.csv`;
-const data = await d3.csv(url);
-const [x, y] = [`GrLivArea`, `SalePrice`]; // The x, y variable keys
+const plot = document.querySelector<HTMLDivElement>("#d3-plot")!;
+const data = [
+  { x: 1, y: 0.41 },
+  { x: 2, y: 4.62 },
+  { x: 3, y: 7.62 },
+  { x: 4, y: 6.54 },
+  { x: 5, y: 9.61 },
+];
 
 const margin = { top: 10, right: 30, bottom: 30, left: 60 };
-const width = parseFloat(app.style.width);
-const height = parseFloat(app.style.height);
+const width = parseFloat(plot.style.width);
+const height = parseFloat(plot.style.height);
 
-// Create a SVG element, resize it, and append it to #app
+// Create a SVG element, resize it, and append it to #d3-plot
 const svg = d3
-  .select("#app")
+  .select("#d3-plot")
   .append("svg")
   .attr("width", width + margin.left + margin.right)
   .attr("height", height + margin.top + margin.bottom)
   .append("g")
   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-// Create x and y scales and append them to the plot
-const scaleX = d3.scaleLinear().domain([0, 4000]).range([0, width]);
-const scaleY = d3.scaleLinear().domain([500000, 0]).range([0, height]);
+// Create x and y scales and append them to
+const scaleX = d3.scaleLinear().domain([0, 6]).range([0, width]);
+const scaleY = d3.scaleLinear().domain([10, 0]).range([0, height]);
 svg
   .append("g")
   .attr("transform", "translate(0," + height + ")")
@@ -94,9 +100,9 @@ svg
   .data(data)
   .enter()
   .append("circle")
-  .attr("cx", (d) => scaleX(d[x]))
-  .attr("cy", (d) => scaleY(d[y]))
-  .attr("r", 1);
+  .attr("cx", (d) => scaleX(d.x))
+  .attr("cy", (d) => scaleY(d.y))
+  .attr("r", 2);
 ```
 
 ```{r d3-scatterplot}
@@ -111,30 +117,28 @@ Finally, D3.js visualizations are rendered as Scalable Vector Graphics (SVG) by 
 
 #### Plotly and Highcharts
 
-Building upon the low-level infrastructure that D3 provides, many packages such as Plotly.js [@plotly2022] and Highcharts [@highcharts2024] provide high-level abstractions which make the process of building complex interactive figures more streamlined for the average user. Unlike D3 which provides low-level utilities such as data transformations, scales, and geometric objects, these packages provide functions for rendering entire plots and registering reactive events, built on the native DOM Event Target interface [@mdn2024a].
+Building upon the low-level infrastructure that D3 provides, many packages such as Plotly.js [@plotly2022] and Highcharts [@highcharts2024] provide high-level abstractions which make the process of building interactive figures easier for the average user. Unlike D3 which provides low-level utilities such as data transformations, scales, and geometric objects, these packages provide a simple declarative framework for rendering entire plots using a static [JSON] schema.
 
-For example, here's how to render a scatterplot in Plotly:
+Here's how to render the same scatterplot in Plotly:
 
 ```{js}
 #| eval: false
 const data = [{
-  x: [1, 2, 3, 4],
-  y: [10, 15, 13, 17],
+  x: [1, 2, 3, 4, 5, 6],
+  y: [0.41, 4.62, 7.62, 6.54, 9.61],
   mode: 'markers',
   type: 'scatter'
 }];
 
 Plotly.newPlot('app', data);
 ```
-
 <script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
 <div id="app" style="width: 500px; height: 500px"></div>
-
 ```{js}
 #| echo: false
 const data = [{
-  x: [1, 2, 3, 4],
-  y: [10, 15, 13, 17],
+  x: [1, 2, 3, 4, 5, 6],
+  y: [0.41, 4.62, 7.62, 6.54, 9.61],
   mode: 'markers',
   type: 'scatter'
 }];
@@ -148,19 +152,58 @@ Plotly.newPlot('app', data);
 #| fig-cap: "Example of a scatterplot in Plotly.js. The code was taken from the official Plotly documentation [@plotly2024c] and slightly simplified."
 plot(0, 0)
 ```
-As you can see, compared with the D3 code used to create Figure \@ref(fig:d3-scatterplot), the code for creating Figure \@ref(fig:plotly-scatterplot) is much terser. Many details, such as the axis limits and margins, point size and colour, gridlines, and widgets, are handled implicitly. Also, notice that the figure provides some interactive features by default, such the ability to zoom and pan and a tooltip on hover.
+Clearly, compared with the D3 code used to create Figure \@ref(fig:d3-scatterplot), the code for creating Figure \@ref(fig:plotly-scatterplot) is much terser. Many details, such as the axis limits and margins, point size and colour, gridlines, and widgets, are handled implicitly, via default values and automatic inference. Also, note that the figure provides some interactive features by default, such as zooming, panning, and tooltip on hover. Reactivity is handled automatically using systems built on the native DOM Event Target interface [@mdn2024a].
+
+Highcharts provides a similar JSON-based interface for specifying plots. While perhaps slightly more flexible than Plotly, it also requires more verbose specifications. Because of the similarity, I will not provide a separate example here [interested reader should look up the library website, @highcharts2024].
 
 Finally, like D3, both plotly.js and Highcharts also render the graphics in SVG by default. However, unlike D3, they both also provide alternative rendering engines based on WebGL [@highschartsboost2022; @plotly2024b]. This makes them more ergonomic for use with large data sets. 
 
-#### Vega and Vegalite
+#### Vega and Vega-Lite
 
-Vega [@satyanarayan2015; @vega2024a] is another popular package, which, despite also being built partially upon the foundation of D3, takes a different approach. It provides a declarative framework for defining (interactive) data visualizations using a static [JSON] schema. Compared to Plotly.js and Highcharts, Vega offers significantly more granular customization of graphics and interactive behavior, making it significantly more expressive but also more verbose. For example, specifying a scatterplot matrix with linked selection in Vega requires over 300 lines of JSON, not including the data and using default formatting [@vega2024b]. 
+Vega [@satyanarayan2015; @vega2024a] is another popular interactive data visualization package. Like Plotly and Highcharts, Vega is also partially built upon the foundation of D3 and uses JSON schema for plot specification. However, Vega is more low-level and implements a lot of custom functionality. This allows it to offer more fine-grained customization of graphics and interactive behavior, leading to greater flexibility.
+
+However, this added flexibility does come at a cost. Compared to the high-level frameworks like Plotly and Highcharts, Vega is significantly more verbose. For instance, creating a scatterplot matrix with linked selection in Vega requires over 300 lines of JSON specification, not including the data and using default formatting [@vega2024b].
+
+Vega-Lite [@satyanarayan2015] attempts to remedy this complexity by providing a high-level interface to Vega. Here's how we can define a scatterplot with zooming, panning, and tooltip on hover in Vega-Lite:
+
+<script src="https://cdn.jsdelivr.net/npm/vega@5.30.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-lite@5.21.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-embed@6.26.0"></script>
+
+<div id="vegalite-plot" style="width: 500px; height: 500px"></div>
+
+```{js}
+const spec = {
+  $schema: "https://vega.github.io/schema/vega-lite/v5.json",
+  width: 500,
+  height: 500,
+  data: { values: [
+    { x: 1, y: 0.41 },
+    { x: 2, y: 4.62 },
+    { x: 3, y: 7.62 },
+    { x: 4, y: 6.54 },
+    { x: 5, y: 9.61 }]
+  },
+  mark: {"type": "point", "tooltip": true},
+  encoding: {
+    x: { field: "x", type: "quantitative" },
+    y: { field: "y", type: "quantitative" }
+  },
+  params: [{ name: "grid", select: "interval", bind: "scales" }]
+};
+
+vegaEmbed("#vegalite-plot", spec);
+```
+
+Note that the zooming and panning capability is provided by the `params` property, which declaratively specifies a list of plot parameters that can be modified by interaction [see @vegalite2024a]. In the case above, the specification creates a two-way binding between plot scales and mouse selection events [@vegalite2024b].   
 
 #### Some conclusions
 
-In general, these contemporary web-based interactive data visualization systems offer a great deal of flexibility and customizability, making the well suited for modern data presentation. However, all of this expressiveness does come at a cost. Compared to the earlier statistical graphics systems, described in Section \@ref(early-interactive), many of the more advanced features that used to be common are now either missing or require so much effort to implement that they are only accessible to power-users, as evidenced by their absence in the documentation and gallery pages of the corresponding packages. For instance, the [R Graph Gallery entry on Interactive Charts](https://r-graph-gallery.com/interactive-charts.html) [@holtz2022] features multiple interactive figures implemented in the above-mentioned JavaScript libraries, however, they all feature only surface-level single-plot interactive features such zooming, panning, hovering, 3D rotation, and node repositioning. The [Plotly Dash documentation page on Interactive Visualizations](https://dash.plotly.com/interactive-graphing) [@plotly2022] does feature two examples of simple linked cross-filtering, however, the vast majority of visualizations in the [Plotly R Open Source Graphing Library documentation page](https://plotly.com/r/) [@plotly2022] show examples only surface-level interactivity. Similarly, [VegaLite Gallery pages on Interactive Charts](https://vega.github.io/vega-lite/examples/#interactive-charts) and [Interactive Multiview Displays](https://vega.github.io/vega-lite/examples/#interactive-multi-view-displays)  [@vegalite2022] feature many examples, however, there are only few, limited examples of linked or parametric interactivity. Finally, the [Highcharter Showcase Page ](https://jkunst.com/highcharter/articles/showcase.html) [@kunst2022] does not feature any examples of linking.
+In general, these contemporary web-based interactive data visualization systems offer a great deal of flexibility, making them well-suited to modern data presentation. However, all of this expressiveness does seem to come at a cost. Compared to the earlier statistical graphics systems, described in Section \@ref(early-interactive), many of the more advanced features that used to be common are either missing or require a significant effort to implement, such that they are only accessible to expert users. This is evidenced by their infrequent appearance in the documentation and example gallery pages. 
 
-Of course, it is still possible to implement advanced features such as complex linked views and parametric interaction in these web-based visualization frameworks, however, it often requires a) writing a lot of code, or b) stepping outside of the visualization library to make use of the more general features provided by the reactive framework or JavaScript. This creates a barrier to entry for taking advantage of these more interesting types of interactivity. This may not be an issue for large organizations which can afford to hire specialists to work on visualizations full-time. However, to the average scientist or data analyst, the upfront cost of producing interactive visualizations may be too high, especially if one is only interested in exploratory data analysis. This may be the reason why interactive visualizations are nowadays mainly used for data communication, not data exploration [@batch2017].
+For instance, the [R Graph Gallery entry on Interactive Charts](https://r-graph-gallery.com/interactive-charts.html) [@holtz2022] features multiple interactive figures implemented in the JavaScript libraries described above. However, all of these examples show only surface-level single-plot interactive features such zooming, panning, hovering, 3D rotation, and node repositioning. The [Plotly Dash documentation page on Interactive Visualizations](https://dash.plotly.com/interactive-graphing) [@plotly2022] does feature two examples of simple linked cross-filtering, however, the vast majority of visualizations in the [Plotly R Open Source Graphing Library documentation page](https://plotly.com/r/) [@plotly2022] show examples only surface-level interactivity. Similarly, [VegaLite Gallery pages on Interactive Charts](https://vega.github.io/vega-lite/examples/#interactive-charts) [@vegalite2022] feature many examples, however, there is only a limited number of examples of linked or parametric interactivity (see e.g. [Interactive Multiview Displays](https://vega.github.io/vega-lite/examples/#interactive-multi-view-displays)). Finally, the [Highcharter Showcase Page ](https://jkunst.com/highcharter/articles/showcase.html) [@kunst2022] does not feature any examples of linking.
+
+Of course, with enough effort, users of these web-based visualization systems can still create rich interactive figures with advanced features such as complex linked views and parametric interaction. However, implementing these features may require dealing with reactivity and visualization primitives directly. This defeats the purpose of using a high-level libraries and also creates a barrier to entry for people looking to use these more interesting types of interaction. While large organizations can afford to hire specialists to work on interactive dashboards full-time, to the average scientist or data analyst, the upfront cost of producing interactive visualizations may be too high, especially if one is interested in "quick and dirty" exploratory data analysis. This may explain why interactive visualizations are nowadays mainly used for data presentation, not data exploration [@batch2017].
 
 ## What even is interactive data visualization? {#what-is-interactive-visualization}
 
@@ -170,30 +213,32 @@ Of course, it is still possible to implement advanced features such as complex l
 >
 > [Duck Test](https://en.wikipedia.org/wiki/Duck_test) entry, [@wikipedia2022] 
 
-While giving a brief overview of the history and the present state of interactive data visualization in the previous section, I skirted around one important: what even is interactive data visualization? Surprisingly, despite the widespread popularity of interactive visualizations, there is no clear consensus for what makes a figure interactive. Within the data visualization literature, the terms "interactive" and "interaction" are used inconsistently, with researchers providing incongruent and at times even contradictory definitions [see e.g. @dimara2019; @elmqvist2011; @pike2009].  
+In the previous section (Section \@ref(brief-history)), I provided an overview of the history and present state of interactive data visualization, discussing a number of features and systems. However, while doing so, I avoided one crucial question: what constitutes an interactive data visualization? 
 
-The lack of a clear consensus complicates discussion of interactive data visualization. Ignoring the issue could risk leaving the reader confused, while a comprehensive exploration of the terminology could become overly complex, as evidenced by the dearth of research papers dedicated to the topic [see e.g. @dimara2019; @elmqvist2011]. To address this issue, this section aims to provide a concise yet informative account of how interactivity has been conceptualized in the literature. The goal is to establish a clear framework for understanding the terms "interactive" and "interaction" within the context of this thesis.
+Surprisingly, despite the widespread popularity of interactive visualizations, there is no universally agreed-upon definition of interactivity. Within the data visualization literature, the terms "interactive" and "interaction" are rarely defined. And even when they are, the definitions are often incongruent or even contradictory [see e.g. @dimara2019; @elmqvist2011; @pike2009].  
+
+This lack of a clear consensus complicates my task of discussing interactive data visualization. Ignoring the issue could lead to confusion, while a comprehensive exploration of the terminology could become overly complex, as evidenced by the abundance of research papers dedicated to the topic [see e.g. @dimara2019; @elmqvist2011]. To address this, this section aims to provide a concise overview of how interactivity has been conceptualized in the literature. The goal is to establish a clear framework for understanding "interactive" and "interaction" within the context of this thesis.
 
 ### Interactive vs. interacting with
 
-First, the word "visualization" in the term "interactive data visualization" can be interpreted in two different ways:
+First, the term "interactive data visualization" can be interpreted in two different ways:
 
-1. Noun, as in *interactive data visualization* is a concrete chart or figure
-2. Verb, as in *interactive data visualization* is the process of interacting with a figure
+1. As a noun: a concrete chart or figure
+2. As a verb: the process of interacting with a figure
 
-Data visualization literature frequently features both uses of the term, leading to significant overloading [@dimara2019; @pike2009; see also @yi2007]. Further, this dual interpretation has lead to a kind of a split in the literature. Some researchers focus on the mathematical and computational aspects of interactive data visualization, discussing specific systems and implementations [see e.g. @buja1996; @kelleher2015; @leman2013; @wills2008]. Others prioritize the more cognitive or human-computer interaction (HCI) aspects of interactive data visualization, exploring what impact different kinds of visualization and interaction styles have on the user's ability to derive insights from the data [see e.g. @dimara2019; @dix1998; @pike2009; @quadri2021; @yi2007]. 
+In data visualization literature, both interpretations are frequently used, leading to significant ambiguity [@dimara2019; @pike2009; see also @yi2007]. Some researchers focus on the mathematical and computational aspects of interactive data visualization, discussing specific systems and implementations [see e.g. @buja1996; @kelleher2015; @leman2013; @wills2008]. Others prioritize the more cognitive or human-computer interaction (HCI) aspects of interactive data visualization, exploring what impact different kinds of visualization and interaction styles have on the user's ability to derive insights from the data [see e.g. @dimara2019; @dix1998; @pike2009; @quadri2021; @yi2007]. 
 
-There is of course a significant overlap - most papers discuss both concrete implementations of interactive data visualization systems and the user's intentions and experiences while using those systems. However, the dual intepretation of "interactive data visualization" does complicate literature search. It also highlights the interdisciplinary nature of the field, showing its connections to statistics, computer science, applied mathematics, business analytics, HCI, and cognitive psychology[@dimara2019]. While this interdisciplinary nature of interactive data visualization is certainly a strength, it can also lead to confusion, and as such I think it is necessary to clearly define key terms. 
+Of course, many papers discuss both concrete implementations of interactive data visualization systems and the user's intentions and experiences while using those systems. However, the dual intepretation of "interactive data visualization" does complicate literature search. It also highlights the interdisciplinary nature of the field, showing its connections to statistics, computer science, applied mathematics, business analytics, HCI, and cognitive psychology[@dimara2019]. While this interdisciplinary nature of interactive data visualization is certainly a strength, it can also lead to confusion. As such I think it is necessary to clearly define key terms. 
 
 To ensure clarity throughout thesis, the term *"interactive data visualization"* will primarily refer to concrete charts or figures. When referring to the *practice* of interactive data visualization, I will attempt to use more active phrasing such as *"interacting with a visualization"* or *"user's interaction with a visualization"*, to indicate that what is being referred to is the activity or process of visualization, rather than any concrete object or implementation. 
 
 ### What is "interactive enough"?
 
-Even when we use the term "interactive data visualization" to refer to concrete charts or figures, the meaning still remains fairly ambiguous. What is the bar for calling a figure "interactive"? What features should interactive figures have? These criteria vary a lot between data visualization researchers, such that the same figure may be considered interactive by some but not by others. This is important, since the criteria may impact the requirements and implementation details of interactive data visualization systems.  
+Even when we use the term "interactive data visualization" to refer to concrete charts or figures, the meaning still remains fairly ambiguous. What is the bar for calling a figure "interactive"? What features should interactive figures have? These criteria vary a lot between data visualization researchers, such that the same figure may be considered interactive by some but not by others. 
 
 Some researchers adopt a broad definition of interactive data visualization, considering almost any figure combined with graphical user interface (GUI) as interactive, as long as it allows for some level of user manipulation  [@brodbeck2009]. For others, the speed of the computer's responses to user input is important, with faster updates translating to greater interactivity [@becker1987; @buja1996]. Some also differentiate between "interactive" and "dynamic" manipulation, such that interactive manipulation involves discrete actions such as pressing a button or selecting an item from a drop-down menu, whereas dynamic manipulation involves continuous actions, like moving a slider or clicking-and-dragging to highlight a rectangular area [@rheingans2002; @jankun2007; see also @dimara2019]. 
 
-However, many other researchers ascribe to a much narrower view of interactive data visualizations, which hinges on high-level analytic features that allow efficient exploration of the data. These features include the ability to generate different views of the data (by e.g. zooming, panning, sorting, and filtering), and the reactive propagation of changes between connected or "linked" parts of a figure [@kehrer2012; @buja1996; @keim2002; @unwin1999; @chen2008]. An often cited guideline is the visual information seeking mantra: overview first, zoom and filter, then details-on-demand [@shneiderman2003]. Similarly, in visual analytics research, a distinction is made between "surface-level" (or "low-level") and "parametric" (or "high-level") interactions, where surface-level interactions manipulate attributes of the visual domain only (e.g. zooming and panning), whereas parametric interactions manipulate attributes of mathematical models or algorithms underlying the visualization [@leman2013; @pike2009]. 
+However, many other researchers ascribe to a much narrower view of interactive data visualization, which hinges on high-level analytic features that allow efficient exploration of the data. These features include the ability to generate different views of the data (by e.g. zooming, panning, sorting, and filtering), and the reactive propagation of changes between connected or "linked" parts of a figure [@kehrer2012; @buja1996; @keim2002; @unwin1999; @chen2008]. An often cited guideline is the visual information seeking mantra: overview first, zoom and filter, then details-on-demand [@shneiderman2003]. Similarly, in visual analytics research, a distinction is made between "surface-level" (or "low-level") and "parametric" (or "high-level") interactions, where surface-level interactions manipulate attributes of the visual domain only (e.g. zooming and panning), whereas parametric interactions manipulate attributes of mathematical models or algorithms underlying the visualization [@leman2013; @pike2009]. 
 
 Table \@ref(tab:definitions) provides a concise summary of the several perspectives on interactivity discussed above. It meant to serve as a reference point for future discussions within the text, though it is important to note that this is not an exhaustive list. For a more comprehensive taxonomy of interactive visualization systems and features, see e.g. @dimara2019, @yi2007.
 
@@ -222,49 +267,39 @@ tab <- data.frame(
 )
 
 colnames(tab) <- c("Name", "Details", "Selected references")
-knitr::kable(tab, caption = "Summary of the perspectives on interactivity") |> kable_styling(full_width = FALSE)
-
-# odd_rows <- (1:nrow(tab))[1:nrow(tab) %% 2 == 1]
-# 
-# flextable(tab) |>
-#   theme_booktabs(bold_header = TRUE) |>
-#   set_table_properties(width = 1, layout = "autofit") |>
-#   bg(i = odd_rows, bg = "grey95") |>
-#   border_inner_h(border = fp_border_default(color = "grey80"))
-
+kableExtra::kbl(tab, caption = "Summary of the perspectives on interactivity") |> 
+  kable_styling(full_width = FALSE)
 ```
 
 ### Complexity of interactive features
 
-The way we define interactivity is not just a matter of taste or preference: it has a significant impact on the complexity and feasibility of our systems. Some simple features, such as zooming or changing size and alpha, are fairly simple to implement and require just a thin interactive layer over a static data visualization system. Other more advanced features, such as linked selection, demand a significant overhead, reaching all the way to fundamental data processing steps.
+The way we define interactivity is not just a matter of taste or preference: it has a significant impact on the complexity and feasibility of our systems. As we will see in Section \@ref(common-features), some simple features are fairly easy to implement, requiring just a thin interactive layer over a static data visualization system, whereas others come with a significant overhead, requiring an entirely different framework than static visualization.
 
-To start with a perhaps slightly over-exaggerated example, many programming languages come equipped with a read-evaluate-print loop (REPL) which can be used to interactively execute code from the command line. The user writes code, presses ENTER, and the language interpreter evaluates the code, returns any output, and waits for more input from the user. Now, if the language in question supports plotting, then, under the permissive "user interaction" definition, it could be argued that even the act of running code from a command line to produce new plots could be considered an "interactive data visualization system", since the user's interaction with the REPL produces changes to the visual output. And, hypothetically, if the user could type fast enough, they would see the updates appear almost instantly, satisfying the "real-time update" definition.
+To make the point with a particularly blunt example, many programming languages support a read-evaluate-print loop (REPL). This allows interactive code execution from the command line: the user inputs code, the interpreter evaluates it, outputs results, and waits for more input. If the language supports plotting, running code to generate plots could be considered an "interactive data visualization system." User interaction with the REPL modifies the visual output, and with fast-enough input, updates could appear almost instantly (thus satisfying the user interaction and real-time update definitions of interactivity, see table). This would make almost every programming language an "interactive data visualization system", requiring no additional effort.
 
-Does this mean that every programming language which has a REPL and supports plotting automatically ships with an interactive data visualization system? I would argue that no: most people nowadays probably do not consider the command line to be an interactive data visualization system. But perhaps it has not always been this way. Several decades ago, the command used to be considered a prime example of an interactive user interface [see e.g. @foley1990; @howard1995]. Compared to waiting seconds or minutes for code to compile, a REPL is indeed a much more interactive experience. However, with the rise in processor speed and the proliferation of highly interactive graphical user interfaces (GUIs), users have come to expect visualizations that can be interacted with *directly* [@dimara2019]. As such, our perceptions of what is "interactive" are not constant but change over time; as technologies improve, we come to expect more direct and responsive user interfaces.
+However, I would argue that, today, this view stretches the concept of interactivity. It is true that, historically, the command line was considered a highly interactive user interface [see e.g. @foley1990; @howard1995]. However, with advancements in processor speeds and the widespread adoption of graphical user interfaces (GUIs), user expectations have evolved. Nowadays, we typically associate interactivity with direct manipulation of visual elements and immediate feedback [@dimara2019]. Thus, we can see that what's considered "interactive" evolves over time. 
 
-Now, let's set the somewhat exaggerated example of the REPL aside, and focus on what today would be considered more "typical" examples interactive data visualization systems. That is, systems in which the user can interact with the visualizations directly, by pressing keys or mouse buttons. Then, there still are considerable differences in what different features imply for implementation requirements.  
+But even with figures that are manipulated directly, there still are considerable differences in what different features imply for implementation requirements. Some features, like changing color or opacity of points in a scatterplot affect only the visual attributes of the plot and not the underlying data representation. This makes them simple to implement as they do not require any specialized data structures or complex computations, and the primary cost lies in re-rendering the visualization.
 
-There are features which manipulate visual attributes of the plot only, independent of the data. These include, for example, changing the size, color, or opacity of points in a scatterplot. Features like this are usually fairly simple to implement because they do not affect the underlying data representation: a point displays the same data (as indicated by its xy-coordinates) no matter whether it is green or orange. Also, these graphical-only features typically do not require specialized data structures, and have low time- and space-complexity: for example, when interactively changing the opacity of points in a scatterplot, we only need to update one scalar value - the points' opacity - and as such most of the user-experienced time will be spent re-rendering, rather than on any computation.     
+In contrast, some interactive features require a lot more infrastructure. For instance, filtering, linked highlighting, or parametric interaction require specialized data structures and algorithms beyond those that would be required in static plots. This is because, each time the user engages in an interaction, entirely new summaries of the underlying data may need to be computed. 
 
-In contrast, some interactive features require specialized data structures and complex algorithms, above and beyond those that are required for static plots. For instance, each time the user engages in interactive features such as filtering, linked highlighting, or parametric interaction, new summaries of the underlying data may need to be computed. When a user selects several points in a linked scatterplot, we first have to find the ids of all the corresponding cases, recompute the statistics underlying all other linked plots (such as counts/sums in barplots or histograms), train all of the relevant scales, and only then can we re-render the plot. Likewise, if we interactively manipulate a histogram's binwidth, we need to recompute the number of cases in each bin each time the binwidth changes. To maintain the illusion of smooth, "continuous" interaction [@dimara2019], these computations need to happen fast, and as such, computational efficiency becomes imperative.
+To give a concrete example, when a user selects several points in a linked scatterplot (see Section \@ref(linked-selection)), we first have to find the ids of all the selected cases, recompute the statistics underlying all other linked plots (such as counts/sums in barplots or histograms), train all of the relevant scales, and only then can we re-render the figure. Likewise, when interactively manipulating a histogram's binwidth, we need to recompute the number of cases in each bin whenever the binwidth changes. To maintain the illusion of smooth, "continuous" interaction [@dimara2019], these computations need to happen fast, and as such, computational efficiency becomes imperative at high data volumes.
 
 ### Working definition
 
-As was discussed in previous sections, the definition "interactive data visualization" varies across fields and researchers. Moreover, when building an interactive data visualization system, this distinction matters, since different interactive features inherently come with different levels of complexity. Thus, how should we go about deciding what to consider "interactive" for our purposes? 
+As discussed in previous sections, the definition "interactive data visualization" varies across fields and researchers. Moreover, when building interactive data visualization systems, different definitions imply varying levels of implementation complexity. Thus, we need to establish clear criteria for our specific definition. 
 
-Data visualization can be broadly categorized into two primary modes: presentation and exploration. While both modes share a bulk of common techniques, each comes with a different set of goals and challenges [@kosara2016]. Data presentation starts from the assumption that we have derived most of the important insights from our data already, and the goal is now to communicate these insights clearly and make an impactful and lasting impression [@kosara2016]. In contrast, data exploration begins from a position of incomplete knowledge - we accept that there are facts about our data we might not be aware of yet. Thus, when we explore data with visualizations, the goal is to help us see what we might otherwise miss or might not even think to look for [@tukey1977; @unwin2018].    
+Data visualization can be broadly categorized into two primary modes: presentation and exploration. While both modes share a bulk of common techniques, each comes with a different set of goals and challenges [@kosara2016]. Data presentation starts from the assumption that we have derived most of the important insights from our data already, and the goal is now to communicate these insights clearly and make an impactful and lasting impression [@kosara2016]. In contrast, data exploration begins from a position of incomplete knowledge - we accept that there are facts about our data we might not be aware of. Thus, when we explore data with visualizations, the goal is to help us see what we might otherwise miss or might not even think to look for [@tukey1977; @unwin2018].    
 
-However, it is not always the case that more complex visuals necessarily translate to better statistical insights. In static visualization, it is a well-established fact that plots can include sophisticated-looking and seemingly appealing features which do not promote the acquisition of statistical insights in any way [@cairo2014; @cairo2019; @gelman2013; @tufte2001]. Similarly, adding interactivity to a visualization does not always improve its statistical legibility [see e.g. @abukhodair2013; @franconeri2021]. 
+However, it is not always the case that more complex visuals necessarily translate to better statistical insights. In static visualization, it is a well-established that plots can include seemingly sophisticated features which do not promote the acquisition of statistical insights in any way [@cairo2014; @cairo2019; @gelman2013; @tufte2001]. Similarly, adding interactivity to a visualization does not always improve its statistical legibility [see e.g. @abukhodair2013; @franconeri2021]. 
 
-I propose to approach interactive features the same way we treat visual features in static visualization. Specifically, I propose the following working definition:
+I propose to treat interactive features the same way we treat visual features in static visualization. Specifically, I propose the following working definition:
 
-> To justify being called an "interactive data visualization", the interactive features in a visualization should promote statistical understanding.
+> When building interactive data visualization systems, we should prioritize interactive features which promote statistical understanding.
 
-If we accept this proposition, then there are several important consequences that follow. First, we must favour high-level, data-dependent, parametric interactions over the purely graphical ones.
+If we accept this proposition, then several important consequences follow. First, we must favor high-level, data-dependent, parametric interactions over the purely graphical ones. That is not to say that purely graphical interactive features cannot useful. For example, in a scatterplot with overplotting, changing the size or alpha of points can help us see features that would otherwise remain hidden. Still, I argue that the ability to see entirely new summaries of the data is what makes some interactive data visualizations systems particularly powerful. The interactive features that enable this, such as linked highlighting, and parameter manipulation, go beyond aesthetics, and empower the users to explore the data dynamically.
 
-That is not to say that purely graphical interactive features are not useful. For example, in the presence of overplotting, manipulating size or alpha of objects can help us features (areas of high density) that would otherwise remain hidden. Likewise, zooming and panning, while often being counted among the more high-level features, require manipulation of existing axis limits only and can be done without reference to the original data. Still, I argue that the ability to see new summaries of the data is what makes some interactive data visualizations systems ultimately more powerful (and also more challenging to implement). The interactive features that enable this, such as filtering, linked highlighting, and parameter manipulation, go beyond aesthetics, and empower the users to explore the data dynamically, uncovering hidden patterns and relationships that may otherwise remain hidden. 
-
-### Common interactive features
+### Common interactive features {#common-features}
 
 This section describes several common types of interactive features that tend to make frequent appearance across interactive data visualization systems. It is only meant as an overview [for comprehensive taxonomies of interactive features, see @dimara2019; @yi2007]. For each feature, I highlight its properties, common uses, and implementation requirements. 
 
@@ -328,7 +363,7 @@ However, since the heights of the bars are different, barplots are not very effe
 
 Other examples of switching of representations include the spineplot (a normalized version of the histogram).
 
-#### Linked selection
+#### Linked selection {#linked-selection}
 
 Linked selection, also known as linked brushing, highlighting, or views, is often considered as one of the most useful interactive data visualization features [see e.g. @buja1996; @wilhelm2003; @heer2012; @ward2015; @ware2019]. Fundamentally, it involves creating a figure with multiple "linked" plots. The user can then click or click-and-drag over objects in one plot, and the corresponding cases are highlighted across all the other plots, see Figure \@ref(fig:linked-selection). This makes it possible to quickly quickly explore trends across different dynamically-generated subsets of the data [@dix1998]. The ability to quickly materialize alternative views of the data makes this a particularly effective tool for data exploration [@wilhelm2008; @wills2008].
 

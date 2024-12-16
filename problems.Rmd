@@ -12,9 +12,11 @@ Designing an interactive data visualization system presents a unique set of chal
 
 When creating visualizations, it is rare to encounter data that can be rendered directly. Instead, the data often has to pass through several distinct stages or transformations before it can finally be rendered. Together, these stages form a data visualization pipeline [see e.g. @chi2000; @wickham2009; @wu2024]. 
 
-Take for example the typical barplot. To draw a barplot, there are several steps we need to take. First, we have to divide the data into parts, based on the levels of some categorical variable. Second, we need to summarize or aggregate each part by some metric, usually either sum or count. Third, we need to take these summaries and map them to visual encodings, such as x-axis position, y-axis position, and length. Finally, we use these encodings to render the individual bars. 
+Take for example the typical barplot. To draw a barplot, there are several steps we need to take. First, we have to divide the data into parts, based on the levels of some categorical variable. Second, we need to summarize or aggregate each part by some metric, usually either sum or count. Third, we need to take these summaries and map them to visual encodings, such as x-axis position, y-axis position, and length. Finally, we use these encodings to render the individual bars.
 
-In the next few sections, I discuss these four fundamental steps of the data visualization pipeline - partitioning, aggregation, scaling and encoding, and rendering - and explores challenges related to their implementation. Particularly, some unique issues that come up in interactive data visualization are pointed out and discussed. Ultimately, my goal is to show that certain parts of the pipeline, particularly the aggregation step, are more complex than often given credit for, and that many current data visualization packages handle this complexity only implicitly, limiting the scope of their application [see also @wu2024].  
+These four steps are common to all data visualization systems, be they static or interactive, however, interactivity does present some unique challenges. Specifically, user's interaction may affect any of the four stages, and the resulting changes need to be propagated accordingly. How to do this in a general and efficient manner remains an open problem [@wickham2009; @franconeri2021], and as such the role of interactivity with respect to the visualization pipeline is often discussed only vaguely [@dimara2019].
+
+In the next few sections, I discuss the four fundamental steps of the data visualization pipeline - partitioning, aggregation, scaling and encoding, and rendering - and explores challenges related to their implementation, particularly when interaction is involved. Ultimately, my goal is to show that certain parts of the pipeline, particularly the aggregation step, are more complex than often given credit for, and that many current data visualization packages handle this complexity only implicitly, limiting the scope of their application [see also @wu2024].  
 
 ## Partitioning
 
@@ -52,9 +54,9 @@ Clearly then, we can dismiss the first two data-hiding issues - cherry picking a
 
 > "Graphics are for comparison - comparison of one kind or another - not for access to individual amounts." [@tukey1993]
 
-An interesting yet underappreciated fact is that, in many common types of visualizations, geometric objects tend to represent distinct subsets of the data. That is, in most plots, each point, bar, line, or polygon typically represents a unique set of data points (rows of the data), with no overlap between objects within the same graphical layer. Despite being so common to border on a rule, this practice is often overlooked.
+An interesting yet underappreciated fact is that, in many common types of visualizations, geometric objects tend to represent disjoint subsets of the data. That is, in most plots, each point, bar, line, or polygon typically represents a unique set of data points (rows of the data), with no overlap between the data represented by objects within the same graphical layer. Despite this practice being so common that it borders on a rule, it is often overlooked.
 
-We can find counterexamples of this practice. For instance, certain visualizations of set-typed data "double up" the contribution of data subsets, such that the same subset of the data may appear in multiple objects [see e.g. @alsallakh2013; @alsallakh2014; @conway2017; @lex2014]. However, these types of visualizations are the exception rather than the norm. In other words, when we see a barplot, we expect each bar to represent a unique set of cases.   
+Of course, we can find counterexamples. For instance, certain visualizations of set-typed data "double up" the contribution of data subsets, such that the same subset of the data may appear in multiple objects [see e.g. @alsallakh2013; @alsallakh2014; @conway2017; @lex2014]. However, these types of visualizations are fairly rare, and are the exception rather than the norm. In other words, when we see a barplot, we expect each bar to represent a unique set of cases.   
 
 So where does this unconscious "law" of showing disjoint parts of the data come from? I believe that it is rooted in the fundamental purpose of data visualization: comparison [@tufte2001; @tukey1993]. When we visualize, we draw our graphics with the ultimate goal of comparing our data along a set of visual channels [@bertin1983; @wilkinson2012; @franconeri2021; @wilke2019]. This mirrors the comparisons we make in the real world, where we compare properties of physical objects. And, as I would like to argue, it is often far easier to reason about multiple objects when they are independent or disjoint. In statistics, we see a example of this in the sum and product rules of probability, which require independence as pre-requisite [@kolmogorov2018]. Likewise, in psychology, is now-all-too-famous experimental evidence that people struggle with comparing non-disjoint events [the "Linda experiment", @tversky1983]. Thus, disjointness presents a more intuitive, "natural" model.
 
@@ -131,9 +133,9 @@ Here again, each bar (segment) in each plot represents a disjoint subset of vote
 
 #### Disjointness and interaction
 
-As I argued above, disjoint subsets offer a simpler mental model for understanding data visualizations. When each geometric object represents a unique set of data points, it becomes easier to reason about the comparisons being made. In contrast, when objects overlap or share data points, it requires additional cognitive effort to track the relationships between them.
+As I argued above, disjoint subsets offer a simpler mental model for understanding data visualizations. When each geometric object represents a unique set of data points, it becomes easier to reason about the comparisons being made. Conversely, when objects overlap or share data points, it requires additional cognitive effort to track the relationships between them.
 
-I would also argue that disjointness presents a particularly good model for interactive visualization [see also @wilhelm2008]. The natural correspondence between geometric objects and subsets of the data makes certain interactions more intuitive, and conversely, overlapping subsets can produce surprising or unexpected behavior. For instance, when a user clicks on a bar in a linked barplot, they might reasonably expect to highlight that particular bar within the active plot and the corresponding cases within all the other (passive) plots. If they see parts of other bars within the active plot get highlighted as well, they have to expend additional mental effort thinking about the relationship between the objects (bars) and the subsets of the data, since it is no longer one-to-one.
+I also argue that disjointness presents a particularly good model for interactive visualization [see also @wilhelm2008]. The natural correspondence between geometric objects and subsets of the data makes certain interactions more intuitive, and conversely, overlapping subsets can produce surprising or unexpected behavior. For instance, when a user clicks on a bar in a linked barplot, they might reasonably expect to highlight that particular bar within the active plot and the corresponding cases within all the other (passive) plots. If they see parts of other bars within the active plot get highlighted as well, they have to expend additional mental effort thinking about the relationship between the objects (bars) and the subsets of the data, since this is no longer one-to-one.
 
 Similar issue arises during querying. When a user queries an object that does not represent a disjoint subset of the data, should the returned summary statistics match the object or the (non-disjoint) subset? Again, this issue complicates the interpretation of the presented information.
 
@@ -141,7 +143,7 @@ This does not mean that non-disjoint subsets and linking cannot be useful in spe
 
 ### Plots as partitions
 
-In the two preceding sections, I have argued the plots in our interactive data visualization system should, in general, have have two properties:
+In the two preceding sections, I have argued the plots in our interactive data visualization system should, in general, be based around two properties:
 
 - Plots should show the full data (surjective mapping)
 - Geometric objects within these plots should represent distinct subsets (disjoint parts)
@@ -160,9 +162,9 @@ While I have not been able to find references explicitly linking plots to partit
 
 However, this "one-row-one-object" model skirts around the issue of aggregation. It only works if we assume that the data comes to us pre-aggregated, such that, for example, barplots and histograms are direct representations of their marginal tables. However, if we do admit that aggregation is not a completely independent process and is instead a part of the data visualization pipeline [@chi2000; @wickham2016], then we have a problem. 
 
-Aggregation is, by definition, a one-way process: after we aggregate our data into a set of summaries, we cannot recover the original cases [see also @wu2024]. However, many popular plots such as barplots and histograms rely on aggregation. Under the model proposed by @dastani2002, @ziemkiewicz2009, and @vickers2012, these types of plots would be impermissible. @ziemkiewicz2009 do acknowledge that, at times, aggregation can be an acceptable trade-off, despite the inherent information loss.
+Aggregation is, by definition, is not injective: once we aggregate multiple data points into a summary or a set of summaries, we cannot recover the original cases [see also @wu2024]. However, many popular plots such as barplots and histograms rely on aggregation. Under the model proposed by @dastani2002, @ziemkiewicz2009, and @vickers2012, these types of plots would be impermissible. @ziemkiewicz2009 do acknowledge that this is a problem, and admit that, at times, aggregation can be an acceptable trade-off, despite the inherent information loss.
 
-I propose the following solution. Instead of modeling plots as bijections between *cases* and the geometric objects, I model them as bijections between *parts of data* and the geometric objects. In other words, the domain of the bijection are not individual rows of the original data table, but entire "slices" of rows. With this approach, aggregation can be considered as part of the bijection. For example, if we split our data into ten tables and aggregate each table, we are still left with ten tables of one row each.   
+However, I propose the following solution. Instead of modeling plots as bijections between *cases* and the geometric objects, I model them as bijections between *parts of data* and the geometric objects. In other words, the domain of the bijection are not individual rows of the original data table, but instead entire "slices" of rows. With this approach, aggregation can be considered as part of the bijection. For example, if we split our data into ten tables and aggregate each table, we are still left with ten tables of one row each that we can map bijectively to geometric objects.
 
 Finally, Wilkinson [-@wilkinson2012, pp 210] and @keim2002 have linked stacked plots to (hierarchical) partitions.
 
@@ -303,7 +305,7 @@ However, despite the fact that barplot and spineplot represent the same underlyi
 
 ```{r}
 #| echo: false
-#| fig-cap: "A joke image shared in the Mathematical Mathematics Memes Facebook group on the 28th of March, 2024 [@mathematicalmathematics2024]. In this section, I would like to make the case that charts (right) do in fact have a graph structure, in other words, graphs are graphs, not \"delusional cosplayers\"."
+#| fig-cap: "A joke image shared in the Mathematical Mathematics Memes Facebook group on the 28th of March, 2024 [@mathematicalmathematics2024]. I would like to make the case that charts (right) do in fact have a graph structure, in other words, graphs are graphs, not \"delusional cosplayers\"."
 #| out-extra: 'style="border:1px solid black;"'
 #| out-width: 75%
 knitr::include_graphics("./figures/graphs-cosplayers.jpg")
@@ -453,7 +455,7 @@ However, notice one important feature of the plot above: the heights of the "sta
 
 #### Why choose stacking over dodging and layering?
 
-But before we go on to discuss what makes statistics stackable, we need to address one particular issue. It might not be immediately clear why I focus on stacking so much. Indeed, some might argue that stacking is only one way of presenting partitioned data, and that we could equally well present the averages in Figure \@ref(fig:grammar-barplot-means) by plotting the corresponding bars side by side (a technique know as dodging), or by plotting them on top of each other in semi-transparent layers:
+But before we go on to discuss what makes certain statistics stackable, we need to first address one issue. It might not be immediately clear why I focus on stacking so much. Indeed, some might argue that stacking is only one way of presenting partitioned data, and that we could equally well present the averages in Figure \@ref(fig:grammar-barplot-means) by plotting the corresponding bars side by side (a technique know as dodging), or by plotting them on top of each other in semi-transparent layers:
 
 ```{r}
 #| echo: false
