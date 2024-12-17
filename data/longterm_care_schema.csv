@@ -1,0 +1,12 @@
+translation,original,description
+year,rok,The year hospitalization was terminated
+region_code,kraj_kod,Region code based on the NUTS 3 classification
+region,kraj_nazev,Region where the facility was located
+sex,pohlavi,Classification of patients’ sex
+diagnosis,zakladni_diagnoza,The primary diagnosis of the psychiatric disorder based on the ICD-10 classification
+reason_for_termination,ukonceni,The reason for termination of care
+age_category,vekova_kategorie,Classification of patients’ age category
+field,obor,The field of psychiatric care
+care_category,kategorie_pece,Classification of care: child or adult
+hospitalizations,pocet_hospitalizaci,The total number of hospitalizations in a given subgroup of patients
+days,delka_hospitlizace,"The total time spent in care, in days. Specifically, the total number of days all patients in a given subgroup spent in care. "

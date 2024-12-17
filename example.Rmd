@@ -1,4 +1,64 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
 
-# Applied examples
+# Applied example
 
-Examples of applied data analysis using plotscaper will go here.
+In this section, I will illustrate the use of `plotscaper`, showcasing the workflow and the various features of the package.
+
+The Institute of Health Information and Statistics of the Czech Republic (IHIS, ÚZIS in Czech) is a government agency established by the Czech Ministry of Health. Its primary roles is to collect, process, and report on medical data within the country of Czechia [@uzis2024]. Of interest, the institute provides high-quality, open-access medical data, including information about the use and manufacture of medicines, summaries of fiscal and employment records in medical facilities, and various epidemiological datasets.
+
+### The data set
+
+The data set [@soukupova2023] contains longitudinal information about psychiatric care in Czechia. More specifically, it contains aggregated data on individuals released from long-term psychiatric care facilities between 2010 and 2022. It includes information such the region of the treatment facility, the sex of the patients, age category, diagnosis based on the international ICD-10 classification [@icd2024a; @icd2024b], the number of hospitalizations, and the total number of days spent in care by the given subset of patients. 
+
+Here's the data set at a quick glance:
+
+```{r}
+df <- read.csv("./data/longterm_care.csv")
+dplyr::glimpse(df)
+```
+
+The data set contains over 68,000 rows, totalling over 410,000 hospitalizations. Each row records the number patients with a particular set of of characteristics released from a treatment facility during a given year, and the number of days the patients spent in treatment in total.
+
+The original dataset used Czech column names and category labels. To make the analysis more easily accessible to non-Czech speakers, I took the liberty of translating most of these to English (excluding the `region` variable). The translation script is available in the [thesis repository](https://github.com/bartonicek/thesis), at the following path: `./data/longterm_care_translate.R`. Additionally, the [data set website](https://www.nzip.cz/data/2060-dlouhodoba-psychiatricka-pece) contains a JSON schema with a text description of each of the variables [@soukupova2023]. I took the liberty of translating these descriptions as well, and provide them below, in table Table \@ref(tab:longterm-care-schema):
+
+```{r longterm-care-schema}
+#| echo: false
+schema <- read.csv("./data/longterm_care_schema.csv")
+knitr::kable(schema, 
+             col.names = c("Translated name", "Original name", "Description"), 
+             caption = "Schema of the long-term care data set, including the original column names (Czech), as well as translated names and descriptions.")
+```
+
+### Initial exploration
+
+```{r}
+
+library(plotscaper)
+
+create_schema(df) |>
+  add_scatterplot(c("hospitalizations", "days")) |>
+  render()
+
+df$stay_category <- relevel(factor(df$stay_category), ref = "short-term")
+fit <- lm(days ~ hospitalizations * stay_category, data = df)
+
+predict(fit, newdata = data.frame(
+  hospitalizations = 1,
+  stay_category = c("short-term", "medium-term", "long-term")
+))
+
+summary(fit)
+
+ggplot(df, aes(hospitalizations, days)) +
+  geom_point() +
+  geom_abline(intercept = -16.9, slope = 35.8, col = "red") +
+  geom_abline(intercept = -16.9 + 32.4, slope = 35.8 + 78.1, col = "blue") +
+  geom_abline(intercept = -16.9 + 81.76, slope = 35.8 + 480.8, col = "green")
+
+
+181 / 40
+```

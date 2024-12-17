@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>7 Applied example | Fluent Graphics</title>
+  <meta name="description" content="7 Applied example | Fluent Graphics" />
+  <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="7 Applied example | Fluent Graphics" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="7 Applied example | Fluent Graphics" />
+  
+  
+  
+
+<meta name="author" content="Adam Bartonicek" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="system-description.html"/>
+<link rel="next" href="discussion.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Abstract</a></li>
+<li class="chapter" data-level="2" data-path="literature-review.html"><a href="literature-review.html"><i class="fa fa-check"></i><b>2</b> Literature review</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="literature-review.html"><a href="literature-review.html#brief-history"><i class="fa fa-check"></i><b>2.1</b> Brief history of interactive data visualization</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="literature-review.html"><a href="literature-review.html#static-data-visualization-from-ancient-times-to-the-space-age"><i class="fa fa-check"></i><b>2.1.1</b> Static data visualization: From ancient times to the space age</a></li>
+<li class="chapter" data-level="2.1.2" data-path="literature-review.html"><a href="literature-review.html#early-interactive"><i class="fa fa-check"></i><b>2.1.2</b> Early interactive data visualization: By statisticians for statisticians</a></li>
+<li class="chapter" data-level="2.1.3" data-path="literature-review.html"><a href="literature-review.html#interactive-data-visualization-and-the-internet-web-based-interactivity"><i class="fa fa-check"></i><b>2.1.3</b> Interactive data visualization and the internet: Web-based interactivity</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="literature-review.html"><a href="literature-review.html#what-is-interactive-visualization"><i class="fa fa-check"></i><b>2.2</b> What even is interactive data visualization?</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="literature-review.html"><a href="literature-review.html#interactive-vs.-interacting-with"><i class="fa fa-check"></i><b>2.2.1</b> Interactive vs. interacting with</a></li>
+<li class="chapter" data-level="2.2.2" data-path="literature-review.html"><a href="literature-review.html#what-is-interactive-enough"><i class="fa fa-check"></i><b>2.2.2</b> What is “interactive enough”?</a></li>
+<li class="chapter" data-level="2.2.3" data-path="literature-review.html"><a href="literature-review.html#complexity-of-interactive-features"><i class="fa fa-check"></i><b>2.2.3</b> Complexity of interactive features</a></li>
+<li class="chapter" data-level="2.2.4" data-path="literature-review.html"><a href="literature-review.html#working-definition"><i class="fa fa-check"></i><b>2.2.4</b> Working definition</a></li>
+<li class="chapter" data-level="2.2.5" data-path="literature-review.html"><a href="literature-review.html#common-features"><i class="fa fa-check"></i><b>2.2.5</b> Common interactive features</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="literature-review.html"><a href="literature-review.html#the-highlighting-problem"><i class="fa fa-check"></i><b>2.3</b> The highlighting problem</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="literature-review.html"><a href="literature-review.html#linked-selection-and-stacking"><i class="fa fa-check"></i><b>2.3.1</b> Linked selection and stacking</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="literature-review.html"><a href="literature-review.html#theory-of-data-visualization-systems"><i class="fa fa-check"></i><b>2.4</b> Theory of data visualization systems</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="literature-review.html"><a href="literature-review.html#scales"><i class="fa fa-check"></i><b>2.4.1</b> Scales</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="goals-and-principles.html"><a href="goals-and-principles.html"><i class="fa fa-check"></i><b>3</b> Goals and Principles</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="goals-and-principles.html"><a href="goals-and-principles.html#user-profile"><i class="fa fa-check"></i><b>3.1</b> User profile</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="problem-set.html"><a href="problem-set.html"><i class="fa fa-check"></i><b>4</b> Problem Set</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="problem-set.html"><a href="problem-set.html#data-visualization-pipeline"><i class="fa fa-check"></i><b>4.1</b> Data visualization pipeline</a></li>
+<li class="chapter" data-level="4.2" data-path="problem-set.html"><a href="problem-set.html#partitioning"><i class="fa fa-check"></i><b>4.2</b> Partitioning</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="problem-set.html"><a href="problem-set.html#showing-the-full-data"><i class="fa fa-check"></i><b>4.2.1</b> Showing the full data</a></li>
+<li class="chapter" data-level="4.2.2" data-path="problem-set.html"><a href="problem-set.html#disjointness-and-comparison"><i class="fa fa-check"></i><b>4.2.2</b> Disjointness and comparison</a></li>
+<li class="chapter" data-level="4.2.3" data-path="problem-set.html"><a href="problem-set.html#plots-as-partitions"><i class="fa fa-check"></i><b>4.2.3</b> Plots as partitions</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="problem-set.html"><a href="problem-set.html#aggregation"><i class="fa fa-check"></i><b>4.3</b> Aggregation</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="problem-set.html"><a href="problem-set.html#graphics-and-statistics-are-not-independent"><i class="fa fa-check"></i><b>4.3.1</b> Graphics and statistics are not independent</a></li>
+<li class="chapter" data-level="4.3.2" data-path="problem-set.html"><a href="problem-set.html#stackable-summaries"><i class="fa fa-check"></i><b>4.3.2</b> Stackable summaries</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="problem-set.html"><a href="problem-set.html#scaling"><i class="fa fa-check"></i><b>4.4</b> Scaling</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="problem-set.html"><a href="problem-set.html#theory-of-scales"><i class="fa fa-check"></i><b>4.4.1</b> Theory of scales</a></li>
+<li class="chapter" data-level="4.4.2" data-path="problem-set.html"><a href="problem-set.html#scales-in-practice"><i class="fa fa-check"></i><b>4.4.2</b> Scales in practice</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="high-level-principles.html"><a href="high-level-principles.html"><i class="fa fa-check"></i><b>5</b> High-level principles</a>
+<ul>
+<li class="chapter" data-level="5.0.1" data-path="high-level-principles.html"><a href="high-level-principles.html#user-profile-1"><i class="fa fa-check"></i><b>5.0.1</b> User profile</a></li>
+<li class="chapter" data-level="5.1" data-path="high-level-principles.html"><a href="high-level-principles.html#programming-paradigm"><i class="fa fa-check"></i><b>5.1</b> Programming paradigm</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="high-level-principles.html"><a href="high-level-principles.html#imperative-programming"><i class="fa fa-check"></i><b>5.1.1</b> Imperative programming</a></li>
+<li class="chapter" data-level="5.1.2" data-path="high-level-principles.html"><a href="high-level-principles.html#functional-programming"><i class="fa fa-check"></i><b>5.1.2</b> Functional programming</a></li>
+<li class="chapter" data-level="5.1.3" data-path="high-level-principles.html"><a href="high-level-principles.html#object-oriented-programming"><i class="fa fa-check"></i><b>5.1.3</b> Object oriented programming</a></li>
+<li class="chapter" data-level="5.1.4" data-path="high-level-principles.html"><a href="high-level-principles.html#data-oriented-programming"><i class="fa fa-check"></i><b>5.1.4</b> Data oriented programming</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="high-level-principles.html"><a href="high-level-principles.html#reactivity"><i class="fa fa-check"></i><b>5.2</b> Reactivity</a></li>
+<li class="chapter" data-level="5.3" data-path="high-level-principles.html"><a href="high-level-principles.html#data-representation"><i class="fa fa-check"></i><b>5.3</b> Data representation</a></li>
+<li class="chapter" data-level="5.4" data-path="high-level-principles.html"><a href="high-level-principles.html#rendering-engine"><i class="fa fa-check"></i><b>5.4</b> Rendering engine</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="system-description.html"><a href="system-description.html"><i class="fa fa-check"></i><b>6</b> System description</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="system-description.html"><a href="system-description.html#core-requirements"><i class="fa fa-check"></i><b>6.1</b> Core requirements</a></li>
+<li class="chapter" data-level="6.2" data-path="system-description.html"><a href="system-description.html#components"><i class="fa fa-check"></i><b>6.2</b> Components</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="system-description.html"><a href="system-description.html#Indexable"><i class="fa fa-check"></i><b>6.2.1</b> Indexable</a></li>
+<li class="chapter" data-level="6.2.2" data-path="system-description.html"><a href="system-description.html#Getter"><i class="fa fa-check"></i><b>6.2.2</b> Getter</a></li>
+<li class="chapter" data-level="6.2.3" data-path="system-description.html"><a href="system-description.html#dataframe"><i class="fa fa-check"></i><b>6.2.3</b> Dataframe</a></li>
+<li class="chapter" data-level="6.2.4" data-path="system-description.html"><a href="system-description.html#reactive"><i class="fa fa-check"></i><b>6.2.4</b> Reactive</a></li>
+<li class="chapter" data-level="6.2.5" data-path="system-description.html"><a href="system-description.html#factors"><i class="fa fa-check"></i><b>6.2.5</b> Factors</a></li>
+<li class="chapter" data-level="6.2.6" data-path="system-description.html"><a href="system-description.html#reducers"><i class="fa fa-check"></i><b>6.2.6</b> Reducers</a></li>
+<li class="chapter" data-level="6.2.7" data-path="system-description.html"><a href="system-description.html#scales-1"><i class="fa fa-check"></i><b>6.2.7</b> Scales</a></li>
+<li class="chapter" data-level="6.2.8" data-path="system-description.html"><a href="system-description.html#expanses"><i class="fa fa-check"></i><b>6.2.8</b> Expanses</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="applied-example.html"><a href="applied-example.html"><i class="fa fa-check"></i><b>7</b> Applied example</a>
+<ul>
+<li class="chapter" data-level="7.0.1" data-path="applied-example.html"><a href="applied-example.html#the-data-set"><i class="fa fa-check"></i><b>7.0.1</b> The data set</a></li>
+<li class="chapter" data-level="7.0.2" data-path="applied-example.html"><a href="applied-example.html#initial-exploration"><i class="fa fa-check"></i><b>7.0.2</b> Initial exploration</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>8</b> Discussion</a></li>
+<li class="chapter" data-level="9" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>9</b> Glossary</a></li>
+<li class="chapter" data-level="10" data-path="appendix.html"><a href="appendix.html"><i class="fa fa-check"></i><b>10</b> Appendix</a></li>
+<li class="chapter" data-level="11" data-path="mathematical-theory.html"><a href="mathematical-theory.html"><i class="fa fa-check"></i><b>11</b> Mathematical theory</a>
+<ul>
+<li class="chapter" data-level="11.0.1" data-path="mathematical-theory.html"><a href="mathematical-theory.html#relations"><i class="fa fa-check"></i><b>11.0.1</b> Relations</a></li>
+<li class="chapter" data-level="11.0.2" data-path="mathematical-theory.html"><a href="mathematical-theory.html#functions"><i class="fa fa-check"></i><b>11.0.2</b> Functions</a></li>
+<li class="chapter" data-level="11.0.3" data-path="mathematical-theory.html"><a href="mathematical-theory.html#partitions"><i class="fa fa-check"></i><b>11.0.3</b> Partitions</a></li>
+<li class="chapter" data-level="11.0.4" data-path="mathematical-theory.html"><a href="mathematical-theory.html#preorders"><i class="fa fa-check"></i><b>11.0.4</b> Preorders</a></li>
+<li class="chapter" data-level="11.0.5" data-path="mathematical-theory.html"><a href="mathematical-theory.html#monoids"><i class="fa fa-check"></i><b>11.0.5</b> Monoids</a></li>
+<li class="chapter" data-level="11.0.6" data-path="mathematical-theory.html"><a href="mathematical-theory.html#groups"><i class="fa fa-check"></i><b>11.0.6</b> Groups</a></li>
+<li class="chapter" data-level="11.0.7" data-path="mathematical-theory.html"><a href="mathematical-theory.html#categories"><i class="fa fa-check"></i><b>11.0.7</b> Categories</a></li>
+<li class="chapter" data-level="11.0.8" data-path="mathematical-theory.html"><a href="mathematical-theory.html#functors"><i class="fa fa-check"></i><b>11.0.8</b> Functors</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>12</b> References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Fluent Graphics</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="applied-example" class="section level1 hasAnchor" number="7">
+<h1><span class="header-section-number">7</span> Applied example<a href="applied-example.html#applied-example" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>In this section, I will illustrate the use of <code>plotscaper</code>, showcasing the workflow and the various features of the package.</p>
+<p>The Institute of Health Information and Statistics of the Czech Republic (IHIS, ÚZIS in Czech) is a government agency established by the Czech Ministry of Health. Its primary roles is to collect, process, and report on medical data within the country of Czechia <span class="citation">(<a href="#ref-uzis2024">ÚZIS 2024</a>)</span>. Of interest, the institute provides high-quality, open-access medical data, including information about the use and manufacture of medicines, summaries of fiscal and employment records in medical facilities, and various epidemiological datasets.</p>
+<div id="the-data-set" class="section level3 hasAnchor" number="7.0.1">
+<h3><span class="header-section-number">7.0.1</span> The data set<a href="applied-example.html#the-data-set" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The data set <span class="citation">(<a href="#ref-soukupova2023">Soukupová et al. 2023</a>)</span> contains longitudinal information about psychiatric care in Czechia. More specifically, it contains aggregated data on individuals released from long-term psychiatric care facilities between 2010 and 2022. It includes information such the region of the treatment facility, the sex of the patients, age category, diagnosis based on the international ICD-10 classification <span class="citation">(<a href="#ref-icd2024a">World Health Organization 2024a</a>, <a href="#ref-icd2024b">2024b</a>)</span>, the number of hospitalizations, and the total number of days spent in care by the given subset of patients.</p>
+<p>Here’s the data set at a quick glance:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="applied-example.html#cb1-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;./data/longterm_care.csv&quot;</span>)</span>
+<span id="cb1-2"><a href="applied-example.html#cb1-2" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">glimpse</span>(df)</span></code></pre></div>
+<pre><code>## Rows: 68,115
+## Columns: 12
+## $ year                   &lt;int&gt; 2019, 2016, 2011, 2013, 2019, 2013, 2018, 2017, 2019, …
+## $ region_code            &lt;chr&gt; &quot;CZ071&quot;, &quot;CZ064&quot;, &quot;CZ080&quot;, &quot;CZ072&quot;, &quot;CZ080&quot;, &quot;CZ053&quot;, …
+## $ region                 &lt;chr&gt; &quot;Olomoucký kraj&quot;, &quot;Jihomoravský kraj&quot;, &quot;Moravskoslezsk…
+## $ sex                    &lt;chr&gt; &quot;female&quot;, &quot;male&quot;, &quot;male&quot;, &quot;female&quot;, &quot;male&quot;, &quot;female&quot;, …
+## $ diagnosis              &lt;chr&gt; &quot;f10&quot;, &quot;f2&quot;, &quot;f7&quot;, &quot;f4 without f42&quot;, &quot;f60–f61&quot;, &quot;f32–f…
+## $ reason_for_termination &lt;chr&gt; &quot;release&quot;, &quot;early termination&quot;, &quot;early termination&quot;, &quot;…
+## $ age_category           &lt;chr&gt; &quot;40–49&quot;, &quot;30–39&quot;, &quot;30–39&quot;, &quot;40–49&quot;, &quot;50–59&quot;, &quot;40–49&quot;, …
+## $ stay_category          &lt;chr&gt; &quot;short-term&quot;, &quot;medium-term&quot;, &quot;short-term&quot;, &quot;short-term…
+## $ field                  &lt;chr&gt; &quot;psychiatry&quot;, &quot;psychiatry&quot;, &quot;psychiatry&quot;, &quot;psychiatry&quot;…
+## $ care_category          &lt;chr&gt; &quot;adult&quot;, &quot;adult&quot;, &quot;adult&quot;, &quot;adult&quot;, &quot;adult&quot;, &quot;adult&quot;, …
+## $ hospitalizations       &lt;int&gt; 13, 3, 2, 3, 1, 2, 2, 32, 2, 2, 1, 12, 1, 1, 2, 9, 18,…
+## $ days                   &lt;int&gt; 196, 345, 38, 108, 1, 47, 319, 3813, 120, 256, 151, 57…</code></pre>
+<p>The data set contains over 68,000 rows, totalling over 410,000 hospitalizations. Each row records the number patients with a particular set of of characteristics released from a treatment facility during a given year, and the number of days the patients spent in treatment in total.</p>
+<p>The original dataset used Czech column names and category labels. To make the analysis more easily accessible to non-Czech speakers, I took the liberty of translating most of these to English (excluding the <code>region</code> variable). The translation script is available in the <a href="https://github.com/bartonicek/thesis">thesis repository</a>, at the following path: <code>./data/longterm_care_translate.R</code>. Additionally, the <a href="https://www.nzip.cz/data/2060-dlouhodoba-psychiatricka-pece">data set website</a> contains a JSON schema with a text description of each of the variables <span class="citation">(<a href="#ref-soukupova2023">Soukupová et al. 2023</a>)</span>. I took the liberty of translating these descriptions as well, and provide them below, in table Table <a href="applied-example.html#tab:longterm-care-schema">7.1</a>:</p>
+<table>
+<caption><span id="tab:longterm-care-schema">Table 7.1: </span>Schema of the long-term care data set, including the original column names (Czech), as well as translated names and descriptions.</caption>
+<colgroup>
+<col width="13%" />
+<col width="11%" />
+<col width="74%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Translated name</th>
+<th align="left">Original name</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">year</td>
+<td align="left">rok</td>
+<td align="left">The year hospitalization was terminated</td>
+</tr>
+<tr class="even">
+<td align="left">region_code</td>
+<td align="left">kraj_kod</td>
+<td align="left">Region code based on the NUTS 3 classification</td>
+</tr>
+<tr class="odd">
+<td align="left">region</td>
+<td align="left">kraj_nazev</td>
+<td align="left">Region where the facility was located</td>
+</tr>
+<tr class="even">
+<td align="left">sex</td>
+<td align="left">pohlavi</td>
+<td align="left">Classification of patients’ sex</td>
+</tr>
+<tr class="odd">
+<td align="left">diagnosis</td>
+<td align="left">zakladni_diagnoza</td>
+<td align="left">The primary diagnosis of the psychiatric disorder based on the ICD-10 classification</td>
+</tr>
+<tr class="even">
+<td align="left">reason_for_termination</td>
+<td align="left">ukonceni</td>
+<td align="left">The reason for termination of care</td>
+</tr>
+<tr class="odd">
+<td align="left">age_category</td>
+<td align="left">vekova_kategorie</td>
+<td align="left">Classification of patients’ age category</td>
+</tr>
+<tr class="even">
+<td align="left">field</td>
+<td align="left">obor</td>
+<td align="left">The field of psychiatric care</td>
+</tr>
+<tr class="odd">
+<td align="left">care_category</td>
+<td align="left">kategorie_pece</td>
+<td align="left">Classification of care: child or adult</td>
+</tr>
+<tr class="even">
+<td align="left">hospitalizations</td>
+<td align="left">pocet_hospitalizaci</td>
+<td align="left">The total number of hospitalizations in a given subgroup of patients</td>
+</tr>
+<tr class="odd">
+<td align="left">days</td>
+<td align="left">delka_hospitlizace</td>
+<td align="left">The total time spent in care, in days. Specifically, the total number of days all patients in a given subgroup spent in care.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="initial-exploration" class="section level3 hasAnchor" number="7.0.2">
+<h3><span class="header-section-number">7.0.2</span> Initial exploration<a href="applied-example.html#initial-exploration" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+
+</div>
+</div>
+<h3> References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-soukupova2023" class="csl-entry">
+Soukupová, J, H Melicharová, O Šanca, V Bartůněk, J Jarkovský, and M Komenda. 2023. <span>“<span class="nocase">Dlouhodob<span class="nocase">á</span> psychiatrick<span class="nocase">á</span> p<span class="nocase">é</span><span class="nocase">č</span>e</span>.”</span> <em>NZIP</em>. <a href="https://www.nzip.cz/data/2060-dlouhodoba-psychiatricka-pece">https://www.nzip.cz/data/2060-dlouhodoba-psychiatricka-pece</a>.
+</div>
+<div id="ref-uzis2024" class="csl-entry">
+ÚZIS. 2024. <span>“<span class="nocase">About us - <span>Ú</span>ZIS <span>Č</span>R</span>.”</span> <a href="https://www.uzis.cz/index-en.php?pg=about-us">https://www.uzis.cz/index-en.php?pg=about-us</a>.
+</div>
+<div id="ref-icd2024a" class="csl-entry">
+World Health Organization. 2024a. <span>“<span>ICD-10 Version:2019</span>.”</span> <a href="https://icd.who.int/browse10/2019/en">https://icd.who.int/browse10/2019/en</a>.
+</div>
+<div id="ref-icd2024b" class="csl-entry">
+———. 2024b. <span>“<span class="nocase">International Classification of Diseases (ICD)</span>.”</span> <a href="https://www.who.int/standards/classifications/classification-of-diseases">https://www.who.int/standards/classifications/classification-of-diseases</a>.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="system-description.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="discussion.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

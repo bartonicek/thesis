@@ -51,10 +51,6 @@
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
-<script src="libs/kePrint-0.0.1/kePrint.js"></script>
-<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
-<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
-<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
 
 
 <style type="text/css">
@@ -276,8 +272,119 @@ div.csl-indent {
             <section class="normal" id="section-">
 <div id="applied-examples" class="section level1 hasAnchor" number="7">
 <h1><span class="header-section-number">7</span> Applied examples<a href="applied-examples.html#applied-examples" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>Examples of applied data analysis using plotscaper will go here.</p>
+<p>In this section, I will illustrate the use of <code>plotscaper</code>, showcasing the workflow and the various features of the package.</p>
+<p>The Institute of Health Information and Statistics of the Czech Republic (IHIS, ÚZIS in Czech) is a government agency established by the Czech Ministry of Health. Its primary roles is to collect, process, and report on medical data within the country of Czechia <span class="citation">(<a href="#ref-uzis2024">ÚZIS 2024</a>)</span>. Of interest, the institute provides high-quality, open-access medical data, including information about the use and manufacture of medicines, summaries of fiscal and employment records in medical facilities, and various epidemiological datasets.</p>
+<div id="the-data-set" class="section level4 hasAnchor" number="7.0.0.1">
+<h4><span class="header-section-number">7.0.0.1</span> The data set<a href="applied-examples.html#the-data-set" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The data set <span class="citation">(<a href="#ref-soukupova2023">Soukupová et al. 2023</a>)</span> contains longitudinal information about psychiatric care in Czechia. More specifically, it contains aggregated data on individuals released from long-term psychiatric care facilities between 2010 and 2022. It includes information such the region of the treatment facility, the sex of the patients, age category, diagnosis based on the international ICD-10 classification <span class="citation">(<a href="#ref-icd2024a">World Health Organization 2024a</a>, <a href="#ref-icd2024b">2024b</a>)</span>, the number of hospitalizations, and the total number of days spent in care by the given subset of patients.</p>
+<p>Here’s the data set at a quick glance:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="applied-examples.html#cb1-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;./data/longterm_care.csv&quot;</span>)</span>
+<span id="cb1-2"><a href="applied-examples.html#cb1-2" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">glimpse</span>(df)</span></code></pre></div>
+<pre><code>## Rows: 68,115
+## Columns: 12
+## $ year                   &lt;int&gt; 2019, 2016, 2011, 2013, 2019, 2013, 2018, 2017, 2019, …
+## $ region_code            &lt;chr&gt; &quot;CZ071&quot;, &quot;CZ064&quot;, &quot;CZ080&quot;, &quot;CZ072&quot;, &quot;CZ080&quot;, &quot;CZ053&quot;, …
+## $ region                 &lt;chr&gt; &quot;Olomoucký kraj&quot;, &quot;Jihomoravský kraj&quot;, &quot;Moravskoslezsk…
+## $ sex                    &lt;chr&gt; &quot;female&quot;, &quot;male&quot;, &quot;male&quot;, &quot;female&quot;, &quot;male&quot;, &quot;female&quot;, …
+## $ diagnosis              &lt;chr&gt; &quot;f10&quot;, &quot;f2&quot;, &quot;f7&quot;, &quot;f4 without f42&quot;, &quot;f60–f61&quot;, &quot;f32–f…
+## $ reason_for_termination &lt;chr&gt; &quot;release&quot;, &quot;early termination&quot;, &quot;early termination&quot;, &quot;…
+## $ age_category           &lt;chr&gt; &quot;40–49&quot;, &quot;30–39&quot;, &quot;30–39&quot;, &quot;40–49&quot;, &quot;50–59&quot;, &quot;40–49&quot;, …
+## $ stay_category          &lt;chr&gt; &quot;short-term&quot;, &quot;medium-term&quot;, &quot;short-term&quot;, &quot;short-term…
+## $ field                  &lt;chr&gt; &quot;psychiatry&quot;, &quot;psychiatry&quot;, &quot;psychiatry&quot;, &quot;psychiatry&quot;…
+## $ care_category          &lt;chr&gt; &quot;adult&quot;, &quot;adult&quot;, &quot;adult&quot;, &quot;adult&quot;, &quot;adult&quot;, &quot;adult&quot;, …
+## $ hospitalizations       &lt;int&gt; 13, 3, 2, 3, 1, 2, 2, 32, 2, 2, 1, 12, 1, 1, 2, 9, 18,…
+## $ days                   &lt;int&gt; 196, 345, 38, 108, 1, 47, 319, 3813, 120, 256, 151, 57…</code></pre>
+<p>The data set contains over 68,000 rows, totalling over 410,000 hospitalizations. Each row records the number patients with a particular set of of characteristics released from a treatment facility during a given year, and the number of days the patients spent in treatment in total.</p>
+<p>The original dataset used Czech column names and category labels. To make the analysis more easily accessible to non-Czech speakers, I took the liberty of translating most of these to English (excluding the <code>region</code> variable). The translation script is available in the <a href="https://github.com/bartonicek/thesis">thesis repository</a>, at the following path: <code>./data/longterm_care_translate.R</code>. Additionally, the <a href="https://www.nzip.cz/data/2060-dlouhodoba-psychiatricka-pece">data set website</a> contains a JSON schema with a text description of each of the variables <span class="citation">(<a href="#ref-soukupova2023">Soukupová et al. 2023</a>)</span>. I took the liberty of translating these descriptions as well, and provide them below, in table Table <a href="applied-examples.html#tab:longterm-care-schema">7.1</a>:</p>
+<table>
+<caption><span id="tab:longterm-care-schema">Table 7.1: </span>Schema of the long-term care data set, including the original column names (Czech), as well as translated names and descriptions.</caption>
+<colgroup>
+<col width="13%" />
+<col width="11%" />
+<col width="74%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Translated name</th>
+<th align="left">Original name</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">year</td>
+<td align="left">rok</td>
+<td align="left">The year hospitalization was terminated</td>
+</tr>
+<tr class="even">
+<td align="left">region_code</td>
+<td align="left">kraj_kod</td>
+<td align="left">Region code based on the NUTS 3 classification</td>
+</tr>
+<tr class="odd">
+<td align="left">region</td>
+<td align="left">kraj_nazev</td>
+<td align="left">Region where the facility was located</td>
+</tr>
+<tr class="even">
+<td align="left">sex</td>
+<td align="left">pohlavi</td>
+<td align="left">Classification of patients’ sex</td>
+</tr>
+<tr class="odd">
+<td align="left">diagnosis</td>
+<td align="left">zakladni_diagnoza</td>
+<td align="left">The primary diagnosis of the psychiatric disorder based on the ICD-10 classification</td>
+</tr>
+<tr class="even">
+<td align="left">reason_for_termination</td>
+<td align="left">ukonceni</td>
+<td align="left">The reason for termination of care</td>
+</tr>
+<tr class="odd">
+<td align="left">age_category</td>
+<td align="left">vekova_kategorie</td>
+<td align="left">Classification of patients’ age category</td>
+</tr>
+<tr class="even">
+<td align="left">field</td>
+<td align="left">obor</td>
+<td align="left">The field of psychiatric care</td>
+</tr>
+<tr class="odd">
+<td align="left">care_category</td>
+<td align="left">kategorie_pece</td>
+<td align="left">Classification of care: child or adult</td>
+</tr>
+<tr class="even">
+<td align="left">hospitalizations</td>
+<td align="left">pocet_hospitalizaci</td>
+<td align="left">The total number of hospitalizations in a given subgroup of patients</td>
+</tr>
+<tr class="odd">
+<td align="left">days</td>
+<td align="left">delka_hospitlizace</td>
+<td align="left">The total time spent in care, in days. Specifically, the total number of days all patients in a given subgroup spent in care.</td>
+</tr>
+</tbody>
+</table>
 
+</div>
+</div>
+<h3> References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-soukupova2023" class="csl-entry">
+Soukupová, J, H Melicharová, O Šanca, V Bartůněk, J Jarkovský, and M Komenda. 2023. <span>“<span class="nocase">Dlouhodob<span class="nocase">á</span> psychiatrick<span class="nocase">á</span> p<span class="nocase">é</span><span class="nocase">č</span>e</span>.”</span> <em>NZIP</em>. <a href="https://www.nzip.cz/data/2060-dlouhodoba-psychiatricka-pece">https://www.nzip.cz/data/2060-dlouhodoba-psychiatricka-pece</a>.
+</div>
+<div id="ref-uzis2024" class="csl-entry">
+ÚZIS. 2024. <span>“<span class="nocase">About us - <span>Ú</span>ZIS <span>Č</span>R</span>.”</span> <a href="https://www.uzis.cz/index-en.php?pg=about-us">https://www.uzis.cz/index-en.php?pg=about-us</a>.
+</div>
+<div id="ref-icd2024a" class="csl-entry">
+World Health Organization. 2024a. <span>“<span>ICD-10 Version:2019</span>.”</span> <a href="https://icd.who.int/browse10/2019/en">https://icd.who.int/browse10/2019/en</a>.
+</div>
+<div id="ref-icd2024b" class="csl-entry">
+———. 2024b. <span>“<span class="nocase">International Classification of Diseases (ICD)</span>.”</span> <a href="https://www.who.int/standards/classifications/classification-of-diseases">https://www.who.int/standards/classifications/classification-of-diseases</a>.
+</div>
 </div>
             </section>
 
@@ -339,20 +446,6 @@ gitbook.start({
 });
 </script>
 
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
-  (function () {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    var src = "true";
-    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:")
-      if (/^https?:/.test(src))
-        src = src.replace(/^https?:/, '');
-    script.src = src;
-    document.getElementsByTagName("head")[0].appendChild(script);
-  })();
-</script>
 </body>
 
 </html>

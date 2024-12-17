@@ -60,7 +60,7 @@ Of course, we can find counterexamples. For instance, certain visualizations of 
 
 So where does this unconscious "law" of showing disjoint parts of the data come from? I believe that it is rooted in the fundamental purpose of data visualization: comparison [@tufte2001; @tukey1993]. When we visualize, we draw our graphics with the ultimate goal of comparing our data along a set of visual channels [@bertin1983; @wilkinson2012; @franconeri2021; @wilke2019]. This mirrors the comparisons we make in the real world, where we compare properties of physical objects. And, as I would like to argue, it is often far easier to reason about multiple objects when they are independent or disjoint. In statistics, we see a example of this in the sum and product rules of probability, which require independence as pre-requisite [@kolmogorov2018]. Likewise, in psychology, is now-all-too-famous experimental evidence that people struggle with comparing non-disjoint events [the "Linda experiment", @tversky1983]. Thus, disjointness presents a more intuitive, "natural" model.
 
-Fundamentally, the intuitive appeal of disjoint parts may originate in the fact that they reflect a structure which mathematicians have long considered natural: a [bijection](#functions) [see e.g. @fong2019; @lawvere2009]. Specifically, if we take a set, split it into disjoint subsets, and label them, then there is a one-to-one correspondence between these subsets and the subset labels (i.e. the parts form an [equivalence class](#partition)). Practically, this means that we can go back and forth between the subsets and the corresponding labels, without losing any information.
+Even more fundamentally, the intuitive appeal of disjoint parts may originate in the fact that they reflect a structure which mathematicians have long considered natural: a [bijection](#functions) [see e.g. @fong2019; @lawvere2009]. Specifically, if we take a set, split it into disjoint subsets, and label each subset, then there is a one-to-one correspondence between these subsets and the subset labels (i.e. the parts form an [equivalence class](#partition)). Practically, this means that we can go back and forth between the subsets and the corresponding labels, without losing any information.
 
 A diagram of this natural correspondence between objects and data subsets is shown in Figure \@ref(fig:geoms-bijection). Specifically, when drawing a barplot, if we divide our data into disjoint subsets and draw one bar corresponding to each part, then the function mapping the objects (bars) to the data subsets is invertible: we can pick a bar, identify the corresponding cases, and then use those cases to pick out the original bar. In plots where the objects do not represent disjoint subsets of the data, this correspondence is broken: if we select cases corresponding to a single bar, there may be no simple way of identifying the original bar from the cases alone.
 
@@ -266,7 +266,7 @@ ggplot(combined_df, aes(x = group, y = value, fill = selection)) +
 knitr::include_graphics("./figures/barplot-partitions-products.png")
 ```
 
-What we have just shown is an example of a simple split-apply-combine pipeline [@wickham2011]. This type of a pipeline is required for most types of plots, and happens implicitly in most `ggplot2` calls such as this one:
+What we have just shown is an example of a simple split-apply-combine pipeline [@wickham2011]. This type of a pipeline is necessary in most types of plots and data visualization systems. For instance, the following `ggplot2` call produces a similar data visualization pipeline like the one we described above:
 
 ```{r}
 #| eval: false
@@ -311,7 +311,7 @@ However, despite the fact that barplot and spineplot represent the same underlyi
 knitr::include_graphics("./figures/graphs-cosplayers.jpg")
 ```
 
-Why are spineplots so tricky? The reason is that they force us to confront the hierarchical nature of graphics. Specifically, while in a barplot, we can get away with a single flat partition of the data, in a spineplot, the data is summarized and transformed *along and across* different levels of aggregation [@wu2024]:
+Why are spineplots so tricky? The reason is that they force us to confront the hierarchical nature of (interactive) graphics [@macdonal1990; @keller2024]. Specifically, while in a barplot, we can get away with a single flat partition of the data, in a spineplot, the data is summarized and transformed *along and across* different levels of aggregation [@wu2024]:
 
 - Along the x-axis, we stack the summaries *across the levels of the top-level factor/category*
 - Along the y-axis, we stack the summaries *across the levels of a product of two factors* and normalize them by the values *within the levels of the top-level factor*.   

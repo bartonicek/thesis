@@ -30,7 +30,7 @@ fig:barspine
 def:linear-mapping
 def:scale
 def:scale-inverse
-fig:unnamed-chunk-100
+fig:unnamed-chunk-101
 def:unlabeled-div-3
 fig:function-subset
 def:unlabeled-div-4
@@ -172,6 +172,7 @@ continuous-expanses
 point-expanses
 band-expanses
 applied-examples
+the-data-set
 discussion
 glossary
 SoA
@@ -203,8 +204,8 @@ isomorphism
 algebraic-structures-as-categories
 functors
 references
-fig:unnamed-chunk-1
-fig:unnamed-chunk-6
-fig:unnamed-chunk-2
-fig:unnamed-chunk-12
-fig:unnamed-chunk-21
+tab:unnamed-chunk-3
+tab:unnamed-chunk-2
+tab:longterm-care-schema
+applied-example
+initial-exploration
