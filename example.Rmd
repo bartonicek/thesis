@@ -4,6 +4,10 @@ editor_options:
   chunk_output_type: console
 ---
 
+```{r}
+# knitr::opts_chunk$set(eval = FALSE)
+```
+
 # Applied example
 
 In this section, I will illustrate the use of `plotscaper`, showcasing the workflow and the various features of the package.
@@ -12,7 +16,7 @@ The Institute of Health Information and Statistics of the Czech Republic (IHIS, 
 
 ### The data set
 
-The data set [@soukupova2023] contains longitudinal information about psychiatric care in Czechia. More specifically, it contains aggregated data on individuals released from long-term psychiatric care facilities between 2010 and 2022. It includes information such the region of the treatment facility, the sex of the patients, age category, diagnosis based on the international ICD-10 classification [@icd2024a; @icd2024b], the number of hospitalizations, and the total number of days spent in care by the given subset of patients. 
+The data set [@soukupova2023] contains longitudinal information about long-term psychiatric care in Czechia. More specifically, it contains aggregated data on individuals released from psychiatric care facilities between 2010 and 2022. It includes information such the region of the treatment facility, the sex of the patients, age category, diagnosis based on the international ICD-10 classification [@icd2024a; @icd2024b], the number of hospitalizations, and the total number of days spent in care by the given subset of patients. 
 
 Here's the data set at a quick glance:
 
@@ -33,32 +37,61 @@ knitr::kable(schema,
              caption = "Schema of the long-term care data set, including the original column names (Czech), as well as translated names and descriptions.")
 ```
 
-### Initial exploration
+### Interactive exploration
+
+Now it is time to start exploring the data using `plotscaper`.
+
+The first to note about the data set is that the data has been aggregated, such that each row represents the combined number of releases within a given subset of patients. For example, the first row records that, in the year 2019, there were 13 females aged 40-49 who were released from treatment facilities in Olomoucký kraj, after having been in short-term care with F10 ICD-10 diagnosis [mental and behavioural disorders due to use of alcohol, @icd2024a] for a sum total of 196 days:
+
+```{r}
+df[1, ]
+```
+
+Thus, the two primary continuous variables in the data are `cases` (the number of patients in a given subgroup released from care) and `days` (the number of days the given subgroup of patients spent in care). Intuitively, we should expect a fairly linear relationship between these variables, such that a larger group of patients should spend a greater number of days in care, in total. We can use `plotscaper` to visualize this relationship via a scatterplot:
+
+```{r}
+#| fig-cap: "Relationship between the number of patients in a given subgroup and the total number of days they spent in care"
+library(plotscaper) # Load in the package
+
+create_schema(df) |> # Create a schema that can be modified declaratively
+  add_scatterplot(c("cases", "days")) |>
+  render() # Render the figure
+```
+
+Interestingly, there seems to be a leaf-shaped pattern in the data, with three distinct "leaflets", each suggesting a linear relationship. If we look at the data, we can see that the `stay_category` variable has three levels, corresponding to short-term (< 3 months), medium-term (3-6 months), and long-term (6+ months) care. If we mark the cases corresponding to the three categories in different colors, we can see that these indeed correspond to the three leaflets:
+
+```{r}
+df |>
+  create_schema() |>
+  add_scatterplot(c("cases", "days")) |>
+  add_barplot(c("stay_category", "cases")) |>
+  assign_cases(which(df$stay_category == "short-term"), 1) |>
+  assign_cases(which(df$stay_category == "long-term"), 2) |>
+  render()
+```
+
+Feel free to click on the bars in the barplot to make sure that there is fairly little overplotting between the points in the three layers. 
+
+However, this does not really explain the absence of points between the different leaflets - if the distribution of cases and days within each of the three `stay_category` levels were uniform, we should expect to see more points in the gaps between the leaflets. This suggests that there may be a kind of a selection process at play, where patients are less likely to be released after at intervals which are close to the category boundaries. We can see this more easily if we plot the average number of days a group of patients spent in care:
 
 ```{r}
 
-library(plotscaper)
+df$avg_days <- df$days / df$cases
 
-create_schema(df) |>
-  add_scatterplot(c("hospitalizations", "days")) |>
+df |>
+  create_schema() |>
+  add_scatterplot(c("cases", "avg_days")) |>
+  add_barplot(c("stay_category", "cases")) |>
+  assign_cases(which(df$stay_category == "short-term"), 1) |>
+  assign_cases(which(df$stay_category == "long-term"), 2) |>
+  set_scale("scatterplot1", "y", transformation = "log10", default = TRUE) |>
   render()
-
-df$stay_category <- relevel(factor(df$stay_category), ref = "short-term")
-fit <- lm(days ~ hospitalizations * stay_category, data = df)
-
-predict(fit, newdata = data.frame(
-  hospitalizations = 1,
-  stay_category = c("short-term", "medium-term", "long-term")
-))
-
-summary(fit)
-
-ggplot(df, aes(hospitalizations, days)) +
-  geom_point() +
-  geom_abline(intercept = -16.9, slope = 35.8, col = "red") +
-  geom_abline(intercept = -16.9 + 32.4, slope = 35.8 + 78.1, col = "blue") +
-  geom_abline(intercept = -16.9 + 81.76, slope = 35.8 + 480.8, col = "green")
-
-
-181 / 40
 ```
+
+Now we can see the gaps between the three different distributions along the y-axis. By pressing the `Q` key and hovering over the points near these gaps, we can see that there are only few patient groups where the average patients spends between 60-90 or 150-210 days in care (corresponding to gaps at 2-3 months and 5-7 months). This suggests that, perhaps, if a patient spends 2 months in care, the healthcare providers are more likely to keep them in care longer by transfer them to medium-term care, and likewise, if a patients spends 5 months in care, they are more likely to be transferred to long-term care (or, alternatively, the patients may be released early).    
+
+```{r}
+knitr::opts_chunk$set(eval = TRUE)
+```
+
+

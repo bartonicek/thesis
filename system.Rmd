@@ -407,59 +407,59 @@ Another challenge is the hierarchical nature of graphics. In interactive data vi
 #| fig-align: "center"
 #| fig-height: 4
 
-
-library(ggplot2)
-library(dplyr)
-library(patchwork)
-
-# seed <- sample(1:1e4, 1)
-# set.seed(seed)
-set.seed(8311)
-
-mtcars2 <- mtcars
-mtcars2$cyl <- factor(mtcars2$cyl, labels = c("A", "B", "C"))
-mtcars2$am <- sample(mtcars2$am)
-mtcars2$am <- factor(mtcars2$am, levels = c(1, 0))
-
-mtcars_spine1 <- mtcars2 |> 
-  group_by(cyl) |>
-  count() |>
-  ungroup() |>
-  mutate(left = cumsum(lag(n, default = 0)), right = cumsum(n), 
-         position = (left + right) / 2)
-
-mtcars_spine <- mtcars2 |>
-  count(cyl, am, name = "n_prod") |>
-  left_join(mtcars_spine1, by = "cyl") |>
-  mutate(prop = n_prod / n) |>
-  group_by(cyl) |>
-  mutate(prop_cum = cumsum(prop))
-
-# Need to reorder the rows to make ggplot2 layer the bars in the right order
-mtcars_spine <- mtcars_spine[c(2 * 0:2 + 2, 2 * 0:2 + 1), ]
-
-mtcars3 <- mtcars2
-mtcars3$am <- factor(mtcars3$am, levels = c(0, 1))
-
-p1 <- ggplot(mtcars3, aes(cyl, fill = am)) +
-  geom_bar(col = "white") +
-  scale_fill_manual(values = pal_dark_3[2:1]) +
-  scale_y_continuous(breaks = seq(0, 14, by = 3)) +
-  guides(fill = "none") +
-  labs(x = NULL, y = NULL) +
-  clean_theme
-
-p2 <- ggplot(mtcars_spine, aes(x = position, y = prop_cum, width = n, fill = am)) +
-  geom_bar(stat = "identity", position = position_identity(), col = "white") +
-  geom_text(data = mtcars_spine1, col = "white",
-            aes(x = position, y = 0.9, label = cyl, fill = NULL)) +
-  scale_x_continuous(breaks = c(0, mtcars_spine$right)) +
-  scale_fill_manual(values = pal_dark_3) +
-  guides(fill = "none") +
-  labs(x = NULL, y = NULL) +
-  clean_theme
-
-p1 + plot_spacer() + p2 + plot_layout(widths = c(1, 0.05, 1))
+knitr::include_graphics("./figures/barplot-spineplot.png")
+# library(ggplot2)
+# library(dplyr)
+# library(patchwork)
+# 
+# # seed <- sample(1:1e4, 1)
+# # set.seed(seed)
+# set.seed(8311)
+# 
+# mtcars2 <- mtcars
+# mtcars2$cyl <- factor(mtcars2$cyl, labels = c("A", "B", "C"))
+# mtcars2$am <- sample(mtcars2$am)
+# mtcars2$am <- factor(mtcars2$am, levels = c(1, 0))
+# 
+# mtcars_spine1 <- mtcars2 |> 
+#   group_by(cyl) |>
+#   count() |>
+#   ungroup() |>
+#   mutate(left = cumsum(lag(n, default = 0)), right = cumsum(n), 
+#          position = (left + right) / 2)
+# 
+# mtcars_spine <- mtcars2 |>
+#   count(cyl, am, name = "n_prod") |>
+#   left_join(mtcars_spine1, by = "cyl") |>
+#   mutate(prop = n_prod / n) |>
+#   group_by(cyl) |>
+#   mutate(prop_cum = cumsum(prop))
+# 
+# # Need to reorder the rows to make ggplot2 layer the bars in the right order
+# mtcars_spine <- mtcars_spine[c(2 * 0:2 + 2, 2 * 0:2 + 1), ]
+# 
+# mtcars3 <- mtcars2
+# mtcars3$am <- factor(mtcars3$am, levels = c(0, 1))
+# 
+# p1 <- ggplot(mtcars3, aes(cyl, fill = am)) +
+#   geom_bar(col = "white") +
+#   scale_fill_manual(values = pal_dark_3[2:1]) +
+#   scale_y_continuous(breaks = seq(0, 14, by = 3)) +
+#   guides(fill = "none") +
+#   labs(x = NULL, y = NULL) +
+#   clean_theme
+# 
+# p2 <- ggplot(mtcars_spine, aes(x = position, y = prop_cum, width = n, fill = am)) +
+#   geom_bar(stat = "identity", position = position_identity(), col = "white") +
+#   geom_text(data = mtcars_spine1, col = "white",
+#             aes(x = position, y = 0.9, label = cyl, fill = NULL)) +
+#   scale_x_continuous(breaks = c(0, mtcars_spine$right)) +
+#   scale_fill_manual(values = pal_dark_3) +
+#   guides(fill = "none") +
+#   labs(x = NULL, y = NULL) +
+#   clean_theme
+# 
+# p1 + plot_spacer() + p2 + plot_layout(widths = c(1, 0.05, 1))
 ```
 
 However, despite the fact that both barplots and spineplots represent the same underlying summaries (counts), turning one into the other is not always a trivial exercise. For example, in `ggplot2`, it is easy to create a barplot using simple declarative syntax, however, there is no such simple recipe for spineplots - creating the right plot in Figure \@ref(fig:barspine) took over 10 lines of external data wrangling code (using standard `dplyr` syntax).

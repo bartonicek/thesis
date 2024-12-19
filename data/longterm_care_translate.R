@@ -12,7 +12,7 @@ column_names <- c(
   "kategorie_delky_hospitalizace" = "stay_category",
   "obor" = "field",
   "kategorie_pece" = "care_category",
-  "pocet_hospitalizaci" = "hospitalizations",
+  "pocet_hospitalizaci" = "cases",
   "delka_hospitalizace" = "days"
 )
 

@@ -33,9 +33,17 @@ While these questions may seem simple, answering them requires making assumption
 
 A common recommendation that many data visualization experts provide is that faithful visual representations should show the full data and leave nothing out. The moral behind this recommendation seem fairly obvious. Visualizations which hide or obscure information, be it by negligence or by intent, cannot be considered truthful representations of the underlying data [@cairo2016; @cairo2019]. 
 
-However, data hiding can occur in many different ways. First, the data itself can be cherry-picked or massaged [see e.g. @lisnic2024]. This is arguably the most egregious case, and can in some cases amount to malicious statistical practices such as HARKing or p-hacking [see e.g. @kerr1998; @lisnic2024; @head2015]. Second, even when showing the full data, some visualizations can obscure or downplay certain data features via poor design or incorrect use of visual encodings [@cairo2016; @cairo2019; @cleveland1985; @ziemkiewicz2009]. Finally, there is the issue of missing or incomplete data, where some data cannot be represented because it simply is not there.      
+However, data hiding can occur in many different ways. First, the data itself can be cherry-picked or massaged [see e.g. @lisnic2024]. This is arguably the most egregious case, and can in some cases amount to malicious statistical practices such as HARKing or p-hacking [see e.g. @kerr1998; @lisnic2024; @head2015]. Second, even when showing the full data, some visualizations can obscure or downplay certain data features via poor design or incorrect use of visual encodings [@cairo2016; @cairo2019; @cleveland1985; @ziemkiewicz2009]. Finally, there is the issue of missing or incomplete data, where some data cannot be easily represented because it is simply not there.
 
-To give one concrete example of data hiding, consider axis limits. @cleveland1985 argues that axis limits should generally be expanded to avoid inadvertently obscuring data near these limits [see also e.g. @chen2008, pp. 64]. Take the following two scatterplots:
+An infamous example of data hiding leading to disastrous real-world consequences was the 1986 crash of the Space Shuttle Challenger [see @dalal1989]. During a pre-launch teleconference, engineers debated the effect of temperature on the performance of O-ring gaskets, as the forecasted temperature for the launch date was 31 degrees Fahrenheit, significantly lower than during previous launches. Plot in the left panel of Figure \@ref(fig:challenger) was used to argue that there was no correlation between temperature and O-ring failures. However, this plot had one significant flaw: it excluded launches where no failures occurred. After the disaster, when the data including the zero-failure launches was plotted, it revealed a clear increasing trend of failures at lower temperatures [see right panel of Figure \@ref(fig:challenger), see also @dalal1989].    
+
+```{r challenger}
+#| echo: false
+#| fig-cap: "Relationship between temperature and the number of O-ring failures within the 1986 Challenger data. Left: the original plot as presented during the pre-launch teleconference. Right: a reproduced plot of the same data, including the original data points (black), the excluded data points with zero failures (grey), and an estimated logistic regression fit (red). The source of right-panel data is @dalal1989."
+knitr::include_graphics("./figures/challenger.png")
+```
+
+However, data hiding can also occur in more subtle ways. Consider axis limits. @cleveland1985 argues that axis limits should generally be expanded to avoid inadvertently obscuring data near these limits [see also e.g. @chen2008, pp. 64]. Take the following two scatterplots:
 
 ```{r}
 #| echo: false
@@ -46,7 +54,7 @@ knitr::include_graphics("./figures/expand-scatterplot.png")
 
 In the left scatterplot, the axis limits match the data limits exactly, whereas in the right plot, they are expanded by a small fraction [5%, `ggplot2` default, @wickham2016]. The left scatterplot provides a misleading representation of the underlying trend, as data points near the axis limits (top-left and bottom-right corners) are represented by a smaller area, compared to points near the centre of the plot. For instance, the point in the bottom-right corner of the plot lies simultaneously at the limits of the x- and y-axis, and is thus represented by one-quarter of the area of the points in the center.
 
-Clearly then, we can dismiss the first two data-hiding issues - cherry picking and incorrect use of design - as they involve deliberate misrepresentation. Unless there is a clear and justifiable reason, no data should be arbitrarily removed or discarded, and we should take care to provide good representations such that all data is represented faithfully. The issue of missing or incomplete data is a bit more complicated. While techniques of visualizing data with missing values do exist [see e.g. @unwin1996; @tierney2023], these methods often depend on the specific visualization type and style. Nevertheless, in the ideal case, the visualization should present a clear and unambiguous mapping between the graphics and the data [@ziemkiewicz2009]. 
+Clearly then, we need to be mindful of the first two reasons for data hiding: direct omission and incorrect use of design. Unless there is a clear and justifiable reason, no data should be arbitrarily removed or discarded, and we should take care to provide good representations such that all data is represented faithfully. The issue of missing or incomplete data is a bit more complicated, however. While techniques of visualizing data with missing values do exist [see e.g. @unwin1996; @tierney2023], they are often tied to specific visualization types and styles. Nevertheless, in the ideal case, the visualization should present a clear and unambiguous mapping between the graphics and the data [@ziemkiewicz2009].
 
 ### Disjointness and comparison
 
@@ -158,13 +166,13 @@ I propose that regular plots should form the fundamental building block of our i
 
 #### Bijection on cases vs. bijection on subsets
 
-While I have not been able to find references explicitly linking plots to partitions in such a general way, some data visualization researchers have used the language of bijections when discussing graphics. For example, @dastani2002 discusses plots as bijections (homomorphisms) between data tables and visual attribute tables. Similarly, @ziemkiewicz2009, and @vickers2012 argue that, in order to be visually unambiguous, plots should represent bijections of the underlying data.
+While I have not been able to find references explicitly linking plots to partitions in this way, some data visualization researchers have used the language of bijections when discussing graphics. For example, @dastani2002 discusses plots as bijections (homomorphisms) between data tables and visual attribute tables. Similarly, @ziemkiewicz2009, and @vickers2012 argue that, in order to be visually unambiguous, plots should represent bijections of the underlying data.
 
-However, this "one-row-one-object" model skirts around the issue of aggregation. It only works if we assume that the data comes to us pre-aggregated, such that, for example, barplots and histograms are direct representations of their marginal tables. However, if we do admit that aggregation is not a completely independent process and is instead a part of the data visualization pipeline [@chi2000; @wickham2016], then we have a problem. 
+However, this "one-row-one-object" model skirts around the issue of aggregation (see also Section \@ref(aggregation)). It only works if we assume that the data comes to us pre-aggregated, such that, for example, when we draw a barplot or a histogram, we start with a table that has one row per bar. But few visualization systems work like this. Instead, most provide aggregation functions as explicit parts of the data visualization pipeline [see e.g. @chi2000; @wickham2016; @satyanarayan2015; @satyanarayan2016]. If we admit that aggregation is not a completely independent process, but instead an integral part of our graphics, then we have a problem.
 
-Aggregation is, by definition, is not injective: once we aggregate multiple data points into a summary or a set of summaries, we cannot recover the original cases [see also @wu2024]. However, many popular plots such as barplots and histograms rely on aggregation. Under the model proposed by @dastani2002, @ziemkiewicz2009, and @vickers2012, these types of plots would be impermissible. @ziemkiewicz2009 do acknowledge that this is a problem, and admit that, at times, aggregation can be an acceptable trade-off, despite the inherent information loss.
+Aggregation is, by definition, is not injective: once we aggregate multiple data points into a summary or a set of summaries, we cannot recover the original cases [see also @wu2024]. Thus, under the model proposed by authors such as @dastani2002, @ziemkiewicz2009, and @vickers2012 would discard many common types of plots that rely on aggregation, such as barplots and histograms. @ziemkiewicz2009 do acknowledge that this is a problem, and admit that, at times, aggregation can be an acceptable trade-off, despite the inherent information loss.
 
-However, I propose the following solution. Instead of modeling plots as bijections between *cases* and the geometric objects, I model them as bijections between *parts of data* and the geometric objects. In other words, the domain of the bijection are not individual rows of the original data table, but instead entire "slices" of rows. With this approach, aggregation can be considered as part of the bijection. For example, if we split our data into ten tables and aggregate each table, we are still left with ten tables of one row each that we can map bijectively to geometric objects.
+I propose the following solution to the conundrum: instead of modeling plots as bijections between *cases* and the geometric objects, we can model them as bijections between *parts of data* and the geometric objects. In other words, the domain of the bijection are not individual rows of the original data table, but instead entire "slices" of rows. With this approach, aggregation can be considered as part of the bijection. For instance, if we split our data into ten tables and aggregate each table, we are still left with ten tables of one row each that we can map bijectively to geometric objects.
 
 Finally, Wilkinson [-@wilkinson2012, pp 210] and @keim2002 have linked stacked plots to (hierarchical) partitions.
 
@@ -211,7 +219,9 @@ render_tables <- function(x) {
 render_table(df, row.names = TRUE)
 ```
 
-To draw the individual bar segments, we need to sum `value` across the subsets cases corresponding to each segment. To do this, we first need to split our data into multiple subsets according to the product of `group` and `selection` variables. In R, the general data structure for representing partitions is the `factor` S3 class, and, while there is no built-in function for combining two factors, we can simulate it using `paste` function to combine factor levels as strings element-wise:
+To draw the individual bar segments, we need to sum `value` across the subsets cases corresponding to each segment. To do this, we first need to split our data into multiple subsets according to the product of `group` and `selection` variables, forming a partition. 
+
+In R, the general data structure for representing partitions is the `factor` S3 class. In a `factor`, all elements of a vector are assigned a label, such that each label represent one disjoint part of the data. Unfortunately, there is no built-in function for creating a Cartesian product of two factors. However, we can easily emulate it using `paste` function to combine factor levels as strings element-wise:
 
 ```{r}
 #| results: "asis"
@@ -231,7 +241,7 @@ summarized_dfs <- lapply(split_dfs, function(x) {
 render_tables(summarized_dfs)
 ```
 
-Finally, to "stack" the segments on top of each other, we need to combine the summaries back together, within the levels of `group` variable, and take their cumulative sum:
+Finally, to "stack" the segments on top of each other, we need to combine the summaries back together, within the levels of `group` variable. We can do this by grouping the data sets by the `group` variable and taking their cumulative sum:
 
 ```{r}
 #| results: "asis"
@@ -239,7 +249,7 @@ grouped_dfs <- split(summarized_dfs, sapply(summarized_dfs, function(x) x$group)
 stacked_dfs <- lapply(grouped_dfs, function(x) {
   x <- do.call(rbind, x)
   x$value <- cumsum(x$value)
-  rownames(x) <- NULL
+  rownames(x) <- NULL # Remove rownames for nicer formatting
   x
 })
 
@@ -251,18 +261,17 @@ Now, we can combine these tables into one `data.frame` and render:
 ```{r}
 #| eval: false
 combined_df <- do.call(rbind, stacked_dfs)
+# Need to reverse factor and row order for ggplot2 to layer segments correctly
 combined_df$selection <- factor(combined_df$selection, levels = c(2, 1))
-# Need to reverse row order for ggplot2 to layer segments in the correct order
 combined_df <- combined_df[6:1, ] 
 
 ggplot(combined_df, aes(x = group, y = value, fill = selection)) +
-  geom_col(position = position_identity(), col = "white")
+  geom_col(position = position_identity())
 ```
 
 ```{r}
 #| echo: false
 #| message: false
-
 knitr::include_graphics("./figures/barplot-partitions-products.png")
 ```
 
@@ -271,10 +280,10 @@ What we have just shown is an example of a simple split-apply-combine pipeline [
 ```{r}
 #| eval: false
 ggplot(data, aes(x, y, fill = fill)) +
-  geom_bar()
+  geom_bar(stat = "summary", fun = "sum")
 ```
 
-To be more explicit, in the `ggplot2` call above, we specify that we want to partition the data set by the Cartesian product of the `x`, `y`, and `fill` variables. We then compute whatever statistical aggregations we need on the resulting subsets. See the following comment from the [`ggplot2` documentation](https://github.com/tidyverse/ggplot2/blob/f46805349d6ca8ca7a99f8966cfa0f29279c2f6c/R/grouping.R#L7) [@wickham2016]:
+To be more explicit, in the `ggplot2` call above, we specify that we want to partition the data set by the Cartesian product of the `x`, `y`, and `fill` variables. See the following comment from the [`ggplot2` documentation](https://github.com/tidyverse/ggplot2/blob/f46805349d6ca8ca7a99f8966cfa0f29279c2f6c/R/grouping.R#L7) [@wickham2016]:
 
 ```{r}
 # If the `group` variable is not present, then a new group
@@ -282,13 +291,15 @@ To be more explicit, in the `ggplot2` call above, we specify that we want to par
 # character) vectors, excluding `label`.
 ```
 
+We then compute whatever summary we want (`sum`). Finally, when a `fill` or `col` aesthetic is used with `geom_bar`, `ggplot2` also automatically stack the bars on top of each other by summing their heights. Similar strategy is employed for many other types of stacked plots, including pie charts, histograms, or density plots [@wickham2016]. 
+
 #### Limits of simple product partitions
 
-For many types of plots, the simple strategy of taking a single "flat" product of all factors/partitions works reasonably well. However, for other types of plots, this simple model is not enough. 
+For many types of plots, the simple strategy of taking a single "flat" product of all factors/partitions works reasonably well. However, for other plot types, this simple model is not enough. Specifically, certain types of plots exhibit hierarchical relationships which the flat product model does not cover. 
 
 To give a concrete example, let's turn back to the barplot from the section above (\@ref(plots-as-partitions)). To draw the barplot, we first split our data into smaller tables, summarized each table by summing up the values, stacked the summaries by taking their cumulative sum, and finally used the resulting data frame to render bar segments. This gave us a stacked barplot, which is a good visualization for comparing absolute counts across categories. 
 
-However, what if, instead of comparing absolute counts, we wanted to compare proportions? It turns out there is another type of visualization, called the spineplot, which can be used to represent the same underlying data as the barplot, however, is much more useful for comparing proportions: 
+However, what if, instead of comparing absolute counts, we wanted to compare proportions? It turns out there is another type of visualization, called the spineplot, which can be used to represent the same underlying data as a barplot, however, is much better suited for comparing proportions: 
 
 ```{r barplot-spineplot}
 #| echo: false
@@ -299,24 +310,16 @@ knitr::include_graphics("./figures/barplot-spineplot.png")
 
 Like barplots, spineplots represent some summary statistic (usually counts), aggregated within the levels of the product of two categorical variables. However, unlike barplots, spineplots map the underlying statistics to both the y-axis position and width. Furthermore, the y-axis position is normalized, such that the heights of the different segments within the same category add up to one. This normalization makes it possible to compare the relative frequencies within categories directly (notice how the right panel in Figure \@ref(fig:barplot-spineplot) makes it obvious that the proportion of red cases within the B and C categories is the same). Thus, like barplot, the spineplot is a valuable tool for visualizing categorical data, especially when we can use interactive features to switch from one type of representation to the other. 
 
-However, despite the fact that barplot and spineplot represent the same underlying data, turning one into the other is not always trivial. Specifically, while many grammar-based visualization systems offer a simple declarative syntax for defining barplots, they lack such simple syntax for spineplots. For example, in `ggplot2`, there is currently no way to define a spineplot without first having to reshape the data, and creating the plot right panel in Figure \@ref(fig:barplot-spineplot) took over 10 lines of external code (using standard `dplyr` syntax).
+However, despite the fact that barplot and spineplot represent the same underlying data, turning one into the other is not always trivial. Specifically, while many grammar-based visualization systems offer a simple declarative syntax for defining barplots, they lack such simple syntax for spineplots. For instance, in `ggplot2`, there is currently no way to define a spineplot without first having to reshape the data. Creating the plot in the right panel of Figure \@ref(fig:barplot-spineplot) took over 10 lines of non-trivial data-wrangling code (using standard `dplyr` syntax). The same applies to other "normalized" types of plots such as spinograms [see e.g. @theus2002].
 
 #### Partitions and hierarchy: The graph behind the graph
 
-```{r}
-#| echo: false
-#| fig-cap: "A joke image shared in the Mathematical Mathematics Memes Facebook group on the 28th of March, 2024 [@mathematicalmathematics2024]. I would like to make the case that charts (right) do in fact have a graph structure, in other words, graphs are graphs, not \"delusional cosplayers\"."
-#| out-extra: 'style="border:1px solid black;"'
-#| out-width: 75%
-knitr::include_graphics("./figures/graphs-cosplayers.jpg")
-```
-
-Why are spineplots so tricky? The reason is that they force us to confront the hierarchical nature of (interactive) graphics [@macdonal1990; @keller2024]. Specifically, while in a barplot, we can get away with a single flat partition of the data, in a spineplot, the data is summarized and transformed *along and across* different levels of aggregation [@wu2024]:
+Why are spineplots so tricky? The reason is that they force us to confront the hierarchical nature of (interactive) graphics [@mcdonald1990; @keller2024]. Specifically, while in a barplot, we can get away with a single flat partition of the data, in a spineplot, the data is summarized and stacked *along and across* different levels of aggregation [@wu2024]:
 
 - Along the x-axis, we stack the summaries *across the levels of the top-level factor/category*
-- Along the y-axis, we stack the summaries *across the levels of a product of two factors* and normalize them by the values *within the levels of the top-level factor*.   
+- Along the y-axis, we stack the summaries *across the levels of a product of two factors* and normalize them by the values *within the levels of the top-level factor*.
 
-So, when we want to render a spineplot based on two categorical variables with $j$ and $k$ levels, it is not enough to simply break our data into $j \cdot k$ tables. Instead, we need to partition our data in two steps: first, break the original data into $j$ tables based on the levels of the top level factor, and second, break the resulting sub-tables into $j \cdot k$ tables, based on the levels of the second factor. This automatically induces a hierarchical relation, such that the resulting data subsets form a tree, see Figure \@ref(fig:spineplot-tree):
+For example, assume we have a dataset with two categorical variables, with $j$ and $k$ levels respectively. If we want to render a spineplot based on these two variables, it is not enough to simply break our data into $j \cdot k$ tables. Instead, we need to partition our data on two levels: first, break the data into $j$ tables, and second, break the data into $j \cdot k$ tables. We also need to keep track of the which of the $j$ tables on the first level of partitioning each of the $j \cdot k$ smaller tables *relates to*. This automatically induces a hierarchical relationship, such that the resulting data subsets form a tree, see Figure \@ref(fig:spineplot-tree):
 
 ```{r spineplot-tree}
 #| echo: false
@@ -326,15 +329,27 @@ knitr::include_graphics("./figures/spineplot-tree.png")
 
 In the diagram above, each vertical level represents on partition of the data, and the relationship between parts is designated by arrows, such that a node where multiple arrows meet represents a union of the corresponding subsets. 
 
-This same tree can be used to represent both the barplot and the spineplot. For a barplot, it is not strictly necessary, since we can get by with only the lowest level of the partitioning (segments), provided we skirt around some issues such as stacking order. However, for a spineplot, the hierarchical structure is absolutely essential, since we need to apply transformations *across* the levels of the hierarchy. Specifically, we need to normalize (divide) the statistics corresponding to each segment by the values within the parent bar. This is only possible if the segment has some sort of reference to the parent statistic.
+This same tree can be used to represent both the barplot and the spineplot. For a barplot, this tree structure is not strictly necessary, since we can get by with only the lowest level of the partitioning (segments), provided we hand-wave away some issues such as ensuring a correct stacking order. However, for a spineplot, the hierarchical structure is absolutely essential. In a spineplot, we need to apply transformations *across* the levels of the hierarchy: we need to normalize (divide) the statistics corresponding to each segment by the values within the parent bar. This is only possible if the data corresponding to each segment can refer to the data corresponding to the parent bar.
 
-Clearly then, modeling plots as a single flat partition does not provide enough generality, and we should instead conceptualize them as a hierarchy of partitions. Therefore, we should refine our definition of a regular plot:
+Clearly then, modeling plots as a single flat partition does not provide enough generality, and having some way to encode a hierarchy (graph) of partitions is necessary. Therefore, we should refine our definition of a regular plot:
 
 :::{.definition name="Regular plot 2"}
 Regular plot is a plot where the geometric objects within one layer represent *a hierarchy of partitions* of the data, such that there is a bijection between these objects and (possibly aggregated) subsets of the original data.   
 :::
 
-However, now we face another issue: when we organize our data into a hierarchy of subsets, we impose structure on our data. Clearly, the subsequent steps of the data visualization pipeline should respect this structure. For example, if we have barplot bars that have been divided into segments, it would not make sense to stack some segments on top of each other and plot others side-by-side. However, the question of what it means to "respect the structure" of the data is more complicated than it may seem. It will be explored in the following section, which deals with the next step of the data visualization pipeline: aggregation.   
+In other words, *graphs are graphs*. As a bit of a whimsical side-note, this view is not shared by everyone. Particularly, the poster of the following meme shared on the Mathematical Mathematics Memes Facebook group [@mathematicalmathematics2024] might not agree:
+
+```{r meme}
+#| echo: false
+#| fig-cap: "A joke image shared in the Mathematical Mathematics Memes Facebook group on the 28th of March, 2024 [@mathematicalmathematics2024]."
+#| out-extra: 'style="border:1px solid black;"'
+#| out-width: 75%
+knitr::include_graphics("./figures/graphs-cosplayers.jpg")
+```
+
+I hope that in the preceding sections, I have made a reasonably strong case that graphs actually are graphs, not "delusional cosplayers".
+
+However, now we face another issue: when we organize our data into a hierarchy, we impose a kind of a structure. Clearly, the subsequent steps of the data visualization pipeline should respect this structure. For example, suppose we have a barplot where bars that have been divided into segments. Clearly, it would not make sense to stack some segments on top of each other and plot others side-by-side. However, what does it actually mean to "respect the structure" of our data? This question will be explored in the following section, which deals with the next step of the data visualization pipeline: aggregation.   
 
 @keim2002 stacked plots are suited for hierarchically-partitioned data. 
 
@@ -358,7 +373,7 @@ However, despite all its advantages, the grammar-based model also suffers from o
 
 ##### Stacking: not (only) about graphics
 
-For this example, I will use now-famous data set from a study on the effect of smoking on child lung capacity [@tager1979; @kahn2005]. In the study, the researchers measured children's forced expiratory volume (FEV), and recorded it alongside age, height, sex, and smoking status.
+For this example, I will use famous data set from a study on the effect of smoking on child lung capacity [@tager1979; @kahn2005]. In the study, the researchers measured children's forced expiratory volume (FEV), and recorded it alongside age, height, sex, and smoking status.
 
 A rather surprising feature of this data set is that, at a glance, the children who smoked actually had greater lung volume than non-smokers. In `ggplot2`, we can easily create a boxplot showing the relationship between smoking status and FEV using the following short code snippet:
 
@@ -463,7 +478,7 @@ But before we go on to discuss what makes certain statistics stackable, we need 
 knitr::include_graphics("./figures/grammar-dodging-layering.png") 
 ```
 
-However, I argue that, in the context of interactive visualization, stacking has certain advantages that dodging and layering do not [see @roberts2000; @wilhelm2008]. Specifically, the fundamental strength of stacking is that parts of the objects "add up" to the whole. As a result, the whole object provides a kind of a bound on the highlighted subsets, greatly simplifying certain interactive behaviors.
+However, I argue that, in the context of interactive visualization, stacking presents certain advantages over dodging and layering [see also @roberts2000; @wilhelm2008]. Specifically, the fundamental strength of stacking is that parts of the objects "add up" to the whole. As a result, the whole object provides a kind of a bound on the highlighted subsets, greatly simplifying certain interactive behaviors.
 
 For instance, in a stacked barplot, the heights of the individual segments add up to the height of the whole bars. This is useful when combined with linked selection, since, even when the heights of the highlighted segments change, the heights of the whole bars remain the same. As a result, we can keep the upper y-axis limit fixed. The same is not true for dodging and layering. Here, the heights of the bars are not necessarily bound by any value. For instance, in a dodged barplot the heights of the highlighted segments may become greater than those of the unselected segments. This means that we either have to make the upper y-axis limits reactive in response to selection, losing the context that the limit provides, or risk the bars "overflowing" beyond the bounds of the plot.  
 

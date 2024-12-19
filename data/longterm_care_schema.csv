@@ -6,7 +6,8 @@ sex,pohlavi,Classification of patients’ sex
 diagnosis,zakladni_diagnoza,The primary diagnosis of the psychiatric disorder based on the ICD-10 classification
 reason_for_termination,ukonceni,The reason for termination of care
 age_category,vekova_kategorie,Classification of patients’ age category
+stay_category,kategorie_delky_hospitalizace,"Classification of hospitalization based on length: short-term (< 3 months), medium-term (3-6 months), and long-term (6+ months) "
 field,obor,The field of psychiatric care
 care_category,kategorie_pece,Classification of care: child or adult
-hospitalizations,pocet_hospitalizaci,The total number of hospitalizations in a given subgroup of patients
-days,delka_hospitlizace,"The total time spent in care, in days. Specifically, the total number of days all patients in a given subgroup spent in care. "
+cases,pocet_hospitalizaci,The total number of cases/hospitalizations in the given subgroup of patients
+days,delka_hospitlizace,"The total time spent in care, in days (= sum of the number of days all patients in a given subgroup spent in care)"
