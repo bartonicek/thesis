@@ -5,18 +5,25 @@ editor_options:
 ---
 
 ```{r}
+#| echo: false
 # knitr::opts_chunk$set(eval = FALSE)
 ```
 
 # Applied example
 
-In this section, I will illustrate the use of `plotscaper`, showcasing the workflow and the various features of the package.
+> Please note that the data set used in this section is fairly large (~70,000 rows) and so the figures below might take some time to load.
 
-The Institute of Health Information and Statistics of the Czech Republic (IHIS, ÚZIS in Czech) is a government agency established by the Czech Ministry of Health. Its primary roles is to collect, process, and report on medical data within the country of Czechia [@uzis2024]. Of interest, the institute provides high-quality, open-access medical data, including information about the use and manufacture of medicines, summaries of fiscal and employment records in medical facilities, and various epidemiological datasets.
+This section demonstrates the workflow and features of `plotscaper` using a large real-world dataset focused on a pressing global issue: mental health.
 
-### The data set
+Mental health is a global concern. In developed nations, mental health disorders are primary contributor to years lived with disability, significantly impacting both the well-being of individuals and the economic productivity of entire countries [@who2022]. This issue, however, extends beyond developed nations. The global burden of mental health disorders has been steadily rising over the recent decades, a trend which is particularly concerning in low-income countries where access to mental health services is even more limited [@patel2018].
 
-The data set [@soukupova2023] contains longitudinal information about long-term psychiatric care in Czechia. More specifically, it contains aggregated data on individuals released from psychiatric care facilities between 2010 and 2022. It includes information such the region of the treatment facility, the sex of the patients, age category, diagnosis based on the international ICD-10 classification [@icd2024a; @icd2024b], the number of hospitalizations, and the total number of days spent in care by the given subset of patients. 
+Having had personal experience with friends and relatives impacted by mental health issues, as well as having majored in psychology during my undergraduate studies, I have had a long-standing interest in the topic. It is clear to me that mental health is a key challenge that the world is facing today, and the first step towards solving it will require clearly identifying key trends and patterns. For this reason, I chose to dedicate this section to an exploration of a large longitudinal mental health data set.  
+
+### About the data set
+
+The Institute of Health Information and Statistics of the Czech Republic (IHIS, ÚZIS in Czech) is a government agency established by the Czech Ministry of Health. Its primary roles is to collect, process, and report on medical data within the country of Czechia [@uzis2024]. Of interest, the institute provides high-quality, open-access medical data, including information about the use and manufacture of medicines, summaries of fiscal and employment records in medical facilities, and various epidemiological data sets.
+
+The Long-term care data set [@soukupova2023] contains longitudinal information about long-term psychiatric care in Czechia. More specifically, it contains aggregated data on individuals released from psychiatric care facilities between 2010 and 2022. It includes information such the region of the treatment facility, the sex of the patients, age category, diagnosis based on the international ICD-10 classification [@icd2024a; @icd2024b], the number of hospitalizations, and the total number of days spent in care by the given subset of patients. 
 
 Here's the data set at a quick glance:
 
@@ -25,7 +32,7 @@ df <- read.csv("./data/longterm_care.csv")
 dplyr::glimpse(df)
 ```
 
-The data set contains over 68,000 rows, totalling over 410,000 hospitalizations. Each row records the number patients with a particular set of of characteristics released from a treatment facility during a given year, and the number of days the patients spent in treatment in total.
+The data contains over 68,000 rows, totaling over 410,000 hospitalizations. Each row records the number patients with a particular set of of characteristics released from a treatment facility during a given year, and the number of days the patients spent in treatment in total.
 
 The original dataset used Czech column names and category labels. To make the analysis more easily accessible to non-Czech speakers, I took the liberty of translating most of these to English (excluding the `region` variable). The translation script is available in the [thesis repository](https://github.com/bartonicek/thesis), at the following path: `./data/longterm_care_translate.R`. Additionally, the [data set website](https://www.nzip.cz/data/2060-dlouhodoba-psychiatricka-pece) contains a JSON schema with a text description of each of the variables [@soukupova2023]. I took the liberty of translating these descriptions as well, and provide them below, in table Table \@ref(tab:longterm-care-schema):
 
@@ -39,18 +46,20 @@ knitr::kable(schema,
 
 ### Interactive exploration
 
-Now it is time to start exploring the data using `plotscaper`.
+Let's jump into exploring the data.
 
-The first to note about the data set is that the data has been aggregated, such that each row represents the combined number of releases within a given subset of patients. For example, the first row records that, in the year 2019, there were 13 females aged 40-49 who were released from treatment facilities in Olomoucký kraj, after having been in short-term care with F10 ICD-10 diagnosis [mental and behavioural disorders due to use of alcohol, @icd2024a] for a sum total of 196 days:
+#### The relationship between cases and days
+
+The first to note about the data set is that the data has been aggregated, such that each row represents the combined number of releases within a given subset of patients. For example, the first row indicates that, in the year 2019, 13 women aged 40-49 were released from treatment facilities in Olomoucký kraj (region), after receiving short-term care for F10 ICD-10 diagnosis [mental and behavioural disorders due to alcohol use, @icd2024a] for a sum total of 196 days:
 
 ```{r}
 df[1, ]
 ```
 
-Thus, the two primary continuous variables in the data are `cases` (the number of patients in a given subgroup released from care) and `days` (the number of days the given subgroup of patients spent in care). Intuitively, we should expect a fairly linear relationship between these variables, such that a larger group of patients should spend a greater number of days in care, in total. We can use `plotscaper` to visualize this relationship via a scatterplot:
+Thus, the two primary continuous variables of interest are `cases` (the number of patients in a given subgroup released from care) and `days` (the total number of days the given subgroup of patients spent in care). Intuitively, we should expect a fairly linear relationship between these variables, such that a larger group of patients should spend a greater number of days in care, in total. We can use `plotscaper` to visualize this relationship via a scatterplot:
 
 ```{r}
-#| fig-cap: "Relationship between the number of patients in a given subgroup and the total number of days they spent in care"
+#| fig-cap: "Relationship between the number of cases in a given patient subgroup and the total number of days they spent in care."
 library(plotscaper) # Load in the package
 
 create_schema(df) |> # Create a schema that can be modified declaratively
@@ -58,21 +67,22 @@ create_schema(df) |> # Create a schema that can be modified declaratively
   render() # Render the figure
 ```
 
-Interestingly, there seems to be a leaf-shaped pattern in the data, with three distinct "leaflets", each suggesting a linear relationship. If we look at the data, we can see that the `stay_category` variable has three levels, corresponding to short-term (< 3 months), medium-term (3-6 months), and long-term (6+ months) care. If we mark the cases corresponding to the three categories in different colors, we can see that these indeed correspond to the three leaflets:
+Interestingly, the data does not exhibit a simple linear relationship. Instead, there seems to be a leaf-shaped pattern, with three distinct, roughly linear "leaflets", suggesting a pooling effect. Closer inspection of the data reveals that the `stay_category` variable has three levels, corresponding to short-term (< 3 months), medium-term (3-6 months), and long-term (6+ months) care. Color-coding the cases by these categories indeed confirms that these correspond to the three observed leaflets:
 
 ```{r}
+#| fig-cap: "The data exhibits a pooling effect: while patient groups within each care duration category (short-term, medium-term, and long-term) individually show a linear relationship, this does not hold when the groups are considered together."
 df |>
   create_schema() |>
   add_scatterplot(c("cases", "days")) |>
-  add_barplot(c("stay_category", "cases")) |>
-  assign_cases(which(df$stay_category == "short-term"), 1) |>
-  assign_cases(which(df$stay_category == "long-term"), 2) |>
+  add_barplot(c("stay_category", "cases")) |> # y-axis isn't just count but weighted by cases
+  assign_cases(which(df$stay_category == "short-term"), 1) |> # Mark short-term cases green
+  assign_cases(which(df$stay_category == "long-term"), 2) |> # Mark long-term cases red
   render()
 ```
 
-Feel free to click on the bars in the barplot to make sure that there is fairly little overplotting between the points in the three layers. 
+Try clicking on the bars in the barplot to confirm there is a fairly minimal overlap between the data points in the three categories.
 
-However, this does not really explain the absence of points between the different leaflets - if the distribution of cases and days within each of the three `stay_category` levels were uniform, we should expect to see more points in the gaps between the leaflets. This suggests that there may be a kind of a selection process at play, where patients are less likely to be released after at intervals which are close to the category boundaries. We can see this more easily if we plot the average number of days a group of patients spent in care:
+However, the pooling effect does not fully explain the absence of points between the three leaflets. If the distribution of cases and days within each of the three `stay_category` levels were uniform, we should expect to see more points within the gaps. This suggests a potential selection process, where patients are less likely to be discharged at durations near the category boundaries. We can confirm this by plotting the average number of days a group of patients spent in care:
 
 ```{r}
 
@@ -88,9 +98,45 @@ df |>
   render()
 ```
 
-Now we can see the gaps between the three different distributions along the y-axis. By pressing the `Q` key and hovering over the points near these gaps, we can see that there are only few patient groups where the average patients spends between 60-90 or 150-210 days in care (corresponding to gaps at 2-3 months and 5-7 months). This suggests that, perhaps, if a patient spends 2 months in care, the healthcare providers are more likely to keep them in care longer by transfer them to medium-term care, and likewise, if a patients spends 5 months in care, they are more likely to be transferred to long-term care (or, alternatively, the patients may be released early).    
+Now we can clearly see the gaps between the three different distributions along the y-axis.
+
+Try querying the points near the gaps by pressing the `Q` key and hovering over them. You will observe that these gaps roughly span the 60-90 day and 150-210 day ranges, corresponding to 2-3 months and 5-7 months, respectively. This is a strong indication of a selection process is at work. Specifically, it seems that patients staying for more than two months are likely to be transitioned to medium-term care and kept around for longer, while those staying for more than five months are similarly likely to be moved to long-term care. There are likely mundane administrative or health-care provider reasons for this, however, it is still an interesting pattern. 
+
+#### Number of cases over time
+
+An important question to answer is how has the number of patients and the number of days they spent in care changed over time. We can investigate this by plotting the same scatterplot as we did in the section above, as well as two barplots showing the total number of cases and days within each year. We can also include a histogram of the number of days, for good measure:
 
 ```{r}
+
+schema <- df |>
+  create_schema() |>
+  add_scatterplot(c("cases", "days")) |>
+  add_barplot(c("year", "cases")) |>
+  add_barplot(c("year", "days")) |>
+  add_histogram(c("days")) |>
+  set_parameters("histogram1", width = 20) # Set histogram binwidth to 20 days
+
+schema |> render()
+```
+
+From the barplots, we can immediately see an interesting pattern: while the numbers of cases seem to have declined over time, the number of days patients spend in care seem to seem to have stayed fairly constant. This suggest that while fewer patients are being hospitalized, they are spending longer time in care.
+
+We can indeed confirm this interactively. Try clicking on the bars corresponding to the year 2010 and 2022, in either of the two barplots (feel free to mark either of the bars in red or green by holding the `1` or `2` keys and clicking the bars). It is clearly visible that, compared with 2010, in 2022 there were more patients in long term care, and the relationship between the number of cases and the total number of days was steeper.
+
+While the declining number of cases over time might initially appear positive, the constant number days in treatment suggests a more concerning trend. Specifically, given that treatment facility placements are limited, the increasing number of patients staying in care for longer durations may be burdening the healthcare system, reducing its capacity to serve new patients.
+
+We can also scrutinize the trend more closely by zooming into the histogram:
+
+```{r}
+schema |> 
+  assign_cases(which(df$year == 2010), 1) |>
+  assign_cases(which(df$year == 2022), 2) |>
+  zoom("histogram1", c(-100, 0, 1500, 2000), units = "data") |>
+  render()
+```
+
+```{r}
+#| echo: false
 knitr::opts_chunk$set(eval = TRUE)
 ```
 

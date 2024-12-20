@@ -55,6 +55,10 @@
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 <link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
 <script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
+<link href="libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="libs/plotscape-0.0.0/main.iife.js"></script>
+<script src="libs/plotscaper-binding-0.2.4/plotscaper.js"></script>
 
 
 <style type="text/css">
@@ -243,7 +247,7 @@ div.csl-indent {
 </ul></li>
 <li class="chapter" data-level="7" data-path="applied-example.html"><a href="applied-example.html"><i class="fa fa-check"></i><b>7</b> Applied example</a>
 <ul>
-<li class="chapter" data-level="7.0.1" data-path="applied-example.html"><a href="applied-example.html#the-data-set"><i class="fa fa-check"></i><b>7.0.1</b> The data set</a></li>
+<li class="chapter" data-level="7.0.1" data-path="applied-example.html"><a href="applied-example.html#about-the-data-set"><i class="fa fa-check"></i><b>7.0.1</b> About the data set</a></li>
 <li class="chapter" data-level="7.0.2" data-path="applied-example.html"><a href="applied-example.html#interactive-exploration"><i class="fa fa-check"></i><b>7.0.2</b> Interactive exploration</a></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>8</b> Discussion</a></li>
@@ -304,21 +308,21 @@ div.csl-indent {
 <p>A common recommendation that many data visualization experts provide is that faithful visual representations should show the full data and leave nothing out. The moral behind this recommendation seem fairly obvious. Visualizations which hide or obscure information, be it by negligence or by intent, cannot be considered truthful representations of the underlying data <span class="citation">(<a href="#ref-cairo2016">Cairo 2016</a>, <a href="#ref-cairo2019">2019</a>)</span>.</p>
 <p>However, data hiding can occur in many different ways. First, the data itself can be cherry-picked or massaged <span class="citation">(see e.g. <a href="#ref-lisnic2024">Lisnic et al. 2024</a>)</span>. This is arguably the most egregious case, and can in some cases amount to malicious statistical practices such as HARKing or p-hacking <span class="citation">(see e.g. <a href="#ref-kerr1998">Kerr 1998</a>; <a href="#ref-lisnic2024">Lisnic et al. 2024</a>; <a href="#ref-head2015">Head et al. 2015</a>)</span>. Second, even when showing the full data, some visualizations can obscure or downplay certain data features via poor design or incorrect use of visual encodings <span class="citation">(<a href="#ref-cairo2016">Cairo 2016</a>, <a href="#ref-cairo2019">2019</a>; <a href="#ref-cleveland1985">Cleveland 1985</a>; <a href="#ref-ziemkiewicz2009">Ziemkiewicz and Kosara 2009</a>)</span>. Finally, there is the issue of missing or incomplete data, where some data cannot be easily represented because it is simply not there.</p>
 <p>An infamous example of data hiding leading to disastrous real-world consequences was the 1986 crash of the Space Shuttle Challenger <span class="citation">(see <a href="#ref-dalal1989">Dalal, Fowlkes, and Hoadley 1989</a>)</span>. During a pre-launch teleconference, engineers debated the effect of temperature on the performance of O-ring gaskets, as the forecasted temperature for the launch date was 31 degrees Fahrenheit, significantly lower than during previous launches. Plot in the left panel of Figure <a href="problem-set.html#fig:challenger">4.1</a> was used to argue that there was no correlation between temperature and O-ring failures. However, this plot had one significant flaw: it excluded launches where no failures occurred. After the disaster, when the data including the zero-failure launches was plotted, it revealed a clear increasing trend of failures at lower temperatures <span class="citation">(see right panel of Figure <a href="problem-set.html#fig:challenger">4.1</a>, see also <a href="#ref-dalal1989">Dalal, Fowlkes, and Hoadley 1989</a>)</span>.</p>
-<div class="figure"><span style="display:block;" id="fig:challenger"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:challenger"></span>
 <img src="figures/challenger.png" alt="Relationship between temperature and the number of O-ring failures within the 1986 Challenger data. Left: the original plot as presented during the pre-launch teleconference. Right: a reproduced plot of the same data, including the original data points (black), the excluded data points with zero failures (grey), and an estimated logistic regression fit (red). The source of right-panel data is @dalal1989." width="750" />
 <p class="caption">
 Figure 4.1: Relationship between temperature and the number of O-ring failures within the 1986 Challenger data. Left: the original plot as presented during the pre-launch teleconference. Right: a reproduced plot of the same data, including the original data points (black), the excluded data points with zero failures (grey), and an estimated logistic regression fit (red). The source of right-panel data is <span class="citation">Dalal, Fowlkes, and Hoadley (<a href="#ref-dalal1989">1989</a>)</span>.
 </p>
 </div>
 <p>However, data hiding can also occur in more subtle ways. Consider axis limits. <span class="citation">Cleveland (<a href="#ref-cleveland1985">1985</a>)</span> argues that axis limits should generally be expanded to avoid inadvertently obscuring data near these limits <span class="citation">(see also e.g. <a href="#ref-chen2008">Chen, Härdle, and Unwin 2008, 64</a>)</span>. Take the following two scatterplots:</p>
-<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-1"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-9"></span>
 <img src="figures/expand-scatterplot.png" alt="Without expanding axis limits, objects at or near the limits become less salient. Left: axis limits match the data limits exactly, and so the points in the top-left and bottom-right corner of the plot are represented by smaller area and the overall trend is distorted. Right: by expanding axis limits, we can ensure that trend is represented faithfully." width="750" />
 <p class="caption">
 Figure 4.2: Without expanding axis limits, objects at or near the limits become less salient. Left: axis limits match the data limits exactly, and so the points in the top-left and bottom-right corner of the plot are represented by smaller area and the overall trend is distorted. Right: by expanding axis limits, we can ensure that trend is represented faithfully.
 </p>
 </div>
 <p>In the left scatterplot, the axis limits match the data limits exactly, whereas in the right plot, they are expanded by a small fraction <span class="citation">(5%, <code>ggplot2</code> default, <a href="#ref-wickham2016">Wickham 2016</a>)</span>. The left scatterplot provides a misleading representation of the underlying trend, as data points near the axis limits (top-left and bottom-right corners) are represented by a smaller area, compared to points near the centre of the plot. For instance, the point in the bottom-right corner of the plot lies simultaneously at the limits of the x- and y-axis, and is thus represented by one-quarter of the area of the points in the center.</p>
-<p>Clearly then, we need to be mindful of the first two reasons for data hiding: direct omission and incorrect use of design. Unless there is a clear and justifiable reason, no data should be arbitrarily removed or discarded, and we should take care to provide good representations such that all data is represented faithfully. The issue of missing or incomplete data is a bit more complicated, however. While techniques of visualizing data with missing values do exist <span class="citation">(see e.g. <a href="#ref-unwin1996">Unwin et al. 1996</a>; <a href="#ref-tierney2023">Tierney and Cook 2023</a>)</span>, they are often tied to specific visualization types and styles. Nevertheless, in the ideal case, the visualization should present a clear and unambiguous mapping between the graphics and the data <span class="citation">(<a href="#ref-ziemkiewicz2009">Ziemkiewicz and Kosara 2009</a>)</span>.</p>
+<p>Clearly then, we need to be mindful of the first two reasons for data hiding: direct omission and incorrect use of design. Unless there is a clear and justifiable reason, no data should be arbitrarily removed or discarded, and we should take care to provide good representations such that all data is represented faithfully. The issue of missing or incomplete data is a bit more complicated, however. While techniques of visualizing data with missing values do exist <span class="citation">(see e.g. <a href="#ref-unwin1996">Unwin et al. 1996</a>; <a href="#ref-tierney2023">N. Tierney and Cook 2023</a>)</span>, they are often tied to specific visualization types and styles. Nevertheless, in the ideal case, the visualization should present a clear and unambiguous mapping between the graphics and the data <span class="citation">(<a href="#ref-ziemkiewicz2009">Ziemkiewicz and Kosara 2009</a>)</span>.</p>
 </div>
 <div id="disjointness-and-comparison" class="section level3 hasAnchor" number="4.2.2">
 <h3><span class="header-section-number">4.2.2</span> Disjointness and comparison<a href="problem-set.html#disjointness-and-comparison" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -333,7 +337,7 @@ Figure 4.2: Without expanding axis limits, objects at or near the limits become 
 <p>So where does this unconscious “law” of showing disjoint parts of the data come from? I believe that it is rooted in the fundamental purpose of data visualization: comparison <span class="citation">(<a href="#ref-tufte2001">Tufte 2001</a>; <a href="#ref-tukey1993">Tukey 1993</a>)</span>. When we visualize, we draw our graphics with the ultimate goal of comparing our data along a set of visual channels <span class="citation">(<a href="#ref-bertin1983">Bertin 1983</a>; <a href="#ref-wilkinson2012">Wilkinson 2012</a>; <a href="#ref-franconeri2021">Franconeri et al. 2021</a>; <a href="#ref-wilke2019">Wilke 2019</a>)</span>. This mirrors the comparisons we make in the real world, where we compare properties of physical objects. And, as I would like to argue, it is often far easier to reason about multiple objects when they are independent or disjoint. In statistics, we see a example of this in the sum and product rules of probability, which require independence as pre-requisite <span class="citation">(<a href="#ref-kolmogorov2018">Kolmogorov and Bharucha-Reid 2018</a>)</span>. Likewise, in psychology, is now-all-too-famous experimental evidence that people struggle with comparing non-disjoint events <span class="citation">(the “Linda experiment,” <a href="#ref-tversky1983">Tversky and Kahneman 1983</a>)</span>. Thus, disjointness presents a more intuitive, “natural” model.</p>
 <p>Even more fundamentally, the intuitive appeal of disjoint parts may originate in the fact that they reflect a structure which mathematicians have long considered natural: a <a href="mathematical-theory.html#functions">bijection</a> <span class="citation">(see e.g. <a href="#ref-fong2019">Fong and Spivak 2019</a>; <a href="#ref-lawvere2009">Lawvere and Schanuel 2009</a>)</span>. Specifically, if we take a set, split it into disjoint subsets, and label each subset, then there is a one-to-one correspondence between these subsets and the subset labels (i.e. the parts form an <a href="#partition">equivalence class</a>). Practically, this means that we can go back and forth between the subsets and the corresponding labels, without losing any information.</p>
 <p>A diagram of this natural correspondence between objects and data subsets is shown in Figure <a href="problem-set.html#fig:geoms-bijection">4.3</a>. Specifically, when drawing a barplot, if we divide our data into disjoint subsets and draw one bar corresponding to each part, then the function mapping the objects (bars) to the data subsets is invertible: we can pick a bar, identify the corresponding cases, and then use those cases to pick out the original bar. In plots where the objects do not represent disjoint subsets of the data, this correspondence is broken: if we select cases corresponding to a single bar, there may be no simple way of identifying the original bar from the cases alone.</p>
-<div class="figure"><span style="display:block;" id="fig:geoms-bijection"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:geoms-bijection"></span>
 <img src="figures/geoms-bijection.png" alt="Disjointness induces a one-to-one mapping (bijection) between geometric objects and subsets of the data. Suppose we mark out the cases corresponding to the leftmost bar (red). Top row: when each geometric object (bar) represents unique subset of cases, we can easily go back and forth between the object and its underlying data subset (middle panel), and so the function which picks the cases corresponding to each object is invertible. Bottom row: if there is an overlap between the cases represented by each object, then there may be no way to identify the original object after we have picked out the corresponding cases." width="886" />
 <p class="caption">
 Figure 4.3: Disjointness induces a one-to-one mapping (bijection) between geometric objects and subsets of the data. Suppose we mark out the cases corresponding to the leftmost bar (red). Top row: when each geometric object (bar) represents unique subset of cases, we can easily go back and forth between the object and its underlying data subset (middle panel), and so the function which picks the cases corresponding to each object is invertible. Bottom row: if there is an overlap between the cases represented by each object, then there may be no way to identify the original object after we have picked out the corresponding cases.
@@ -342,14 +346,14 @@ Figure 4.3: Disjointness induces a one-to-one mapping (bijection) between geomet
 <div id="real-data-example" class="section level4 hasAnchor" number="4.2.2.1">
 <h4><span class="header-section-number">4.2.2.1</span> Real data example<a href="problem-set.html#real-data-example" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>To illustrate the idea of disjoint parts on concrete, real-world data, take the following barplot representing the vote share among the top three parties in the 2023 New Zealand general election <span class="citation">(<a href="#ref-election2023">Electoral Commission New Zealand 2023</a>)</span>:</p>
-<div class="figure"><span style="display:block;" id="fig:barplot-bijection"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:barplot-bijection"></span>
 <img src="figures/barplot-bijection.png" alt="Barplot showing disjoint subsets of the data. The bars show the vote share among the top three parties in the 2023 New Zealand general election, with each bar representing a unique subset of voters." width="750" />
 <p class="caption">
 Figure 4.4: Barplot showing disjoint subsets of the data. The bars show the vote share among the top three parties in the 2023 New Zealand general election, with each bar representing a unique subset of voters.
 </p>
 </div>
 <p>Each bar represents a unique subset of voters and thus the bars show disjoint data. This is the type of data representation that we encounter most often, however, there are few explicit guidelines about this. Hypothetically, we could transform our data, and, for example, show the union of the votes of National and Labour parties in the leftmost bar:</p>
-<div class="figure"><span style="display:block;" id="fig:union-geoms"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:union-geoms"></span>
 <img src="figures/barplot-notbijection.png" alt="Barplot showing non-disjoint subsets of the data. Most of the bars show the same data as in Figure \@ref(fig:geoms-bijection), however, the leftmost bar representing a union of National and Labour voters. The two leftmost bars are thus not disjoint. For a more realistic example, see Figure \@ref(fig:union-geoms2)." width="750" />
 <p class="caption">
 Figure 4.5: Barplot showing non-disjoint subsets of the data. Most of the bars show the same data as in Figure <a href="problem-set.html#fig:geoms-bijection">4.3</a>, however, the leftmost bar representing a union of National and Labour voters. The two leftmost bars are thus not disjoint. For a more realistic example, see Figure <a href="problem-set.html#fig:union-geoms2">4.7</a>.
@@ -357,7 +361,7 @@ Figure 4.5: Barplot showing non-disjoint subsets of the data. Most of the bars s
 </div>
 <p>However, this way of representing the data has several problems. First, there is the issue of whether this type of representation addresses our visualization goals. For example, when visualizing election data such as the one above, we typically want to compare the relative number of votes each party received. The second barplot in Figure <a href="problem-set.html#fig:union-geoms">4.5</a> this comparison difficult. Specifically, since the leftmost bar represents the union of National and Labour votes, we have to perform additional mental calculation if we want to compare the number of votes received by National and Labour directly <span class="citation">(<a href="#ref-cleveland1985">Cleveland 1985</a>)</span>. Second, we have metadata knowledge <span class="citation">(see e.g. <a href="#ref-wilkinson2012">Wilkinson 2012</a>; <a href="#ref-velleman1993">Velleman and Wilkinson 1993</a>)</span> about the data being disjoint - we know that, in the New Zealand parliament electoral system, each voter can only vote for a single party. Finally, the plot above duplicates information: in Figure <a href="problem-set.html#fig:union-geoms">4.5</a>, the number of votes the National party received is counted twice, once in the leftmost bar and again in the second-from-left bar. This goes against the general principle of representing our data in the most parsimonious way <span class="citation">(<a href="#ref-tufte2001">Tufte 2001</a>)</span>.</p>
 <p>Even when our goal is not to compare absolute counts, there are usually better disjoint data visualization techniques available. For example, if we were interested in visualizing the proportion of votes that each party received, we could draw the following plot:</p>
-<div class="figure"><span style="display:block;" id="fig:stacked-proportion"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:stacked-proportion"></span>
 <img src="figures/barplot-bijection-proportions.png" alt="Even when proportions are of interest, there are usually disjoint data visualization techniques available. The plot shows proportion of vote share of the top three parties in the 2023 New Zealand general election, with each bar segment again representing a unique subset of voters." width="750" />
 <p class="caption">
 Figure 4.6: Even when proportions are of interest, there are usually disjoint data visualization techniques available. The plot shows proportion of vote share of the top three parties in the 2023 New Zealand general election, with each bar segment again representing a unique subset of voters.
@@ -366,7 +370,7 @@ Figure 4.6: Even when proportions are of interest, there are usually disjoint da
 <p>By stacking the bar segments on top of each other, we can easily compare proportion of the total number of votes while retaining a parsimonious representation of our data. Each bar segments now again represents a unique subset of voters.</p>
 <p>The example above is fairly clear-cut case of where disjoint data representation is the better choice. However, there are also more ambiguous situations, such as when multiple attributes of the data are simultaneously present or absent for each case. Take, for example, the 2020 New Zealand joint referendum on the legalization of euthanasia and cannabis. In this referendum, the two issues were included on the same ballot and voters would vote on them simultaneously. The legalization of euthanasia was accepted by the voters, with 65.1% of votes supporting the decision, whereas the legalization of cannabis was rejected, with 50.7% of voters rejecting the decision <span class="citation">(<a href="#ref-referendum2020">Electoral Commission New Zealand 2020</a>)</span>.</p>
 <p>We could visualize the referendum data in the following way:</p>
-<div class="figure"><span style="display:block;" id="fig:union-geoms2"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:union-geoms2"></span>
 <img src="figures/referendum-notbijection.png" alt="Barplot showing a more realistic example of non-disjoint data representation. The bars show the vote share cast by New Zealand voters in the joint 2020 referendum on euthanasia and cannabis. The two bars show (mostly) the same set of ballots, with each single ballot contributing to the height of one segment in each bar." width="750" />
 <p class="caption">
 Figure 4.7: Barplot showing a more realistic example of non-disjoint data representation. The bars show the vote share cast by New Zealand voters in the joint 2020 referendum on euthanasia and cannabis. The two bars show (mostly) the same set of ballots, with each single ballot contributing to the height of one segment in each bar.
@@ -375,7 +379,7 @@ Figure 4.7: Barplot showing a more realistic example of non-disjoint data repres
 <p>Here, both bars include votes which were cast by the same voter <span class="citation">(ignoring the votes where no preference was given for either issue, <a href="#ref-referendum2020">Electoral Commission New Zealand 2020</a>)</span>, making the representation non-disjoint. In
 this case, the visualization works, since the underlying data is genuinely non-disjoint (each person cast two votes). If we had information about individual votes, it might be interesting to see how many people voted for both euthanasia and cannabis, how many voted for euthanasia but against cannabis, and so on. Similar types of visualization can work well for set-typed data <span class="citation">(see e.g. <a href="#ref-alsallakh2014">Alsallakh et al. 2014</a>)</span>.</p>
 <p>However, even though the data here is fundamentally non-disjoint, there is a way to represent it in a disjoint way that preserves most of the desirable properties - draw separate plots or small multiples <span class="citation">(<a href="#ref-tufte2001">Tufte 2001</a>)</span>:</p>
-<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-2"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-10"></span>
 <img src="figures/referendum-bijection.png" alt="Small multiple figure showing the non-disjoint data represented as disjoint bars. The bars again show the vote share cast by New Zealand voters in the joint 2020 referendum on euthanasia and cannabis, however, this time, each bar within one plot represents a unique subset of the cases." width="750" />
 <p class="caption">
 Figure 4.8: Small multiple figure showing the non-disjoint data represented as disjoint bars. The bars again show the vote share cast by New Zealand voters in the joint 2020 referendum on euthanasia and cannabis, however, this time, each bar within one plot represents a unique subset of the cases.
@@ -415,7 +419,7 @@ Figure 4.8: Small multiple figure showing the non-disjoint data represented as d
 <h4><span class="header-section-number">4.2.3.2</span> Partition products<a href="problem-set.html#partition-products" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>Many types of plots involve data partitioned across multiple dimensions. This is especially true in interactive data visualization, where linking automatically induces another level of partitioning <span class="citation">(<a href="#ref-wilhelm2008">Wilhelm 2008</a>)</span>. This necessitates a general mechanism for creating a product of multiple partitions.</p>
 <p>To give a concrete example, suppose we want to draw the following barplot:</p>
-<p><img src="figures/barplot-partitions-products.png" width="750" /></p>
+<p><img src="figures/barplot-partitions-products.png" width="750" style="display: block; margin: auto;" /></p>
 <p>We start with the following data, which includes a categorical variable (<code>group</code>, plotted along the x-axis), a variable representing selection status (<code>selection</code>, used to colour the bar segments), and a continuous variable that we want to summarize (<code>value</code>):</p>
 <table class="table" style="color: black; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
@@ -550,9 +554,9 @@ C
 </table>
 <p>To draw the individual bar segments, we need to sum <code>value</code> across the subsets cases corresponding to each segment. To do this, we first need to split our data into multiple subsets according to the product of <code>group</code> and <code>selection</code> variables, forming a partition.</p>
 <p>In R, the general data structure for representing partitions is the <code>factor</code> S3 class. In a <code>factor</code>, all elements of a vector are assigned a label, such that each label represent one disjoint part of the data. Unfortunately, there is no built-in function for creating a Cartesian product of two factors. However, we can easily emulate it using <code>paste</code> function to combine factor levels as strings element-wise:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="problem-set.html#cb1-1" tabindex="-1"></a>product_factor <span class="ot">&lt;-</span> <span class="fu">paste</span>(df<span class="sc">$</span>group, df<span class="sc">$</span>selection)</span>
-<span id="cb1-2"><a href="problem-set.html#cb1-2" tabindex="-1"></a>split_dfs <span class="ot">&lt;-</span> <span class="fu">split</span>(df, product_factor)</span>
-<span id="cb1-3"><a href="problem-set.html#cb1-3" tabindex="-1"></a><span class="fu">render_tables</span>(split_dfs)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="problem-set.html#cb4-1" tabindex="-1"></a>product_factor <span class="ot">&lt;-</span> <span class="fu">paste</span>(df<span class="sc">$</span>group, df<span class="sc">$</span>selection)</span>
+<span id="cb4-2"><a href="problem-set.html#cb4-2" tabindex="-1"></a>split_dfs <span class="ot">&lt;-</span> <span class="fu">split</span>(df, product_factor)</span>
+<span id="cb4-3"><a href="problem-set.html#cb4-3" tabindex="-1"></a><span class="fu">render_tables</span>(split_dfs)</span></code></pre></div>
 <table class="kable_wrapper">
 <tbody>
 <tr>
@@ -802,11 +806,11 @@ C
 </tbody>
 </table>
 <p>We can then summarize each small data set by summing <code>value</code>:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="problem-set.html#cb2-1" tabindex="-1"></a>summarized_dfs <span class="ot">&lt;-</span> <span class="fu">lapply</span>(split_dfs, <span class="cf">function</span>(x) {</span>
-<span id="cb2-2"><a href="problem-set.html#cb2-2" tabindex="-1"></a>  <span class="fu">aggregate</span>(value <span class="sc">~</span> ., <span class="at">data =</span> x, sum)</span>
-<span id="cb2-3"><a href="problem-set.html#cb2-3" tabindex="-1"></a>})</span>
-<span id="cb2-4"><a href="problem-set.html#cb2-4" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="problem-set.html#cb2-5" tabindex="-1"></a><span class="fu">render_tables</span>(summarized_dfs)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="problem-set.html#cb5-1" tabindex="-1"></a>summarized_dfs <span class="ot">&lt;-</span> <span class="fu">lapply</span>(split_dfs, <span class="cf">function</span>(x) {</span>
+<span id="cb5-2"><a href="problem-set.html#cb5-2" tabindex="-1"></a>  <span class="fu">aggregate</span>(value <span class="sc">~</span> ., <span class="at">data =</span> x, sum)</span>
+<span id="cb5-3"><a href="problem-set.html#cb5-3" tabindex="-1"></a>})</span>
+<span id="cb5-4"><a href="problem-set.html#cb5-4" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="problem-set.html#cb5-5" tabindex="-1"></a><span class="fu">render_tables</span>(summarized_dfs)</span></code></pre></div>
 <table class="kable_wrapper">
 <tbody>
 <tr>
@@ -1006,15 +1010,15 @@ C
 </tbody>
 </table>
 <p>Finally, to “stack” the segments on top of each other, we need to combine the summaries back together, within the levels of <code>group</code> variable. We can do this by grouping the data sets by the <code>group</code> variable and taking their cumulative sum:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="problem-set.html#cb3-1" tabindex="-1"></a>grouped_dfs <span class="ot">&lt;-</span> <span class="fu">split</span>(summarized_dfs, <span class="fu">sapply</span>(summarized_dfs, <span class="cf">function</span>(x) x<span class="sc">$</span>group))</span>
-<span id="cb3-2"><a href="problem-set.html#cb3-2" tabindex="-1"></a>stacked_dfs <span class="ot">&lt;-</span> <span class="fu">lapply</span>(grouped_dfs, <span class="cf">function</span>(x) {</span>
-<span id="cb3-3"><a href="problem-set.html#cb3-3" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, x)</span>
-<span id="cb3-4"><a href="problem-set.html#cb3-4" tabindex="-1"></a>  x<span class="sc">$</span>value <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(x<span class="sc">$</span>value)</span>
-<span id="cb3-5"><a href="problem-set.html#cb3-5" tabindex="-1"></a>  <span class="fu">rownames</span>(x) <span class="ot">&lt;-</span> <span class="cn">NULL</span> <span class="co"># Remove rownames for nicer formatting</span></span>
-<span id="cb3-6"><a href="problem-set.html#cb3-6" tabindex="-1"></a>  x</span>
-<span id="cb3-7"><a href="problem-set.html#cb3-7" tabindex="-1"></a>})</span>
-<span id="cb3-8"><a href="problem-set.html#cb3-8" tabindex="-1"></a></span>
-<span id="cb3-9"><a href="problem-set.html#cb3-9" tabindex="-1"></a><span class="fu">render_tables</span>(stacked_dfs)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="problem-set.html#cb6-1" tabindex="-1"></a>grouped_dfs <span class="ot">&lt;-</span> <span class="fu">split</span>(summarized_dfs, <span class="fu">sapply</span>(summarized_dfs, <span class="cf">function</span>(x) x<span class="sc">$</span>group))</span>
+<span id="cb6-2"><a href="problem-set.html#cb6-2" tabindex="-1"></a>stacked_dfs <span class="ot">&lt;-</span> <span class="fu">lapply</span>(grouped_dfs, <span class="cf">function</span>(x) {</span>
+<span id="cb6-3"><a href="problem-set.html#cb6-3" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, x)</span>
+<span id="cb6-4"><a href="problem-set.html#cb6-4" tabindex="-1"></a>  x<span class="sc">$</span>value <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(x<span class="sc">$</span>value)</span>
+<span id="cb6-5"><a href="problem-set.html#cb6-5" tabindex="-1"></a>  <span class="fu">rownames</span>(x) <span class="ot">&lt;-</span> <span class="cn">NULL</span> <span class="co"># Remove rownames for nicer formatting</span></span>
+<span id="cb6-6"><a href="problem-set.html#cb6-6" tabindex="-1"></a>  x</span>
+<span id="cb6-7"><a href="problem-set.html#cb6-7" tabindex="-1"></a>})</span>
+<span id="cb6-8"><a href="problem-set.html#cb6-8" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="problem-set.html#cb6-9" tabindex="-1"></a><span class="fu">render_tables</span>(stacked_dfs)</span></code></pre></div>
 <table class="kable_wrapper">
 <tbody>
 <tr>
@@ -1143,21 +1147,21 @@ C
 </tbody>
 </table>
 <p>Now, we can combine these tables into one <code>data.frame</code> and render:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="problem-set.html#cb4-1" tabindex="-1"></a>combined_df <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, stacked_dfs)</span>
-<span id="cb4-2"><a href="problem-set.html#cb4-2" tabindex="-1"></a><span class="co"># Need to reverse factor and row order for ggplot2 to layer segments correctly</span></span>
-<span id="cb4-3"><a href="problem-set.html#cb4-3" tabindex="-1"></a>combined_df<span class="sc">$</span>selection <span class="ot">&lt;-</span> <span class="fu">factor</span>(combined_df<span class="sc">$</span>selection, <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">1</span>))</span>
-<span id="cb4-4"><a href="problem-set.html#cb4-4" tabindex="-1"></a>combined_df <span class="ot">&lt;-</span> combined_df[<span class="dv">6</span><span class="sc">:</span><span class="dv">1</span>, ] </span>
-<span id="cb4-5"><a href="problem-set.html#cb4-5" tabindex="-1"></a></span>
-<span id="cb4-6"><a href="problem-set.html#cb4-6" tabindex="-1"></a><span class="fu">ggplot</span>(combined_df, <span class="fu">aes</span>(<span class="at">x =</span> group, <span class="at">y =</span> value, <span class="at">fill =</span> selection)) <span class="sc">+</span></span>
-<span id="cb4-7"><a href="problem-set.html#cb4-7" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">position =</span> <span class="fu">position_identity</span>())</span></code></pre></div>
-<p><img src="figures/barplot-partitions-products.png" width="750" /></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="problem-set.html#cb7-1" tabindex="-1"></a>combined_df <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, stacked_dfs)</span>
+<span id="cb7-2"><a href="problem-set.html#cb7-2" tabindex="-1"></a><span class="co"># Need to reverse factor and row order for ggplot2 to layer segments correctly</span></span>
+<span id="cb7-3"><a href="problem-set.html#cb7-3" tabindex="-1"></a>combined_df<span class="sc">$</span>selection <span class="ot">&lt;-</span> <span class="fu">factor</span>(combined_df<span class="sc">$</span>selection, <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">1</span>))</span>
+<span id="cb7-4"><a href="problem-set.html#cb7-4" tabindex="-1"></a>combined_df <span class="ot">&lt;-</span> combined_df[<span class="dv">6</span><span class="sc">:</span><span class="dv">1</span>, ] </span>
+<span id="cb7-5"><a href="problem-set.html#cb7-5" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="problem-set.html#cb7-6" tabindex="-1"></a><span class="fu">ggplot</span>(combined_df, <span class="fu">aes</span>(<span class="at">x =</span> group, <span class="at">y =</span> value, <span class="at">fill =</span> selection)) <span class="sc">+</span></span>
+<span id="cb7-7"><a href="problem-set.html#cb7-7" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">position =</span> <span class="fu">position_identity</span>())</span></code></pre></div>
+<p><img src="figures/barplot-partitions-products.png" width="750" style="display: block; margin: auto;" /></p>
 <p>What we have just shown is an example of a simple split-apply-combine pipeline <span class="citation">(<a href="#ref-wickham2011">Wickham 2011</a>)</span>. This type of a pipeline is necessary in most types of plots and data visualization systems. For instance, the following <code>ggplot2</code> call produces a similar data visualization pipeline like the one we described above:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="problem-set.html#cb5-1" tabindex="-1"></a><span class="fu">ggplot</span>(data, <span class="fu">aes</span>(x, y, <span class="at">fill =</span> fill)) <span class="sc">+</span></span>
-<span id="cb5-2"><a href="problem-set.html#cb5-2" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">&quot;summary&quot;</span>, <span class="at">fun =</span> <span class="st">&quot;sum&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="problem-set.html#cb8-1" tabindex="-1"></a><span class="fu">ggplot</span>(data, <span class="fu">aes</span>(x, y, <span class="at">fill =</span> fill)) <span class="sc">+</span></span>
+<span id="cb8-2"><a href="problem-set.html#cb8-2" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">&quot;summary&quot;</span>, <span class="at">fun =</span> <span class="st">&quot;sum&quot;</span>)</span></code></pre></div>
 <p>To be more explicit, in the <code>ggplot2</code> call above, we specify that we want to partition the data set by the Cartesian product of the <code>x</code>, <code>y</code>, and <code>fill</code> variables. See the following comment from the <a href="https://github.com/tidyverse/ggplot2/blob/f46805349d6ca8ca7a99f8966cfa0f29279c2f6c/R/grouping.R#L7"><code>ggplot2</code> documentation</a> <span class="citation">(<a href="#ref-wickham2016">Wickham 2016</a>)</span>:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="problem-set.html#cb6-1" tabindex="-1"></a><span class="co"># If the `group` variable is not present, then a new group</span></span>
-<span id="cb6-2"><a href="problem-set.html#cb6-2" tabindex="-1"></a><span class="co"># variable is generated from the interaction of all discrete (factor or</span></span>
-<span id="cb6-3"><a href="problem-set.html#cb6-3" tabindex="-1"></a><span class="co"># character) vectors, excluding `label`.</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="problem-set.html#cb9-1" tabindex="-1"></a><span class="co"># If the `group` variable is not present, then a new group</span></span>
+<span id="cb9-2"><a href="problem-set.html#cb9-2" tabindex="-1"></a><span class="co"># variable is generated from the interaction of all discrete (factor or</span></span>
+<span id="cb9-3"><a href="problem-set.html#cb9-3" tabindex="-1"></a><span class="co"># character) vectors, excluding `label`.</span></span></code></pre></div>
 <p>We then compute whatever summary we want (<code>sum</code>). Finally, when a <code>fill</code> or <code>col</code> aesthetic is used with <code>geom_bar</code>, <code>ggplot2</code> also automatically stack the bars on top of each other by summing their heights. Similar strategy is employed for many other types of stacked plots, including pie charts, histograms, or density plots <span class="citation">(<a href="#ref-wickham2016">Wickham 2016</a>)</span>.</p>
 </div>
 <div id="limits-of-simple-product-partitions" class="section level4 hasAnchor" number="4.2.3.3">
@@ -1165,7 +1169,7 @@ C
 <p>For many types of plots, the simple strategy of taking a single “flat” product of all factors/partitions works reasonably well. However, for other plot types, this simple model is not enough. Specifically, certain types of plots exhibit hierarchical relationships which the flat product model does not cover.</p>
 <p>To give a concrete example, let’s turn back to the barplot from the section above (<a href="problem-set.html#plots-as-partitions">4.2.3</a>). To draw the barplot, we first split our data into smaller tables, summarized each table by summing up the values, stacked the summaries by taking their cumulative sum, and finally used the resulting data frame to render bar segments. This gave us a stacked barplot, which is a good visualization for comparing absolute counts across categories.</p>
 <p>However, what if, instead of comparing absolute counts, we wanted to compare proportions? It turns out there is another type of visualization, called the spineplot, which can be used to represent the same underlying data as a barplot, however, is much better suited for comparing proportions:</p>
-<div class="figure"><span style="display:block;" id="fig:barplot-spineplot"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:barplot-spineplot"></span>
 <img src="figures/barplot-spineplot.png" alt="The same underlying data represented as a barplot (left) and a spineplot (right)." width="750" />
 <p class="caption">
 Figure 4.9: The same underlying data represented as a barplot (left) and a spineplot (right).
@@ -1182,7 +1186,7 @@ Figure 4.9: The same underlying data represented as a barplot (left) and a spine
 <li>Along the y-axis, we stack the summaries <em>across the levels of a product of two factors</em> and normalize them by the values <em>within the levels of the top-level factor</em>.</li>
 </ul>
 <p>For example, assume we have a dataset with two categorical variables, with <span class="math inline">\(j\)</span> and <span class="math inline">\(k\)</span> levels respectively. If we want to render a spineplot based on these two variables, it is not enough to simply break our data into <span class="math inline">\(j \cdot k\)</span> tables. Instead, we need to partition our data on two levels: first, break the data into <span class="math inline">\(j\)</span> tables, and second, break the data into <span class="math inline">\(j \cdot k\)</span> tables. We also need to keep track of the which of the <span class="math inline">\(j\)</span> tables on the first level of partitioning each of the <span class="math inline">\(j \cdot k\)</span> smaller tables <em>relates to</em>. This automatically induces a hierarchical relationship, such that the resulting data subsets form a tree, see Figure <a href="problem-set.html#fig:spineplot-tree">4.10</a>:</p>
-<div class="figure"><span style="display:block;" id="fig:spineplot-tree"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:spineplot-tree"></span>
 <img src="figures/spineplot-tree.png" alt="A diagram of the hierarchical relationship between the subsets of the data represented by a spineplot/barplot. The whole data set is partitioned into bars, which are in turn partitioned into bar segments. The arrows represent a union relationship, such that a bar is a union of the corresponding segments, and whole the data set is a union of all bars." width="708" />
 <p class="caption">
 Figure 4.10: A diagram of the hierarchical relationship between the subsets of the data represented by a spineplot/barplot. The whole data set is partitioned into bars, which are in turn partitioned into bar segments. The arrows represent a union relationship, such that a bar is a union of the corresponding segments, and whole the data set is a union of all bars.
@@ -1195,7 +1199,7 @@ Figure 4.10: A diagram of the hierarchical relationship between the subsets of t
 <p><span id="def:unlabeled-div-2" class="definition"><strong>Definition 4.2  (Regular plot 2) </strong></span>Regular plot is a plot where the geometric objects within one layer represent <em>a hierarchy of partitions</em> of the data, such that there is a bijection between these objects and (possibly aggregated) subsets of the original data.</p>
 </div>
 <p>In other words, <em>graphs are graphs</em>. As a bit of a whimsical side-note, this view is not shared by everyone. Particularly, the poster of the following meme shared on the Mathematical Mathematics Memes Facebook group <span class="citation">(<a href="#ref-mathematicalmathematics2024">Martínez 2024</a>)</span> might not agree:</p>
-<div class="figure"><span style="display:block;" id="fig:meme"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:meme"></span>
 <img src="figures/graphs-cosplayers.jpg" alt="A joke image shared in the Mathematical Mathematics Memes Facebook group on the 28th of March, 2024 [@mathematicalmathematics2024]." width="75%" style="border:1px solid black;" />
 <p class="caption">
 Figure 4.11: A joke image shared in the Mathematical Mathematics Memes Facebook group on the 28th of March, 2024 <span class="citation">(<a href="#ref-mathematicalmathematics2024">Martínez 2024</a>)</span>.
@@ -1222,26 +1226,26 @@ Figure 4.11: A joke image shared in the Mathematical Mathematics Memes Facebook 
 <p>However, despite all its advantages, the grammar-based model also suffers from one fundamental flaw: graphics and statistics are not independent. Instead, the way we choose to represent the data has to align with the properties of the data. Let’s illustrate this point on a real-world example.</p>
 <div id="stacking-not-only-about-graphics" class="section level5 hasAnchor" number="4.3.1.0.1">
 <h5><span class="header-section-number">4.3.1.0.1</span> Stacking: not (only) about graphics<a href="problem-set.html#stacking-not-only-about-graphics" class="anchor-section" aria-label="Anchor link to header"></a></h5>
-<p>For this example, I will use now-famous data set from a study on the effect of smoking on child lung capacity <span class="citation">(<a href="#ref-tager1979">Tager et al. 1979</a>; <a href="#ref-kahn2005">Kahn 2005</a>)</span>. In the study, the researchers measured children’s forced expiratory volume (FEV), and recorded it alongside age, height, sex, and smoking status.</p>
+<p>For this example, I will use famous data set from a study on the effect of smoking on child lung capacity <span class="citation">(<a href="#ref-tager1979">Tager et al. 1979</a>; <a href="#ref-kahn2005">Kahn 2005</a>)</span>. In the study, the researchers measured children’s forced expiratory volume (FEV), and recorded it alongside age, height, sex, and smoking status.</p>
 <p>A rather surprising feature of this data set is that, at a glance, the children who smoked actually had greater lung volume than non-smokers. In <code>ggplot2</code>, we can easily create a boxplot showing the relationship between smoking status and FEV using the following short code snippet:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="problem-set.html#cb7-1" tabindex="-1"></a>fev <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;./data/fev.csv&quot;</span>)</span>
-<span id="cb7-2"><a href="problem-set.html#cb7-2" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="problem-set.html#cb7-3" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb7-4"><a href="problem-set.html#cb7-4" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="problem-set.html#cb7-5" tabindex="-1"></a><span class="fu">ggplot</span>(fev, <span class="fu">aes</span>(smoke, fev, <span class="at">fill =</span> smoke)) <span class="sc">+</span></span>
-<span id="cb7-6"><a href="problem-set.html#cb7-6" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span>
-<span id="cb7-7"><a href="problem-set.html#cb7-7" tabindex="-1"></a><span class="co"># There is actually a bit more code involved in producing the plot below,</span></span>
-<span id="cb7-8"><a href="problem-set.html#cb7-8" tabindex="-1"></a><span class="co"># but it all just has to do with design/aesthetic flair</span></span></code></pre></div>
-<p><img src="figures/grammar-boxplot.png" width="750" /></p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="problem-set.html#cb10-1" tabindex="-1"></a>fev <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;./data/fev.csv&quot;</span>)</span>
+<span id="cb10-2"><a href="problem-set.html#cb10-2" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="problem-set.html#cb10-3" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb10-4"><a href="problem-set.html#cb10-4" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="problem-set.html#cb10-5" tabindex="-1"></a><span class="fu">ggplot</span>(fev, <span class="fu">aes</span>(smoke, fev, <span class="at">fill =</span> smoke)) <span class="sc">+</span></span>
+<span id="cb10-6"><a href="problem-set.html#cb10-6" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span>
+<span id="cb10-7"><a href="problem-set.html#cb10-7" tabindex="-1"></a><span class="co"># There is actually a bit more code involved in producing the plot below,</span></span>
+<span id="cb10-8"><a href="problem-set.html#cb10-8" tabindex="-1"></a><span class="co"># but it all just has to do with design/aesthetic flair</span></span></code></pre></div>
+<p><img src="figures/grammar-boxplot.png" width="750" style="display: block; margin: auto;" /></p>
 <p>Before we start extolling the benefits of smoking for juvenile lung health, it may be a good idea to first look at some confounding variables. Lung volume develops with age, and the researchers had collected data from children ages three and up. Clearly, there were not going to be many smokers among three-year olds, so we should make sure age is not a confounder.</p>
 <p>We can verify that there indeed is a strong relationship between age and FEV like so:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="problem-set.html#cb8-1" tabindex="-1"></a><span class="fu">ggplot</span>(fev, <span class="fu">aes</span>(age, fev, <span class="at">fill =</span> smoke)) <span class="sc">+</span></span>
-<span id="cb8-2"><a href="problem-set.html#cb8-2" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
-<p><img src="figures/grammar-scatterplot.png" width="750" /></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="problem-set.html#cb11-1" tabindex="-1"></a><span class="fu">ggplot</span>(fev, <span class="fu">aes</span>(age, fev, <span class="at">fill =</span> smoke)) <span class="sc">+</span></span>
+<span id="cb11-2"><a href="problem-set.html#cb11-2" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
+<p><img src="figures/grammar-scatterplot.png" width="750" style="display: block; margin: auto;" /></p>
 <p>From the plot above, we can see that age and FEV correlate strongly, and also that the smokers tend to be quite a bit older than the non-smokers. To visualize the distribution of smokers and non-smokers across age a bit more clearly, we can draw an ordinary stacked barplot:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="problem-set.html#cb9-1" tabindex="-1"></a><span class="fu">ggplot</span>(fev, <span class="fu">aes</span>(age, fev, <span class="at">fill =</span> smoke)) <span class="sc">+</span></span>
-<span id="cb9-2"><a href="problem-set.html#cb9-2" tabindex="-1"></a>  <span class="fu">geom_bar</span>()</span></code></pre></div>
-<div class="figure"><span style="display:block;" id="fig:grammar-barplot-counts"></span>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="problem-set.html#cb12-1" tabindex="-1"></a><span class="fu">ggplot</span>(fev, <span class="fu">aes</span>(age, fev, <span class="at">fill =</span> smoke)) <span class="sc">+</span></span>
+<span id="cb12-2"><a href="problem-set.html#cb12-2" tabindex="-1"></a>  <span class="fu">geom_bar</span>()</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:grammar-barplot-counts"></span>
 <img src="figures/grammar-barplot-counts.png" alt="The number of participants by age and smoking status. Notice that the bar segments &quot;stack&quot;, such that the height of the whole bar correctly represents the number of smokers and non-smokers combined." width="750" />
 <p class="caption">
 Figure 4.12: The number of participants by age and smoking status. Notice that the bar segments “stack”, such that the height of the whole bar correctly represents the number of smokers and non-smokers combined.
@@ -1249,9 +1253,9 @@ Figure 4.12: The number of participants by age and smoking status. Notice that t
 </div>
 <p>The plot above clearly shows that there were a lot more smokers than non-smokers, and that smokers tended to be on average older than the non-smokers. This provides a support for our confounding hypothesis.</p>
 <p>Now, what if we wanted to compare the distribution of FEV across the different ages? A data visualization novice might do something like this:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="problem-set.html#cb10-1" tabindex="-1"></a><span class="fu">ggplot</span>(fev, <span class="fu">aes</span>(age, fev, <span class="at">fill =</span> smoke)) <span class="sc">+</span></span>
-<span id="cb10-2"><a href="problem-set.html#cb10-2" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">&quot;summary&quot;</span>, <span class="at">fun =</span> <span class="st">&quot;mean&quot;</span>)</span></code></pre></div>
-<div class="figure"><span style="display:block;" id="fig:grammar-barplot-means"></span>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="problem-set.html#cb13-1" tabindex="-1"></a><span class="fu">ggplot</span>(fev, <span class="fu">aes</span>(age, fev, <span class="at">fill =</span> smoke)) <span class="sc">+</span></span>
+<span id="cb13-2"><a href="problem-set.html#cb13-2" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">&quot;summary&quot;</span>, <span class="at">fun =</span> <span class="st">&quot;mean&quot;</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:grammar-barplot-means"></span>
 <img src="figures/grammar-barplot-means.png" alt="A poor visualization of the average FEV by age and smoking status. Notice that the height of the stacked bars is meaningless: it represents the sum of the group averages, which is not a valid summary of the combined smoker and non-smoker data." width="750" />
 <p class="caption">
 Figure 4.13: A poor visualization of the average FEV by age and smoking status. Notice that the height of the stacked bars is meaningless: it represents the sum of the group averages, which is not a valid summary of the combined smoker and non-smoker data.
@@ -1270,22 +1274,22 @@ Figure 4.13: A poor visualization of the average FEV by age and smoking status. 
 <p>“[…] We do this to ensure that aggregate statistics are always computed over the input data, and so users do not inadvertantly compute e.g., averages of averages, which can easily lead to misinterpretation.” <span class="citation">(<a href="#ref-wu2022">Wu 2022</a>)</span></p>
 </blockquote>
 <p>Does this mean we can only ever stack counts and sums? Take a look at the following plot:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="problem-set.html#cb11-1" tabindex="-1"></a><span class="co"># Code is not included because this type of plot cannot be made </span></span>
-<span id="cb11-2"><a href="problem-set.html#cb11-2" tabindex="-1"></a><span class="co"># with a simple ggplot2 call (without pre-processing)</span></span></code></pre></div>
-<p><img src="figures/grammar-barplot-maximums.png" width="750" /></p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="problem-set.html#cb14-1" tabindex="-1"></a><span class="co"># Code is not included because this type of plot cannot be made </span></span>
+<span id="cb14-2"><a href="problem-set.html#cb14-2" tabindex="-1"></a><span class="co"># with a simple ggplot2 call (without pre-processing)</span></span></code></pre></div>
+<p><img src="figures/grammar-barplot-maximums.png" width="750" style="display: block; margin: auto;" /></p>
 <p>Here we plot the maximum FEV for smokers and non-smokers across the different ages. From this plot, we can see that in most of the age categories which included smokers (age 9 and up), the FEV of the non-smoker with the highest lung capacity was greater than that of a smoker with the greatest lung capacity, although there are several exceptions (ages 11, 16, and 18).</p>
 <p>However, notice one important feature of the plot above: the heights of the “stacked” bars represent a valid overall summary. That is, <em>the maximum of the maximums is a valid maximum of the combined cases</em>. This suggests that other statistics may be “stackable”, besides counts and sums.</p>
 </div>
 <div id="why-choose-stacking-over-dodging-and-layering" class="section level4 hasAnchor" number="4.3.1.1">
 <h4><span class="header-section-number">4.3.1.1</span> Why choose stacking over dodging and layering?<a href="problem-set.html#why-choose-stacking-over-dodging-and-layering" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>But before we go on to discuss what makes certain statistics stackable, we need to first address one issue. It might not be immediately clear why I focus on stacking so much. Indeed, some might argue that stacking is only one way of presenting partitioned data, and that we could equally well present the averages in Figure <a href="problem-set.html#fig:grammar-barplot-means">4.13</a> by plotting the corresponding bars side by side (a technique know as dodging), or by plotting them on top of each other in semi-transparent layers:</p>
-<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-20"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-28"></span>
 <img src="figures/grammar-dodging-layering.png" alt="Two alternative means of displaying partitioned data: dodging and stacking." width="750" />
 <p class="caption">
 Figure 4.14: Two alternative means of displaying partitioned data: dodging and stacking.
 </p>
 </div>
-<p>However, I argue that, in the context of interactive visualization, stacking has certain advantages that dodging and layering do not <span class="citation">(see <a href="#ref-roberts2000">Roberts et al. 2000</a>; <a href="#ref-wilhelm2008">Wilhelm 2008</a>)</span>. Specifically, the fundamental strength of stacking is that parts of the objects “add up” to the whole. As a result, the whole object provides a kind of a bound on the highlighted subsets, greatly simplifying certain interactive behaviors.</p>
+<p>However, I argue that, in the context of interactive visualization, stacking presents certain advantages over dodging and layering <span class="citation">(see also <a href="#ref-roberts2000">Roberts et al. 2000</a>; <a href="#ref-wilhelm2008">Wilhelm 2008</a>)</span>. Specifically, the fundamental strength of stacking is that parts of the objects “add up” to the whole. As a result, the whole object provides a kind of a bound on the highlighted subsets, greatly simplifying certain interactive behaviors.</p>
 <p>For instance, in a stacked barplot, the heights of the individual segments add up to the height of the whole bars. This is useful when combined with linked selection, since, even when the heights of the highlighted segments change, the heights of the whole bars remain the same. As a result, we can keep the upper y-axis limit fixed. The same is not true for dodging and layering. Here, the heights of the bars are not necessarily bound by any value. For instance, in a dodged barplot the heights of the highlighted segments may become greater than those of the unselected segments. This means that we either have to make the upper y-axis limits reactive in response to selection, losing the context that the limit provides, or risk the bars “overflowing” beyond the bounds of the plot.</p>
 <p>This issue is also discussed by <span class="citation">Wilhelm (<a href="#ref-wilhelm2008">2008</a>)</span>, who conceptualizes it as three linked visualizations strategies: replacement, overlaying, and repetition. Overlaying and repetition are essentially equivalent to stacking and dodging, whereas replacement means that the entire visualization gets replaced whenever linked selection occurs. Wilhelm argues that replacement is a flawed strategy, since it means that the context of the previous visualization such as axis limits is lost whenever selection occurs. Likewise, he suggests that repetition is a less popular strategy since it requires the plot to be re-arranged when selection happens. Finally, he also points out two problems with overlaying: the fact that plot parameters are inherited from the plot representing the whole data set, and that parts of the original plot may become obscured by the highlighted subset. Overall, he seems to favor repetition over the other two methods.</p>
 <p>My conclusion is different from that of <span class="citation">Wilhelm (<a href="#ref-wilhelm2008">2008</a>)</span>: I argue that, while overlaying/stacking is less flexible than the other two methods, it is nevertheless the best, since it ensures that the context of the whole data is always preserved. Conversely, repetition/dodging suffers from the same problem that replacement does. Specifically, if we draw highlighted subsets as separate objects, then we either have to make the axis limits reactive (leading to a loss of context), or risk that the highlighted objects may extend beyond these limits. What <span class="citation">Wilhelm (<a href="#ref-wilhelm2008">2008</a>)</span> sees as one of the problems of overlaying - the fact that plot parameters are inherited from the whole data - I instead see as a fundamental strength. The part-whole relationship between the highlighted segments ensures that interaction preserves context, and also reduces the amount of computation that needs to be done.</p>
@@ -1382,7 +1386,7 @@ because it can substantially simplify the structure of a set of data.”</p>
 <h3><span class="header-section-number">4.4.2</span> Scales in practice<a href="problem-set.html#scales-in-practice" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>While there exists a large body of literature concerned with what we should and should not do with scales, information about what scales actually are and how to implement them is scarce. Partly to blame may be fatigue from the endless debates around theory of measurement (see Section <a href="problem-set.html#theory-of-measurement">4.4.1.1</a>). Be it as it may, many data visualization researchers seem content to talk about scales in fairly abstract terms, making an occasional nod to Steven’s -<span class="citation">Stevens (<a href="#ref-stevens1946">1946</a>)</span> typology <span class="citation">(see e.g. <a href="#ref-aparicio2015">Aparicio and Costa 2015</a>; <a href="#ref-dastani2002">Dastani 2002</a>; for some rare counter-examples see e.g. <a href="#ref-murrell2005">Murrell 2005</a>; <a href="#ref-petricek2020">Petricek 2020</a>; <a href="#ref-ziemkiewicz2009">Ziemkiewicz and Kosara 2009</a>)</span>.</p>
 <p>However, the reality of real-world data visualization code-bases is quite different. Here, a significant portion of effort is dedicated to implementing scales and coordinate systems. For instance, within the <code>ggplot2</code> codebase, the file containing the definition of the <code>Scale</code> class has the greatest number of lines, by quite a significant margin <span class="citation">(as of 4th of December 2024, <a href="#ref-ggplot2repo2024">Wickham 2024</a>)</span>, see Figure <a href="problem-set.html#fig:ggplot2-linecounts">4.15</a>:</p>
-<div class="figure"><span style="display:block;" id="fig:ggplot2-linecounts"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:ggplot2-linecounts"></span>
 <img src="figures/ggplot2-linecounts.png" alt="The top 10 longest source files within the `ggplot2` codebase. Notice that `scale-.R` files contains significantly more lines than the other files." width="750" />
 <p class="caption">
 Figure 4.15: The top 10 longest source files within the <code>ggplot2</code> codebase. Notice that <code>scale-.R</code> files contains significantly more lines than the other files.
@@ -1405,13 +1409,13 @@ Alsallakh, Bilal, Luana Micallef, Wolfgang Aigner, Helwig Hauser, Silvia Miksch,
 Aparicio, Manuela, and Carlos J Costa. 2015. <span>“Data Visualization.”</span> <em>Communication Design Quarterly Review</em> 3 (1): 7–11.
 </div>
 <div id="ref-bertin1983" class="csl-entry">
-Bertin, Jacques. 1983. <em>Semiology of Graphics</em>. University of Wisconsin press.
+———. 1983. <em>Semiology of Graphics</em>. University of Wisconsin press.
 </div>
 <div id="ref-buja1996" class="csl-entry">
 Buja, Andreas, Dianne Cook, and Deborah F Swayne. 1996. <span>“Interactive High-Dimensional Data Visualization.”</span> <em>Journal of Computational and Graphical Statistics</em> 5 (1): 78–99.
 </div>
 <div id="ref-cairo2016" class="csl-entry">
-Cairo, Alberto. 2016. <em>The Truthful Art: Data, Charts, and Maps for Communication</em>. New Riders.
+———. 2016. <em>The Truthful Art: Data, Charts, and Maps for Communication</em>. New Riders.
 </div>
 <div id="ref-cairo2019" class="csl-entry">
 ———. 2019. <em>How Charts Lie: Getting Smarter about Visual Information</em>. WW Norton &amp; Company.
@@ -1567,7 +1571,7 @@ Stevens, Stanley Smith. 1946. <span>“On the Theory of Scales of Measurement.�
 Tager, Ira B, Scott T Weiss, Bernard Rosner, and Frank E Speizer. 1979. <span>“Effect of Parental Cigarette Smoking on the Pulmonary Function of Children.”</span> <em>American Journal of Epidemiology</em> 110 (1): 15–26.
 </div>
 <div id="ref-tal2025" class="csl-entry">
-Tal, Eran. 2025. <span>“Models and Measurement.”</span> <em>The Routledge Handbook of Philosophy of Scientific Modeling</em>, 256–69.
+———. 2025. <span>“Models and Measurement.”</span> <em>The Routledge Handbook of Philosophy of Scientific Modeling</em>, 256–69.
 </div>
 <div id="ref-theus2002" class="csl-entry">
 Theus, Martin. 2002. <span>“<span class="nocase">Interactive Data Visualization using Mondrian</span>.”</span> <em>J. Stat. Soft.</em> 7 (November): 1–9. <a href="https://doi.org/10.18637/jss.v007.i11">https://doi.org/10.18637/jss.v007.i11</a>.
@@ -1618,7 +1622,7 @@ Wickham, Hadley, Michael Lawrence, Dianne Cook, Andreas Buja, Heike Hofmann, and
 Wickham, Hadley, and Danielle Navarro. 2024. <em>Ggplot2: Elegant Graphics for Data Analysis (3e)</em>. <a href="https://ggplot2-book.org">https://ggplot2-book.org</a>.
 </div>
 <div id="ref-wilhelm2008" class="csl-entry">
-Wilhelm, Adalbert. 2008. <span>“Linked Views for Visual Exploration.”</span> In <em>Handbook of Data Visualization</em>, 200–214. Springer Science &amp; Business Media.
+———. 2008. <span>“Linked Views for Visual Exploration.”</span> In <em>Handbook of Data Visualization</em>, 200–214. Springer Science &amp; Business Media.
 </div>
 <div id="ref-wilke2019" class="csl-entry">
 Wilke, Claus O. 2019. <em>Fundamentals of Data Visualization: A Primer on Making Informative and Compelling Figures</em>. O’Reilly Media.
@@ -1627,7 +1631,7 @@ Wilke, Claus O. 2019. <em>Fundamentals of Data Visualization: A Primer on Making
 Wilkinson, Leland. 2012. <em>The Grammar of Graphics</em>. Springer.
 </div>
 <div id="ref-wills2011" class="csl-entry">
-Wills, Graham. 2011. <em>Visualizing Time: Designing Graphical Representations for Statistical Data</em>. Springer Science &amp; Business Media.
+———. 2011. <em>Visualizing Time: Designing Graphical Representations for Statistical Data</em>. Springer Science &amp; Business Media.
 </div>
 <div id="ref-wu2022" class="csl-entry">
 Wu, Eugene. 2022. <span>“View Composition Algebra for Ad Hoc Comparison.”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em> 28 (6): 2470–85.

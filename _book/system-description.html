@@ -55,6 +55,10 @@
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 <link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
 <script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
+<link href="libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="libs/plotscape-0.0.0/main.iife.js"></script>
+<script src="libs/plotscaper-binding-0.2.4/plotscaper.js"></script>
 
 
 <style type="text/css">
@@ -243,7 +247,7 @@ div.csl-indent {
 </ul></li>
 <li class="chapter" data-level="7" data-path="applied-example.html"><a href="applied-example.html"><i class="fa fa-check"></i><b>7</b> Applied example</a>
 <ul>
-<li class="chapter" data-level="7.0.1" data-path="applied-example.html"><a href="applied-example.html#the-data-set"><i class="fa fa-check"></i><b>7.0.1</b> The data set</a></li>
+<li class="chapter" data-level="7.0.1" data-path="applied-example.html"><a href="applied-example.html#about-the-data-set"><i class="fa fa-check"></i><b>7.0.1</b> About the data set</a></li>
 <li class="chapter" data-level="7.0.2" data-path="applied-example.html"><a href="applied-example.html#interactive-exploration"><i class="fa fa-check"></i><b>7.0.2</b> Interactive exploration</a></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>8</b> Discussion</a></li>
@@ -609,13 +613,13 @@ Figure 6.1: While barplot and spineplot represent the same underlying summaries,
 <span id="cb50-3"><a href="system-description.html#cb50-3" tabindex="-1"></a>col <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span> <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">10</span>), <span class="st">&quot;indianred&quot;</span>, <span class="st">&quot;grey80&quot;</span>)</span>
 <span id="cb50-4"><a href="system-description.html#cb50-4" tabindex="-1"></a></span>
 <span id="cb50-5"><a href="system-description.html#cb50-5" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">col =</span> col, <span class="at">cex =</span> <span class="dv">3</span>, <span class="at">xaxs =</span> <span class="st">&quot;i&quot;</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-58-1.png" width="800px" style="display: block; margin: auto;" /></p>
+<p><img src="_main_files/figure-html/unnamed-chunk-57-1.png" width="800px" style="display: block; margin: auto;" /></p>
 <p>The plot above shows values scaled using the simple linear mapping along the x-axis, that is, <span class="math inline">\(s: [1, 10] \to [0, 800]\)</span> (effect of the <code>xaxs = "i"</code> argument). Notice that, since the position of the points representing the values 1 and 10 (highlighted in red) gets mapped to pixel values 0 and 800 (the left and right border of the plot), only half of each point is visible. This is quite undesirable - a fundamental principles of graphical integrity is that our graphics should not arbitrarily downplay or hide certain data points <span class="citation">(<a href="#ref-tufte2001">Tufte 2001</a>)</span>. The points at the axis limits are represented by only 1/2 of the area (or less, if at the limits of both axes), making them less salient, and this is especially pernicious since they are likely to be outliers.</p>
 <p>To address this problem, most data visualization systems automatically expand the range of the domain by some pre-specified percentage:</p>
 <div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="system-description.html#cb51-1" tabindex="-1"></a><span class="co"># By default, the plot() function automatically expands the x- and y-axis</span></span>
 <span id="cb51-2"><a href="system-description.html#cb51-2" tabindex="-1"></a><span class="co"># limits by approximately 4% on each end, see `xaxs` in ?graphics::par</span></span>
 <span id="cb51-3"><a href="system-description.html#cb51-3" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">col =</span> col, <span class="at">cex =</span> <span class="dv">3</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-59-1.png" width="800px" style="display: block; margin: auto;" /></p>
+<p><img src="_main_files/figure-html/unnamed-chunk-58-1.png" width="800px" style="display: block; margin: auto;" /></p>
 <p>We <em>could</em> achieve similar effect by modifying the simple linear mapping we have defined above and adding an additional argument:</p>
 <div class="sourceCode" id="cb52"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb52-1"><a href="system-description.html#cb52-1" tabindex="-1"></a><span class="co">// simpleScale2.ts</span></span>
 <span id="cb52-2"><a href="system-description.html#cb52-2" tabindex="-1"></a><span class="im">export</span> <span class="kw">function</span> <span class="fu">simpleScale2</span>(</span>
@@ -1006,7 +1010,7 @@ Figure 6.1: While barplot and spineplot represent the same underlying summaries,
 <span id="cb83-13"><a href="system-description.html#cb83-13" tabindex="-1"></a></span>
 <span id="cb83-14"><a href="system-description.html#cb83-14" tabindex="-1"></a>  <span class="cf">return</span> Expanse<span class="op">.</span><span class="fu">unnormalize</span>(codomain<span class="op">,</span> normalized)<span class="op">;</span></span>
 <span id="cb83-15"><a href="system-description.html#cb83-15" tabindex="-1"></a>}</span></code></pre></div>
-<p>This is the full definition of the <code>pushforward</code> function in <code>plotscape</code> as of 2024-12-19. The implementation for <code>pullback</code> function is very similar, with the only differences being that the order of the <code>domain</code> and <code>codomain</code> arguments reversed, and it uses the <code>applyPropsBackward</code> function, which is not too difficult to derive.</p>
+<p>This is the full definition of the <code>pushforward</code> function in <code>plotscape</code> as of 2024-12-20. The implementation for <code>pullback</code> function is very similar, with the only differences being that the order of the <code>domain</code> and <code>codomain</code> arguments reversed, and it uses the <code>applyPropsBackward</code> function, which is not too difficult to derive.</p>
 </div>
 </div>
 </div>
@@ -1336,9 +1340,6 @@ Figure 6.1: While barplot and spineplot represent the same underlying summaries,
 <!-- ``` -->
 <!-- ##  -->
 
-<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="system-description.html#cb96-1" tabindex="-1"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(</span>
-<span id="cb96-2"><a href="system-description.html#cb96-2" tabindex="-1"></a>  <span class="at">eval =</span> <span class="cn">FALSE</span></span>
-<span id="cb96-3"><a href="system-description.html#cb96-3" tabindex="-1"></a>)</span></code></pre></div>
 </div>
 </div>
 </div>
