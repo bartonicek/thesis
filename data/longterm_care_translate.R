@@ -42,9 +42,9 @@ termination_reasons <- c(
 df$reason_for_termination <- termination_reasons[df$reason_for_termination]
 
 df$stay_category <- c(
-  "1.Krátkodobá" = "short-term",
-  "2.Střednědobá" = "medium-term",
-  "3.Dlouhodobá" = "long-term"
+  "1.Krátkodobá" = "short",
+  "2.Střednědobá" = "medium",
+  "3.Dlouhodobá" = "long"
 )[df$stay_category]
 
 df$field <- c(
