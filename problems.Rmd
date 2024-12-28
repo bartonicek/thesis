@@ -478,7 +478,7 @@ But before we go on to discuss what makes certain statistics stackable, we need 
 knitr::include_graphics("./figures/grammar-dodging-layering.png") 
 ```
 
-However, I argue that, in the context of interactive visualization, stacking presents certain advantages over dodging and layering [see also @roberts2000; @wilhelm2008]. Specifically, the fundamental strength of stacking is that parts of the objects "add up" to the whole. As a result, the whole object provides a kind of a bound on the highlighted subsets, greatly simplifying certain interactive behaviors.
+However, I argue that, in the context of interactive visualization, stacking presents certain advantages over dodging and layering [see also @roberts2000; @wilhelm2008]. Specifically, a fundamental strength of stacking is that parts of the objects "add up" to the whole. As a result, the whole object provides a kind of a bound on the highlighted subsets, greatly simplifying certain interactive behaviors.
 
 For instance, in a stacked barplot, the heights of the individual segments add up to the height of the whole bars. This is useful when combined with linked selection, since, even when the heights of the highlighted segments change, the heights of the whole bars remain the same. As a result, we can keep the upper y-axis limit fixed. The same is not true for dodging and layering. Here, the heights of the bars are not necessarily bound by any value. For instance, in a dodged barplot the heights of the highlighted segments may become greater than those of the unselected segments. This means that we either have to make the upper y-axis limits reactive in response to selection, losing the context that the limit provides, or risk the bars "overflowing" beyond the bounds of the plot.  
 
