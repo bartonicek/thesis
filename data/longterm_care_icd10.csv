@@ -1,10 +1,10 @@
 f10,Mental and behavioural disorders due to use of alcohol
 f2,"Dementia in other diseases classified elsewhere (includes Parkinson’s, Huntington’s, and Creutzfeld-Jacobs disease)"
 f0 and g30,"Dementia in Alzheimer disease (f0), Alzheimer disease (g30)"
-f4 without f42,"Organic amnesic syndrome, not induced by alcohol and other psychoactive substances (f4) without obsessive-compulsive disorder (f42)"
+f4 without f42,"Organic amnesic syndrome, not induced by alcohol and other psychoactive substances (f4) without obsessive-compulsive disorder (f42). (includes non-alcoholic Korsakoff’s syndrome)"
 f11-f19,"Mental and behavioural disorders due to psychoactive substance use (excluding alcohol, f10)"
 f8–f9,Unspecified organic or symptomatic mental disorder
-f32–f33,"Depressive episode (f32), Recurrent depressive disorder (f33)"
+f32–f33,"Depressive episode (f32), recurrent depressive disorder (f33)"
 f60–f61,"Specific personality disorders (f60; includes e.g. paranoid, schizoid, histrionic, or anxious/avoidant personality disorders), mixed and other personality disorders (f61)"
 f7,"Personality and behavioural disorders due to brain disease, damage and dysfunction"
 f3 without f32&f33,Unspecified dementia (f3) without depression (f32 and f33)

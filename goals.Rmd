@@ -4,15 +4,36 @@ editor_options:
   chunk_output_type: console
 ---
 
-# Goals and Principles
+# Goals {#goals}
 
-This section contains a list of goals and high-level design principles that served as the basis of the data interactive visualization system that was implemented as part of this doctoral project.
+The primary aim of this doctoral project was to develop an original interactive data visualization system, while attempting to provide solutions to some of the problems described in Section \@ref(problems). This was realized through the creation and publication of the R package `plotscaper` (available on [CRAN](https://cran.r-project.org/web/packages/plotscaper/index.html)) and the underlying JavaScript package `plotscape` (available on [NPM](https://www.npmjs.com/package/@abartonicek/plotscape)). This section outlines some of the key concerns that informed the more specific design decisions that will be discussed in Section \@ref(system).
 
 ## User profile
 
-When designing any system, an important first consideration is what the average user will be like. The expectations about the expertise, motivations, and goals of the average user should inform every step of the design process.
+A key first step in designing any kind of system is understanding the target user's characteristics, including their expertise, motivations, and goals. This is particularly relevant in interactive data visualization systems, which, as was discussed in Section \@ref(litreview), serve a diverse range of users. At one end of the spectrum, some interactive data visualization systems are designed with fairly minimal expectations of the user's level of experience and motivation. Conversely, other systems assume a highly motivated "expert" users with a sufficient level of domain expertise [@dimara2019] or the ability to contend with low-level execution details such as rendering or reactive event graph [@satyanarayan2015; @satyanarayan2016].
 
-Among interactive data visualization systems, there are significant differences among the target audience. Some interactive data visualization systems make almost no assumptions about the user's level of experience or motivation. Others assume a highly motivated "expert" user with a sufficient level of domain expertise [@dimara2019].
+The goal was to design a package for interactive data exploration that would be accessible to a wide range of R users. Specifically, I wanted to give novice users the ability to quickly create comprehensive interactive figures they could use to explore their data, while, at the same time, allowing more advanced users to take advantage of the full range of features and engage in deeper customization. This informed the design of the package, leading to the prioritization of several key features: a simple and intuitive application programming interface with sensible defaults, an intuitive user interface, and a robust set of built-in interactive features.
+
+## Programming interface
+
+To make the package accessible to a wide range of R users, a key concern was designing a simple and intuitive application programming interface ([API]). Specifically, I wanted to make it easy for the average user to learn the package and produce fairly complete and useful interactive figures, with only few lines of R code. Ideally, the package should empower even users with limited programming experience to take advantage of interactive graphics.
+
+Achieving this level of accessibility required several design choices. First, the interface had to be simple and easy to learn, which was accomplished by drawing inspiration from established packages. Specifically, the main inspirations for the `plotscaper` API were the popular `ggplot2` package [@wickham2016], as well as the `iplots` package [@urbanek2003; @urbanek2011]. However, `plotscaper`'s design goals also necessitated some deviations from these packages' APIs, see Section \@ref(system). Second, to further simplify the API, many of the components such as scales had to be given sensible defaults. Conversely, this also meant that extensive customizability was not a primary concern: the goal was to empower the users to start exploring their data quickly, rather than spend time making fine-grained adjustments to their figures. Third, to broaden its appeal, the package had to integrate seamlessly with existing tools within the R ecosystem. These include the popular RStudio [IDE] [@rstudio2024] and the RMarkdown document-authoring system [@xie2018].    
+
+## User interface
+
+While ease of writing user code was a key consideration, equally important was the ease of interpreting and interacting with the resulting visualizations. The visual design of the figures needed to promote acquisition of statistical insights, and the figures' interactive behavior had to be clear and intuitive. Effective visual design is crucial, as poor design can make figures less legible or even misleading [see e.g. @tufte2001; @cairo2014; @cairo2019; @franconeri2021]. Similarly, the design of interactions can either enhance or hinder the acquisition of insights.
+
+A general rule I applied to the design of the user interface in my package was "less is more". Specifically, following Tufte's [-@tufte2001] example, I aimed to design figures that would prioritize data above all else. Visually, this was achieved by minimizing auxiliary graphical elements such as axis ticks, labels, and grid lines, and striving for a "pen and paper" aesthetic, as if the figures were drawn in a notebook. For color, I decided to use a muted colour palette for the non-data elements and an established color palette for representing data. Finally, when it came to interactive features, I approached those with similar minimalism as the visual design, trying to design them in a way that would enhance but not overwhelm the visual experience.  
+
+## Interactive features
+
+The next important question was which interactive features to support. As was discussed in Section \@ref(litreview), there are many interactive data visualization features, and some are more useful (for data exploration) than others. Furthmore, implementing the amount of effort required to implement these features also differs considerably. Therefore, choosing the right set of features to implement was a key design consideration.
+
+As was hinted at throughout Section \@ref(litreview), the key feature to implement was generalized linked selection or brushing. Specifically, every plot in `plotscaper` should both support and be able to respond to selection. This feature was highly desirable because it allows the user to quickly explore trends across various dynamically generated subsets of the data, making it one of the most useful tools in interactive data visualization [@buja1996; @heer2012; @wilhelm2003; @wilhelm2008; @wills2008; @ware2019; @ward2015]. However, this feature also required a significant amount of careful planning and programming effort, since, as was discussed in section \@ref(problems), it cannot be simply implemented on top of an existing static data visualization system. Instead, it has to be directly integrated into the data visualization pipeline.
+
+Other features which were also highly desirable and required a significant effort to implement were parameter manipulation and representation switching. Like linked selection, these features also to be integrated into the data visualization pipeline.  
+
 
 > "It only works ﬁne when we have individual plot symbols for each observation, as in scatterplots for example, where some attributes are changed by the user interaction. But even when replacing plot parameters the user loses the possibility to compare the current plot with previous versions. The
 user can only compare the current image with a mental copy of the previous image and hence the comparison might get distorted."

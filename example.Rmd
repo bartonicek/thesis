@@ -28,6 +28,7 @@ The Long-term care data set [@soukupova2023] contains longitudinal information a
 Here's the data set at a quick glance:
 
 ```{r}
+#| eval: true
 df <- read.csv("./data/longterm_care.csv")
 dplyr::glimpse(df)
 ```
@@ -226,27 +227,30 @@ Again, if we interrogate the figure by employing interactive actions such as sel
 
 Another important information we can glean from the data set is the prevalence of different mental disorders. The data set identifies the disorders according to ICD-10, an internationally recognized disease classification system published by the World Health organization which organizes various diseases into categories based on aetiology [@icd2024a]. In the data set, the vast majority diagnoses come from the F category, which represents mental and behavioral disorders, although there are also few references to the G category, which represents diseases of the nervous system. Also note that while some levels of the `diagnosis` variable represent a singular ICD-10 diagnosis (e.g. `f10`, `f2`), other represent a range of diagnoses (e.g. `f11-f19`), a union (e.g. `f0 and g30`), or an exclusive difference (e.g. `f4 without f42`).
 
-We can visualize the distribution of the various disorders via the following barplot:
+We can explore the prevalence rates of the various diagnoses, as well as their demographic characteristics, by plotting an interactive figure. For brevity, I will describe interesting features of the data in text rather than by displaying individual figures. You are encouraged to verify these findings using the figure and the interactive techniques we have discussed so far. 
 
 ```{r}
-# Create ordering for the bars based on frequency of cases
+# Create ordering for the bars in the barplot based on frequency of cases
 order_df <- aggregate(cases ~ diagnosis, sum, data = df)
 order_df <- order_df[order(order_df$cases), ]
 
 df |>
   create_schema() |>
   add_barplot(c("diagnosis", "cases")) |>
-  set_scale("barplot1", "x", breaks = order_df$diagnosis) |>
+  add_barplot(c("age_category", "cases")) |>
+  add_barplot(c("sex", "cases")) |>
+  add_histogram(c("days", "cases")) |>
+  # Sort the bars by prevalence
+  set_scale("barplot1", "x", breaks = order_df$diagnosis) |> 
   render()
 ```
 
-> You can also sort the barplot bars interactively by pressing the `O` key. 
+> You can also sort the barplot bars interactively by pressing the `O` key while the barplot is active. 
 
-We can immediately see that the majority patient load is taken up by the top 5 disorders with > 40,000 cumulative cases each.   
-
+From the barplot in the top left panel of the figure above, we can immediately see that the majority patient load is taken up by the top 5 disorders with > 40,000 cumulative cases each.   
 > Press the `Q` key and hover over each of the top 5 bars to see what disorders they represent.
 
-I took the liberty of transcribing the names/classification of the disorders from the [ICD-10 website](https://icd.who.int/browse10/2019/en) [@icd2024a]. Each row of Table [REFERENCE] contains the classification code used in the data, along with the name of the diagnosis/es according to ICD-10. I've also added some notes in the parentheses:
+I took the liberty of transcribing classification of the disorders from the [ICD-10 website](https://icd.who.int/browse10/2019/en) [@icd2024a]. In order of prevalence, each row of Table [REFERENCE] contains the diagnostic code used in the data, along with the name/description of the diagnosis/es according to ICD-10 (I also added some notes in the parentheses):
 
 ```{r}
 #| echo: false
@@ -255,17 +259,23 @@ icd10 <- read.csv("./data/longterm_care_icd10.csv", header = FALSE)
 
 kableExtra::kbl(icd10,
                 col.names = c("Code", "Description"),
-                caption = "ICD-10 mental disorder codes") |> 
+                caption = "The data diagnosis code and ICD-10 description") |> 
   kableExtra::kable_styling(full_width = FALSE)
 ```
 
-Thus, the most mental disorders were those caused by the use of alcohol, followed by dementias caused by Alzheimer's and other diseases, followed by amnesia (not caused psychoactive substances), and, finally, disorders caused by non-alcohol psychoactive substances. The amnesia diagnosis is quite interesting, becuase it explicitly rules out obsessive-compulsive disorder (OCD; f42). While the connection between OCD and amnesia might not be immediately clear (at least to a layman such as myself), there is evidence that people with OCD tend to obsess over not remembering certain events and have less confidence in recollecting things from the past [see e.g. @muller2005]. For instance, a person with OCD may have anxiety over whether or not they locked the doors to their house or turned off the stove. Thus it makes sense to explicitly rule out this diagnosis.     
+Thus, the five most common mental disorders, ranked in order of prevalence, were: alcohol-use related disorders, dementias (including Alzheimer's and other forms), organic amnesic syndrome (not induced by psychoactive substances), and disorders caused by psychoactive substances (excluding alcohol). Interestingly, more frequently discussed conditions like depression and personality disorders were less prevalent. However, this may be due to the fact that less severe forms of these disorders can managed through outpatient treatment, such as a combination of medication and therapy [see e.g. @roiser2012], with long-term psychiatric care reserved only for the most acute episodes.
+
+The high prevalence of four of the top five diagnoses is fairly intuitive. First, alcohol use disorders - the most common diagnosis - rank among the most common disorders globally and are associated with high mortality due to chronic health conditions and injury [@carvalho2019]. This diagnosis was about twice as common in men and showed a fairly symmetric, normal-shaped age distribution, occuring the most frequently in 40-60 year olds. Second, the high prevalence of dementias, including Alzheimer's disease, is unfortunately also to be expected, as these are fairly common neurodegenerative diseases in developed countries [see e.g. @cao2020; @langa2017]. Particularly, Alzheimer's disease is the leading cause of long-term psychiatric care in old age, as can be seen from the strongly skewed age distribution. Finally, the high prevalence of disorders due to use of psychoactive substances is also not unexpected, since, among European countries, Czechia ranks moderately high in consumption of certain substances such as ecstasy and cannabis [@mounteney2016]. By contrast, these disorders were more prevalent in young people, peaking around 20-29 years of age.
+
+The high prevalence of organic amnesic syndrome is perhaps more surprising. The ICD-10 describes it as: "a syndrome of prominent impairment of recent and remote memory while immediate recall is preserved, with reduced ability to learn new material and disorientation in time" with a known physical cause and explicitly includes non-alcoholic Korsakoff's syndrome [@icd2024a]. Notably however, the classification excludes other forms of amnesia, including anterograde and retrograde, as well as cases caused by psychoactive substances. Further, the data code also explicitly excludes obsessive-compulsive disorder (OCD). This may seem strange, however, there is evidence that people with OCD tend to obsess over not remembering certain events and have less confidence in recollecting things from the past [see e.g. @muller2005]. For instance, a person with OCD may have anxiety over whether they locked their doors or turned off the stove. Thus, individuals with OCD may over-report memory problems, and the data set's authors likely explicitly excluded OCD for this reason. 
+
+The age distribution for organic amnesia was fairly uniform, and the disorder was roughly twice as prevalent in women than in men. This actually aligns fairly well with the systematic review by @scalzo2015, who found a 1:1.84 male-to-female ratio of non-alcoholic Korsakoff's, largely due to the second most common cause being hyperemesis gravidarum, which is a syndrome of acute nausea and vomiting during pregnancy (with the most common cause being gastrointestinal tract diseases or surgery). In general, Korsakoff's disorder is often caused by poor nutritional intake, particularly thiamine deficiency [@chandrakumar2019; @sechi2007]. While I have not been able to find epidemiological studies comparing the prevalence rates of non-alcoholic Korsakoff's syndrome across different countries, there is some evidence that general Korsakoff's syndrome (including alcohol-related) is fairly common in Czechia [@sechi2007].   
+
+From my cursory search, Czech oficial sources often emphasize alcoholism as the leading cause of organic amnesia and Korsakoff's syndrome [see e.g. @nzip2024]. However, if we look at the data, we see that non-alcohol related organic amnesia has almost two-thirds the prevalence of all alcohol-use disorders: 
 
 ```{r}
-df |>
-  create_schema() |>
-  add_barplot(c("diagnosis", "cases")) |>
-  add_barplot(c("age_category", "cases")) |>
-  set_scale("barplot1", "x", breaks = order_df$diagnosis) |>
-  render()
+#| eval: true
+aggregate(cases ~ diagnosis, sum, data = df) |>
+  subset(diagnosis %in% c("f10", "f4 without f42")) |>
+  transform(cases = cases / sum(cases))
 ```

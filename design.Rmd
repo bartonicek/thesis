@@ -1,4 +1,4 @@
-# High-level principles
+# High-level design
 
 > "Designing is fundamentally about taking things apart [...] in such a way that they can be put back together. Separating things into things that can be composed."
 >

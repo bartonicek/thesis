@@ -4,7 +4,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-# Literature review
+# Literature review {#litreview}
 
 ## Brief history of interactive data visualization {#brief-history}
 
@@ -277,7 +277,7 @@ The way we define interactivity is not just a matter of taste or preference: it 
 
 To make the point with a particularly blunt example, many programming languages support a read-evaluate-print loop (REPL). This allows interactive code execution from the command line: the user inputs code, the interpreter evaluates it, outputs results, and waits for more input. If the language supports plotting, running code to generate plots could be considered an "interactive data visualization system." User interaction with the REPL modifies the visual output, and with fast-enough input, updates could appear almost instantly (thus satisfying the user interaction and real-time update definitions of interactivity, see table). This would make almost every programming language an "interactive data visualization system", requiring no additional effort.
 
-However, I would argue that, today, this view stretches the concept of interactivity. It is true that, historically, the command line was considered a highly interactive user interface [see e.g. @foley1990; @howard1995]. However, with advancements in processor speeds and the widespread adoption of graphical user interfaces (GUIs), user expectations have evolved. Nowadays, we typically associate interactivity with direct manipulation of visual elements and immediate feedback [@dimara2019]. Thus, we can see that what's considered "interactive" evolves over time. 
+However, I would argue that, today, this view stretches the concept of interactivity. It is true that, historically, the command line was considered a highly interactive user interface [see e.g. @foley1990; @howard1995]. However, with advancements in processor speeds and the widespread adoption of graphical user interfaces (GUIs), user expectations have evolved. Nowadays, we typically associate interactivity with direct manipulation of visual elements and immediate feedback [@dimara2019; @urbanek2011]. Thus, we can see that what's considered "interactive" evolves over time. 
 
 But even with figures that are manipulated directly, there still are considerable differences in what different features imply for implementation requirements. Some features, like changing color or opacity of points in a scatterplot affect only the visual attributes of the plot and not the underlying data representation. This makes them simple to implement as they do not require any specialized data structures or complex computations, and the primary cost lies in re-rendering the visualization.
 

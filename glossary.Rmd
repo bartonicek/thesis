@@ -6,6 +6,10 @@ editor_options:
 
 # Glossary
 
+#### API {#API}
+
+The term "API" (application programming interface) is used in many different ways in many different contexts. However, in general, it tends to describe a bounded surface area that a program or service provides for interaction with other programs or services [see e.g. @bloch2006; @ofoeda2019]. For instance, the set of objects that a package or library exports, and the way these exported objects are structured and organized, can be considered an API.  However, the term API can also describe a protocol or a data format. The term is also sometimes used interchangeably with "Web API," which refers to a set of rules for communicating with specific web servers, typically using the HTTP protocol.
+
 #### Array of Structs (AoS) vs. Struct of Arrays (SoA) {#SoA}
 
 Two-dimensional, tabular data is ubiquitous in data analytic workflows. However, since computer memory is fundamentally one-dimensional. Thus, when representing two-dimensional tables, we need to pick one of the dimensions as "primary" (and the other as "secondary"). This leads to two fundamentally different data representations.  
@@ -58,6 +62,10 @@ For example, the following is a valid JSON:
 The JSON specification is more restrictive compared to the full JavaScript object type (as implemented in the browser and various JavaScript runtimes). JavaScript runtime objects are very flexible - they can contain non-string keys (numbers or symbols) and non-primitive values such as functions/methods. In contrast, JSON is a fairly "simple" format designed for declaring and transporting data. For this reason, JSON is often used as the medium for sending data to and from Web APIs [@bourhis2017; @pezoa2016] as well as for configuration documents.
 
 The main advantages of JSON are that it is a simple, flexible, and human-readable format. Also, due to its recursive nature (JSON arrays and objects can contain other JSON arrays and objects), it can be used to express a wide variety of hierarchical data structures which would not be efficient to express in "flat" data formats such as CSV. However, this flexibility also comes with some disadvantages. The recursive nature of the format makes parsing JSON files inherently more time- and compute-intensive, and, since the values in a JSON can be of any type (as long as it is a valid JSON type), it is often necessary to validate JSON inputs [@pezoa2016].      
+
+#### IDE
+
+An Integrated Development Environment (IDE) is a software application that streamlines software development by providing utilities and automation tools for various stages of the workflow, such as coding, testing, debugging, building, and version control. A core component is a text editor, which may be enhanced by various features such as syntax highlighting and code completion. IDEs may also include integrated debuggers, version control systems, and other tools. Some IDEs primarily focus on a single programming language [such as @rstudio2024], whereas others offer full multi-language support [e.g. Visual Studio Code, @microsoft2025].    
 
 #### SVG
 

@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>2 Literature review | Fluent Graphics</title>
+  <meta name="description" content="2 Literature review | Fluent Graphics" />
+  <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="2 Literature review | Fluent Graphics" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="2 Literature review | Fluent Graphics" />
+  
+  
+  
+
+<meta name="author" content="Adam Bartonicek" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="index.html"/>
+<link rel="next" href="goals.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Abstract</a></li>
+<li class="chapter" data-level="2" data-path="litreview.html"><a href="litreview.html"><i class="fa fa-check"></i><b>2</b> Literature review</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="litreview.html"><a href="litreview.html#brief-history"><i class="fa fa-check"></i><b>2.1</b> Brief history of interactive data visualization</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="litreview.html"><a href="litreview.html#static-data-visualization-from-ancient-times-to-the-space-age"><i class="fa fa-check"></i><b>2.1.1</b> Static data visualization: From ancient times to the space age</a></li>
+<li class="chapter" data-level="2.1.2" data-path="litreview.html"><a href="litreview.html#early-interactive"><i class="fa fa-check"></i><b>2.1.2</b> Early interactive data visualization: By statisticians for statisticians</a></li>
+<li class="chapter" data-level="2.1.3" data-path="litreview.html"><a href="litreview.html#interactive-data-visualization-and-the-internet-web-based-interactivity"><i class="fa fa-check"></i><b>2.1.3</b> Interactive data visualization and the internet: Web-based interactivity</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="litreview.html"><a href="litreview.html#what-is-interactive-visualization"><i class="fa fa-check"></i><b>2.2</b> What even is interactive data visualization?</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="litreview.html"><a href="litreview.html#interactive-vs.-interacting-with"><i class="fa fa-check"></i><b>2.2.1</b> Interactive vs. interacting with</a></li>
+<li class="chapter" data-level="2.2.2" data-path="litreview.html"><a href="litreview.html#what-is-interactive-enough"><i class="fa fa-check"></i><b>2.2.2</b> What is “interactive enough”?</a></li>
+<li class="chapter" data-level="2.2.3" data-path="litreview.html"><a href="litreview.html#complexity-of-interactive-features"><i class="fa fa-check"></i><b>2.2.3</b> Complexity of interactive features</a></li>
+<li class="chapter" data-level="2.2.4" data-path="litreview.html"><a href="litreview.html#working-definition"><i class="fa fa-check"></i><b>2.2.4</b> Working definition</a></li>
+<li class="chapter" data-level="2.2.5" data-path="litreview.html"><a href="litreview.html#common-features"><i class="fa fa-check"></i><b>2.2.5</b> Common interactive features</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="litreview.html"><a href="litreview.html#the-highlighting-problem"><i class="fa fa-check"></i><b>2.3</b> The highlighting problem</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="litreview.html"><a href="litreview.html#linked-selection-and-stacking"><i class="fa fa-check"></i><b>2.3.1</b> Linked selection and stacking</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="litreview.html"><a href="litreview.html#theory-of-data-visualization-systems"><i class="fa fa-check"></i><b>2.4</b> Theory of data visualization systems</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="litreview.html"><a href="litreview.html#scales"><i class="fa fa-check"></i><b>2.4.1</b> Scales</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="goals.html"><a href="goals.html"><i class="fa fa-check"></i><b>3</b> Goals</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="goals.html"><a href="goals.html#user-profile"><i class="fa fa-check"></i><b>3.1</b> User profile</a></li>
+<li class="chapter" data-level="3.2" data-path="goals.html"><a href="goals.html#programming-interface"><i class="fa fa-check"></i><b>3.2</b> Programming interface</a></li>
+<li class="chapter" data-level="3.3" data-path="goals.html"><a href="goals.html#interactive-features"><i class="fa fa-check"></i><b>3.3</b> Interactive features</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="problems.html"><a href="problems.html"><i class="fa fa-check"></i><b>4</b> Problem Set</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="problems.html"><a href="problems.html#data-visualization-pipeline"><i class="fa fa-check"></i><b>4.1</b> Data visualization pipeline</a></li>
+<li class="chapter" data-level="4.2" data-path="problems.html"><a href="problems.html#partitioning"><i class="fa fa-check"></i><b>4.2</b> Partitioning</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="problems.html"><a href="problems.html#showing-the-full-data"><i class="fa fa-check"></i><b>4.2.1</b> Showing the full data</a></li>
+<li class="chapter" data-level="4.2.2" data-path="problems.html"><a href="problems.html#disjointness-and-comparison"><i class="fa fa-check"></i><b>4.2.2</b> Disjointness and comparison</a></li>
+<li class="chapter" data-level="4.2.3" data-path="problems.html"><a href="problems.html#plots-as-partitions"><i class="fa fa-check"></i><b>4.2.3</b> Plots as partitions</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="problems.html"><a href="problems.html#aggregation"><i class="fa fa-check"></i><b>4.3</b> Aggregation</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="problems.html"><a href="problems.html#graphics-and-statistics-are-not-independent"><i class="fa fa-check"></i><b>4.3.1</b> Graphics and statistics are not independent</a></li>
+<li class="chapter" data-level="4.3.2" data-path="problems.html"><a href="problems.html#stackable-summaries"><i class="fa fa-check"></i><b>4.3.2</b> Stackable summaries</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="problems.html"><a href="problems.html#scaling"><i class="fa fa-check"></i><b>4.4</b> Scaling</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="problems.html"><a href="problems.html#theory-of-scales"><i class="fa fa-check"></i><b>4.4.1</b> Theory of scales</a></li>
+<li class="chapter" data-level="4.4.2" data-path="problems.html"><a href="problems.html#scales-in-practice"><i class="fa fa-check"></i><b>4.4.2</b> Scales in practice</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="high-level-design.html"><a href="high-level-design.html"><i class="fa fa-check"></i><b>5</b> High-level design</a>
+<ul>
+<li class="chapter" data-level="5.0.1" data-path="high-level-design.html"><a href="high-level-design.html#user-profile-1"><i class="fa fa-check"></i><b>5.0.1</b> User profile</a></li>
+<li class="chapter" data-level="5.1" data-path="high-level-design.html"><a href="high-level-design.html#programming-paradigm"><i class="fa fa-check"></i><b>5.1</b> Programming paradigm</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="high-level-design.html"><a href="high-level-design.html#imperative-programming"><i class="fa fa-check"></i><b>5.1.1</b> Imperative programming</a></li>
+<li class="chapter" data-level="5.1.2" data-path="high-level-design.html"><a href="high-level-design.html#functional-programming"><i class="fa fa-check"></i><b>5.1.2</b> Functional programming</a></li>
+<li class="chapter" data-level="5.1.3" data-path="high-level-design.html"><a href="high-level-design.html#object-oriented-programming"><i class="fa fa-check"></i><b>5.1.3</b> Object oriented programming</a></li>
+<li class="chapter" data-level="5.1.4" data-path="high-level-design.html"><a href="high-level-design.html#data-oriented-programming"><i class="fa fa-check"></i><b>5.1.4</b> Data oriented programming</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="high-level-design.html"><a href="high-level-design.html#reactivity"><i class="fa fa-check"></i><b>5.2</b> Reactivity</a></li>
+<li class="chapter" data-level="5.3" data-path="high-level-design.html"><a href="high-level-design.html#data-representation"><i class="fa fa-check"></i><b>5.3</b> Data representation</a></li>
+<li class="chapter" data-level="5.4" data-path="high-level-design.html"><a href="high-level-design.html#rendering-engine"><i class="fa fa-check"></i><b>5.4</b> Rendering engine</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="system.html"><a href="system.html"><i class="fa fa-check"></i><b>6</b> System description</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="system.html"><a href="system.html#core-requirements"><i class="fa fa-check"></i><b>6.1</b> Core requirements</a></li>
+<li class="chapter" data-level="6.2" data-path="system.html"><a href="system.html#application-programming-interface-plotscaper"><i class="fa fa-check"></i><b>6.2</b> Application Programming Interface (<code>plotscaper</code>)</a></li>
+<li class="chapter" data-level="6.3" data-path="system.html"><a href="system.html#components"><i class="fa fa-check"></i><b>6.3</b> Components</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="system.html"><a href="system.html#Indexable"><i class="fa fa-check"></i><b>6.3.1</b> Indexable</a></li>
+<li class="chapter" data-level="6.3.2" data-path="system.html"><a href="system.html#Getter"><i class="fa fa-check"></i><b>6.3.2</b> Getter</a></li>
+<li class="chapter" data-level="6.3.3" data-path="system.html"><a href="system.html#dataframe"><i class="fa fa-check"></i><b>6.3.3</b> Dataframe</a></li>
+<li class="chapter" data-level="6.3.4" data-path="system.html"><a href="system.html#reactive"><i class="fa fa-check"></i><b>6.3.4</b> Reactive</a></li>
+<li class="chapter" data-level="6.3.5" data-path="system.html"><a href="system.html#factors"><i class="fa fa-check"></i><b>6.3.5</b> Factors</a></li>
+<li class="chapter" data-level="6.3.6" data-path="system.html"><a href="system.html#reducers"><i class="fa fa-check"></i><b>6.3.6</b> Reducers</a></li>
+<li class="chapter" data-level="6.3.7" data-path="system.html"><a href="system.html#scales-1"><i class="fa fa-check"></i><b>6.3.7</b> Scales</a></li>
+<li class="chapter" data-level="6.3.8" data-path="system.html"><a href="system.html#expanses"><i class="fa fa-check"></i><b>6.3.8</b> Expanses</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="applied-example.html"><a href="applied-example.html"><i class="fa fa-check"></i><b>7</b> Applied example</a>
+<ul>
+<li class="chapter" data-level="7.0.1" data-path="applied-example.html"><a href="applied-example.html#about-the-data-set"><i class="fa fa-check"></i><b>7.0.1</b> About the data set</a></li>
+<li class="chapter" data-level="7.0.2" data-path="applied-example.html"><a href="applied-example.html#interactive-exploration"><i class="fa fa-check"></i><b>7.0.2</b> Interactive exploration</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>8</b> Discussion</a></li>
+<li class="chapter" data-level="9" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>9</b> Glossary</a></li>
+<li class="chapter" data-level="10" data-path="appendix.html"><a href="appendix.html"><i class="fa fa-check"></i><b>10</b> Appendix</a></li>
+<li class="chapter" data-level="11" data-path="mathematical-theory.html"><a href="mathematical-theory.html"><i class="fa fa-check"></i><b>11</b> Mathematical theory</a>
+<ul>
+<li class="chapter" data-level="11.0.1" data-path="mathematical-theory.html"><a href="mathematical-theory.html#relations"><i class="fa fa-check"></i><b>11.0.1</b> Relations</a></li>
+<li class="chapter" data-level="11.0.2" data-path="mathematical-theory.html"><a href="mathematical-theory.html#functions"><i class="fa fa-check"></i><b>11.0.2</b> Functions</a></li>
+<li class="chapter" data-level="11.0.3" data-path="mathematical-theory.html"><a href="mathematical-theory.html#partitions"><i class="fa fa-check"></i><b>11.0.3</b> Partitions</a></li>
+<li class="chapter" data-level="11.0.4" data-path="mathematical-theory.html"><a href="mathematical-theory.html#preorders"><i class="fa fa-check"></i><b>11.0.4</b> Preorders</a></li>
+<li class="chapter" data-level="11.0.5" data-path="mathematical-theory.html"><a href="mathematical-theory.html#monoids"><i class="fa fa-check"></i><b>11.0.5</b> Monoids</a></li>
+<li class="chapter" data-level="11.0.6" data-path="mathematical-theory.html"><a href="mathematical-theory.html#groups"><i class="fa fa-check"></i><b>11.0.6</b> Groups</a></li>
+<li class="chapter" data-level="11.0.7" data-path="mathematical-theory.html"><a href="mathematical-theory.html#categories"><i class="fa fa-check"></i><b>11.0.7</b> Categories</a></li>
+<li class="chapter" data-level="11.0.8" data-path="mathematical-theory.html"><a href="mathematical-theory.html#functors"><i class="fa fa-check"></i><b>11.0.8</b> Functors</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>12</b> References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Fluent Graphics</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="litreview" class="section level1 hasAnchor" number="2">
+<h1><span class="header-section-number">2</span> Literature review<a href="litreview.html#litreview" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="brief-history" class="section level2 hasAnchor" number="2.1">
+<h2><span class="header-section-number">2.1</span> Brief history of interactive data visualization<a href="litreview.html#brief-history" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Data visualization has a rich and intricate history, and a comprehensive treatment is beyond the scope of the present thesis. Nevertheless, in this section, I will provide a brief overview, with a particular focus on the later developments related to interactive visualization. For a more detailed historical account, readers should refer to <span class="citation">Beniger and Robyn (<a href="#ref-beniger1978">1978</a>)</span>, <span class="citation">Dix and Ellis (<a href="#ref-dix1998">1998</a>)</span>, <span class="citation">Friendly (<a href="#ref-friendly2006">2006</a>)</span>, <span class="citation">Friendly and Wainer (<a href="#ref-friendly2021">2021</a>)</span>, or <span class="citation">Young, Valero-Mora, and Friendly (<a href="#ref-young2011">2011</a>)</span>.</p>
+<div id="static-data-visualization-from-ancient-times-to-the-space-age" class="section level3 hasAnchor" number="2.1.1">
+<h3><span class="header-section-number">2.1.1</span> Static data visualization: From ancient times to the space age<a href="litreview.html#static-data-visualization-from-ancient-times-to-the-space-age" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The idea of graphically representing abstract information is very old. As one concrete example, a clay tablet recording a land survey during the Old Babylonian period (approximately 1900-1600 BCE) has recently been identified as the earliest visual depiction of the Pythagorean theorem <span class="citation">(<a href="#ref-mansfield2020">Mansfield 2020</a>)</span>. Other examples of early abstract visualizations include maps of geographic regions and the night sky, and these were also the first to introduce the idea of coordinate systems <span class="citation">(<a href="#ref-beniger1978">Beniger and Robyn 1978</a>; <a href="#ref-friendly2021">Friendly and Wainer 2021</a>)</span>.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-3"></span>
+<img src="figures/si427.jpg" alt="Photos of the tablet Si. 427 which has recently been identified as the earliest depiction of the Pythagorean theorem [@mansfield2020]. Left: the obverse of the tablet depicts a diagram of a field, inscribed with areas. Right: the reverse of the tablet contains a table of numbers, corresponding to the calculation of the areas. Source: Wikimedia Commons [@mansfield2024]." width="1044" />
+<p class="caption">
+Figure 2.1: Photos of the tablet Si. 427 which has recently been identified as the earliest depiction of the Pythagorean theorem <span class="citation">(<a href="#ref-mansfield2020">Mansfield 2020</a>)</span>. Left: the obverse of the tablet depicts a diagram of a field, inscribed with areas. Right: the reverse of the tablet contains a table of numbers, corresponding to the calculation of the areas. Source: Wikimedia Commons <span class="citation">(<a href="#ref-mansfield2024">Mansfield 2018</a>)</span>.
+</p>
+</div>
+<p>For a long time, coordinate systems remained tied to geography and maps. However, with the arrival of the early modern age, this was about to change. In the 16-17th century, the works of the 9th century algebraist Al-Khwarizmi percolated into Europe, and with them the idea of representing unknown quantities by variables <span class="citation">(<a href="#ref-kvasz2006">Kvasz 2006</a>)</span>. This idea culminated with Descartes, who introduced the concept of visualizing algebraic relationships as objects in a 2D plane, forging a powerful link between Euclidean geometry and algebra <span class="citation">(<a href="#ref-friendly2021">Friendly and Wainer 2021</a>)</span>. Coordinate systems were thus freed of their connection to geography, and the x- and y-axes could now be used to represent an arbitrary “space” spanned by two variables.</p>
+<p>Descartes’ invention of drawing abstract relationships as objects in a 2D plane was initially only used to plot mathematical functions. However, it would not be long until people realized that observations of the real world could be visualized as well. A true pioneer in this arena was William Playfair, who popularized visualization as a way of presenting socioeconomic data and invented many types of plots still in use today, such as the barplot, lineplot, and pie chart <span class="citation">(<a href="#ref-friendly2021">Friendly and Wainer 2021</a>)</span>. Further, with the emergence of modern nation states in the 19th century, the collection of data and <em>statistics</em> <span class="citation">(“things of the state,” <a href="#ref-etymonline2024">Online Etymology Dictionary 2024</a>)</span> became widespread, leading to a “golden age” of statistical graphics <span class="citation">(<a href="#ref-beniger1978">Beniger and Robyn 1978</a>; <a href="#ref-friendly2021">Friendly and Wainer 2021</a>; <a href="#ref-young2011">Young, Valero-Mora, and Friendly 2011</a>)</span>. This period saw the emergence of other graphical lumnaries, such as Étienne-Jules Marey and Charles Joseph Minard <span class="citation">(<a href="#ref-friendly2021">Friendly and Wainer 2021</a>)</span>, as well as some ingenious examples of the use of statistical graphics to solve real-world problems, including John Snow’s investigation into the London cholera outbreak <span class="citation">(<a href="#ref-freedman1999">Freedman 1999</a>; <a href="#ref-friendly2021">Friendly and Wainer 2021</a>)</span> and Florence Nightingale’s reporting on the unsanitary treatment of wounded British soldiers during the Crimean War <span class="citation">(<a href="#ref-brasseur2005">Brasseur 2005</a>)</span>, both of which lead to a great reduction of preventable deaths.</p>
+<p>Simultaneously, the field of mathematical statistics was also experiencing significant developments. Building upon the foundation laid by mathematical prodigies such as Jakob Bernoulli, Abraham de Moivre, Pierre Simon Laplace, and Carl Friedrich Gauss, early 19th century pioneers such as Adolph Quetelet and Francis Galton began developing statistical techniques for uncovering hidden trends in the newly unearthed treasure trove of socioeconomic data <span class="citation">(<a href="#ref-fienberg1992">Fienberg 1992</a>; <a href="#ref-freedman1999">Freedman 1999</a>)</span>. In the late 19th and early 20th century, these initial efforts were greatly advanced by the theoretical work of figures such as Karl Pearson, Ronald A. Fisher, Jerzy Neyman, and Harold Jeffreys, who established statistics as a discipline in its own right and facilitated its dissemination throughout many scientific fields <span class="citation">(<a href="#ref-fienberg1992">Fienberg 1992</a>)</span>.</p>
+<p>As mathematical statistics gained prominence in the early 20th century, data visualization declined. Perceived as less rigorous than “serious” statistical analysis, it got relegated to an auxiliary position, ushering in “dark age” of statistical graphics <span class="citation">(<a href="#ref-friendly2006">Friendly 2006</a>; <a href="#ref-young2011">Young, Valero-Mora, and Friendly 2011</a>)</span>. This development may have been partly driven by the early frequentist statisticians’ aspiration to establish statistics as a foundation for determining objective truths about the world and society, motivated by personal socio-political goals <span class="citation">(see <a href="#ref-clayton2021">Clayton 2021</a>)</span>. Be it as it may, while statistical graphics also did get popularized and entered the mainstream during this time, only a few interesting developments took place <span class="citation">(<a href="#ref-friendly2021">Friendly and Wainer 2021</a>)</span>.</p>
+<p>However, beginning in the late 1950’s, a series of developments took place which would restore the prominence of data visualization and make it more accessible than ever. Firstly, on the theoretical front, the work of certain academic heavy-weights greatly elevated data visualization and its prestige. Particularly, John Tukey <span class="citation">(<a href="#ref-tukey1962">1962</a>; <a href="#ref-tukey1977">1977</a>)</span> fervently championed exploratory data analysis and placed data visualization in its centre. Around the same time, Jacques Bertin published his famous <em>Sémiologie graphique</em> <span class="citation">(<a href="#ref-bertin1967">1967</a>)</span>, which was one of the first works to attempt to lay out a comprehensive system of visual encodings and scales. Secondly, at the more applied level, the development of personal computers <span class="citation">(see e.g. <a href="#ref-abbate1999">Abbate 1999</a>)</span> and high-level programming languages such as FORTRAN in 1954 <span class="citation">(<a href="#ref-backus1978">Backus 1978</a>)</span>, made the process of rendering production-grade figures easier and more accessible than ever before. Combined, these developments fueled a surge in the use and dissemination of data visualizations.</p>
+<p>As the millennium drew to a close, several other important developments solidified the foundation of static data visualization. First, William Cleveland made significant contributions to the field, laying out many important principles for scientific data visualization <span class="citation">(<a href="#ref-cleveland1985">Cleveland 1985</a>, <a href="#ref-cleveland1993">1993</a>)</span>. Of note, his seminal study on the impact of the choice of visual encodings on statistical judgements remains widely cited today <span class="citation">(<a href="#ref-cleveland1984">Cleveland and McGill 1984</a>)</span>. Similarly, Edward Tufte introduced essential principles for designing effective graphics, coining terms such as <em>chartjunk</em> and <em>data-to-ink ratio</em> <span class="citation">(<a href="#ref-tufte2001">Tufte 2001</a>)</span>. Finally, Leland Wilkinson’s groundbreaking Grammar of Graphics <span class="citation">(<a href="#ref-wilkinson2012">2012</a>)</span> introduced a comprehensive system for designing charts based on simple algebraic rules, influencing nearly every subsequent software package and research endeavor in the field of visualization.</p>
+</div>
+<div id="early-interactive" class="section level3 hasAnchor" number="2.1.2">
+<h3><span class="header-section-number">2.1.2</span> Early interactive data visualization: By statisticians for statisticians<a href="litreview.html#early-interactive" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>With the boom of static data visualization in the 1950’s, interactive data visualization would not be left far behind. It started with tools designed for niche, specialized tasks. For example, <span class="citation">Fowlkes (<a href="#ref-fowlkes1969">1969</a>)</span> designed a system which allowed the users to view probability plots under different configurations of parameters and transformations, whereas <span class="citation">Kruskal (<a href="#ref-kruskal1964">1965</a>)</span> created a tool for visualizing multidimensional scaling.</p>
+<p>However, soon, researchers soon recognized the potential of interactive data visualization as a general-purpose tool for exploring data. The first such general-purpose system was PRIM-9 <span class="citation">(<a href="#ref-fisherkeller1974">Fisherkeller, Friedman, and Tukey 1974</a>)</span>. PRIM-9 allowed for exploration of multivariate data via interactive features such as projection, rotation, masking, and filtering. Following PRIM-9, the late 1980’s saw the emergence of a new generation of systems which provided an even wider range of capabilities. Tools like MacSpin <span class="citation">(<a href="#ref-donoho1988">Donoho, Donoho, and Gasko 1988</a>)</span>, Data Desk <span class="citation">(<a href="#ref-velleman1989">Velleman and Paul 1989</a>)</span>, LISP-Stat <span class="citation">(<a href="#ref-tierney1990">L. Tierney 1990</a>)</span>, and XGobi <span class="citation">(<a href="#ref-swayne1998">Swayne, Cook, and Buja 1998</a>)</span> introduced features such as interactive scaling, rotation, linked views, and grand tours (for a glimpse into these systems, excellent video-documentaries are available at <a href="https://community.amstat.org/jointscsg-section/media/videos">ASA Statistical Graphics Video Library</a>).</p>
+<div id="open-source-statistical-computing" class="section level4 hasAnchor" number="2.1.2.1">
+<h4><span class="header-section-number">2.1.2.1</span> Open-source Statistical Computing<a href="litreview.html#open-source-statistical-computing" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The proliferation of open-source, general-purpose statistical computing software such as S and R further democratized the access to interactive data visualization tools. Building on XGobi’s foundation, GGobi <span class="citation">(<a href="#ref-swayne2003">Swayne et al. 2003</a>)</span>, expanded upon on XGobi and provided an integration layer for R. Other tools like Mondrian <span class="citation">(<a href="#ref-theus2002">Theus 2002</a>)</span> introduced sophisticated linked interaction between many different types of plots including scatteplots, histograms, barplots, scatterplot, mosaic plots, parallel coordinates plots, and maps. Additionally, iPlots <span class="citation">(<a href="#ref-urbanek2003">Urbanek and Theus 2003</a>)</span> implemented a general framework for interactive plotting in R, allowing not only for one-shot rendering interactive figures from R but also for direct programmatic manipulation. This package was later expanded expanded for big data capabilities in iPlots eXtreme <span class="citation">(<a href="#ref-urbanek2011">Urbanek 2011</a>)</span>.</p>
+</div>
+<div id="some-conclusions" class="section level4 hasAnchor" number="2.1.2.2">
+<h4><span class="header-section-number">2.1.2.2</span> Some conclusions<a href="litreview.html#some-conclusions" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>A common thread among these interactive data visualization systems is that they were designed by statisticians with primary focus on data exploration. High-level analytic features such as linked views, rotation/projection, and interactive manipulation of model parameters made frequent appearance. While these features were powerful, they also contributed to a steeper learning curve, potentially limiting adoption by users without a strong data analytic background. Additionally, these tools often had fairly limited options for customization, making them less well suited for data presentation.</p>
+</div>
+</div>
+<div id="interactive-data-visualization-and-the-internet-web-based-interactivity" class="section level3 hasAnchor" number="2.1.3">
+<h3><span class="header-section-number">2.1.3</span> Interactive data visualization and the internet: Web-based interactivity<a href="litreview.html#interactive-data-visualization-and-the-internet-web-based-interactivity" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The end of the millennium marked the arrival of a new class of technologies which impacted interactive data visualization just as much as almost every other field of human endeavor. The rise of the internet in the mid 1990’s made it possible to create interactive applications that could be accessed by anyone, from anywhere. This was aided by the dissemination of robust and standardized web browsers, as well as the development of JavaScript as a high-level programming language for the web <span class="citation">(for a tour of the history, see <a href="#ref-wirfs-brock2020">Wirfs-Brock and Eich 2020</a>)</span>. Soon, interactive visualizations became just one of many emerging technologies within the burgeoning web ecosystem.</p>
+<p>Early web-based interactive data visualization systems tended to rely on external plugins. Examples of these include Prefuse <span class="citation">(<a href="#ref-heer2005">Heer, Card, and Landay 2005</a>)</span> and Flare <span class="citation">(developed around 2008, <a href="#ref-flare2020">Blokt 2020</a>)</span>, which leveraged the Java runtime and Adobe Flash Player, respectively. However, as browser technologies advanced, particularly as JavaScript’s performance improved thanks to advances in just-in-time compilation <span class="citation">(JIT, see e.g. <a href="#ref-clark2017">Clark 2017</a>; <a href="#ref-dao2020">Dao 2020</a>)</span>, it became possible to create complex interactive experiences directly in the browser. This led to the emergence of several popular web-native interactive data visualization systems in the early 2010s, many of which remain widely used today.</p>
+<div id="d3" class="section level4 hasAnchor" number="2.1.3.1">
+<h4><span class="header-section-number">2.1.3.1</span> D3<a href="litreview.html#d3" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>D3.js <span class="citation">(<a href="#ref-bostock2022">Mike Bostock 2022</a>)</span> is one of the earliest and most influential web-based visualization systems. As a general, low-level framework for visualizing data, D3 provides of a suite of specialized JavaScript modules for various aspects of the data visualization workflow, including data parsing, transformation, scaling, and DOM interaction.</p>
+<p>For instance, here’s how to create a basic scatterplot in D3:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1-1"><a href="litreview.html#cb1-1" tabindex="-1"></a><span class="im">import</span> <span class="op">*</span> <span class="im">as</span> d3 <span class="im">from</span> <span class="st">&quot;d3&quot;</span><span class="op">;</span></span>
+<span id="cb1-2"><a href="litreview.html#cb1-2" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="litreview.html#cb1-3" tabindex="-1"></a><span class="kw">const</span> plot <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">querySelector</span><span class="op">&lt;</span><span class="bu">HTMLDivElement</span><span class="op">&gt;</span>(<span class="st">&quot;#d3-plot&quot;</span>)<span class="op">!;</span></span>
+<span id="cb1-4"><a href="litreview.html#cb1-4" tabindex="-1"></a><span class="kw">const</span> data <span class="op">=</span> [</span>
+<span id="cb1-5"><a href="litreview.html#cb1-5" tabindex="-1"></a>  { <span class="dt">x</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="fl">0.41</span> }<span class="op">,</span></span>
+<span id="cb1-6"><a href="litreview.html#cb1-6" tabindex="-1"></a>  { <span class="dt">x</span><span class="op">:</span> <span class="dv">2</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="fl">4.62</span> }<span class="op">,</span></span>
+<span id="cb1-7"><a href="litreview.html#cb1-7" tabindex="-1"></a>  { <span class="dt">x</span><span class="op">:</span> <span class="dv">3</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="fl">7.62</span> }<span class="op">,</span></span>
+<span id="cb1-8"><a href="litreview.html#cb1-8" tabindex="-1"></a>  { <span class="dt">x</span><span class="op">:</span> <span class="dv">4</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="fl">6.54</span> }<span class="op">,</span></span>
+<span id="cb1-9"><a href="litreview.html#cb1-9" tabindex="-1"></a>  { <span class="dt">x</span><span class="op">:</span> <span class="dv">5</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="fl">9.61</span> }<span class="op">,</span></span>
+<span id="cb1-10"><a href="litreview.html#cb1-10" tabindex="-1"></a>]<span class="op">;</span></span>
+<span id="cb1-11"><a href="litreview.html#cb1-11" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="litreview.html#cb1-12" tabindex="-1"></a><span class="kw">const</span> margin <span class="op">=</span> { <span class="dt">top</span><span class="op">:</span> <span class="dv">10</span><span class="op">,</span> <span class="dt">right</span><span class="op">:</span> <span class="dv">30</span><span class="op">,</span> <span class="dt">bottom</span><span class="op">:</span> <span class="dv">30</span><span class="op">,</span> <span class="dt">left</span><span class="op">:</span> <span class="dv">60</span> }<span class="op">;</span></span>
+<span id="cb1-13"><a href="litreview.html#cb1-13" tabindex="-1"></a><span class="kw">const</span> width <span class="op">=</span> <span class="pp">parseFloat</span>(plot<span class="op">.</span><span class="at">style</span><span class="op">.</span><span class="at">width</span>)<span class="op">;</span></span>
+<span id="cb1-14"><a href="litreview.html#cb1-14" tabindex="-1"></a><span class="kw">const</span> height <span class="op">=</span> <span class="pp">parseFloat</span>(plot<span class="op">.</span><span class="at">style</span><span class="op">.</span><span class="at">height</span>)<span class="op">;</span></span>
+<span id="cb1-15"><a href="litreview.html#cb1-15" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="litreview.html#cb1-16" tabindex="-1"></a><span class="co">// Create a SVG element, resize it, and append it to #d3-plot</span></span>
+<span id="cb1-17"><a href="litreview.html#cb1-17" tabindex="-1"></a><span class="kw">const</span> svg <span class="op">=</span> d3</span>
+<span id="cb1-18"><a href="litreview.html#cb1-18" tabindex="-1"></a>  <span class="op">.</span><span class="fu">select</span>(<span class="st">&quot;#d3-plot&quot;</span>)</span>
+<span id="cb1-19"><a href="litreview.html#cb1-19" tabindex="-1"></a>  <span class="op">.</span><span class="fu">append</span>(<span class="st">&quot;svg&quot;</span>)</span>
+<span id="cb1-20"><a href="litreview.html#cb1-20" tabindex="-1"></a>  <span class="op">.</span><span class="fu">attr</span>(<span class="st">&quot;width&quot;</span><span class="op">,</span> width <span class="op">+</span> margin<span class="op">.</span><span class="at">left</span> <span class="op">+</span> margin<span class="op">.</span><span class="at">right</span>)</span>
+<span id="cb1-21"><a href="litreview.html#cb1-21" tabindex="-1"></a>  <span class="op">.</span><span class="fu">attr</span>(<span class="st">&quot;height&quot;</span><span class="op">,</span> height <span class="op">+</span> margin<span class="op">.</span><span class="at">top</span> <span class="op">+</span> margin<span class="op">.</span><span class="at">bottom</span>)</span>
+<span id="cb1-22"><a href="litreview.html#cb1-22" tabindex="-1"></a>  <span class="op">.</span><span class="fu">append</span>(<span class="st">&quot;g&quot;</span>)</span>
+<span id="cb1-23"><a href="litreview.html#cb1-23" tabindex="-1"></a>  <span class="op">.</span><span class="fu">attr</span>(<span class="st">&quot;transform&quot;</span><span class="op">,</span> <span class="st">&quot;translate(&quot;</span> <span class="op">+</span> margin<span class="op">.</span><span class="at">left</span> <span class="op">+</span> <span class="st">&quot;,&quot;</span> <span class="op">+</span> margin<span class="op">.</span><span class="at">top</span> <span class="op">+</span> <span class="st">&quot;)&quot;</span>)<span class="op">;</span></span>
+<span id="cb1-24"><a href="litreview.html#cb1-24" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="litreview.html#cb1-25" tabindex="-1"></a><span class="co">// Create x and y scales and append them to</span></span>
+<span id="cb1-26"><a href="litreview.html#cb1-26" tabindex="-1"></a><span class="kw">const</span> scaleX <span class="op">=</span> d3<span class="op">.</span><span class="fu">scaleLinear</span>()<span class="op">.</span><span class="fu">domain</span>([<span class="dv">0</span><span class="op">,</span> <span class="dv">6</span>])<span class="op">.</span><span class="fu">range</span>([<span class="dv">0</span><span class="op">,</span> width])<span class="op">;</span></span>
+<span id="cb1-27"><a href="litreview.html#cb1-27" tabindex="-1"></a><span class="kw">const</span> scaleY <span class="op">=</span> d3<span class="op">.</span><span class="fu">scaleLinear</span>()<span class="op">.</span><span class="fu">domain</span>([<span class="dv">10</span><span class="op">,</span> <span class="dv">0</span>])<span class="op">.</span><span class="fu">range</span>([<span class="dv">0</span><span class="op">,</span> height])<span class="op">;</span></span>
+<span id="cb1-28"><a href="litreview.html#cb1-28" tabindex="-1"></a>svg</span>
+<span id="cb1-29"><a href="litreview.html#cb1-29" tabindex="-1"></a>  <span class="op">.</span><span class="fu">append</span>(<span class="st">&quot;g&quot;</span>)</span>
+<span id="cb1-30"><a href="litreview.html#cb1-30" tabindex="-1"></a>  <span class="op">.</span><span class="fu">attr</span>(<span class="st">&quot;transform&quot;</span><span class="op">,</span> <span class="st">&quot;translate(0,&quot;</span> <span class="op">+</span> height <span class="op">+</span> <span class="st">&quot;)&quot;</span>)</span>
+<span id="cb1-31"><a href="litreview.html#cb1-31" tabindex="-1"></a>  <span class="op">.</span><span class="fu">call</span>(d3<span class="op">.</span><span class="fu">axisBottom</span>(scaleX))<span class="op">;</span></span>
+<span id="cb1-32"><a href="litreview.html#cb1-32" tabindex="-1"></a>svg<span class="op">.</span><span class="fu">append</span>(<span class="st">&quot;g&quot;</span>)<span class="op">.</span><span class="fu">call</span>(d3<span class="op">.</span><span class="fu">axisLeft</span>(scaleY))<span class="op">;</span></span>
+<span id="cb1-33"><a href="litreview.html#cb1-33" tabindex="-1"></a></span>
+<span id="cb1-34"><a href="litreview.html#cb1-34" tabindex="-1"></a><span class="co">// Add points</span></span>
+<span id="cb1-35"><a href="litreview.html#cb1-35" tabindex="-1"></a>svg</span>
+<span id="cb1-36"><a href="litreview.html#cb1-36" tabindex="-1"></a>  <span class="op">.</span><span class="fu">append</span>(<span class="st">&quot;g&quot;</span>)</span>
+<span id="cb1-37"><a href="litreview.html#cb1-37" tabindex="-1"></a>  <span class="op">.</span><span class="fu">selectAll</span>(<span class="st">&quot;dot&quot;</span>)</span>
+<span id="cb1-38"><a href="litreview.html#cb1-38" tabindex="-1"></a>  <span class="op">.</span><span class="fu">data</span>(data)</span>
+<span id="cb1-39"><a href="litreview.html#cb1-39" tabindex="-1"></a>  <span class="op">.</span><span class="fu">enter</span>()</span>
+<span id="cb1-40"><a href="litreview.html#cb1-40" tabindex="-1"></a>  <span class="op">.</span><span class="fu">append</span>(<span class="st">&quot;circle&quot;</span>)</span>
+<span id="cb1-41"><a href="litreview.html#cb1-41" tabindex="-1"></a>  <span class="op">.</span><span class="fu">attr</span>(<span class="st">&quot;cx&quot;</span><span class="op">,</span> (d) <span class="kw">=&gt;</span> <span class="fu">scaleX</span>(d<span class="op">.</span><span class="at">x</span>))</span>
+<span id="cb1-42"><a href="litreview.html#cb1-42" tabindex="-1"></a>  <span class="op">.</span><span class="fu">attr</span>(<span class="st">&quot;cy&quot;</span><span class="op">,</span> (d) <span class="kw">=&gt;</span> <span class="fu">scaleY</span>(d<span class="op">.</span><span class="at">y</span>))</span>
+<span id="cb1-43"><a href="litreview.html#cb1-43" tabindex="-1"></a>  <span class="op">.</span><span class="fu">attr</span>(<span class="st">&quot;r&quot;</span><span class="op">,</span> <span class="dv">2</span>)<span class="op">;</span></span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:d3-scatterplot"></span>
+<img src="figures/d3-scatterplot.png" alt="Example of a scatterplot in D3.js. The code was taken from D3 Graph Gallery [@holtz2022b] and adjusted to use ES6 syntax and slightly more informative variable names/comments." width="411" />
+<p class="caption">
+Figure 2.2: Example of a scatterplot in D3.js. The code was taken from D3 Graph Gallery <span class="citation">(<a href="#ref-holtz2022b">Holtz 2022b</a>)</span> and adjusted to use ES6 syntax and slightly more informative variable names/comments.
+</p>
+</div>
+<p>As you can see from Figure <a href="litreview.html#fig:d3-scatterplot">2.2</a>, D3 is a fairly low-level framework. Notice that, compared with high-level plotting capabilities such as those provided by base R or <code>ggplot2</code> <span class="citation">(<a href="#ref-r2024">R Core Team 2024</a>; <a href="#ref-wickham2016">Wickham 2016</a>)</span>, the user has to handle many low-level details such as scaling and appending of primitives explicitly. This is also the case with interaction. While D3 does provide methods for handling interactive DOM events, it does not itself provide a system for dispatching and coordinating these events - it instead delegates this responsibility to the user and encourages the use of reactive Web frameworks such as React <span class="citation">(<a href="#ref-react2024">Meta 2024</a>)</span>, Vue <span class="citation">(<a href="#ref-vue2024">Evan You and the Vue Core Team 2024</a>)</span>, or Svelte <span class="citation">(<a href="#ref-svelte2024">Rich Harris and the Svelte Core Team 2024</a>)</span>.</p>
+<p>Finally, D3.js visualizations are rendered as Scalable Vector Graphics (SVG) by default. This ensures lossless scaling but may impact rendering performance at high data volumes. While various unofficial alternative rendering engines based on the HTML 5 Canvas element or WebGL, do exist, there are no such official libraries as of this date.</p>
+</div>
+<div id="plotly-and-highcharts" class="section level4 hasAnchor" number="2.1.3.2">
+<h4><span class="header-section-number">2.1.3.2</span> Plotly and Highcharts<a href="litreview.html#plotly-and-highcharts" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Building upon the low-level infrastructure that D3 provides, many packages such as Plotly.js <span class="citation">(<a href="#ref-plotly2022">Plotly Inc. 2022</a>)</span> and Highcharts <span class="citation">(<a href="#ref-highcharts2024">Highsoft 2024</a>)</span> provide high-level abstractions which make the process of building interactive figures easier for the average user. Unlike D3 which provides low-level utilities such as data transformations, scales, and geometric objects, these packages provide a simple declarative framework for rendering entire plots using a static <a href="glossary.html#JSON">JSON</a> schema.</p>
+<p>Here’s how to render the same scatterplot in Plotly:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb2-1"><a href="litreview.html#cb2-1" tabindex="-1"></a><span class="kw">const</span> data <span class="op">=</span> [{</span>
+<span id="cb2-2"><a href="litreview.html#cb2-2" tabindex="-1"></a>  <span class="dt">x</span><span class="op">:</span> [<span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span><span class="op">,</span> <span class="dv">4</span><span class="op">,</span> <span class="dv">5</span><span class="op">,</span> <span class="dv">6</span>]<span class="op">,</span></span>
+<span id="cb2-3"><a href="litreview.html#cb2-3" tabindex="-1"></a>  <span class="dt">y</span><span class="op">:</span> [<span class="fl">0.41</span><span class="op">,</span> <span class="fl">4.62</span><span class="op">,</span> <span class="fl">7.62</span><span class="op">,</span> <span class="fl">6.54</span><span class="op">,</span> <span class="fl">9.61</span>]<span class="op">,</span></span>
+<span id="cb2-4"><a href="litreview.html#cb2-4" tabindex="-1"></a>  <span class="dt">mode</span><span class="op">:</span> <span class="st">&#39;markers&#39;</span><span class="op">,</span></span>
+<span id="cb2-5"><a href="litreview.html#cb2-5" tabindex="-1"></a>  <span class="dt">type</span><span class="op">:</span> <span class="st">&#39;scatter&#39;</span></span>
+<span id="cb2-6"><a href="litreview.html#cb2-6" tabindex="-1"></a>}]<span class="op">;</span></span>
+<span id="cb2-7"><a href="litreview.html#cb2-7" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="litreview.html#cb2-8" tabindex="-1"></a>Plotly<span class="op">.</span><span class="fu">newPlot</span>(<span class="st">&#39;app&#39;</span><span class="op">,</span> data)<span class="op">;</span></span></code></pre></div>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
+<div id="app" style="width: 500px; height: 500px">
+
+</div>
+<script>
+const data = [{
+  x: [1, 2, 3, 4, 5, 6],
+  y: [0.41, 4.62, 7.62, 6.54, 9.61],
+  mode: 'markers',
+  type: 'scatter'
+}];
+Plotly.newPlot('app', data);
+</script>
+<!-- This is a dummy code chunk to provide a figure label to the JS block above -->
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:plotly-scatterplot"></span>
+<img src="_main_files/figure-html/plotly-scatterplot-1.png" alt="Example of a scatterplot in Plotly.js. The code was taken from the official Plotly documentation [@plotly2024c] and slightly simplified." width="0px" height="0px" />
+<p class="caption">
+Figure 2.3: Example of a scatterplot in Plotly.js. The code was taken from the official Plotly documentation <span class="citation">(<a href="#ref-plotly2024c">Plotly Inc. 2024b</a>)</span> and slightly simplified.
+</p>
+</div>
+<p>Clearly, compared with the D3 code used to create Figure <a href="litreview.html#fig:d3-scatterplot">2.2</a>, the code for creating Figure <a href="litreview.html#fig:plotly-scatterplot">2.3</a> is much terser. Many details, such as the axis limits and margins, point size and colour, gridlines, and widgets, are handled implicitly, via default values and automatic inference. Also, note that the figure provides some interactive features by default, such as zooming, panning, and tooltip on hover. Reactivity is handled automatically using systems built on the native DOM Event Target interface <span class="citation">(<a href="#ref-mdn2024a">MDN 2024a</a>)</span>.</p>
+<p>Highcharts provides a similar JSON-based interface for specifying plots. While perhaps slightly more flexible than Plotly, it also requires more verbose specifications. Because of the similarity, I will not provide a separate example here <span class="citation">(interested reader should look up the library website, <a href="#ref-highcharts2024">Highsoft 2024</a>)</span>.</p>
+<p>Finally, like D3, both plotly.js and Highcharts also render the graphics in SVG by default. However, unlike D3, they both also provide alternative rendering engines based on WebGL <span class="citation">(<a href="#ref-highschartsboost2022">Highsoft 2022</a>; <a href="#ref-plotly2024b">Plotly Inc. 2024a</a>)</span>. This makes them more ergonomic for use with large data sets.</p>
+</div>
+<div id="vega-and-vega-lite" class="section level4 hasAnchor" number="2.1.3.3">
+<h4><span class="header-section-number">2.1.3.3</span> Vega and Vega-Lite<a href="litreview.html#vega-and-vega-lite" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Vega <span class="citation">(<a href="#ref-satyanarayan2015">Satyanarayan et al. 2015</a>; <a href="#ref-vega2024a">Vega Project 2024d</a>)</span> is another popular interactive data visualization package. Like Plotly and Highcharts, Vega is also partially built upon the foundation of D3 and uses JSON schema for plot specification. However, Vega is more low-level and implements a lot of custom functionality. This allows it to offer more fine-grained customization of graphics and interactive behavior, leading to greater flexibility.</p>
+<p>However, this added flexibility does come at a cost. Compared to the high-level frameworks like Plotly and Highcharts, Vega is significantly more verbose. For instance, creating a scatterplot matrix with linked selection in Vega requires over 300 lines of JSON specification, not including the data and using default formatting <span class="citation">(<a href="#ref-vega2024b">Vega Project 2024b</a>)</span>.</p>
+<p>Vega-Lite <span class="citation">(<a href="#ref-satyanarayan2015">Satyanarayan et al. 2015</a>)</span> attempts to remedy this complexity by providing a high-level interface to Vega. Here’s how we can define a scatterplot with zooming, panning, and tooltip on hover in Vega-Lite:</p>
+<script src="https://cdn.jsdelivr.net/npm/vega@5.30.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-lite@5.21.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-embed@6.26.0"></script>
+<div id="vegalite-plot" style="width: 500px; height: 500px">
+
+</div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb3-1"><a href="litreview.html#cb3-1" tabindex="-1"></a><span class="kw">const</span> spec <span class="op">=</span> {</span>
+<span id="cb3-2"><a href="litreview.html#cb3-2" tabindex="-1"></a>  <span class="dt">$schema</span><span class="op">:</span> <span class="st">&quot;https://vega.github.io/schema/vega-lite/v5.json&quot;</span><span class="op">,</span></span>
+<span id="cb3-3"><a href="litreview.html#cb3-3" tabindex="-1"></a>  <span class="dt">width</span><span class="op">:</span> <span class="dv">500</span><span class="op">,</span></span>
+<span id="cb3-4"><a href="litreview.html#cb3-4" tabindex="-1"></a>  <span class="dt">height</span><span class="op">:</span> <span class="dv">500</span><span class="op">,</span></span>
+<span id="cb3-5"><a href="litreview.html#cb3-5" tabindex="-1"></a>  <span class="dt">data</span><span class="op">:</span> { <span class="dt">values</span><span class="op">:</span> [</span>
+<span id="cb3-6"><a href="litreview.html#cb3-6" tabindex="-1"></a>    { <span class="dt">x</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="fl">0.41</span> }<span class="op">,</span></span>
+<span id="cb3-7"><a href="litreview.html#cb3-7" tabindex="-1"></a>    { <span class="dt">x</span><span class="op">:</span> <span class="dv">2</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="fl">4.62</span> }<span class="op">,</span></span>
+<span id="cb3-8"><a href="litreview.html#cb3-8" tabindex="-1"></a>    { <span class="dt">x</span><span class="op">:</span> <span class="dv">3</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="fl">7.62</span> }<span class="op">,</span></span>
+<span id="cb3-9"><a href="litreview.html#cb3-9" tabindex="-1"></a>    { <span class="dt">x</span><span class="op">:</span> <span class="dv">4</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="fl">6.54</span> }<span class="op">,</span></span>
+<span id="cb3-10"><a href="litreview.html#cb3-10" tabindex="-1"></a>    { <span class="dt">x</span><span class="op">:</span> <span class="dv">5</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="fl">9.61</span> }]</span>
+<span id="cb3-11"><a href="litreview.html#cb3-11" tabindex="-1"></a>  }<span class="op">,</span></span>
+<span id="cb3-12"><a href="litreview.html#cb3-12" tabindex="-1"></a>  <span class="dt">mark</span><span class="op">:</span> {<span class="st">&quot;type&quot;</span><span class="op">:</span> <span class="st">&quot;point&quot;</span><span class="op">,</span> <span class="st">&quot;tooltip&quot;</span><span class="op">:</span> <span class="kw">true</span>}<span class="op">,</span></span>
+<span id="cb3-13"><a href="litreview.html#cb3-13" tabindex="-1"></a>  <span class="dt">encoding</span><span class="op">:</span> {</span>
+<span id="cb3-14"><a href="litreview.html#cb3-14" tabindex="-1"></a>    <span class="dt">x</span><span class="op">:</span> { <span class="dt">field</span><span class="op">:</span> <span class="st">&quot;x&quot;</span><span class="op">,</span> <span class="dt">type</span><span class="op">:</span> <span class="st">&quot;quantitative&quot;</span> }<span class="op">,</span></span>
+<span id="cb3-15"><a href="litreview.html#cb3-15" tabindex="-1"></a>    <span class="dt">y</span><span class="op">:</span> { <span class="dt">field</span><span class="op">:</span> <span class="st">&quot;y&quot;</span><span class="op">,</span> <span class="dt">type</span><span class="op">:</span> <span class="st">&quot;quantitative&quot;</span> }</span>
+<span id="cb3-16"><a href="litreview.html#cb3-16" tabindex="-1"></a>  }<span class="op">,</span></span>
+<span id="cb3-17"><a href="litreview.html#cb3-17" tabindex="-1"></a>  <span class="dt">params</span><span class="op">:</span> [{ <span class="dt">name</span><span class="op">:</span> <span class="st">&quot;grid&quot;</span><span class="op">,</span> <span class="dt">select</span><span class="op">:</span> <span class="st">&quot;interval&quot;</span><span class="op">,</span> <span class="dt">bind</span><span class="op">:</span> <span class="st">&quot;scales&quot;</span> }]</span>
+<span id="cb3-18"><a href="litreview.html#cb3-18" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb3-19"><a href="litreview.html#cb3-19" tabindex="-1"></a></span>
+<span id="cb3-20"><a href="litreview.html#cb3-20" tabindex="-1"></a><span class="fu">vegaEmbed</span>(<span class="st">&quot;#vegalite-plot&quot;</span><span class="op">,</span> spec)<span class="op">;</span></span></code></pre></div>
+<script>
+const spec = {
+  $schema: "https://vega.github.io/schema/vega-lite/v5.json",
+  width: 500,
+  height: 500,
+  data: { values: [
+    { x: 1, y: 0.41 },
+    { x: 2, y: 4.62 },
+    { x: 3, y: 7.62 },
+    { x: 4, y: 6.54 },
+    { x: 5, y: 9.61 }]
+  },
+  mark: {"type": "point", "tooltip": true},
+  encoding: {
+    x: { field: "x", type: "quantitative" },
+    y: { field: "y", type: "quantitative" }
+  },
+  params: [{ name: "grid", select: "interval", bind: "scales" }]
+};
+
+vegaEmbed("#vegalite-plot", spec);
+</script>
+<p>Note that the zooming and panning capability is provided by the <code>params</code> property, which declaratively specifies a list of plot parameters that can be modified by interaction <span class="citation">(see <a href="#ref-vegalite2024a">Vega Project 2024c</a>)</span>. In the case above, the specification creates a two-way binding between plot scales and mouse selection events <span class="citation">(<a href="#ref-vegalite2024b">Vega Project 2024a</a>)</span>.</p>
+</div>
+<div id="some-conclusions-1" class="section level4 hasAnchor" number="2.1.3.4">
+<h4><span class="header-section-number">2.1.3.4</span> Some conclusions<a href="litreview.html#some-conclusions-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>In general, these contemporary web-based interactive data visualization systems offer a great deal of flexibility, making them well-suited to modern data presentation. However, all of this expressiveness does seem to come at a cost. Compared to the earlier statistical graphics systems, described in Section <a href="litreview.html#early-interactive">2.1.2</a>, many of the more advanced features that used to be common are either missing or require a significant effort to implement, such that they are only accessible to expert users. This is evidenced by their infrequent appearance in the documentation and example gallery pages.</p>
+<p>For instance, the <a href="https://r-graph-gallery.com/interactive-charts.html">R Graph Gallery entry on Interactive Charts</a> <span class="citation">(<a href="#ref-holtz2022">Holtz 2022a</a>)</span> features multiple interactive figures implemented in the JavaScript libraries described above. However, all of these examples show only surface-level single-plot interactive features such zooming, panning, hovering, 3D rotation, and node repositioning. The <a href="https://dash.plotly.com/interactive-graphing">Plotly Dash documentation page on Interactive Visualizations</a> <span class="citation">(<a href="#ref-plotly2022">Plotly Inc. 2022</a>)</span> does feature two examples of simple linked cross-filtering, however, the vast majority of visualizations in the <a href="https://plotly.com/r/">Plotly R Open Source Graphing Library documentation page</a> <span class="citation">(<a href="#ref-plotly2022">Plotly Inc. 2022</a>)</span> show examples only surface-level interactivity. Similarly, <a href="https://vega.github.io/vega-lite/examples/#interactive-charts">VegaLite Gallery pages on Interactive Charts</a> <span class="citation">(<a href="#ref-vegalite2022">Vega Project 2022</a>)</span> feature many examples, however, there is only a limited number of examples of linked or parametric interactivity (see e.g. <a href="https://vega.github.io/vega-lite/examples/#interactive-multi-view-displays">Interactive Multiview Displays</a>). Finally, the <a href="https://jkunst.com/highcharter/articles/showcase.html">Highcharter Showcase Page</a> <span class="citation">(<a href="#ref-kunst2022">Kunst 2022</a>)</span> does not feature any examples of linking.</p>
+<p>Of course, with enough effort, users of these web-based visualization systems can still create rich interactive figures with advanced features such as complex linked views and parametric interaction. However, implementing these features often requires dealing with low-level reactivity and visualization primitives directly, defeating the purpose of using a high-level library and creating a barrier to entry for casual users <span class="citation">(<a href="#ref-keller2024">Keller, Manz, and Gehlenborg 2024</a>)</span>. This may explain why interactive visualizations are nowadays mainly used for data presentation, not data exploration <span class="citation">(<a href="#ref-batch2017">Batch and Elmqvist 2017</a>)</span>.</p>
+</div>
+</div>
+</div>
+<div id="what-is-interactive-visualization" class="section level2 hasAnchor" number="2.2">
+<h2><span class="header-section-number">2.2</span> What even is interactive data visualization?<a href="litreview.html#what-is-interactive-visualization" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<blockquote>
+<p>If it looks like a duck, swims like a duck, and quacks like a duck, then it probably is a duck.</p>
+<p>[…] The irony is that while the phrase is often cited as proof of abductive reasoning, it is not proof, as the mechanical duck is still not a living duck</p>
+<p><a href="https://en.wikipedia.org/wiki/Duck_test">Duck Test</a> entry, <span class="citation">(<a href="#ref-wikipedia2022">Wikipedia 2022</a>)</span></p>
+</blockquote>
+<p>In the previous section (Section <a href="litreview.html#brief-history">2.1</a>), I provided an overview of the history and present state of interactive data visualization, discussing a number of features and systems. However, while doing so, I avoided one crucial question: what constitutes an interactive data visualization?</p>
+<p>Surprisingly, despite the widespread popularity of interactive visualizations, there is no universally agreed-upon definition of interactivity. Within the data visualization literature, the terms “interactive” and “interaction” are rarely defined. And even when they are, the definitions are often incongruent or even contradictory <span class="citation">(see e.g. <a href="#ref-dimara2019">Dimara and Perin 2019</a>; <a href="#ref-elmqvist2011">Elmqvist et al. 2011</a>; <a href="#ref-pike2009">Pike et al. 2009</a>)</span>.</p>
+<p>This lack of a clear consensus complicates my task of discussing interactive data visualization. Ignoring the issue could lead to confusion, while a comprehensive exploration of the terminology could become overly complex, as evidenced by the abundance of research papers dedicated to the topic <span class="citation">(see e.g. <a href="#ref-dimara2019">Dimara and Perin 2019</a>; <a href="#ref-elmqvist2011">Elmqvist et al. 2011</a>)</span>. To address this, this section aims to provide a concise overview of how interactivity has been conceptualized in the literature. The goal is to establish a clear framework for understanding “interactive” and “interaction” within the context of this thesis.</p>
+<div id="interactive-vs.-interacting-with" class="section level3 hasAnchor" number="2.2.1">
+<h3><span class="header-section-number">2.2.1</span> Interactive vs. interacting with<a href="litreview.html#interactive-vs.-interacting-with" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>First, the term “interactive data visualization” can be interpreted in two different ways:</p>
+<ol style="list-style-type: decimal">
+<li>As a noun: a concrete chart or figure</li>
+<li>As a verb: the process of interacting with a figure</li>
+</ol>
+<p>In data visualization literature, both interpretations are frequently used, leading to significant ambiguity <span class="citation">(<a href="#ref-dimara2019">Dimara and Perin 2019</a>; <a href="#ref-pike2009">Pike et al. 2009</a>; see also <a href="#ref-yi2007">Yi et al. 2007</a>)</span>. Some researchers focus on the mathematical and computational aspects of interactive data visualization, discussing specific systems and implementations <span class="citation">(see e.g. <a href="#ref-buja1996">Buja, Cook, and Swayne 1996</a>; <a href="#ref-kelleher2015">Kelleher and Levkowitz 2015</a>; <a href="#ref-leman2013">Leman et al. 2013</a>; <a href="#ref-wills2008">Wills 2008</a>)</span>. Others prioritize the more cognitive or human-computer interaction (HCI) aspects of interactive data visualization, exploring what impact different kinds of visualization and interaction styles have on the user’s ability to derive insights from the data <span class="citation">(see e.g. <a href="#ref-dimara2019">Dimara and Perin 2019</a>; <a href="#ref-dix1998">Dix and Ellis 1998</a>; <a href="#ref-pike2009">Pike et al. 2009</a>; <a href="#ref-quadri2021">Quadri and Rosen 2021</a>; <a href="#ref-yi2007">Yi et al. 2007</a>)</span>.</p>
+<p>Of course, many papers discuss both concrete implementations of interactive data visualization systems and the user’s intentions and experiences while using those systems. However, the dual intepretation of “interactive data visualization” does complicate literature search. It also highlights the interdisciplinary nature of the field, showing its connections to statistics, computer science, applied mathematics, business analytics, HCI, and cognitive psychology<span class="citation">(<a href="#ref-dimara2019">Dimara and Perin 2019</a>)</span>. While this interdisciplinary nature of interactive data visualization is certainly a strength, it can also lead to confusion. As such I think it is necessary to clearly define key terms.</p>
+<p>To ensure clarity throughout thesis, the term <em>“interactive data visualization”</em> will primarily refer to concrete charts or figures. When referring to the <em>practice</em> of interactive data visualization, I will attempt to use more active phrasing such as <em>“interacting with a visualization”</em> or <em>“user’s interaction with a visualization”</em>, to indicate that what is being referred to is the activity or process of visualization, rather than any concrete object or implementation.</p>
+</div>
+<div id="what-is-interactive-enough" class="section level3 hasAnchor" number="2.2.2">
+<h3><span class="header-section-number">2.2.2</span> What is “interactive enough”?<a href="litreview.html#what-is-interactive-enough" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Even when we use the term “interactive data visualization” to refer to concrete charts or figures, the meaning still remains fairly ambiguous. What is the bar for calling a figure “interactive”? What features should interactive figures have? These criteria vary a lot between data visualization researchers, such that the same figure may be considered interactive by some but not by others.</p>
+<p>Some researchers adopt a broad definition of interactive data visualization, considering almost any figure combined with graphical user interface (GUI) as interactive, as long as it allows for some level of user manipulation <span class="citation">(<a href="#ref-brodbeck2009">Brodbeck, Mazza, and Lalanne 2009</a>)</span>. For others, the speed of the computer’s responses to user input is important, with faster updates translating to greater interactivity <span class="citation">(<a href="#ref-becker1987">Becker and Cleveland 1987</a>; <a href="#ref-buja1996">Buja, Cook, and Swayne 1996</a>)</span>. Some also differentiate between “interactive” and “dynamic” manipulation, such that interactive manipulation involves discrete actions such as pressing a button or selecting an item from a drop-down menu, whereas dynamic manipulation involves continuous actions, like moving a slider or clicking-and-dragging to highlight a rectangular area <span class="citation">(<a href="#ref-rheingans2002">Rheingans 2002</a>; <a href="#ref-jankun2007">Jankun-Kelly, Ma, and Gertz 2007</a>; see also <a href="#ref-dimara2019">Dimara and Perin 2019</a>)</span>.</p>
+<p>However, many other researchers ascribe to a much narrower view of interactive data visualization, which hinges on high-level analytic features that allow efficient exploration of the data. These features include the ability to generate different views of the data (by e.g. zooming, panning, sorting, and filtering), and the reactive propagation of changes between connected or “linked” parts of a figure <span class="citation">(<a href="#ref-kehrer2012">Kehrer et al. 2012</a>; <a href="#ref-buja1996">Buja, Cook, and Swayne 1996</a>; <a href="#ref-keim2002">Keim 2002</a>; <a href="#ref-unwin1999">Unwin 1999</a>; <a href="#ref-chen2008">Chen, Härdle, and Unwin 2008</a>)</span>. An often cited guideline is the visual information seeking mantra: overview first, zoom and filter, then details-on-demand <span class="citation">(<a href="#ref-shneiderman2003">Shneiderman 2003</a>)</span>. Similarly, in visual analytics research, a distinction is made between “surface-level” (or “low-level”) and “parametric” (or “high-level”) interactions, where surface-level interactions manipulate attributes of the visual domain only (e.g. zooming and panning), whereas parametric interactions manipulate attributes of mathematical models or algorithms underlying the visualization <span class="citation">(<a href="#ref-leman2013">Leman et al. 2013</a>; <a href="#ref-pike2009">Pike et al. 2009</a>)</span>.</p>
+<p>Table <a href="litreview.html#tab:definitions">2.1</a> provides a concise summary of the several perspectives on interactivity discussed above. It meant to serve as a reference point for future discussions within the text, though it is important to note that this is not an exhaustive list. For a more comprehensive taxonomy of interactive visualization systems and features, see e.g. <span class="citation">Dimara and Perin (<a href="#ref-dimara2019">2019</a>)</span>, <span class="citation">Yi et al. (<a href="#ref-yi2007">2007</a>)</span>.</p>
+<table class="table" style="color: black; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:definitions">Table 2.1: </span>Summary of the perspectives on interactivity
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Name
+</th>
+<th style="text-align:left;">
+Details
+</th>
+<th style="text-align:left;">
+Selected references
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+User interaction
+</td>
+<td style="text-align:left;">
+The user can interactively manipulate the figure in some way
+</td>
+<td style="text-align:left;">
+<span class="citation">Brodbeck, Mazza, and Lalanne (<a href="#ref-brodbeck2009">2009</a>)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Real-time updates
+</td>
+<td style="text-align:left;">
+The user’s interactions propagate into the visualization with little to no lag
+</td>
+<td style="text-align:left;">
+<span class="citation">Becker and Cleveland (<a href="#ref-becker1987">1987</a>)</span>, <span class="citation">Buja, Cook, and Swayne (<a href="#ref-buja1996">1996</a>)</span>, <span class="citation">Jankun-Kelly, Ma, and Gertz (<a href="#ref-jankun2007">2007</a>)</span>, and <span class="citation">Rheingans (<a href="#ref-rheingans2002">2002</a>)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Plot- and data-space manipulation
+</td>
+<td style="text-align:left;">
+The user can interactively explore different parts of the data set by doing actions which effectively amount to “subsetting” rows of the data (e.g. zooming, panning, and filtering)
+</td>
+<td style="text-align:left;">
+<span class="citation">Buja, Cook, and Swayne (<a href="#ref-buja1996">1996</a>)</span>, <span class="citation">Keim (<a href="#ref-keim2002">2002</a>)</span>, <span class="citation">Shneiderman (<a href="#ref-shneiderman2003">2003</a>)</span>, and <span class="citation">Unwin (<a href="#ref-unwin1999">1999</a>)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Linked views
+</td>
+<td style="text-align:left;">
+The user’s interaction propagate across multiple plots (e.g. linked highlighting)
+</td>
+<td style="text-align:left;">
+<span class="citation">Buja, Cook, and Swayne (<a href="#ref-buja1996">1996</a>)</span>, <span class="citation">Keim (<a href="#ref-keim2002">2002</a>)</span>, <span class="citation">Kehrer et al. (<a href="#ref-kehrer2012">2012</a>)</span>, <span class="citation">Unwin (<a href="#ref-unwin1999">1999</a>)</span>, <span class="citation">Theus (<a href="#ref-theus2008">2008</a>)</span>, <span class="citation">Wilhelm (<a href="#ref-wilhelm2008">2008</a>)</span>, <span class="citation">Wills (<a href="#ref-wills2008">2008</a>)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Parametric updates
+</td>
+<td style="text-align:left;">
+The user can manipulate the parameters of some underlying mathematical model or algorithm (e.g. histogram bins, grand tour projections, etc…)
+</td>
+<td style="text-align:left;">
+<span class="citation">Leman et al. (<a href="#ref-leman2013">2013</a>)</span>, <span class="citation">Pike et al. (<a href="#ref-pike2009">2009</a>)</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="complexity-of-interactive-features" class="section level3 hasAnchor" number="2.2.3">
+<h3><span class="header-section-number">2.2.3</span> Complexity of interactive features<a href="litreview.html#complexity-of-interactive-features" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The way we define interactivity is not just a matter of taste or preference: it has a significant impact on the complexity and feasibility of our systems. As we will see in Section <a href="litreview.html#common-features">2.2.5</a>, some simple features are fairly easy to implement, requiring just a thin interactive layer over a static data visualization system, whereas others come with a significant overhead, requiring an entirely different framework than static visualization.</p>
+<p>To make the point with a particularly blunt example, many programming languages support a read-evaluate-print loop (REPL). This allows interactive code execution from the command line: the user inputs code, the interpreter evaluates it, outputs results, and waits for more input. If the language supports plotting, running code to generate plots could be considered an “interactive data visualization system.” User interaction with the REPL modifies the visual output, and with fast-enough input, updates could appear almost instantly (thus satisfying the user interaction and real-time update definitions of interactivity, see table). This would make almost every programming language an “interactive data visualization system”, requiring no additional effort.</p>
+<p>However, I would argue that, today, this view stretches the concept of interactivity. It is true that, historically, the command line was considered a highly interactive user interface <span class="citation">(see e.g. <a href="#ref-foley1990">Foley 1990</a>; <a href="#ref-howard1995">Howard and MacEachren 1995</a>)</span>. However, with advancements in processor speeds and the widespread adoption of graphical user interfaces (GUIs), user expectations have evolved. Nowadays, we typically associate interactivity with direct manipulation of visual elements and immediate feedback <span class="citation">(<a href="#ref-dimara2019">Dimara and Perin 2019</a>; <a href="#ref-urbanek2011">Urbanek 2011</a>)</span>. Thus, we can see that what’s considered “interactive” evolves over time.</p>
+<p>But even with figures that are manipulated directly, there still are considerable differences in what different features imply for implementation requirements. Some features, like changing color or opacity of points in a scatterplot affect only the visual attributes of the plot and not the underlying data representation. This makes them simple to implement as they do not require any specialized data structures or complex computations, and the primary cost lies in re-rendering the visualization.</p>
+<p>In contrast, some interactive features require a lot more infrastructure. For instance, filtering, linked highlighting, or parametric interaction require specialized data structures and algorithms beyond those that would be required in static plots. This is because, each time the user engages in an interaction, entirely new summaries of the underlying data may need to be computed.</p>
+<p>To give a concrete example, when a user selects several points in a linked scatterplot (see Section <a href="litreview.html#linked-selection">2.2.5.5</a>), we first have to find the ids of all the selected cases, recompute the statistics underlying all other linked plots (such as counts/sums in barplots or histograms), train all of the relevant scales, and only then can we re-render the figure. Likewise, when interactively manipulating a histogram’s binwidth, we need to recompute the number of cases in each bin whenever the binwidth changes. To maintain the illusion of smooth, “continuous” interaction <span class="citation">(<a href="#ref-dimara2019">Dimara and Perin 2019</a>)</span>, these computations need to happen fast, and as such, computational efficiency becomes imperative at high data volumes.</p>
+</div>
+<div id="working-definition" class="section level3 hasAnchor" number="2.2.4">
+<h3><span class="header-section-number">2.2.4</span> Working definition<a href="litreview.html#working-definition" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>As discussed in previous sections, the definition “interactive data visualization” varies across fields and researchers. Moreover, when building interactive data visualization systems, different definitions imply varying levels of implementation complexity. Thus, we need to establish clear criteria for our specific definition.</p>
+<p>Data visualization can be broadly categorized into two primary modes: presentation and exploration. While both modes share a bulk of common techniques, each comes with a different set of goals and challenges <span class="citation">(<a href="#ref-kosara2016">Kosara 2016</a>)</span>. Data presentation starts from the assumption that we have derived most of the important insights from our data already, and the goal is now to communicate these insights clearly and make an impactful and lasting impression <span class="citation">(<a href="#ref-kosara2016">Kosara 2016</a>)</span>. In contrast, data exploration begins from a position of incomplete knowledge - we accept that there are facts about our data we might not be aware of. Thus, when we explore data with visualizations, the goal is to help us see what we might otherwise miss or might not even think to look for <span class="citation">(<a href="#ref-tukey1977">Tukey et al. 1977</a>; <a href="#ref-unwin2018">Unwin 2018</a>)</span>.</p>
+<p>However, it is not always the case that more complex visuals necessarily translate to better statistical insights. In static visualization, it is a well-established that plots can include seemingly sophisticated features which do not promote the acquisition of statistical insights in any way <span class="citation">(<a href="#ref-cairo2014">Cairo 2014</a>, <a href="#ref-cairo2019">2019</a>; <a href="#ref-gelman2013">Gelman and Unwin 2013</a>; <a href="#ref-tufte2001">Tufte 2001</a>)</span>. Similarly, adding interactivity to a visualization does not always improve its statistical legibility <span class="citation">(see e.g. <a href="#ref-abukhodair2013">Abukhodair et al. 2013</a>; <a href="#ref-franconeri2021">Franconeri et al. 2021</a>)</span>.</p>
+<p>I propose to treat interactive features the same way we treat visual features in static visualization. Specifically, I propose the following working definition:</p>
+<blockquote>
+<p>When building interactive data visualization systems, we should prioritize interactive features which promote statistical understanding.</p>
+</blockquote>
+<p>If we accept this proposition, then several important consequences follow. First, we must favor high-level, data-dependent, parametric interactions over the purely graphical ones. That is not to say that purely graphical interactive features cannot useful. For example, in a scatterplot with overplotting, changing the size or alpha of points can help us see features that would otherwise remain hidden. Still, I argue that the ability to see entirely new summaries of the data is what makes some interactive data visualizations systems particularly powerful. The interactive features that enable this, such as linked highlighting, and parameter manipulation, go beyond aesthetics, and empower the users to explore the data dynamically.</p>
+</div>
+<div id="common-features" class="section level3 hasAnchor" number="2.2.5">
+<h3><span class="header-section-number">2.2.5</span> Common interactive features<a href="litreview.html#common-features" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>This section describes several common types of interactive features that tend to make frequent appearance across interactive data visualization systems. It is only meant as an overview <span class="citation">(for comprehensive taxonomies of interactive features, see <a href="#ref-dimara2019">Dimara and Perin 2019</a>; <a href="#ref-yi2007">Yi et al. 2007</a>)</span>. For each feature, I highlight its properties, common uses, and implementation requirements.</p>
+<div id="changing-size-and-alpha" class="section level4 hasAnchor" number="2.2.5.1">
+<h4><span class="header-section-number">2.2.5.1</span> Changing size and alpha<a href="litreview.html#changing-size-and-alpha" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>One of the simplest and most widely-implemented interactive features is the ability to adjust the size and transparency of geometric objects. In other words, the user may dynamically shrink or grow the objects and make them more or less opaque. This can be particularly useful at high data volumes, as reducing the size or alpha might show certain trends that would be otherwise hidden. For example, in scatterplots, shrinking points and making them semi-transparent reduces overplotting and can provide an approximation to a 2D kernel density plot <span class="citation">(see e.g. <a href="#ref-dang2010">Dang, Wilkinson, and Anand 2010</a>)</span>. Similar technique can work for parallel coordinates plot as well <span class="citation">(<a href="#ref-theus2008">Theus 2008</a>)</span>.</p>
+<p>This feature is usually quite easy to implement, since it involves the visual attributes only. In other words, when we manipulate size or alpha of geometric objects in our plots, we usually do not need to worry about what data these objects represent or where it came from. As such, it is relatively simple to implement this feature “on top” of an existing static visualization layer <span class="citation">(see <a href="#ref-bracsoveanu2017">Braşoveanu et al. 2017</a>)</span>.</p>
+</div>
+<div id="zooming-and-panning" class="section level4 hasAnchor" number="2.2.5.2">
+<h4><span class="header-section-number">2.2.5.2</span> Zooming and panning<a href="litreview.html#zooming-and-panning" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Zooming and panning are two fundamental interactive features, often used in tandem. Because of their association, and the fact that they both involve interactive manipulation of scale limits, I discuss them here simultaneously, in a single subsection.</p>
+<p>Zooming, depicted in Figure <a href="litreview.html#fig:zooming">2.4</a>, allows the user to magnify a specific region of a single plot. Typically, this is done creating a rectangular selection and the plot scales are then automatically adjusted to match this region. Zooming allows the user to get a better sense of the trend within the magnified region, and discover patterns that may be otherwise obscured due to overplotting or improper aspect ratio <span class="citation">(see e.g. <a href="#ref-buja1996">Buja, Cook, and Swayne 1996</a>; <a href="#ref-dix1998">Dix and Ellis 1998</a>; <a href="#ref-unwin1999">Unwin 1999</a>; <a href="#ref-theus2008">Theus 2008</a>; <a href="#ref-yi2007">Yi et al. 2007</a>)</span>.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:zooming"></span>
+<img src="figures/zooming.png" alt="Zooming involves shrinking the axis limits to obtain a more detailed view of the data. Typically, the user selects a rectangular region of the plot (left) and the plot scales are then adjusted so that the region fills up the entire plot area (right). Notice the change in the axis limits." width="750" />
+<p class="caption">
+Figure 2.4: Zooming involves shrinking the axis limits to obtain a more detailed view of the data. Typically, the user selects a rectangular region of the plot (left) and the plot scales are then adjusted so that the region fills up the entire plot area (right). Notice the change in the axis limits.
+</p>
+</div>
+<p>However, after zooming into a region, it is often helpful retain the ability to traverse the wider plot area, while maintaining the same level of zoom and aspect ratio. This is what panning is for. By performing an action like right-clicking and dragging, the user can shift the center of the zoomed in region around the plot.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:panning"></span>
+<img src="figures/panning.png" alt="Panning involves moving the axis limits while retaining the same zoom level and axis ratio. After zooming into a rectangular region (top row), the user can around the plot region, usually by clicking and dragging (bottom row)." width="750" />
+<p class="caption">
+Figure 2.5: Panning involves moving the axis limits while retaining the same zoom level and axis ratio. After zooming into a rectangular region (top row), the user can around the plot region, usually by clicking and dragging (bottom row).
+</p>
+</div>
+<p>Since these features can be implemented with scales only, implementing zooming and panning might seem relatively straightforward, however, even here, there are few issues to consider. First, whereas continuous axes can be be zoomed and/or panned by simply modifying the axis limits, zooming other types of scales such as discrete ones require a bit more consideration <span class="citation">(see e.g. <a href="#ref-wilkinson2012">Wilkinson 2012</a>)</span>. Second, with nested zooming, maintaining a reversible history of previous states is essential <span class="citation">(<a href="#ref-unwin1999">Unwin 1999</a>)</span>. Third, at times, it can be useful to link scale updates across multiple plots, such that, for example, zooming or panning a plot in a scatterplot matrix produces the same updates in other plots with the same variables on one of the axes. Finally, an advanced feature that can be also quite useful when combined with hierarchical data such as geographic information is logical or semantic zooming <span class="citation">(<a href="#ref-keim2002">Keim 2002</a>; <a href="#ref-unwin1999">Unwin 1999</a>; <a href="#ref-yi2007">Yi et al. 2007</a>)</span>. In logical zooming, magnification does not only increase the size of the zoomed-in objects, but also the level of detail the objects show, making this a more complex feature than general zooming involving scales only.</p>
+</div>
+<div id="querying" class="section level4 hasAnchor" number="2.2.5.3">
+<h4><span class="header-section-number">2.2.5.3</span> Querying<a href="litreview.html#querying" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Querying is another popular interactive feature that is usually fairly simple to implement. As shown in Figure <a href="litreview.html#fig:querying">2.6</a>, the way querying is typically implemented is that when a user mouses over a particular geometric object, a tooltip or a small table is displayed, showing values corresponding to the underlying data point(s) <span class="citation">(<a href="#ref-urbanek2003">Urbanek and Theus 2003</a>)</span>. This makes it possible to look up precise values that would otherwise be available only approximately via the visual representation.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:querying"></span>
+<img src="figures/querying.png" alt="Querying involves hovering over an object to display its associated data values in a table or pop-up. Notice that this can include both plotted values (weight, mileage) as well as values that are not directly represented in the plot (car name, cylinders)." width="750" />
+<p class="caption">
+Figure 2.6: Querying involves hovering over an object to display its associated data values in a table or pop-up. Notice that this can include both plotted values (weight, mileage) as well as values that are not directly represented in the plot (car name, cylinders).
+</p>
+</div>
+<p>Querying is useful because it allows us to combine the best features of graphics and tables. Specifically, it allows us overcome the dichotomy pointed out by John Tukey in his famous paper on the role of graphics in data exploration: “graphics are for the qualitative/descriptive […] never for the carefully quantitative (tables do that better)” and “graphics are for comparison […] not for access to individual amounts” <span class="citation">(<a href="#ref-tukey1993">Tukey 1993</a>)</span>. By providing the option to query geometric objects, it allows the user to seamlessly transition between the high-level analytic overview that the graphic provides and the low-level quantitative information of the table.</p>
+<p>Additionally, querying also allow us to show more information than can be displayed via the visual encodings alone (see again Figure <a href="litreview.html#fig:querying">2.6</a>). Specifically, whereas most plots can encode only two or three variables, we can assign an arbitrary number of key-value pairs to the rows query table. However, it is crucial to balance the need for detail against the risk of visual clutter. Too many rows may overtax the attention of the visualization consumer and also lead to clipping/overplotting issues if the table cannot fit the plotting area. Further, there are <a href="#bidirectional-communication">better methods</a> for retrieving very detailed information from interactive visualizations.</p>
+<p>While querying one-to-one representations of the data such as points in a scatterplot is relatively simple, querying aggregate objects such as bars in a barplot/histograms presents some challenges. In the case of one-to-one representations, we can always simply retrieve the corresponding row of the data, however, in the case of aggregate objects, a single object may correspond to multiple rows and there may be no obvious way to summarize them. For instance, when querying a continuous variable corresponding to a bar in a barplot, should we return its sum, its maximum, the set of all unique values, or perhaps something entirely different? Likewise, querying objects in the presence of selection or higlighting presents some problems.</p>
+</div>
+<div id="switching-representations" class="section level4 hasAnchor" number="2.2.5.4">
+<h4><span class="header-section-number">2.2.5.4</span> Switching representations<a href="litreview.html#switching-representations" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The same data can often by visualized in multiple ways, by representing it via different sets of visual encodings <span class="citation">(<a href="#ref-wilkinson2012">Wilkinson 2012</a>)</span>. However, some encodings may work better for answering certain questions than others. By enabling the users to switch the visual representation, we empower them to explore their data with grater flexibility <span class="citation">(<a href="#ref-yi2007">Yi et al. 2007</a>)</span>.</p>
+<p>A typical example is switching between a barplot and a spineplot, see Figure <a href="litreview.html#fig:barplot-spineplot1">2.7</a>. Barplots are an effective representation for comparing absolute quantities. Specifically, by encoding a categorical variable as the x-axis position and a continuous variable as the y-axis position/bar length, we can easily compare the y-axis quantities across the levels of the x-axis variable. Often, we further split the bars into segments and encode a second categorical variable as the segment colour, to be able to compare quantities within subgroups.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:barplot-spineplot1"></span>
+<img src="figures/barplot-spineplot.png" alt="Switching representations can be an effective way to derive new insights from the data. A barplot (left) represents the same underlying data as a spineplot (right), however, the former is better for comparing absolute counts whereas the latter is better for comparing proportions. Note that in the spineplot, it is much easier to see that the proportion of the red cases is the same in categories B and C." width="750" />
+<p class="caption">
+Figure 2.7: Switching representations can be an effective way to derive new insights from the data. A barplot (left) represents the same underlying data as a spineplot (right), however, the former is better for comparing absolute counts whereas the latter is better for comparing proportions. Note that in the spineplot, it is much easier to see that the proportion of the red cases is the same in categories B and C.
+</p>
+</div>
+<p>However, since the heights of the bars are different, barplots are not very effective for comparing proportions, especially when the bar heights vary significantly. Spineplots, on the other hand, present a way of visualizing the same sort of data as a barplot while making it much easier to compare proportions. Specifically, in a spineplot, the heights of the bars are all normalized to 1, such that the segments show a proportion of the total, and the absolute values are instead encoded as the bar width. The fixed height of bars makes it easy to compare the proportions the segments represent.</p>
+<p>Other examples of switching of representations include the spineplot (a normalized version of the histogram).</p>
+</div>
+<div id="linked-selection" class="section level4 hasAnchor" number="2.2.5.5">
+<h4><span class="header-section-number">2.2.5.5</span> Linked selection<a href="litreview.html#linked-selection" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Linked selection, also known as linked brushing, highlighting, or views, is often considered as one of the most useful interactive data visualization features <span class="citation">(see e.g. <a href="#ref-buja1996">Buja, Cook, and Swayne 1996</a>; <a href="#ref-wilhelm2003">Wilhelm 2003</a>; <a href="#ref-heer2012">Heer and Shneiderman 2012</a>; <a href="#ref-ward2015">Ward, Grinstein, and Keim 2015</a>; <a href="#ref-ware2019">Ware 2019</a>)</span>. Fundamentally, it involves creating a figure with multiple “linked” plots. The user can then click or click-and-drag over objects in one plot, and the corresponding cases are highlighted across all the other plots, see Figure <a href="litreview.html#fig:linked-selection">2.8</a>. This makes it possible to quickly quickly explore trends across different dynamically-generated subsets of the data <span class="citation">(<a href="#ref-dix1998">Dix and Ellis 1998</a>)</span>. The ability to quickly materialize alternative views of the data makes this a particularly effective tool for data exploration <span class="citation">(<a href="#ref-wilhelm2008">Wilhelm 2008</a>; <a href="#ref-wills2008">Wills 2008</a>)</span>.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:linked-selection"></span>
+<img src="figures/linked-selection.png" alt="Linked selection involves highlighting the same cases across all plots. The user can select some objects in one plot, such as points in a scatterplot (top left), and the corresponding cases are higlighted in all the other plots." width="750" />
+<p class="caption">
+Figure 2.8: Linked selection involves highlighting the same cases across all plots. The user can select some objects in one plot, such as points in a scatterplot (top left), and the corresponding cases are higlighted in all the other plots.
+</p>
+</div>
+<p>Despite the fact that the user experience of linked selection is usually fairly intuitive, there are many subtle considerations that go into implementing the feature <span class="citation">(for a good overview, see <a href="#ref-wilhelm2008">Wilhelm 2008</a>)</span>. First, there is the issue of how the user makes the selection. Typically, clicking selects a single objects and clicking-and-dragging selects multiple objects in a rectangular region (similar to how selecting files and folders works on desktop GUIs of most operating systems). In some systems, the users may also drag the selection region around (“brushing”), form a continuous “lasso” selection, select lines in a particular angular range, or points at a particular distance from a centroid <span class="citation">(see e.g. <a href="#ref-hauser2002">Hauser, Ledermann, and Doleisch 2002</a>; <a href="#ref-splechtna2018">Splechtna et al. 2018</a>; <a href="#ref-wills2008">Wills 2008</a>)</span>. Further, when one variables is continuous and the other is derived (such as the x- and y-axes in a histogram), the interaction may also be simplified by restricting selection/brushing to the primary axis <span class="citation">(<a href="#ref-satyanarayan2016">Satyanarayan et al. 2016</a>)</span>. Finally, the selections can be combined by various operators such as OR, AND, NOT, and XOR, to form unions, intersections, and other types of logical subsets <span class="citation">(<a href="#ref-theus2002">Theus 2002</a>; <a href="#ref-urbanek2003">Urbanek and Theus 2003</a>; <a href="#ref-wills2008">Wills 2008</a>)</span>.</p>
+<p>Second, there is the issue of who should dispatch and respond to selection events. In presentation-focused interactive data visualization and dashboarding systems, this responsibility is kept flexible, such that some plots may only dispatch, only respond, do both, or neither <span class="citation">(<a href="#ref-satyanarayan2015">Satyanarayan et al. 2015</a>, <a href="#ref-satyanarayan2016">2016</a>)</span>. However, in systems focused on data exploration, the convention is typically for all plots to both dispatch and respond to selection events, such that they may be interacted with in the same way. <span class="citation">(<a href="#ref-theus2002">Theus 2002</a>; <a href="#ref-urbanek2003">Urbanek and Theus 2003</a>; <a href="#ref-urbanek2011">Urbanek 2011</a>)</span>.</p>
+<p>Third, there is the issue of what to link. In the case of data represented by a two-dimensional table or data frame, the most common method is to link cases taken on the same observational level (identity linking), such that each row gets assigned a value representing the selection status <span class="citation">(<a href="#ref-urbanek2003">Urbanek and Theus 2003</a>; <a href="#ref-wilhelm2008">Wilhelm 2008</a>; <a href="#ref-wills2008">Wills 2008</a>)</span>. However, in the case of more complex data, more advanced linking schemes are also available, such as hierarchical and distance-based linking <span class="citation">(<a href="#ref-wilhelm2008">Wilhelm 2008</a>; <a href="#ref-urbanek2011">Urbanek 2011</a>)</span>.</p>
+<p>Third, there is the issue of how to display the selection.</p>
+</div>
+</div>
+</div>
+<div id="the-highlighting-problem" class="section level2 hasAnchor" number="2.3">
+<h2><span class="header-section-number">2.3</span> The highlighting problem<a href="litreview.html#the-highlighting-problem" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>As was discussed in the previous section, linked selection is one of the most highly ranked interactive features in interactive data visualization. It allows us to mark specific cases in one plot, and see the corresponding summary statistics in all the other plots. In this way, it allows us to quickly explore different dynamically-generated subsets of our data, within the context of the whole data set.</p>
+<div id="linked-selection-and-stacking" class="section level3 hasAnchor" number="2.3.1">
+<h3><span class="header-section-number">2.3.1</span> Linked selection and stacking<a href="litreview.html#linked-selection-and-stacking" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>When we engage in linked selection, we want to highlight parts of objects corresponding to the selected cases. Thus, fundamentally, we need to break each object into parts. We then need some way of representing those parts, in a way that visually preserves the hierarchical nature of the relationship (it needs to be clear that the parts are still parts of the whole object).</p>
+<p>In data visualization, there are three common methods for dealing with objects that have been split into parts: stacking, dodging, and layering. Let’s briefly illustrate these on the example of the barplot. We start with the whole bars and then break each bar into multiple segments based on the levels of another variable (such as selection status). Now, what we do with these segments will differ based on the technique we use. When stacking, we plot the bar segments vertically on top of each other. When dodging, we plot the bars side-by-side, as “clusters”. Finally, when layering, we plot bar segments in separate graphical layers and use partial transparency to mitigate overplotting.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-8"></span>
+<img src="_main_files/figure-html/unnamed-chunk-8-1.png" alt="Examples of the three methods for dealing with objects that have been split into parts: stacking, dodging, and layering." width="672" />
+<p class="caption">
+Figure 2.9: Examples of the three methods for dealing with objects that have been split into parts: stacking, dodging, and layering.
+</p>
+</div>
+<p>Much has been written about the relative merits of stacking, dodging, and layering. For example, layering is only useful with few categories, as blending many colors can make it difficult to tell the categories apart <span class="citation">(<a href="#ref-franconeri2021">Franconeri et al. 2021</a>; <a href="#ref-wilke2019">Wilke 2019</a>)</span>. Further, in a landmark study, <span class="citation">Cleveland and McGill (<a href="#ref-cleveland1984">1984</a>)</span> showed that people tend to be less accurate when reading information from stacked bar charts as opposed to dodged bar charts. Specifically, since the lower y-axis coordinate of a stacked segment is pushed up by the cumulative height of the segments below, it becomes difficult to accurately compare segments’ length, both within and across bars <span class="citation">(<a href="#ref-cleveland1984">Cleveland and McGill 1984</a>)</span>. Subsequent research has independently validated these findings and expanded upon them <span class="citation">(see e.g. <a href="#ref-heer2010">Heer and Bostock 2010</a>; <a href="#ref-thudt2016">Thudt et al. 2016</a>; <a href="#ref-quadri2021">Quadri and Rosen 2021</a>)</span>. Due to this suboptimal statistical legibility, many data visualization researchers have urged caution about stacking <span class="citation">(see e.g. <a href="#ref-byron2008">Byron and Wattenberg 2008</a>; <a href="#ref-cairo2014">Cairo 2014</a>; <a href="#ref-franconeri2021">Franconeri et al. 2021</a>)</span>, and some have even discouraged its use altogether <span class="citation">(<a href="#ref-kosara2016">Kosara 2016</a>; <a href="#ref-wilke2019">Wilke 2019</a>)</span>.</p>
+<p>However, much of this research has been done with on static visualizations. I argue that, in interactive data visualization, there are additional constraints that affect the calculus of which method is the best.</p>
+<p>First, if we want to support the ability to interactively manipulate the alpha channel and do linked selection with multiple (3+) selection groups, we can effectively eliminate layering as an option. Having two different sources of alpha channel (layering and user input) would make the interaction confusing and limit its range (e.g. if we use 75% alpha to do layering, then the effective range of values the user can manipulate is 0-75%). Further, with multiple selection groups, it would become hard to tell the selection status apart. It is much better to keep the two interactive features (selection and alpha manipulation) orthogonal and use a separate visual attribute (color and transparency) for each.</p>
+<p>Thus, the choice is between stacking and dodging. While, as was discussed above, dodging is the preferred choice in static data visualization, I propose that</p>
+<p>First, I propose that stacking is the superior method for <em>displaying</em> selection. Thanks to the four Gestalt principles of proximity, similarity, closure, and common region, in a stacked barplot, each bar presents itself as a single visual entity. In other words, since the stacked segments are placed right on top of each other, and share width and a closed border, they are perceived as part of a unified whole (the bar). This remains true throughout selection - no matter how the heights of the highlighted segments change, the height of the whole stacked bar remains constant, and so does the overall outline of the plot.</p>
+</div>
+</div>
+<div id="theory-of-data-visualization-systems" class="section level2 hasAnchor" number="2.4">
+<h2><span class="header-section-number">2.4</span> Theory of data visualization systems<a href="litreview.html#theory-of-data-visualization-systems" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="scales" class="section level3 hasAnchor" number="2.4.1">
+<h3><span class="header-section-number">2.4.1</span> Scales<a href="litreview.html#scales" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Every data visualization system needs some way of translating abstract data values into concrete graphical attributes such as position, size, or colour. Given the ubiquitous need for scales, one might expect them to be a “solved issue”, within the relevant literature. However, this is far from the truth. Specifically, the issues of scales and measurement are still being grappled with in the areas of mathematics and philosophy of science to this day <span class="citation">(for a gentle yet thorough introduction, see <a href="#ref-tal2015">Tal 2015</a>)</span>.</p>
+<p>Scales are another area of data visualization in which there has been considerable debate, with many terms being overloaded and relating to concepts from different fields. This is due to the fact that the issue of how to compare, rank, and translate values has a long and complicated history. In particular, the issue of measurement has been hotly debated in the field of psychometrics and mathematical psychology, leading to the development of the <em>theory of measurement</em> (which has some overlap with, but is not the same as, <em>measurement theory</em> in mathematics).</p>
+<p>One paper that has been key to the debate around scales and measurement has been the seminal work of <span class="citation">Stevens (<a href="#ref-stevens1946">1946</a>)</span>. In this paper, Stevens defined a <em>scale</em> as a method of assigning numbers to values, allowing for various kinds of comparisons. Further, by considering transformations which preserve the comparisons, Stevens identified 4 types of scales: <em>nominal</em>, <em>ordinal</em>, <em>interval</em>, and <em>ratio</em> <span class="citation">(see also <a href="#ref-michell1986">Michell 1986</a>; <a href="#ref-velleman1993">Velleman and Wilkinson 1993</a>)</span>.</p>
+<table>
+<caption><span id="tab:scales">Table 2.2: </span>Types of scales identified by Stevens (1946)</caption>
+<colgroup>
+<col width="7%" />
+<col width="17%" />
+<col width="33%" />
+<col width="40%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Scale</th>
+<th align="left">Structure</th>
+<th align="left">Comparison</th>
+<th align="left">Valid transformations</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Nominal</td>
+<td align="left">Equivalence relation</td>
+<td align="left">Are <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> the same?</td>
+<td align="left"><span class="math inline">\(x&#39; = f(x)\)</span>, where <span class="math inline">\(f\)</span> is a bijection</td>
+</tr>
+<tr class="even">
+<td align="left">Ordinal</td>
+<td align="left">Total order</td>
+<td align="left">Is <span class="math inline">\(x\)</span> is greater than <span class="math inline">\(y\)</span>?</td>
+<td align="left"><span class="math inline">\(x&#39; = f(x)\)</span>, where <span class="math inline">\(f\)</span> is a monotonic bijection</td>
+</tr>
+<tr class="odd">
+<td align="left">Interval</td>
+<td align="left">Lebesque measure</td>
+<td align="left">How far is <span class="math inline">\(x\)</span> from <span class="math inline">\(y\)</span>?</td>
+<td align="left"><span class="math inline">\(x&#39; = ax + b\)</span>, for <span class="math inline">\(a, b\)</span> real</td>
+</tr>
+<tr class="even">
+<td align="left">Ratio</td>
+<td align="left"></td>
+<td align="left">How many times is <span class="math inline">\(x\)</span> greater than <span class="math inline">\(y\)</span>?</td>
+<td align="left"><span class="math inline">\(x&#39; = ax\)</span>, for <span class="math inline">\(a\)</span> real</td>
+</tr>
+</tbody>
+</table>
+<p>Table <a href="litreview.html#tab:scales">2.2</a> shows a loose reproduction of Table 1 from <span class="citation">Stevens (<a href="#ref-stevens1946">1946</a>)</span>. Note that the family of valid transformations gets smaller in each row, meaning that the scales carry more information <span class="citation">(<a href="#ref-velleman1993">Velleman and Wilkinson 1993</a>)</span>. Let’s discuss the scales individually.</p>
+<div id="nominal-scales" class="section level5 hasAnchor" number="2.4.1.0.1">
+<h5><span class="header-section-number">2.4.1.0.1</span> Nominal scales<a href="litreview.html#nominal-scales" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p><em>Nominal</em> scales correspond to equivalence relations. An equivalence relation is a binary relation <span class="math inline">\(\sim\)</span> on some set <span class="math inline">\(X\)</span> which, for all <span class="math inline">\(x, y, z \in X\)</span>, has the following properties:</p>
+<ul>
+<li><em>Reflexivity</em>: <span class="math inline">\(x \sim x\)</span></li>
+<li><em>Symmetry</em>: <span class="math inline">\(x \sim y \text{ if and only if } y \sim x\)</span></li>
+<li><em>Transitivity</em>: <span class="math inline">\(x \sim y \text{ and } y \sim z \text{ then } x \sim z\)</span></li>
+</ul>
+<p>Intuitively, we can think of the numbers on a nominal scale as “labels”. Thus, the only question which we can ask a nominal scale is whether two labels are the same or different. Examples of variables with nominal scale include variables of which we typically think of as categorical, such as color, species, or political party. It does not make sense to say “blue is <em>more</em> than green” or “cat is <em>more</em> than dog” without specifying some other axis of comparison. It does make sense, however, to say “Daisy and Molly are the same species of animal (cat)” or “these two glasses are of different colors”.</p>
+<p>For nominal scales, any permutation is a valid transformation <span class="citation">(<a href="#ref-stevens1946">Stevens 1946</a>)</span>. For example, if we use the numbers <span class="math inline">\(\{ 1, 2, 3 \}\)</span> to represent the species <span class="math inline">\(S = \{ \text{cat}, \text{dog}, \text{hamster} \}\)</span>, respectively, we can re-assign the numbers in any order we want and the properties of the scale are preserved.</p>
+<p>It is arguable whether any nominal quantities exist in and of themselves or whether they only ever exists as abstract social constructions over underlying continuous reality. Color is a discretization of the visible light spectrum (frequency of electromagnetic radiation), and the pre-Darwinian concept of a species is likewise an abstraction over continuously varying distribution of genes <span class="citation">(although there have been some attempts to ground the definition of a discrete species in the theory of genetics, e.g. as a population of individuals which can produce viable offsprings, see <a href="#ref-mayr1999">Mayr 1999</a>)</span>. Further, even many subjective concepts which are typically described as discrete such as emotions may be abstractions over underlying continuous phenomena <span class="citation">(<a href="#ref-barrett2013">Barrett 2013</a>)</span>.</p>
+<p>However, even if nominal quantities are entirely socially constructed, this does not mean they are arbitrary or useless. SEARLE</p>
+</div>
+<div id="ordinal-scales" class="section level5 hasAnchor" number="2.4.1.0.2">
+<h5><span class="header-section-number">2.4.1.0.2</span> Ordinal scales<a href="litreview.html#ordinal-scales" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p><em>Ordinal</em> scales correspond to total orders. A total order is a relation <span class="math inline">\(\leq\)</span> on <span class="math inline">\(X\)</span> which, for all <span class="math inline">\(x, y, z \in X\)</span>, has the following properties:</p>
+<ol style="list-style-type: decimal">
+<li><em>Reflexivity</em>: <span class="math inline">\(x \leq x\)</span></li>
+<li><em>Antisymmetry</em>: <span class="math inline">\(\text{if } x \leq y \leq x \text{ then } x = y\)</span></li>
+<li><em>Transitivity</em>: <span class="math inline">\(x \leq y \text{ and } y \leq z \text{ then } x \leq z\)</span></li>
+<li><em>Totality</em> or <em>comparability</em> or <em>strong connectedness</em>: <span class="math inline">\(\text{for all } x, y, \text{ either } x \leq y \text{ or } y \leq x\)</span></li>
+</ol>
+<p>Examples of total orders include the usual ordering <span class="math inline">\(\leq\)</span> on natural numbers <span class="math inline">\(\mathbb{N}\)</span>: <span class="math inline">\(1 \leq 2 \leq 3 \leq \ldots\)</span> or the alphabetical order on letters: <span class="math inline">\(A \leq B \leq C \ldots \leq Z\)</span>.</p>
+<p>As total orders, ordinal scales allow us to rank quantities. A good example of an ordinal variable is placement in a race or competition. If Emma and Charlotte ran a marathon, and Emma placed 2nd and Charlotte 3rd, we can say that Charlotte ran finished the race earlier than Emma. However, we do not know whether she crossed the finish line 15 minutes or 2 hours earlier, or whether or not her average pace was less than half of that of Emma.</p>
+<p>Some authors have related ordinal scales to <em>weak orders</em> <span class="citation">(see <a href="#ref-michell1986">Michell 1986</a>)</span>. Weak orders <span class="citation">(also known as <em>total preorders</em>, see <a href="#ref-nlab2024d">nLab 2024a</a>)</span> generalize total orders by allowing for ties (properties 2. and 4. above do not need hold). While this seems like a useful property, I opted to relate ordinal scales to total orders here instead, since there is currently ambuiguity in the way the term <em>weak order</em> is used in the literature <span class="citation">(see e.g. <a href="#ref-nlab2024a">nLab 2024b</a>, <a href="#ref-nlab2024b">2024c</a>; <a href="#ref-stackexchange2024">Abrams 2024</a>)</span>, and, for practical data analysis, the distinction is fairly inconsequential. For instance, in the marathon example above, if Emma and Charlotte both placed second, after Lucy and before Lily, we could frame the outcome of the race as the following weak order on the set <span class="math inline">\(M\)</span> of marathoners: <span class="math inline">\(\text{Lucy} \leq \text{Emma, Charlotte} \leq \text{Lily} \leq ...\)</span>. However, the underlying set of ranks <span class="math inline">\(R \subset \mathbb{N}\)</span> still retains a total ordering: <span class="math inline">\(1 \leq 2 \leq 3 \leq \ldots\)</span> and we can specify a surjective monotonically increasing function <span class="math inline">\(r: M \to R\)</span> which maps each marathoner to her rank. Clearly, we can map any weak order to a total order by applying a functor which enforces anti-symmetry in this way <span class="citation">(<a href="#ref-fong2019">Fong and Spivak 2019</a>; <a href="#ref-nlab2024d">nLab 2024a</a>)</span>.</p>
+<p>The only transformations which are permissible for ordinal scales are those which preserve order, that is, monotonic increasing transformations <span class="citation">(<a href="#ref-stevens1946">Stevens 1946</a>; <a href="#ref-michell1986">Michell 1986</a>)</span>. For example, transforming our set of ranks <span class="math inline">\(R\)</span> by taking the log or square root of each rank leaves the order relations between them unchanged.</p>
+</div>
+<div id="interval-scales" class="section level5 hasAnchor" number="2.4.1.0.3">
+<h5><span class="header-section-number">2.4.1.0.3</span> Interval scales<a href="litreview.html#interval-scales" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p><em>Interval</em> scales.</p>
+<p>Interval scales allow us to calculate a distance between two points. However, they do not have a natural “zero point” or intercept. As such we cannot use them to determine the ratio between two quantities. Examples of interval scales include the calendar date and geographical position. It does not make sense to say that the year 1000 CE is “twice as much” as 500 CE, since the birth of Jesus Christ is (religious beliefs aside) an arbitrary zero point: we could set 0 CE at any other point in time, such as the founding of Athens or the release of Taylor Swift’s first album, and all of the properties we care about when tracking historical time would be preserved. Likewise, it does not make sense to say that 90° longitude is “three times” that of 30° longitude: the location of the prime meridian is also the product of arbitrary historical cirumstances.</p>
+<div id="ratio-scales" class="section level6 hasAnchor" number="2.4.1.0.3.1">
+<h6><span class="header-section-number">2.4.1.0.3.1</span> Ratio scales<a href="litreview.html#ratio-scales" class="anchor-section" aria-label="Anchor link to header"></a></h6>
+<p>Unlike interval scales, ratio scale have a well-defined natural zero point. For example,</p>
+</div>
+</div>
+<div id="criticism-of-on-the-theory-of-scales-of-measurement" class="section level5 hasAnchor" number="2.4.1.0.4">
+<h5><span class="header-section-number">2.4.1.0.4</span> Criticism of On the Theory of Scales of Measurement<a href="litreview.html#criticism-of-on-the-theory-of-scales-of-measurement" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>In the original paper, Stevens had also made the claim that the type of scale determined which statistical tests and summaries were “permissible” for the data. For example, according to Stevens, while mean is an appropriate summary of an interval scale (since expectation is linear), it would not be a permissible summary of ordinal data. This claim was later disputed by researchers</p>
+
+</div>
+</div>
+</div>
+</div>
+<h3> References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-abbate1999" class="csl-entry">
+Abbate, J. 1999. <span>“<span class="nocase">Getting small: a short history of the personal computer</span>.”</span> <em>Proc. IEEE</em> 87 (9): 1695–98. <a href="https://doi.org/10.1109/5.784256">https://doi.org/10.1109/5.784256</a>.
+</div>
+<div id="ref-stackexchange2024" class="csl-entry">
+Abrams, Dave. 2024. <span>“Total Weak Order Vs Total Order.”</span> <em>Mathematics Stack Exchange</em>. <a href="https://math.stackexchange.com/questions/3793222/total-weak-order-vs-total-order">https://math.stackexchange.com/questions/3793222/total-weak-order-vs-total-order</a>.
+</div>
+<div id="ref-abukhodair2013" class="csl-entry">
+Abukhodair, Felwa A, Bernhard E Riecke, Halil I Erhan, and Chris D Shaw. 2013. <span>“Does Interactive Animation Control Improve Exploratory Data Analysis of Animated Trend Visualization?”</span> In <em>Visualization and Data Analysis 2013</em>, 8654:211–23. SPIE.
+</div>
+<div id="ref-backus1978" class="csl-entry">
+Backus, John. 1978. <span>“The History of Fortran i, II, and III.”</span> <em>ACM Sigplan Notices</em> 13 (8): 165–80.
+</div>
+<div id="ref-barrett2013" class="csl-entry">
+Barrett, Lisa Feldman. 2013. <span>“Psychological Construction: The Darwinian Approach to the Science of Emotion.”</span> <em>Emotion Review</em> 5 (4): 379–89.
+</div>
+<div id="ref-batch2017" class="csl-entry">
+Batch, Andrea, and Niklas Elmqvist. 2017. <span>“The Interactive Visualization Gap in Initial Exploratory Data Analysis.”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em> 24 (1): 278–87.
+</div>
+<div id="ref-becker1987" class="csl-entry">
+Becker, Richard A, and William S Cleveland. 1987. <span>“Brushing Scatterplots.”</span> <em>Technometrics</em> 29 (2): 127–42.
+</div>
+<div id="ref-beniger1978" class="csl-entry">
+Beniger, James R, and Dorothy L Robyn. 1978. <span>“Quantitative Graphics in Statistics: A Brief History.”</span> <em>The American Statistician</em> 32 (1): 1–11.
+</div>
+<div id="ref-bertin1967" class="csl-entry">
+Bertin, Jacques. 1967. <em><span class="nocase">Sémiologie Graphique: Les diagrammes, les réseaux, les cartes</span></em>. Gauthier-Villars.
+</div>
+<div id="ref-flare2020" class="csl-entry">
+Blokt. 2020. <span>“Flare <span><span class="math inline">\(\vert\)</span></span> Data Visualization for the Web.”</span> <em>Blokt - Privacy, Tech, Bitcoin, Blockchain <span>&amp;</span> Cryptocurrency</em>. <a href="https://blokt.com/tool/prefuse-flare">https://blokt.com/tool/prefuse-flare</a>.
+</div>
+<div id="ref-bostock2022" class="csl-entry">
+Bostock, Mike. 2022. <span>“D3.js - Data-Driven Documents.”</span> <a href="https://d3js.org">https://d3js.org</a>.
+</div>
+<div id="ref-bracsoveanu2017" class="csl-entry">
+Braşoveanu, Adrian MP, Marta Sabou, Arno Scharl, Alexander Hubmann-Haidvogel, and Daniel Fischl. 2017. <span>“Visualizing Statistical Linked Knowledge for Decision Support.”</span> <em>Semantic Web</em> 8 (1): 113–37.
+</div>
+<div id="ref-brasseur2005" class="csl-entry">
+Brasseur, Lee. 2005. <span>“Florence Nightingale’s Visual Rhetoric in the Rose Diagrams.”</span> <em>Technical Communication Quarterly</em> 14 (2): 161–82.
+</div>
+<div id="ref-brodbeck2009" class="csl-entry">
+Brodbeck, Dominique, Riccardo Mazza, and Denis Lalanne. 2009. <span>“<span>Interactive Visualization - A Survey</span>.”</span> In <em><span>Human Machine Interaction</span></em>, 27–46. Berlin, Germany: Springer. <a href="https://doi.org/10.1007/978-3-642-00437-7_2">https://doi.org/10.1007/978-3-642-00437-7_2</a>.
+</div>
+<div id="ref-buja1996" class="csl-entry">
+Buja, Andreas, Dianne Cook, and Deborah F Swayne. 1996. <span>“Interactive High-Dimensional Data Visualization.”</span> <em>Journal of Computational and Graphical Statistics</em> 5 (1): 78–99.
+</div>
+<div id="ref-byron2008" class="csl-entry">
+Byron, Lee, and Martin Wattenberg. 2008. <span>“Stacked Graphs–Geometry &amp; Aesthetics.”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em> 14 (6): 1245–52.
+</div>
+<div id="ref-cairo2014" class="csl-entry">
+Cairo, Alberto. 2014. <span>“Graphics Lies, Misleading Visuals: Reflections on the Challenges and Pitfalls of Evidence-Driven Visual Communication.”</span> In <em>New Challenges for Data Design</em>, 103–16. Springer.
+</div>
+<div id="ref-cairo2019" class="csl-entry">
+———. 2019. <em>How Charts Lie: Getting Smarter about Visual Information</em>. WW Norton &amp; Company.
+</div>
+<div id="ref-chen2008" class="csl-entry">
+Chen, Chun-houh, Wolfgang Karl Härdle, and Antony Unwin. 2008. <em>Handbook of Data Visualization</em>. Springer Science &amp; Business Media.
+</div>
+<div id="ref-clark2017" class="csl-entry">
+Clark, Lin. 2017. <span>“A Crash Course in Just-in-Time (JIT) Compilers.”</span> <em>Mozilla Hacks <span></span> the Web Developer Blog</em>. <a href="https://hacks.mozilla.org/2017/02/a-crash-course-in-just-in-time-jit-compilers">https://hacks.mozilla.org/2017/02/a-crash-course-in-just-in-time-jit-compilers</a>.
+</div>
+<div id="ref-clayton2021" class="csl-entry">
+Clayton, Aubrey. 2021. <em>Bernoulli’s Fallacy: Statistical Illogic and the Crisis of Modern Science</em>. Columbia University Press.
+</div>
+<div id="ref-cleveland1985" class="csl-entry">
+Cleveland, William S. 1985. <em>The Elements of Graphing Data</em>. Wadsworth Publ. Co.
+</div>
+<div id="ref-cleveland1993" class="csl-entry">
+———. 1993. <em>Visualizing Data</em>. Hobart press.
+</div>
+<div id="ref-cleveland1984" class="csl-entry">
+Cleveland, William S, and Robert McGill. 1984. <span>“Graphical Perception: Theory, Experimentation, and Application to the Development of Graphical Methods.”</span> <em>Journal of the American Statistical Association</em> 79 (387): 531–54.
+</div>
+<div id="ref-dang2010" class="csl-entry">
+Dang, Tuan Nhon, Leland Wilkinson, and Anushka Anand. 2010. <span>“Stacking Graphic Elements to Avoid over-Plotting.”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em> 16 (6): 1044–52.
+</div>
+<div id="ref-dao2020" class="csl-entry">
+Dao, Chau. 2020. <span>“The Nature and Evolution of JavaScript.”</span> Bachelor's Thesis, Oulu University of Applied Sciences.
+</div>
+<div id="ref-dimara2019" class="csl-entry">
+Dimara, Evanthia, and Charles Perin. 2019. <span>“What Is Interaction for Data Visualization?”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em> 26 (1): 119–29.
+</div>
+<div id="ref-dix1998" class="csl-entry">
+Dix, Alan, and Geoffrey Ellis. 1998. <span>“<span class="nocase">Starting simple: adding value to static visualisation through simple interaction</span>.”</span> In <em><span class="nocase">AVI ’98: Proceedings of the working conference on Advanced visual interfaces</span></em>, 124–34. New York, NY, USA: Association for Computing Machinery. <a href="https://doi.org/10.1145/948496.948514">https://doi.org/10.1145/948496.948514</a>.
+</div>
+<div id="ref-donoho1988" class="csl-entry">
+Donoho, Andrew W, David L Donoho, and Miriam Gasko. 1988. <span>“MacSpin: Dynamic Graphics on a Desktop Computer.”</span> <em>IEEE Computer Graphics and Applications</em> 8 (4): 51–58.
+</div>
+<div id="ref-elmqvist2011" class="csl-entry">
+Elmqvist, Niklas, Andrew Vande Moere, Hans-Christian Jetter, Daniel Cernea, Harald Reiterer, and TJ Jankun-Kelly. 2011. <span>“Fluid Interaction for Information Visualization.”</span> <em>Information Visualization</em> 10 (4): 327–40.
+</div>
+<div id="ref-vue2024" class="csl-entry">
+Evan You and the Vue Core Team. 2024. <span>“Vue.js.”</span> <a href="https://vuejs.org">https://vuejs.org</a>.
+</div>
+<div id="ref-fienberg1992" class="csl-entry">
+Fienberg, Stephen E. 1992. <span>“A Brief History of Statistics in Three and One-Half Chapters: A Review Essay.”</span> JSTOR.
+</div>
+<div id="ref-fisherkeller1974" class="csl-entry">
+Fisherkeller, Mary Anne, Jerome H Friedman, and John W Tukey. 1974. <span>“An Interactive Multidimensional Data Display and Analysis System.”</span> SLAC National Accelerator Lab., Menlo Park, CA (United States).
+</div>
+<div id="ref-foley1990" class="csl-entry">
+Foley, James D. 1990. <span>“Scientific Data Visualization Software: Trends and Directions.”</span> <em>The International Journal of Supercomputing Applications</em> 4 (2): 154–57.
+</div>
+<div id="ref-fong2019" class="csl-entry">
+Fong, Brendan, and David I Spivak. 2019. <em>An Invitation to Applied Category Theory: Seven Sketches in Compositionality</em>. Cambridge University Press.
+</div>
+<div id="ref-fowlkes1969" class="csl-entry">
+Fowlkes, EB. 1969. <span>“User’s Manual for a System Fo Active Probability Plotting on Graphic-2.”</span> <em>Tech-Nical Memorandum, AT&amp;T Bell Labs, Murray Hill, NJ</em>.
+</div>
+<div id="ref-franconeri2021" class="csl-entry">
+Franconeri, Steven L, Lace M Padilla, Priti Shah, Jeffrey M Zacks, and Jessica Hullman. 2021. <span>“The Science of Visual Data Communication: What Works.”</span> <em>Psychological Science in the Public Interest</em> 22 (3): 110–61.
+</div>
+<div id="ref-freedman1999" class="csl-entry">
+Freedman, David. 1999. <span>“From Association to Causation: Some Remarks on the History of Statistics.”</span> <em>Statistical Science</em> 14 (3): 243–58.
+</div>
+<div id="ref-friendly2006" class="csl-entry">
+Friendly, Michael. 2006. <span>“A Brief History of Data Visualization.”</span> In <em>Handbook of Computational Statistics: Data Visualization</em>, edited by C. Chen, W. Härdle, and A Unwin, III???–. Heidelberg: Springer-Verlag.
+</div>
+<div id="ref-friendly2021" class="csl-entry">
+Friendly, Michael, and Howard Wainer. 2021. <em>A History of Data Visualization and Graphic Communication</em>. Harvard University Press.
+</div>
+<div id="ref-gelman2013" class="csl-entry">
+Gelman, Andrew, and Antony Unwin. 2013. <span>“Infovis and Statistical Graphics: Different Goals, Different Looks.”</span> <em>Journal of Computational and Graphical Statistics</em> 22 (1): 2–28.
+</div>
+<div id="ref-hauser2002" class="csl-entry">
+Hauser, Helwig, Florian Ledermann, and Helmut Doleisch. 2002. <span>“Angular Brushing of Extended Parallel Coordinates.”</span> In <em>IEEE Symposium on Information Visualization, 2002. INFOVIS 2002.</em>, 127–30. IEEE.
+</div>
+<div id="ref-heer2010" class="csl-entry">
+Heer, Jeffrey, and Michael Bostock. 2010. <span>“Crowdsourcing Graphical Perception: Using Mechanical Turk to Assess Visualization Design.”</span> In <em>Proceedings of the SIGCHI Conference on Human Factors in Computing Systems</em>, 203–12.
+</div>
+<div id="ref-heer2005" class="csl-entry">
+Heer, Jeffrey, Stuart K. Card, and James A. Landay. 2005. <span>“<span class="nocase">prefuse: a toolkit for interactive information visualization</span>.”</span> In <em><span class="nocase">CHI ’05: Proceedings of the SIGCHI Conference on Human Factors in Computing Systems</span></em>, 421–30. New York, NY, USA: Association for Computing Machinery. <a href="https://doi.org/10.1145/1054972.1055031">https://doi.org/10.1145/1054972.1055031</a>.
+</div>
+<div id="ref-heer2012" class="csl-entry">
+Heer, Jeffrey, and Ben Shneiderman. 2012. <span>“Interactive Dynamics for Visual Analysis: A Taxonomy of Tools That Support the Fluent and Flexible Use of Visualizations.”</span> <em>Queue</em> 10 (2): 30–55.
+</div>
+<div id="ref-highschartsboost2022" class="csl-entry">
+Highsoft. 2022. <span>“Render Millions of Chart Points with the Boost Module <span></span> Highcharts.”</span> <em>Highcharts</em>. <a href="https://www.highcharts.com/blog/tutorials/highcharts-high-performance-boost-module">https://www.highcharts.com/blog/tutorials/highcharts-high-performance-boost-module</a>.
+</div>
+<div id="ref-highcharts2024" class="csl-entry">
+———. 2024. <span>“Highcharts - Interactive Charting Library for Developers.”</span> <em>Highcharts Blog <span><span class="math inline">\(\vert\)</span></span> Highcharts</em>. <a href="https://www.highcharts.com">https://www.highcharts.com</a>.
+</div>
+<div id="ref-holtz2022" class="csl-entry">
+Holtz, Yan. 2022a. <span>“Barplot with Variable Width - Ggplot2.”</span> <a href="https://r-graph-gallery.com/81-barplot-with-variable-width.html">https://r-graph-gallery.com/81-barplot-with-variable-width.html</a>.
+</div>
+<div id="ref-holtz2022b" class="csl-entry">
+———. 2022b. <span>“Basic Scatterplot in D3.js.”</span> <a href="https://d3-graph-gallery.com/graph/scatter_basic.html">https://d3-graph-gallery.com/graph/scatter_basic.html</a>.
+</div>
+<div id="ref-howard1995" class="csl-entry">
+Howard, David, and Alan M MacEachren. 1995. <span>“Constructing and Evaluating an Interactive Interface for Visualizing Reliability.”</span> In <em>Congresso Da Associa<span>ç</span><span>ã</span>o Cartogr<span>á</span>fica Internacional–ICA</em>, 17:321–29.
+</div>
+<div id="ref-jankun2007" class="csl-entry">
+Jankun-Kelly, TJ, Kwan-Liu Ma, and Michael Gertz. 2007. <span>“A Model and Framework for Visualization Exploration.”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em> 13 (2): 357–69.
+</div>
+<div id="ref-kehrer2012" class="csl-entry">
+Kehrer, Johannes, Roland N Boubela, Peter Filzmoser, and Harald Piringer. 2012. <span>“A Generic Model for the Integration of Interactive Visualization and Statistical Computing Using r.”</span> In <em>2012 IEEE Conference on Visual Analytics Science and Technology (VAST)</em>, 233–34. IEEE.
+</div>
+<div id="ref-keim2002" class="csl-entry">
+Keim, Daniel A. 2002. <span>“Information Visualization and Visual Data Mining.”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em> 8 (1): 1–8.
+</div>
+<div id="ref-kelleher2015" class="csl-entry">
+Kelleher, Curran, and Haim Levkowitz. 2015. <span>“Reactive Data Visualizations.”</span> In <em>Visualization and Data Analysis 2015</em>, 9397:263–69. SPIE.
+</div>
+<div id="ref-keller2024" class="csl-entry">
+Keller, Mark S, Trevor Manz, and Nils Gehlenborg. 2024. <span>“Use-Coordination: Model, Grammar, and Library for Implementation of Coordinated Multiple Views.”</span> In <em>2024 IEEE Visualization and Visual Analytics (VIS)</em>, 166–70. IEEE.
+</div>
+<div id="ref-kosara2016" class="csl-entry">
+Kosara, Robert. 2016. <span>“Presentation-Oriented Visualization Techniques.”</span> <em>IEEE Computer Graphics and Applications</em> 36 (1): 80–85.
+</div>
+<div id="ref-kruskal1964" class="csl-entry">
+Kruskal, J. B. 1965. <span>“<span>Multidimensional Scaling</span>.”</span> <a href="https://community.amstat.org/jointscsg-section/media/videos">https://community.amstat.org/jointscsg-section/media/videos</a>.
+</div>
+<div id="ref-kunst2022" class="csl-entry">
+Kunst, Joshua. 2022. <em>Highcharter: A Wrapper for the ’Highcharts’ Library</em>.
+</div>
+<div id="ref-kvasz2006" class="csl-entry">
+Kvasz, Ladislav. 2006. <span>“The History of Algebra and the Development of the Form of Its Language.”</span> <em>Philosophia Mathematica</em> 14 (3): 287–317.
+</div>
+<div id="ref-leman2013" class="csl-entry">
+Leman, Scotland C, Leanna House, Dipayan Maiti, Alex Endert, and Chris North. 2013. <span>“Visual to Parametric Interaction (V2pi).”</span> <em>PloS One</em> 8 (3): e50474.
+</div>
+<div id="ref-mansfield2024" class="csl-entry">
+Mansfield, Daniel F. 2018. <em>Wikimedia Commons</em>. <a href="https://commons.wikimedia.org/wiki/File:Si427o.jpg">https://commons.wikimedia.org/wiki/File:Si427o.jpg</a>.
+</div>
+<div id="ref-mansfield2020" class="csl-entry">
+———. 2020. <span>“Perpendicular Lines and Diagonal Triples in Old Babylonian Surveying.”</span> <em>Journal of Cuneiform Studies</em> 72 (1): 87–99.
+</div>
+<div id="ref-mayr1999" class="csl-entry">
+Mayr, Ernst. 1999. <em>Systematics and the Origin of Species, from the Viewpoint of a Zoologist</em>. Harvard University Press.
+</div>
+<div id="ref-mdn2024a" class="csl-entry">
+MDN. 2024a. <span>“EventTarget - Web APIs <span><span class="math inline">\(\vert\)</span></span> MDN.”</span> <em>MDN Web Docs</em>. <a href="https://developer.mozilla.org/en-US/docs/Web/API/EventTarget">https://developer.mozilla.org/en-US/docs/Web/API/EventTarget</a>.
+</div>
+<div id="ref-react2024" class="csl-entry">
+Meta. 2024. <span>“React.”</span> <a href="https://react.dev">https://react.dev</a>.
+</div>
+<div id="ref-michell1986" class="csl-entry">
+Michell, Joel. 1986. <span>“Measurement Scales and Statistics: A Clash of Paradigms.”</span> <em>Psychological Bulletin</em> 100 (3): 398.
+</div>
+<div id="ref-nlab2024d" class="csl-entry">
+nLab. 2024a. <span>“Posetal Reflection in nLab.”</span> <a href="https://ncatlab.org/nlab/show/posetal+reflection">https://ncatlab.org/nlab/show/posetal+reflection</a>.
+</div>
+<div id="ref-nlab2024a" class="csl-entry">
+———. 2024b. <span>“Strict Weak Order in nLab.”</span> <a href="https://ncatlab.org/nlab/show/strict+weak+order">https://ncatlab.org/nlab/show/strict+weak+order</a>.
+</div>
+<div id="ref-nlab2024b" class="csl-entry">
+———. 2024c. <span>“Weak Order in nLab.”</span> <a href="https://ncatlab.org/nlab/show/weak+order">https://ncatlab.org/nlab/show/weak+order</a>.
+</div>
+<div id="ref-etymonline2024" class="csl-entry">
+Online Etymology Dictionary. 2024. <span>“Statistics.”</span> <a href="https://www.etymonline.com/word/statistics">https://www.etymonline.com/word/statistics</a>.
+</div>
+<div id="ref-pike2009" class="csl-entry">
+Pike, William A, John Stasko, Remco Chang, and Theresa A O’connell. 2009. <span>“The Science of Interaction.”</span> <em>Information Visualization</em> 8 (4): 263–74.
+</div>
+<div id="ref-plotly2022" class="csl-entry">
+Plotly Inc. 2022. <span>“<span class="nocase">Part 4. Interactive Graphing and Crossfiltering <span><span class="math inline">\(\vert\)</span></span> Dash for Python Documentation <span><span class="math inline">\(\vert\)</span></span> Plotly</span>.”</span> <a href="https://dash.plotly.com/interactive-graphing">https://dash.plotly.com/interactive-graphing</a>.
+</div>
+<div id="ref-plotly2024b" class="csl-entry">
+———. 2024a. <span>“Webgl.”</span> <a href="https://plotly.com/python/webgl-vs-svg">https://plotly.com/python/webgl-vs-svg</a>.
+</div>
+<div id="ref-plotly2024c" class="csl-entry">
+———. 2024b. <span>“Scatter Plots in JavaScript.”</span> <a href="https://plotly.com/javascript/line-and-scatter">https://plotly.com/javascript/line-and-scatter</a>.
+</div>
+<div id="ref-quadri2021" class="csl-entry">
+Quadri, Ghulam Jilani, and Paul Rosen. 2021. <span>“A Survey of Perception-Based Visualization Studies by Task.”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em>.
+</div>
+<div id="ref-r2024" class="csl-entry">
+R Core Team. 2024. <em>R: A Language and Environment for Statistical Computing</em>. Vienna, Austria: R Foundation for Statistical Computing. <a href="https://www.R-project.org/">https://www.R-project.org/</a>.
+</div>
+<div id="ref-rheingans2002" class="csl-entry">
+Rheingans, Penny. 2002. <span>“Are We There yet? Exploring with Dynamic Visualization.”</span> <em>IEEE Computer Graphics and Applications</em> 22 (1): 6–10.
+</div>
+<div id="ref-svelte2024" class="csl-entry">
+Rich Harris and the Svelte Core Team. 2024. <span>“Svelte.”</span> <a href="https://svelte.dev">https://svelte.dev</a>.
+</div>
+<div id="ref-satyanarayan2016" class="csl-entry">
+Satyanarayan, Arvind, Dominik Moritz, Kanit Wongsuphasawat, and Jeffrey Heer. 2016. <span>“Vega-Lite: A Grammar of Interactive Graphics.”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em> 23 (1): 341–50.
+</div>
+<div id="ref-satyanarayan2015" class="csl-entry">
+Satyanarayan, Arvind, Ryan Russell, Jane Hoffswell, and Jeffrey Heer. 2015. <span>“Reactive Vega: A Streaming Dataflow Architecture for Declarative Interactive Visualization.”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em> 22 (1): 659–68.
+</div>
+<div id="ref-shneiderman2003" class="csl-entry">
+Shneiderman, Ben. 2003. <span>“The Eyes Have It: A Task by Data Type Taxonomy for Information Visualizations.”</span> In <em>The Craft of Information Visualization</em>, 364–71. Elsevier.
+</div>
+<div id="ref-splechtna2018" class="csl-entry">
+Splechtna, Rainer, Michael Beham, Denis Gračanin, Marı́a Luján Ganuza, Katja Bühler, Igor Sunday Pandžić, and Krešimir Matković. 2018. <span>“Cross-Table Linking and Brushing: Interactive Visual Analysis of Multiple Tabular Data Sets.”</span> <em>The Visual Computer</em> 34 (6): 1087–98.
+</div>
+<div id="ref-stevens1946" class="csl-entry">
+Stevens, Stanley Smith. 1946. <span>“On the Theory of Scales of Measurement.”</span> <em>Science</em> 103 (2684): 677–80.
+</div>
+<div id="ref-swayne1998" class="csl-entry">
+Swayne, Deborah F., Dianne Cook, and Andreas Buja. 1998. <span>“<span class="nocase">XGobi: Interactive Dynamic Data Visualization in the X Window System</span>.”</span> <em>J. Comput. Graph. Stat.</em> 7 (1): 113–30. <a href="https://doi.org/10.1080/10618600.1998.10474764">https://doi.org/10.1080/10618600.1998.10474764</a>.
+</div>
+<div id="ref-swayne2003" class="csl-entry">
+Swayne, Deborah F., Duncan Temple Lang, Andreas Buja, and Dianne Cook. 2003. <span>“<span class="nocase">GGobi: evolving from XGobi into an extensible framework for interactive data visualization</span>.”</span> <em>Comput. Statist. Data Anal.</em> 43 (4): 423–44. <a href="https://doi.org/10.1016/S0167-9473(02)00286-4">https://doi.org/10.1016/S0167-9473(02)00286-4</a>.
+</div>
+<div id="ref-tal2015" class="csl-entry">
+Tal, Eran. 2015. <span>“Measurement in Science.”</span>
+</div>
+<div id="ref-theus2002" class="csl-entry">
+Theus, Martin. 2002. <span>“<span class="nocase">Interactive Data Visualization using Mondrian</span>.”</span> <em>J. Stat. Soft.</em> 7 (November): 1–9. <a href="https://doi.org/10.18637/jss.v007.i11">https://doi.org/10.18637/jss.v007.i11</a>.
+</div>
+<div id="ref-theus2008" class="csl-entry">
+———. 2008. <span>“High-Dimensional Data Visualization.”</span> In <em>Handbook of Data Visualization</em>, 152–75. Springer Science &amp; Business Media.
+</div>
+<div id="ref-thudt2016" class="csl-entry">
+Thudt, Alice, Jagoda Walny, Charles Perin, Fateme Rajabiyazdi, Lindsay MacDonald, Diane Vardeleon, Saul Greenberg, and Sheelagh Carpendale. 2016. <span>“Assessing the Readability of Stacked Graphs.”</span> In <em>Proceedings of Graphics Interface Conference (GI)</em>.
+</div>
+<div id="ref-tierney1990" class="csl-entry">
+Tierney, Luke. 1990. <em>Lisp-Stat: An Object-Oriented Environment for Statistical Computing and Dynamic Graphics</em>. New York: Wiley-Interscience.
+</div>
+<div id="ref-tufte2001" class="csl-entry">
+Tufte, Edward R. 2001. <em>The Visual Display of Quantitative Information</em>. Cheshire, Connecticut: Graphics Press LLC.
+</div>
+<div id="ref-tukey1962" class="csl-entry">
+Tukey, John W. 1962. <span>“The Future of Data Analysis.”</span> <em>The Annals of Mathematical Statistics</em> 33 (1): 1–67.
+</div>
+<div id="ref-tukey1977" class="csl-entry">
+Tukey, John W et al. 1977. <em>Exploratory Data Analysis</em>. Vol. 2. Reading, MA.
+</div>
+<div id="ref-tukey1993" class="csl-entry">
+———. 1993. <span>“Graphic Comparisons of Several Linked Aspects: Alternatives and Suggested Principles.”</span> <em>Journal of Computational and Graphical Statistics</em> 2 (1): 1–33.
+</div>
+<div id="ref-unwin1999" class="csl-entry">
+Unwin, Antony. 1999. <span>“<span class="nocase">Requirements for interactive graphics software for exploratory data analysis</span>.”</span> <em>Comput. Statist.</em> 14 (1): 7–22. <a href="https://doi.org/10.1007/PL00022706">https://doi.org/10.1007/PL00022706</a>.
+</div>
+<div id="ref-unwin2018" class="csl-entry">
+———. 2018. <em>Graphical Data Analysis with r</em>. Chapman; Hall/CRC.
+</div>
+<div id="ref-urbanek2011" class="csl-entry">
+Urbanek, Simon. 2011. <span>“iPlots eXtreme: Next-Generation Interactive Graphics Design and Implementation of Modern Interactive Graphics.”</span> <em>Computational Statistics</em> 26 (3): 381–93.
+</div>
+<div id="ref-urbanek2003" class="csl-entry">
+Urbanek, Simon, and Martin Theus. 2003. <span>“iPlots: High Interaction Graphics for r.”</span> In <em>Proceedings of the 3rd International Workshop on Distributed Statistical Computing</em>. Citeseer.
+</div>
+<div id="ref-vegalite2022" class="csl-entry">
+Vega Project. 2022. <span>“<span>Example Gallery: Interactive</span>.”</span> <a href="https://vega.github.io/vega-lite/examples/#interactive">https://vega.github.io/vega-lite/examples/#interactive</a>.
+</div>
+<div id="ref-vegalite2024b" class="csl-entry">
+———. 2024a. <span>“<span class="nocase">Binding a Parameter</span>.”</span> <a href="https://vega.github.io/vega-lite/docs/bind.html">https://vega.github.io/vega-lite/docs/bind.html</a>.
+</div>
+<div id="ref-vega2024b" class="csl-entry">
+———. 2024b. <span>“Brushing Scatter Plots Example.”</span> <em>Vega</em>. <a href="https://vega.github.io/vega/examples/brushing-scatter-plots">https://vega.github.io/vega/examples/brushing-scatter-plots</a>.
+</div>
+<div id="ref-vegalite2024a" class="csl-entry">
+———. 2024c. <span>“<span class="nocase">Dynamic Behaviors with Parameters</span>.”</span> <a href="https://vega.github.io/vega-lite/docs/parameter.html">https://vega.github.io/vega-lite/docs/parameter.html</a>.
+</div>
+<div id="ref-vega2024a" class="csl-entry">
+———. 2024d. <span>“Vega and D3.”</span> <em>Vega</em>. <a href="https://vega.github.io/vega/about/vega-and-d3">https://vega.github.io/vega/about/vega-and-d3</a>.
+</div>
+<div id="ref-velleman1989" class="csl-entry">
+Velleman, Paul F, and Pratt Paul. 1989. <span>“A Graphical Interface for Data Analysis.”</span> <em>Journal of Statistical Computation and Simulation</em> 32 (4): 223–28.
+</div>
+<div id="ref-velleman1993" class="csl-entry">
+Velleman, Paul F, and Leland Wilkinson. 1993. <span>“Nominal, Ordinal, Interval, and Ratio Typologies Are Misleading.”</span> <em>The American Statistician</em> 47 (1): 65–72.
+</div>
+<div id="ref-ward2015" class="csl-entry">
+Ward, Matthew O, Georges Grinstein, and Daniel Keim. 2015. <em>Interactive Data Visualization: Foundations, Techniques, and Applications</em>. CRC Press.
+</div>
+<div id="ref-ware2019" class="csl-entry">
+Ware, Colin. 2019. <em>Information Visualization: Perception for Design</em>. Morgan Kaufmann.
+</div>
+<div id="ref-wickham2016" class="csl-entry">
+Wickham, Hadley. 2016. <em>Ggplot2: Elegant Graphics for Data Analysis (2e)</em>. Springer-Verlag New York. <a href="https://ggplot2.tidyverse.org">https://ggplot2.tidyverse.org</a>.
+</div>
+<div id="ref-wikipedia2022" class="csl-entry">
+Wikipedia. 2022. <span>“<span class="nocase">Duck test - Wikipedia</span>.”</span> <a href="https://en.wikipedia.org/w/index.php?title=Duck_test&amp;oldid=1110781513">https://en.wikipedia.org/w/index.php?title=Duck_test&amp;oldid=1110781513</a>.
+</div>
+<div id="ref-wilhelm2003" class="csl-entry">
+Wilhelm, Adalbert. 2003. <span>“<span class="nocase">User interaction at various levels of data displays</span>.”</span> <em>Comput. Statist. Data Anal.</em> 43 (4): 471–94. <a href="https://doi.org/10.1016/S0167-9473(02)00288-8">https://doi.org/10.1016/S0167-9473(02)00288-8</a>.
+</div>
+<div id="ref-wilhelm2008" class="csl-entry">
+———. 2008. <span>“Linked Views for Visual Exploration.”</span> In <em>Handbook of Data Visualization</em>, 200–214. Springer Science &amp; Business Media.
+</div>
+<div id="ref-wilke2019" class="csl-entry">
+Wilke, Claus O. 2019. <em>Fundamentals of Data Visualization: A Primer on Making Informative and Compelling Figures</em>. O’Reilly Media.
+</div>
+<div id="ref-wilkinson2012" class="csl-entry">
+Wilkinson, Leland. 2012. <em>The Grammar of Graphics</em>. Springer.
+</div>
+<div id="ref-wills2008" class="csl-entry">
+Wills, Graham. 2008. <span>“Linked Data Views.”</span> In <em>Handbook of Data Visualization</em>, 217–41. ch. II. 9. Springer Berlin/Heidelberg, Germany.
+</div>
+<div id="ref-wirfs-brock2020" class="csl-entry">
+Wirfs-Brock, Allen, and Brendan Eich. 2020. <span>“<span class="nocase">JavaScript: the first 20 years</span>.”</span> <em>Proc. ACM Program. Lang.</em> 4 (HOPL): 1–189. <a href="https://doi.org/10.1145/3386327">https://doi.org/10.1145/3386327</a>.
+</div>
+<div id="ref-yi2007" class="csl-entry">
+Yi, Ji Soo, Youn ah Kang, John Stasko, and Julie A Jacko. 2007. <span>“Toward a Deeper Understanding of the Role of Interaction in Information Visualization.”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em> 13 (6): 1224–31.
+</div>
+<div id="ref-young2011" class="csl-entry">
+Young, Forrest W, Pedro M Valero-Mora, and Michael Friendly. 2011. <em>Visual Statistics: Seeing Data with Dynamic Interactive Graphics</em>. John Wiley &amp; Sons.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="goals.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
