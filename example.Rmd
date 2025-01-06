@@ -6,7 +6,7 @@ editor_options:
 
 ```{r}
 #| echo: false
-knitr::opts_chunk$set(eval = FALSE)
+# knitr::opts_chunk$set(eval = FALSE)
 ```
 
 # Applied example
@@ -199,8 +199,8 @@ df |>
   add_barplot(c("year", "days")) |>
   add_barplot(c("care_category", "cases")) |>
   assign_cases(which(df$care_category == "child")) |>
-  normalize("barplot1") |>
-  normalize("barplot2") |>
+  plotscaper::normalize("barplot1") |>
+  plotscaper::normalize("barplot2") |>
   zoom("barplot1", c(0, 0, 1, 0.15)) |>
   zoom("barplot2", c(0, 0, 1, 0.15)) |>
   set_layout(layout) |>
