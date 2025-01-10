@@ -1,14 +1,14 @@
 f10,Mental and behavioural disorders due to use of alcohol
-f2,"Dementia in other diseases classified elsewhere (includes Parkinson’s, Huntington’s, and Creutzfeld-Jacobs disease)"
-f0 and g30,"Dementia in Alzheimer disease (f0), Alzheimer disease (g30)"
-f4 without f42,"Organic amnesic syndrome, not induced by alcohol and other psychoactive substances (f4) without obsessive-compulsive disorder (f42). (includes non-alcoholic Korsakoff’s syndrome)"
-f11-f19,"Mental and behavioural disorders due to psychoactive substance use (excluding alcohol, f10)"
-f8–f9,Unspecified organic or symptomatic mental disorder
+f2,"Schizophrenia, schizotypal and delusional disorders (f20-f29) "
+f0 and g30,"Dementia in Alzheimer’s disease (f0), Alzheimer’s disease (g30)"
+f4 without f42,"Neurotic, stress-related and somatoform disorders (f40-f48; includes e.g. specific phobias, generalized anxiety disorder, and post-traumatic stress disorder), without obsessive-compulsive disorder (f42)"
+f11-f19,"Mental and behavioural disorders due to psychoactive substance use (excluding alcohol use, f10)"
+f8–f9,"Disorders of psychological development (f80-f89), behavioural and emotional disorders with onset usually occurring in childhood and adolescence (f90-f98) and unspecified mental disorder (f99) "
 f32–f33,"Depressive episode (f32), recurrent depressive disorder (f33)"
 f60–f61,"Specific personality disorders (f60; includes e.g. paranoid, schizoid, histrionic, or anxious/avoidant personality disorders), mixed and other personality disorders (f61)"
-f7,"Personality and behavioural disorders due to brain disease, damage and dysfunction"
-f3 without f32&f33,Unspecified dementia (f3) without depression (f32 and f33)
+f7,Mental retardation (f70-f79) 
+f3 without f32 & f33,Mood [affective] disorders (f30-f39) without depressive episode (f32) and recurrent depressive disorder (f33)
 f62–f69,"Personality and behavioral disorders (includes things such as PTSD, habit and impulse disorders, sexual preference disorders, etc...)"
-f5,"Delirium, not induced by alcohol and other psychoactive substances"
+f5,"Behavioural syndromes associated with physiological disturbances and physical factors (f50-f59; includes eating disorders, sleep disorders, sexual dysfunction disorders, and others) "
 other,
-f42, Obsessive-compulsive disorder
+f42,Obsessive-compulsive disorder

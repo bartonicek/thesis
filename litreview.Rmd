@@ -347,7 +347,7 @@ Additionally, querying also allow us to show more information than can be displa
 
 While querying one-to-one representations of the data such as points in a scatterplot is relatively simple, querying aggregate objects such as bars in a barplot/histograms presents some challenges. In the case of one-to-one representations, we can always simply retrieve the corresponding row of the data, however, in the case of aggregate objects, a single object may correspond to multiple rows and there may be no obvious way to summarize them. For instance, when querying a continuous variable corresponding to a bar in a barplot, should we return its sum, its maximum, the set of all unique values, or perhaps something entirely different? Likewise, querying objects in the presence of selection or higlighting presents some problems.
 
-#### Switching representations
+#### Changing representation
 
 The same data can often by visualized in multiple ways, by representing it via different sets of visual encodings [@wilkinson2012]. However, some encodings may work better for answering certain questions than others. By enabling the users to switch the visual representation, we empower them to explore their data with grater flexibility [@yi2007].
 

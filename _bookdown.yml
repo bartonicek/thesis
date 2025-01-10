@@ -1,5 +1,5 @@
-rmd_files: ["index.Rmd", "litreview.Rmd", "goals.Rmd",
-            "problems.Rmd", "design.Rmd",
+rmd_files: ["index.Rmd", "litreview.Rmd",
+            "problems.Rmd", "goals.Rmd", "design.Rmd",
             "system.Rmd", "example.Rmd", "discussion.Rmd",
             "glossary.Rmd", "appendix.Rmd", "math.Rmd", "references.Rmd"]
 delete_merged_file: true

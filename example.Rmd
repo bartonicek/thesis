@@ -11,7 +11,7 @@ editor_options:
 
 # Applied example
 
-> Please note that the data set used in this section is fairly large (~70,000 rows) and so the figures below take some time to load.
+> Please note that the data set used in this section is fairly large (~70,000 rows) and so this section takes a while to load.
 
 This section demonstrates a typical interactive workflow with `plotscaper`. The goal is to showcase the package's key features and capabilities by exploring a large, real-world data set, pertaining to a pressing issue: mental health.
 
@@ -71,7 +71,7 @@ df |>
   render() # Render the schema into an interactive figure
 ```
 
-Interestingly, the pattern that the points show is not a simple linear trend. Instead, the points seem to cluster in three distinct "leaflets", each exhibiting a roughly linear trend. This suggests the presence of a pooling effect, such that the overall trend is the result of combining three distinct groups. Closer inspection of the data reveals that the `stay_category` variable has three levels: short-term (< 3 months), medium-term (3-6 months), and long-term (6+ months) care. Color-coding the cases indeed confirms that the three levels of `stay_category` correspond to the leaflets:
+Interestingly, the points did not show a simple linear trend. Instead, they seemed to cluster in three distinct "leaflets", each exhibiting a roughly linear trend. This suggests the presence of a pooling effect, such that the overall trend is the result of combining three distinct groups. Closer inspection of the data reveals that the `stay_category` variable has three levels: short-term (< 3 months), medium-term (3-6 months), and long-term (6+ months) care. Color-coding the cases indeed confirms that the three levels of `stay_category` correspond to the leaflets:
 
 ```{r}
 #| fig-cap: "The data exhibits a pooling effect: while patient groups within each care duration category (short-term, medium-term, and long-term) individually show a linear relationship, this does not hold when the groups are considered together."
@@ -223,36 +223,17 @@ df |>
 
 Again, if we interrogate the figure by employing interactive actions such as selection, zooming, and normalization, we can discover that one age category in which there has been steady growth in both the proportion of cases and days spend in treatment are 70-79 year olds. This aligns with the limited placement availability hypothesis: while these patients account for a relatively small fraction of the total cases, they represent a disproportionately large and increasing proportion of days in treatment. Later, we will also see evidence that many of these patients suffer from neurodegenerative diseases, which require intensive long-term care. It may be the case that, with increasing life-expectancy, the healthcare system is not able to handle the influx of older patients, limiting the availability of placements. 
 
-#### Prevalence of mental disorders
+#### Prevalence of diagnoses
 
-Another important information we can glean from the data set is the prevalence of different mental disorders. The data set identifies the disorders according to ICD-10, an internationally recognized disease classification system published by the World Health organization which organizes various diseases into categories based on aetiology [@icd2024a]. In the data set, the vast majority diagnoses come from the F category, which represents mental and behavioral disorders, although there are also few references to the G category, which represents diseases of the nervous system. Also note that while some levels of the `diagnosis` variable represent a singular ICD-10 diagnosis (e.g. `f10`, `f2`), other represent a range of diagnoses (e.g. `f11-f19`), a union (e.g. `f0 and g30`), or an exclusive difference (e.g. `f4 without f42`).
+Another important information we can glean from the data set is the prevalence of different diagnoses and their demographic characteristics. The data set identifies mental disorders according to ICD-10, an internationally recognized disease classification system published by the World Health organization which organizes various diseases into categories based on aetiology [@icd2024a]. 
 
-We can explore the prevalence rates of the various diagnoses, as well as their demographic characteristics, by plotting an interactive figure. For brevity, I will describe interesting features of the data in text rather than by displaying individual figures. You are encouraged to verify these findings using the figure and the interactive techniques we have discussed so far. 
+It is first necessary to discuss the coding scheme of the diagnoses. The codes were directly translated from the Czech version of the data set [@soukupova2023]. The vast majority diagnoses come from the F category, which represents mental and behavioral disorders, although there are also few references to the G category, which classifies diseases of the nervous system. Further, note that while some levels of the `diagnosis` variable represent a singular ICD-10 diagnosis (e.g. `f10`), others represent a range of diagnoses (e.g. `f11-f19`), a union (e.g. `f0 and g30`), or an exclusive difference (e.g. `f4 without f42`). 
 
-```{r}
-# Create ordering for the bars in the barplot based on frequency of cases
-order_df <- aggregate(cases ~ diagnosis, sum, data = df)
-order_df <- order_df[order(order_df$cases), ]
+Importantly, some of the codes also represent a range of diagnoses *implicitly*. For instance, whereas `f10` code refers to the F10 diagnosis (alcohol-use disorders), the part `f4` in `f4 without f42` does *not* refer to the F04 diagnosis (organic amnesic syndrome, not induced by alcohol and other psychoactive substances) but instead to the F40-F48 range of diagnoses [neurotic, stress-related and somatoform disorders, @icd2024a]. Likewise, `f2` represents F20-F29 (schizophrenia, schizotypal and delusional disorders), `f7` represents F70-F79 (mental retardation), and `f5` represents F50-F59 (behavioural syndromes associated with physiological disturbances and physical factors). I have confirmed this via personal communication with the data set's authors [@melicharova2025].
 
-df |>
-  create_schema() |>
-  add_barplot(c("diagnosis", "cases")) |>
-  add_barplot(c("age_category", "cases")) |>
-  add_barplot(c("sex", "cases")) |>
-  add_histogram(c("days", "cases")) |>
-  # Sort the bars by prevalence
-  set_scale("barplot1", "x", breaks = order_df$diagnosis) |> 
-  render()
-```
+Table \@ref(tab:icd10) lists codes used in the data, in order of their prevalence (the number of all cases across all time), along with a short description based on the ICD-10 [@icd2024a], and some clarifying notes in parentheses that I myself have added: 
 
-> You can also sort the barplot bars interactively by pressing the `O` key while the barplot is active. 
-
-From the barplot in the top left panel of the figure above, we can immediately see that the majority patient load is taken up by the top 5 disorders with > 40,000 cumulative cases each.   
-> Press the `Q` key and hover over each of the top 5 bars to see what disorders they represent.
-
-I took the liberty of transcribing classification of the disorders from the [ICD-10 website](https://icd.who.int/browse10/2019/en) [@icd2024a]. In order of prevalence, each row of Table [REFERENCE] contains the diagnostic code used in the data, along with the name/description of the diagnosis/es according to ICD-10 (I also added some notes in the parentheses):
-
-```{r}
+```{r icd10}
 #| echo: false
 #| eval: true
 icd10 <- read.csv("./data/longterm_care_icd10.csv", header = FALSE)
@@ -263,19 +244,148 @@ kableExtra::kbl(icd10,
   kableExtra::kable_styling(full_width = FALSE)
 ```
 
-Thus, the five most common mental disorders, ranked in order of prevalence, were: alcohol-use related disorders, dementias (including Alzheimer's and other forms), organic amnesic syndrome (not induced by psychoactive substances), and disorders caused by psychoactive substances (excluding alcohol). Interestingly, more frequently discussed conditions like depression and personality disorders were less prevalent. However, this may be due to the fact that less severe forms of these disorders can managed through outpatient treatment, such as a combination of medication and therapy [see e.g. @roiser2012], with long-term psychiatric care reserved only for the most acute episodes.
+To explore the prevalence of the various diagnoses as well as their demographic characteristics, we create another interactive figure. For this figure, I decided to plot the following variables: `diagnosis`, `age_category`, `sex`, and `reason_for_termination`. These seemed like the most interesting demographic variables. The `region` variable could also be an interesting choice, however, initial exploration did not reveal any interesting trends so I decided to omit it. 
 
-The high prevalence of four of the top five diagnoses is fairly intuitive. First, alcohol use disorders - the most common diagnosis - rank among the most common disorders globally and are associated with high mortality due to chronic health conditions and injury [@carvalho2019]. This diagnosis was about twice as common in men and showed a fairly symmetric, normal-shaped age distribution, occuring the most frequently in 40-60 year olds. Second, the high prevalence of dementias, including Alzheimer's disease, is unfortunately also to be expected, as these are fairly common neurodegenerative diseases in developed countries [see e.g. @cao2020; @langa2017]. Particularly, Alzheimer's disease is the leading cause of long-term psychiatric care in old age, as can be seen from the strongly skewed age distribution. Finally, the high prevalence of disorders due to use of psychoactive substances is also not unexpected, since, among European countries, Czechia ranks moderately high in consumption of certain substances such as ecstasy and cannabis [@mounteney2016]. By contrast, these disorders were more prevalent in young people, peaking around 20-29 years of age.
+From now on, I will describe interesting features of the data in text rather than through individual figures. You are encouraged to verify these findings by interacting with the figure, using the various techniques that have been discussed so far.
 
-The high prevalence of organic amnesic syndrome is perhaps more surprising. The ICD-10 describes it as: "a syndrome of prominent impairment of recent and remote memory while immediate recall is preserved, with reduced ability to learn new material and disorientation in time" with a known physical cause and explicitly includes non-alcoholic Korsakoff's syndrome [@icd2024a]. Notably however, the classification excludes other forms of amnesia, including anterograde and retrograde, as well as cases caused by psychoactive substances. Further, the data code also explicitly excludes obsessive-compulsive disorder (OCD). This may seem strange, however, there is evidence that people with OCD tend to obsess over not remembering certain events and have less confidence in recollecting things from the past [see e.g. @muller2005]. For instance, a person with OCD may have anxiety over whether they locked their doors or turned off the stove. Thus, individuals with OCD may over-report memory problems, and the data set's authors likely explicitly excluded OCD for this reason. 
+```{r prevalence}
+# Create ordering for barplots based on frequency
+order_df <- aggregate(cases ~ diagnosis, sum, data = df)
+order_df <- order_df[order(order_df$cases), ]
 
-The age distribution for organic amnesia was fairly uniform, and the disorder was roughly twice as prevalent in women than in men. This actually aligns fairly well with the systematic review by @scalzo2015, who found a 1:1.84 male-to-female ratio of non-alcoholic Korsakoff's, largely due to the second most common cause being hyperemesis gravidarum, which is a syndrome of acute nausea and vomiting during pregnancy (with the most common cause being gastrointestinal tract diseases or surgery). In general, Korsakoff's disorder is often caused by poor nutritional intake, particularly thiamine deficiency [@chandrakumar2019; @sechi2007]. While I have not been able to find epidemiological studies comparing the prevalence rates of non-alcoholic Korsakoff's syndrome across different countries, there is some evidence that general Korsakoff's syndrome (including alcohol-related) is fairly common in Czechia [@sechi2007].   
+order_df2 <- aggregate(cases ~ reason_for_termination, sum, data = df)
+order_df2 <- order_df2[order(order_df2$cases), ]
 
-From my cursory search, Czech oficial sources often emphasize alcoholism as the leading cause of organic amnesia and Korsakoff's syndrome [see e.g. @nzip2024]. However, if we look at the data, we see that non-alcohol related organic amnesia has almost two-thirds the prevalence of all alcohol-use disorders: 
+df |>
+  create_schema() |>
+  add_barplot(c("diagnosis", "cases")) |>
+  add_barplot(c("age_category", "cases")) |>
+  add_barplot(c("sex", "cases")) |>
+  add_barplot(c("reason_for_termination", "cases")) |>
+  # Sort the bars by prevalence (can also do interactively by pressing `O` key)
+  set_scale("barplot1", "x", breaks = order_df$diagnosis) |> 
+  set_scale("barplot4", "x", breaks = order_df2$reason_for_termination) |> 
+  render()
+```
+
+From the barplot in the top left panel of the Figure \@ref(fig:prevalence), we can immediately see that the majority patient load was taken up by the top five most common disorders. There were over 40,000 cases with each of these disorders, and together they made up over 75% of all cases (319,557 out of 414,242).     
+
+> Press the `Q` key and hover over the bars in the top left panel of Figure \@ref(fig:prevalence) to see what disorder each represents.
+
+In order of prevalence, the top five disorders were, were: alcohol-use disorders, schizophrenia, Alzheimer's disease, neurotic and stress-related disorders, and disorders caused by psychoactive substances (excluding alcohol). Overall, the high prevalence of these disorders is fairly, given that their high socio-economic impact is well-known to psychiatrists. Nevertheless, it may be illustrative to take a closer look at this data and examine demographic trends.  
+
+First, alcohol use disorders were the most common diagnosis. This is not surprising, since, globally, alcohol use disorders rank among the most common disorders and are associated with high mortality due to chronic health conditions and injury [@carvalho2019]. In the data set, this diagnosis was about twice as common in men and showed a fairly symmetric, normal-shaped age distribution, occurring the most frequently in 40-49 and 50-59 year-olds (this can be seen by selecting the corresponding bar in the top-left panel of figure Figure \@ref(fig:prevalence) and normalizing the age-category barplot). 
+
+The second most prevalent category of diagnoses were schizophrenia, schizotypal, and delusional disorders. While the individual lifetime prevalence of schizophrenia is not as high as some other disorders on this list, the reason for its high representation in the data set is likely its chronic and serious nature. Among those with mental illness, people with schizophrenia have one of the lowest life expectancies [see e.g. @chang2011], and often require multi-year or even life-long hospitalization [@messias2007]. This debilitating nature of schizophrenia has prompted some experts to describe it as "arguably one of the most severe health conditions affecting mankind" [see e.g. @messias2007; @tandon2024]. In the data set at hand, schizophrenic disorders had a fairly balanced sex ratio and a fairly flat age distribution.
+
+Third most prevalent disorder categories was Alzheimer's disease. The high prevalence of this disorder is unfortunately also to be expected, as, in developed countries, Alzheimer's disease tends the leading cause of long-term psychiatric care in old age [see e.g. @cao2020; @langa2017]. It also tends to be more prevalent in women. These patterns could be seen fairly well in the data set: the age distribution of Alzheimer's disease was strongly skewed, occurring much more frequently in older patients (and, in fact, making up the majority of >70 year-old patients), and the diagnosis was about ~40% more prevalent in women than in men. We can also see that Alzheimer's patient made up the vast majority of patients who had died in care, further reinforcing its status as a disease of old age.
+
+The fourth most prevalent category of disorders were neurotic, stress-related, and somatoform disorders (excluding the obsessive-compulsive disorder, F42) which was classified as its own category in the data set. This category includes disorders such as specific phobias, generalized anxiety disorder, and the post-traumatic stress disorder [@icd2024a]. These disorders are known to be relatively common, occur roughly twice as often in women as in men, and have a generally even age distribution, with decline in prevalence in older age [@bandelow2015]. This pattern could be seen well in the data set, with women making up the majority of the cases and the age distribution being fairly uniform, until a drop-off starting at about 60-69 years of age. In fact, these disorders were the most common diagnosis for women under 40:
 
 ```{r}
 #| eval: true
-aggregate(cases ~ diagnosis, sum, data = df) |>
-  subset(diagnosis %in% c("f10", "f4 without f42")) |>
-  transform(cases = cases / sum(cases))
+df$age_category_n <- as.numeric(factor(df$age_category, ordered = TRUE))
+under_40 <- unique(df$age_category_n[df$age_category == "30–39"])
+
+subset(df, sex == "female" & age_category_n <= under_40) |>
+  (\(x) aggregate(cases ~ diagnosis, sum, data = x))() |>
+  (\(x) x[order(-x$cases), ])() |>
+  head(5) |> knitr::kable(align = "ll", row.names = FALSE)
 ```
+
+
+The fifth and final of the top five diagnoses were disorders due to use of psychoactive substances. This finding is also not particularly surprising, since, among European countries, Czechia ranks moderately high in consumption psychoactive substances, particularly ecstasy and cannabis [@mounteney2016]. By contrast to some of the earlier categories, this diagnosis was significantly more common in males and in young people, showing a skewed age distribution with peak in the 20-29 category. Interestingly, the patients in this category also made up a fairly high proportion of those who had their care terminated early. It is hard to say what this means exactly (a more detailed coding schema for this variable is not available), however, other disorders with high proportion of early terminations included personality disorders (F60-F61 and F62-F69), suggesting that perhaps some patients may be released from care early because of serious behavioral problems.  
+
+Overall, the high prevalence of the top five diagnoses seemed to stem from their broad scope which encompassed a wide range of disorders. For instance, alcohol and other psychoactive substance use disorders can manifest in diverse symptoms, including dependence, psychosis, and amnesic syndrome  [@icd2024a]. Similarly, as was mentioned above, the stress-related diagnosis covers a broad spectrum of conditions. Alzheimer's disease was one notable exception, representing a fairly specific diagnosis with well-established physiological markers such as the presence of amyloid plaques and neurofibrillary tangles [see e.g. @deture2019]. It could be the case that, under a different classification scheme, Alzheimer's disease would be the most prevalent disorder. 
+
+Regardless, the diagnoses which followed the top five tended to be more specific, generally encompassing only one or two ICD-10 codes. Such was the case, for example, for depressive episode and recurrent depressive disorder (F32-F33), specific and mixed personality disorders (F60-F61), and so on. While it could be the case that these disorders would rank higher if some of the top five diagnoses were more granular as well, it is also possible that these disorders require less long-term care due to being more amenable to outpatient treatment methods [see e.g. @roiser2012].    
+
+#### Prevalence of diagnoses over time
+
+We can also scrutinize the prevalence of different mental disorders over time. Again, we need to distinguish between the number of cases versus the number of days patients spent in care. We can use the following figure:
+
+```{r}
+
+df |>
+  create_schema() |>
+  add_barplot(c("diagnosis", "cases")) |>
+  add_barplot(c("year", "cases")) |>
+  add_barplot(c("year", "days")) |>
+  set_layout(matrix(c(1, 1, 2, 3), nrow = 2, byrow = TRUE)) |>
+  set_scale("barplot1", "x", breaks = order_df$diagnosis) |>
+  render()
+```
+
+Overall, over time, the proportion of both cases and days in treatment the various diagnoses made up seemed to remain fairly constant, with perhaps a slight general decreasing trend in the number of cases. Of the top five diagnoses, the one which seemed to buck this trend was schizophrenia (F20-F29), which had a fairly marked increasing trend in the proportion of days. Furthermore, the number of cases related to psychoactive substance use disorders (excluding alcohol) seemed to also be rising slightly.
+
+Of the rarer disorders, the one in which there seemed to be a significant relative rise in both the proportion of cases and days in treatment were mental and behavioral disorders associated with physiological disturbances and physical factors (F50-F59). This category includes disorders such as anorexia, bulimia, sleep disorders, and sexual dysfunction disorders. Given that this category was more prevalent in women and young people (as can be seen by interrogating Figure \@ref(fig:prevalence)), the likely explanation for this trend is rise in the number of cases of anorexia and bulimia. There also seemed to be slight of a decrease in the number of days spent in treatment by patients with stress-related disorders (F40-F49 without F42) and depression disorders (F32 and F33).
+
+We can quickly verify these findings by fitting simple linear regressions for each diagnosis. First, we can model the number of cases by year:
+
+```{r cases-by-year}
+#| eval: true
+#| echo: false
+
+library(kableExtra)
+
+fits <- lapply(split(df, df$diagnosis), function(x) {
+  broom::tidy(lm(cases ~ year, data = x), conf.int = TRUE)[2, ]
+  }) |> (\(x) do.call(`rbind`, x))()
+
+fits$diagnosis <- rownames(fits)
+fits <- subset(fits, select = c(diagnosis, estimate,
+                                  conf.low, conf.high, p.value))
+names(fits) <- c("diagnosis", "beta", "lower 95% CI", "upper 95% CI", "p-value")
+fits$`p-value` <- ifelse(fits$`p-value` < 0.001, "< 0.001", round(fits$`p-value`, 3))
+fits$beta <- round(fits$beta, 2)
+fits$`lower 95% CI` <- round(fits$`lower 95% CI`, 2)
+fits$`upper 95% CI` <- round(fits$`upper 95% CI`, 2)
+
+order_df3 <- aggregate(cases ~ diagnosis, sum, data = df)
+order_df3 <- order_df3[order(-order_df3$cases), ]
+fits <- fits[match(1:14, match(fits$diagnosis, order_df3$diagnosis)), ]
+
+knitr::kable(fits, align = "lllll", format = "html",
+             caption = "Simple linear regressions of the number of cases by year for each diagnosis") |>
+  kable_styling() |>
+  column_spec(2, color = ifelse(fits$beta < 0, "red", "black")) |>
+  column_spec(3, color = ifelse(fits$`lower 95% CI` < 0, "red", "black")) |>
+  column_spec(4, color = ifelse(fits$`upper 95% CI` < 0, "red", "black"))
+```
+
+As we can see in Table \@ref(tab:prevalence-over-time), for most diagnoses, there seemed to be a decreasing trend in the number of cases over time. The only diagnosis for which the number of cases was significantly *increasing* over time was F50-F59, confirming the observations made in the interactive figure.
+
+We can do the same for the number of days by year:
+
+```{r days-by-year}
+#| eval: true
+#| echo: false
+
+library(kableExtra)
+
+fits <- lapply(split(df, df$diagnosis), function(x) {
+  broom::tidy(lm(days ~ year, data = x), conf.int = TRUE)[2, ]
+  }) |> (\(x) do.call(`rbind`, x))()
+
+fits$diagnosis <- rownames(fits)
+fits <- subset(fits, select = c(diagnosis, estimate,
+                                  conf.low, conf.high, p.value))
+names(fits) <- c("diagnosis", "beta", "lower 95% CI", "upper 95% CI", "p-value")
+fits$`p-value` <- ifelse(fits$`p-value` < 0.001, "< 0.001", round(fits$`p-value`, 3))
+fits$beta <- round(fits$beta, 2)
+fits$`lower 95% CI` <- round(fits$`lower 95% CI`, 2)
+fits$`upper 95% CI` <- round(fits$`upper 95% CI`, 2)
+
+order_df3 <- aggregate(cases ~ diagnosis, sum, data = df)
+order_df3 <- order_df3[order(-order_df3$cases), ]
+fits <- fits[match(1:14, match(fits$diagnosis, order_df3$diagnosis)), ]
+
+knitr::kable(fits, align = "lllll", format = "html",
+             caption = "Simple linear regressions of the number of days by year for each diagnosis") |>
+  kable_styling() |>
+  column_spec(2, color = ifelse(fits$beta < 0, "red", "black")) |>
+  column_spec(3, color = ifelse(fits$`lower 95% CI` < 0, "red", "black")) |>
+  column_spec(4, color = ifelse(fits$`upper 95% CI` < 0, "red", "black"))
+```
+
+Here, the situation was a bit more varied. For most diagnoses, the number of days patients spent in care seemed to increase, with particularly large increases being observed for schizophrenia (F20-F29), Alzheimer's disease (F02 and G30), mental retardation (F70-F79), and personality disorders (F62-F69). The two diagnosis for which the number of days in treatment actually decreased were, interestingly, stress-related disorders (F40-F49 without F42) and depression disorders (F32 and F33).      
