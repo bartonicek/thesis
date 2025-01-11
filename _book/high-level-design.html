@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>5 High-level design | Fluent Graphics</title>
-  <meta name="description" content="5 High-level design | Fluent Graphics" />
+  <title>6 High-level design | Fluent Graphics</title>
+  <meta name="description" content="6 High-level design | Fluent Graphics" />
   <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="5 High-level design | Fluent Graphics" />
+  <meta property="og:title" content="6 High-level design | Fluent Graphics" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="5 High-level design | Fluent Graphics" />
+  <meta name="twitter:title" content="6 High-level design | Fluent Graphics" />
   
   
   
@@ -53,10 +53,8 @@
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
 <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
-<link href="libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
-<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
-<script src="libs/plotscape-0.0.0/main.iife.js"></script>
-<script src="libs/plotscaper-binding-0.2.6/plotscaper.js"></script>
+<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
 
 
 <style type="text/css">
@@ -165,108 +163,113 @@ div.csl-indent {
 
 <ul class="summary">
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Abstract</a></li>
-<li class="chapter" data-level="2" data-path="litreview.html"><a href="litreview.html"><i class="fa fa-check"></i><b>2</b> Literature review</a>
+<li class="chapter" data-level="2" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>2</b> Introduction</a></li>
+<li class="chapter" data-level="3" data-path="litreview.html"><a href="litreview.html"><i class="fa fa-check"></i><b>3</b> Literature review</a>
 <ul>
-<li class="chapter" data-level="2.1" data-path="litreview.html"><a href="litreview.html#brief-history"><i class="fa fa-check"></i><b>2.1</b> Brief history of interactive data visualization</a>
+<li class="chapter" data-level="3.1" data-path="litreview.html"><a href="litreview.html#brief-history"><i class="fa fa-check"></i><b>3.1</b> Brief history of interactive data visualization</a>
 <ul>
-<li class="chapter" data-level="2.1.1" data-path="litreview.html"><a href="litreview.html#static-data-visualization-from-ancient-times-to-the-space-age"><i class="fa fa-check"></i><b>2.1.1</b> Static data visualization: From ancient times to the space age</a></li>
-<li class="chapter" data-level="2.1.2" data-path="litreview.html"><a href="litreview.html#early-interactive"><i class="fa fa-check"></i><b>2.1.2</b> Early interactive data visualization: By statisticians for statisticians</a></li>
-<li class="chapter" data-level="2.1.3" data-path="litreview.html"><a href="litreview.html#interactive-data-visualization-and-the-internet-web-based-interactivity"><i class="fa fa-check"></i><b>2.1.3</b> Interactive data visualization and the internet: Web-based interactivity</a></li>
+<li class="chapter" data-level="3.1.1" data-path="litreview.html"><a href="litreview.html#static-data-visualization-from-ancient-times-to-the-space-age"><i class="fa fa-check"></i><b>3.1.1</b> Static data visualization: From ancient times to the space age</a></li>
+<li class="chapter" data-level="3.1.2" data-path="litreview.html"><a href="litreview.html#early-interactive"><i class="fa fa-check"></i><b>3.1.2</b> Early interactive data visualization: By statisticians for statisticians</a></li>
+<li class="chapter" data-level="3.1.3" data-path="litreview.html"><a href="litreview.html#interactive-data-visualization-and-the-internet-web-based-interactivity"><i class="fa fa-check"></i><b>3.1.3</b> Interactive data visualization and the internet: Web-based interactivity</a></li>
 </ul></li>
-<li class="chapter" data-level="2.2" data-path="litreview.html"><a href="litreview.html#what-is-interactive-visualization"><i class="fa fa-check"></i><b>2.2</b> What even is interactive data visualization?</a>
+<li class="chapter" data-level="3.2" data-path="litreview.html"><a href="litreview.html#what-is-interactive-visualization"><i class="fa fa-check"></i><b>3.2</b> What even is interactive data visualization?</a>
 <ul>
-<li class="chapter" data-level="2.2.1" data-path="litreview.html"><a href="litreview.html#interactive-vs.-interacting-with"><i class="fa fa-check"></i><b>2.2.1</b> Interactive vs. interacting with</a></li>
-<li class="chapter" data-level="2.2.2" data-path="litreview.html"><a href="litreview.html#what-is-interactive-enough"><i class="fa fa-check"></i><b>2.2.2</b> What is “interactive enough”?</a></li>
-<li class="chapter" data-level="2.2.3" data-path="litreview.html"><a href="litreview.html#complexity-of-interactive-features"><i class="fa fa-check"></i><b>2.2.3</b> Complexity of interactive features</a></li>
-<li class="chapter" data-level="2.2.4" data-path="litreview.html"><a href="litreview.html#working-definition"><i class="fa fa-check"></i><b>2.2.4</b> Working definition</a></li>
-<li class="chapter" data-level="2.2.5" data-path="litreview.html"><a href="litreview.html#common-features"><i class="fa fa-check"></i><b>2.2.5</b> Common interactive features</a></li>
+<li class="chapter" data-level="3.2.1" data-path="litreview.html"><a href="litreview.html#interactive-vs.-interacting-with"><i class="fa fa-check"></i><b>3.2.1</b> Interactive vs. interacting with</a></li>
 </ul></li>
-<li class="chapter" data-level="2.3" data-path="litreview.html"><a href="litreview.html#the-highlighting-problem"><i class="fa fa-check"></i><b>2.3</b> The highlighting problem</a>
+<li class="chapter" data-level="3.3" data-path="litreview.html"><a href="litreview.html#visualization-goals"><i class="fa fa-check"></i><b>3.3</b> Visualization goals</a>
 <ul>
-<li class="chapter" data-level="2.3.1" data-path="litreview.html"><a href="litreview.html#linked-selection-and-stacking"><i class="fa fa-check"></i><b>2.3.1</b> Linked selection and stacking</a></li>
+<li class="chapter" data-level="3.3.1" data-path="litreview.html"><a href="litreview.html#what-is-interactive-enough"><i class="fa fa-check"></i><b>3.3.1</b> What is “interactive enough”?</a></li>
+<li class="chapter" data-level="3.3.2" data-path="litreview.html"><a href="litreview.html#complexity-of-interactive-features"><i class="fa fa-check"></i><b>3.3.2</b> Complexity of interactive features</a></li>
+<li class="chapter" data-level="3.3.3" data-path="litreview.html"><a href="litreview.html#working-definition"><i class="fa fa-check"></i><b>3.3.3</b> Working definition</a></li>
+<li class="chapter" data-level="3.3.4" data-path="litreview.html"><a href="litreview.html#common-features"><i class="fa fa-check"></i><b>3.3.4</b> Common interactive features</a></li>
 </ul></li>
-<li class="chapter" data-level="2.4" data-path="litreview.html"><a href="litreview.html#theory-of-data-visualization-systems"><i class="fa fa-check"></i><b>2.4</b> Theory of data visualization systems</a>
+<li class="chapter" data-level="3.4" data-path="litreview.html"><a href="litreview.html#the-highlighting-problem"><i class="fa fa-check"></i><b>3.4</b> The highlighting problem</a>
 <ul>
-<li class="chapter" data-level="2.4.1" data-path="litreview.html"><a href="litreview.html#scales"><i class="fa fa-check"></i><b>2.4.1</b> Scales</a></li>
+<li class="chapter" data-level="3.4.1" data-path="litreview.html"><a href="litreview.html#linked-selection-and-stacking"><i class="fa fa-check"></i><b>3.4.1</b> Linked selection and stacking</a></li>
 </ul></li>
-</ul></li>
-<li class="chapter" data-level="3" data-path="problems.html"><a href="problems.html"><i class="fa fa-check"></i><b>3</b> Problem Set</a>
+<li class="chapter" data-level="3.5" data-path="litreview.html"><a href="litreview.html#theory-of-data-visualization-systems"><i class="fa fa-check"></i><b>3.5</b> Theory of data visualization systems</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="problems.html"><a href="problems.html#data-visualization-pipeline"><i class="fa fa-check"></i><b>3.1</b> Data visualization pipeline</a></li>
-<li class="chapter" data-level="3.2" data-path="problems.html"><a href="problems.html#partitioning"><i class="fa fa-check"></i><b>3.2</b> Partitioning</a>
-<ul>
-<li class="chapter" data-level="3.2.1" data-path="problems.html"><a href="problems.html#showing-the-full-data"><i class="fa fa-check"></i><b>3.2.1</b> Showing the full data</a></li>
-<li class="chapter" data-level="3.2.2" data-path="problems.html"><a href="problems.html#disjointness-and-comparison"><i class="fa fa-check"></i><b>3.2.2</b> Disjointness and comparison</a></li>
-<li class="chapter" data-level="3.2.3" data-path="problems.html"><a href="problems.html#plots-as-partitions"><i class="fa fa-check"></i><b>3.2.3</b> Plots as partitions</a></li>
-</ul></li>
-<li class="chapter" data-level="3.3" data-path="problems.html"><a href="problems.html#aggregation"><i class="fa fa-check"></i><b>3.3</b> Aggregation</a>
-<ul>
-<li class="chapter" data-level="3.3.1" data-path="problems.html"><a href="problems.html#graphics-and-statistics-are-not-independent"><i class="fa fa-check"></i><b>3.3.1</b> Graphics and statistics are not independent</a></li>
-<li class="chapter" data-level="3.3.2" data-path="problems.html"><a href="problems.html#stackable-summaries"><i class="fa fa-check"></i><b>3.3.2</b> Stackable summaries</a></li>
-</ul></li>
-<li class="chapter" data-level="3.4" data-path="problems.html"><a href="problems.html#scaling"><i class="fa fa-check"></i><b>3.4</b> Scaling</a>
-<ul>
-<li class="chapter" data-level="3.4.1" data-path="problems.html"><a href="problems.html#theory-of-scales"><i class="fa fa-check"></i><b>3.4.1</b> Theory of scales</a></li>
-<li class="chapter" data-level="3.4.2" data-path="problems.html"><a href="problems.html#scales-in-practice"><i class="fa fa-check"></i><b>3.4.2</b> Scales in practice</a></li>
+<li class="chapter" data-level="3.5.1" data-path="litreview.html"><a href="litreview.html#scales"><i class="fa fa-check"></i><b>3.5.1</b> Scales</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="goals.html"><a href="goals.html"><i class="fa fa-check"></i><b>4</b> Goals</a>
+<li class="chapter" data-level="4" data-path="problems.html"><a href="problems.html"><i class="fa fa-check"></i><b>4</b> Problem Set</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="goals.html"><a href="goals.html#user-profile"><i class="fa fa-check"></i><b>4.1</b> User profile</a></li>
-<li class="chapter" data-level="4.2" data-path="goals.html"><a href="goals.html#programming-interface"><i class="fa fa-check"></i><b>4.2</b> Programming interface</a></li>
-<li class="chapter" data-level="4.3" data-path="goals.html"><a href="goals.html#user-interface"><i class="fa fa-check"></i><b>4.3</b> User interface</a></li>
-<li class="chapter" data-level="4.4" data-path="goals.html"><a href="goals.html#interactive-features"><i class="fa fa-check"></i><b>4.4</b> Interactive features</a></li>
+<li class="chapter" data-level="4.1" data-path="problems.html"><a href="problems.html#data-visualization-pipeline"><i class="fa fa-check"></i><b>4.1</b> Data visualization pipeline</a></li>
+<li class="chapter" data-level="4.2" data-path="problems.html"><a href="problems.html#partitioning"><i class="fa fa-check"></i><b>4.2</b> Partitioning</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="problems.html"><a href="problems.html#showing-the-full-data"><i class="fa fa-check"></i><b>4.2.1</b> Showing the full data</a></li>
+<li class="chapter" data-level="4.2.2" data-path="problems.html"><a href="problems.html#disjointness-and-comparison"><i class="fa fa-check"></i><b>4.2.2</b> Disjointness and comparison</a></li>
+<li class="chapter" data-level="4.2.3" data-path="problems.html"><a href="problems.html#plots-as-partitions"><i class="fa fa-check"></i><b>4.2.3</b> Plots as partitions</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="high-level-design.html"><a href="high-level-design.html"><i class="fa fa-check"></i><b>5</b> High-level design</a>
+<li class="chapter" data-level="4.3" data-path="problems.html"><a href="problems.html#aggregation"><i class="fa fa-check"></i><b>4.3</b> Aggregation</a>
 <ul>
-<li class="chapter" data-level="5.0.1" data-path="high-level-design.html"><a href="high-level-design.html#user-profile-1"><i class="fa fa-check"></i><b>5.0.1</b> User profile</a></li>
-<li class="chapter" data-level="5.1" data-path="high-level-design.html"><a href="high-level-design.html#programming-paradigm"><i class="fa fa-check"></i><b>5.1</b> Programming paradigm</a>
-<ul>
-<li class="chapter" data-level="5.1.1" data-path="high-level-design.html"><a href="high-level-design.html#imperative-programming"><i class="fa fa-check"></i><b>5.1.1</b> Imperative programming</a></li>
-<li class="chapter" data-level="5.1.2" data-path="high-level-design.html"><a href="high-level-design.html#functional-programming"><i class="fa fa-check"></i><b>5.1.2</b> Functional programming</a></li>
-<li class="chapter" data-level="5.1.3" data-path="high-level-design.html"><a href="high-level-design.html#object-oriented-programming"><i class="fa fa-check"></i><b>5.1.3</b> Object oriented programming</a></li>
-<li class="chapter" data-level="5.1.4" data-path="high-level-design.html"><a href="high-level-design.html#data-oriented-programming"><i class="fa fa-check"></i><b>5.1.4</b> Data oriented programming</a></li>
+<li class="chapter" data-level="4.3.1" data-path="problems.html"><a href="problems.html#graphics-and-statistics-are-not-independent"><i class="fa fa-check"></i><b>4.3.1</b> Graphics and statistics are not independent</a></li>
+<li class="chapter" data-level="4.3.2" data-path="problems.html"><a href="problems.html#stackable-summaries"><i class="fa fa-check"></i><b>4.3.2</b> Stackable summaries</a></li>
 </ul></li>
-<li class="chapter" data-level="5.2" data-path="high-level-design.html"><a href="high-level-design.html#reactivity"><i class="fa fa-check"></i><b>5.2</b> Reactivity</a></li>
-<li class="chapter" data-level="5.3" data-path="high-level-design.html"><a href="high-level-design.html#data-representation"><i class="fa fa-check"></i><b>5.3</b> Data representation</a></li>
-<li class="chapter" data-level="5.4" data-path="high-level-design.html"><a href="high-level-design.html#rendering-engine"><i class="fa fa-check"></i><b>5.4</b> Rendering engine</a></li>
-</ul></li>
-<li class="chapter" data-level="6" data-path="system.html"><a href="system.html"><i class="fa fa-check"></i><b>6</b> System description</a>
+<li class="chapter" data-level="4.4" data-path="problems.html"><a href="problems.html#scaling"><i class="fa fa-check"></i><b>4.4</b> Scaling</a>
 <ul>
-<li class="chapter" data-level="6.1" data-path="system.html"><a href="system.html#core-requirements"><i class="fa fa-check"></i><b>6.1</b> Core requirements</a></li>
-<li class="chapter" data-level="6.2" data-path="system.html"><a href="system.html#application-programming-interface-plotscaper"><i class="fa fa-check"></i><b>6.2</b> Application Programming Interface (<code>plotscaper</code>)</a></li>
-<li class="chapter" data-level="6.3" data-path="system.html"><a href="system.html#components"><i class="fa fa-check"></i><b>6.3</b> Components</a>
-<ul>
-<li class="chapter" data-level="6.3.1" data-path="system.html"><a href="system.html#Indexable"><i class="fa fa-check"></i><b>6.3.1</b> Indexable</a></li>
-<li class="chapter" data-level="6.3.2" data-path="system.html"><a href="system.html#Getter"><i class="fa fa-check"></i><b>6.3.2</b> Getter</a></li>
-<li class="chapter" data-level="6.3.3" data-path="system.html"><a href="system.html#dataframe"><i class="fa fa-check"></i><b>6.3.3</b> Dataframe</a></li>
-<li class="chapter" data-level="6.3.4" data-path="system.html"><a href="system.html#reactive"><i class="fa fa-check"></i><b>6.3.4</b> Reactive</a></li>
-<li class="chapter" data-level="6.3.5" data-path="system.html"><a href="system.html#factors"><i class="fa fa-check"></i><b>6.3.5</b> Factors</a></li>
-<li class="chapter" data-level="6.3.6" data-path="system.html"><a href="system.html#reducers"><i class="fa fa-check"></i><b>6.3.6</b> Reducers</a></li>
-<li class="chapter" data-level="6.3.7" data-path="system.html"><a href="system.html#scales-1"><i class="fa fa-check"></i><b>6.3.7</b> Scales</a></li>
-<li class="chapter" data-level="6.3.8" data-path="system.html"><a href="system.html#expanses"><i class="fa fa-check"></i><b>6.3.8</b> Expanses</a></li>
+<li class="chapter" data-level="4.4.1" data-path="problems.html"><a href="problems.html#theory-of-scales"><i class="fa fa-check"></i><b>4.4.1</b> Theory of scales</a></li>
+<li class="chapter" data-level="4.4.2" data-path="problems.html"><a href="problems.html#scales-in-practice"><i class="fa fa-check"></i><b>4.4.2</b> Scales in practice</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="applied-example.html"><a href="applied-example.html"><i class="fa fa-check"></i><b>7</b> Applied example</a>
+<li class="chapter" data-level="5" data-path="goals.html"><a href="goals.html"><i class="fa fa-check"></i><b>5</b> Goals</a>
 <ul>
-<li class="chapter" data-level="7.0.1" data-path="applied-example.html"><a href="applied-example.html#about-the-data-set"><i class="fa fa-check"></i><b>7.0.1</b> About the data set</a></li>
-<li class="chapter" data-level="7.0.2" data-path="applied-example.html"><a href="applied-example.html#interactive-exploration"><i class="fa fa-check"></i><b>7.0.2</b> Interactive exploration</a></li>
+<li class="chapter" data-level="5.1" data-path="goals.html"><a href="goals.html#user-profile"><i class="fa fa-check"></i><b>5.1</b> User profile</a></li>
+<li class="chapter" data-level="5.2" data-path="goals.html"><a href="goals.html#programming-interface"><i class="fa fa-check"></i><b>5.2</b> Programming interface</a></li>
+<li class="chapter" data-level="5.3" data-path="goals.html"><a href="goals.html#user-interface"><i class="fa fa-check"></i><b>5.3</b> User interface</a></li>
+<li class="chapter" data-level="5.4" data-path="goals.html"><a href="goals.html#interactive-features"><i class="fa fa-check"></i><b>5.4</b> Interactive features</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>8</b> Discussion</a></li>
-<li class="chapter" data-level="9" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>9</b> Glossary</a></li>
-<li class="chapter" data-level="10" data-path="appendix.html"><a href="appendix.html"><i class="fa fa-check"></i><b>10</b> Appendix</a></li>
-<li class="chapter" data-level="11" data-path="mathematical-theory.html"><a href="mathematical-theory.html"><i class="fa fa-check"></i><b>11</b> Mathematical theory</a>
+<li class="chapter" data-level="6" data-path="high-level-design.html"><a href="high-level-design.html"><i class="fa fa-check"></i><b>6</b> High-level design</a>
 <ul>
-<li class="chapter" data-level="11.0.1" data-path="mathematical-theory.html"><a href="mathematical-theory.html#relations"><i class="fa fa-check"></i><b>11.0.1</b> Relations</a></li>
-<li class="chapter" data-level="11.0.2" data-path="mathematical-theory.html"><a href="mathematical-theory.html#functions"><i class="fa fa-check"></i><b>11.0.2</b> Functions</a></li>
-<li class="chapter" data-level="11.0.3" data-path="mathematical-theory.html"><a href="mathematical-theory.html#partitions"><i class="fa fa-check"></i><b>11.0.3</b> Partitions</a></li>
-<li class="chapter" data-level="11.0.4" data-path="mathematical-theory.html"><a href="mathematical-theory.html#preorders"><i class="fa fa-check"></i><b>11.0.4</b> Preorders</a></li>
-<li class="chapter" data-level="11.0.5" data-path="mathematical-theory.html"><a href="mathematical-theory.html#monoids"><i class="fa fa-check"></i><b>11.0.5</b> Monoids</a></li>
-<li class="chapter" data-level="11.0.6" data-path="mathematical-theory.html"><a href="mathematical-theory.html#groups"><i class="fa fa-check"></i><b>11.0.6</b> Groups</a></li>
-<li class="chapter" data-level="11.0.7" data-path="mathematical-theory.html"><a href="mathematical-theory.html#categories"><i class="fa fa-check"></i><b>11.0.7</b> Categories</a></li>
-<li class="chapter" data-level="11.0.8" data-path="mathematical-theory.html"><a href="mathematical-theory.html#functors"><i class="fa fa-check"></i><b>11.0.8</b> Functors</a></li>
+<li class="chapter" data-level="6.0.1" data-path="high-level-design.html"><a href="high-level-design.html#user-profile-1"><i class="fa fa-check"></i><b>6.0.1</b> User profile</a></li>
+<li class="chapter" data-level="6.1" data-path="high-level-design.html"><a href="high-level-design.html#programming-paradigm"><i class="fa fa-check"></i><b>6.1</b> Programming paradigm</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="high-level-design.html"><a href="high-level-design.html#imperative-programming"><i class="fa fa-check"></i><b>6.1.1</b> Imperative programming</a></li>
+<li class="chapter" data-level="6.1.2" data-path="high-level-design.html"><a href="high-level-design.html#functional-programming"><i class="fa fa-check"></i><b>6.1.2</b> Functional programming</a></li>
+<li class="chapter" data-level="6.1.3" data-path="high-level-design.html"><a href="high-level-design.html#object-oriented-programming"><i class="fa fa-check"></i><b>6.1.3</b> Object oriented programming</a></li>
+<li class="chapter" data-level="6.1.4" data-path="high-level-design.html"><a href="high-level-design.html#data-oriented-programming"><i class="fa fa-check"></i><b>6.1.4</b> Data oriented programming</a></li>
 </ul></li>
-<li class="chapter" data-level="12" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>12</b> References</a></li>
+<li class="chapter" data-level="6.2" data-path="high-level-design.html"><a href="high-level-design.html#reactivity"><i class="fa fa-check"></i><b>6.2</b> Reactivity</a></li>
+<li class="chapter" data-level="6.3" data-path="high-level-design.html"><a href="high-level-design.html#data-representation"><i class="fa fa-check"></i><b>6.3</b> Data representation</a></li>
+<li class="chapter" data-level="6.4" data-path="high-level-design.html"><a href="high-level-design.html#rendering-engine"><i class="fa fa-check"></i><b>6.4</b> Rendering engine</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="system.html"><a href="system.html"><i class="fa fa-check"></i><b>7</b> System description</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="system.html"><a href="system.html#core-requirements"><i class="fa fa-check"></i><b>7.1</b> Core requirements</a></li>
+<li class="chapter" data-level="7.2" data-path="system.html"><a href="system.html#application-programming-interface-plotscaper"><i class="fa fa-check"></i><b>7.2</b> Application Programming Interface (<code>plotscaper</code>)</a></li>
+<li class="chapter" data-level="7.3" data-path="system.html"><a href="system.html#components"><i class="fa fa-check"></i><b>7.3</b> Components</a>
+<ul>
+<li class="chapter" data-level="7.3.1" data-path="system.html"><a href="system.html#Indexable"><i class="fa fa-check"></i><b>7.3.1</b> Indexable</a></li>
+<li class="chapter" data-level="7.3.2" data-path="system.html"><a href="system.html#Getter"><i class="fa fa-check"></i><b>7.3.2</b> Getter</a></li>
+<li class="chapter" data-level="7.3.3" data-path="system.html"><a href="system.html#dataframe"><i class="fa fa-check"></i><b>7.3.3</b> Dataframe</a></li>
+<li class="chapter" data-level="7.3.4" data-path="system.html"><a href="system.html#reactive"><i class="fa fa-check"></i><b>7.3.4</b> Reactive</a></li>
+<li class="chapter" data-level="7.3.5" data-path="system.html"><a href="system.html#factors"><i class="fa fa-check"></i><b>7.3.5</b> Factors</a></li>
+<li class="chapter" data-level="7.3.6" data-path="system.html"><a href="system.html#reducers"><i class="fa fa-check"></i><b>7.3.6</b> Reducers</a></li>
+<li class="chapter" data-level="7.3.7" data-path="system.html"><a href="system.html#scales-1"><i class="fa fa-check"></i><b>7.3.7</b> Scales</a></li>
+<li class="chapter" data-level="7.3.8" data-path="system.html"><a href="system.html#expanses"><i class="fa fa-check"></i><b>7.3.8</b> Expanses</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="applied-example.html"><a href="applied-example.html"><i class="fa fa-check"></i><b>8</b> Applied example</a>
+<ul>
+<li class="chapter" data-level="8.0.1" data-path="applied-example.html"><a href="applied-example.html#about-the-data-set"><i class="fa fa-check"></i><b>8.0.1</b> About the data set</a></li>
+<li class="chapter" data-level="8.0.2" data-path="applied-example.html"><a href="applied-example.html#interactive-exploration"><i class="fa fa-check"></i><b>8.0.2</b> Interactive exploration</a></li>
+<li class="chapter" data-level="8.1" data-path="applied-example.html"><a href="applied-example.html#summary"><i class="fa fa-check"></i><b>8.1</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>9</b> Discussion</a></li>
+<li class="chapter" data-level="10" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>10</b> Glossary</a></li>
+<li class="chapter" data-level="11" data-path="appendix.html"><a href="appendix.html"><i class="fa fa-check"></i><b>11</b> Appendix</a></li>
+<li class="chapter" data-level="12" data-path="mathematical-theory.html"><a href="mathematical-theory.html"><i class="fa fa-check"></i><b>12</b> Mathematical theory</a>
+<ul>
+<li class="chapter" data-level="12.0.1" data-path="mathematical-theory.html"><a href="mathematical-theory.html#relations"><i class="fa fa-check"></i><b>12.0.1</b> Relations</a></li>
+<li class="chapter" data-level="12.0.2" data-path="mathematical-theory.html"><a href="mathematical-theory.html#functions"><i class="fa fa-check"></i><b>12.0.2</b> Functions</a></li>
+<li class="chapter" data-level="12.0.3" data-path="mathematical-theory.html"><a href="mathematical-theory.html#partitions"><i class="fa fa-check"></i><b>12.0.3</b> Partitions</a></li>
+<li class="chapter" data-level="12.0.4" data-path="mathematical-theory.html"><a href="mathematical-theory.html#preorders"><i class="fa fa-check"></i><b>12.0.4</b> Preorders</a></li>
+<li class="chapter" data-level="12.0.5" data-path="mathematical-theory.html"><a href="mathematical-theory.html#monoids"><i class="fa fa-check"></i><b>12.0.5</b> Monoids</a></li>
+<li class="chapter" data-level="12.0.6" data-path="mathematical-theory.html"><a href="mathematical-theory.html#groups"><i class="fa fa-check"></i><b>12.0.6</b> Groups</a></li>
+<li class="chapter" data-level="12.0.7" data-path="mathematical-theory.html"><a href="mathematical-theory.html#categories"><i class="fa fa-check"></i><b>12.0.7</b> Categories</a></li>
+<li class="chapter" data-level="12.0.8" data-path="mathematical-theory.html"><a href="mathematical-theory.html#functors"><i class="fa fa-check"></i><b>12.0.8</b> Functors</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>13</b> References</a></li>
 </ul>
 
       </nav>
@@ -284,8 +287,8 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="high-level-design" class="section level1 hasAnchor" number="5">
-<h1><span class="header-section-number">5</span> High-level design<a href="high-level-design.html#high-level-design" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="high-level-design" class="section level1 hasAnchor" number="6">
+<h1><span class="header-section-number">6</span> High-level design<a href="high-level-design.html#high-level-design" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <blockquote>
 <p>“Designing is fundamentally about taking things apart […] in such a way that they can be put back together. Separating things into things that can be composed.”</p>
 <p>Rich Hickey <span class="citation">(<a href="#ref-hickey2013">2013</a>)</span></p>
@@ -295,14 +298,14 @@ div.csl-indent {
 <p>The example code chunks in this section are written in both R and TypeScript. While I would prefer to use R for all code examples, due to its tight integration with RMarkdown, some of the concepts are much easier to explain in a language with static typing like TypeScript (particularly, type annotations and interfaces). However, since some examples can also be greatly enhanced by graphical output, I also wanted to use R.</p>
 <p>So, where graphical output is important, the code examples are written in R, and, where the code itself is the main focus, they are written in TypeScript. I hope this bilingualism is not too confusing. I have tried to use only the core features of each language to make the examples clear.</p>
 </blockquote>
-<div id="user-profile-1" class="section level3 hasAnchor" number="5.0.1">
-<h3><span class="header-section-number">5.0.1</span> User profile<a href="high-level-design.html#user-profile-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="user-profile-1" class="section level3 hasAnchor" number="6.0.1">
+<h3><span class="header-section-number">6.0.1</span> User profile<a href="high-level-design.html#user-profile-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>When designing an interactive data visualization system, one important consideration is the profile of the average user. Among interactive data visualization systems, there can be significant differences in what the user is expected to know, across various implementations and research areas. For example, some general interactive data visualization systems make almost no assumptions about the user’s level of experience or motivation, whereas others assume a highly motivated “expert” user with a sufficient level of domain knowledge <span class="citation">(<a href="#ref-dimara2019">Dimara and Perin 2019</a>)</span>.</p>
 <p>The goal of the project was to design a fairly versatile system for general data exploration. As such, the system was designed in such a way to make it possible for someone with fairly modest data science skills to pick up and make decent use of its basic features. At the same time, I also wanted to provide some more advanced features that experienced users could make use of.</p>
 <p>[Give examples].</p>
 </div>
-<div id="programming-paradigm" class="section level2 hasAnchor" number="5.1">
-<h2><span class="header-section-number">5.1</span> Programming paradigm<a href="high-level-design.html#programming-paradigm" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="programming-paradigm" class="section level2 hasAnchor" number="6.1">
+<h2><span class="header-section-number">6.1</span> Programming paradigm<a href="high-level-design.html#programming-paradigm" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <blockquote>
 <p>“Apex predator of Grug is complexity. Complexity bad. Say again: complexity very bad.
 You say now: complexity very, very bad. Given choice between complexity or one on one
@@ -314,15 +317,15 @@ against T-rex, Grug take T-rex: at least grug see T-rex.”</p>
 <p>However, all programming paradigms ultimately share one fundamental concern: complexity <span class="citation">(<a href="#ref-booch2008">Booch et al. 2008</a>)</span>. Every programming problem comes with some inherent level of complexity. Without careful thought and constant effort, software has the tendency to grow out of scope and becomes unmanageable <span class="citation">(<a href="#ref-moseley2006">Moseley and Marks 2006</a>)</span>. Thus, all programming paradigms provide answers to the fundamental problem of complexity, each in their own idiosyncratic way <span class="citation">(<a href="#ref-chambers2014">Chambers 2014</a>; <a href="#ref-jordan2015">Jordan et al. 2015</a>; <a href="#ref-moseley2006">Moseley and Marks 2006</a>; <a href="#ref-van2009">Van Roy et al. 2009</a>)</span>.</p>
 <p>Most programming languages are geared towards one specific programming paradigm, and typically support only one or two to a reasonable capacity <span class="citation">(<a href="#ref-van2009">Van Roy et al. 2009</a>)</span>. Fortunately, this is not the case for either JavaScript/TypeScript or R, since both are multiparadigm programming languages <span class="citation">(<a href="#ref-chambers2014">Chambers 2014</a>; <a href="#ref-mdn2024c">MDN 2024f</a>)</span>. Both languages support object-oriented programming, via prototype inheritance in the case of JavaScript <span class="citation">(<a href="#ref-mdn2024d">MDN 2024b</a>)</span> and the S3, S4, and R6 systems in the case of R <span class="citation">(<a href="#ref-wickham2019">Wickham 2019</a>)</span>, and treat functions as first class citizens, allowing for functional programming style <span class="citation">(<a href="#ref-chambers2014">Chambers 2014</a>; <a href="#ref-mdn2024e">MDN 2024d</a>)</span>. Further, as C based languages, both also support classical imperative/procedural programming style, and also provide some utilities for reflective metaprogramming.</p>
 <p>The flexibility of JavaScript and R had allowed me to experiment with different programming paradigms while developing my interactive data visualization package. I have rewritten the JavaScript side of the package multiple times from scratch, testing out several different programming paradigms and styles in the process. Below, I provide a rough sketch of the paradigms I have sampled, as well as an account of my experience of using each paradigm and some thoughts on its suitability for designing interactive data visualization systems.</p>
-<div id="imperative-programming" class="section level3 hasAnchor" number="5.1.1">
-<h3><span class="header-section-number">5.1.1</span> Imperative programming<a href="high-level-design.html#imperative-programming" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="imperative-programming" class="section level3 hasAnchor" number="6.1.1">
+<h3><span class="header-section-number">6.1.1</span> Imperative programming<a href="high-level-design.html#imperative-programming" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Imperative programming is one of the oldest and most classical programming paradigms. It conceptualizes the program as a sequence of discrete steps that manipulate some mutable state <span class="citation">(<a href="#ref-frame2014">Frame and Coffey 2014</a>)</span>. In this way, it closely resembles the way computer programs get executed on the underlying hardware <span class="citation">(barring some advanced techniques such as branch prediction and speculative execution, the CPU executes instructions sequentially, see e.g. <a href="#ref-parihar2015">Parihar 2015</a>; <a href="#ref-raghavan1998">Raghavan, Shachnai, and Yaniv 1998</a>)</span>.</p>
 </div>
-<div id="functional-programming" class="section level3 hasAnchor" number="5.1.2">
-<h3><span class="header-section-number">5.1.2</span> Functional programming<a href="high-level-design.html#functional-programming" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="functional-programming" class="section level3 hasAnchor" number="6.1.2">
+<h3><span class="header-section-number">6.1.2</span> Functional programming<a href="high-level-design.html#functional-programming" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 </div>
-<div id="object-oriented-programming" class="section level3 hasAnchor" number="5.1.3">
-<h3><span class="header-section-number">5.1.3</span> Object oriented programming<a href="high-level-design.html#object-oriented-programming" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="object-oriented-programming" class="section level3 hasAnchor" number="6.1.3">
+<h3><span class="header-section-number">6.1.3</span> Object oriented programming<a href="high-level-design.html#object-oriented-programming" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Object oriented programming (OOP) is a widely used programming paradigm. It first appeared in the late 1950’s and early 1960’s, with languages like Simula and Smalltalk <span class="citation">(<a href="#ref-black2013">Black 2013</a>)</span>. It then grew to prominence in the 1980’s and 1990’s, eventually becoming an industry standard.</p>
 <p>While there are may different interpretations of OOP, there are several concepts which tend to be shared by most implementations. The core idea of OOP is that programs should be modeled as networks of objects: independent units of computation which bundle related data (properties, members) and code (methods, virtual functions) together <span class="citation">(<a href="#ref-booch2008">Booch et al. 2008</a>)</span>. Objects are self-contained, and own hidden, private state; they expose only a limited public interface. To communicate with each other, objects send each other messages <span class="citation">(<a href="#ref-meyer1997">Meyer 1997</a>)</span>. In this way, they behave similarly to networks of biological cells <span class="citation">(this was the inspiration for Alan Kay, one of the creators of Smalltalk, who also coined the term “object oriented,” <a href="#ref-kay1996">Kay 1996</a>)</span>.</p>
 <p>Each object is instantiated based on a class, a sort of a blueprint which provides the object with a type as well as implementation of its methods. Classes can be associated with each other in various ways. For example, a class may inherit methods and properties from a parent class (superclass), such that it can make use of the parent’s implementation. Alternatively, a class may be composed of other classes, by having their instances as properties.</p>
@@ -376,61 +379,61 @@ against T-rex, Grug take T-rex: at least grug see T-rex.”</p>
 <pre><code>## x: -10, y: 10, nutrition: 110
 ## Woof!</code></pre>
 <p>This is only a toy example of OOP code. In real applications, when writing OOP code, one may also rely on more advanced language features such as interfaces, abstract classes, and generics, however, a detailed discussion of these features is outside of the scope of the present thesis. Nevertheless, what is important to discuss are some fundamental theoretical ideas behind OOP.</p>
-<div id="abstraction" class="section level4 hasAnchor" number="5.1.3.1">
-<h4><span class="header-section-number">5.1.3.1</span> Abstraction<a href="high-level-design.html#abstraction" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div id="abstraction" class="section level4 hasAnchor" number="6.1.3.1">
+<h4><span class="header-section-number">6.1.3.1</span> Abstraction<a href="high-level-design.html#abstraction" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>Abstraction is a fundamental concept in OOP. It refers to the idea that, after having built a system (class) out of components (values and other classes), one should be able to “forget” all of the messy internal details and only rely on the exposed public interface. For instance, in the example above, the <code>Dog</code> class inherits from the <code>Animal</code> class: we should be able to use the methods inherited from <code>Animal</code> (such as <code>move</code>) without having to remember how these methods were implemented on the <code>Animal</code> class.</p>
 <p>Ultimately, the goal of abstraction is to make it possible to reason about complex systems <span class="citation">(<a href="#ref-booch2008">Booch et al. 2008</a>)</span>. By hiding away details, good abstractions can free us to think about higher-level concepts. Fundamentally, this also comes with a shift of perspective: instead of thinking about the data objects are composed of, we should only consider their behavior <span class="citation">(<a href="#ref-black2013">Black 2013</a>; <a href="#ref-meyer1997">Meyer 1997</a>)</span>.</p>
 </div>
-<div id="encapsulation" class="section level4 hasAnchor" number="5.1.3.2">
-<h4><span class="header-section-number">5.1.3.2</span> Encapsulation<a href="high-level-design.html#encapsulation" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div id="encapsulation" class="section level4 hasAnchor" number="6.1.3.2">
+<h4><span class="header-section-number">6.1.3.2</span> Encapsulation<a href="high-level-design.html#encapsulation" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>An idea closely related to abstraction is encapsulation. Encapsulation refers to the practice of controlling access to class internals. Specifically, to properly encapsulate its data, a class should expose only a limited number of properties/methods and the rest should be kept private <span class="citation">(<a href="#ref-booch2008">Booch et al. 2008</a>)</span>. Note that this does not mean that the hidden parts of a class have to be entirely <em>invisible</em> to the user, merely that the user should not be able to access the hidden data and rely on it in their applications <span class="citation">(<a href="#ref-meyer1997">Meyer 1997</a>)</span>.</p>
 <p>The main goal of encapsulation is continuity. By encapsulating private properties, the developer is free to modify them without affecting the public interface <span class="citation">(<a href="#ref-booch2008">Booch et al. 2008</a>; <a href="#ref-meyer1997">Meyer 1997</a>)</span>. In other words, users can continue using the class the same way, even while the developer is actively modifying the internals.</p>
 <p>Encapsulation is also closely related to the ideas of the <em>open-closed</em> principle and <em>small interfaces</em> <span class="citation">(<a href="#ref-meyer1997">Meyer 1997</a>)</span>. The open-closed principles states that modules should be open to extension but closed to modification. The idea of small interfaces suggests that, when communicating via messages (method calls), objects should exchange as little information as possible <span class="citation">(<a href="#ref-meyer1997">Meyer 1997</a>)</span>. This is meant to prevent coupling.</p>
 </div>
-<div id="polymorphism" class="section level4 hasAnchor" number="5.1.3.3">
-<h4><span class="header-section-number">5.1.3.3</span> Polymorphism<a href="high-level-design.html#polymorphism" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div id="polymorphism" class="section level4 hasAnchor" number="6.1.3.3">
+<h4><span class="header-section-number">6.1.3.3</span> Polymorphism<a href="high-level-design.html#polymorphism" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>Polymorphism refers to the idea that we should be able to swap out components of our system for other components that conform to the same public interface.</p>
 </div>
-<div id="inheritance" class="section level4 hasAnchor" number="5.1.3.4">
-<h4><span class="header-section-number">5.1.3.4</span> Inheritance<a href="high-level-design.html#inheritance" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div id="inheritance" class="section level4 hasAnchor" number="6.1.3.4">
+<h4><span class="header-section-number">6.1.3.4</span> Inheritance<a href="high-level-design.html#inheritance" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>“programming without inheritance is distinctly not object-oriented; that would merely be programming with abstract data types” <span class="citation">(<a href="#ref-booch2008">Booch et al. 2008</a>)</span>.</p>
 </div>
-<div id="domain-driven-design" class="section level4 hasAnchor" number="5.1.3.5">
-<h4><span class="header-section-number">5.1.3.5</span> Domain-driven design<a href="high-level-design.html#domain-driven-design" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div id="domain-driven-design" class="section level4 hasAnchor" number="6.1.3.5">
+<h4><span class="header-section-number">6.1.3.5</span> Domain-driven design<a href="high-level-design.html#domain-driven-design" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>One final concept that is not uniquely object-oriented but has a strong tradition in OOP is domain-drive design. This refers to the idea that components of a program (classes) should model things in the business domain or the real world <span class="citation">(<a href="#ref-hadar2013">Hadar 2013</a>; <a href="#ref-meyer1997">Meyer 1997</a>)</span>. The goal of this strategy is to make it easier to discover objects/classes and their relationships by exploiting the mind’s capacity for thinking about the natural world <span class="citation">(<a href="#ref-booch2008">Booch et al. 2008</a>; <a href="#ref-hadar2013">Hadar 2013</a>; <a href="#ref-meyer1997">Meyer 1997</a>)</span>.</p>
 </div>
-<div id="criticism-of-oop" class="section level4 hasAnchor" number="5.1.3.6">
-<h4><span class="header-section-number">5.1.3.6</span> Criticism of OOP<a href="high-level-design.html#criticism-of-oop" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div id="criticism-of-oop" class="section level4 hasAnchor" number="6.1.3.6">
+<h4><span class="header-section-number">6.1.3.6</span> Criticism of OOP<a href="high-level-design.html#criticism-of-oop" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>Another OOP principle that is not always adhered to is the idea of small interfaces <span class="citation">(<a href="#ref-meyer1997">Meyer 1997</a>)</span>. In practice, it is common for class methods to receive pointers to other objects as arguments. However, this results in effectively sending all of the information contained in the argument object(s), defeating the principle of small interfaces <span class="citation">(<a href="#ref-will2016">Will 2016</a>)</span>.</p>
 <p>Another issue is that, while elegant abstractions are undeniably powerful, it usually takes a long time to come up with them. Poor and/or complicated abstractions tend to appear first <span class="citation">(<a href="#ref-meyer1997">Meyer 1997</a>)</span>. The problem with OOP is that it tends to introduce abstraction early <span class="citation">(essentially treating all components of a system as abstract data types, <a href="#ref-vaneerd2024">Van Eerd 2024</a>)</span>.</p>
 </div>
 </div>
-<div id="data-oriented-programming" class="section level3 hasAnchor" number="5.1.4">
-<h3><span class="header-section-number">5.1.4</span> Data oriented programming<a href="high-level-design.html#data-oriented-programming" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="data-oriented-programming" class="section level3 hasAnchor" number="6.1.4">
+<h3><span class="header-section-number">6.1.4</span> Data oriented programming<a href="high-level-design.html#data-oriented-programming" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <blockquote>
 <p>My second remark is that our intellectual powers are rather geared to master static relations and that our powers to visualize processes evolving in time are relatively poorly developed. For that reason we should do (as wise programmers aware of our limitations) our utmost to shorten the conceptual gap between the static program and the dynamic process, to make the correspondence between the program (spread out in text space) and the process (spread out in time) as trivial as possible.</p>
 <p>Edgar Dijkstra -<span class="citation">Dijkstra (<a href="#ref-dijkstra1968">1968</a>)</span></p>
 </blockquote>
 <p>Data-oriented programming (DOP) is a relatively new programming paradigm that has been gaining attention in certain programming communities over the recent years. Unfortunately, due to its novelty, there is some confusion in the terminology surrounding this paradigm. The term “DOP” is often used interchangeably with Data Oriented Design (DOD), which shares a number of similarities. However, there are also important differences: whereas DOP is inspired by the Clojure style of programming and focuses on high-level principles such as structure and organization of code <span class="citation">(<a href="#ref-hickey2011">Hickey 2011</a>, <a href="#ref-hickey2018">2018</a>; <a href="#ref-sharvit2022">Sharvit 2022</a>; <a href="#ref-parlog2024">Parlog 2024</a>)</span>, DOD originates in the world of video-game development and primarily concerns itself with low-level optimization details such as memory layout and CPU cache utilization <span class="citation">(<a href="#ref-acton2014">Acton 2014</a>; <a href="#ref-bayliss2022">Bayliss 2022</a>; <a href="#ref-kelley2023">Kelley 2023</a>; <a href="#ref-nikolov2018">Nikolov 2018</a>; <a href="#ref-fabian2018">Fabian 2018</a>)</span>. Also, both paradigms share a connection to value semantics and Value Oriented Design <span class="citation">(VOD, <a href="#ref-parent2013">Parent 2013</a>, <a href="#ref-parent2015">2015</a>; <a href="#ref-vaneerd2021">Van Eerd 2021</a>, <a href="#ref-vaneerd2023">2023</a>, <a href="#ref-vaneerd2024">2024</a>)</span> which has its roots in the work of Alexander Stepanov <span class="citation">(see e.g. <a href="#ref-stepanov2009">Stepanov and McJones 2009</a>; <a href="#ref-stepanov2013">Stepanov 2013</a>)</span>.</p>
 <p>Nevertheless, despite the differences, there is also a large common set of ideas that the above-mentioned paradigms share. Specifically, the high-level principles and guidelines they provide are remarkably similar, and there are even examples of explicit cross-pollination and sharing of ideas <span class="citation">(see e.g. <a href="#ref-vaneerd2024">Van Eerd 2024</a>)</span>. Therefore, in this section, I have decided to use DOP as an umbrella term and use it to refer to all three paradigms, unless explicitly specified otherwise.</p>
-<div id="data-first" class="section level4 hasAnchor" number="5.1.4.1">
-<h4><span class="header-section-number">5.1.4.1</span> Data first<a href="high-level-design.html#data-first" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div id="data-first" class="section level4 hasAnchor" number="6.1.4.1">
+<h4><span class="header-section-number">6.1.4.1</span> Data first<a href="high-level-design.html#data-first" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>The main idea of DOP is a data-first perspective. Programs should be viewed as transformations of data, nothing less, nothing more <span class="citation">(<a href="#ref-acton2014">Acton 2014</a>; <a href="#ref-fabian2018">Fabian 2018</a>; <a href="#ref-sharvit2022">Sharvit 2022</a>)</span>. This view has several important consequences for design.</p>
 <p>First and foremost, programs should be partitioned into two sets of independent components: data and code <span class="citation">(<a href="#ref-fabian2018">Fabian 2018</a>)</span>. Data should be represented by generic data structures and code should live inside modules composed of stateless functions <span class="citation">(<a href="#ref-fabian2018">Fabian 2018</a>; <a href="#ref-sharvit2022">Sharvit 2022</a>)</span>. The main benefit of this approach is that, by keeping data and code separate, we can use and reason about both in isolation, without entanglement <span class="citation">(<a href="#ref-vaneerd2024">Van Eerd 2024</a>)</span>. More specifically, data becomes easy to pass around and serialize, and, since the code is composed of pure functions, it becomes easy to test and mock <span class="citation">(<a href="#ref-sharvit2022">Sharvit 2022</a>)</span>. In this way, programs can be thought of as being split between what <em>is</em> and what <em>does</em>.</p>
 </div>
-<div id="the-data" class="section level4 hasAnchor" number="5.1.4.2">
-<h4><span class="header-section-number">5.1.4.2</span> The data<a href="high-level-design.html#the-data" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div id="the-data" class="section level4 hasAnchor" number="6.1.4.2">
+<h4><span class="header-section-number">6.1.4.2</span> The data<a href="high-level-design.html#the-data" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>In the DOP view, data should be represented by plain data structures. These are any structures that can formed by combining generic components: primitives, arrays, and dictionaries <span class="citation">(aka objects, maps, or structs, <a href="#ref-hickey2011">Hickey 2011</a>, <a href="#ref-hickey2018">2018</a>; <a href="#ref-sharvit2022">Sharvit 2022</a>)</span>. A good example of such plain data is <a href="glossary.html#JSON">JSON</a>.</p>
 <p>The data should be organized in a way that makes logical sense and avoids duplicating information. It may even be desirable that the data adheres to the relational model <span class="citation">(<a href="#ref-codd1970">Codd 1970</a>; <a href="#ref-moseley2006">Moseley and Marks 2006</a>; <a href="#ref-fabian2018">Fabian 2018</a>)</span>. This does not mean that the data has to actually <em>live</em> inside a relational database, just that its shape should resemble that of normalized database tables, with columns represented by generic arrays <span class="citation">(<a href="#ref-fabian2018">Fabian 2018</a>)</span>.</p>
 <p>Since data represents just itself - data - there is no obligation for it to model the real world or any kind of abstract entity. This can bring significant performance benefits <span class="citation">(<a href="#ref-acton2014">Acton 2014</a>; <a href="#ref-fabian2018">Fabian 2018</a>)</span>. An example typically discussed in DOD is the Structure of Arrays (<a href="glossary.html#SoA">SoA</a>) data structure <span class="citation">(<a href="#ref-acton2014">Acton 2014</a>, <a href="#ref-acton2019">2019</a>; <a href="#ref-kelley2023">Kelley 2023</a>)</span>. Storing a list of records as a single record of homogeneous arrays can dramatically reduce memory footprint and improve cache line utilization, resulting in better performance <span class="citation">(<a href="#ref-acton2014">Acton 2014</a>; <a href="#ref-fabian2018">Fabian 2018</a>; <a href="#ref-kelley2023">Kelley 2023</a>)</span>. Another example of alternative data representation that can lead to improved performance are Entity Component Systems in videogames <span class="citation">(<a href="#ref-harkonen2019">Härkönen 2019</a>)</span>.</p>
 <p>Outside of performance, another benefit of plain data is that it allows us introduce abstraction gradually. When starting a new project, we should rely on generic data manipulation functions as much as possible <span class="citation">(<a href="#ref-fabian2018">Fabian 2018</a>; <a href="#ref-sharvit2022">Sharvit 2022</a>)</span>. Only once we have settled on a good abstraction should we reify it as code.</p>
 </div>
-<div id="the-code" class="section level4 hasAnchor" number="5.1.4.3">
-<h4><span class="header-section-number">5.1.4.3</span> The code<a href="high-level-design.html#the-code" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div id="the-code" class="section level4 hasAnchor" number="6.1.4.3">
+<h4><span class="header-section-number">6.1.4.3</span> The code<a href="high-level-design.html#the-code" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>Separate calculating from doing <span class="citation">(<a href="#ref-vaneerd2023">Van Eerd 2023</a>, <a href="#ref-vaneerd2024">2024</a>)</span>.</p>
 <p>It may seem that many of the DOP principles directly contradict many popular OOP principles, specifically encapsulation, inheritance, polymorphism, and domain driven design. However, many of these principles can either be reconciled with DOP, or DOP in fact provides better alternatives. Below, I go over these principles and provide code examples that further illustrate how DOP works.</p>
-<div id="encapsulation-1" class="section level5 hasAnchor" number="5.1.4.3.1">
-<h5><span class="header-section-number">5.1.4.3.1</span> Encapsulation<a href="high-level-design.html#encapsulation-1" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<div id="encapsulation-1" class="section level5 hasAnchor" number="6.1.4.3.1">
+<h5><span class="header-section-number">6.1.4.3.1</span> Encapsulation<a href="high-level-design.html#encapsulation-1" class="anchor-section" aria-label="Anchor link to header"></a></h5>
 <p>When it comes to encapsulation in DOP, we have to differentiate between encapsulating data and encapsulating code. Encapsulating code is easy in DOP - we can simply not export certain functions from the code modules. We are then free to modify the signature of these functions without affecting the public interface <span class="citation">(<a href="#ref-fabian2018">Fabian 2018</a>)</span>. Encapsulating data may require a bit more work. Depending on the language, generic data structures may not have property access modifiers <span class="citation">(although there does seem to be a trend in recent languages to support property access modifiers more generically, see e.g. <a href="#ref-rust2024">Rust Foundation 2024</a>; <a href="#ref-zig2024">Zig Software Foundation 2024</a>)</span>. For instance, in JavaScript, private properties can only be declared as part of a class declaration <span class="citation">(<a href="#ref-mdn2024e">MDN 2024d</a>)</span>. However, in most languages, it is still possible to use other language features and metaprogramming to achieve data encapsulation - for example, in JavaScript, we can use the Proxy class to emulate private property access (<a href="appendix.html#dop-encapsulation">see Appendix</a>).</p>
 <p>Thus, encapsulation of data is certainly possible in DOP. However, a question still remains whether it is a good idea. While in OOP, encapsulation is generally seen as a net positive, in DOP it is thought to come with trade-offs. It does provide an additional layer of security, however, it also makes systems more complex and harder to debug <span class="citation">(<a href="#ref-fabian2018">Fabian 2018</a>; <a href="#ref-sharvit2022">Sharvit 2022</a>)</span>. And, even with full encapsulation, users may still come to rely on hidden features of the system <span class="citation">(<a href="#ref-fabian2018">Fabian 2018</a>)</span>. Ultimately, it is necessary to weigh the pros and cons of encapsulating data within the context of the specific use-case.</p>
 <p>Some languages also have features which allow for a weak form encapsulation which is compatible with DOP. In JavaScript, this can be implemented by using symbol keys for object properties <span class="citation">(<a href="#ref-mdn2024f">MDN 2024c</a>)</span>. Symbols are builtin primitive in JavaScript and are guaranteed to be unique. If we assign a property to an object using an unexported symbol as the key, the user will still be able to inspect the object and see the property, however, they will not be able to access it without using reflection. This is actually in line with the data hiding concept as laid out by <span class="citation">Meyer (<a href="#ref-meyer1997">1997</a>)</span>.</p>
@@ -479,8 +482,8 @@ against T-rex, Grug take T-rex: at least grug see T-rex.”</p>
 ## }
 ## 1337</code></pre>
 </div>
-<div id="inheritance-1" class="section level5 hasAnchor" number="5.1.4.3.2">
-<h5><span class="header-section-number">5.1.4.3.2</span> Inheritance<a href="high-level-design.html#inheritance-1" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<div id="inheritance-1" class="section level5 hasAnchor" number="6.1.4.3.2">
+<h5><span class="header-section-number">6.1.4.3.2</span> Inheritance<a href="high-level-design.html#inheritance-1" class="anchor-section" aria-label="Anchor link to header"></a></h5>
 <p>In OOP, primary mechanisms for code reuse are inheritance and composition.</p>
 <p>In DOP, since data is generic and separate from behavior, we can call functions from arbitrary modules with any compatible data, and this makes code reuse trivial. For example, here’s a simplified version of the <code>Reactive</code> interface (Observer pattern) from <code>plotscape</code>:</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb21-1"><a href="high-level-design.html#cb21-1" tabindex="-1"></a></span>
@@ -525,27 +528,27 @@ against T-rex, Grug take T-rex: at least grug see T-rex.”</p>
 </div>
 </div>
 </div>
-<div id="reactivity" class="section level2 hasAnchor" number="5.2">
-<h2><span class="header-section-number">5.2</span> Reactivity<a href="high-level-design.html#reactivity" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="reactivity" class="section level2 hasAnchor" number="6.2">
+<h2><span class="header-section-number">6.2</span> Reactivity<a href="high-level-design.html#reactivity" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 </div>
-<div id="data-representation" class="section level2 hasAnchor" number="5.3">
-<h2><span class="header-section-number">5.3</span> Data representation<a href="high-level-design.html#data-representation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="data-representation" class="section level2 hasAnchor" number="6.3">
+<h2><span class="header-section-number">6.3</span> Data representation<a href="high-level-design.html#data-representation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Data visualization is, first and foremost, about data (it’s in the name). However, all data is not created equal. Information can come to us in various shapes and sizes, and the way the data is structured can have a significant impact on various aspects of the visualization system, including ease of use, maintainability, and performance.</p>
-<div id="row-based-vs.-column-based" class="section level4 hasAnchor" number="5.3.0.1">
-<h4><span class="header-section-number">5.3.0.1</span> Row-based vs. column-based<a href="high-level-design.html#row-based-vs.-column-based" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div id="row-based-vs.-column-based" class="section level4 hasAnchor" number="6.3.0.1">
+<h4><span class="header-section-number">6.3.0.1</span> Row-based vs. column-based<a href="high-level-design.html#row-based-vs.-column-based" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>A common model in many data analytic languages is that of two-dimensional table or data frame. Here, the data is organized in a dictionary of columns, with each column being a homogeneous array containing values of the same type. However, unlike in a matrix data structure, different columns can store values of different types (such as floats, integers, or strings). The dataframe object can also store optional metadata, such as row names, column labels, or grouping structure <span class="citation">(<a href="#ref-r2024">R Core Team 2024</a>; <a href="#ref-bouchet-valat2023">Bouchet-Valat and Kamiński 2023</a>)</span>. Popular examples of this design include the S3 <code>data.frame</code> class in base R <span class="citation">(<a href="#ref-r2024">R Core Team 2024</a>)</span>, the <code>tbl_df</code> S3 class in the <code>tibble</code> package <span class="citation">(<a href="#ref-muller2023">Müller and Wickham 2023</a>)</span>, the <code>DataFrame</code> class in the Python <code>pandas</code> package <span class="citation">(<a href="#ref-pandas2024">Pandas Core Team 2024</a>)</span>, the <code>DataFrame</code> class in the <code>polars</code> library <span class="citation">(<a href="#ref-polars2024">Team 2024</a>)</span>, or the <code>DataFrame</code> type in the Julia <code>DataFrame.jl</code> package <span class="citation">(<a href="#ref-bouchet-valat2023">Bouchet-Valat and Kamiński 2023</a>)</span>.</p>
 <p>However, the column-based organization of data is not universal. For example, the popular JavaScript data visualization and transformation library D3 <span class="citation">(<a href="#ref-bostock2022">Mike Bostock 2022</a>)</span> models data frames as arrays of rows, with each row being its own separate dictionary. Likewise, certain types of databases store tables as lists of records, with each record having the shape of a dictionary <span class="citation">(<a href="#ref-abadi2013">Abadi et al. 2013</a>)</span>.</p>
 <p>Within a broader programming context, these two fundamental data layouts are referred to as the struct of arrays (SoA, also known as “parallel arrays”) versus the array of structs (AoS) data structures. SoA store data in a dictionary of arrays, similar to the column-based layout, whereas AoS store data in an arrays of dictionaries, similar to row-based layout. The distinction between SoA and AoS is a bit more nuanced, since structs can store a wider class of types than just plain data, such as functions and pointers, and this makes either layout better suited to certain <a href="#programming-paradigms">programming styles</a>. For example, in object oriented programming, behaviour is encapsulated alongside data in objects (via methods/member functions), and this makes the AoS the more natural data structure within this programming paradigm <span class="citation">(replicating the same functionality with SoA is awkward, although some modern languages offer features which make this more convenient, see e.g. <a href="#ref-zig2024">Zig Software Foundation 2024</a>)</span>.</p>
 </div>
-<div id="performance" class="section level4 hasAnchor" number="5.3.0.2">
-<h4><span class="header-section-number">5.3.0.2</span> Performance<a href="high-level-design.html#performance" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div id="performance" class="section level4 hasAnchor" number="6.3.0.2">
+<h4><span class="header-section-number">6.3.0.2</span> Performance<a href="high-level-design.html#performance" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>The two data layouts also offer distinct performance characteristics.</p>
 <p>The column-based (SoA) layout is generally considered to be the one better for performance <span class="citation">(see e.g. <a href="#ref-acton2014">Acton 2014</a>; <a href="#ref-kelley2023">Kelley 2023</a>)</span>. Specifically, it benefits from two important features: better memory alignment and improved cache locality. First, homogeneous arrays offer better memory characteristics than heterogeneous structs. This is because they can be stored as contiguous blocks of memory with the same alignment, eliminating the need for padding and potentially leading to a significant reduction in memory footprint <span class="citation">(see e.g. <a href="#ref-rentzsch2005">Rentzsch 2005</a>; <a href="#ref-kelley2023">Kelley 2023</a>)</span>. Second, the column-based data layout is better suited for pre-fetching. Specifically, when performing column-wise operations, the CPU can cache the contiguously-stored values more easily, often resulting in greatly improved performance <span class="citation">(<a href="#ref-abadi2013">Abadi et al. 2013</a>; <a href="#ref-acton2014">Acton 2014</a>; <a href="#ref-kelley2023">Kelley 2023</a>)</span>.</p>
 <p>However, the row-based (AoS) layout can also perform well in certain situations. Specifically, it can outperform column-based stores when retrieving individual records/rows is key, hence why it is commonly used in traditional Online Transaction Processing databases <span class="citation">(OLTP, <a href="#ref-abadi2013">Abadi et al. 2013</a>)</span>. Additionally, it could be argued that the row-based layout can be more “natural” and offer better developer ergonomics for certain programming styles.</p>
 </div>
 </div>
-<div id="rendering-engine" class="section level2 hasAnchor" number="5.4">
-<h2><span class="header-section-number">5.4</span> Rendering engine<a href="high-level-design.html#rendering-engine" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="rendering-engine" class="section level2 hasAnchor" number="6.4">
+<h2><span class="header-section-number">6.4</span> Rendering engine<a href="high-level-design.html#rendering-engine" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 
 </div>
 </div>
