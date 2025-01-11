@@ -232,6 +232,15 @@ Of course, many papers discuss both concrete implementations of interactive data
 
 To ensure clarity throughout thesis, the term *"interactive data visualization"* will primarily refer to concrete charts or figures. When referring to the *practice* of interactive data visualization, I will attempt to use more active phrasing such as *"interacting with a visualization"* or *"user's interaction with a visualization"*, to indicate that what is being referred to is the activity or process of visualization, rather than any concrete object or implementation. 
 
+## Visualization goals
+
+@ward2015 outlined several common goals for creating interactive visualizations:
+
+- Exploration: The user wants to examine a data set
+- Confirmation: The user wants to verify a fact or a hypothesis
+- Presentation: The user wants to use the visualization to convince or inspire an audience 
+- Interactive presentation: The user wants to take the audience on a guided tour of key insights
+
 ### What is "interactive enough"?
 
 Even when we use the term "interactive data visualization" to refer to concrete charts or figures, the meaning still remains fairly ambiguous. What is the bar for calling a figure "interactive"? What features should interactive figures have? These criteria vary a lot between data visualization researchers, such that the same figure may be considered interactive by some but not by others. 

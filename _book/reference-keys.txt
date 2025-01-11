@@ -221,3 +221,5 @@ isomorphism
 algebraic-structures-as-categories
 functors
 references
+summary
+visualization-goals
