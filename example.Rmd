@@ -390,6 +390,27 @@ knitr::kable(fits, align = "lllll", format = "html",
 
 Here, the situation was a bit more varied. For most diagnoses, the number of days patients spent in care seemed to increase, with particularly large increases being observed for schizophrenia (F20-F29), Alzheimer's disease (F02 and G30), mental retardation (F70-F79), and personality disorders (F62-F69). The two diagnosis for which the number of days in treatment actually decreased were, interestingly, stress-related disorders (F40-F49 without F42) and depression disorders (F32 and F33).      
 
+#### Characteristics of patient cohorts over time
+
+One final things we are going to investigate are characteristics of patient cohorts. Specifically, given that each row of data represents one patient cohort within a given year, of a given sex, diagnosis, and so on, we can investigate whether there were any interesting patterns within the patient cohorts over time. One way we can do this is via the following figure:
+
+```{r cohort}
+df |>
+  create_schema() |>
+  add_barplot(c("diagnosis", "cases")) |>
+  add_barplot(c("year", "cases")) |>
+  add_barplot(c("year", "cases"), list(reducer = "max")) |>
+  add_barplot(c("year", "days")) |>
+  add_barplot(c("year", "days"), list(reducer = "max")) |>
+  set_scale("barplot1", "x", breaks = order_df$diagnosis) |>
+  set_layout(matrix(c(1, 1, 2, 3, 4, 5), nrow = 2)) |>
+  render()
+```
+
+In Figure \@ref(fig:cohort), I show plots of diagnoses, as well as days and cases. However, note that, whereas all barplots shown before had sum (of cases and days) as the y-axis summary statistic, the two barplots in the lower half of figure Figure \@ref(fig:cohort) show maximum, not sum. These plots effectively tell us the size and the number of days in treatment for the largest/longest hospitalized patient cohort within a given year. Based on theory in Section \@ref(problems), we know that these plots will behave well under linked selection (with one selection group).
+
+By investigating the diagnoses, we can discover some interesting trends in the patient cohorts. Specifically, by comparing the schizophrenia (F20-F29) and the Alzheimer's disease diagnoses (F0 and G30), we can see that they show a complementary trend in the maximum number of days hospitalized. Specifically, whereas Alzheimer's disease generally accounted for the longest-hospitalized patient cohorts up until 2016, schizophrenia accounted for the longest-hospitalized patient cohorts for five of the six years following 2016 (excluding 2020, where Alzheimer's disease narrowly beat it out). This occured despite schizophrenia patient cohorts shrinking in size over time and the fact that Alzheimer's disease was more restricted in terms of age-range, so we would naturally expect larger cohorts (due to "lumping"). On that note, developmental disorders (F80-F99), despite the making up only a small proportion of the total number cases, made up many of the largest patients cohorts year over year. This is understandable given that these patients came almost exclusively from the youngest age group and were otherwise relatively homogeneous.
+
 ## Summary
 
 I have used the Long-term Care data set [@soukupova2023] to demonstrate the typical data analytic workflow using `plotscaper`. By creating interactive figures and leveraging a suite of interactive features such as linked selection, representation switching, querying, and zooming and panning, we were able to quickly discover many interesting features about the data set, highlighting the usefulness of the package and interactive data visualization in general.
@@ -402,5 +423,5 @@ Some key take-away points were:
 - There were few patients staying in care for periods of between 2-3 months and 5-7 months, suggesting that there may be potential selection mechanisms influencing hospitalization duration (e.g. administrative reasons).
 - The five most common diagnoses were, in order: alcohol use disorders, schizophrenia, Alzheimer's disease, stress-related disorders, and psychoactive substance use disorders. Patient demographics for these disorders showed some very strong trends which largely aligned with the existing literature.
 - One diagnostic category which actually shown a significant increase in the number of cases over time were behavioural syndromes associated with physiological disturbances and physical factors. Given that this category includes disorders like anorexia and bulimia, and that the majority of cases were young women, this suggests that, while rare, eating disorders may be on the rise, and should be given attention.
-
+- While initially, the longest hospitalized patient cohorts tended to be Alzheimer's patients, over time, schizophrenia patients became the longest hospitalized patient cohorts
 
