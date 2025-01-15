@@ -1,0 +1,13 @@
+\documentclass[tikz]{standalone}
+\usepackage{tikz-cd}
+
+\begin{document}
+\begin{tikzcd}
+	& A \\
+	{A \cup B} && {A \cup B \cup C}
+	\arrow["{-\cup B}"'{pos=0.7}, from=1-2, to=2-1]
+	\arrow["{- \cup (B \cup C)}"{pos=0.7}, from=1-2, to=2-3]
+	\arrow["{- \cup C}"', from=2-1, to=2-3]
+\end{tikzcd}
+\end{document}
+

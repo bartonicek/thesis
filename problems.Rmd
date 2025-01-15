@@ -14,9 +14,9 @@ When creating visualizations, it is rarely the case that we can plot the raw dat
 
 Take, for instance, the typical barplot. There are several steps to drawing a barplot. First, we have to divide the data into parts, based on the levels of some categorical variable. Second, we need to summarize or aggregate each part by some metric, usually either sum or count. Third, we need to take these summaries and map them to visual encodings, such as x-axis position, y-axis position, and length. Finally, we use these encodings to render the individual bars as rectangles on a computer screen [see e.g. @franconeri2021].
 
-These four steps - partitioning, aggregation, encoding, and rendering - are common to all data visualization systems, be they static or interactive. However, interactivity does present some unique challenges. Specifically, since user interaction may affect any of the four stages, resulting changes must be propagated through the data visualization pipeline. This propagation is not trivial, and finding a general and efficient solution remains an open research topic [@wickham2009; @franconeri2021]. Consequently, discussions of interaction within the context of the data visualization pipeline are often fairly vague [see @dimara2019; @wu2024].
+These four steps - partitioning, aggregation, encoding, and rendering - are common to all data visualization systems, be they static or interactive. However, interactivity does present some unique challenges, since user interaction may affect any of the four stages. As a result, the changes may need to be propagated throughout the entire pipeline. Finding a general and efficient way to implement this propagation remains an open research topic [@wickham2009; @franconeri2021]. Consequently, discussions of interaction within the context of the data visualization pipeline are often fairly vague [see @dimara2019; @wu2024].
 
-In the next few sections, I will try to address this conceptual ambiguity by discussing the four fundamental steps of the data visualization pipeline in depth, and exploring challenges related to their implementation in interactive systems. Ultimately, my goal is to demonstrate that certain parts of the pipeline, particularly the aggregation step, are more complex than commonly acknowledged. Further, if the goal is to build truly generic and robust interactive data visualization systems, this complexity must be addressed [see also @wu2024].
+In the next few sections, I will try to address this conceptual ambiguity by discussing the four fundamental steps of the data visualization pipeline in depth, and exploring challenges related to their implementation in interactive systems. Ultimately, my goal is to demonstrate that integrating interaction into certain parts of the pipeline, particularly the aggregation step, is more complex than commonly acknowledged. Further, if the goal is to build truly generic and robust interactive data visualization systems, this complexity must be addressed [see also @wu2024].
 
 ## Partitioning
 
@@ -29,7 +29,7 @@ Thus, the process of splitting our data into subsets may appear straightforward.
 - How much of the original data should the subsets contain?
 - What should be the relationship between the subsets?
 
-While common data visualization practices provide implicit solutions to these questions, in the data visualization literature, explicit answers are rarely given. This is unfortunate because choosing how to partition our data is a consequential decision: it involves making assumptions about both the data itself and the visualization's goals. Especially in interactive data visualization, the relationships between the parts of our data are important. Therefore, discussing these two questions is essential.
+While common data visualization practices provide implicit solutions to these questions, in the data visualization literature, explicit answers are rarely given. This is unfortunate because choosing how to partition our data is a highly consequential decision: it involves making assumptions about both the data itself and the visualization's goals. Especially in interactive data visualization, the relationships between the parts of our data become of crucial importance. Therefore, discussing these two questions is essential.
 
 ### Showing the full data
 
@@ -68,15 +68,15 @@ Either way, data hiding is something we should be mindful of. Unless there is a 
 
 > "Graphics are for comparison - comparison of one kind or another - not for access to individual amounts." [@tukey1993]
 
-An interesting yet underappreciated fact is that in many common visualizations, geometric objects represent disjoint subsets of the data. That is, in most plots, each point, bar, line, or polygon represents a unique set of data points (rows of the data), with no overlap between the data represented by other objects within the same graphical layer. This practice, despite being so common to border on a rule, is often overlooked.
+An interesting yet underappreciated fact is that in many common visualization types, geometric objects tend to represent disjoint subsets of the data. That is, in most plots, each point, bar, line, or polygon represents a unique set of data points (rows of the data), with no overlap with other objects within the same graphical layer. This practice, despite being so common to border on a rule, is rarely given much attention.
 
 There are of course counter-examples. For instance, certain visualizations of set-typed data "double up" the contribution of data subsets, such that the same subset of the data may appear in multiple objects [see e.g. @alsallakh2013; @alsallakh2014; @conway2017; @lex2014]. However, these types of visualizations are fairly rare, and represent the exception rather than the norm. When we see a barplot, we typically expect each bar to represent a unique set of cases.   
 
-But where does this unconscious "law" of showing disjoint parts of the data come from? I believe that it stems from the fundamental purpose of data visualization: comparison [@tufte2001; @tukey1993]. When we visualize, we draw our graphics with the ultimate goal of comparing our data along a set of visual channels [@bertin1983; @wilkinson2012; @franconeri2021; @wilke2019]. This mirrors the comparisons we make in the real world. And, in general, it is far easier to reason about objects and events which are independent, rather than ones which overlap or blend together. One example of this comes from basic probability theory, where the sum and product rules have independence as a pre-requisite [@kolmogorov2018]. Similarly, psychological research, such as the well-known "Linda experiment" [@tversky1983], shows that people struggle with comparing the probability of non-disjoint events. Thus it seems that, in many ways, disjointness presents a more intuitive, "natural" model.
+But where does this unconscious "law" of showing disjoint parts of the data come from? I argue that it stems from the fundamental purpose of data visualization: comparison [@tufte2001; @tukey1993]. When we visualize, we draw our graphics with the ultimate goal of comparing our data along a set of visual channels [@bertin1983; @wilkinson2012; @franconeri2021; @wilke2019]. This mirrors the comparisons we make about objects and events in the real world. And, in general, it is far easier to reason about objects and events which are independent, rather than ones which overlap or blend together. One example of this comes from basic probability theory, where the sum and product rules have independence as a pre-requisite [@kolmogorov2018]. Similarly, psychological research, such as the well-known "Linda experiment" [@tversky1983], shows that people struggle with comparing the probability of non-disjoint events. Thus it seems that, in many ways, disjointness presents a more intuitive, "natural" model.
 
-More fundamentally, the intuitive appeal of disjointness may originate in the fact that it reflects a structure which mathematicians have long considered natural: a [bijection](#functions) [see e.g. @fong2019; @lawvere2009]. Specifically, if we take a set, split it into disjoint subsets, and label each subset, then there is a one-to-one correspondence between these subsets and the subset labels (i.e. the parts form an [equivalence class](#partition)). Practically, this means that we can go back and forth between the subsets and the corresponding labels, without losing any information.
+More fundamentally, disjointness may be more intuitive because it reflects a structure which mathematicians have long considered natural: a [bijection](#functions) [see e.g. @fong2019; @lawvere2009]. Specifically, if we take a set, split it into disjoint subsets, and label each subset, then there is a one-to-one correspondence between these subsets and the subset labels (i.e. the parts form an [equivalence class](#partition)). Practically, this means that we can go back and forth between the subsets and the corresponding labels, without losing any information.
 
-The fact that disjoint partitions form a bijection may be particularly useful in data visualization, see Figure \@ref(fig:geoms-bijection). When drawing a barplot, if we divide our data into disjoint subsets and draw one bar corresponding to each part, then the function of identifying objects (bars) with data subsets is invertible: we can pick a bar, identify the corresponding cases, and then use those cases to pick out the original bar again. In plots where the objects do not represent disjoint subsets, this correspondence is broken: if we select cases corresponding to a bar, there may be no simple way of identifying the original bar from the cases alone.
+The fact that disjoint subsets form a bijection may be particularly useful in data visualization and this may explain its ubiquity, see Figure \@ref(fig:geoms-bijection). For instance, when drawing a barplot, if we divide our data into disjoint subsets and draw one bar corresponding to each part, then we can go back and forth between identifying subsets of the data corresponding to individual bars and vice versa. Thus, the function of identifying data subsets is invertible. In plots where the objects do not represent disjoint subsets, this correspondence is broken: if we select a subset of cases corresponding to a bar, there may be no simple way to identify the original bar from the cases alone. This issue applies both conceptually, when viewing static visualizations, and also more practically, when interacting with interactive visualizations, via features such as linked selection.
 
 ```{r geoms-bijection}
 #| echo: false
@@ -87,7 +87,7 @@ knitr::include_graphics("./figures/geoms-bijection.png")
 
 #### Real-world example
 
-To illustrate the idea of disjoint parts on concrete, real-world data, take the following barplot representing the vote share among the top three parties in the 2023 New Zealand general election [@election2023]:
+To illustrate the idea of disjoint subsets on concrete, real-world example, take the following barplot representing the vote share among the top three parties in the 2023 New Zealand general election [@election2023]:
 
 ```{r barplot-bijection}
 #| echo: false
@@ -96,7 +96,7 @@ To illustrate the idea of disjoint parts on concrete, real-world data, take the 
 knitr::include_graphics("./figures/barplot-bijection.png")
 ```
 
-Each bar represents a unique subset of voters and thus the bars show disjoint data. This is the type of data representation that we encounter most often, however, there are few explicit guidelines about this. Hypothetically, we could transform our data, and, for example, show the union of the votes of National and Labour parties in the leftmost bar:
+Each bar represents a unique subset of voters and thus the bars show disjoint data. This is the type of data representation that we encounter most often, however, there are few explicit guidelines about this. Hypothetically, we could transform our data, and use the leftmost bar to show, for example, the union of the votes of National and Labour parties:
 
 ```{r union-geoms}
 #| echo: false
@@ -105,9 +105,9 @@ Each bar represents a unique subset of voters and thus the bars show disjoint da
 knitr::include_graphics("./figures/barplot-notbijection.png")
 ```
 
-However, this way of representing the data has several problems. First, there is the issue of whether this type of representation addresses our visualization goals. For example, when visualizing election data such as the one above, we typically want to compare the relative number of votes each party received. The second barplot in Figure \@ref(fig:union-geoms) this comparison difficult. Specifically, since the leftmost bar represents the union of National and Labour votes, we have to perform additional mental calculation if we want to compare the number of votes received by National and Labour directly [@cleveland1985]. Second, we have metadata knowledge [see e.g. @wilkinson2012; @velleman1993] about the data being disjoint - we know that, in the New Zealand parliament electoral system, each voter can only vote for a single party. Finally, the plot above duplicates information: in Figure \@ref(fig:union-geoms), the number of votes the National party received is counted twice, once in the leftmost bar and again in the second-from-left bar. This goes against the general principle of representing our data in the most parsimonious way [@tufte2001].
+However, this way of representing the data has several problems. First, this type of visualization is arguably not very useful for addressing our visualization goals. For example, when visualizing election data such as the one above, we typically want to compare the relative number of votes each party received. Figure \@ref(fig:union-geoms) this comparison needlessly difficult. Specifically, since the leftmost bar represents the union of National and Labour votes, we have to perform additional mental calculation if we want to compare the number of votes received by National and Labour directly [@cleveland1985]. Second, we have metadata knowledge [see e.g. @wilkinson2012; @velleman1993] about the data actually being disjoint. We know that, in the New Zealand parliament electoral system, each voter can only vote for a single party. Hence, it does not make sense to arbitrarily combine the data in this way. Finally, Figure \@ref(fig:union-geoms) also needlessly duplicates information: the number of votes the National party received is counted twice, once in the leftmost bar and again in the second-from-left bar. This goes against the general principle of representing our data parsimoniously [@tufte2001].
 
-Even when our goal is not to compare absolute counts, there are usually better disjoint data visualization techniques available. For example, if we were interested in visualizing the proportion of votes that each party received, we could draw the following plot: 
+Even when our goal is not to compare absolute counts, there are usually better disjoint data visualization methods available. For instance, if we were interested in visualizing the *proportion* of votes that each party received, we could instead draw the following plot: 
 
 ```{r stacked-proportion}
 #| echo: false
@@ -116,7 +116,7 @@ Even when our goal is not to compare absolute counts, there are usually better d
 knitr::include_graphics("./figures/barplot-bijection-proportions.png")
 ```
 
-By stacking the bar segments on top of each other, we can easily compare proportion of the total number of votes while retaining a parsimonious representation of our data. Each bar segments now again represents a unique subset of voters.
+By stacking the bar segments on top of each other as in \@ref(fig:stacked-proportion), we can easily compare proportion of the total number of votes each party received, while retaining a disjoint representation. Each bar segment now again represents a unique subset of voters.
 
 The example above is fairly clear-cut case of where disjoint data representation is the better choice. However, there are also more ambiguous situations, such as when multiple attributes of the data are simultaneously present or absent for each case. Take, for example, the 2020 New Zealand joint referendum on the legalization of euthanasia and cannabis. In this referendum, the two issues were included on the same ballot and voters would vote on them simultaneously. The legalization of euthanasia was accepted by the voters, with 65.1% of votes supporting the decision, whereas the legalization of cannabis was rejected, with 50.7% of voters rejecting the decision [@referendum2020].
 
@@ -130,12 +130,12 @@ We could visualize the referendum data in the following way:
 knitr::include_graphics("./figures/referendum-notbijection.png")
 ```
 
-Here, both bars include votes which were cast by the same voter [ignoring the votes where no preference was given for either issue, @referendum2020], making the representation non-disjoint. In 
-this case, the visualization works, since the underlying data is genuinely non-disjoint (each person cast two votes). If we had information about individual votes, it might be interesting to see how many people voted for both euthanasia and cannabis, how many voted for euthanasia but against cannabis, and so on. Similar types of visualization can work well for set-typed data [see e.g. @alsallakh2014]. 
+In Figure \@ref(fig:union-geoms2), both bars include votes cast by the same voter [ignoring the votes where no preference was given for either issue, @referendum2020], making the representation non-disjoint. In 
+this case, the visualization works, since the underlying data is genuinely non-independent (each person cast two votes). If we had information about individual votes, it might be interesting to see how many people voted for both euthanasia and cannabis, how many voted for euthanasia but against cannabis, and so on. As was mentioned before, these types of visualizations can be useful for set-typed data [see e.g. @alsallakh2014]. 
 
-However, even though the data here is fundamentally non-disjoint, there is a way to represent it in a disjoint way that preserves most of the desirable properties - draw separate plots or small multiples [@tufte2001]:  
+However, even though the data here is fundamentally non-independent, there is often a way to represent it in a disjoint way that preserves most of the desirable properties. Specifically, we can split the data and draw it as separate plots or small multiples [@tufte2001]:  
 
-```{r}
+```{r small-multiples}
 #| echo: false
 #| fig-height: 3
 #| fig-cap: "Small multiple figure showing the non-disjoint data represented as disjoint bars. The bars again show the vote share cast by New Zealand voters in the joint 2020 referendum on euthanasia and cannabis, however, this time, each bar within one plot represents a unique subset of the cases."
@@ -143,50 +143,46 @@ However, even though the data here is fundamentally non-disjoint, there is a way
 knitr::include_graphics("./figures/referendum-bijection.png")
 ```
 
-Here again, each bar (segment) in each plot represents a disjoint subset of voters.
+Here again, in Figure \@ref(fig:small-multiples), each bar (segment) in each plot represents a disjoint subset of voters.
 
 #### Disjointness and interaction
 
-As I argued above, disjoint subsets offer a simpler mental model for understanding data visualizations. When each geometric object represents a unique set of data points, it becomes easier to reason about the comparisons being made. Conversely, when objects overlap or share data points, it requires additional cognitive effort to track the relationships between them.
+As I argued above, disjoint subsets offer a simpler mental model for understanding data visualizations. When each geometric object represents a unique set of data points, it becomes easier to reason about the comparisons being made. Conversely, when objects overlap or share underlying data points, additional cognitive effort is required to track the relationships between them.
 
-I also argue that disjointness presents a particularly good model for interactive visualization [see also @wilhelm2008]. The natural correspondence between geometric objects and subsets of the data makes certain interactions more intuitive, and conversely, overlapping subsets can produce surprising or unexpected behavior. For instance, when a user clicks on a bar in a linked barplot, they might reasonably expect to highlight that particular bar within the active plot and the corresponding cases within all the other (passive) plots. If they see parts of other bars within the active plot get highlighted as well, they have to expend additional mental effort thinking about the relationship between the objects (bars) and the subsets of the data, since this is no longer one-to-one.
+Further, I argue that disjointness presents a particularly good model for interactive visualization [see also @wilhelm2008]. The natural correspondence between geometric objects and subsets of the data makes certain interactions more intuitive, and conversely, overlapping subsets can produce unexpected or unintuitive behavior. For instance, when a user clicks on a bar in a linked barplot, they might reasonably expect to highlight *that particular bar*, within the active plot, and the corresponding cases within all the other (passive) plots. If they see parts of other bars within the active plot get highlighted as well, they have to spend additional mental effort thinking about the relation between the objects (bars) and the subsets of the data, since this is no longer one-to-one.
 
-Similar issue arises during querying. When a user queries an object that does not represent a disjoint subset of the data, should the returned summary statistics match the object or the (non-disjoint) subset? Again, this issue complicates the interpretation of the presented information.
+Similar issue arises during querying. When a user queries an object that does not represent a disjoint subset of the data, should the returned summary statistics match the object or the (non-disjoint) subset? And how do we signal this to the user? Again, lack of disjointness introduces subtle ambiguities and complicates the interpretation of the presented information.
 
-This does not mean that non-disjoint subsets and linking cannot be useful in specific contexts [see e.g. @alsallakh2014; @wilhelm2008], however, I argue that disjointness generally provides a good default. Disjoint subsets simplify our mental model, and this may be the reason why some authors discuss interactive features in the context of partitions [see e.g. @buja1996; @keim2002]. Likewise, many common data analytic operations, such as SQL aggregation queries [`GROUP BY`, @hellerstein1999], operate on disjoint subsets, and this may be another reason why this model is more familiar.
+This does not mean that non-disjoint subsets cannot be usefuly combined with interaction, in specific contexts [see e.g. @alsallakh2014; @wilhelm2008]. However, I argue that, as a general model, disjointness provides a very good default. Disjoint subsets simplify our mental model, and this may be the reason why some authors discuss interactive features in the context of partitions, which are by definition disjoint [see e.g. @buja1996; @keim2002]. Likewise, many common data analytic operations, such as SQL aggregation queries [`GROUP BY`, @hellerstein1999], operate on disjoint subsets, and this may be another reason why this model is familiar.
 
 ### Plots as partitions
 
-In the two preceding sections, I have argued that it is desirable for plots in our (interactive) data visualization system to have two fundamental properties:
+In the two preceding sections, I have argued that it is generally desirable for plots in our (interactive) data visualization system to have two fundamental features:
 
-- They should show the full data (surjective mapping)
-- Geometric objects within them should represent distinct subsets (disjoint parts)
+- Completeness: They should show the full data
+- Distinctness: Geometric objects should represent distinct subsets of data points
 
-These two properties suggest a fundamental mathematical model for a plot: that of a [partition](#Partitions). Specifically, I propose the following definition of a *regular plot*:
+These two features actually map onto two fundamental mathematical properties: [surjectivity](#Functions) and [disjointness](#Partitions). In turn, these two properties define a well-known mathematical structure: a [partition](#Partitions). Therefore, partitions offer a compelling model for structuring our plots. I propose the following definition of a *regular plot*:
 
 :::{.definition name="Regular plot"}
 Regular plot is a plot where the geometric objects within one layer represent a partition of the data, such that there is a bijection between these objects and (possibly aggregated) subsets of the original data.   
 :::
 
-Note that this does not preclude plots where there is an overlap between the cases represented by geometric objects within multiple layers, such as boxplots with overlaid points, or a scatterplot with a smooth fit. 
+Note that this definition still allows for plots where geometric objects in different layers represent overlapping data subsets, such as boxplots with overlaid points, or scatterplots with a smooth fit. 
 
-I propose that regular plots should form the fundamental building block of our interactive figures. By arranging a series of regular plots into an interactive figure [as small multiples, @tufte2001], we can ensure that the resulting visualization will be easily interpretable, even when combined with interactive features such as linking and querying.
+I propose regular plots as a fundamental building block of our interactive data visualization system. By building our interactive figures out of regular plots [as small multiples, @tufte2001], we can ensure that the resulting visualization will be easily interpretable, even when combined with interactive features such as linking and querying.
 
 #### Bijection on cases vs. bijection on subsets
 
-While I have not been able to find references explicitly linking plots to partitions in as general way as I do here, some data visualization researchers have used the language of bijections when discussing graphics. For example, @dastani2002 discusses plots as bijections (homomorphisms) between data tables and visual attribute tables. Similarly, @ziemkiewicz2009, and @vickers2012 argue that, in order to be visually unambiguous, plots should represent bijections of the underlying data.
+Although I have not been able to find references conceptualizing plots as partitions in the same general way as I do here, some data visualization researchers have used the language of bijections when discussing graphics. For example, @dastani2002 discusses plots as bijections (homomorphisms) between data tables and visual attribute tables. Similarly, @ziemkiewicz2009, and @vickers2012 argue that, in order to be visually unambiguous, plots should represent bijections of the underlying data. Essentially, these researchers argue that plots should represent bijective mappings of the data tables, such that each object represents one row of the data.
 
-However, this "one-row-one-object" model skirts around the issue of aggregation (see also Section \@ref(aggregation)). It only works if we assume that the data comes to us pre-aggregated, such that, for example, when we draw a barplot or a histogram, we start with a table that has one row per bar. But few visualization systems work like this. Instead, most provide aggregation functions as explicit parts of the data visualization pipeline [see e.g. @chi2000; @wickham2016; @satyanarayan2015; @satyanarayan2016]. If we admit that aggregation is not a completely independent process, but instead an integral part of our graphics, then we have a problem.
+However, this "one-row-one-object" model sidesteps the issue of aggregation (see also Section \@ref(aggregation)). It operates on the assumption that the data is pre-aggregated, such that, for instance, when we draw a barplot or a histogram, we start with a table that has one row per bar. This is rarely the case in practice. Most visualization systems incorporate aggregation as an explicit component of the data visualization pipeline [see e.g. @chi2000; @wickham2016; @satyanarayan2015; @satyanarayan2016; @wu2024]. Howeever, acknowledging aggregation presents a problem for the one-row-one-object model, since aggregation is, by definition, not injective. Once we aggregate multiple data points into a summary or a set of summaries, we cannot recover the original cases [see also @wu2024]. Thus, the model proposed by authors such as @dastani2002, @ziemkiewicz2009, and @vickers2012 would exclude many common aggregation-based types of plots, such as barplots and histograms. @ziemkiewicz2009 indeed do acknowledge that this is a problem, and admit that, at times, aggregation can be an acceptable trade-off, despite the inherent information loss.
 
-Aggregation is, by definition, is not injective: once we aggregate multiple data points into a summary or a set of summaries, we cannot recover the original cases [see also @wu2024]. Thus, under the model proposed by authors such as @dastani2002, @ziemkiewicz2009, and @vickers2012 would discard many common types of plots that rely on aggregation, such as barplots and histograms. @ziemkiewicz2009 do acknowledge that this is a problem, and admit that, at times, aggregation can be an acceptable trade-off, despite the inherent information loss.
+However, if we instead model plots as bijection between *parts of data* and the geometric objects, rather than between individual *data points* and geometric objects, aggregation ceases to be a problem. Even after we aggregate a multiple-row subset of the data into a single row summary, this bijection is preserved. Thus, aggregation can be considered a part of the bijection. For instance, if we split our data into ten tables and aggregate each table, we are still left with ten tables of one row each that we can map bijectively to geometric objects.
 
-I propose the following solution to the conundrum: instead of modeling plots as bijections between *cases* and the geometric objects, we can model them as bijections between *parts of data* and the geometric objects. In other words, the domain of the bijection are not individual rows of the original data table, but instead entire "slices" of rows. With this approach, aggregation can be considered as part of the bijection. For instance, if we split our data into ten tables and aggregate each table, we are still left with ten tables of one row each that we can map bijectively to geometric objects.
+#### Products of partitions
 
-Finally, Wilkinson [-@wilkinson2012, pp 210] and @keim2002 have linked stacked plots to (hierarchical) partitions.
-
-#### Partition products 
-
-Many types of plots involve data partitioned across multiple dimensions. This is especially true in interactive data visualization, where linking automatically induces another level of partitioning [@wilhelm2008]. This necessitates a general mechanism for creating a product of multiple partitions.
+Many types of plots involve data that is partitioned or split across multiple dimensions. This is especially true in interactive data visualization, where features such as linking automatically induce another level of partitioning [@wilhelm2008]. This necessitates a general mechanism for combining partitions to form their product.
 
 To give a concrete example, suppose we want to draw the following barplot:
 
@@ -227,7 +223,7 @@ render_tables <- function(x) {
 render_table(df, row.names = TRUE)
 ```
 
-To draw the individual bar segments, we need to sum `value` across the subsets cases corresponding to each segment. To do this, we first need to split our data into multiple subsets according to the product of `group` and `selection` variables, forming a partition. 
+To draw individual bar segments, we need to sum `value` across the subsets cases corresponding to each segment. To do this, we first need to split our data into multiple subsets corresponding to the partition formed by taking the product of `group` and `selection` variables.
 
 In R, the general data structure for representing partitions is the `factor` S3 class. In a `factor`, all elements of a vector are assigned a label, such that each label represent one disjoint part of the data. Unfortunately, there is no built-in function for creating a Cartesian product of two factors. However, we can easily emulate it using `paste` function to combine factor levels as strings element-wise:
 
@@ -301,11 +297,11 @@ To be more explicit, in the `ggplot2` call above, we specify that we want to par
 
 We then compute whatever summary we want (`sum`). Finally, when a `fill` or `col` aesthetic is used with `geom_bar`, `ggplot2` also automatically stack the bars on top of each other by summing their heights. Similar strategy is employed for many other types of stacked plots, including pie charts, histograms, or density plots [@wickham2016]. 
 
-#### Limits of simple product partitions
+#### Limits of flat product partitions
 
-For many types of plots, the simple strategy of taking a single "flat" product of all factors/partitions works reasonably well. However, for other plot types, this simple model is not enough. Specifically, certain types of plots exhibit hierarchical relationships which the flat product model fails to cover. 
+For many common plot types, a single "flat" product of all factors/partitions works reasonably well. However, for other types of plots, this simple model is not enough. Specifically, certain types of plots exhibit hierarchical relationships between the partitions which cannot be represented under this flat model.
 
-To give a concrete example, let's turn back to the barplot from the section above (\@ref(plots-as-partitions)). To draw the barplot, we first split our data into smaller tables, summarized each table by summing up the values, stacked the summaries by taking their cumulative sum, and finally used the resulting data frame to render bar segments. This gave us a stacked barplot, which is a good visualization for comparing absolute counts across categories. 
+To give a concrete example, let's turn back to the barplot from the section above (\@ref(plots-as-partitions)). To draw the barplot, we first split our data into smaller tables, summarized each table by summing the values, stacked the summaries by taking their cumulative sum, and finally used the resulting data frame to render bar segments. This gave us a stacked barplot, which is a good visualization for comparing absolute counts across categories. 
 
 However, what if, instead of comparing absolute counts, we wanted to compare proportions? It turns out there is another type of visualization, called the spineplot, which can be used to represent the same underlying data as a barplot, however, is much better suited for comparing proportions: 
 
@@ -316,18 +312,18 @@ However, what if, instead of comparing absolute counts, we wanted to compare pro
 knitr::include_graphics("./figures/barplot-spineplot.png")
 ```
 
-Like barplots, spineplots represent some summary statistic (usually counts), aggregated within the levels of the product of two categorical variables. However, unlike barplots, spineplots map the underlying statistics to both the y-axis position (height) and the bar width. Furthermore, the y-axis position is normalized, such that the heights of the different segments within the same category add up to one. This normalization makes it possible to compare the relative frequencies within categories directly (notice how the right panel in Figure \@ref(fig:barplot-spineplot) makes it obvious that the proportion of red cases within the B and C categories is the same). Thus, like the barplot, the spineplot is a valuable tool for visualizing categorical data, especially when we can use interactive features to switch from one type of representation to the other. 
+Like barplots, spineplots represent some summary statistic (usually counts), aggregated within the levels of a product of two categorical variables. However, unlike barplots, spineplots map the underlying statistics to both the y-axis position (height) and the bar width. Furthermore, the y-axis position is normalized, such that the heights of the different segments within the same category add up to one. This normalization makes it possible to compare the relative frequencies within categories directly (notice how the right panel in Figure \@ref(fig:barplot-spineplot) makes it obvious that the proportion of red cases within the B and C categories is the same). Thus, like the barplot, the spineplot is a valuable tool for visualizing categorical data, especially when we can use interactive features to switch from one type of representation to the other. 
 
-However, despite the fact that barplot and spineplot represent the same underlying data, turning one into the other is not always trivial. Specifically, while many grammar-based visualization systems offer a simple declarative syntax for defining barplots, they lack such simple syntax for spineplots. For instance, in `ggplot2`, there is currently no way to render a spineplot without first engaging in some non-trivial data wrangling. Creating the plot in the right panel of Figure \@ref(fig:barplot-spineplot) took over 10 lines of code, using standard `dplyr` syntax. The same applies to other "normalized" types of plots such as spinograms [see e.g. @theus2002].
+Although barplot and spineplot represent the same underlying data, turning one into the other is not always easy. Specifically, while many grammar-based visualization systems offer a simple declarative syntax for defining barplots, they lack such simple syntax for spineplots. For instance, to draw a spineplot in `ggplot2`, we first need to do substantial amount of data wrangling (creating the plot in the right panel of Figure \@ref(fig:barplot-spineplot) took over 10 lines of code, using standard `dplyr` syntax). The same applies to other "normalized" types of plots such as spinograms [see e.g. @theus2002].
 
-#### Partitions and hierarchy: The graph behind the graph
+#### Partitions and hierarchy: The graph behind the graph {#hierarchy}
 
 Why are spineplots so tricky? The reason is that they force us to confront the hierarchical nature of (interactive) graphics [@mcdonald1990; @keller2024]. Specifically, while in a barplot, we can get away with a single flat partition of the data, in a spineplot, the data is summarized and stacked *along and across* different levels of aggregation [@wu2024]:
 
 - Along the x-axis, we stack the summaries *across the levels of the top-level factor/category*
 - Along the y-axis, we stack the summaries *across the levels of a product of two factors* and normalize them by the values *within the levels of the top-level factor*.
 
-For example, assume we have a dataset with two categorical variables, with $j$ and $k$ levels respectively. If we want to render a spineplot based on these two variables, it is not enough to simply break our data into $j \cdot k$ tables. Instead, we need to partition our data on two levels: first, break the data into $j$ tables, and second, break the data into $j \cdot k$ tables. We also need to keep track of the which of the $j$ tables on the first level of partitioning each of the $j \cdot k$ smaller tables *relates to*. This automatically induces a hierarchical relationship, such that the resulting data subsets form a graph (more specifically a tree), see Figure \@ref(fig:spineplot-tree):
+For example, assume we have a dataset with two categorical variables, with $j$ and $k$ levels respectively. If we want to render a spineplot using these two variables, it is not enough to simply split our data into $j \cdot k$ tables. Instead, we need to partition our data twice: first, split it into $j$ tables, and second, split it into $j \cdot k$ tables. We also need to keep track of the which of the $j$ tables on the first level of partitioning *corresponds* to each of the $j \cdot k$ smaller tables. This automatically induces a hierarchical relationship, where the resulting data subsets form a graph - specifically, a tree - see Figure \@ref(fig:spineplot-tree):
 
 ```{r spineplot-tree}
 #| echo: false
@@ -335,27 +331,27 @@ For example, assume we have a dataset with two categorical variables, with $j$ a
 knitr::include_graphics("./figures/spineplot-tree.png")
 ```
 
-In the diagram above, each vertical level represents on partition of the data, and the relationship between parts is designated by arrows, such that a node where multiple arrows meet represents a union of the corresponding subsets. 
+In \@ref(fig:spineplot-tree), each vertical level represents a data partition, and arrows indicate relationships between the resulting subsets. A node where multiple arrows converge represents the union of the corresponding subsets. This same tree can be used to represent both barplots and spineplots. For a stacked barplot, this tree structure can be implicit, since we can work with the lowest level of the partitioning only - the segments - ignoring details such as maintaining correct stacking order. However, for spineplots, this hierarchical structure is essential. In spineplots, we apply transformations *across* the levels of the hierarchy: we need to normalize the statistics corresponding to each segment by the values within the parent bar. This is only possible if each segment's data can reference its parent bar's data.
 
-This same tree can be used to represent both the barplot and the spineplot. For a stacked barplot, this tree structure can be implicit, since we can work with the lowest level of the partitioning only (segments; provided we hand-wave away some issues such as maintaining a correct stacking order). However, for a spineplot, the hierarchical structure is unavoidable. In a spineplot, we need to apply transformations *across* the levels of the hierarchy: we need to normalize (divide) the statistics corresponding to each segment by the values within the parent bar. This is only possible if the data corresponding to each segment can refer to the data corresponding to the parent bar.
-
-Clearly then, modeling plots as a single flat partition does not provide enough generality, and having some way to encode a hierarchy (graph) of partitions is necessary. Therefore, we should refine our definition of a regular plot:
+Clearly then, the single flat partition model is not general enough. Having a way to encode a hierarchy (tree) of partitions is necessary if we want to be able to render plots with hierarchical mapping such as spineplots and spinograms. Consequently, we need to revise our definition of a regular plot:
 
 :::{.definition name="Regular plot 2"}
 Regular plot is a plot where the geometric objects within one layer represent *a hierarchy of partitions* of the data, such that there is a bijection between these objects and (possibly aggregated) subsets of the original data.   
 :::
 
-In other words, *graphs are graphs*. As a whimsical side-note, this view is not shared by everyone. Particularly, the poster of the following meme shared on the Mathematical Mathematics Memes Facebook group [@mathematicalmathematics2024] might not agree:
+Simply put, *graphs are graphs*. As a bit of a playful side-note, this view is not shared by everyone. Particularly, the poster of the following meme shared on the Mathematical Mathematics Memes Facebook group [@mathematicalmathematics2024] might not agree:
 
 ```{r meme}
 #| echo: false
-#| fig-cap: "A joke image shared in the Mathematical Mathematics Memes Facebook group on the 28th of March, 2024 [@mathematicalmathematics2024]. I hope I have made a reasonably strong case that many data visualizations actually are graphs, not 'delusional cosplayers'."
+#| fig-cap: "A joke image shared in the Mathematical Mathematics Memes Facebook group on the 28th of March, 2024 [@mathematicalmathematics2024]."
 #| out-extra: 'style="border:1px solid black;"'
 #| out-width: 75%
 knitr::include_graphics("./figures/graphs-cosplayers.jpg")
 ```
 
-However, when we organize our data into a hierarchy or a tree, we face another kind of issue. The hierarchical organization of the data induces a structure. Clearly, the subsequent steps of the data visualization pipeline should respect this structure. For example, suppose we have a barplot where bars that have been divided into segments. Clearly, it would not make sense to stack some segments on top of each other and plot others side-by-side. However, what does it actually mean to "respect the structure" of our data? This question will be explored in the following section, which deals with the next step of the data visualization pipeline: aggregation.   
+I hope I have made a reasonably strong case here that many data visualization types are not "delusional cosplayers". By organizing our data into a hierarchy of partitions, we induce a graph-like, part-whole relationship on the subsets. Thus, graphs are graphs. 
+
+However, organizing our data into a graph introduces a new kind of challenge: preserving the inherent structure. A hierarchy or tree imposes a kind of a structure on our data, and, intuitively, disregarding this structure in the subsequent steps of the data visualization pipeline would be an error. For example, in a barplot, if we split our bars into segments, it would be inconsistent to stack some segments on top of each other while plotting others side-by-side. Clearly, any further manipulation of the hierarchically partitioned data should *respect this underlying structure*. However, what does it really mean to respect the structure of our data? This question will be explored in detail in the following section, which deals with the next step of the data visualization pipeline: aggregation.   
 
 ## Aggregation
 
@@ -365,19 +361,19 @@ However, when we organize our data into a hierarchy or a tree, we face another k
 >
 > @wilkinson2012, The Grammar of Graphics, pp. 15 and 112. 
 
-The second step of any data visualization pipeline is aggregation. Specifically, after we split our data into parts, we need a way of summarizing each part via some set of summary statistics. While the computing summaries may seem like a fairly straightforward part of the visualization process, there is more complexity involved than may be immediately apparent. This section explores this complexity in more depth.
+The second step of any data visualization pipeline is aggregation. Specifically, after we split our data into a hierarchy of parts, we need to summarize each part via a set of summary statistics. Further, as I have hinted at in the previous section, these summaries should respect the hierarchical nature of the data. Thus, while the computing summaries may seem like a fairly straightforward part of the visualization process, there is more complexity here than meets the eye. This will be the main subject of the present section.
 
-### Graphics and statistics are not independent
+### The relationship between graphics and statistics
 
-A fundamental issue with aggregation concerns the relationship between graphics and statistics. Specifically, when we summarize our data and then render these summaries as geometric objects, an important question arises: can any statistic be represented by any arbitrary object? Can we freely mix and match statistics and objects? Or are there some constraints on what we can combine?
+A key issue in data visualization, which is also the central theme of the present thesis, concerns the relationship between graphics and statistics. Specifically, when we summarize our data and then render these summaries as geometric objects, an important question arises: can we pair arbitrary statistics and geometric objects? Or are there constraints which limit which statistics and geometric objects can be effectively combined, particularly when interaction is involved?
 
-The lasseiz-faire approach of combining arbitrary statistics and objects has its appeal. Currently, a popular approach to building visualizations is the "grammar-based" model, developed by Wilkinson in his seminal work, The Grammar of Graphics [-@wilkinson2012]. Under this model, visualizations are created out of independent, modular components, which include geometric objects and statistics, as well as other components such as scales and coordinate systems.
+The approach of treating graphics and statistics as independent components is highly appealing. Indeed, it is the cornerstone of the immensely popular "grammar-based" model of visualization, introduced by Wilkinson in his seminal work, The Grammar of Graphics [-@wilkinson2012]. Under this model, visualizations are constructed out of independent, modular components, which include geometric objects, statistics, scales, and coordinate systems.
 
-The grammar-based model has many benefits, including simplicity and expressive power. As a result, it has gained widespread popularity and has been implemented in in numerous data visualization systems [see e.g. @mcnutt2022; @kim2022; @vanderplas2020; @wickham2010; @satyanarayan2014; @satyanarayan2016]. One prominent example is the famous `ggplot2` package [@wickham2010]. In `ggplot2`, plots are built out of components such as geometric objects (called `geoms`), statistical summaries (`stats`), and scales. These components can be combined at will, allowing the user to express a wide range of graphics using just few primitives. The expressive power of `ggplot2` has made it one of the most popular R packages of all time.^[Being the top most downloaded CRAN package as of 4th of December 2024, @rmeta2024]
+The grammar-based model offers many advantages, including simplicity and expressive power, contributing to its widespread adoption in many data visualization systems [see e.g. @mcnutt2022; @kim2022; @vanderplas2020; @wickham2010; @satyanarayan2014; @satyanarayan2016]. The canonical example is the famous `ggplot2` package [@wickham2010]. In `ggplot2`, plots are built out of components such as geometric objects (called `geoms`), statistical summaries (`stats`), and scales. These components can be flexibly combined, allowing the user to express a wide range of graphics using a small set of primitives. The expressive power of `ggplot2` has made it one of the most popular R packages of all time.^[Being the top most downloaded CRAN package as of 4th of December 2024, @rmeta2024].
 
-However, despite its advantages, the grammar-based model has one fundamental flaw: graphics and statistics are not independent. Instead, the way we choose to represent our data has to align with its properties - a constraint that is present even in static graphics but which becomes particularly apparent in interactive visualizations. Let's illustrate this with a real-world example.
+However, despite its advantages, the grammar-based model has one fundamental flaw: graphics and statistics are not truly independent. Instead, the visual representation of data must be congruent with its mathematical properties. This constraint, present even in static visualizations, becomes especially critical in interactive contexts. Let's illustrate this point with an example of real-world data.
 
-##### Stacking and highlighting are not only about graphics
+##### Stacking and highlighting are not (only) graphical operations {#stacking-not-graphical}
 
 For this example, I will use famous data set from a study on the effect of smoking on child lung capacity [@tager1979; @kahn2005]. In the study, the researchers measured children's forced expiratory volume (FEV), and recorded it alongside age, height, sex, and smoking status.
 
@@ -430,7 +426,7 @@ ggplot(fev, aes(age, fev, fill = smoke)) +
 knitr::include_graphics("./figures/grammar-barplot-counts.png")
 ```
 
-The plot above clearly shows that there were a lot more smokers than non-smokers, and that smokers tended to be on average older than the non-smokers. This provides a support for our confounding hypothesis.
+The plot above clearly shows that there were more smokers than non-smokers, and that smokers tended to be on average older. This provides a support for our confounding hypothesis.
 
 Now, what if we wanted to compare FEV across the different ages? A data visualization novice might do something like below, and draw a stacked barplot of the average FEV in each age group:
 
@@ -442,15 +438,15 @@ ggplot(fev, aes(age, fev, fill = smoke)) +
 
 ```{r grammar-barplot-means}
 #| echo: false
-#| fig-cap: "A poor visualization of the average FEV by age and smoking status. Notice that the height of the stacked bars is meaningless: it represents the sum of the group averages, which is not a valid summary of the combined smoker and non-smoker data."
+#| fig-cap: "A fundamentally flawed visualization of the average FEV by age and smoking status. Notice that the total height of the stacked bars is meaningless: it represents the sum of grouped averages, which is not a valid summary of the combined smoker and non-smoker data."
 knitr::include_graphics("./figures/grammar-barplot-means.png")
 ```
 
-At a glance, the plot above looks fine. However, what do the heights of the stacked bars represent? Each coloured bar segment represents a mean of the `fev` variable, grouped by the levels defined by the product of the `age` and `smoke` variables. By stacking the bars on top of each other, we are essentially summing up the average FEV of smokers and non-smokers, within the given age category.
+At a glance, the plot in \@ref(fig:grammar-barplot-means) looks fine. However, what do the heights of the stacked bars actually represent? Each coloured bar segment represents a mean of the `fev` variable, grouped by the levels defined by the product of the `age` and `smoke` variables. By stacking the bars on top of each other, we are essentially summing up the average FEV of smokers and non-smokers, within the given age category.
 
-However, visualizing the data in this way is problematic, because the bar heights do not represent a meaningful summary statistic. The sum of group means is not something that most consumers of visualizations would know how to interpret or care about. Consider that, before, in Figure \@ref(fig:grammar-barplot-counts), we had stacked counts, and the heights of the stacked bars represented valid overall counts - the number of smokers and non-smokers within a given age category combined. This is not the case here - in Figure \@ref(fig:grammar-barplot-means), the sum of the group means is different from the mean of the combined cases (and so would be the mean of group means).   
+This visualization is problematic because the bar heights lack a meaningful statistical interpretation. The sum of group means is not something that most consumers of visualizations would know how to interpret or care about. Before, in Figure \@ref(fig:grammar-barplot-counts), the heights of the stacked bars represented valid overall counts - the number of smokers and non-smokers within a given age category combined - however, this is no longer the case here. By contrast, in Figure \@ref(fig:grammar-barplot-means), the sum of the group means is different from the mean of the combined cases. Further, even if we were to take the *mean of the group means*, this would almost surely be different from the *grand mean*, unless by accident.
 
-This problem is familiar to data visualization researchers and many have explicitly warned about this:
+Many data visualization researchers have explicitly warned about this problem:
 
 >"Stacking is useful when the sum of the amounts represented by the individual stacked bars is in itself a meaningful amount" [@wilke2019, p. 52].
 
@@ -458,27 +454,28 @@ This problem is familiar to data visualization researchers and many have explici
 
 >"[...] We do this to ensure that aggregate statistics are always computed over the input data, and so users do not inadvertantly compute e.g., averages of averages, which can easily lead to misinterpretation." [@wu2022]
 
-Does this mean we can only ever stack counts and sums? Take a look at the following plot:
+Based on these quotes, one might get the impression that we can only ever "stack" or "highlight" sums and counts, to get a valid combined summary statistics. However, take a look at the following plot:
 
 ```{r}
-# Code is not included because this type of plot cannot be created 
+# Code is not included because this plot cannot be recreated 
 # with a simple ggplot2 call (without data wrangling)
 ```
 
-```{r}
+```{r grammar-barplot-maximums}
 #| echo: false
+#| fig-cap: "A maximum of maxima is a valid maximum of the combined cases."
 knitr::include_graphics("./figures/grammar-barplot-maximums.png")
 ```
 
-Here we plot the maximum FEV for smokers and non-smokers across the different ages. From this plot, we can see that in most of the age categories which included smokers (age 9 and up), the FEV of the non-smoker with the highest lung capacity was greater than that of a smoker with the greatest lung capacity, although there are several exceptions (ages 11, 16, and 18). 
+Here, in Figure \@ref(fig:grammar-barplot-maximums), we again plot FEV for smokers and non-smokers across the different age groups, however, this time, we display the *maximum FEV* on the y-axis. From this plot, we can see that, in most of the age categories which included smokers (age 9 and up), the child with the highest lung capacity was a non-smoker, although there were a few exceptions (ages 11, 16, and 18). 
 
-However, notice one important feature of the plot above: the heights of the "stacked" bars represent a valid overall summary. That is, *the maximum of the maximums is a valid maximum of the combined cases*. One could argue about the usefulness of the type of plot above, however, it presents undeniable evidence of one important fact: there summary statistics other than sums and counts which are "stackable".
+However, notice one important feature of the plot above: the heights of the "stacked" bars represent a valid overall summary. Taking grouped data, summarizing each group by its maximum, and then taking the maximum of those maxima yields the overall maximum. That is, *the maximum of maxima is a valid maximum of the combined cases*. While the general usefulness of the plot in Figure \@ref(fig:grammar-barplot-maximums) could be debated - given that each bar effectively represents a single data point (the group maximum), and that, in small data sets, the maximum can be a highly variable - the plot still demonstrates one important, undeniable fact: summaries other than sums and counts can be meaningfully "stacked."
 
 #### Why is stacking important?
 
-Before we go on to discuss what makes certain statistics stackable, however, we first need to address the issue of of why stacking desirable. Specifically, some might argue that stacking is only one way of presenting partitioned data, and that we could equally well present the averages in Figure \@ref(fig:grammar-barplot-means) by plotting the corresponding bars side by side (a technique know as dodging), or by plotting them on top of each other in semi-transparent layers:
+However, before we go on to discuss what makes certain statistics stackable, we first need to address the issue of of why stacking desirable. Specifically, some might argue that stacking is only one way of presenting partitioned data, and that we could equally well present "unstackable" summaries such as the averages in Figure \@ref(fig:grammar-barplot-means) by plotting the corresponding bars side by side (a technique know as dodging), or by plotting them on top of each other in semi-transparent layers, see \@ref(fig:dodging-layering):
 
-```{r}
+```{r dodging-layering}
 #| echo: false
 #| fig-cap: "Two alternative means of displaying partitioned data: dodging and layering."
 knitr::include_graphics("./figures/grammar-dodging-layering.png") 
@@ -496,11 +493,44 @@ My conclusion is different from that of @wilhelm2008: I argue that, while overla
 
 ### Stackable summaries
 
-Now it is finally time to discuss what makes certain statistics stackable. To do this, I will use some fundamental concepts from category. These concepts are described at greater length in the [Appendix: Mathematical Theory](#mathematical-theory) - the reader is advised to consult this section if they are unfamiliar with this material.
+Now it is finally time to discuss what makes certain statistics stackable. To do this, I will use some fundamental concepts from category theory and abstract algebra. These concepts are described in greater detail in the [Appendix: Mathematical Theory](#mathematical-theory) - the reader is advised to consult this section if they are unfamiliar with this material.
 
-In section \@ref(partitioning), I discussed the idea of modeling our plots as a hierarchy of partitions. Specifically, starting with the full data, we can divide the data into disjoint subsets, each representing one geometric objects, and then divide these subsets again, representing parts of geometric objects (such as induced by selection status). Thus, as was discussed in Section [REFERENCE], this hierarchical partitioning results in a tree-like structure.
+Let's briefly recap the key points so far. In section \@ref(partitioning), I advocated for modeling plots as a hierarchy of partitions. Specifically, starting with the full data set, we divide it into disjoint subsets, each corresponding to a geometric object. These subsets can then be further subdivided, representing parts of those objects (such as those resulting from linked selection). As discussed in Section \ref(hierarchy), we end up with a tree-like structure that encodes this part-whole relationship.
 
-I further posit that, when aggregating our data into summaries, we want to choose summary statistics which preserve this hierarchical structure. In other words, statistics which are stackable preserve the preorder relation on the subsets of the data, whereas statistics which are not do not.
+Further, I made the argument that, when summarizing our data, we should choose summary statistics which preserve this hierarchical, tree-like structure of our data. In Section \ref(stacking-not-graphical), I showed an example of visualizations which violate this structure, by stacking "unstackable" summary statistics, and pointed to others who have noted this problem. I have also showed that this property of being "stackable" is *not* unique to sums and counts.
+
+#### Preorders and hierarchy
+
+The fundamental algebraic structure can be used to describe a hierarchy is a [preorder](#preorders). A preorder is a relation on a set, where any two elements may relate via some preorder relation $\leq$, such that one is less than the other (or the two elements do not relate at all).
+
+Our hierarchy of partitions described in Section \ref(hierarchy) can be modeled as a preorder. Specifically, the data subsets form an elements of a set, and the preorder relation is the set inclusion relation $\subseteq$. For instance, a bar segment relates to its parent bar, which in turn relates to the whole data set, and so on, see Figure \@ref(fig:barplot-preorder): 
+
+```{r barplot-preorder}
+#| echo: false
+#| fig-cap: "A diagram of a barplot represented as a preorder of data subsets ordered by inclusion. $W$ represents the whole data set, $B_i$ represent bars, and $S_j$ represent individual bar segments."
+knitr::include_graphics("./figures/barplot-preorder.png") 
+```
+
+#### Statistics and structure preserving maps
+
+A fundamental concept in abstract algebra and category theory is that of a structure-preserving map or a [functor](#functors). As the name suggests, a functor is a special kind of mapping which preserves the properties of a given algebraic structure. In category theoretic terms, this structure-preserving preserving is described by the following two formulas:
+
+\newcommand\then{⨾}
+
+$$F(\text{id}_X) = \text{id}_{F(X)}$$
+$$F(f \then g) = F(f) \then F(g)$$
+
+Without going into too much depth here (please see [Appendix: Mathematical Theory](#mathematical-theory)), these properties mean that, when we map some objects from one space to another via a functor, the identity of all objects is preserved and so are any relationships between them that exist within the original space. This should become a lot clearer with a concrete example.
+
+In our case, the structure we are trying to preserve is a preorder ordered by set union, as shown in Figure \@ref(fig:barplot-preorder)). A preorder has two fundamental properties: reflexivity (every element relates to itself) and transitivity (if $A$ relates to $B$ and $B$ relates to $C$, $A$ relates to $C$). Further, it can be shown that these two properties are specialized cases of more general mathematical structures: identity functions (= reflexivity, there is a function from every element to itself) and associativity (= transitivity, a function from $A$ to $B$ can be composed with a function from $B$ to $C$ to form a function from $A$ to $C$).
+
+Suppose we have three disjoint subsets of our data $A$, $B$, and $C$. Suppose further that these subsets correspond to three of an object (e.g. bar segments, as in Figure \@ref(fig:barplot-preorder)), and the union of all three subsets corresponds to a whole object (bar). Since set union is an associative operation, we know that we can take the union of the three subsets in any order to get the subset corresponding to the whole object. For example, we could first take the union of sets $A$ and $B$, and then union that with $C$, or we could first union $B$ and $C$ and then union that with $A$, see Figure \@ref(fig:barplot-associativity):    
+
+```{r barplot-associativity}
+#| echo: false
+#| fig-cap: "The operation of taking the union of data subsets is associative, such that we can either first combine the subset $A$ with subset $B$ and then with subset $C$, or combine subset $A$ with with union of $B$ and $C$ directly, and get the same result."
+knitr::include_graphics("./figures/barplot-associativity.png") 
+```
 
 
 #### Transforming summaries

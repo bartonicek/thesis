@@ -19,7 +19,7 @@ This thesis leverages category theory in a different way, by using it to shed li
 
 And now for the theory.
 
-### Relations
+### Relations {#relations}
 
 A relation is one of the simplest mathematical structures. Given two sets $X$ and $Y$, a relation $R$ between $X$ and $Y$ is a subset of the Cartesian product of the two sets, $R \subseteq X \times Y$. In other words, a relation can be thought of as the subset of pairs $(x, y) \in X \times Y$ for which the condition "$x$ and $y$ relate" holds. Note that $X$ and $Y$ can be the same set, such that $R \subseteq X \times X$. 
 
@@ -61,7 +61,7 @@ $$[a] = \{ x \in X : x \sim a \}$$
 
 While relations might seem like very simple constructions, they are incredibly versatile. The next few sections will discuss three important examples of relations: functions, partitions, and preorders. 
 
-### Functions
+### Functions {#functions}
 
 A function is a special kind of relation which encodes a mapping between two sets. More specifically, let $S$ be the set of sources (also called the *domain*) and $T$ be the set of possible targets (also called the *codomain*). Then, we can think of a function as a relation $F \subseteq S \times T$ of valid source-target pairs $(s, t)$, such that for every $s \in S$ in there exists a unique $t \in T$ with $(s, t) \in F$ (see Figure \@ref(fig:function-subset)). In other words, every source relates to exactly one target:
 
@@ -112,7 +112,7 @@ A function is a bijection and only if it is both surjective and injective, which
 knitr::include_graphics("./figures/functions-types.png") 
 ```
 
-#### More on bijections
+#### More on bijections {#bijections}
 
 Bijections are special since they encode the idea of reversible transformations. Any bijective function $f$ has an associated inverse $f^{-1}$ such that $f^{-1}(f(x)) = x$ and $f(f^{-1}(y)) = y$ for all $x$ and $y$ in the function's domain and codomain, respectively. In other words, we can keep translating the value from the domain to codomain and back without losing any information. Later we will see that, when the elements $x$ and $y$ possess additional structure, we call a bijection that preserves this structure an [*isomorphism*](#isomorphism).
 
@@ -186,7 +186,7 @@ $$f_!(f^*(\{Paris, Rome \})) = f_!(\{ Sam, Dominic \}) = \{ Rome \}$$
 
 This odd relationship between the the image and the pre-image is due to the fact that the image is actually something called *left adjoint* [@baez2023; @fong2019]. Adjoints can be thought of as the "best approximate answer to a problem that has no solution" [no inverse, @baez2023], and they come in pairs - a left and a right adjoint - with the left adjoint being more permissive or "liberal" and the right adjoint being more strict or "conservative" [@baez2023]. Proper treatment of adjoints is beyond the scope of this thesis, however.
 
-### Partitions
+### Partitions {#partitions}
 
 Another interesting simple mathematical constructions are partitions. Like functions, partitions are a type of relation, and can in fact be constructed using functions. That is, if we have a "labeling" function $f$, we can construct a partition as follows:
 
@@ -231,7 +231,7 @@ p_3(a) = \begin{cases}
 \end{cases}
 $$
 
-### Preorders
+### Preorders {#preorders}
 
 Another important class of relations are ones that have to do with order. Among these, one of the simplest constructions is a preorder:
 
@@ -556,7 +556,7 @@ A group is a category with one object where every morphism is an isomorphism
 :::
 
 
-### Functors
+### Functors {#functors}
 
 Now it is time for a precise and general definition of structure preserving maps. This is what a functor is.
 
