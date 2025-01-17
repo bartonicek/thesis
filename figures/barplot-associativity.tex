@@ -3,11 +3,11 @@
 
 \begin{document}
 \begin{tikzcd}
-	& A \\
-	{A \cup B} && {A \cup B \cup C}
-	\arrow["{-\cup B}"'{pos=0.7}, from=1-2, to=2-1]
-	\arrow["{- \cup (B \cup C)}"{pos=0.7}, from=1-2, to=2-3]
-	\arrow["{- \cup C}"', from=2-1, to=2-3]
+	& S_1 \\
+	{S_2 \cup S_3} && {S_1 \cup S_2 \cup S_3 = B_1}
+	\arrow["{-\cup S_2}"'{pos=0.7}, from=1-2, to=2-1]
+	\arrow["{- \cup (S_2 \cup S_3)}"{pos=0.7}, from=1-2, to=2-3]
+	\arrow["{- \cup S_3}"', from=2-1, to=2-3]
 \end{tikzcd}
 \end{document}
 

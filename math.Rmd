@@ -467,7 +467,7 @@ Group homomorphism is a [monoid homomorphism](#monoid-homomorphism) where the pr
 
 Again, like with monoids, if a group homomorphism $f: G \to H$ is a bijection, then we speak of a group isomorphism.
 
-### Categories
+### Categories {#categories}
 
 While discussing mathematical structures like preorders, monoids, and groups, some common have been cropping up: namely, structure, equality, and structure-preserving maps. Now it is time to shift gears and define these common themes more generally. To do this, we can make use of one powerful concept: categories [@fong2019; @lawvere2009].
 
@@ -521,7 +521,7 @@ Notice that the definition above is similar to that of a bijection, however, we 
 
 Note that I have mentioned that the definition above is *one* way of defining isomorphisms, *within a category*. Without getting ahead of ourselves too much, it turns out there is another way of defining isomorphisms, *between categories*. This duality of definition of isomorphism does not cause problems, since, as was mentioned above, the definition of a category is broad enough such that the objects in a category can be other categories, and the morphisms can be transformations between categories. More on this later.   
 
-#### Algebraic structures as categories
+#### Algebraic structures as categories {#algebraic-as-categories}
 
 It might not seem that the broad, abstract definition of a category can buy us much. However, as we will see, it allows us to reason about all of the algebraic structures we have discussed so far. To start off:
 

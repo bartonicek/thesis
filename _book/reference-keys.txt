@@ -246,3 +246,17 @@ fig:barplot-preorder
 structure-preserving-maps
 statistics-and-structure-preserving-maps
 fig:barplot-associativity
+stackable-vs.-non-stackable-statistics
+some-statistics-are-not-stackable
+plots-as-preorders
+foreshadowing-preserving-structure
+the-graph-behind-the-graph
+preorders-as-a-categories
+algebraic-as-categories
+preorders-as-categories
+stackable-summaries-a-sortie-into-category-theory
+generalizing-preorders-categories
+structure-preserving-maps-functors
+stackable-summaries-a-sojourn-into-category-theory
+aggregation-a-functor-from-a-preorder-of-subsets-to-a-preorder-of-statistics
+aggregation-a-functor-from-a-preorder-of-data-subsets-to-a-preorder-of-statistics
