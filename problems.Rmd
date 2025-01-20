@@ -383,13 +383,17 @@ The second step of any data visualization pipeline is aggregation. Specifically,
 
 A key issue in data visualization, which is also the central theme of the present thesis, concerns the relationship between graphics and statistics. Specifically, when we summarize our data and then render these summaries as geometric objects, an important question arises: can we pair arbitrary statistics and geometric objects? Or are there constraints which limit which statistics and geometric objects can be effectively combined, particularly when interaction is involved?
 
-The approach of treating graphics and statistics as independent components is highly appealing. Indeed, it is the cornerstone of the immensely popular "grammar-based" model of visualization, introduced by Wilkinson in his seminal work, The Grammar of Graphics [-@wilkinson2012]. Under this model, visualizations are constructed out of independent, modular components, which include geometric objects, statistics, scales, and coordinate systems.
+#### Independence: The grammar-based model
 
-The grammar-based model offers many advantages, including simplicity and expressive power, contributing to its widespread adoption in many data visualization systems [see e.g. @mcnutt2022; @kim2022; @vanderplas2020; @wickham2010; @satyanarayan2014; @satyanarayan2016]. The canonical example is the famous `ggplot2` package [@wickham2010]. In `ggplot2`, plots are built out of components such as geometric objects (called `geoms`), statistical summaries (`stats`), and scales. These components can be flexibly combined, allowing the user to express a wide range of graphics using a small set of primitives. The expressive power of `ggplot2` has made it one of the most popular R packages of all time.^[Being the top most downloaded CRAN package as of 4th of December 2024, @rmeta2024].
+The approach of treating graphics and statistics as independent entities is highly appealing. Indeed, it is the cornerstone of the immensely popular "grammar-based" model of visualization, introduced by Wilkinson in his seminal work The Grammar of Graphics [-@wilkinson2012]. Under this model, visualizations are constructed out of independent, modular components, such as geometric objects, statistics, scales, and coordinate systems. See the following quote by Wilkinson [-@wilkinson2012, pp. 14-15]:
+
+> "We have tried to avoid adding functions, graphs, or operators that do not work independently across the system. There are doubtless many statistical graphics the system in this book cannot completely specify. We can add many different graphs, transformations, types of axes, annotations, etc., but there are two limitations we will always face with a formal system.
+
+The grammar-based model offers many advantages, including simplicity and expressive power. This has contributed to its widespread adoption and implementation in many data visualization systems [see e.g. @mcnutt2022; @kim2022; @vanderplas2020; @wickham2010; @satyanarayan2014; @satyanarayan2016]. The canonical example is the famous `ggplot2` package [@wickham2010]. In `ggplot2`, plots are built out of components such as geometric objects (called `geoms`), statistical summaries (`stats`), and scales. These components can be flexibly combined, allowing the user to express a wide range of graphics using a small set of primitives. The expressive power of `ggplot2` has made it one of the most popular R packages of all time.^[Being the top most downloaded CRAN package as of 4th of December 2024, @rmeta2024].
 
 However, despite its advantages, the grammar-based model has one fundamental flaw: graphics and statistics are not truly independent. Instead, the visual representation of data must be congruent with its mathematical properties. This constraint, while present even in static visualizations, becomes especially critical in interactive contexts. Let's illustrate this point with an example of real-world data.
 
-#### Stacking and highlighting are not (only) graphical operations {#stacking-not-graphical}
+#### Limits of independence {#stacking-not-graphical}
 
 For this example, I will use famous data set from a study on the effect of smoking on child lung capacity [@tager1979; @kahn2005]. In the study, the researchers measured children's forced expiratory volume (FEV), and recorded it alongside age, height, sex, and smoking status.
 
@@ -460,9 +464,9 @@ knitr::include_graphics("./figures/grammar-barplot-means.png")
 
 At a glance, the plot in \@ref(fig:grammar-barplot-means) looks fine. However, what do the heights of the stacked bars actually represent? Each coloured bar segment represents a mean of the `fev` variable, grouped by the levels defined by the product of the `age` and `smoke` variables. By stacking the bars on top of each other, we are essentially summing up the average FEV of smokers and non-smokers, within the given age category.
 
-#### Some statistics are not stackable
+#### Some statistics are stackable but others are not
 
-The visualization in \@ref(fig:grammar-barplot-means) is problematic because the bar heights lack a meaningful statistical interpretation. The sum of group means is not something that most consumers of visualizations would know how to interpret or care about. Whereas before, in Figure \@ref(fig:grammar-barplot-counts), the heights of the stacked bars represented valid overall counts - the number of smokers and non-smokers within a given age category combined - however, this is no longer the case  in Figure \@ref(fig:grammar-barplot-means). The sum of the group means is different from the mean of the combined cases, and so is the mean of the group means.
+The visualization in \@ref(fig:grammar-barplot-means) is problematic because the bar heights lack a meaningful statistical interpretation. The sum of group means is not something that most consumers of visualizations would care about or know how to interpret. Compare that with the previous example. Before, in Figure \@ref(fig:grammar-barplot-counts), the heights of the stacked bars represented valid overall counts - the number of smokers and non-smokers within a given age category combined. However, this is no longer the cae in Figure \@ref(fig:grammar-barplot-means). The sum of the group means is different from the mean of the combined cases, and neither is the mean of the group means. Fundamentally, in `ggplot2`, this problem arises because "stacking" is implemented as a purely graphical operation, however, as we can see, this is clearly not the case.
 
 Many data visualization researchers have explicitly warned about this problem:
 
@@ -472,7 +476,7 @@ Many data visualization researchers have explicitly warned about this problem:
 
 >"[...] We do this to ensure that aggregate statistics are always computed over the input data, and so users do not inadvertantly compute e.g., averages of averages, which can easily lead to misinterpretation." [@wu2022]
 
-Based on these quotes, one might get the impression that we can only ever "stack" or "highlight" sums and counts, to get a valid combined summary statistics. However, take a look at the following plot:
+Based on the quotes above, one might get the impression that we can only ever "stack" or "highlight" sums and counts, to get a valid combined summary statistics. However, take a look at the following plot:
 
 ```{r}
 # Code is not included because this plot cannot be recreated 
@@ -487,11 +491,11 @@ knitr::include_graphics("./figures/grammar-barplot-maximums.png")
 
 Here, in Figure \@ref(fig:grammar-barplot-maximums), we again plot FEV for smokers and non-smokers across the different age groups, however, this time, we display the *maximum FEV* on the y-axis. From this plot, we can see that, in most of the age categories which included smokers (age 9 and up), the child with the highest lung capacity was a non-smoker, although there were a few exceptions (ages 11, 16, and 18). 
 
-However, notice one important feature of the plot above: the heights of the "stacked" bars represent a valid overall summary. Taking grouped data, summarizing each group by its maximum, and then taking the maximum of those maxima yields the overall maximum. That is, *the maximum of maxima is a valid maximum of the combined cases*. While the general usefulness of the plot in Figure \@ref(fig:grammar-barplot-maximums) could be debated - given that each bar effectively represents a single data point (the group maximum), and that, in small data sets, the maximum can be a highly variable - the plot still demonstrates one important, undeniable fact: summaries other than sums and counts can be meaningfully "stacked."
+Notice one important feature of the plot above: the heights of the "stacked" bars represent a valid overall summary. Taking grouped data, summarizing each group by its maximum, and then taking the maximum of those maxima yields the overall maximum. That is, *the maximum of maxima is a valid maximum of the combined cases*. While the general usefulness of the plot in Figure \@ref(fig:grammar-barplot-maximums) could be debated - given that each bar effectively represents a single data point (the group maximum), and that, in small data sets, the maximum can be a highly variable - the plot still demonstrates one important, unshakeable fact: summaries other than sums and counts can be meaningfully "stacked."
 
-#### Why is stacking important?
+#### Advantages of stacking: Part-whole relationship
 
-However, before we go on to discuss what makes certain statistics stackable, we first need to address the issue of of why stacking desirable. Specifically, some might argue that stacking is only one way of presenting partitioned data, and that we could equally well present "unstackable" summaries such as the averages in Figure \@ref(fig:grammar-barplot-means) by plotting the corresponding bars side by side (a technique know as dodging), or by plotting them on top of each other in semi-transparent layers, see \@ref(fig:dodging-layering):
+Before we go on to discuss what makes certain statistics stackable, we first need to address the issue of of why is stacking useful. Specifically, some might argue that stacking is only one way of presenting partitioned data, and that we could equally well present "unstackable" summaries such as the averages in Figure \@ref(fig:grammar-barplot-means) by plotting the corresponding bars side by side (a technique know as dodging), or by plotting them on top of each other in semi-transparent layers, see \@ref(fig:dodging-layering):
 
 ```{r dodging-layering}
 #| echo: false
@@ -499,15 +503,21 @@ However, before we go on to discuss what makes certain statistics stackable, we 
 knitr::include_graphics("./figures/grammar-dodging-layering.png") 
 ```
 
-However, I argue that, in the context of interactive visualization, stacking or "highlighting" has certain advantages over dodging and layering [see also @roberts2000; @wilhelm2008]. Specifically, a fundamental strength of stacking is that parts of the objects "add up" to the whole. As a result, the whole object provides a kind of a bound on the highlighted subsets, simplifying the figure's implementation and visual appearance.
+However, I contend that, while dodging and layering are valuable techniques for static visualization, stacking offers significant advantages in interactive contexts. The issue comes down to how the three techniques represent the relatedness of data subsets. In dodging and layering, the only indication of the fact that two subsets are related is their spatial proximity. In contrast, in stacking, the stacked segments are both close together in space (proximity) and also combine together to form a meaningful object (part-whole relationship). Thus, in a stacked barplot, we can interpret an individual stacked segment as a *highlighted part* of a bar, whereas the same is not true for dodging or layering. This distinction has important implications for a figure's visual properties and interactive behavior [see also @roberts2000; @wilhelm2008].
 
-For instance, in a stacked barplot, the heights of the individual segments add up to the height of the whole bars. This is useful when combined with linked selection, since, even when the heights of the highlighted segments change, the heights of the whole bars remain the same. As a result, we can keep the upper y-axis limit fixed. 
+Take, for instance, the typical stacked barplot. In a stacked barplot, the heights of the stacked segments sum to the height of the whole bar, providing a fixed upper bound and a clear visual anchor. This is particularly useful with linked selection. Even when the heights of the segments change, the total bar height remains constant, allowing us to maintain a fixed upper limit on the y-axis, for instance. Besides other advantages, this also reduces the computational overhead, since the axis limits only need to be recomputed *when the heights of the whole bars change* (e.g. changing binwidth in a histogram), not when the heights of the segments change. 
 
-The same is not true for dodging and layering. Here, the heights of the bars are not necessarily bound by any value. For instance, in a dodged barplot the heights of the highlighted segments may become greater than those of the unselected segments. This means that we either have to make the upper y-axis limit reactive, dispensing with the context that the limit provides, or risk the bars "overflowing" beyond the bounds of the plot. Further, the fact that the segments are not bound by anything leads to subpar visuals. Research shows that translating and looming stimuli capture attention [@franconeri2003], and since the dodged and layered segment lengths are not visually anchored by anything, the viewer cannot predict how far they will stretch creates a distracting visual effect.  
+This is not the case for dodging and layering, see Figure \@ref(fig:stacking-vs-dodging). Here, the heights of the bars are not bound by any value, such that the heights of the selected segments can exceed those of unselected segments. This forces us to choose between making the upper y-axis limit reactive (losing the context that the limit provides, each time seleciton happens), or risking the bars "overflowing" the plot area. Furthermore, this lack of visual anchoring creates suboptimal visuals. Research shows that translating and looming stimuli capture attention [@franconeri2003]. Because dodged (or layered) segments lengths lack a visual anchor, they can move around (stretch or shrink) in unpredictable ways in response to selection, creating a distracting visual effect:
 
-This issue is also discussed by @wilhelm2008, who conceptualizes it in the context of three linked visualizations strategies: replacement, overlaying, and repetition. Overlaying and repetition are essentially equivalent to stacking and dodging, whereas replacement means that the entire visualization gets replaced whenever linked selection occurs. Wilhelm argues that replacement is a flawed strategy, since it means that the context of the previous visualization such as axis limits is lost whenever selection occurs. Likewise, he suggests that repetition is a less popular strategy since it requires the plot to be re-arranged when selection happens. Finally, he also points out two problems with overlaying: the fact that plot parameters are inherited from the plot representing the whole data set, and that parts of the original plot may become obscured by the highlighted subset. Overall, he seems to favor repetition over the other two methods. 
+```{r stacking-vs-dodging}
+#| echo: false
+#| fig-cap: "Stacking has advantages over dodging (and layering) when it comes to displaying linked selection. Plots left to right show a simulated static snapshot of what happens as more cases are selected (red). In a stacked barplot (top row), the heights of the higlighted segments are always bound by the height of the whole bar, and so the outline of the figure remains constant. In contrast, in a dodged barplot, the bar segment heights are not bounded, leading to the outline of the figure fluctuating dramatically (notice the changing upper y-axis limit)."
+knitr::include_graphics("./figures/stacking-vs-dodging.png") 
+```
 
-My conclusion is different from that of @wilhelm2008: I argue that, while overlaying/stacking is less flexible than the other two methods, it is nevertheless the best, since it ensures that the context of the whole data is always preserved. Conversely, repetition/dodging suffers from the same problem that replacement does. Specifically, if we draw highlighted subsets as separate objects, then we either have to make the axis limits reactive (leading to a loss of context), or risk that the highlighted objects may extend beyond these limits. What @wilhelm2008 sees as one of the problems of overlaying - the fact that plot parameters are inherited from the whole data - I instead see as a fundamental strength. The part-whole relationship between the highlighted segments ensures that interaction preserves context, and also reduces the amount of computation that needs to be done.
+The only reference I have been able to find which addresses this issue directly is @wilhelm2008. Wilhelm outlines three linked visualization strategies: replacement, overlaying, and repetition. Within the context of the three techniques discussed above (stacking, dodging, and layering), overlaying essentially conflates both stacking and layering, repetition is equivalent to dodging, and replacement involves re-rendering the visualization completely upon selection. Wilhelm argues that replacement is a flawed because it entirely discards contextual information such as axis limits. He also notes that repetition is less common due to the necessity of re-arranging the plot upon selection. Finally, he identifies two issues with overlaying: the fact that plot parameters are inherited from the plot representing the whole data set, and the fact that parts of the original plot may become obscured by the highlighted subset. Ultimately, he appears to favor repetition over the other two methods.
+
+My conclusion diverges from @wilhelm2008. I contend that, while overlaying/stacking is less flexible than the other two methods, it is nevertheless the superior, since it ensures that the context of the whole data is always preserved. Conversely, repetition/dodging suffers from the same contextual loss as replacement. Specifically, if we draw highlighted subsets as separate objects, then, in the general case, we either have to make the axis limits reactive (leading to loss of context), or risk that the highlighted objects may exceed the plot area. What @wilhelm2008 sees as one of the problems of overlaying - the fact that plot parameters are inherited from the whole data - I instead see as a fundamental strength. The part-whole relationship between the highlighted segments ensures that interaction preserves context, and also reduces computational overhead.
 
 ### Stackable summaries: A sojourn into Category Theory
 
@@ -519,20 +529,33 @@ Further, I have made the argument that, when summarizing our data, we should cho
 
 #### Generalizing preorders: Categories
 
-Before, I had formalized the hierarchy of data subsets as a preorder. Now, we need to take a further step towards abstraction by describing preorders within the framework of category theory, specifically as categories.
+Before, I had formalized the hierarchy of data subsets as a preorder. Now, we need to take one step further towards abstraction by describing preorders within the framework of category theory, specifically as categories.
 
-Although often perceived as complex, the definition of a [category](#categories) is actually quite straightforward. In simple terms, a category $\mathcal{C}$ is a collection of objects (denoted as $\text{Ob}(\mathcal{C})$), connected by sets of arrows (morphisms), with four fundamental properties: 
+Although often perceived as complex, the definition of a [category](#categories) is actually quite straightforward. In simple terms, a category $\mathcal{C}$ is just a collection of objects, connected by arrows, that conforms to a few properties. More specifically, when we have a category $\mathcal{C}$:
 
-\newcommand\then{⨾}
+- We have a collection of objects $\text{Ob}(\mathcal{C})$
+- For every pair of objects $c_1, c_2 \in \text{Ob}(\mathcal{C})$, there is a set of of arrows (morphisms) $c_1 \to c_2$, $\mathcal{C}(c_1, c_2)$
 
-- Every object $c \in \text{Ob}(\mathcal{C})$ has an arrow $\text{id}_c$ pointing to itself (called the identity morphism)
+Further:
+
+- Every object $c \in \text{Ob}(\mathcal{C})$ has special arrow $\text{id}_c$ pointing back to itself (called the identity morphism)
 - Arrows compose. That is, if there is an arrow $f$ from object $c_1$ to object $c_2$, and an arrow $g$ from object $c_2$ to object $c_3$, we can define a composite arrow $f \then g$ from $c_1$ to $c_3$
+
+Finally, the arrows need to conform to two properties:
+
 - Composing with the identity morphism leaves arrows unchanged: $\text{id}_{c_1} \then f = f \then \text{id}_{c_2} = f$
 - Composition is associative: $f \then (g \then h) = (f \then g) \then h = f \then g \then h$
 
+For example, the following is a diagram of a simple category with 2 objects and a single non-identity morphism, called $\underline{\textbf{2}}$:
+
+```{r category-two1}
+#| echo: false
+knitr::include_graphics("./figures/category-two.png")
+```
+
 What are the objects? What are the arrows? That is all left for us to specify. The abstract nature of the definition can make it difficult to grasp initially, however, there are some fairly straightforward examples that can help. For instance, one simple class of categories are those where the objects $c \in \text{Ob}(\mathcal{C})$ are elements of some set. However, it is important to keep in mind that the definition is far, far broader - the objects could themselves be sets, more complex algebraic structures such as groups, rings, or graphs, or even entire categories.    
 
-One example of a category where the objects are elements in a set is a preorder. Specifically, given a preorder on a set $S$, define the objects $c \in \text{Ob}(\mathcal{C})$ as the elements in $s \in S$, and, for any two objects $a$, $b$, define at most one morphism $a \to b$ if $a \leq b$ (and no morphism if $a \not \leq b$). Then, the two properties of preorders just fall out of the definition of a category:
+It can be shown that every preorder is in fact a category. Specifically, given a preorder on a set $S$, define the objects $c \in \text{Ob}(\mathcal{C})$ as the elements in $s \in S$, and, for any two objects $a$, $b$, define at most one morphism $a \to b$ if $a \leq b$ (and no morphism if $a \not \leq b$). Then, the two properties of preorders just fall out of the definition of a category:
 
 - Reflexivity: that is just the identity morphism. For every $c \in \text{Ob}(\mathcal{C})$, we have $\text{id}_c : c \to c$
 - Transitivity: that is just composition of morphisms. Given $f: a \to b$ ($a \leq b$) and $g: b \to c$ ($b \leq c$), we can define $h: a \to c$ as $h = f \then g$ ($a \leq c$)
@@ -546,36 +569,51 @@ knitr::include_graphics("./figures/barplot-preorder.png")
 
 Here, the objects are again just the data subsets, such as the whole data set $W$, the bars $B_i$, and the segments $S_j$. The morphisms are the arrows indicating the set inclusion relationship. The fact that there is an arrow between $S_1$ and $B_1$, but no arrow between $S_1$ and $S_2$ simply means that segment 1 is a subset of bar 1, but segments 1 and 2 are disjoint. As mentioned above, reflexivity and transitivity fall out of the definition of a category.
 
-While the benefits of this abstract reformulation of preorders might not be immediately apparent, I encourage the reader to bear with me. In the next section, I will show the advantages of thinking about our data in this way.
+While the benefits of this abstract reformulation of preorders might not be immediately apparent, I encourage the reader to bear with me. In the next sections, I will show the advantages of thinking about our data and visualizations categorically.
 
 #### Structure preserving maps: Functors
 
-A fundamental concept in category theory is that of a structure-preserving map or a [functor](#functors). As the name suggests, a functor is a mapping from one category to another, such that the properties of the former category are preserved or reflected in its embedding in the latter [this can also be thought of as drawing a diagram of the former category inside the latter, @fong2019]. 
+A fundamental concept in category theory is that of a structure-preserving map or a [functor](#functors). As the name suggests, a functor is a mapping from one category to another, such that the properties of the first category are preserved or reflected in its embedding within the second [this can also be thought of as drawing a diagram of the the first category inside the second category, @fong2019]. 
 
 In category theoretic terms, a functor $F: \mathcal{C} \to \mathcal{D}$ is a mapping from category $\mathcal{C}$ to category $\mathcal{D}$ such that:
 
 - Every object in $c \in \text{Ob}(\mathcal{C})$ is mapped to some object $d \in \text{Ob}(\mathcal{D})$
 - Every morphism $f: c_1 \to c_2$ in $\mathcal{C}(c_1, c_2)$ is mapped to some morphism in $\mathcal{D}(F(c_1), F(c_2))$, i.e. $F(f): F(c_1) \to F(c_2)$
 
-Further, this mapping is subject to two properties:
+Further, this mapping is subject to two fundamental properties:
 
 - Identities are preserved: $F(\text{id}_c) = \text{id}_{F(c)}$
 - Composition is too: $F(f \then g) = F(f) \then F(g)$
 
-The first property simply states that objects cannot be separated from their identities. The second property is more interesting, since it tells us that all compositions (chains of arrows) must be preserved. Other than that, we are free to map the objects and arrows as we wish. We can map multiple objects in $\text{Ob}(\mathcal{C})$ to a single object in $\text{Ob}(\mathcal{D})$, "squish" a morphism (or a chain of morphisms) in $\mathcal{C}$ by mapping it to an identity morphism in $\mathcal{D}$, or "stretch" a morphism in $\mathcal{C}$ by mapping it to a composite morphism in $\mathcal{D}$. However, we cannot "tear" or "rip" any chain of morphisms in $\mathcal{C}$ into multiple parts in $\mathcal{D}$.  
+The first property simply states that objects cannot be separated from their identities. The second property is more interesting, since it tells us that all compositions (chains of arrows) must be preserved. Other than that, we are free to map the objects and arrows as we wish. We can map multiple objects in $\text{Ob}(\mathcal{C})$ to a single object in $\text{Ob}(\mathcal{D})$, "squish" a morphism (or a chain of morphisms) in $\mathcal{C}$ by mapping it to an identity morphism in $\mathcal{D}$, or "stretch" a morphism in $\mathcal{C}$ by mapping it to a composite morphism in $\mathcal{D}$. However, we cannot "tear" or "rip" any morphism or chain of morphisms in $\mathcal{C}$ into multiple parts in $\mathcal{D}$. 
+
+This second property of preserving composition can be described by the following commutative diagram:
+
+```{r functor}
+#| echo: false
+#| fig-cap: "A commutative diagram of showing how a functor $F$ preserves associativity."
+knitr::include_graphics("./figures/functor.png")
+```
+
+Here, $A$, $B$, and $C$ are three objects in category $\mathcal{C}$ and $F(A)$, $F(B)$, and $F(C)$ are the same three objects mapped to category $\mathcal{D}$. Since $A$ maps to $B$ via $f$, and $B$ maps to $C$ via $g$ (both in $\mathcal{C}$), we can compose the morphisms and map $A$ to $C$ directly via $f \then g$. When we apply a functor, this property needs to be preserved for any such three objects $A$, $B$, and $C$.  
+
+In simple terms, the second property of functors means that, if we have a way to move from $A$ to $C$ in $\mathcal{C}$, we *must* have a way to move from $F(A)$ to $F(C)$ in $\mathcal{D}$ (even if it means staying in the same place - for example, we may map $A$, $B$, $C$ to the same object in $\mathcal{D}$, and map $f$ and $g$ to the identity morpism).
 
 #### Aggregation: A functor from a preorder of data subsets to a preorder of statistics
 
-As mentioned before, we start with a preorder of data subsets ordered by inclusion, which can be re-interpreted as a category. We would like to summarize these subsets in a way that preserves the preorder's structure. Is there a way to describe this? Indeed there is: a functor.
+As mentioned before, we start with a preorder of data subsets ordered by inclusion, which can be re-interpreted as a category. We would like to summarize these subsets in a way that preserves the preorder's structure. Is there a formal way to do this? Indeed there is: via a functor. 
 
-But before we go on to do that, we need to do one more trick. We can recast the set inclusion relations in Figure \@ref(fig:barplot-preorder) as unions. Specifically, instead of the arrows simply denoting the fact that, for example, segment 1 is a subset of bar 1, we can be explicit about the fact that we can get to bar 1 by taking the union of segment 1, and *all the other segments within the bar*: 
+But before we go on to do that, we need to one more trick. We can recast the set inclusion relations in Figure \@ref(fig:barplot-preorder) as set union. Specifically, instead of the arrows simply denoting the fact that, for example, segment 1 is a subset of bar 1, we can be explicit about the fact that, to get bar 1, we need to take the union of segment 1 and *all the other segments within the bar*: 
 
-```{r}
+```{r barplot-preorder2}
 #| echo: false
+#| fig-cap: "The preorder of data subsets corresponding to a barplot, this time ordered by set union."
 knitr::include_graphics("./figures/barplot-preorder2.png") 
 ```
 
-Now, an important fact about set union is that it is associative. Suppose we have three disjoint subsets of our data $S_1$, $S_2$, and $S_3$. Since set union is an associative operation, we know that we can take the union of the three subsets in any order and always end up with the same result. For example, we could first take the union of sets $S_1$ and $S_2$, and then union that with $S_3$ (i.e. $B_1 = (S_1 \cup S_2) \cup S_3$), or we could first union $S_2$ and $S_3$ and then union that with $S_1$ (i.e. $B_1 = S_1 \cup (S_2 \cup S_3)$). This fact can be described by the following commutative diagram:    
+Now, imagine trying to explain the diagram above to a computer. As humans, we have internalized the fact that set union is associative (meaning that the order in which we combine sets does not matter). As such, we can naturally interpret the statement "a bar subset is a union of all segment subsets" as a single action: taking all segment subsets and "smushing" them together. However, computers do not work this way. Instead, they process instructions sequentially. For a computer, there is no such thing as a "global" union of subsets, there is only a sequence of pairwise unions. In other words, you cannot tell a computer: "take all sets and combine them together", instead, you can only tell it: "take $S_1$ and combine it with $S_2$, take the result and combine that with $S_3$, ..." and so on.
+
+However, we can describe the fact that we want the sequential operations to be associative via a diagram. Specifically, the following commutative diagram: 
 
 ```{r barplot-associativity}
 #| echo: false
@@ -583,8 +621,39 @@ Now, an important fact about set union is that it is associative. Suppose we hav
 knitr::include_graphics("./figures/barplot-associativity.png") 
 ```
 
-This fact is also true of taking the union of the subsets of our data. In other words, *the subset corresponding to a bar will be the same, no matter in which order we take the union of subsets corrresponding to segments.* 
+Here, like in any commutative diagram, two parallel paths indicate the same result. Starting at $S_1$, we can either take the *long path*, and combine $S_1$ with $S_2$, and then combine the result with $S_3$, or take the *short path*, and combine $S_1$ with the union $S_2 \cup S_3$ directly. The diagram in Figure \@ref(fig:barplot-associativity) merely tells us that, no matter which path we take, we always end up with the same result.
 
+We could imagine drawing these commutative diagrams for any possible sequence of subsets. For example, the following diagram shows all the ways three subsets can be sequentially combined to form their union: 
+
+```{r barplot-associativity2}
+#| echo: false
+#| fig-cap: "All the ways three subsets can be combined into one superset. Arrow labels are omitted to prevent the diagram from becoming cluttered."
+knitr::include_graphics("./figures/barplot-associativity2.png") 
+```
+
+Further, we could actually draw all of these possible paths inside \@ref(fig:barplot-preorder2). However, as you can imagine, with so many arrows and nodes, the figure would quickly become very busy - in Figure \@ref(fig:barplot-associativity2), the number of paths grows as a factorial of the number of bottom nodes [@fong2019]. Nevertheless, this structure *is there*, implicitly: we know that we can combine the data subsets corresponding to bar segments in any order, and end up with a valid bar subset.
+
+Thus, when we go on to map our data from the space of data subsets into a space of statistics, we want to preserve this web of arrows. In the microcosm of three segment subsets combining into a bar subset, we want the following diagram to commute:
+
+```{r}
+#| echo: false
+#| fig-cap: "Commutative diagram of the functor from the space of the data subsets to the space of summary statistics. The top triangle represents the associativity of taking the union of data subsets, F represents the operation of summarizing a set via a summary statistic, and otimes represents the operation of combining two summary statistics together."
+knitr::include_graphics("./figures/barplot-functor.png")
+```
+
+This is precisely the diagram of a functor from Figure \@ref(fig:functor). The functor $F$ here represents the action of taking a subset of data and summarizing it. For example, in a barplot where we sum some numerical variable, the action of the functor $F$ on an object (subset) $S_1 = \{ 10, 12, 15, 14 \}$ may be:
+
+$$F(S_1) = F(\{ 10, 15, 12 \}) = 10 + 15 + 12 = 27$$
+
+The arrow labels $- \otimes F(\cdot)$ represent the action of the functor on the morphisms. Specifically, we go from the operation of combining subsets via set union, to the operation of combining summary statistics. For example, the action of the same functor on composition of morphisms (union of subsets), of $S_1 = \{ 10, 15, 12 \}$ and $S_2 = \{ 11, 9\}$ may be:
+
+$$F(S_1 \cup S_2) = F(S_1) \otimes F(S_2) = F(\{10, 15,  12 \}) + F(\{ 11, 9 \}) = 27 + 20 = 47$$
+
+Most importantly, the commutative diagram tells us the following:
+
+> We can either first combine the data subsets via union and then summarize the resulting superset, or first summarize the subsets and then combine the summaries *and the result will be the same.*
+
+This is the most important point in this section, and one of the most important points in the whole thesis. The definition of a functor tells us which summary statistics can meaningfully preserve the part-whole relationships found in a hierarchical partitioning in the data, and this in turn tells us whether they will be "stackable" and behave well under linked selection. 
 
 #### Transforming summaries
 

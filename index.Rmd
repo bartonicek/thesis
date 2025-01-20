@@ -74,4 +74,5 @@ clean_theme <- theme_bw() +
 theme_set(clean_theme)
 ```
 
+\newcommand\then{⨾}
 

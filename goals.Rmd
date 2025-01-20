@@ -37,7 +37,7 @@ user can only compare the current image with a mental copy of the previous image
 >
 > [@wilhelm2008, pp. 210]
 
-Thus, linked selection had to be directly integrated into the data visualization pipeline, or rather, the data visualization pipeline had to be built around this feature. This was a significant programming challenge. Crucially also, I aimed for a consistent linked selection behavior across *all* implemented plot types. This necessitated careful consideration of the issues discussed in Section @ref(problems).
+Thus, linked selection had to be directly integrated into the data visualization pipeline, or rather, the data visualization pipeline had to be built around this feature. This was a significant programming challenge. Crucially also, I aimed for a consistent linked selection behavior across *all* implemented plot types. This necessitated careful consideration of the issues discussed in Section \@ref(problems).
 
 Other important features which also had to be directly integrated into the data visualization pipeline were parameter manipulation and representation switching. These features give the user the ability to quickly see alternative views of their data and discover trends that they may otherwise miss (see Sections \@ref(changing-representation)). This makes them highly desirable. 
 

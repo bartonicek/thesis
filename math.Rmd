@@ -131,8 +131,6 @@ $$h(x) = g(f(x))$$
 
 There are several different ways to denote function composition. One is to write out the composition explicitly using the variable $x$ as in the example above. However, mathematical texts often omit the explicit reference to the variable ($x$) and write the composition in one of several ways:
 
-\newcommand\then{⨾}
-
 1. $h = g \circ f$ (read: "apply $g$ after $f$")
 2. $h = gf$ (same as above)
 3. $h = f \then g$ (read "apply $f$ then $g$")
