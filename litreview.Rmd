@@ -4,7 +4,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-# Literature review {#litreview}
+# Background {#litreview}
 
 ## Brief history of interactive data visualization {#brief-history}
 
@@ -232,15 +232,6 @@ Of course, many papers discuss both concrete implementations of interactive data
 
 To ensure clarity throughout thesis, the term *"interactive data visualization"* will primarily refer to concrete charts or figures. When referring to the *practice* of interactive data visualization, I will attempt to use more active phrasing such as *"interacting with a visualization"* or *"user's interaction with a visualization"*, to indicate that what is being referred to is the activity or process of visualization, rather than any concrete object or implementation. 
 
-## Visualization goals
-
-@ward2015 outlined several common goals for creating interactive visualizations:
-
-- Exploration: The user wants to examine a data set
-- Confirmation: The user wants to verify a fact or a hypothesis
-- Presentation: The user wants to use the visualization to convince or inspire an audience 
-- Interactive presentation: The user wants to take the audience on a guided tour of key insights
-
 ### What is "interactive enough"?
 
 Even when we use the term "interactive data visualization" to refer to concrete charts or figures, the meaning still remains fairly ambiguous. What is the bar for calling a figure "interactive"? What features should interactive figures have? These criteria vary a lot between data visualization researchers, such that the same figure may be considered interactive by some but not by others. 
@@ -388,82 +379,56 @@ Second, there is the issue of who should dispatch and respond to selection event
 
 Third, there is the issue of what to link. In the case of data represented by a two-dimensional table or data frame, the most common method is to link cases taken on the same observational level (identity linking), such that each row gets assigned a value representing the selection status [@urbanek2003; @wilhelm2008; @wills2008]. However, in the case of more complex data, more advanced linking schemes are also available, such as hierarchical and distance-based linking [@wilhelm2008; @urbanek2011]. 
 
-Third, there is the issue of how to display the selection. 
+Third, there is the issue of displaying selection. This issue will be touched upon in more detail later, in Section \@ref(problems). Briefly, @wilhelm2008 identifies three methods for displaying linked selection: replacement, overlaying, and repetition. Replacement involves replacing the entire plot with a new graphic; overlaying involves superimposing the objects representing the selected subsets on top of the original objects; and repetition involves displaying the selected objects alongside the original ones. Wilhelm identifies issues with all three techniques, although he does seem to generally come down in favor of repetition (however, see my argument in Section \@ref(stacking-part-whole)).
 
-## The highlighting problem
+A fourth and final issue in linked selection, and arguably one of the core concerns of the present thesis, is consistency. This topic will be coming up again and again, particularly in Section \@ref(problems). Consistent and predictable features are a cornerstone of good user interface design [see e.g. @ruiz2021]. However, as discussed above, the design an interactive data visualization system supporting linked selection presents many design decisions, each with its own set of implementation constraints. Achieving a consistent user interface through the right combination of these decisions is a known challenge [@urbanek2011]. For example, while the approach of allowing objects to independently dispatch and display selection events offers great flexibility, it can also lead to a less intuitive user experience. Put simply, when users select objects in one linked plot by clicking them, they might reasonably expect the same functionality in other plots. If that is not the case (if, for instance, other plots support only displaying but not dispatching selection events), their expectation will be violated. Thus, it might be reasonable to require that all objects can both dispatch and display selection events. However, this places some fundamental constraints on these objects. For instance, how do we draw a lineplot line where only some of the underlying cases are selected? Do we draw a sequence of differently-coloured line segments, leading to a striped "candy cane" pattern (see Figure \@ref(fig:line-consistency))? Do we draw two separate lines? If so, how do we then dispatch selection events on these lines which are already conditional on selection? Like turning over a rock and disturbing a host of creepy-crawlies, linked selection reveals a complex web of visualization design challenges that defy a satisfying, generic solution.
 
-As was discussed in the previous section, linked selection is one of the most highly ranked interactive features in interactive data visualization. It allows us to mark specific cases in one plot, and see the corresponding summary statistics in all the other plots. In this way, it allows us to quickly explore different dynamically-generated subsets of our data, within the context of the whole data set.
-
-### Linked selection and stacking
-
-When we engage in linked selection, we want to highlight parts of objects corresponding to the selected cases. Thus, fundamentally, we need to break each object into parts. We then need some way of representing those parts, in a way that visually preserves the hierarchical nature of the relationship (it needs to be clear that the parts are still parts of the whole object).
-
-In data visualization, there are three common methods for dealing with objects that have been split into parts: stacking, dodging, and layering. Let's briefly illustrate these on the example of the barplot. We start with the whole bars and then break each bar into multiple segments based on the levels of another variable (such as selection status). Now, what we do with these segments will differ based on the technique we use. When stacking, we plot the bar segments vertically on top of each other. When dodging, we plot the bars side-by-side, as "clusters". Finally, when layering, we plot bar segments in separate graphical layers and use partial transparency to mitigate overplotting.
-
-```{r}
+```{r line-consistency}
 #| echo: false
-#| fig-cap: "Examples of the three methods for dealing with objects that 
-#| have been split into parts: stacking, dodging, and layering."
-#| fig-height: 3
-library(ggplot2)
-library(patchwork)
-
-mtcars$cyl <- factor(mtcars$cyl)
-mtcars$am <- factor(mtcars$am)
-
-p0 <- ggplot(mtcars, aes(cyl, fill = am, group = am)) +
-  scale_fill_manual(values = pal_dark_3) +
-  guides(fill = "none") +
-  labs(x = NULL, y = NULL) +
-  clean_theme
-
-p1 <- p0 + geom_bar() + labs(title = "Stacking")
-p2 <- p0 + geom_bar(position = position_dodge()) + labs(title = "Dodging")
-p3 <- p0 + 
-  geom_bar(position = position_identity(), alpha = 0.75) + 
-  labs(title = "Layering")
-
-p1 + p2 + p3
+#| fig-cap: "Displaying selection with line plots is tricky. Whereas a point in a scatterplot displays a single case (row) and a bar in a barplot displays a simple subset of cases, a line segment in a lineplot connects two data points. As such, it is not clear whether to highlight the segment starting at the selected point, ending at the selected point, or some combination of either (e.g. half a segment on each side of the point). Further, since the geometric representation of a line is not commutative (row order matters), we end up with a striped 'candy cane' pattern that is not easily interpretable."
+knitr::include_graphics("./figures/line-consistency.png")
 ```
 
-Much has been written about the relative merits of stacking, dodging, and layering. For example, layering is only useful with few categories, as blending many colors can make it difficult to tell the categories apart [@franconeri2021; @wilke2019]. Further, in a landmark study, @cleveland1984 showed that people tend to be less accurate when reading information from stacked bar charts as opposed to dodged bar charts. Specifically, since the lower y-axis coordinate of a stacked segment is pushed up by the cumulative height of the segments below, it becomes difficult to accurately compare segments' length, both within and across bars [@cleveland1984]. Subsequent research has independently validated these findings and expanded upon them [see e.g. @heer2010; @thudt2016; @quadri2021]. Due to this suboptimal statistical legibility, many data visualization researchers have urged caution about stacking [see e.g. @byron2008; @cairo2014; @franconeri2021], and some have even discouraged its use altogether [@kosara2016; @wilke2019]. 
-
-However, much of this research has been done with on static visualizations. I argue that, in interactive data visualization, there are additional constraints that affect the calculus of which method is the best.
-
-First, if we want to support the ability to interactively manipulate the alpha channel and do linked selection with multiple (3+) selection groups, we can effectively eliminate layering as an option. Having two different sources of alpha channel (layering and user input) would make the interaction confusing and limit its range (e.g. if we use 75% alpha to do layering, then the effective range of values the user can manipulate is 0-75%). Further, with multiple selection groups, it would become hard to tell the selection status apart. It is much better to keep the two interactive features (selection and alpha manipulation) orthogonal and use a separate visual attribute (color and transparency) for each.
-
-Thus, the choice is between stacking and dodging. While, as was discussed above, dodging is the preferred choice in static data visualization, I propose that 
-
-First, I propose that stacking is the superior method for *displaying* selection. Thanks to the four Gestalt principles of proximity, similarity, closure, and common region, in a stacked barplot, each bar presents itself as a single visual entity. In other words, since the stacked segments are placed right on top of each other, and share width and a closed border, they are perceived as part of a unified whole (the bar). This remains true throughout selection - no matter how the heights of the highlighted segments change, the height of the whole stacked bar remains constant, and so does the overall outline of the plot.
 
 
-## Theory of data visualization systems
+## General visualization theory
 
-### Scales
+The final topics that need to be discussed 
 
-Every data visualization system needs some way of translating abstract data values into concrete graphical attributes such as position, size, or colour. Given the ubiquitous need for scales, one might expect them to be a "solved issue", within the relevant literature. However, this is far from the truth. Specifically, the issues of scales and measurement are still being grappled with in the areas of mathematics and philosophy of science to this day [for a gentle yet thorough introduction, see @tal2015].
+Within the data visualization literature, there exists a fairly large body of research on the theoretical properties of scales. A full treatment is beyond the scope of the present thesis. However, in this section, I will attempt to briefly summarize some important findings and concepts.
 
-Scales are another area of data visualization in which there has been considerable debate, with many terms being overloaded and relating to concepts from different fields. This is due to the fact that the issue of how to compare, rank, and translate values has a long and complicated history. In particular, the issue of measurement has been hotly debated in the field of psychometrics and mathematical psychology, leading to the development of the *theory of measurement* (which has some overlap with, but is not the same as, *measurement theory* in mathematics). 
+### Visualization goals
 
-One paper that has been key to the debate around scales and measurement has been the seminal work of @stevens1946. In this paper, Stevens defined a *scale* as a method of assigning numbers to values, allowing for various kinds of comparisons. Further, by considering transformations which preserve the comparisons, Stevens identified 4 types of scales: *nominal*, *ordinal*, *interval*, and *ratio* [see also @michell1986; @velleman1993].
+@ward2015 outlined several common goals for creating interactive visualizations:
 
-```{r scales}
+- Exploration: The user wants to examine a data set
+- Confirmation: The user wants to verify a fact or a hypothesis
+- Presentation: The user wants to use the visualization to convince or inspire an audience 
+- Interactive presentation: The user wants to take the audience on a guided tour of key insights
+
+### Scales and measurement {#measurement}
+
+One challenge when discussing scales in data visualization is that the topic unavoidably intersects with a research area that has a particularly long and contentious history: theory of measurement [see e.g. @hand1996; @michell1986; @tal2025]. Theory of measurement (not to be confused with measure theory, with which it nevertheless shares some overlap) is the research area which tries to answer the deceptively simple question: what does it mean to measure something? This seemingly trivial problem has inspired long and fiery debates within the fields of mathematics, philosophy, and social science. Particularly, in psychology, where assigning numerical values non-physical phenomena such as moods and mental states is a central concern, the topic has garnered a significant amount of attention, creating a dense body of research [see e.g. @humphry2013; @michell2021].
+
+Arguably, the most influential work in this field has been that of @stevens1946. In his fairly concise paper, Stevens defined a *scale* as method of assigning numbers to values, and introduced a four-fold classification classification, namely: nominal, ordinal, interval, and ratio scales (see Table \@ref(tab:stevens-scales)).
+
+```{r stevens-scales}
 #| echo: false
 
 tab <- data.frame(
   v1 = c("Nominal", "Ordinal", "Interval", "Ratio"),
-  v2 = c("Equivalence relation",
-         "Total order",
-         "Lebesque measure",
-         ""),
+  v2 = c("Isomorphism",
+         "Monotone map",
+         "Affine transformation",
+         "Linear map"),
   v3 = c("Are $x$ and $y$ the same?", 
          "Is $x$ is greater than $y$?", 
          "How far is $x$ from $y$?",
          "How many times is $x$ greater than $y$?"),
   v4 = c("$x' = f(x)$, where $f$ is a bijection", 
-         "$x' = f(x)$, where $f$ is a monotonic bijection", 
-         "$x' = ax + b$, for $a, b$ real", 
-         "$x' = ax$, for $a$ real")
+         "$x' = f(x)$, where $f$ is a monotone bijection", 
+         "$x' = ax + b$, for $a, b \\in \\mathbb{R}$", 
+         "$x' = ax$, for $a \\in \\mathbb{R}$")
 )
 
 col_names <- c("Scale", 
@@ -475,51 +440,17 @@ knitr::kable(tab, col.names = col_names,
 
 ```
 
-Table \@ref(tab:scales) shows a loose reproduction of Table 1 from @stevens1946. Note that the family of valid transformations gets smaller in each row, meaning that the scales carry more information [@velleman1993]. Let's discuss the scales individually.    
+The Steven's [-@stevens1946] typology is based on invariance under transformation. Specifically, for each class of scales, we define a set of transformations that preserve valid comparisons. The set of valid transformations shrinks as we move from one class of scales to another.  
 
-##### Nominal scales
+For nominal scales, any kind of bijective transformation is valid. Intuitively, we can think of the scale as assigning labels to values, and any kind re-labeling is valid, as long as it preserves equality of the underlying values. For instance, given a nominal scale with three values, we can assign the labels $\{ \text{red}, \text{green}, \text{blue} \}$ or $\{ \text{monday}, \text{tuesday}, \text{wednesday} \}$ in any way we like, as long as each value maps to a unique label. This identifies the underlying mathematical structure as an isomorphism.
 
-*Nominal* scales correspond to equivalence relations. An equivalence relation is a binary relation $\sim$ on some set $X$ which, for all $x, y, z \in X$, has the following properties:
+Ordinal scales are more restrictive, since, on top of preserving equality, transformations also need to preserve order. For example, if we want to assign the labels $\{ \text{monday}, \text{tuesday}, \text{wednesday} \}$ to an ordinal scale with three values, there is only one way to do it that preserves the underlying order: assign the least values to $\text{monday}$, the middle value to $\text{tuesday}$, and the greatest value to $\text{wednesday}$ (assuming we order the labels/days in the usual day-of-week order). However, there is no notion of distance between the labels: we could just as well assign the values labels in $\mathbb{N}$ such as $\{ 10, 20, 30 \}$, $\{1, 2, 9999 \}$, and so on. Thus, the fundamental mathematical structure is that of a monotone map.
 
-- *Reflexivity*: $x \sim x$
-- *Symmetry*: $x \sim y \text{ if and only if } y \sim x$
-- *Transitivity*: $x \sim y \text{ and } y \sim z \text{ then } x \sim z$
+Interval scales need to additionally preserve equality of intervals. This means that, for any three values $a, b,$ and $c$, if the distances between $a$ and $b$ and $b$ and $c$ are equal, $d(a, b) = d(b, c)$, then so should be the distances between the scaled labels, $d^*(f(a), f(b)) = d^*(f(b), f(c)$. For most real applications, this limits interval scales to the class of affine transformations of the form $f(x) = ax + b$. A canonical example of an interval scale is the conversion formula of degrees Celsius to Fahrenheit: $f(c) = 9/5 \cdot c + 32$ [@stevens1946]. This example also highlights an important property of interval scales: the zero point can be arbitrary and ratios are not meaningful. Specifically, since the zero points of both Celsius and Fahrenheit scales were chosen based on arbitrary metrics (freezing temperatures of water and brine, respectively), it does not make sense to say that, e.g. 20°C is "twice as hot" as 10°C, in the same way that it does not make sense to say that 2000 CE is "twice as late" as 1000 CE.  
 
-Intuitively, we can think of the numbers on a nominal scale as "labels". Thus, the only question which we can ask a nominal scale is whether two labels are the same or different. Examples of variables with nominal scale include variables of which we typically think of as categorical, such as color, species, or political party. It does not make sense to say "blue is *more* than green" or "cat is *more* than dog" without specifying some other axis of comparison. It does make sense, however, to say "Daisy and Molly are the same species of animal (cat)" or "these two glasses are of different colors".
+Finally, ratio scales also need to preserve the equality of ratios. Specifically, if $a/b = b/c$ then $f(a)/f(b) = f(b) / f(c)$. As a consequence, this also means that the scale must have a well-defined zero-point. Examples of ratio scales include physical magnitudes such as height and weight, which have a well-defined zero point [@stevens1946].
 
-For nominal scales, any permutation is a valid transformation [@stevens1946]. For example, if we use the numbers $\{ 1, 2, 3 \}$ to represent the species $S = \{ \text{cat}, \text{dog}, \text{hamster} \}$, respectively, we can re-assign the numbers in any order we want and the properties of the scale are preserved.   
+Steven's [-@stevens1946] typology sparked a considerable debate, on multiple fronts. First, since the original publication, many authors have sought to either expand upon or criticize Steven's typology. However, despite some monumental efforts towards a unified theory, such as that of @krantz1971, measurement has remained a hotly debated topic to this day [see e.g. @michell2021; @tal2025]. Second, more relevant to statistics, some authors such as @stevens1951 and @luce1959 used the theory to define come up with prescriptive rules for statistical transformations, suggesting that, for example, taking the mean of an ordinal variable is wrong since the meaning of the average operator is not preserved under monotone transformations. However, this issue was hotly contested by statisticians such as @lord1953, @tukey1986, and @velleman1993, who argued that many well-established statistical practices, such as rank-based tests and coefficients of variations, rely on such "impermissible" statistics but can nevertheless yield valuable insights. More broadly, these authors also argued that data is not really meaningful on its own, but instead derives its meaning from the statistical questions it is used to answer [see also @wilkinson2012].        
 
-It is arguable whether any nominal quantities exist in and of themselves or whether they only ever exists as abstract social constructions over underlying continuous reality. Color is a discretization of the visible light spectrum (frequency of electromagnetic radiation), and the pre-Darwinian concept of a species is likewise an abstraction over continuously varying distribution of genes [although there have been some attempts to ground the definition of a discrete species in the theory of genetics, e.g. as a population of individuals which can produce viable offsprings, see @mayr1999]. Further, even many subjective concepts which are typically described as discrete such as emotions may be abstractions over underlying continuous phenomena [@barrett2013]. 
+At this point, the discussion around measurement has arguably become far too dense and theoretical, and most data visualization researchers seem to avoid delving into it too deeply [see e.g. @wilkinson2012]. Nevertheless, there are still some areas where the issues of measurement and Steven's typology do crop up. For instance, when scaling area based on a continuous variable, a common recommendation is to start the scale at zero to ensure accurate representations of ratios [see e.g. @wickham2024], aligning with Steven's definition of a ratio scale. Likewise, the long-standing debate around whether the base of a barplot should always start at zero [see e.g. @cleveland1985; @wilkinson2012] also carries echoes of the measurement debate. Ultimately, it may yet require long time to settle the issues around measurement, however, there are definitely some ideas within the literature that data visualization can benefit from.    
 
-However, even if nominal quantities are entirely socially constructed, this does not mean they are arbitrary or useless. SEARLE     
-
-##### Ordinal scales
-
-*Ordinal* scales correspond to total orders. A total order is a relation $\leq$ on $X$ which, for all $x, y, z \in X$, has the following properties:
-
-1) *Reflexivity*: $x \leq x$
-2) *Antisymmetry*: $\text{if } x \leq y \leq x \text{ then } x = y$
-3) *Transitivity*: $x \leq y \text{ and } y \leq z \text{ then } x \leq z$
-4) *Totality* or *comparability* or *strong connectedness*: $\text{for all } x, y, \text{ either } x \leq y \text{ or } y \leq x$
-
-Examples of total orders include the usual ordering $\leq$ on natural numbers $\mathbb{N}$: $1 \leq 2 \leq 3 \leq \ldots$ or the alphabetical order on letters: $A \leq B \leq C \ldots \leq Z$.  
-
-As total orders, ordinal scales allow us to rank quantities. A good example of an ordinal variable is placement in a race or competition. If Emma and Charlotte ran a marathon, and Emma placed 2nd and Charlotte 3rd, we can say that Charlotte ran finished the race earlier than Emma. However, we do not know whether she crossed the finish line 15 minutes or 2 hours earlier, or whether or not her average pace was less than half of that of Emma. 
-
-Some authors have related ordinal scales to *weak orders* [see @michell1986]. Weak orders [also known as *total preorders*, see @nlab2024d] generalize total orders by allowing for ties (properties 2. and 4. above do not need hold). While this seems like a useful property, I opted to relate ordinal scales to total orders here instead, since there is currently ambuiguity in the way the term *weak order* is used in the literature [see e.g. @nlab2024a; @nlab2024b; @stackexchange2024], and, for practical data analysis, the distinction is fairly inconsequential. For instance, in the marathon example above, if Emma and Charlotte both placed second, after Lucy and before Lily, we could frame the outcome of the race as the following weak order on the set $M$ of marathoners: $\text{Lucy} \leq \text{Emma, Charlotte} \leq \text{Lily} \leq ...$. However, the underlying set of ranks $R \subset \mathbb{N}$ still retains a total ordering: $1 \leq 2 \leq 3 \leq \ldots$ and we can specify a surjective monotonically increasing function $r: M \to R$ which maps each marathoner to her rank. Clearly, we can map any weak order to a total order by applying a functor which enforces anti-symmetry in this way [@fong2019; @nlab2024d].
-
-The only transformations which are permissible for ordinal scales are those which preserve order, that is, monotonic increasing transformations [@stevens1946; @michell1986]. For example, transforming our set of ranks $R$ by taking the log or square root of each rank leaves the order relations between them unchanged.  
-
-##### Interval scales
-
-*Interval* scales. 
-
-Interval scales allow us to calculate a distance between two points. However, they do not have a natural "zero point" or intercept. As such we cannot use them to determine the ratio between two quantities. Examples of interval scales include the calendar date and geographical position. It does not make sense to say that the year 1000 CE is "twice as much" as 500 CE, since the birth of Jesus Christ is (religious beliefs aside) an arbitrary zero point: we could set 0 CE at any other point in time, such as the founding of Athens or the release of Taylor Swift's first album, and all of the properties we care about when tracking historical time would be preserved. Likewise, it does not make sense to say that 90° longitude is "three times" that of 30° longitude: the location of the prime meridian is also the product of arbitrary historical cirumstances.  
-
-###### Ratio scales
-
-Unlike interval scales, ratio scale have a well-defined natural zero point. For example, 
-
-##### Criticism of On the Theory of Scales of Measurement
-
-In the original paper, Stevens had also made the claim that the type of scale determined which statistical tests and summaries were "permissible" for the data. For example, according to Stevens, while mean is an appropriate summary of an interval scale (since expectation is linear), it would not be a permissible summary of ordinal data. This claim was later disputed by researchers      

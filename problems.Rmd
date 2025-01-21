@@ -299,7 +299,7 @@ We then compute whatever summary we want (`sum`). Finally, when a `fill` or `col
 
 #### Limits of flat product partitions
 
-For many common plot types, a single "flat" product of all factors/partitions works reasonably well. However, for other types of plots, this simple model is not enough. Specifically, certain types of plots exhibit hierarchical relationships between the partitions which cannot be represented under this flat model.
+For many common plot types, a single "flat" product of all factors/partitions works reasonably well. However, for other types of plots, this simple model is not enough. Specifically, certain types of plots exhibit hierarchical relationships between the partitions which cannot be represented under this flat model [see also @slingsby2009; @wu2022].
 
 To give a concrete example, let's turn back to the barplot from the section above (\@ref(plots-as-partitions)). To draw the barplot, we first split our data into smaller tables, summarized each table by summing the values, stacked the summaries by taking their cumulative sum, and finally used the resulting data frame to render bar segments. This gave us a stacked barplot, which is a good visualization for comparing absolute counts across categories. 
 
@@ -314,7 +314,7 @@ knitr::include_graphics("./figures/barplot-spineplot.png")
 
 Like barplots, spineplots represent some summary statistic (usually counts), aggregated within the levels of a product of two categorical variables. However, unlike barplots, spineplots map the underlying statistics to both the y-axis position (height) and the bar width. Furthermore, the y-axis position is normalized, such that the heights of the different segments within the same category add up to one. This normalization makes it possible to compare the relative frequencies within categories directly (notice how the right panel in Figure \@ref(fig:barplot-spineplot) makes it obvious that the proportion of red cases within the B and C categories is the same). Thus, like the barplot, the spineplot is a valuable tool for visualizing categorical data, especially when we can use interactive features to switch from one type of representation to the other. 
 
-Although barplot and spineplot represent the same underlying data, turning one into the other is not always easy. Specifically, while many grammar-based visualization systems offer a simple declarative syntax for defining barplots, they lack such simple syntax for spineplots. For instance, to draw a spineplot in `ggplot2`, we first need to do a substantial amount of data wrangling (creating the plot in the right panel of Figure \@ref(fig:barplot-spineplot) took over 10 lines of code, using standard `dplyr` syntax). The same applies to other "normalized" types of plots, such as spinograms [see e.g. @theus2002].
+Although barplot and spineplot represent the same underlying data, turning one into the other is not always easy. Specifically, while many grammar-based visualization systems offer a simple declarative syntax for defining barplots, they lack such simple syntax for spineplots. For instance, to draw a spineplot in `ggplot2`, we first need to do a substantial amount of data wrangling (creating the plot in the right panel of Figure \@ref(fig:barplot-spineplot) took over 10 lines of code, using standard `dplyr` syntax). This same hierarchical dependence applies to other "normalized" types of plots, such as spinograms, as well as innately hierarchical displays such as treemaps and mosaic plots [see e.g. @theus2002; slingsby2009].
 
 #### Partitions and hierarchy {#hierarchy}
 
@@ -391,7 +391,7 @@ The approach of treating graphics and statistics as independent entities is high
 
 The grammar-based model offers many advantages, including simplicity and expressive power. This has contributed to its widespread adoption and implementation in many data visualization systems [see e.g. @mcnutt2022; @kim2022; @vanderplas2020; @wickham2010; @satyanarayan2014; @satyanarayan2016]. The canonical example is the famous `ggplot2` package [@wickham2010]. In `ggplot2`, plots are built out of components such as geometric objects (called `geoms`), statistical summaries (`stats`), and scales. These components can be flexibly combined, allowing the user to express a wide range of graphics using a small set of primitives. The expressive power of `ggplot2` has made it one of the most popular R packages of all time.^[Being the top most downloaded CRAN package as of 4th of December 2024, @rmeta2024].
 
-However, despite its advantages, the grammar-based model has one fundamental flaw: graphics and statistics are not truly independent. Instead, the visual representation of data must be congruent with its mathematical properties. This constraint, while present even in static visualizations, becomes especially critical in interactive contexts. Let's illustrate this point with an example of real-world data.
+However, despite its advantages, the grammar-based model has one fundamental flaw: graphics and statistics are not truly independent [see also @wu2024]. Instead, the visual representation of data must be congruent with its mathematical properties. This constraint, while present even in static visualizations, becomes especially critical in interactive contexts. Let's illustrate this point with an example of real-world data.
 
 #### Limits of independence {#stacking-not-graphical}
 
@@ -485,15 +485,15 @@ Based on the quotes above, one might get the impression that we can only ever "s
 
 ```{r grammar-barplot-maximums}
 #| echo: false
-#| fig-cap: "A maximum of maxima is a valid maximum of the combined cases."
+#| fig-cap: "The maximum of maxima is a valid maximum of all cases."
 knitr::include_graphics("./figures/grammar-barplot-maximums.png")
 ```
 
 Here, in Figure \@ref(fig:grammar-barplot-maximums), we again plot FEV for smokers and non-smokers across the different age groups, however, this time, we display the *maximum FEV* on the y-axis. From this plot, we can see that, in most of the age categories which included smokers (age 9 and up), the child with the highest lung capacity was a non-smoker, although there were a few exceptions (ages 11, 16, and 18). 
 
-Notice one important feature of the plot above: the heights of the "stacked" bars represent a valid overall summary. Taking grouped data, summarizing each group by its maximum, and then taking the maximum of those maxima yields the overall maximum. That is, *the maximum of maxima is a valid maximum of the combined cases*. While the general usefulness of the plot in Figure \@ref(fig:grammar-barplot-maximums) could be debated - given that each bar effectively represents a single data point (the group maximum), and that, in small data sets, the maximum can be a highly variable - the plot still demonstrates one important, unshakeable fact: summaries other than sums and counts can be meaningfully "stacked."
+Notice one important feature of the plot above: the heights of the "stacked" bars represent a valid overall summary. Taking grouped data, summarizing each group by its maximum, and then taking the maximum of those maxima yields the overall maximum. That is, *the maximum of maxima is a valid maximum of all cases*. While the general usefulness of the plot in Figure \@ref(fig:grammar-barplot-maximums) could be debated - given that each bar effectively represents a single data point (the group maximum), and that, in small data sets, the maximum can be a highly variable - the plot still demonstrates one important, unshakeable fact: summaries other than sums and counts can be meaningfully "stacked."
 
-#### Advantages of stacking: Part-whole relationship
+#### Advantages of stacking: Part-whole relationship {#stacking-part-whole}
 
 Before we go on to discuss what makes certain statistics stackable, we first need to address the issue of of why is stacking useful. Specifically, some might argue that stacking is only one way of presenting partitioned data, and that we could equally well present "unstackable" summaries such as the averages in Figure \@ref(fig:grammar-barplot-means) by plotting the corresponding bars side by side (a technique know as dodging), or by plotting them on top of each other in semi-transparent layers, see \@ref(fig:dodging-layering):
 
@@ -503,7 +503,9 @@ Before we go on to discuss what makes certain statistics stackable, we first nee
 knitr::include_graphics("./figures/grammar-dodging-layering.png") 
 ```
 
-However, I contend that, while dodging and layering are valuable techniques for static visualization, stacking offers significant advantages in interactive contexts. The issue comes down to how the three techniques represent the relatedness of data subsets. In dodging and layering, the only indication of the fact that two subsets are related is their spatial proximity. In contrast, in stacking, the stacked segments are both close together in space (proximity) and also combine together to form a meaningful object (part-whole relationship). Thus, in a stacked barplot, we can interpret an individual stacked segment as a *highlighted part* of a bar, whereas the same is not true for dodging or layering. This distinction has important implications for a figure's visual properties and interactive behavior [see also @roberts2000; @wilhelm2008].
+Much has been written about the relative merits of stacking, dodging, and layering. For example, layering is only useful with few categories, as blending many colors can make it difficult to tell the categories apart [@franconeri2021; @wilke2019]. Further, in a landmark study, @cleveland1984 showed that people tend to be less accurate when reading information from stacked bar charts as opposed to dodged bar charts. Specifically, since the lower y-axis coordinate of a stacked segment is pushed up by the cumulative height of the segments below, it becomes difficult to accurately compare segments' length, both within and across bars [@cleveland1984]. Subsequent research has independently validated these findings and expanded upon them [see e.g. @heer2010; @thudt2016; @quadri2021]. Due to this suboptimal statistical legibility, many data visualization researchers have urged caution about stacking [see e.g. @byron2008; @cairo2014; @franconeri2021], and some have even discouraged its use altogether [@kosara2016; @wilke2019]. 
+
+However, I contend that, while dodging and layering are indeed valuable techniques for static visualization, stacking offers significant advantages in interactive contexts. The issue comes down to how the three techniques represent the relatedness of data subsets. In dodging and layering, the only indication of the fact that two subsets are related is their spatial proximity. In contrast, in stacking, the stacked segments are both close together in space (proximity) and also combine together to form a single object [part-whole relationship; see also @slingsby2009]. Thus, in a stacked barplot, we can interpret an individual stacked segment as a highlighted *part* of a bar, whereas the same is not true for dodging or layering. This subtle distinction has important implications for the figure's visual properties and interactive behavior [see also @roberts2000; @wilhelm2008].
 
 Take, for instance, the typical stacked barplot. In a stacked barplot, the heights of the stacked segments sum to the height of the whole bar, providing a fixed upper bound and a clear visual anchor. This is particularly useful with linked selection. Even when the heights of the segments change, the total bar height remains constant, allowing us to maintain a fixed upper limit on the y-axis, for instance. Besides other advantages, this also reduces the computational overhead, since the axis limits only need to be recomputed *when the heights of the whole bars change* (e.g. changing binwidth in a histogram), not when the heights of the segments change. 
 
@@ -511,15 +513,15 @@ This is not the case for dodging and layering, see Figure \@ref(fig:stacking-vs-
 
 ```{r stacking-vs-dodging}
 #| echo: false
-#| fig-cap: "Stacking has advantages over dodging (and layering) when it comes to displaying linked selection. Plots left to right show a simulated static snapshot of what happens as more cases are selected (red). In a stacked barplot (top row), the heights of the higlighted segments are always bound by the height of the whole bar, and so the outline of the figure remains constant. In contrast, in a dodged barplot, the bar segment heights are not bounded, leading to the outline of the figure fluctuating dramatically (notice the changing upper y-axis limit)."
+#| fig-cap: "Stacking has advantages over dodging (and layering) when it comes to displaying linked selection. Plots left to right show a simulated static snapshots of more cases being selected (red). In a stacked barplot (top row), the heights of the higlighted segments are always bound by the height of the whole bar, and so the outline of the figure remains constant. In contrast, in a dodged barplot, the bar segment heights are not bounded, leading to the outline of the figure fluctuating dramatically (notice the changing upper y-axis limit)."
 knitr::include_graphics("./figures/stacking-vs-dodging.png") 
 ```
 
-The only reference I have been able to find which addresses this issue directly is @wilhelm2008. Wilhelm outlines three linked visualization strategies: replacement, overlaying, and repetition. Within the context of the three techniques discussed above (stacking, dodging, and layering), overlaying essentially conflates both stacking and layering, repetition is equivalent to dodging, and replacement involves re-rendering the visualization completely upon selection. Wilhelm argues that replacement is a flawed because it entirely discards contextual information such as axis limits. He also notes that repetition is less common due to the necessity of re-arranging the plot upon selection. Finally, he identifies two issues with overlaying: the fact that plot parameters are inherited from the plot representing the whole data set, and the fact that parts of the original plot may become obscured by the highlighted subset. Ultimately, he appears to favor repetition over the other two methods.
+The only reference I have been able to find which addresses this issue directly is @wilhelm2008. Wilhelm outlines three strategies for displaying selection: replacement, overlaying, and repetition. Within the context of the three techniques discussed above (stacking, dodging, and layering), overlaying essentially conflates both stacking and layering, repetition is equivalent to dodging, and replacement involves re-rendering the visualization completely upon selection. Wilhelm argues that replacement is a flawed because it entirely discards contextual information such as axis limits. He also notes that repetition is less common due to the necessity of re-arranging the plot upon selection. Finally, he identifies two issues with overlaying: the fact that plot parameters are inherited from the plot representing the whole data set, and the fact that parts of the original plot may become obscured by the highlighted subset. Ultimately, he appears to favor repetition over the other two methods.
 
 My conclusion diverges from @wilhelm2008. I contend that, while overlaying/stacking is less flexible than the other two methods, it is nevertheless the superior, since it ensures that the context of the whole data is always preserved. Conversely, repetition/dodging suffers from the same contextual loss as replacement. Specifically, if we draw highlighted subsets as separate objects, then, in the general case, we either have to make the axis limits reactive (leading to loss of context), or risk that the highlighted objects may exceed the plot area. What @wilhelm2008 sees as one of the problems of overlaying - the fact that plot parameters are inherited from the whole data - I instead see as a fundamental strength. The part-whole relationship between the highlighted segments ensures that interaction preserves context, and also reduces computational overhead.
 
-### Stackable summaries: A sojourn into Category Theory
+### Stackable summaries: A brief journey into Category Theory
 
 Now it is finally time to discuss what makes certain statistics stackable. To do this, I will need to use some fundamental concepts from category theory. These concepts are described in greater detail in the [Appendix: Mathematical Theory](#mathematical-theory) - the reader is advised to consult this section if they are unfamiliar with the material (links to appropriate sections will also be provided throughout the following text).
 
@@ -611,9 +613,12 @@ But before we go on to do that, we need to one more trick. We can recast the set
 knitr::include_graphics("./figures/barplot-preorder2.png") 
 ```
 
-Now, imagine trying to explain the diagram above to a computer. As humans, we have internalized the fact that set union is associative (meaning that the order in which we combine sets does not matter). As such, we can naturally interpret the statement "a bar subset is a union of all segment subsets" as a single action: taking all segment subsets and "smushing" them together. However, computers do not work this way. Instead, they process instructions sequentially. For a computer, there is no such thing as a "global" union of subsets, there is only a sequence of pairwise unions. In other words, you cannot tell a computer: "take all sets and combine them together", instead, you can only tell it: "take $S_1$ and combine it with $S_2$, take the result and combine that with $S_3$, ..." and so on.
+Now, given that we want to preserve the structure of the diagram above, it is natural that we want to preserve properties of set union. For our purposes, two important property of set union we may want to preserve are:
 
-However, we can describe the fact that we want the sequential operations to be associative via a diagram. Specifically, the following commutative diagram: 
+- Unitality: $A \cup \varnothing = A$ (for all sets $A$).
+- Associativity: $A \cup (B \cup C) = (A \cup B) \cup C = A \cup B \cup C$ (for all sets $A$, $B$, and $C$).
+
+The first property, unitality, is relatively straightforward (although more on that later). It simply means that the union of any set with the empty set is just the original set. The second property, associativity, is a bit more interesting. It means that the order in which we take union of multiple sets does not matter. We can describe it via the following commutative diagram: 
 
 ```{r barplot-associativity}
 #| echo: false
@@ -653,7 +658,7 @@ Most importantly, the commutative diagram tells us the following:
 
 > We can either first combine the data subsets via union and then summarize the resulting superset, or first summarize the subsets and then combine the summaries *and the result will be the same.*
 
-This is the most important point in this section, and one of the most important points in the whole thesis. The definition of a functor tells us which summary statistics can meaningfully preserve the part-whole relationships found in a hierarchical partitioning in the data, and this in turn tells us whether they will be "stackable" and behave well under linked selection. 
+This is the most important point in this section, and one of the most important points in the whole thesis. The definition of a functor tells us which summary statistics can meaningfully preserve the part-whole hierarchical partitioning of our data, and this in turn tells us whether they will be "stackable" and behave well under linked selection. 
 
 #### Transforming summaries
 
@@ -663,57 +668,57 @@ Suppose we have partitioned our data and computed the relevant summary statistic
 
 Scales involve two important challenges: the theoretical problem of mapping data to visual encodings, and the more applied problem of implementing such a scaling system. While much has been written on the theoretical properties of scales, considerably less information is available on the practical implementation of scales. Further, interactive data visualization presents some fairly unique and interesting problems for the implementation of scales, and these are also rarely discussed. For this reason, I provide only a brief overview of some of the key areas of the theory of scales, and devote more space to the applied problems, as I feel these deserve equal share of attention.   
 
-### Theory of scales
+<!-- ### Theory of scales -->
 
-Within the data visualization literature, there exists a fairly large body of research on the theoretical properties of scales. A full treatment is beyond the scope of the present thesis. However, in this section, I will attempt to briefly summarize some important findings and concepts.
+<!-- Within the data visualization literature, there exists a fairly large body of research on the theoretical properties of scales. A full treatment is beyond the scope of the present thesis. However, in this section, I will attempt to briefly summarize some important findings and concepts. -->
 
-#### Philosophy, psychology, and measurement {#theory-of-measurement}
+<!-- #### Philosophy, psychology, and measurement {#theory-of-measurement} -->
 
-One challenge when discussing scales in data visualization is that the topic unavoidably intersects with a research area that has a particularly long and contentious history: theory of measurement [see e.g. @hand1996; @michell1986; @tal2025]. Theory of measurement (not to be confused with measure theory, with which it nevertheless shares some overlap) is the research area which tries to answer the deceptively simple question: what does it mean to measure something? This seemingly trivial problem has inspired long and fiery debates within the fields of mathematics, philosophy, and social science. Particularly, in psychology, where assigning numerical values non-physical phenomena such as moods and mental states is a central concern, the topic has garnered a significant amount of attention, creating a dense body of research [see e.g. @humphry2013; @michell2021].
+<!-- One challenge when discussing scales in data visualization is that the topic unavoidably intersects with a research area that has a particularly long and contentious history: theory of measurement [see e.g. @hand1996; @michell1986; @tal2025]. Theory of measurement (not to be confused with measure theory, with which it nevertheless shares some overlap) is the research area which tries to answer the deceptively simple question: what does it mean to measure something? This seemingly trivial problem has inspired long and fiery debates within the fields of mathematics, philosophy, and social science. Particularly, in psychology, where assigning numerical values non-physical phenomena such as moods and mental states is a central concern, the topic has garnered a significant amount of attention, creating a dense body of research [see e.g. @humphry2013; @michell2021]. -->
 
-Arguably, the most influential work in this field has been that of @stevens1946. In his fairly concise paper, Stevens defined a *scale* as method of assigning numbers to values, and introduced a four-fold classification classification, namely: nominal, ordinal, interval, and ratio scales (see Table \@ref(tab:stevens-scales)).
+<!-- Arguably, the most influential work in this field has been that of @stevens1946. In his fairly concise paper, Stevens defined a *scale* as method of assigning numbers to values, and introduced a four-fold classification classification, namely: nominal, ordinal, interval, and ratio scales (see Table \@ref(tab:stevens-scales)). -->
 
-```{r stevens-scales}
-#| echo: false
+<!-- ```{r stevens-scales} -->
+<!-- #| echo: false -->
 
-tab <- data.frame(
-  v1 = c("Nominal", "Ordinal", "Interval", "Ratio"),
-  v2 = c("Isomorphism",
-         "Monotone map",
-         "Affine transformation",
-         "Linear map"),
-  v3 = c("Are $x$ and $y$ the same?", 
-         "Is $x$ is greater than $y$?", 
-         "How far is $x$ from $y$?",
-         "How many times is $x$ greater than $y$?"),
-  v4 = c("$x' = f(x)$, where $f$ is a bijection", 
-         "$x' = f(x)$, where $f$ is a monotone bijection", 
-         "$x' = ax + b$, for $a, b \\in \\mathbb{R}$", 
-         "$x' = ax$, for $a \\in \\mathbb{R}$")
-)
+<!-- tab <- data.frame( -->
+<!--   v1 = c("Nominal", "Ordinal", "Interval", "Ratio"), -->
+<!--   v2 = c("Isomorphism", -->
+<!--          "Monotone map", -->
+<!--          "Affine transformation", -->
+<!--          "Linear map"), -->
+<!--   v3 = c("Are $x$ and $y$ the same?",  -->
+<!--          "Is $x$ is greater than $y$?",  -->
+<!--          "How far is $x$ from $y$?", -->
+<!--          "How many times is $x$ greater than $y$?"), -->
+<!--   v4 = c("$x' = f(x)$, where $f$ is a bijection",  -->
+<!--          "$x' = f(x)$, where $f$ is a monotone bijection",  -->
+<!--          "$x' = ax + b$, for $a, b \\in \\mathbb{R}$",  -->
+<!--          "$x' = ax$, for $a \\in \\mathbb{R}$") -->
+<!-- ) -->
 
-col_names <- c("Scale", 
-               "Structure",
-               "Comparison", 
-               "Valid transformations")
-knitr::kable(tab, col.names = col_names, 
-             caption = "Types of scales identified by Stevens (1946)")
+<!-- col_names <- c("Scale",  -->
+<!--                "Structure", -->
+<!--                "Comparison",  -->
+<!--                "Valid transformations") -->
+<!-- knitr::kable(tab, col.names = col_names,  -->
+<!--              caption = "Types of scales identified by Stevens (1946)") -->
 
-```
+<!-- ``` -->
 
-The Steven's [-@stevens1946] typology is based on invariance under transformation. Specifically, for each class of scales, we define a set of transformations that preserve valid comparisons. The set of valid transformations shrinks as we move from one class of scales to another.  
+<!-- The Steven's [-@stevens1946] typology is based on invariance under transformation. Specifically, for each class of scales, we define a set of transformations that preserve valid comparisons. The set of valid transformations shrinks as we move from one class of scales to another.   -->
 
-For nominal scales, any kind of bijective transformation is valid. Intuitively, we can think of the scale as assigning labels to values, and any kind re-labeling is valid, as long as it preserves equality of the underlying values. For instance, given a nominal scale with three values, we can assign the labels $\{ \text{red}, \text{green}, \text{blue} \}$ or $\{ \text{monday}, \text{tuesday}, \text{wednesday} \}$ in any way we like, as long as each value maps to a unique label. This identifies the underlying mathematical structure as an isomorphism.
+<!-- For nominal scales, any kind of bijective transformation is valid. Intuitively, we can think of the scale as assigning labels to values, and any kind re-labeling is valid, as long as it preserves equality of the underlying values. For instance, given a nominal scale with three values, we can assign the labels $\{ \text{red}, \text{green}, \text{blue} \}$ or $\{ \text{monday}, \text{tuesday}, \text{wednesday} \}$ in any way we like, as long as each value maps to a unique label. This identifies the underlying mathematical structure as an isomorphism. -->
 
-Ordinal scales are more restrictive, since, on top of preserving equality, transformations also need to preserve order. For example, if we want to assign the labels $\{ \text{monday}, \text{tuesday}, \text{wednesday} \}$ to an ordinal scale with three values, there is only one way to do it that preserves the underlying order: assign the least values to $\text{monday}$, the middle value to $\text{tuesday}$, and the greatest value to $\text{wednesday}$ (assuming we order the labels/days in the usual day-of-week order). However, there is no notion of distance between the labels: we could just as well assign the values labels in $\mathbb{N}$ such as $\{ 10, 20, 30 \}$, $\{1, 2, 9999 \}$, and so on. Thus, the fundamental mathematical structure is that of a monotone map.
+<!-- Ordinal scales are more restrictive, since, on top of preserving equality, transformations also need to preserve order. For example, if we want to assign the labels $\{ \text{monday}, \text{tuesday}, \text{wednesday} \}$ to an ordinal scale with three values, there is only one way to do it that preserves the underlying order: assign the least values to $\text{monday}$, the middle value to $\text{tuesday}$, and the greatest value to $\text{wednesday}$ (assuming we order the labels/days in the usual day-of-week order). However, there is no notion of distance between the labels: we could just as well assign the values labels in $\mathbb{N}$ such as $\{ 10, 20, 30 \}$, $\{1, 2, 9999 \}$, and so on. Thus, the fundamental mathematical structure is that of a monotone map. -->
 
-Interval scales need to additionally preserve equality of intervals. This means that, for any three values $a, b,$ and $c$, if the distances between $a$ and $b$ and $b$ and $c$ are equal, $d(a, b) = d(b, c)$, then so should be the distances between the scaled labels, $d^*(f(a), f(b)) = d^*(f(b), f(c)$. For most real applications, this limits interval scales to the class of affine transformations of the form $f(x) = ax + b$. A canonical example of an interval scale is the conversion formula of degrees Celsius to Fahrenheit: $f(c) = 9/5 \cdot c + 32$ [@stevens1946]. This example also highlights an important property of interval scales: the zero point can be arbitrary and ratios are not meaningful. Specifically, since the zero points of both Celsius and Fahrenheit scales were chosen based on arbitrary metrics (freezing temperatures of water and brine, respectively), it does not make sense to say that, e.g. 20°C is "twice as hot" as 10°C, in the same way that it does not make sense to say that 2000 CE is "twice as late" as 1000 CE.  
+<!-- Interval scales need to additionally preserve equality of intervals. This means that, for any three values $a, b,$ and $c$, if the distances between $a$ and $b$ and $b$ and $c$ are equal, $d(a, b) = d(b, c)$, then so should be the distances between the scaled labels, $d^*(f(a), f(b)) = d^*(f(b), f(c)$. For most real applications, this limits interval scales to the class of affine transformations of the form $f(x) = ax + b$. A canonical example of an interval scale is the conversion formula of degrees Celsius to Fahrenheit: $f(c) = 9/5 \cdot c + 32$ [@stevens1946]. This example also highlights an important property of interval scales: the zero point can be arbitrary and ratios are not meaningful. Specifically, since the zero points of both Celsius and Fahrenheit scales were chosen based on arbitrary metrics (freezing temperatures of water and brine, respectively), it does not make sense to say that, e.g. 20°C is "twice as hot" as 10°C, in the same way that it does not make sense to say that 2000 CE is "twice as late" as 1000 CE.   -->
 
-Finally, ratio scales also need to preserve the equality of ratios. Specifically, if $a/b = b/c$ then $f(a)/f(b) = f(b) / f(c)$. As a consequence, this also means that the scale must have a well-defined zero-point. Examples of ratio scales include physical magnitudes such as height and weight, which have a well-defined zero point [@stevens1946].
+<!-- Finally, ratio scales also need to preserve the equality of ratios. Specifically, if $a/b = b/c$ then $f(a)/f(b) = f(b) / f(c)$. As a consequence, this also means that the scale must have a well-defined zero-point. Examples of ratio scales include physical magnitudes such as height and weight, which have a well-defined zero point [@stevens1946]. -->
 
-Steven's [-@stevens1946] typology sparked a considerable debate, on multiple fronts. First, since the original publication, many authors have sought to either expand upon or criticize Steven's typology. However, despite some monumental efforts towards a unified theory, such as that of @krantz1971, measurement has remained a hotly debated topic to this day [see e.g. @michell2021; @tal2025]. Second, more relevant to statistics, some authors such as @stevens1951 and @luce1959 used the theory to define come up with prescriptive rules for statistical transformations, suggesting that, for example, taking the mean of an ordinal variable is wrong since the meaning of the average operator is not preserved under monotone transformations. However, this issue was hotly contested by statisticians such as @lord1953, @tukey1986, and @velleman1993, who argued that many well-established statistical practices, such as rank-based tests and coefficients of variations, rely on such "impermissible" statistics but can nevertheless yield valuable insights. More broadly, these authors also argued that data is not really meaningful on its own, but instead derives its meaning from the statistical questions it is used to answer [see also @wilkinson2012].        
+<!-- Steven's [-@stevens1946] typology sparked a considerable debate, on multiple fronts. First, since the original publication, many authors have sought to either expand upon or criticize Steven's typology. However, despite some monumental efforts towards a unified theory, such as that of @krantz1971, measurement has remained a hotly debated topic to this day [see e.g. @michell2021; @tal2025]. Second, more relevant to statistics, some authors such as @stevens1951 and @luce1959 used the theory to define come up with prescriptive rules for statistical transformations, suggesting that, for example, taking the mean of an ordinal variable is wrong since the meaning of the average operator is not preserved under monotone transformations. However, this issue was hotly contested by statisticians such as @lord1953, @tukey1986, and @velleman1993, who argued that many well-established statistical practices, such as rank-based tests and coefficients of variations, rely on such "impermissible" statistics but can nevertheless yield valuable insights. More broadly, these authors also argued that data is not really meaningful on its own, but instead derives its meaning from the statistical questions it is used to answer [see also @wilkinson2012].         -->
 
-At this point, the discussion around measurement has become far too dense and theoretical, and most data visualization researchers seem to avoid delving into it too deeply [see e.g. @wilkinson2012]. Nevertheless, there are still some areas where the issues of measurement and Steven's typology do crop up. For instance, when scaling area based on a continuous variable, a common recommendation is to start the scale at zero to ensure accurate representations of ratios [see e.g. @wickham2024], aligning with Steven's definition of a ratio scale. Likewise, the long-standing debate around whether the base of a barplot should always start at zero [see e.g. @cleveland1985; @wilkinson2012] also carries echoes of the measurement debate. Ultimately, it may yet require long time to settle the issues around measurement, however, there are definitely some ideas within the literature that data visualization can benefit from.    
+<!-- At this point, the discussion around measurement has become far too dense and theoretical, and most data visualization researchers seem to avoid delving into it too deeply [see e.g. @wilkinson2012]. Nevertheless, there are still some areas where the issues of measurement and Steven's typology do crop up. For instance, when scaling area based on a continuous variable, a common recommendation is to start the scale at zero to ensure accurate representations of ratios [see e.g. @wickham2024], aligning with Steven's definition of a ratio scale. Likewise, the long-standing debate around whether the base of a barplot should always start at zero [see e.g. @cleveland1985; @wilkinson2012] also carries echoes of the measurement debate. Ultimately, it may yet require long time to settle the issues around measurement, however, there are definitely some ideas within the literature that data visualization can benefit from.     -->
 
 #### Visual perception and encodings
 

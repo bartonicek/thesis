@@ -168,7 +168,7 @@ div.csl-indent {
 <ul class="summary">
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Abstract</a></li>
 <li class="chapter" data-level="2" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>2</b> Introduction</a></li>
-<li class="chapter" data-level="3" data-path="litreview.html"><a href="litreview.html"><i class="fa fa-check"></i><b>3</b> Literature review</a>
+<li class="chapter" data-level="3" data-path="litreview.html"><a href="litreview.html"><i class="fa fa-check"></i><b>3</b> Background</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="litreview.html"><a href="litreview.html#brief-history"><i class="fa fa-check"></i><b>3.1</b> Brief history of interactive data visualization</a>
 <ul>
@@ -191,9 +191,10 @@ div.csl-indent {
 <ul>
 <li class="chapter" data-level="3.4.1" data-path="litreview.html"><a href="litreview.html#linked-selection-and-stacking"><i class="fa fa-check"></i><b>3.4.1</b> Linked selection and stacking</a></li>
 </ul></li>
-<li class="chapter" data-level="3.5" data-path="litreview.html"><a href="litreview.html#theory-of-data-visualization-systems"><i class="fa fa-check"></i><b>3.5</b> Theory of data visualization systems</a>
+<li class="chapter" data-level="3.5" data-path="litreview.html"><a href="litreview.html#scales-and-visual-perception"><i class="fa fa-check"></i><b>3.5</b> Scales and visual perception</a>
 <ul>
-<li class="chapter" data-level="3.5.1" data-path="litreview.html"><a href="litreview.html#scales"><i class="fa fa-check"></i><b>3.5.1</b> Scales</a></li>
+<li class="chapter" data-level="3.5.1" data-path="litreview.html"><a href="litreview.html#measurement"><i class="fa fa-check"></i><b>3.5.1</b> Scales and measurement</a></li>
+<li class="chapter" data-level="3.5.2" data-path="litreview.html"><a href="litreview.html#scales"><i class="fa fa-check"></i><b>3.5.2</b> Scales</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="problems.html"><a href="problems.html"><i class="fa fa-check"></i><b>4</b> Problem Set</a>
@@ -208,12 +209,11 @@ div.csl-indent {
 <li class="chapter" data-level="4.3" data-path="problems.html"><a href="problems.html#aggregation"><i class="fa fa-check"></i><b>4.3</b> Aggregation</a>
 <ul>
 <li class="chapter" data-level="4.3.1" data-path="problems.html"><a href="problems.html#the-relationship-between-graphics-and-statistics"><i class="fa fa-check"></i><b>4.3.1</b> The relationship between graphics and statistics</a></li>
-<li class="chapter" data-level="4.3.2" data-path="problems.html"><a href="problems.html#stackable-summaries-a-sojourn-into-category-theory"><i class="fa fa-check"></i><b>4.3.2</b> Stackable summaries: A sojourn into Category Theory</a></li>
+<li class="chapter" data-level="4.3.2" data-path="problems.html"><a href="problems.html#stackable-summaries-a-brief-journey-into-category-theory"><i class="fa fa-check"></i><b>4.3.2</b> Stackable summaries: A brief journey into Category Theory</a></li>
 </ul></li>
 <li class="chapter" data-level="4.4" data-path="problems.html"><a href="problems.html#scaling"><i class="fa fa-check"></i><b>4.4</b> Scaling</a>
 <ul>
-<li class="chapter" data-level="4.4.1" data-path="problems.html"><a href="problems.html#theory-of-scales"><i class="fa fa-check"></i><b>4.4.1</b> Theory of scales</a></li>
-<li class="chapter" data-level="4.4.2" data-path="problems.html"><a href="problems.html#scales-in-practice"><i class="fa fa-check"></i><b>4.4.2</b> Scales in practice</a></li>
+<li class="chapter" data-level="4.4.1" data-path="problems.html"><a href="problems.html#scales-in-practice"><i class="fa fa-check"></i><b>4.4.1</b> Scales in practice</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="goals.html"><a href="goals.html"><i class="fa fa-check"></i><b>5</b> Goals</a>
@@ -301,19 +301,19 @@ div.csl-indent {
 <h4><span class="header-section-number">10.0.0.2</span> Array of Structs (AoS) vs. Struct of Arrays (SoA)<a href="glossary.html#SoA" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>Two-dimensional, tabular data is ubiquitous in data analytic workflows. However, since computer memory is fundamentally one-dimensional. Thus, when representing two-dimensional tables, we need to pick one of the dimensions as “primary” (and the other as “secondary”). This leads to two fundamentally different data representations.</p>
 <p>First, we can represent our data as an array of rows, also known as Array of Structs (AoS). In this representation, the rows of the data set are represented as heterogeneous key-value stores (structs/maps/dictionaries) and the entire data set is simply an array of these rows. For example, suppose we are storing a data set of users, such that, for each user, we record their name, age, and gender. Then the AoS way of representing this data (in TypeScript) would be:</p>
-<div class="sourceCode" id="cb124"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb124-1"><a href="glossary.html#cb124-1" tabindex="-1"></a><span class="kw">interface</span> User {</span>
-<span id="cb124-2"><a href="glossary.html#cb124-2" tabindex="-1"></a>  name<span class="op">:</span> <span class="dt">string</span><span class="op">;</span></span>
-<span id="cb124-3"><a href="glossary.html#cb124-3" tabindex="-1"></a>  age<span class="op">:</span> <span class="dt">number</span><span class="op">;</span></span>
-<span id="cb124-4"><a href="glossary.html#cb124-4" tabindex="-1"></a>  gender<span class="op">:</span> <span class="dt">string</span><span class="op">;</span></span>
-<span id="cb124-5"><a href="glossary.html#cb124-5" tabindex="-1"></a>}</span>
-<span id="cb124-6"><a href="glossary.html#cb124-6" tabindex="-1"></a></span>
-<span id="cb124-7"><a href="glossary.html#cb124-7" tabindex="-1"></a><span class="kw">type</span> Users <span class="op">=</span> User[]<span class="op">;</span></span></code></pre></div>
+<div class="sourceCode" id="cb127"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb127-1"><a href="glossary.html#cb127-1" tabindex="-1"></a><span class="kw">interface</span> User {</span>
+<span id="cb127-2"><a href="glossary.html#cb127-2" tabindex="-1"></a>  name<span class="op">:</span> <span class="dt">string</span><span class="op">;</span></span>
+<span id="cb127-3"><a href="glossary.html#cb127-3" tabindex="-1"></a>  age<span class="op">:</span> <span class="dt">number</span><span class="op">;</span></span>
+<span id="cb127-4"><a href="glossary.html#cb127-4" tabindex="-1"></a>  gender<span class="op">:</span> <span class="dt">string</span><span class="op">;</span></span>
+<span id="cb127-5"><a href="glossary.html#cb127-5" tabindex="-1"></a>}</span>
+<span id="cb127-6"><a href="glossary.html#cb127-6" tabindex="-1"></a></span>
+<span id="cb127-7"><a href="glossary.html#cb127-7" tabindex="-1"></a><span class="kw">type</span> Users <span class="op">=</span> User[]<span class="op">;</span></span></code></pre></div>
 <p>Second, we can represent our data as a dictionary of columns, known also as the Struct of Arrays (SoA). In this representation, columns are stored as homogeneous arrays in a single key-value store, and rows are represented implicitly. For example, the way to represent the same data in the SoA format would be:</p>
-<div class="sourceCode" id="cb125"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb125-1"><a href="glossary.html#cb125-1" tabindex="-1"></a><span class="kw">interface</span> Users {</span>
-<span id="cb125-2"><a href="glossary.html#cb125-2" tabindex="-1"></a>  name<span class="op">:</span> <span class="dt">string</span>[]<span class="op">;</span></span>
-<span id="cb125-3"><a href="glossary.html#cb125-3" tabindex="-1"></a>  age<span class="op">:</span> <span class="dt">number</span>[]<span class="op">;</span></span>
-<span id="cb125-4"><a href="glossary.html#cb125-4" tabindex="-1"></a>  gender<span class="op">:</span> <span class="dt">string</span>[]<span class="op">;</span></span>
-<span id="cb125-5"><a href="glossary.html#cb125-5" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb128"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb128-1"><a href="glossary.html#cb128-1" tabindex="-1"></a><span class="kw">interface</span> Users {</span>
+<span id="cb128-2"><a href="glossary.html#cb128-2" tabindex="-1"></a>  name<span class="op">:</span> <span class="dt">string</span>[]<span class="op">;</span></span>
+<span id="cb128-3"><a href="glossary.html#cb128-3" tabindex="-1"></a>  age<span class="op">:</span> <span class="dt">number</span>[]<span class="op">;</span></span>
+<span id="cb128-4"><a href="glossary.html#cb128-4" tabindex="-1"></a>  gender<span class="op">:</span> <span class="dt">string</span>[]<span class="op">;</span></span>
+<span id="cb128-5"><a href="glossary.html#cb128-5" tabindex="-1"></a>}</span></code></pre></div>
 <p>The way how we choose to represent the data has an impact on various performance characteristics, primarily compute time and memory. The mechanisms underlying these differences are quite general and apply to both in-memory and on-disk data; hence why the topic is also studied in database design <span class="citation">(see e.g. <a href="#ref-abadi2013">Abadi et al. 2013</a>)</span>. The SoA layout has (typically) smaller memory footprint and better performance in tight loops that operate on individual columns, thanks to cache locality <span class="citation">(<a href="#ref-abadi2013">Abadi et al. 2013</a>; <a href="#ref-acton2014">Acton 2014</a>; <a href="#ref-kelley2023">Kelley 2023</a>)</span>. The AoS layout has arguably better developer ergonomics and can perform better when retrieving individual records <span class="citation">(hence why it is more common in traditional Online Transaction Processing databases, <a href="#ref-abadi2013">Abadi et al. 2013</a>)</span>.</p>
 <p>Generally, for data analytic workflows where we need to summarize values across many rows of data, the column-based SoA representation has the better performance characteristics, and hence why it is typically preferred in data analytic libraries, for example in base R’s <code>data.frame</code> class or in the <code>pandas</code> <code>DataFrame</code> class <span class="citation">(<a href="#ref-r2024">R Core Team 2024</a>; <a href="#ref-pandas2024">Pandas Core Team 2024</a>)</span>. However, this is not always the case: for example, in the popular JavaScript data visualization/transformation library D3, data sets are represented as arrays of (JSON) rows <span class="citation">(<a href="#ref-bostock2022">Mike Bostock 2022</a>)</span>.</p>
 <p>A possible objection to worrying about data layout in high-level interpreted languages like JavaScript and R is that these languages may represent data completely differently under the hood anyway. For example, JavaScript engines such as V8 utilize hidden classes to lay out data in memory more efficiently <span class="citation">(<a href="#ref-bruni2017">Bruni 2017</a>; <a href="#ref-veight2024">V8 Core Team 2024</a>)</span>, such that even AoS data structures are backed by underlying arrays. However, despite this, there is still good evidence that packed arrays of plain values (such as integers and float), such as used in SoA, present better performance characteristics <span class="citation">(<a href="#ref-bruni2017">Bruni 2017</a>; <a href="#ref-stange2024">Stange 2024</a>)</span>.</p>
@@ -322,13 +322,13 @@ div.csl-indent {
 <h4><span class="header-section-number">10.0.0.3</span> JSON<a href="glossary.html#JSON" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>Short for “JavaScript Object Notation”, JSON is a flexible data format based on the JavaScript object type <span class="citation">(<a href="#ref-ecma2024">Ecma International 2024</a>; see also e.g. <a href="#ref-bourhis2017">Bourhis et al. 2017</a>; <a href="#ref-pezoa2016">Pezoa et al. 2016</a>)</span>. On the top level, a JSON is a key-value store (also known as dictionary, object, struct, hash-table, or list in other languages) with string keys and values of any of the following types: string, number, boolean, null (an undefined/missing value), an array (which can contain any other valid JSON values), or another JSON object.</p>
 <p>For example, the following is a valid JSON:</p>
-<div class="sourceCode" id="cb126"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb126-1"><a href="glossary.html#cb126-1" tabindex="-1"></a>{</span>
-<span id="cb126-2"><a href="glossary.html#cb126-2" tabindex="-1"></a>  <span class="st">&quot;name&quot;</span><span class="op">:</span> <span class="st">&quot;Adam&quot;</span><span class="op">,</span></span>
-<span id="cb126-3"><a href="glossary.html#cb126-3" tabindex="-1"></a>  <span class="st">&quot;age&quot;</span><span class="op">:</span> <span class="dv">30</span><span class="op">,</span></span>
-<span id="cb126-4"><a href="glossary.html#cb126-4" tabindex="-1"></a>  <span class="st">&quot;friends&quot;</span><span class="op">:</span> [{ <span class="st">&quot;name&quot;</span><span class="op">:</span> <span class="st">&quot;Sam&quot;</span><span class="op">,</span> <span class="st">&quot;age&quot;</span><span class="op">:</span> <span class="dv">30</span> }<span class="op">,</span> { <span class="st">&quot;name&quot;</span><span class="op">:</span> <span class="st">&quot;Franta&quot;</span><span class="op">,</span> <span class="st">&quot;age&quot;</span><span class="op">:</span> <span class="dv">26</span> }]<span class="op">,</span></span>
-<span id="cb126-5"><a href="glossary.html#cb126-5" tabindex="-1"></a>  <span class="st">&quot;can drive&quot;</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span></span>
-<span id="cb126-6"><a href="glossary.html#cb126-6" tabindex="-1"></a>  <span class="st">&quot;problems&quot;</span><span class="op">:</span> <span class="dt">null</span></span>
-<span id="cb126-7"><a href="glossary.html#cb126-7" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb129"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb129-1"><a href="glossary.html#cb129-1" tabindex="-1"></a>{</span>
+<span id="cb129-2"><a href="glossary.html#cb129-2" tabindex="-1"></a>  <span class="st">&quot;name&quot;</span><span class="op">:</span> <span class="st">&quot;Adam&quot;</span><span class="op">,</span></span>
+<span id="cb129-3"><a href="glossary.html#cb129-3" tabindex="-1"></a>  <span class="st">&quot;age&quot;</span><span class="op">:</span> <span class="dv">30</span><span class="op">,</span></span>
+<span id="cb129-4"><a href="glossary.html#cb129-4" tabindex="-1"></a>  <span class="st">&quot;friends&quot;</span><span class="op">:</span> [{ <span class="st">&quot;name&quot;</span><span class="op">:</span> <span class="st">&quot;Sam&quot;</span><span class="op">,</span> <span class="st">&quot;age&quot;</span><span class="op">:</span> <span class="dv">30</span> }<span class="op">,</span> { <span class="st">&quot;name&quot;</span><span class="op">:</span> <span class="st">&quot;Franta&quot;</span><span class="op">,</span> <span class="st">&quot;age&quot;</span><span class="op">:</span> <span class="dv">26</span> }]<span class="op">,</span></span>
+<span id="cb129-5"><a href="glossary.html#cb129-5" tabindex="-1"></a>  <span class="st">&quot;can drive&quot;</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span></span>
+<span id="cb129-6"><a href="glossary.html#cb129-6" tabindex="-1"></a>  <span class="st">&quot;problems&quot;</span><span class="op">:</span> <span class="dt">null</span></span>
+<span id="cb129-7"><a href="glossary.html#cb129-7" tabindex="-1"></a>}</span></code></pre></div>
 <p>The JSON specification is more restrictive compared to the full JavaScript object type (as implemented in the browser and various JavaScript runtimes). JavaScript runtime objects are very flexible - they can contain non-string keys (numbers or symbols) and non-primitive values such as functions/methods. In contrast, JSON is a fairly “simple” format designed for declaring and transporting data. For this reason, JSON is often used as the medium for sending data to and from Web APIs <span class="citation">(<a href="#ref-bourhis2017">Bourhis et al. 2017</a>; <a href="#ref-pezoa2016">Pezoa et al. 2016</a>)</span> as well as for configuration documents.</p>
 <p>The main advantages of JSON are that it is a simple, flexible, and human-readable format. Also, due to its recursive nature (JSON arrays and objects can contain other JSON arrays and objects), it can be used to express a wide variety of hierarchical data structures which would not be efficient to express in “flat” data formats such as CSV. However, this flexibility also comes with some disadvantages. The recursive nature of the format makes parsing JSON files inherently more time- and compute-intensive, and, since the values in a JSON can be of any type (as long as it is a valid JSON type), it is often necessary to validate JSON inputs <span class="citation">(<a href="#ref-pezoa2016">Pezoa et al. 2016</a>)</span>.</p>
 </div>

@@ -168,7 +168,7 @@ div.csl-indent {
 <ul class="summary">
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Abstract</a></li>
 <li class="chapter" data-level="2" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>2</b> Introduction</a></li>
-<li class="chapter" data-level="3" data-path="litreview.html"><a href="litreview.html"><i class="fa fa-check"></i><b>3</b> Literature review</a>
+<li class="chapter" data-level="3" data-path="litreview.html"><a href="litreview.html"><i class="fa fa-check"></i><b>3</b> Background</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="litreview.html"><a href="litreview.html#brief-history"><i class="fa fa-check"></i><b>3.1</b> Brief history of interactive data visualization</a>
 <ul>
@@ -191,9 +191,10 @@ div.csl-indent {
 <ul>
 <li class="chapter" data-level="3.4.1" data-path="litreview.html"><a href="litreview.html#linked-selection-and-stacking"><i class="fa fa-check"></i><b>3.4.1</b> Linked selection and stacking</a></li>
 </ul></li>
-<li class="chapter" data-level="3.5" data-path="litreview.html"><a href="litreview.html#theory-of-data-visualization-systems"><i class="fa fa-check"></i><b>3.5</b> Theory of data visualization systems</a>
+<li class="chapter" data-level="3.5" data-path="litreview.html"><a href="litreview.html#scales-and-visual-perception"><i class="fa fa-check"></i><b>3.5</b> Scales and visual perception</a>
 <ul>
-<li class="chapter" data-level="3.5.1" data-path="litreview.html"><a href="litreview.html#scales"><i class="fa fa-check"></i><b>3.5.1</b> Scales</a></li>
+<li class="chapter" data-level="3.5.1" data-path="litreview.html"><a href="litreview.html#measurement"><i class="fa fa-check"></i><b>3.5.1</b> Scales and measurement</a></li>
+<li class="chapter" data-level="3.5.2" data-path="litreview.html"><a href="litreview.html#scales"><i class="fa fa-check"></i><b>3.5.2</b> Scales</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="problems.html"><a href="problems.html"><i class="fa fa-check"></i><b>4</b> Problem Set</a>
@@ -208,12 +209,11 @@ div.csl-indent {
 <li class="chapter" data-level="4.3" data-path="problems.html"><a href="problems.html#aggregation"><i class="fa fa-check"></i><b>4.3</b> Aggregation</a>
 <ul>
 <li class="chapter" data-level="4.3.1" data-path="problems.html"><a href="problems.html#the-relationship-between-graphics-and-statistics"><i class="fa fa-check"></i><b>4.3.1</b> The relationship between graphics and statistics</a></li>
-<li class="chapter" data-level="4.3.2" data-path="problems.html"><a href="problems.html#stackable-summaries-a-sojourn-into-category-theory"><i class="fa fa-check"></i><b>4.3.2</b> Stackable summaries: A sojourn into Category Theory</a></li>
+<li class="chapter" data-level="4.3.2" data-path="problems.html"><a href="problems.html#stackable-summaries-a-brief-journey-into-category-theory"><i class="fa fa-check"></i><b>4.3.2</b> Stackable summaries: A brief journey into Category Theory</a></li>
 </ul></li>
 <li class="chapter" data-level="4.4" data-path="problems.html"><a href="problems.html#scaling"><i class="fa fa-check"></i><b>4.4</b> Scaling</a>
 <ul>
-<li class="chapter" data-level="4.4.1" data-path="problems.html"><a href="problems.html#theory-of-scales"><i class="fa fa-check"></i><b>4.4.1</b> Theory of scales</a></li>
-<li class="chapter" data-level="4.4.2" data-path="problems.html"><a href="problems.html#scales-in-practice"><i class="fa fa-check"></i><b>4.4.2</b> Scales in practice</a></li>
+<li class="chapter" data-level="4.4.1" data-path="problems.html"><a href="problems.html#scales-in-practice"><i class="fa fa-check"></i><b>4.4.1</b> Scales in practice</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="goals.html"><a href="goals.html"><i class="fa fa-check"></i><b>5</b> Goals</a>
@@ -307,7 +307,7 @@ div.csl-indent {
 <p>A relation is one of the simplest mathematical structures. Given two sets <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, a relation <span class="math inline">\(R\)</span> between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> is a subset of the Cartesian product of the two sets, <span class="math inline">\(R \subseteq X \times Y\)</span>. In other words, a relation can be thought of as the subset of pairs <span class="math inline">\((x, y) \in X \times Y\)</span> for which the condition “<span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> relate” holds. Note that <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> can be the same set, such that <span class="math inline">\(R \subseteq X \times X\)</span>.</p>
 <p>There are many different types of relations. One of the most fundamental relations is equality; in this case, “<span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> relate” means that, for our purposes, <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> are the same, i.e. <span class="math inline">\(x = y\)</span>. Other examples of relations include the usual order relations <span class="math inline">\(&lt;\)</span>, <span class="math inline">\(\leq\)</span>, <span class="math inline">\(&gt;\)</span>, or <span class="math inline">\(\geq\)</span>, and the divides operator <span class="math inline">\(\mid\)</span> (<span class="math inline">\(x \mid y\)</span> means “<span class="math inline">\(x\)</span> divides <span class="math inline">\(y\)</span> without remainder”).</p>
 <p>Since a relation is a subset of the product set <span class="math inline">\(X \times Y\)</span>, we can visualize it as a matrix, with values of <span class="math inline">\(X\)</span> as rows, values of <span class="math inline">\(Y\)</span> as columns, and the related pairs <span class="math inline">\((x, y)\)</span> marked out in some specific way. For example, here’s how we can display the order relation <span class="math inline">\(\leq\)</span> on the set <span class="math inline">\(X = \{ 1, 2, 3 \}\)</span>:</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-114"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-115"></span>
 <img src="figures/relations.png" alt="A relation is a subset of the Cartesian product of two sets. The diagram shows the usual order relation $\leq$. We can see that 1 is less than or equal to every other element, 2 is less than or equal to 2 and 3, and 3 is less than or equal to 3 only. Note the symmetry between rows and columns - this is due to the fact that the same set ($X$) is display on both dimensions." width="450" />
 <p class="caption">
 Figure 12.1: A relation is a subset of the Cartesian product of two sets. The diagram shows the usual order relation <span class="math inline">\(\leq\)</span>. We can see that 1 is less than or equal to every other element, 2 is less than or equal to 2 and 3, and 3 is less than or equal to 3 only. Note the symmetry between rows and columns - this is due to the fact that the same set (<span class="math inline">\(X\)</span>) is display on both dimensions.
