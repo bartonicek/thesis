@@ -24,6 +24,7 @@ df <- data.frame(x, y, xend, yend, sx, sy, col)
 
 p2 <- ggplot(df, aes(x, y, xend = xend, yend = yend, col = col)) +
   geom_segment(lineend = "round") +
+  annotate("text", x = 30, y = 1, label = "?", size = 10) +
   scale_y_continuous(expand = c(0.25, 0.25)) +
   scale_colour_manual(values = pal_dark_3) +
   guides(col = "none") +
@@ -38,7 +39,6 @@ p1 <- ggplot(df, aes(x = sx, y = sy, col = col)) +
   labs(x = NULL, y = NULL)
 
 p <- p1 + p2
-p
 
 ggsave("./figures/line-consistency.png", p, dpi = 300,
        width = def_width, height = def_height * 2 / 2, units = "in")

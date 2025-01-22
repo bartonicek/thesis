@@ -4,11 +4,11 @@ editor_options:
   chunk_output_type: console
 ---
 
-# Problem Set {#problems}
+# Challenges {#problems}
 
-Designing an interactive data visualization system presents a unique set of challenges. Some of these have been already touched on in the [Introduction](#Introduction). This section discusses these inherent challenges in greater depth, and begins exploring avenues for possible solutions.
+Designing an interactive data visualization system presents a unique set of challenges. Some of these have been already touched on in the Section \@ref(litreview). This section homes in on these inherent challenges, discusses them in greater depth, and begins exploring avenues for possible solutions.
 
-## Data visualization pipeline
+## The structure of this chapter: Data visualization pipeline
 
 When creating visualizations, it is rarely the case that we can plot the raw data directly, as is. Instead, before it can be rendered, the data often has to pass through several distinct transformation stages. Together, these stages form a data visualization pipeline [see e.g. @chi2000; @wickham2009; @wu2024]. 
 
@@ -31,7 +31,7 @@ Thus, the process of splitting our data into subsets may appear straightforward.
 
 While common data visualization practices provide implicit solutions to these questions, in the data visualization literature, explicit answers are rarely given. This is unfortunate because choosing how to partition our data is a highly consequential decision: it involves making assumptions about both the data itself and the visualization's goals. Especially in interactive data visualization, the relationships between the parts of our data become of crucial importance. Therefore, discussing these two questions is essential.
 
-### Showing the full data
+### Showing the full data {#show-all-data}
 
 > "If someone hides data from you, it’s probably because he has something to hide." [@cairo2016, pp. 47]
 
@@ -664,83 +664,11 @@ This is the most important point in this section, and one of the most important 
 
 ## Scaling
 
-Suppose we have partitioned our data and computed the relevant summary statistics. Now we need a way to to encode these summaries into visual attributes that we can then present on the computer screen. In most data visualization systems, this is done by specialized components called scales or coordinate systems [see e.g. @murrell2005; @wickham2016; @wilkinson2012; @petricek2020].
+Suppose we have partitioned our data and computed all relevant summary statistics. Now we need a way to to encode these summaries into visual attributes that we can then present on the computer screen. In most data visualization systems, this is done by specialized components called scales or coordinate systems [see e.g. @murrell2005; @wickham2016; @wilkinson2012; @petricek2020].
 
-Scales involve two important challenges: the theoretical problem of mapping data to visual encodings, and the more applied problem of implementing such a scaling system. While much has been written on the theoretical properties of scales, considerably less information is available on the practical implementation of scales. Further, interactive data visualization presents some fairly unique and interesting problems for the implementation of scales, and these are also rarely discussed. For this reason, I provide only a brief overview of some of the key areas of the theory of scales, and devote more space to the applied problems, as I feel these deserve equal share of attention.   
+As discussed in Sections \@ref(scales-measurement) and \@ref(visual-perception), there exists is a fair amount of literature on the theoretical properties of scales and their relationship to the mechanisms of visual perception [see e.g. @krzywinski2013; @michell1986; @wilkinson2012; @stevens1946]. However, when it comes to applying this knowledge and implementing scales in concrete data visualization systems, few research papers are available, and most only discuss the problem in vague, abstract terms [for some rare counter-examples, see e.g. @murrell2005; @ziemkiewicz2009]. To learn about how to actually implement scales scales, one has to go digging through open-source code repositories, which are rarely the most concise educational resources.
 
-<!-- ### Theory of scales -->
-
-<!-- Within the data visualization literature, there exists a fairly large body of research on the theoretical properties of scales. A full treatment is beyond the scope of the present thesis. However, in this section, I will attempt to briefly summarize some important findings and concepts. -->
-
-<!-- #### Philosophy, psychology, and measurement {#theory-of-measurement} -->
-
-<!-- One challenge when discussing scales in data visualization is that the topic unavoidably intersects with a research area that has a particularly long and contentious history: theory of measurement [see e.g. @hand1996; @michell1986; @tal2025]. Theory of measurement (not to be confused with measure theory, with which it nevertheless shares some overlap) is the research area which tries to answer the deceptively simple question: what does it mean to measure something? This seemingly trivial problem has inspired long and fiery debates within the fields of mathematics, philosophy, and social science. Particularly, in psychology, where assigning numerical values non-physical phenomena such as moods and mental states is a central concern, the topic has garnered a significant amount of attention, creating a dense body of research [see e.g. @humphry2013; @michell2021]. -->
-
-<!-- Arguably, the most influential work in this field has been that of @stevens1946. In his fairly concise paper, Stevens defined a *scale* as method of assigning numbers to values, and introduced a four-fold classification classification, namely: nominal, ordinal, interval, and ratio scales (see Table \@ref(tab:stevens-scales)). -->
-
-<!-- ```{r stevens-scales} -->
-<!-- #| echo: false -->
-
-<!-- tab <- data.frame( -->
-<!--   v1 = c("Nominal", "Ordinal", "Interval", "Ratio"), -->
-<!--   v2 = c("Isomorphism", -->
-<!--          "Monotone map", -->
-<!--          "Affine transformation", -->
-<!--          "Linear map"), -->
-<!--   v3 = c("Are $x$ and $y$ the same?",  -->
-<!--          "Is $x$ is greater than $y$?",  -->
-<!--          "How far is $x$ from $y$?", -->
-<!--          "How many times is $x$ greater than $y$?"), -->
-<!--   v4 = c("$x' = f(x)$, where $f$ is a bijection",  -->
-<!--          "$x' = f(x)$, where $f$ is a monotone bijection",  -->
-<!--          "$x' = ax + b$, for $a, b \\in \\mathbb{R}$",  -->
-<!--          "$x' = ax$, for $a \\in \\mathbb{R}$") -->
-<!-- ) -->
-
-<!-- col_names <- c("Scale",  -->
-<!--                "Structure", -->
-<!--                "Comparison",  -->
-<!--                "Valid transformations") -->
-<!-- knitr::kable(tab, col.names = col_names,  -->
-<!--              caption = "Types of scales identified by Stevens (1946)") -->
-
-<!-- ``` -->
-
-<!-- The Steven's [-@stevens1946] typology is based on invariance under transformation. Specifically, for each class of scales, we define a set of transformations that preserve valid comparisons. The set of valid transformations shrinks as we move from one class of scales to another.   -->
-
-<!-- For nominal scales, any kind of bijective transformation is valid. Intuitively, we can think of the scale as assigning labels to values, and any kind re-labeling is valid, as long as it preserves equality of the underlying values. For instance, given a nominal scale with three values, we can assign the labels $\{ \text{red}, \text{green}, \text{blue} \}$ or $\{ \text{monday}, \text{tuesday}, \text{wednesday} \}$ in any way we like, as long as each value maps to a unique label. This identifies the underlying mathematical structure as an isomorphism. -->
-
-<!-- Ordinal scales are more restrictive, since, on top of preserving equality, transformations also need to preserve order. For example, if we want to assign the labels $\{ \text{monday}, \text{tuesday}, \text{wednesday} \}$ to an ordinal scale with three values, there is only one way to do it that preserves the underlying order: assign the least values to $\text{monday}$, the middle value to $\text{tuesday}$, and the greatest value to $\text{wednesday}$ (assuming we order the labels/days in the usual day-of-week order). However, there is no notion of distance between the labels: we could just as well assign the values labels in $\mathbb{N}$ such as $\{ 10, 20, 30 \}$, $\{1, 2, 9999 \}$, and so on. Thus, the fundamental mathematical structure is that of a monotone map. -->
-
-<!-- Interval scales need to additionally preserve equality of intervals. This means that, for any three values $a, b,$ and $c$, if the distances between $a$ and $b$ and $b$ and $c$ are equal, $d(a, b) = d(b, c)$, then so should be the distances between the scaled labels, $d^*(f(a), f(b)) = d^*(f(b), f(c)$. For most real applications, this limits interval scales to the class of affine transformations of the form $f(x) = ax + b$. A canonical example of an interval scale is the conversion formula of degrees Celsius to Fahrenheit: $f(c) = 9/5 \cdot c + 32$ [@stevens1946]. This example also highlights an important property of interval scales: the zero point can be arbitrary and ratios are not meaningful. Specifically, since the zero points of both Celsius and Fahrenheit scales were chosen based on arbitrary metrics (freezing temperatures of water and brine, respectively), it does not make sense to say that, e.g. 20°C is "twice as hot" as 10°C, in the same way that it does not make sense to say that 2000 CE is "twice as late" as 1000 CE.   -->
-
-<!-- Finally, ratio scales also need to preserve the equality of ratios. Specifically, if $a/b = b/c$ then $f(a)/f(b) = f(b) / f(c)$. As a consequence, this also means that the scale must have a well-defined zero-point. Examples of ratio scales include physical magnitudes such as height and weight, which have a well-defined zero point [@stevens1946]. -->
-
-<!-- Steven's [-@stevens1946] typology sparked a considerable debate, on multiple fronts. First, since the original publication, many authors have sought to either expand upon or criticize Steven's typology. However, despite some monumental efforts towards a unified theory, such as that of @krantz1971, measurement has remained a hotly debated topic to this day [see e.g. @michell2021; @tal2025]. Second, more relevant to statistics, some authors such as @stevens1951 and @luce1959 used the theory to define come up with prescriptive rules for statistical transformations, suggesting that, for example, taking the mean of an ordinal variable is wrong since the meaning of the average operator is not preserved under monotone transformations. However, this issue was hotly contested by statisticians such as @lord1953, @tukey1986, and @velleman1993, who argued that many well-established statistical practices, such as rank-based tests and coefficients of variations, rely on such "impermissible" statistics but can nevertheless yield valuable insights. More broadly, these authors also argued that data is not really meaningful on its own, but instead derives its meaning from the statistical questions it is used to answer [see also @wilkinson2012].         -->
-
-<!-- At this point, the discussion around measurement has become far too dense and theoretical, and most data visualization researchers seem to avoid delving into it too deeply [see e.g. @wilkinson2012]. Nevertheless, there are still some areas where the issues of measurement and Steven's typology do crop up. For instance, when scaling area based on a continuous variable, a common recommendation is to start the scale at zero to ensure accurate representations of ratios [see e.g. @wickham2024], aligning with Steven's definition of a ratio scale. Likewise, the long-standing debate around whether the base of a barplot should always start at zero [see e.g. @cleveland1985; @wilkinson2012] also carries echoes of the measurement debate. Ultimately, it may yet require long time to settle the issues around measurement, however, there are definitely some ideas within the literature that data visualization can benefit from.     -->
-
-#### Visual perception and encodings
-
-Another important research area is how scales apply to visual perception. Specifically, given that we use visual attributes such as position, color, length, or area to encode various aspects of our data, researchers have tried to answer the question of how to use these attributes in a way that best leverages the human visual system. Fortunately, this research has been quite fruitful, yielding precise and actionable guidelines [for a review, see @franconeri2021; @quadri2021].
-
-A landmark work in this area has been that of @cleveland1984. In this study, the authors conducted a series of empirical experiments in which they investigated people's ability to accurately judge quantities based on different visual encodings. They found that judgments based on position along a common scale were the most accurate, followed by length-based comparisons, and then angle-based comparisons. 
-
-The findings were later corroborated by other authors. @heer2010 replicated the @cleveland1984 study, and included judgements of circular and rectangular areas which were found to be less accurate than position, length, or angle. Other authors have extended these experiments to other visual encodings, such as color or density [e.g. @demiralp2014; @saket2017; @reda2018]. Together, these findings have been used to create rankings of visual encodings, with researchers generally agreeing on the following ordered list: position, length, area, angle, and intensity [from most effective to least, @mackinlay1986; @franconeri2021; @quadri2021].    
-
-#### Scale transformations
-
-> "Transformation is a critical tool for visualization or for any other mode of data analysis
-because it can substantially simplify the structure of a set of data."
-> 
-> @cleveland1993, pp. 48
-
-
-### Scales in practice
-
-While there exists a large body of literature concerned with what we should and should not do with scales, information about what scales actually are and how to implement them is scarce. Partly to blame may be fatigue from the endless debates around theory of measurement (see Section \@ref(theory-of-measurement)). Be it as it may, many data visualization researchers seem content to talk about scales in fairly abstract terms, making an occasional nod to Steven's -@stevens1946 typology [see e.g. @aparicio2015; @dastani2002; for some rare counter-examples see e.g. @murrell2005; @petricek2020; @ziemkiewicz2009].  
-
-However, the reality of real-world data visualization code-bases is quite different. Here, a significant portion of effort is dedicated to implementing scales and coordinate systems. For instance, within the `ggplot2` codebase, the file containing the definition of the `Scale` class has the greatest number of lines, by quite a significant margin [as of 4th of December 2024, @ggplot2repo2024], see Figure \@ref(fig:ggplot2-linecounts):
+This gap between theory and practice is quite unfortunate in my opinion, since scales are an integral part of the data visualization pipeline. Further, they are the foundation of many interactive features, such as zooming and panning. Finally, within existing data visualization systems, it is often the case that a large portion of the code is dedicated to scales. For instance, within the `ggplot2` codebase, the file containing the definition of the `Scale` class has the greatest number of lines, by quite a significant margin [as of 4th of December 2024, @ggplot2repo2024], see Figure \@ref(fig:ggplot2-linecounts):
 
 ```{r ggplot2-linecounts}
 #| echo: false
@@ -749,5 +677,78 @@ knitr::include_graphics("./figures/ggplot2-linecounts.png")
 ```
 
 
-From a high-level perspective, a scale is just a function $s: D \to V$ which translates values of the data $d \in D$ to values of some visual attribute $v \in V$, such as the x- and y-position, length, area, radius, or color [@wilkinson2012; @petricek2020]. 
+
+For the reasons outlined above, I decided to dedicate this section to the problem of applied scales. The information here is based largely on how scales have been implemented in existing data visualization codebases, such as the `ggplot2` R package [@wickham2016] or `d3-scale` module of D3 [@d3-scale2024; also used by Vega @satyanarayan2015], as well as on personal insights gained while implementing my own package.
+
+#### Overview
+
+From a high-level perspective, a scale is just a function $s: D \to V$ which translates values of the data $d \in D$ to values of some visual attribute $v \in V$, such as the x- and y-position, length, area, radius, or color [@wilkinson2012; @petricek2020]. This function may or may not be invertible, such that, at times, each value of the visual attribute may be uniquely identifiable with a single data value, or not.
+
+One of the most common and typical example of a scale is one where both $D$ and $V$ are subsets of the real numbers:
+
+$$s: [d_{min}, d_{max}] \to [v_{min}, v_{max}] \qquad d_{min}, d_{max}, v_{min}, v_{max} \in \mathbb{R}$$
+
+For example, suppose our data takes values in the range from 1 to 10 and we want to plot it along the x-axis, within a 800 pixels wide plotting region. Then, our scale is simply:
+
+$$s_x: [1, 10] \to [0, 800]$$
+
+Now, there is an infinite number of functions that fit this signature. However, one particularly nice and simple candidate is the following function:
+
+::: {.definition #linear-mapping name="Simple linear mapping"}
+$$s(d) = v_{max} + \frac{d - d_{min}}{d_{max} - d_{min}} \cdot (v_{max} - v_{min})$$
+:::
+
+if we substitute our concrete values into the formula, this becomes:
+
+$$s_x(d) = 0 + \frac{d - 1}{10 - 1} \cdot (800 - 0) = [(d - 1) / 9] \cdot 800$$
+
+The function acts on the data in the following way:
+
+- $s_x(1) = (1 - 1) / 9 \cdot 800 = 0$
+- $s_x(10) = (10 - 1) / 9 \cdot 800 = 800$
+- $s_x(d) \in (0, 800)$ for any $d \in (1, 10)$
+
+That is, the function maps the data value 1 to pixel 0 (left border of the plotting region), value 10 to to pixel 800 (right border of the plotting region), and any value in between 1 and 10 inside the interval 0 to 800, proportionally to where in the data range it is located.
+
+#### Limits of modeling scales as simple functions {#simple-scale-limits}
+
+Simple scale functions like the linear mapping above can work fine for basic data visualization systems. However, once we begin adding more features, this design becomes prohibitive. Consider, for example, what happens if we want to:
+
+- Expand the scale limits
+- Scale discrete data
+- Apply non-linear transformations
+- Pan, zoom, reverse, reorder, or otherwise modify the scale interactively
+
+Let's take the first point as a motivating example. Consider what happens to data points at the limits of the data range under the simple linear mapping:   
+
+```{r}
+#| out-width: 800px
+#| fig-align: 'center'
+set.seed(123456)
+x <- 1:10
+y <- rnorm(10, 0, 5)
+col <- ifelse(1:10 %in% c(1, 10), "indianred", "grey80")
+
+plot(x, y, col = col, cex = 3, xaxs = "i", pch = 19)
+```
+
+The plot above shows values scaled using the simple linear mapping along the x-axis, that is, $s: [1, 10] \to [0, 800]$ (effect of the `xaxs = "i"` argument). Notice that, since the position of the points representing the values 1 and 10 (highlighted in red) gets mapped to pixel values 0 and 800 (the left and right border of the plot), only half of each point is visible. This is problematic: as was discussed in Section \@ref(show-all-data), a fundamental principles of graphical integrity is that our graphics should not downplay or hide certain features of the data [@tufte2001]. Since the points near the axis limits are represented by only 1/2 of the area, they become less visually salient, and this is particularly problematic since these points are more likely to be outliers.    
+
+To address this problem, most data visualization systems automatically expand the range of the domain by some pre-specified percentage:
+
+```{r}
+#| out-width: 800px
+#| fig-align: 'center'
+# By default, the plot() function automatically expands the x- and y-axis
+# limits by approximately 4% on each end, see `xaxs` in ?graphics::par
+plot(x, y, col = col, cex = 3, pch = 19)
+```
+
+#### Scale transformations
+
+> "Transformation is a critical tool for visualization or for any other mode of data analysis
+because it can substantially simplify the structure of a set of data."
+> 
+> @cleveland1993, pp. 48
+
 

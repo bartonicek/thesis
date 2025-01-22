@@ -247,3 +247,12 @@ general-data-visualization-theory
 stacking-part-whole
 general-visualization-theory
 fig:line-consistency
+interactive-enough
+fig:unnamed-chunk-2
+data-visualization-pipelines
+interactive-interacting
+scales-measurement
+overview-1
+visual-perception
+show-all-data
+the-structure-of-this-chapter-data-visualization-pipeline
