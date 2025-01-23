@@ -678,9 +678,9 @@ knitr::include_graphics("./figures/ggplot2-linecounts.png")
 
 
 
-For the reasons outlined above, I decided to dedicate this section to the problem of applied scales. The information here is based largely on how scales have been implemented in existing data visualization codebases, such as the `ggplot2` R package [@wickham2016] or `d3-scale` module of D3 [@d3-scale2024; also used by Vega @satyanarayan2015], as well as on personal insights gained while implementing my own package.
+For the reasons outlined above, I decided to dedicate this section to the problem of applied scaling. The information here is based largely on how scales have been implemented in existing data visualization codebases, such as the `ggplot2` R package [@wickham2016] or `d3-scale` module of D3 [@d3-scale2024; also used by Vega @satyanarayan2015], as well as on personal insights gained while implementing my package.
 
-#### Overview
+#### Scales as functions
 
 From a high-level perspective, a scale is just a function $s: D \to V$ which translates values of the data $d \in D$ to values of some visual attribute $v \in V$, such as the x- and y-position, length, area, radius, or color [@wilkinson2012; @petricek2020]. This function may or may not be invertible, such that, at times, each value of the visual attribute may be uniquely identifiable with a single data value, or not.
 
@@ -786,7 +786,7 @@ Further, the normalize and unnormalize functions may at times have inverses (or 
 $$s^{-1}(v) = u_D(n_V(v))$$
 :::
 
-There are a couple of things which bear explaining. First, provided that $d$ falls in some *typical* subset of data values (such as $[d_{\min}, d_{\max}]$ for continuous $D$), the normalize function should *generally* return values into the unit interval $[0, 1]$, and, conversely, the unnormalize function should map values in $[0, 1]$ to typical values of the visual attribute. However, the codomain of $n_D$ is $\mathbb{R}$ instead of strictly $[0, 1]$ to accommodate "unusual" data or visual attribute values. For instance, after zooming into a scatterplot, we still want to be able to render points partially outside the plot limits. Therefore, we use $\mathbb{R}$ as the intermediate domain instead of $[0, 1]$, though we can conceptually think of it as an "extended" unit interval $[0, 1]$, that I will denote as $[0, 1]'$.
+There are a couple of things which bear explaining. First, provided that $d$ falls in some *typical* subset of data values (such as $[d_{\min}, d_{\max}]$ for continuous $D$), the normalize function should *generally* return values into the unit interval $[0, 1]$, and, conversely, the unnormalize function should map values in $[0, 1]$ to typical values of the visual attribute. However, the codomain of $n_D$ is $\mathbb{R}$ instead of strictly $[0, 1]$ to accommodate "unusual" data or visual attribute values. For instance, suppose if you zoom into a specific region in a scatterplot and there is a point with its center just outside of the new plot limits. If the point's radius is greater than the distance of its center to the plot border, a part of the point will still overlap the plotting region and we should render it, even though the x- and y- coordinates lie outside the data range. Therefore, we use $\mathbb{R}$ as the intermediate domain instead of $[0, 1]$, though we can conceptually think of it as an "extended" unit interval $[0, 1]$, that I will denote as $[0, 1]'$.
 
 Second, even with this extended unit interval interpretation, the choice of $[0, 1]$ is arbitrary - any interval $[a, b]$ with $a, b \in \mathbb{R}$ will work. However, the $[0, 1]' = \mathbb{R}$ interval offers a convenient interpretation: values $p \in [0, 1]'$ can be interpreted as percentages. For example, $n_D(d) = 0.5$ indicates data value is at the 50th percentile of the data range, and should, therefore, be generally mapped to the middle of the visual attribute range (other factors that we will talk about later aside). Values outside of $[0, 1]$ represent data values extending beyond the data range. For example, $n_D(d) = 1.2$ suggests that the data point lies 20% beyond the upper limit of the data range (provided that $D$ is continuous).
 
@@ -794,9 +794,9 @@ Finally, note that the terms *normalizing* and *unnormalizing* are also arbitrar
 
 What we gain by recasting scales as a composition of two functions is that now we have three components that we can fiddle with: the data domain $D$, the visual attribute codomain $V$, and the intermediate extended unit interval $[0, 1]' \subset \mathbb{R}$. As we will see, we can do quite a lot by manipulating and combining these three components. However, going forward, I believe it will be a lot easier to explain the ideas via code examples, rather than mathematical formulas. Still, it will be very useful to keep the mathematical definition above in mind.
 
-#### Implementing two-component scale systems in code
+#### A high-level model of scale implementation {#proposed-model}
 
-Implementing scales in code requires moving from abstract mathematical objects such as sets $D$, $V$ and $[0, 1]'$ and mappings $n_D$ and $u_V$ to concrete objects and functions supported via the programming language. These can be implemented as "smart" objects with methods (using traditional object-oriented programming style) or as simple data containers with associated functions (my preferred style). Regardless of the approach, a few useful patterns emerge. The following pseudocode examples use TypeScript because its static typing helps illustrate these patterns.
+To implement scales, we need to translate abstract mathematical objects such as sets $D$, $V$ and $[0, 1]'$ and mappings $n_D$ and $u_V$ to concrete programming constructs. In this section, I will briefly sketch out a high-level model of scales, as implemented in my package, simple TypeScript code (I use TypeScript instead of R because TypeScript's static typing is particularly useful for explaining some of the concepts here). Further, it's worth noting that this model of scales can be implemented in many different ways, depending on the programming paradigm. For instance, in the traditional object-oriented programming style (OOP), someone might design a `Scale` class and then instantiate it as a "smart" object with methods. Personally, I prefer the style of using independent types, data containers, and free functions. This is the style that I used while writing my package and so I will also use it here.
 
 First, we want some kind of object to describe a scale. Based on Definition [REFERENCE], a scale has to primarily incorporate two objects: the data *domain* and the visual attribute *codomain*: 
 
@@ -821,7 +821,7 @@ function pullback<D extends Expanse, V extends Expanse>(scale: Scale<D, V>, valu
 
 The function signatures are fairly long because of the generic type parameters, however, they are actually very simple. The `pushforward` function simply takes a scale and a value that matches the scale's `domain` (the `D["value_type"]` refers to an opaque property access returns the type of values that `domain` operates on) and returns values in the scales `codomain`. Conversely, the `pullback` function simply takes a scale and a value in its `codomain`, and translates it to the scale's `domain`.
 
-Now it is type to discuss `Expanse`. The `Expanse` supertype is actually very simple, even simpler than that of a `Scale`. It only has a single property, indicating the type of values it operates on:
+Now it is type to discuss `Expanse`. The `Expanse` supertype is actually very simple, even simpler than that of a `Scale`. It only has a single property, indicating the value type it operates on:
 
 ```{ts}
 #| eval: false
@@ -841,9 +841,63 @@ function normalize<T extends Expanse>(expanse: T, value: T["value_type"]): numbe
 function unnormalize<T extends Expanse>(expanse: T, value: number): T["value_type"]
 ```
 
-These correspond to the $n_{\cdot}$ and $u_{\cdot}$ functions above. Specifically, the `normalize` function takes in an expanse and a value that the expanse operates on (`T["value_type"]`) and converts it to a number (i.e. $p \in [0, 1]' = \mathbb{R}$), whereas the `unnormalize` function takes in an expanse and a number and converts it to a value of type `T["value_type"]`.
+These correspond to the $n_{\cdot}$ and $u_{\cdot}$ functions above. Specifically, the `normalize` function takes in an expanse and a value that the expanse operates on (`T["value_type"]`) and converts it to a number (i.e. $p \in [0, 1]' = \mathbb{R}$), whereas the `unnormalize` function takes in an expanse and a number and converts it to the expanse's value type. Generally, these functions should be inverses of each other, or at least retractions, such that `unnormalize(exp, normalize(exp, x)) == x` and `normalize(exp, unnormalize(exp, p)) == p`.
 
-The polymorphic nature of the `normalize` and `unnormalize` functions could be implemented through methods bound to specific `Expanse` subtype, function overloading, or even via a simple switch statement.
+As polymorphic functions, `normalize` and `unnormalize` could be implemented as methods bound to specific `Expanse` subtype, an overloaded functions with dynamic dispatch, or even via a simple switch statement. The specific approach really does not matter. The important point is that we can use `Expanse` subtypes for converting between values and numbers. Therefore, the `domain` and `codomain` actually do the majority of the work of a scale. For instance, with a bit of hand-waving that we will clarify later, we can implement a simplified version of the `pushforward` function as:
+
+```{ts}
+#| eval: false
+function pushforward<D extends Expanse, V extends Expanse>(scale: Scale<D, V>, value: D["value_type"]) {
+  const { domain, codomain } = scale
+  return unnormalize(codomain, normalize(domain, value))
+  // ^ Or `return codomain.unnormalize(domain.normalize(value))`, in traditional OOP style
+}
+```
+
+The simplified implementation of the `pushforward` function is almost identical, except that the order of `domain` and `codomain` is reversed.
+
+So, to summarize, a `Scale` object has two important properties - `domain` and `codomain` - which are both of subtypes of type `Expanse`, and, in fact, the majority of actual work is done with/by these objects. As such, we should discuss the `Expanse` subtypes next. However, before we go on to do that, we should compare the implementation outlined above to other implementations of scales in existing data visualization systems.
+
+#### Comparison to past implementations of scales
+
+Many popular data visualization systems implement a two-component model of scales similar to the one outlined in the previous section. For example, in `D3` [@bostock2011], scales are implemented in a functional style, such that the data domain and the visual attribute codomain are passed as tuples or arrays of values to a higher-order `scale*` function (such as `scaleLinear`, `scalePoint`, or `scaleBand`), which then returns a new function that can be used for scaling. The domain and codomain can also be modified afterwards, using the `scale*.domain` and `scale*.range` methods respectively (JavaScript functions are objects and can have other functions/methods attached to them). 
+
+For illustration, here are few examples from the official documentation [@d3-scale2024]:
+
+```{ts}
+#| eval: false
+const x = d3.scaleLinear([10, 130], [0, 960]);
+x(20); // 80
+const color = d3.scaleLinear([10, 100], ["brown", "steelblue"]);
+color(20); // "rgb(154, 52, 57)"
+// The domain and codomain can be changed after initialization
+const y = d3.scaleLinear().domain([10, 130]); 
+```
+
+Internally, the `scale*` functions rely on other specialized functions to translate from its domain to the codomain (such as the `normalize()` and `scale()` functions for continuous and discrete/ordinal domains, respectively, and various `interpolate()` functions for codomains). 
+
+Similarly, in `ggplot2` [@wickham2016], all scales inherit from the `Scale` base class, with each subtype implementing `limits` and `palette` properties. The `limits` property is a vector which corresponds to the data domain and the `palette` property is a function which corresponds roughly to the visual codomain (the x- and y-position behave slightly differently, due to being transformed via coordinate systems). Internally, the package uses the `rescale` function from the `scales` package [@wickham2023] to map data values to $[0, 1]$ and then the `palette` function is responsible for mapping these normalized values to the visual attribute. For illustration, here's the full definition of the `map` method on the `ScaleContinuous` class (I've added comments for clarity):
+
+```{r}
+#| eval: false
+map = function(self, x, limits = self$get_limits()) {
+  # Limits are just a tuple, rescale maps x to [0, 1]
+  x <- self$rescale(self$oob(x, range = limits), limits) 
+
+  uniq <- unique0(x)
+  # Palette is a function which returns a vector of attribute values
+  pal <- self$palette(uniq) 
+  scaled <- pal[match(x, uniq)]
+
+  ifelse(!is.na(scaled), scaled, self$na.value)
+}
+```
+
+However, an key difference between the models of scales discussed above, and the proposed model discussed in Section \@ref(proposed-model) is that, in both `D3` and `ggplot2`, the domain and codomain are of different types. Consequently, the packages' equivalents of the `normalize` and `unnormalize` functions have completely different implementations. In `D3`, internally, the functions used to translate from $D \to [0, 1]'$ are fundamentally different from those used to translate from $[0, 1]' \to V$. This difference is even more pronounced in `ggplot2`, where `limits` is a simple vector/tuple whereas `palette` is a function. 
+
+I contend that having two separate types for the domain and codomain has several disadvantages. First, it impedes code reuse, since we cannot simply use the same object in either place. Second, it complicates the mental model: the user has to hold a completely different concept for the domain and codomain in their head. Finally, the models of scales outlined above are designed to work in only one direction: from the data to the visual attribute. To go the other way around, from the visual attribute to the data, other, specialized functions have to be implemented.
+
+Instead, I propose a unified model where the domain and codomain differ only in the context they are used. This greatly simplifies code reuse and the mental model, as the same `Expanse` subtype can serve as either. Moreover, if the domain and codomain implement both `normalize` and `unnormalize` functions, constructing the inverse scale function is trivial. There are also several other advantages, which I will discuss in the following sections.
 
 #### Scale transformations
 

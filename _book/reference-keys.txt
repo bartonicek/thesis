@@ -257,3 +257,10 @@ visual-perception
 show-all-data
 the-structure-of-this-chapter-data-visualization-pipeline
 implementing-two-component-scale-systems-in-code
+implementing-two-component-scale-systems
+comparison-to-past-implementation-of-scales
+scales-as-functions
+a-high-level-overview-of-scale-implementation
+a-high-level-model-of-scale-implementation
+proposed-model
+comparison-to-past-implementations-of-scales
