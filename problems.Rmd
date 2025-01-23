@@ -684,7 +684,7 @@ For the reasons outlined above, I decided to dedicate this section to the proble
 
 From a high-level perspective, a scale is just a function $s: D \to V$ which translates values of the data $d \in D$ to values of some visual attribute $v \in V$, such as the x- and y-position, length, area, radius, or color [@wilkinson2012; @petricek2020]. This function may or may not be invertible, such that, at times, each value of the visual attribute may be uniquely identifiable with a single data value, or not.
 
-One of the most common and typical example of a scale is one where both $D$ and $V$ are subsets of the real numbers:
+One of the most common examples is a scale where both $D$ and $V$ are subsets of the real numbers:
 
 $$s: [d_{min}, d_{max}] \to [v_{min}, v_{max}] \qquad d_{min}, d_{max}, v_{min}, v_{max} \in \mathbb{R}$$
 
@@ -695,7 +695,7 @@ $$s_x: [1, 10] \to [0, 800]$$
 Now, there is an infinite number of functions that fit this signature. However, one particularly nice and simple candidate is the following function:
 
 ::: {.definition #linear-mapping name="Simple linear mapping"}
-$$s(d) = v_{max} + \frac{d - d_{min}}{d_{max} - d_{min}} \cdot (v_{max} - v_{min})$$
+$$s(d) = v_{min} + \frac{d - d_{min}}{d_{max} - d_{min}} \cdot (v_{max} - v_{min})$$
 :::
 
 if we substitute our concrete values into the formula, this becomes:
@@ -710,9 +710,9 @@ The function acts on the data in the following way:
 
 That is, the function maps the data value 1 to pixel 0 (left border of the plotting region), value 10 to to pixel 800 (right border of the plotting region), and any value in between 1 and 10 inside the interval 0 to 800, proportionally to where in the data range it is located.
 
-#### Limits of modeling scales as simple functions {#simple-scale-limits}
+#### Limits of modeling scales with simple functions {#simple-scale-limits}
 
-Simple scale functions like the linear mapping above can work fine for basic data visualization systems. However, once we begin adding more features, this design becomes prohibitive. Consider, for example, what happens if we want to:
+Simple scale functions like the linear mapping above can work fine for basic data visualization systems. However, once we begin adding more features, this design can become prohibitive. Consider, for example, what happens if we want to:
 
 - Expand the scale limits
 - Scale discrete data
@@ -729,6 +729,7 @@ x <- 1:10
 y <- rnorm(10, 0, 5)
 col <- ifelse(1:10 %in% c(1, 10), "indianred", "grey80")
 
+# xaxs = "i" makes sure the x-axis limits match the data range exactly
 plot(x, y, col = col, cex = 3, xaxs = "i", pch = 19)
 ```
 
@@ -739,10 +740,110 @@ To address this problem, most data visualization systems automatically expand th
 ```{r}
 #| out-width: 800px
 #| fig-align: 'center'
-# By default, the plot() function automatically expands the x- and y-axis
+# By default, the base R plot() function automatically expands the x- and y-axis
 # limits by approximately 4% on each end, see `xaxs` in ?graphics::par
 plot(x, y, col = col, cex = 3, pch = 19)
 ```
+
+We could achieve this by expanding our data range by some hard-coded percentage, for example, a symmetric 10% margin on each side:
+
+$$s(d) = v_{min} + \bigg[ \bigg( 0.1 + \frac{d - d_{min}}{d_{max} - d_{min}} \cdot (0.9 - 0.1) \bigg) \cdot (v_{max} - v_{min}) \bigg]$$
+However, this design quickly gets prohibitive as more features get added. For example, we may want to apply a different margin on each side, shift both margins by equal amount, or flip the scale's direction. Further, implementing this functionality in code with a single function would result in a hard to read implementation.
+
+#### Solution: Two-component scales {#two-component-scales}
+
+The linear mapping formula in \@ref(def:linear-mapping) can guide us in decomposing the scale function into smaller, more manageable parts. Let's look at it again:
+
+$$s(d) = v_{min} + \frac{d - d_{min}}{d_{max} - d_{min}} \cdot (v_{max} - v_{min})$$
+
+If we look closely, we may be able to see that the function can be split into two parts:
+
+$$s(d) = \color{steelblue}{v_{min} +} \color{indianred}{\frac{\color{black}{d} - d_{min}}{d_{max} - d_{min}}} \color{steelblue}{\cdot (v_{max} - v_{min})}$$
+
+That is, the linear mapping can be interpreted as being composed of two simpler functions:
+
+- $\color{indianred}{n(d) = (d - d_{min}) / (d_{max} - d_{min})}$ takes a data value $d \in D$ and maps it to the interval $[0, 1] \subset \mathbb{R}$
+- $\color{steelblue}{u(p) = v_{min} + p \cdot (v_{max} - v_{min})}$ takes a value in $[0, 1] \subset \mathbb{R}$ and maps it to a visual attribute value $v \in V$ 
+
+This leads us to the following definition of a scale:
+
+::: {.definition #scale name="Scale as composition of two functions"}
+
+A scale $s: D \to V$ can be created by composing:
+
+- A *data normalizing* function $n_D: D \to \mathbb{R}$, mapping data values the real numbers $\mathbb{R}$
+- An *visual attribute unnormalizing* function $u_V: \mathbb{R} \to V$, mapping real numbers to the visual attribute codomain
+
+Such that:
+
+$$s = u_V \circ n_D$$
+Or, more explicitly:
+
+$$s(d) = u_V(n_D(d))$$
+
+Further, the normalize and unnormalize functions may at times have inverses (or retractions) such that, e.g. $(n_D)^{-1} = u_D: \mathbb{R} \to D$ and $(u_V)^{-1} = n_V: V \to \mathbb{R}$, such that $u_D \circ n_D = n_V \circ u_V = \text{id}$, the identity function. If both $u_D$ and $n_V$ exist, then we can define the inverse scale function:
+
+$$s^{-1}(v) = u_D(n_V(v))$$
+:::
+
+There are a couple of things which bear explaining. First, provided that $d$ falls in some *typical* subset of data values (such as $[d_{\min}, d_{\max}]$ for continuous $D$), the normalize function should *generally* return values into the unit interval $[0, 1]$, and, conversely, the unnormalize function should map values in $[0, 1]$ to typical values of the visual attribute. However, the codomain of $n_D$ is $\mathbb{R}$ instead of strictly $[0, 1]$ to accommodate "unusual" data or visual attribute values. For instance, after zooming into a scatterplot, we still want to be able to render points partially outside the plot limits. Therefore, we use $\mathbb{R}$ as the intermediate domain instead of $[0, 1]$, though we can conceptually think of it as an "extended" unit interval $[0, 1]$, that I will denote as $[0, 1]'$.
+
+Second, even with this extended unit interval interpretation, the choice of $[0, 1]$ is arbitrary - any interval $[a, b]$ with $a, b \in \mathbb{R}$ will work. However, the $[0, 1]' = \mathbb{R}$ interval offers a convenient interpretation: values $p \in [0, 1]'$ can be interpreted as percentages. For example, $n_D(d) = 0.5$ indicates data value is at the 50th percentile of the data range, and should, therefore, be generally mapped to the middle of the visual attribute range (other factors that we will talk about later aside). Values outside of $[0, 1]$ represent data values extending beyond the data range. For example, $n_D(d) = 1.2$ suggests that the data point lies 20% beyond the upper limit of the data range (provided that $D$ is continuous).
+
+Finally, note that the terms *normalizing* and *unnormalizing* are also arbitrary, however, I believe they make for useful labels. We can interpret them as 1-D equivalent of vector normalization, mapping a value in the domain to and from the extended unit interval $[0, 1]'$.
+
+What we gain by recasting scales as a composition of two functions is that now we have three components that we can fiddle with: the data domain $D$, the visual attribute codomain $V$, and the intermediate extended unit interval $[0, 1]' \subset \mathbb{R}$. As we will see, we can do quite a lot by manipulating and combining these three components. However, going forward, I believe it will be a lot easier to explain the ideas via code examples, rather than mathematical formulas. Still, it will be very useful to keep the mathematical definition above in mind.
+
+#### Implementing two-component scale systems in code
+
+Implementing scales in code requires moving from abstract mathematical objects such as sets $D$, $V$ and $[0, 1]'$ and mappings $n_D$ and $u_V$ to concrete objects and functions supported via the programming language. These can be implemented as "smart" objects with methods (using traditional object-oriented programming style) or as simple data containers with associated functions (my preferred style). Regardless of the approach, a few useful patterns emerge. The following pseudocode examples use TypeScript because its static typing helps illustrate these patterns.
+
+First, we want some kind of object to describe a scale. Based on Definition [REFERENCE], a scale has to primarily incorporate two objects: the data *domain* and the visual attribute *codomain*: 
+
+```{ts}
+#| eval: false
+
+interface Scale<D extends Expanse, V extends Expanse> {
+  domain: D
+  codomain: V 
+}
+```
+
+The angle brackets indicate generic type parameters. Specifically, `D` and `V` are type parameters which extend the `Expanse` type, and signify the type of the domain and codomain of the scale, respectively. I will explain the `Expanse` type below in more detail, however, for now, `D` could be, for example, a continuous expanse, corresponding to a $D = [d_{\max}, d_{\min}]$ for some $d_{\min}, d_{\max} \in \mathbb{R}$.
+
+The primary use of a scale is to "push" values forward, first through its domain and second through its codomain, or "pull" them back, first through its codomain and second through its domain. We can describe this via the following two function signatures:
+
+```{ts}
+#| eval: false
+function pushforward<D extends Expanse, V extends Expanse>(scale: Scale<D, V>, value: D["value_type"]): V["value_type"]
+function pullback<D extends Expanse, V extends Expanse>(scale: Scale<D, V>, value: V["value_type"]): D["value_type"]
+```
+
+The function signatures are fairly long because of the generic type parameters, however, they are actually very simple. The `pushforward` function simply takes a scale and a value that matches the scale's `domain` (the `D["value_type"]` refers to an opaque property access returns the type of values that `domain` operates on) and returns values in the scales `codomain`. Conversely, the `pullback` function simply takes a scale and a value in its `codomain`, and translates it to the scale's `domain`.
+
+Now it is type to discuss `Expanse`. The `Expanse` supertype is actually very simple, even simpler than that of a `Scale`. It only has a single property, indicating the type of values it operates on:
+
+```{ts}
+#| eval: false
+interface Expanse {
+  value_type: unknown
+  // ^ Here, I use TypeScript's `unknown` type to indicate that `value_type` 
+  // could be anything. In practice, most of the time, this will be
+  // either `string` or `number`.
+}
+```
+
+The `Expanse` type is defined by the following two function signatures:
+
+```{ts}
+#| eval: false
+function normalize<T extends Expanse>(expanse: T, value: T["value_type"]): number
+function unnormalize<T extends Expanse>(expanse: T, value: number): T["value_type"]
+```
+
+These correspond to the $n_{\cdot}$ and $u_{\cdot}$ functions above. Specifically, the `normalize` function takes in an expanse and a value that the expanse operates on (`T["value_type"]`) and converts it to a number (i.e. $p \in [0, 1]' = \mathbb{R}$), whereas the `unnormalize` function takes in an expanse and a number and converts it to a value of type `T["value_type"]`.
+
+The polymorphic nature of the `normalize` and `unnormalize` functions could be implemented through methods bound to specific `Expanse` subtype, function overloading, or even via a simple switch statement.
 
 #### Scale transformations
 

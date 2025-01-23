@@ -256,3 +256,4 @@ overview-1
 visual-perception
 show-all-data
 the-structure-of-this-chapter-data-visualization-pipeline
+implementing-two-component-scale-systems-in-code
