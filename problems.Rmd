@@ -339,11 +339,11 @@ Thus, we need a way for thinking about the hierarchical relationships in our dat
 
 A [preorder](#preorders) is a binary relation on a set $S$, generally denoted by $\leq$, that is both reflexive and transitive. In simpler terms, given a preordered set $S$, any two elements $a, b \in S$ either relate ($a \leq b$, meaning $a$ is "less than" $b$), or they do not relate at all. Further, the relation obeys some common sense properties: every element relates to itself (reflexivity), and if $a$ relates to $b$ and $b$ relates to $c$, then $a$ relates to $c$ as well (transitivity).
  
-We can turn our hierarchy of data subsets in Figure \@ref(fig:spineplot-tree) into a preorder very easily, by simply being more explicit about the relationships in the figure. Specifically, define set $S$ as the set of data subsets, and the binary relation $\leq$ as the inclusion relation $\subseteq$. Then, we see that the two properties of preorders do indeed hold: every data subset is included in itself (reflexivity), and if a segment is a part of a bar, and bar is a part of the whole data set, then the segment is, clearly, part of the whole data set as well (transitivity). We can describe this preorder by the following figure (known as a Hasse diagram):
+We can turn our hierarchy of data subsets in Figure \@ref(fig:spineplot-tree) into a preorder very easily, by simply being more explicit about the relations in the figure. Specifically, define set $S$ as the set of data subsets, and the binary relation $\leq$ as the set inclusion relation $\subseteq$. Then, we see that the two properties of preorders do indeed hold: every data subset is included in itself (reflexivity), and if a segment subset is a part of a bar subset, and bar subset is a part of the whole data set, then the segment subset is, clearly, a part of the whole data set as well (transitivity). We can describe this preorder via the following diagram (known as a Hasse diagram):
 
 ```{r barplot-preorder}
 #| echo: false
-#| fig-cap: "A diagram of a preorder of data subsets ordered by inclusion, corresponding to a barplot or spinogram. $W$ represents the whole data set, $B_i$ represent bars, and $S_j$ represent individual bar segments. Arrows correspond to set inclusion."
+#| fig-cap: "A diagram of a preorder of data subsets ordered by inclusion, corresponding to a barplot or spinogram. $W$ represents the whole data set, $B_i$ represent bars, and $S_j$ represent individual bar segments. Arrows indicate set inclusion."
 knitr::include_graphics("./figures/barplot-preorder.png") 
 ```
 
@@ -367,7 +367,7 @@ knitr::include_graphics("./figures/graphs-cosplayers.jpg")
 
 I hope I have made a reasonably strong case here that many data visualization types are not "delusional cosplayers". By organizing our data into a preorder, we induce a graph-like, part-whole relationship on the subsets. Thus, graphs really are graphs. 
 
-However, organizing our data into a preorder introduces a new kind of challenge: preserving the inherent structure. Given that a preorder is an algebraic object imbued with structure, then, intuitively, it would be wrong to disregard this structure in the subsequent steps of the data visualization pipeline. For example, in a barplot, if we split our bars into segments, it would be inconsistent to stack some segments on top of each other while plotting others side-by-side. Clearly, any further manipulation of the hierarchically partitioned data should *respect this underlying structure*. However, what does it really mean to respect the structure of our data? This question will be explored in detail in the following section, which deals with the next step of the data visualization pipeline: aggregation.   
+However, organizing our data into a preorder introduces a new kind of challenge: preserving the inherent structure. Preorders are algebraic objects imbued with structure, and, intuitively, it would be wrong to disregard this structure in the subsequent steps of the data visualization pipeline. For example, in a barplot, if we split our bars into segments, it would be inconsistent to stack some segments on top of each other while plotting others side-by-side. Clearly, any further manipulation of the hierarchically partitioned data should *respect this underlying structure*. However, what does it really mean to respect the structure of our data? This question will be explored in detail in the following section, which deals with the next step of the data visualization pipeline: aggregation.   
 
 ## Aggregation
 
@@ -393,7 +393,7 @@ The grammar-based model offers many advantages, including simplicity and express
 
 However, despite its advantages, the grammar-based model has one fundamental flaw: graphics and statistics are not truly independent [see also @wu2024]. Instead, the visual representation of data must be congruent with its mathematical properties. This constraint, while present even in static visualizations, becomes especially critical in interactive contexts. Let's illustrate this point with an example of real-world data.
 
-#### Limits of independence {#stacking-not-graphical}
+#### Stacking: Limits of independence {#stacking-not-graphical}
 
 For this example, I will use famous data set from a study on the effect of smoking on child lung capacity [@tager1979; @kahn2005]. In the study, the researchers measured children's forced expiratory volume (FEV), and recorded it alongside age, height, sex, and smoking status.
 
@@ -466,9 +466,9 @@ At a glance, the plot in \@ref(fig:grammar-barplot-means) looks fine. However, w
 
 #### Some statistics are stackable but others are not
 
-The visualization in \@ref(fig:grammar-barplot-means) is problematic because the bar heights lack a meaningful statistical interpretation. The sum of group means is not something that most consumers of visualizations would care about or know how to interpret. Compare that with the previous example. Before, in Figure \@ref(fig:grammar-barplot-counts), the heights of the stacked bars represented valid overall counts - the number of smokers and non-smokers within a given age category combined. However, this is no longer the cae in Figure \@ref(fig:grammar-barplot-means). The sum of the group means is different from the mean of the combined cases, and neither is the mean of the group means. Fundamentally, in `ggplot2`, this problem arises because "stacking" is implemented as a purely graphical operation, however, as we can see, this is clearly not the case.
+The visualization in \@ref(fig:grammar-barplot-means) is problematic because the bar heights lack a meaningful statistical interpretation. The sum of group means is not something that most consumers of visualizations would know how to interpret or care about. In the previous example, in Figure \@ref(fig:grammar-barplot-counts), the heights of the stacked bars represented valid overall counts - the number of smokers and non-smokers within a given age category combined. In Figure \@ref(fig:grammar-barplot-means), this is no longer the case - the sum of the group means is different from the mean of the combined cases, and so may be the mean of the group means.
 
-Many data visualization researchers have explicitly warned about this problem:
+In `ggplot2`, stacking is implemented as a purely graphical operation. That is, within the context of the visualization system, stacking operates on geometric objects (rectangles), irrespective of the underlying summary statistics. However, as we can see from the example above, this can cause problems - *what* we stack matters. Indeed, many data visualization researchers have explicitly warned about this problem:
 
 >"Stacking is useful when the sum of the amounts represented by the individual stacked bars is in itself a meaningful amount" [@wilke2019, p. 52].
 
@@ -491,11 +491,11 @@ knitr::include_graphics("./figures/grammar-barplot-maximums.png")
 
 Here, in Figure \@ref(fig:grammar-barplot-maximums), we again plot FEV for smokers and non-smokers across the different age groups, however, this time, we display the *maximum FEV* on the y-axis. From this plot, we can see that, in most of the age categories which included smokers (age 9 and up), the child with the highest lung capacity was a non-smoker, although there were a few exceptions (ages 11, 16, and 18). 
 
-Notice one important feature of the plot above: the heights of the "stacked" bars represent a valid overall summary. Taking grouped data, summarizing each group by its maximum, and then taking the maximum of those maxima yields the overall maximum. That is, *the maximum of maxima is a valid maximum of all cases*. While the general usefulness of the plot in Figure \@ref(fig:grammar-barplot-maximums) could be debated - given that each bar effectively represents a single data point (the group maximum), and that, in small data sets, the maximum can be a highly variable - the plot still demonstrates one important, unshakeable fact: summaries other than sums and counts can be meaningfully "stacked."
+Notice one important feature of the plot above: the heights of the "stacked" bars represent a valid overall summary. Taking grouped data, summarizing each group by its maximum, and then taking the maximum of those maxima yields a valid overall maximum. That is, *the maximum of maxima is a valid maximum of all cases*. While the general usefulness of the plot in Figure \@ref(fig:grammar-barplot-maximums) could be debated - given that each bar effectively represents a single data point (the group maximum), and that, in small data sets, the maximum can be a highly variable - the plot still demonstrates one important, undeniable fact: summaries other than sums and counts can be meaningfully "stacked."
 
 #### Advantages of stacking: Part-whole relationship {#stacking-part-whole}
 
-Before we go on to discuss what makes certain statistics stackable, we first need to address the issue of of why is stacking useful. Specifically, some might argue that stacking is only one way of presenting partitioned data, and that we could equally well present "unstackable" summaries such as the averages in Figure \@ref(fig:grammar-barplot-means) by plotting the corresponding bars side by side (a technique know as dodging), or by plotting them on top of each other in semi-transparent layers, see \@ref(fig:dodging-layering):
+Before we go on to discuss what makes certain statistics stackable, we first need to address the issue of of why spend so much time talking about stacking in the first place. Specifically, some might argue that stacking is only one way of presenting partitioned data, and that we could equally well present "unstackable" summaries such as the averages in Figure \@ref(fig:grammar-barplot-means) by plotting the corresponding bars side by side (a technique know as dodging), or by plotting them on top of each other in semi-transparent layers, see \@ref(fig:dodging-layering):
 
 ```{r dodging-layering}
 #| echo: false
@@ -505,17 +505,17 @@ knitr::include_graphics("./figures/grammar-dodging-layering.png")
 
 Much has been written about the relative merits of stacking, dodging, and layering. For example, layering is only useful with few categories, as blending many colors can make it difficult to tell the categories apart [@franconeri2021; @wilke2019]. Further, in a landmark study, @cleveland1984 showed that people tend to be less accurate when reading information from stacked bar charts as opposed to dodged bar charts. Specifically, since the lower y-axis coordinate of a stacked segment is pushed up by the cumulative height of the segments below, it becomes difficult to accurately compare segments' length, both within and across bars [@cleveland1984]. Subsequent research has independently validated these findings and expanded upon them [see e.g. @heer2010; @thudt2016; @quadri2021]. Due to this suboptimal statistical legibility, many data visualization researchers have urged caution about stacking [see e.g. @byron2008; @cairo2014; @franconeri2021], and some have even discouraged its use altogether [@kosara2016; @wilke2019]. 
 
-However, I contend that, while dodging and layering are indeed valuable techniques for static visualization, stacking offers significant advantages in interactive contexts. The issue comes down to how the three techniques represent the relatedness of data subsets. In dodging and layering, the only indication of the fact that two subsets are related is their spatial proximity. In contrast, in stacking, the stacked segments are both close together in space (proximity) and also combine together to form a single object [part-whole relationship; see also @slingsby2009]. Thus, in a stacked barplot, we can interpret an individual stacked segment as a highlighted *part* of a bar, whereas the same is not true for dodging or layering. This subtle distinction has important implications for the figure's visual properties and interactive behavior [see also @roberts2000; @wilhelm2008].
+However, I contend that, while dodging and layering are indeed valuable techniques for static visualization, stacking offers significant advantages in interactive contexts. The issue comes down to how the three techniques represent the relatedness of data subsets. In dodging and layering, the only indication of the fact that two subsets are related is their spatial proximity. In contrast, in stacking, the stacked segments are both close together in space (proximity) and also combine together to form a single object [part-whole relationship, see also @slingsby2009]. Thus, in a stacked barplot, we can interpret an individual stacked segments as highlighted *parts* of a bar, whereas the same is not true for dodging or layering. This subtle distinction has important implications for the figure's visual properties and interactive behavior [see also @roberts2000; @wilhelm2008].
 
-Take, for instance, the typical stacked barplot. In a stacked barplot, the heights of the stacked segments sum to the height of the whole bar, providing a fixed upper bound and a clear visual anchor. This is particularly useful with linked selection. Even when the heights of the segments change, the total bar height remains constant, allowing us to maintain a fixed upper limit on the y-axis, for instance. Besides other advantages, this also reduces the computational overhead, since the axis limits only need to be recomputed *when the heights of the whole bars change* (e.g. changing binwidth in a histogram), not when the heights of the segments change. 
-
-This is not the case for dodging and layering, see Figure \@ref(fig:stacking-vs-dodging). Here, the heights of the bars are not bound by any value, such that the heights of the selected segments can exceed those of unselected segments. This forces us to choose between making the upper y-axis limit reactive (losing the context that the limit provides, each time seleciton happens), or risking the bars "overflowing" the plot area. Furthermore, this lack of visual anchoring creates suboptimal visuals. Research shows that translating and looming stimuli capture attention [@franconeri2003]. Because dodged (or layered) segments lengths lack a visual anchor, they can move around (stretch or shrink) in unpredictable ways in response to selection, creating a distracting visual effect:
+Take, for instance, the typical stacked barplot. In a stacked barplot, the heights of the stacked segments sum to the height of the whole bar, providing a fixed upper bound and a clear visual anchor, see Figure \@ref(fig:stacking-vs-dodging). This is particularly useful with linked selection. Even when the heights of the segments change, the total bar height remains constant, allowing us to maintain a fixed upper limit on the y-axis, for instance. Besides other advantages, this also reduces the computational overhead, since the axis limits only need to be recomputed *when the heights of the whole bars change* (e.g. changing binwidth in a histogram), not when the heights of the segments change. 
 
 ```{r stacking-vs-dodging}
 #| echo: false
-#| fig-cap: "Stacking has advantages over dodging (and layering) when it comes to displaying linked selection. Plots left to right show a simulated static snapshots of more cases being selected (red). In a stacked barplot (top row), the heights of the higlighted segments are always bound by the height of the whole bar, and so the outline of the figure remains constant. In contrast, in a dodged barplot, the bar segment heights are not bounded, leading to the outline of the figure fluctuating dramatically (notice the changing upper y-axis limit)."
+#| fig-cap: "Stacking has advantages over dodging (and layering) when it comes to displaying linked selection. Plots left to right show simulated static snapshots of more cases being selected (red). In a stacked barplot (top row), the heights of the higlighted segments are always bound by the height of the whole bar, and so the outline of the figure remains constant. In contrast, in a dodged barplot, the bar segment heights are not bounded, leading to the outline of the figure fluctuating dramatically (notice the changing upper y-axis limit)."
 knitr::include_graphics("./figures/stacking-vs-dodging.png") 
 ```
+
+This is not the case for dodging and layering. Here, the heights of the bars are not bound by any value, such that the heights of the selected segments can exceed those of unselected segments. This forces us to choose between making the upper y-axis limit reactive (losing the context that the limit provides, each time seleciton happens), or risking the bars "overflowing" the plot area. Furthermore, this lack of visual anchoring creates suboptimal visuals. Research shows that translating and looming stimuli capture attention [@franconeri2003]. Because dodged (or layered) segments lengths lack a visual anchor, they can move around (stretch or shrink) in unpredictable ways in response to selection, creating a distracting visual effect:
 
 The only reference I have been able to find which addresses this issue directly is @wilhelm2008. Wilhelm outlines three strategies for displaying selection: replacement, overlaying, and repetition. Within the context of the three techniques discussed above (stacking, dodging, and layering), overlaying essentially conflates both stacking and layering, repetition is equivalent to dodging, and replacement involves re-rendering the visualization completely upon selection. Wilhelm argues that replacement is a flawed because it entirely discards contextual information such as axis limits. He also notes that repetition is less common due to the necessity of re-arranging the plot upon selection. Finally, he identifies two issues with overlaying: the fact that plot parameters are inherited from the plot representing the whole data set, and the fact that parts of the original plot may become obscured by the highlighted subset. Ultimately, he appears to favor repetition over the other two methods.
 
@@ -556,8 +556,7 @@ knitr::include_graphics("./figures/category-two.png")
 ```
 
 What are the objects? What are the arrows? That is all left for us to specify. The abstract nature of the definition can make it difficult to grasp initially, however, there are some fairly straightforward examples that can help. For instance, one simple class of categories are those where the objects $c \in \text{Ob}(\mathcal{C})$ are elements of some set. However, it is important to keep in mind that the definition is far, far broader - the objects could themselves be sets, more complex algebraic structures such as groups, rings, or graphs, or even entire categories.    
-
-It can be shown that every preorder is in fact a category. Specifically, given a preorder on a set $S$, define the objects $c \in \text{Ob}(\mathcal{C})$ as the elements in $s \in S$, and, for any two objects $a$, $b$, define at most one morphism $a \to b$ if $a \leq b$ (and no morphism if $a \not \leq b$). Then, the two properties of preorders just fall out of the definition of a category:
+One simple example of a category is a preorder. Specifically, it can be shown that every preorder is in fact a category. Given a preorder on a set $S$, define the objects $c \in \text{Ob}(\mathcal{C})$ as the elements in $s \in S$, and, for any two objects $a$, $b$, define at most one morphism $a \to b$ if $a \leq b$ (and no morphism if $a \not \leq b$). Then, the two properties of preorders just fall out of the definition of a category:
 
 - Reflexivity: that is just the identity morphism. For every $c \in \text{Ob}(\mathcal{C})$, we have $\text{id}_c : c \to c$
 - Transitivity: that is just composition of morphisms. Given $f: a \to b$ ($a \leq b$) and $g: b \to c$ ($b \leq c$), we can define $h: a \to c$ as $h = f \then g$ ($a \leq c$)
@@ -575,7 +574,7 @@ While the benefits of this abstract reformulation of preorders might not be imme
 
 #### Structure preserving maps: Functors
 
-A fundamental concept in category theory is that of a structure-preserving map or a [functor](#functors). As the name suggests, a functor is a mapping from one category to another, such that the properties of the first category are preserved or reflected in its embedding within the second [this can also be thought of as drawing a diagram of the the first category inside the second category, @fong2019]. 
+A second fundamental concept in category theory is that of a structure-preserving map or a [functor](#functors). A functor is a mapping from one category to another, such that the properties of the first category are preserved or reflected in its embedding within the second [this can also be thought of as drawing a diagram of the the first category inside the second category, @fong2019]. 
 
 In category theoretic terms, a functor $F: \mathcal{C} \to \mathcal{D}$ is a mapping from category $\mathcal{C}$ to category $\mathcal{D}$ such that:
 
@@ -601,7 +600,7 @@ Here, $A$, $B$, and $C$ are three objects in category $\mathcal{C}$ and $F(A)$, 
 
 In simple terms, the second property of functors means that, if we have a way to move from $A$ to $C$ in $\mathcal{C}$, we *must* have a way to move from $F(A)$ to $F(C)$ in $\mathcal{D}$ (even if it means staying in the same place - for example, we may map $A$, $B$, $C$ to the same object in $\mathcal{D}$, and map $f$ and $g$ to the identity morpism).
 
-#### Aggregation: A functor from a preorder of data subsets to a preorder of statistics
+#### Aggregation: A functor from the preorder of data subsets to the preorder of summary statistics
 
 As mentioned before, we start with a preorder of data subsets ordered by inclusion, which can be re-interpreted as a category. We would like to summarize these subsets in a way that preserves the preorder's structure. Is there a formal way to do this? Indeed there is: via a functor. 
 
@@ -618,7 +617,13 @@ Now, given that we want to preserve the structure of the diagram above, it is na
 - Unitality: $A \cup \varnothing = A$ (for all sets $A$).
 - Associativity: $A \cup (B \cup C) = (A \cup B) \cup C = A \cup B \cup C$ (for all sets $A$, $B$, and $C$).
 
-The first property, unitality, is relatively straightforward (although more on that later). It simply means that the union of any set with the empty set is just the original set. The second property, associativity, is a bit more interesting. It means that the order in which we take union of multiple sets does not matter. We can describe it via the following commutative diagram: 
+The first property, unitality, is relatively straightforward. It simply means that the union of any set with the empty set is just the original set. We can also interpret this as the identity arrow from each object back to itself (since the union of any set with the empty set, $- \cup \varnothing$, is just the original set). By the functor laws:
+
+$$F(A \cup \varnothing) = F(A) \otimes F(\varnothing) = F(A)$$
+
+Therefore, the summary operation $F$ must be produce a valid summary when applied to the empty set $\varnothing$, and this summary must be unital, such that when combined with any other summary simply yields back the original summary.  
+
+The second property, associativity, is a bit more interesting. It means that the order in which we take union of multiple sets does not matter. We can describe it via the following commutative diagram: 
 
 ```{r barplot-associativity}
 #| echo: false
@@ -640,35 +645,65 @@ Further, we could actually draw all of these possible paths inside \@ref(fig:bar
 
 Thus, when we go on to map our data from the space of data subsets into a space of statistics, we want to preserve this web of arrows. In the microcosm of three segment subsets combining into a bar subset, we want the following diagram to commute:
 
-```{r}
+```{r functor-diagram}
 #| echo: false
 #| fig-cap: "Commutative diagram of the functor from the space of the data subsets to the space of summary statistics. The top triangle represents the associativity of taking the union of data subsets, F represents the operation of summarizing a set via a summary statistic, and otimes represents the operation of combining two summary statistics together."
 knitr::include_graphics("./figures/barplot-functor.png")
 ```
 
-This is precisely the diagram of a functor from Figure \@ref(fig:functor). The functor $F$ here represents the action of taking a subset of data and summarizing it. For example, in a barplot where we sum some numerical variable, the action of the functor $F$ on an object (subset) $S_1 = \{ 10, 12, 15, 14 \}$ may be:
+This is precisely the diagram of a functor from Figure \@ref(fig:functor). The functor $F$ here represents the action of taking a subset of data and summarizing it (more on that later). Most importantly, the commutative diagram tells us the following:
 
-$$F(S_1) = F(\{ 10, 15, 12 \}) = 10 + 15 + 12 = 27$$
-
-The arrow labels $- \otimes F(\cdot)$ represent the action of the functor on the morphisms. Specifically, we go from the operation of combining subsets via set union, to the operation of combining summary statistics. For example, the action of the same functor on composition of morphisms (union of subsets), of $S_1 = \{ 10, 15, 12 \}$ and $S_2 = \{ 11, 9\}$ may be:
-
-$$F(S_1 \cup S_2) = F(S_1) \otimes F(S_2) = F(\{10, 15,  12 \}) + F(\{ 11, 9 \}) = 27 + 20 = 47$$
-
-Most importantly, the commutative diagram tells us the following:
-
-> We can either first combine the data subsets via union and then summarize the resulting superset, or first summarize the subsets and then combine the summaries *and the result will be the same.*
+> The summary operation should preserve set union, meaning that we can either first combine the data subsets via union and then summarize the resulting superset, or first summarize the subsets and then combine the summaries, *and the result will be the same.*
 
 This is the most important point in this section, and one of the most important points in the whole thesis. The definition of a functor tells us which summary statistics can meaningfully preserve the part-whole hierarchical partitioning of our data, and this in turn tells us whether they will be "stackable" and behave well under linked selection. 
 
+#### Stackable summaries: Monoids
+
+So far, I have argued that the summary statistics in our plots should preserve the properties of set union, and formalized this idea via the concept of a structure-preserving map or functor. Now, we can apply this definition to concretely identify the set of valid summary statistics that possess these structure-preserving properties. That is, we can describe the statistics which "behave like set union".
+
+The two important properties of set union we wish to preserve are:
+
+- Unitality: $F(A \cup \varnothing) = F(A) \otimes F(\varnothing) = F(A)$
+- Associativity $F(A \cup (B \cup C)) = F((A \cup B) \cup C) = F(A) \otimes F(B) \otimes F(C)$
+
+It turns out there is an algebraic structure with these exact properties. Specifically, a monoid $(M, e, \otimes)$ is a set $M$ equipped with a binary operation $\otimes$ and a special neutral element $e$, such that the operation is:
+
+- Unital: $m \otimes e = e \otimes m = m$ for all $m \in M$
+- Associative: $(m_1 \otimes m_2) \otimes m_3 = m_1 \otimes (m_2 \otimes m_3) = m_1 \otimes m_2 \otimes m_3$
+
+If we define the functor $F$ as summarizing a data subset via a monoidal summary statistic, then this will behave exactly as we want. Specifically, define the functor $F$ as summarizing or "folding" some data subset by repeatedly applying the monoidal operation $\otimes$. For example:
+
+$F(A) = F(\{a_1 , a_2, a_3 , \ldots \}) = a_1 \otimes a_2 \otimes a_3 \otimes \ldots$
+
+(we could have written this as $F(A) = (((a_1 \otimes a_2) \otimes a_3) \otimes \ldots)$, however, thanks to associativity, brackets do not matter)
+
+Then:
+
+\begin{aligned}
+
+F(A) \otimes F(B) &= (a_1 \otimes a_2 \otimes a_3 \otimes \ldots) \otimes (b_1 \otimes b_2 \otimes b_3 \otimes \ldots) \\
+&= a_1 \otimes a_2 \otimes a_3 \otimes \ldots \otimes b_1 \otimes b_2 \otimes b_3 \otimes \ldots \\
+&= F(A \cup B)
+
+\end{aligned}
+
+Also, if we define the summary of an empty set as $F(\varnothing) = e$, the monoidal unit, then:
+
+$$F(A \cup \varnothing) = F(A) \otimes F(\varnothing) = F(A) \otimes e = F(A) $$
+
+A typical example of a monoid is the summation of real numbers $(\mathbb{R}, 0, +)$ (which we are familiar with as the "default" summary statistic in a typical barplot). Another example is the product of real numbers: $(\mathbb{R}, 1, \cdot)$, or maximum of real numbers $(\mathbb{R}, \max, -\infty)$.
+
+
+
 #### Transforming summaries
 
-## Scaling
+## Scaling {#scaling}
 
 Suppose we have partitioned our data and computed all relevant summary statistics. Now we need a way to to encode these summaries into visual attributes that we can then present on the computer screen. In most data visualization systems, this is done by specialized components called scales or coordinate systems [see e.g. @murrell2005; @wickham2016; @wilkinson2012; @petricek2020].
 
 As discussed in Sections \@ref(scales-measurement) and \@ref(visual-perception), there exists is a fair amount of literature on the theoretical properties of scales and their relationship to the mechanisms of visual perception [see e.g. @krzywinski2013; @michell1986; @wilkinson2012; @stevens1946]. However, when it comes to applying this knowledge and implementing scales in concrete data visualization systems, few research papers are available, and most only discuss the problem in vague, abstract terms [for some rare counter-examples, see e.g. @murrell2005; @ziemkiewicz2009]. To learn about how to actually implement scales scales, one has to go digging through open-source code repositories, which are rarely the most concise educational resources.
 
-This gap between theory and practice is quite unfortunate in my opinion, since scales are an integral part of the data visualization pipeline. Further, they are the foundation of many interactive features, such as zooming and panning. Finally, within existing data visualization systems, it is often the case that a large portion of the code is dedicated to scales. For instance, within the `ggplot2` codebase, the file containing the definition of the `Scale` class has the greatest number of lines, by quite a significant margin [as of 4th of December 2024, @ggplot2repo2024], see Figure \@ref(fig:ggplot2-linecounts):
+This gap between theory and practice is quite unfortunate in my opinion, since scales are an integral part of the data visualization pipeline. Further, they are the foundation of many interactive features, such as zooming, panning, and reordering. Finally, within existing data visualization systems, it is often the case that a large portion of the code is dedicated to scales. For instance, within the `ggplot2` codebase, the file containing the definition of the `Scale` class has the greatest number of lines, by quite a significant margin [as of 4th of December 2024, @ggplot2repo2024], see Figure \@ref(fig:ggplot2-linecounts):
 
 ```{r ggplot2-linecounts}
 #| echo: false
@@ -676,15 +711,13 @@ This gap between theory and practice is quite unfortunate in my opinion, since s
 knitr::include_graphics("./figures/ggplot2-linecounts.png")
 ```
 
-
-
-For the reasons outlined above, I decided to dedicate this section to the problem of applied scaling. The information here is based largely on how scales have been implemented in existing data visualization codebases, such as the `ggplot2` R package [@wickham2016] or `d3-scale` module of D3 [@d3-scale2024; also used by Vega @satyanarayan2015], as well as on personal insights gained while implementing my package.
+For the reasons outlined above, I believe it is important to discuss the issue of applied scaling in more depth. The information here is based largely on how scales have been implemented in existing data visualization codebases, such as the `ggplot2`package [@wickham2016] or `d3-scale` module of D3 [@d3-scale2024; used also by e.g. Vega @satyanarayan2015], as well as on personal insights gained while implementing my package.
 
 #### Scales as functions
 
-From a high-level perspective, a scale is just a function $s: D \to V$ which translates values of the data $d \in D$ to values of some visual attribute $v \in V$, such as the x- and y-position, length, area, radius, or color [@wilkinson2012; @petricek2020]. This function may or may not be invertible, such that, at times, each value of the visual attribute may be uniquely identifiable with a single data value, or not.
+From a high-level perspective, a scale is just a function $s: D \to V$ which maps data values $d \in D$ to values of some visual attribute $v \in V$, such as the x- and y-position, length, area, radius, or color [@wilkinson2012; @petricek2020]. This function may or may not be invertible, such that, at times, each value of the visual attribute may be uniquely identifiable with a single data value, or not.
 
-One of the most common examples is a scale where both $D$ and $V$ are subsets of the real numbers:
+One of the most common examples of a scale is a function where both $D$ and $V$ are subsets of the real numbers:
 
 $$s: [d_{min}, d_{max}] \to [v_{min}, v_{max}] \qquad d_{min}, d_{max}, v_{min}, v_{max} \in \mathbb{R}$$
 
@@ -706,20 +739,20 @@ The function acts on the data in the following way:
 
 - $s_x(1) = (1 - 1) / 9 \cdot 800 = 0$
 - $s_x(10) = (10 - 1) / 9 \cdot 800 = 800$
-- $s_x(d) \in (0, 800)$ for any $d \in (1, 10)$
+- $s_x(d) \in [0, 800]$ for any $d \in [1, 10]$
 
 That is, the function maps the data value 1 to pixel 0 (left border of the plotting region), value 10 to to pixel 800 (right border of the plotting region), and any value in between 1 and 10 inside the interval 0 to 800, proportionally to where in the data range it is located.
 
 #### Limits of modeling scales with simple functions {#simple-scale-limits}
 
-Simple scale functions like the linear mapping above can work fine for basic data visualization systems. However, once we begin adding more features, this design can become prohibitive. Consider, for example, what happens if we want to:
+Simple linear maps like the one above can work fine for basic data visualization systems. However, once we begin to add more features, this design can become prohibitive. Consider, for example, what happens if we want to:
 
 - Expand the scale limits
 - Scale discrete data
 - Apply non-linear transformations
 - Pan, zoom, reverse, reorder, or otherwise modify the scale interactively
 
-Let's take the first point as a motivating example. Consider what happens to data points at the limits of the data range under the simple linear mapping:   
+Having a single function with hard-coded values makes these operations difficult. Let's take the first point in the list above as a motivating example. Consider what happens to data points at the limits of the data range under the simple linear mapping:   
 
 ```{r}
 #| out-width: 800px
@@ -733,7 +766,7 @@ col <- ifelse(1:10 %in% c(1, 10), "indianred", "grey80")
 plot(x, y, col = col, cex = 3, xaxs = "i", pch = 19)
 ```
 
-The plot above shows values scaled using the simple linear mapping along the x-axis, that is, $s: [1, 10] \to [0, 800]$ (effect of the `xaxs = "i"` argument). Notice that, since the position of the points representing the values 1 and 10 (highlighted in red) gets mapped to pixel values 0 and 800 (the left and right border of the plot), only half of each point is visible. This is problematic: as was discussed in Section \@ref(show-all-data), a fundamental principles of graphical integrity is that our graphics should not downplay or hide certain features of the data [@tufte2001]. Since the points near the axis limits are represented by only 1/2 of the area, they become less visually salient, and this is particularly problematic since these points are more likely to be outliers.    
+The plot above shows values scaled using the simple linear mapping along the x-axis, that is, $s: [1, 10] \to [0, 800]$ (effect of the `xaxs = "i"` argument). Notice that, since the positions of the points representing the values 1 and 10 (highlighted in red) get mapped to pixel values 0 and 800 (the left and right border of the plot), only half of each point is visible. This is problematic: as was discussed in Section \@ref(show-all-data), a fundamental principles of graphical integrity is that our graphics should not downplay or hide certain features of the data [@tufte2001]. Since the points near the axis limits are represented by only 1/2 of the area, they become less visually salient, and this is particularly problematic since these points are more likely to be outliers.    
 
 To address this problem, most data visualization systems automatically expand the range of the domain by some pre-specified percentage:
 
@@ -747,52 +780,74 @@ plot(x, y, col = col, cex = 3, pch = 19)
 
 We could achieve this by expanding our data range by some hard-coded percentage, for example, a symmetric 10% margin on each side:
 
-$$s(d) = v_{min} + \bigg[ \bigg( 0.1 + \frac{d - d_{min}}{d_{max} - d_{min}} \cdot (0.9 - 0.1) \bigg) \cdot (v_{max} - v_{min}) \bigg]$$
-However, this design quickly gets prohibitive as more features get added. For example, we may want to apply a different margin on each side, shift both margins by equal amount, or flip the scale's direction. Further, implementing this functionality in code with a single function would result in a hard to read implementation.
+\begin{equation}
 
-#### Solution: Two-component scales {#two-component-scales}
+  s(d) = v_{min} + \bigg[ 0.1 + \frac{d - d_{min}}{d_{max} - d_{min}} \cdot 0.8 
+            \bigg] \cdot (v_{max} - v_{min}) 
+  (\#eq:margins)
 
-The linear mapping formula in \@ref(def:linear-mapping) can guide us in decomposing the scale function into smaller, more manageable parts. Let's look at it again:
+\end{equation}
 
-$$s(d) = v_{min} + \frac{d - d_{min}}{d_{max} - d_{min}} \cdot (v_{max} - v_{min})$$
+However, this design becomes prohibitive as more features are added. For example, if we want to map some discrete data values to the same visual attribute codomain $V$, do we have to design an entirely new mapping function? Similarly, what if we want to apply a different margin on each side, shift both margins by an equal amount, or flip the scale's direction? It would be useful if there were some way to abstract out the data domain $D$ and the visual attribute $V$, such that we could apply some common operations to the scale regardless of its specific implementation.
 
-If we look closely, we may be able to see that the function can be split into two parts:
+#### Solution: Scales as function composition {#scales-composition}
 
-$$s(d) = \color{steelblue}{v_{min} +} \color{indianred}{\frac{\color{black}{d} - d_{min}}{d_{max} - d_{min}}} \color{steelblue}{\cdot (v_{max} - v_{min})}$$
+The linear mapping formula in Equation \@ref(eq:margins) can guide us in decomposing the scale function into smaller, more manageable parts. Let's look at it again:
 
-That is, the linear mapping can be interpreted as being composed of two simpler functions:
+$$  s(d) = v_{min} + \bigg[ 0.1 + \frac{d - d_{min}}{d_{max} - d_{min}} \cdot 0.8 
+            \bigg] \cdot (v_{max} - v_{min}) $$
 
-- $\color{indianred}{n(d) = (d - d_{min}) / (d_{max} - d_{min})}$ takes a data value $d \in D$ and maps it to the interval $[0, 1] \subset \mathbb{R}$
-- $\color{steelblue}{u(p) = v_{min} + p \cdot (v_{max} - v_{min})}$ takes a value in $[0, 1] \subset \mathbb{R}$ and maps it to a visual attribute value $v \in V$ 
+If we look closely, we may be able to see that the function can be split into three parts:
+
+$$s(d) = \color{steelblue}{v_{min} +} \bigg[ \color{seagreen}{0.1 +} \color{indianred}{\frac{\color{black}{d} - d_{min}}{d_{max} - d_{min}}} \color{seagreen}{\cdot 0.8} \bigg] \color{steelblue}{\cdot (v_{max} - v_{min})}$$
+
+That is, the linear mapping can be interpreted as a composition of three simpler functions:
+
+- $\color{indianred}{n(d) = (d - d_{min}) / (d_{max} - d_{min})}$ takes a data value $d \in D$ and maps it to the interval $[0, 1]$^[More on this below.]
+- $\color{seagreen}{r(p) = 0.1 + p \cdot 0.8}$ takes a value in $[0, 1]$ and maps it elsewhere in $[0, 1]$
+- $\color{steelblue}{u(p) = v_{min} + p \cdot (v_{max} - v_{min})}$ takes a value in $[0, 1]$ and maps it to a visual attribute value $v \in V$ 
+
+In other words, instead of thinking of scale as mapping from $D$ to $V$ directly, we explicitly for
 
 This leads us to the following definition of a scale:
 
-::: {.definition #scale name="Scale as composition of two functions"}
+::: {.definition #scale name="Scale as function composition"}
 
 A scale $s: D \to V$ can be created by composing:
 
-- A *data normalizing* function $n_D: D \to \mathbb{R}$, mapping data values the real numbers $\mathbb{R}$
+- A *data normalizing* function $n_D: D \to \mathbb{R}$, mapping data values to the real numbers $\mathbb{R}$
+- A linear *rescale* function $r_{\mathbb{R}}: \mathbb{R} \to \mathbb{R}$
 - An *visual attribute unnormalizing* function $u_V: \mathbb{R} \to V$, mapping real numbers to the visual attribute codomain
 
 Such that:
 
-$$s = u_V \circ n_D$$
+$$s = u_V \circ r_{\mathbb{R}} \circ n_D$$
 Or, more explicitly:
 
-$$s(d) = u_V(n_D(d))$$
+$$s(d) = u_V(r_{\mathbb{R}}(n_D(d)))$$
 
-Further, the normalize and unnormalize functions may at times have inverses (or retractions) such that, e.g. $(n_D)^{-1} = u_D: \mathbb{R} \to D$ and $(u_V)^{-1} = n_V: V \to \mathbb{R}$, such that $u_D \circ n_D = n_V \circ u_V = \text{id}$, the identity function. If both $u_D$ and $n_V$ exist, then we can define the inverse scale function:
+Further, the normalize and unnormalize functions may at times have inverses (or retractions) such that, e.g. $(n_D)^{-1} = u_D: \mathbb{R} \to D$ and $(u_V)^{-1} = n_V: V \to \mathbb{R}$. These functions reverse the effect of their counterparts, such that $u_D \circ n_D = n_V \circ u_V = \text{id}$, the identity function. If both $u_D$ and $n_V$ exist, then we can define the inverse scale function:
 
-$$s^{-1}(v) = u_D(n_V(v))$$
+$$s^{-1}(v) = u_D(r_{\mathbb{R}}^{-1}(n_V(v)))$$
 :::
 
-There are a couple of things which bear explaining. First, provided that $d$ falls in some *typical* subset of data values (such as $[d_{\min}, d_{\max}]$ for continuous $D$), the normalize function should *generally* return values into the unit interval $[0, 1]$, and, conversely, the unnormalize function should map values in $[0, 1]$ to typical values of the visual attribute. However, the codomain of $n_D$ is $\mathbb{R}$ instead of strictly $[0, 1]$ to accommodate "unusual" data or visual attribute values. For instance, suppose if you zoom into a specific region in a scatterplot and there is a point with its center just outside of the new plot limits. If the point's radius is greater than the distance of its center to the plot border, a part of the point will still overlap the plotting region and we should render it, even though the x- and y- coordinates lie outside the data range. Therefore, we use $\mathbb{R}$ as the intermediate domain instead of $[0, 1]$, though we can conceptually think of it as an "extended" unit interval $[0, 1]$, that I will denote as $[0, 1]'$.
+(the rescale function always has an inverse, since it is just a simple linear map of the form $y = ax + b$)
 
-Second, even with this extended unit interval interpretation, the choice of $[0, 1]$ is arbitrary - any interval $[a, b]$ with $a, b \in \mathbb{R}$ will work. However, the $[0, 1]' = \mathbb{R}$ interval offers a convenient interpretation: values $p \in [0, 1]'$ can be interpreted as percentages. For example, $n_D(d) = 0.5$ indicates data value is at the 50th percentile of the data range, and should, therefore, be generally mapped to the middle of the visual attribute range (other factors that we will talk about later aside). Values outside of $[0, 1]$ represent data values extending beyond the data range. For example, $n_D(d) = 1.2$ suggests that the data point lies 20% beyond the upper limit of the data range (provided that $D$ is continuous).
+That concludes the high-level conceptual overview of this scale model. However, several points warrant further discussion.
 
-Finally, note that the terms *normalizing* and *unnormalizing* are also arbitrary, however, I believe they make for useful labels. We can interpret them as 1-D equivalent of vector normalization, mapping a value in the domain to and from the extended unit interval $[0, 1]'$.
+##### The extended unit interval
 
-What we gain by recasting scales as a composition of two functions is that now we have three components that we can fiddle with: the data domain $D$, the visual attribute codomain $V$, and the intermediate extended unit interval $[0, 1]' \subset \mathbb{R}$. As we will see, we can do quite a lot by manipulating and combining these three components. However, going forward, I believe it will be a lot easier to explain the ideas via code examples, rather than mathematical formulas. Still, it will be very useful to keep the mathematical definition above in mind.
+First, note that I described the functions as $n_D: D \to \mathbb{R}$ and $u_V: \mathbb{R} \to V$, i.e. I identified the intermediate domain as $\mathbb{R}$. However, provided that $d$ falls in some *typical* subset of data values (such as $[d_{\min}, d_{\max}]$ for continuous $D$), $n_D$ should *generally* return values in the unit interval $[0, 1]$ (and, conversely, $u_V$ should map values in $[0, 1]$ to typical values of the visual attribute). The reason why I define the intermediate domain as $\mathbb{R}$ instead of strictly $[0, 1]$ is to accommodate "unusual" (emphasis on the quotation marks) data or visual attribute values. 
+
+For instance, suppose we zoom into a region of a scatterplot and there is a point with its center just outside of the new plot limits. If the point's radius is greater than the distance of its center to the plot border, a part of the point will still overlap the plotting region and we should render it, even though the x- and y- coordinates lie outside the data range. Therefore, we use $\mathbb{R}$ as the intermediate domain instead of $[0, 1]$, though we can conceptually think of it as an "extended" unit interval $[0, 1]$, that I will denote as $[0, 1]'$.
+
+The choice of $[0, 1]'$ is somewhat arbitrary - any interval $[a, b]$ with $a, b \in \mathbb{R}$ will work - however, it offers a convenient interpretation. Specifically, values $p \in [0, 1]'$ can be interpreted as percentages: for example, $n_D(d) = 0.5$ indicates data value is at the 50th percentile of the data range, and should, therefore, be generally mapped to the middle of the visual attribute range (other factors that we will discuss later aside). Values outside of $[0, 1]$ represent data values extending beyond the data range. For example, $n_D(d) = 1.2$ suggests that the data point lies 20% beyond the upper limit of the data range (provided that $D$ is continuous).
+
+Finally, note that the terms *normalizing* and *unnormalizing* are also arbitrary, however, I believe they make for useful labels. We can interpret them as 1D equivalent of vector normalization, mapping a one-dimensional vector in $D$ to and from the extended unit interval $[0, 1]'$.
+
+##### Advantages
+
+By expressing scales as the composition of two functions, we gain flexibility by having three adjustable components: the data domain $D$, the visual attribute codomain $V$, and the intermediate extended unit interval $[0, 1]' \subset \mathbb{R}$. As we will see, we can do quite a lot by manipulating and combining these three components. However, going forward, I believe it will be a lot easier to explain these ideas with code examples, rather than through mathematical formulas. Still, I will refer back to the mathematical definition above so it is important to keep it in mind.
 
 #### A high-level model of scale implementation {#proposed-model}
 
@@ -898,6 +953,10 @@ However, an key difference between the models of scales discussed above, and the
 I contend that having two separate types for the domain and codomain has several disadvantages. First, it impedes code reuse, since we cannot simply use the same object in either place. Second, it complicates the mental model: the user has to hold a completely different concept for the domain and codomain in their head. Finally, the models of scales outlined above are designed to work in only one direction: from the data to the visual attribute. To go the other way around, from the visual attribute to the data, other, specialized functions have to be implemented.
 
 Instead, I propose a unified model where the domain and codomain differ only in the context they are used. This greatly simplifies code reuse and the mental model, as the same `Expanse` subtype can serve as either. Moreover, if the domain and codomain implement both `normalize` and `unnormalize` functions, constructing the inverse scale function is trivial. There are also several other advantages, which I will discuss in the following sections.
+
+#### Implementing margins, zooming, and panning
+
+Recall that, at the end of section \@ref(scales-composition), 
 
 #### Scale transformations
 

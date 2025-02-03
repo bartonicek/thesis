@@ -264,3 +264,14 @@ a-high-level-overview-of-scale-implementation
 a-high-level-model-of-scale-implementation
 proposed-model
 comparison-to-past-implementations-of-scales
+implementing-margins-zooming-and-panning
+common-features-and-limitations-of-early-interactive-systems
+common-features-and-limitations-of-web-based-interactive-systems
+the-extended-unit-interval
+advantages
+scales-composition
+eq:margins
+fig:functor-diagram
+monoids-1
+stackable-summaries-monoids
+aggregation-a-functor-from-the-preorder-of-data-subsets-to-the-preorder-of-summary-statistics
