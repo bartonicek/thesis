@@ -6,14 +6,16 @@ editor_options:
 
 # System description {#system}
 
-This section contains a description of the two packages developed as part of this doctoral project ([plotscape](https://github.com/bartonicek/plotscape) and [plotscaper](https://github.com/bartonicek/plotscaper)). Since `plotscaper` provides high-level application programming interface (API) for R users, whereas `plotscape` is more concerned with more low-level JavaScript functionality, I will organize the sections correspondingly, by discussing high-level API concerns alongside `plotscaper` and implementation details alongside `plotscape`. Cross-cutting concerns will be addressed towards the ends of the respective sections. However, let's re-iterate some things that are desirable for the system to have.
+This section contains a description of the two packages developed as part of this doctoral project ([plotscape](https://github.com/bartonicek/plotscape) and [plotscaper](https://github.com/bartonicek/plotscaper)). Since `plotscaper` provides high-level application programming interface (API) for R users, whereas `plotscape` is more concerned with more low-level JavaScript functionality, I will organize the sections accordingly, by discussing high-level API concerns alongside `plotscaper` and implementation details alongside `plotscape`. Cross-cutting concerns will be addressed towards the ends of the respective sections. 
+
+At the time of writing, the `plotscape` repository contains about ~6,400 lines of code (mainly TypeScript), whereas the `plotscaper` repository contains about ~500 lines of R code (counted using the [`cloc` CLI tool](https://github.com/AlDanial/cloc)). 
 
 ## Core requirements
 
 The high-level system/API needs to:
 
 - Be accessible to a wide range of users
-- Provide functionality for creating figures programmatically and manipulating them live
+- Provide functionality for programmatically creating interactive figures and manipulating them live
 - Integrate well with popular tools within the R ecosystem, such as the RStudio IDE and RMarkdown
 
 The low-level system needs to be able to:
@@ -23,11 +25,11 @@ The low-level system needs to be able to:
 - Transform these summaries while respecting the hierarchy (e.g. stacking, normalizing by parent values)
 - Map these summaries to visual encodings such as x- and y-position, width, height, or area
 - Render geometric objects, axes, etc...
-- Do all of the above reactively, in response to user input
+- Respond to user input and propagate changes reactively
 
 ## Application Programming Interface (`plotscaper`)
 
-As was discussed in Section \@ref(goals), a key inspiration for `plotscaper`'s API was the popular R package `ggplot2`. In `ggplot2`, plots are created by chaining together a series of function calls, each of serves to compose an (immutable) plot schema:
+As was discussed in Section \@ref(goals), a primary inspiration for `plotscaper`'s API was the popular R package `ggplot2`. In `ggplot2`, plots are created by chaining together a series of function calls, each of serves to compose an (immutable) plot schema:
 
 ```{r}
 #| fig-show: "hide"
@@ -51,12 +53,73 @@ names(plot2)
 length(plot2$layers)
 ```
 
-- The package is generally designed around the idea of creating individual plots. Although multi-panel figures consisting of repeats of the same plot type can be created via facetting [`facet_wrap()` and `facet_grid()`, @wickham2016], to create multi-panel figures with a mix of different plot types, the users have to reach for external packages such as `gridExtra` [@auguie2017] or `patchwork` [@pedersen2024]. As was discussed in Section \@ref(litreview), in interactive graphics, multi-panel figures are essential, and customizing individual plots is less important than adding and composing multiple plots.
-- The model of composing an immutable plot schema works well for static graphics, however, with interactive graphics, mutability is often beneficial as well. Specifically, the ability to directly modify a rendered figure through code is particularly useful. For instance, in live figure, setting the width of a histogram bin to a specific value can be effectively achieved via a simple function call, rather than by having to manipulate a widget or some other control mechanism.   
-- The package was developed before widespread adoption of the pipe operator in R [both `%*%` from `magrittr`, @bache2022; and the native `|>` pipe, @r2024] and so it used the overloaded `+` operator to implement essentially the same functionality. Hadley Wickham himself admitted that if he had discovered the pipe operator earlier, he would have never implemented `ggplot2` with `+` [@wickham2014].
-- Many of the package's functions make heavy use of non-standard evaluation [e.g. `aes()` and `facet_wrap()`, @wickham2019]. While non-standard evaluation seems to be quite popular within the R community and does make some interactive code more concise, it also makes it more harder to use these functions programmatically [@wickham2019]. For example, using the default `aes()` function, we cannot plot all pairwise combinations of variables in a data set by simply looping over their names - to do this, we need to use a specialized `aes_string()` function that not all users may know about.
+While a popular choice for static graphics, the `ggplot2` API has some disadvantages when it come to interactive graphics. Specifically:
 
-## Components
+- The package is generally designed around the idea of creating individual plots. Although multi-panel figures consisting of repeats of the same plot type can be created via facetting [`facet_wrap()` and `facet_grid()`, @wickham2016], to create multi-panel figures with a mix of different plot types, the users have to reach for external packages such as `gridExtra` [@auguie2017] or `patchwork` [@pedersen2024]. As was discussed in Section \@ref(litreview), in interactive graphics, customizing individual plots is less important however, the ability to compose and view multiple plots is key.
+- The model of composing an immutable plot schema works well for static graphics, however, with interactive graphics, mutability can be highly beneficial as well. Specifically, the ability to directly modify a rendered figure through code is particularly useful. For instance, in live figure, setting the width of a histogram bin to a specific value can be effectively achieved via a simple function call, rather than by having to manipulate a widget or some other control mechanism.   
+- The package was developed before widespread adoption of the pipe operator in R [both `%*%` from `magrittr`, @bache2022; and the native `|>` pipe, @r2024] and so it used the overloaded `+` operator to implement essentially the same functionality. Hadley Wickham himself admitted that if he had discovered the pipe operator earlier, he would have never implemented `ggplot2` with `+` [@wickham2014].
+- Many of the package's core functions make use of non-standard evaluation [e.g. `aes()` and `facet_wrap()`, @wickham2019]. While non-standard evaluation seems to be quite popular within the R community and does make some interactive code more concise, it also makes it more harder to use these functions programmatically [@wickham2019]. For example, using the default `aes()` function, we cannot plot all pairwise combinations of variables in a data set by simply looping over their names - to do this, we need to use a specialized `aes_string()` function that takes variable names as strings. Again, in interactive graphics, it is often highly desirable to be able to manipulate the figure with code, and as such, non-standard evaluation may be less useful in this context.  
+
+Given the reasons above, I've adopted a similar approach to `ggplot2`, giving the user the ability to create interactive figures by chaining together a series of function calls. However, unlike in `ggplot2`, the primary focus is on building figures out of multiple plots, rather than customizing individual plots. As such, the function calls typically serve to add (or remove) entire plots, although individual plots can still be modified via specialized functions which rely on selectors. Furthermore, the API supports both the creation of immutable plot schemas as well as mutable manipulation of a live figure, using largely the same set of functions. The idea is that the user can choose their preferred workflow based on their circumstances. 
+
+### Basic example
+
+Here's a basic example of creating an interactive figure with `plotscaper`:
+
+```{r}
+library(plotscaper)
+
+create_schema(mtcars) |>
+  add_scatterplot(c("wt", "mpg")) |>
+  add_barplot(c("cyl")) |>
+  render()
+```
+
+We first initialize a plot schema with the `create_schema()` function that we pass data to (more on that later, in Section \@ref(scene-and-schema)). Next, we chain together a series of function calls of the form `add_*()`, adding individual plots. Variable names are provided via character string vectors. Importantly, these string vectors do not represent direct aesthetic mapping in the same way how the `aes()` function in `ggplot2` does: in the `plotscaper` model, data variables are not directly mapped to aesthetics, but can undergo transformations and interactive remapping. Finally, the figure is rendered with the `render()` call.      
+
+### The scene and the schema {#scene-and-schema}
+
+An key part of the `plotscaper` API is the distinction between the figure schema and the live scene. In short, the schema is an immutable blueprint defining the figure, while scene scene is its live, rendered version. Both can be manipulated using largely the same set of functions. However, whereas manipulatingthe schema simply appends the corresponding function calls to an immutable ledger, manipulating the scene applies the changes directly, in a mutable way. Consequently, the scene can only be manipulated inside an interactive R session [such as, for example, inside the RStudio IDE, @rstudio2024], whereas a figure schema can also be rendered statically, as part of an RMarkdown document, for example.    
+
+Here is an example of the figure schema, using the same code as above:
+
+```{r}
+schema <- create_schema(mtcars) |>
+  add_scatterplot(c("wt", "mpg")) |>
+  add_barplot(c("cyl"))
+
+schema
+str(schema$queue)
+```
+
+As you can see, the schema is essentially just a list of messages (which are in fact stored as an R `list()` that gets converted to JSON when the figure gets rendered). The `render()` call parses these messages sequentially, applying the changes that create the figure. The main advantage of the schema is that it provides an immutable record, allowing the figure to be recreated in its exact state. Furthermore, the schema can be manipulated programmatically, by e.g. pruning or modifying some of the messages, and, since it is essentially just JSON, it can be easily transported.
+
+Importantly, the schema does not actually encode the the figure's state directly; instead, it records the sequence of steps that generate that state. This deliberate design choice avoids duplicating the figure's state between the R client (e.g., the RStudio session) and the JavaScript "server" (the live figure). By representing the schema as a simple immutable list of messages, all figure state resides within JavaScript, eliminating the need for reconciliation or synchronization with the R side.
+
+The scene is implicitly created via the call to `render()`. Under the hood, the call constructs a `htmlwidgets` widget [@htmlwidgets2021] which utilizes custom `plotscape` code to set up and manage the figure. When inside a live interactive R session, the render call also automatically launches an `httpuv` server [@cheng2024] for live communication with the figure. To enable this live communication, the user must first assign the scene object to a variable. Then they can call functions to modify the figure the same way as they would with a schema, however, in this case, the figure is updated live, in a mutable fashion. 
+
+```{r}
+#| eval: false
+# NOT EVALUATED - works only inside interactive R sessions,
+# not RMarkdown/bookdown documents
+scene <- create_schema(mtcars) |>
+  add_scatterplot(c("wt", "mpg")) |>
+  add_barplot(c("cyl")) |>
+  render()
+
+# Adds a histogram, mutating the current figure
+scene |> add_histogram(c("disp"))
+
+# Selects cases by rows
+scene |> select_cases(1:10)
+
+# Query selected cases (works in interactive mode only)
+scene |> selected_cases() # 1 2 3 4 5 6 7 8 9 10
+```
+
+As noted earlier, most functions work on both the schema and the scene. The one exception are state-querying functions, which include `selected_cases()`, `assigned_cases()`, and `get_scale()`. These functions retrieve the figure's state and return it as output in R (without modifying the figure in any way). For example, `selected_cases()` returns the indices of the currently selected cases as a numeric vector. These functions are designed to interactively query the figure's state, and as such it does not make sense to use them with the stateless schema.    
+
+## Interactive figure platform (`plotscape`)
 
 This section contains a detailed listing of the system's components.
 

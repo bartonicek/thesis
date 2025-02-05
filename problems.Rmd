@@ -20,16 +20,16 @@ In the next few sections, I will try to address this conceptual ambiguity by dis
 
 ## Partitioning
 
-The first step of any data visualization pipeline is to divide the data into parts or subsets. The reason for this initial step lies in our ultimate goal: to draw one or (usually) more geometric objects, representing some aspects of our data. Before we can do that, we need to define the set of data points each object represents. For typical, two-dimensional tables or data frames, this amounts to slicing the table's rows into smaller sub-tables. 
+The first step of any data visualization pipeline is to divide the data into parts or subsets. The reason for this initial step lies in our ultimate goal: to draw one or (usually) more geometric objects [also known as graphic items, @wills2008], representing some aspects of our data. Before we can do that, we need to define the set of data points each object represents. In the case of typical, two-dimensional tables or data frames, this amounts to slicing the table's rows into smaller sub-tables. 
 
-This partitioning operation fairly intuitive for aggregate plots (e.g. typical barplots and histograms), where each object represents multiple rows of the data. However, even one-to-one representations of the data (e.g. scatter plots and parallel coordinate plots), can be viewed this way, specifically, as slicing the table of $n$ rows into $n$ smaller tables of one row each. Similarly, plots with a single geometric object (e.g., a radar plot) can be considered as taking the entire data set as the one and only subset.
+This partitioning operation fairly intuitive for aggregate plots (e.g. typical barplots and histograms), where each object represents multiple rows of the data. However, even one-to-one representations of the data (e.g. scatter plots and parallel coordinate plots), can be viewed this way, specifically, as slicing the table of $n$ rows into $n$ smaller tables of one row each. Similarly, plots with a single geometric object (e.g. a radar plot) can be considered as taking the entire data set as the one and only subset.
 
 Thus, the process of splitting our data into subsets may appear straightforward. However, it does raise two fundamental questions:
 
 - How much of the original data should the subsets contain?
 - What should be the relationship between the subsets?
 
-While common data visualization practices provide implicit solutions to these questions, in the data visualization literature, explicit answers are rarely given. This is unfortunate because choosing how to partition our data is a highly consequential decision: it involves making assumptions about both the data itself and the visualization's goals. Especially in interactive data visualization, the relationships between the parts of our data become of crucial importance. Therefore, discussing these two questions is essential.
+While common data visualization practices provide implicit solutions to these questions, in the data visualization literature, explicit answers are rarely given. This is unfortunate because choosing how to partition our data is a highly consequential decision: it involves making assumptions about both the data itself and the goals we have with the visualization. In interactive data visualization particularly, the relationships between the parts of our data become of crucial importance. Therefore, discussing these two questions in greater depth is essential.
 
 ### Showing the full data {#show-all-data}
 
@@ -491,7 +491,7 @@ knitr::include_graphics("./figures/grammar-barplot-maximums.png")
 
 Here, in Figure \@ref(fig:grammar-barplot-maximums), we again plot FEV for smokers and non-smokers across the different age groups, however, this time, we display the *maximum FEV* on the y-axis. From this plot, we can see that, in most of the age categories which included smokers (age 9 and up), the child with the highest lung capacity was a non-smoker, although there were a few exceptions (ages 11, 16, and 18). 
 
-Notice one important feature of the plot above: the heights of the "stacked" bars represent a valid overall summary. Taking grouped data, summarizing each group by its maximum, and then taking the maximum of those maxima yields a valid overall maximum. That is, *the maximum of maxima is a valid maximum of all cases*. While the general usefulness of the plot in Figure \@ref(fig:grammar-barplot-maximums) could be debated - given that each bar effectively represents a single data point (the group maximum), and that, in small data sets, the maximum can be a highly variable - the plot still demonstrates one important, undeniable fact: summaries other than sums and counts can be meaningfully "stacked."
+Notice one important feature of the plot above: the heights of the "stacked" bars represent a valid overall summary. Taking grouped data, summarizing each group by its maximum, and then taking the maximum of those maxima yields a valid overall maximum. That is, *the maximum of maxima is a valid maximum of all cases*. While the general usefulness of the plot in Figure \@ref(fig:grammar-barplot-maximums) could be debated - given that each bar effectively represents a single data point (the group maximum), and that, in small data sets, the maximum can be a highly variable [c.f. @wills2008] - the plot still demonstrates one important, undeniable fact: summaries other than sums and counts can be meaningfully "stacked."
 
 #### Advantages of stacking: Part-whole relationship {#stacking-part-whole}
 
@@ -602,7 +602,7 @@ In simple terms, the second property of functors means that, if we have a way to
 
 #### Aggregation: A functor from the preorder of data subsets to the preorder of summary statistics
 
-As mentioned before, we start with a preorder of data subsets ordered by inclusion, which can be re-interpreted as a category. We would like to summarize these subsets in a way that preserves the preorder's structure. Is there a formal way to do this? Indeed there is: via a functor. 
+As mentioned before, we start with a preorder of data subsets ordered by inclusion, which can be re-interpreted as a category. When we aggregate, we summarize each of these subsets by one or more metrics. We can imagine the process of summarizing data subsets as a functor, mapping from the space of data subsets ordered by set inclusion to the space of summary statistics or metrics, also ordered in some way.  
 
 But before we go on to do that, we need to one more trick. We can recast the set inclusion relations in Figure \@ref(fig:barplot-preorder) as set union. Specifically, instead of the arrows simply denoting the fact that, for example, segment 1 is a subset of bar 1, we can be explicit about the fact that, to get bar 1, we need to take the union of segment 1 and *all the other segments within the bar*: 
 
