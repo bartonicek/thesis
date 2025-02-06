@@ -279,3 +279,15 @@ web-based
 basic-example
 scene-and-schema
 interactive-figure-platform-plotscape
+html-document-embedding
+discrete-scales
+reusability-and-discrete-scales
+the-intermediate-interval
+eq:scale-composition
+implementing-interactive-features-panning-and-zooming
+implementing-scale-features-margins-panning-zooming-and-reversing
+implementing-scale-features-via-the-intermediate-interval
+margins
+panning
+zooming
+inverses-1
