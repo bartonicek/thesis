@@ -1,0 +1,18 @@
+\documentclass[tikz]{standalone}
+\usepackage{tikz-cd}
+
+\begin{document}
+\begin{tikzcd}
+	&&& S_D \\
+	& {S_{B_1}} && \ldots && {S_{B_n}} \\
+	{S_{S_1}} & {S_{S_2}} & {S_{S_3}} & \ldots & {S_{S_{k - 2}}} & {S_{S_{k - 1}}} & {S_{S_{k}}}
+	\arrow["\otimes", from=2-2, to=1-4]
+	\arrow["\otimes"', from=2-6, to=1-4]
+	\arrow["\otimes", from=3-1, to=2-2]
+	\arrow["\otimes", from=3-2, to=2-2]
+	\arrow["\otimes"', from=3-3, to=2-2]
+	\arrow["\otimes", from=3-5, to=2-6]
+	\arrow["\otimes"', from=3-6, to=2-6]
+	\arrow["\otimes"', from=3-7, to=2-6]
+\end{tikzcd}
+\end{document}

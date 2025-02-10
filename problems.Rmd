@@ -339,13 +339,15 @@ Thus, to be able to model a broad class of plots, we need a way to encode a hier
 
 A [preorder](#preorders) is a binary relation on a set $S$, generally denoted by $\leq$, that is both reflexive and transitive. In simpler terms, given a preordered set $S$, any two elements $a, b \in S$ either relate ($a \leq b$, meaning $a$ is "less than" $b$), or they do not relate at all. Further, the relation obeys some common sense properties: every element relates to itself (reflexivity), and if $a$ relates to $b$ and $b$ relates to $c$, then $a$ relates to $c$ as well (transitivity).
  
-We can turn our hierarchy of data subsets in Figure \@ref(fig:spineplot-tree) into a preorder very easily, by simply being more explicit about the relations in the figure. Specifically, define set $S$ as the set of data subsets, and the binary relation $\leq$ as the set inclusion relation $\subseteq$. Then, we see that the two properties of preorders do indeed hold: every data subset is included in itself (reflexivity), and if a segment subset is a part of a bar subset, and bar subset is a part of the whole data set, then the segment subset is, clearly, a part of the whole data set as well (transitivity). We can describe this preorder via the following diagram (known as a Hasse diagram):
+We can turn our hierarchy of data subsets in Figure \@ref(fig:spineplot-tree) into a preorder very easily, by simply being more explicit about the relations, see Figure \@ref(fig:barplot-preorder). Specifically, define set $S$ as the set of data subsets $D$, with the individual subsets indexed by identity such that e.g. $D_D$ corresponds to the whole data set, $D_{B_1}, \ldots D_{B_n}$ correspond to bar subsets, and $D_{S_1}, \ldots D_{S_k}$ correspond to segment subsets. Further, define the binary relation $\leq$ as the set inclusion relation $\subseteq$.
 
 ```{r barplot-preorder}
 #| echo: false
-#| fig-cap: "A diagram of a barplot or spinogram, represented as a preorder ordered by set inclusion. $D$ represents the whole data set, $B_i$ represent bars, and $S_j$ represent individual bar segments. Arrows indicate set inclusion."
+#| fig-cap: "A diagram of a barplot or spinogram, represented as a preorder ordered by set inclusion. $D_D$ represents the whole data set, $D_{B_i}$ represent bar subsets, and $D_{S_j}$ represent individual bar segment subsets. Arrows indicate set inclusion."
 knitr::include_graphics("./figures/barplot-preorder.png") 
 ```
+
+Then, we see that the two properties of preorders do indeed hold: every data subset is included in itself (reflexivity), and if a segment subset is a part of a bar subset, and bar subset is a part of the whole data set, then the segment subset is, clearly, a part of the whole data set as well (transitivity).
 
 The set inclusion relation is a simple and valid way to describe the relationship between the data subsets, however, it is not entirely precise enough for our purposes later. Specifically, data corresponding to a bar segment is not just an arbitrary subset of the data corresponding to the bar, *it is the specific subset that, when combined with all the other sibling segments, gives us the whole bar*. Thus, we can be even more explicit by describing the relationship via set union: 
 
@@ -363,7 +365,7 @@ Here, in Figure \@ref(fig:barplot-preorder2), the set union symbol ($\cup$) on t
 knitr::include_graphics("./figures/barplot-preorder3.png") 
 ```
 
-Figure \@ref(fig:barplot-preorder3) illustrates the simple fact that Bar 1 is formed by combining the data subset of Segment 1 with those of Segments 2 and 3 using set union (and similarly for Segments 2 and 3). It is simply a more detailed view of a section of Figure \@ref(fig:barplot-preorder2). We could expand this diagram to encompass all other bars, segments, and the entire data set.
+Figure \@ref(fig:barplot-preorder3) illustrates the simple fact that Bar 1 is formed by combining the data subset of Segment 1 with those of Segments 2 and 3 using set union (and similarly for Segments 2 and 3). It is simply a more detailed view of a section of Figure \@ref(fig:barplot-preorder2). We could expand this diagram to encompass all other bars, segments, and the entire data set. As before with figure \@ref(fig:barplot-preorder), it's not difficult to show that reflexivity and transitivity hold.
 
 In summary, our data subset hierarchy can be described as a preorder, where the ordering is defined by set union with all relevant sibling subsets. This is really the same idea as Figure \@ref(fig:spineplot-tree), we are simply being more explicit about our data assumptions. The real utility of this approach will be revealed later, in Section \@ref(aggregation). However, for now, it may be useful to revise our definition of a regular plot:
 
@@ -591,7 +593,7 @@ In our concrete case of preorder of data subsets ordered by set union, we can ea
 knitr::include_graphics("./figures/barplot-preorder2.png") 
 ```
 
-Here, the objects are again just the data subsets, such as the whole data set $D$, the bars $B_i$, and the segments $S_j$. The morphisms are the arrows indicating set union with the sibling subsets. As before, the fact that there is an arrow between $S_1$ and $B_1$ simply means that Segment 1 can be combined with other segments to form Bar 1 (and  the absence of an arrow between $S_1$ and $S_2$ indicates that segments are disjoint). Identity morphisms are not explicitly shown, but they are of course present (every subset can be combined with the empty set $\varnothing$ to get back the original set). Finally, as mentioned above, reflexivity and transitivity automatically fall out of the definition of a category.
+Here, the objects are again just the data subsets, such as the whole data set $D_D$, the bar subsets $D_{B_i}$, and the segments $D_{S_j}$. The morphisms are the arrows indicating set union with the sibling subsets. As before, the fact that there is an arrow between $D_{S_1}$ and $D_{B_1}$ simply means that Segment 1 can be combined with the other segments to form Bar 1 (and the absence of an arrow between $D_{S_1}$ and $D_{S_2}$ indicates that segments are disjoint). Identity morphisms are not explicitly shown, but they are of course present (every subset can be combined with the empty set $\varnothing$ to get back the original set). Finally, as mentioned above, reflexivity and transitivity automatically fall out of the definition of a category.
 
 While the benefits of this abstract reformulation of preorders may not be immediately apparent, I encourage the reader to bear with me. In the next sections, I will show the advantages of thinking about our data and visualizations categorically.
 
@@ -615,36 +617,121 @@ This second property of preserving composition can be described by the following
 
 ```{r functor}
 #| echo: false
-#| fig-cap: "A commutative diagram of showing how a functor $F$ preserves associativity."
+#| fig-cap: "A commutative diagram showing how a functor $F$ preserves associativity. $A$, $B$, $C$ are objects in category $\\mathcal{C}$, $F(A)$, $F(B)$, $F(C)$ are objects in category $\\mathcal{D}$, $f$ and $g$ are morphisms in $\\mathcal{C}$, and $F(F)$ and $F(g)$ are objects in $\\mathcal{D}$."
 knitr::include_graphics("./figures/functor.png")
 ```
 
-Here, $A$, $B$, and $C$ are three objects in category $\mathcal{C}$ and $F(A)$, $F(B)$, and $F(C)$ are the same three objects mapped to category $\mathcal{D}$. Since $A$ maps to $B$ via $f$, and $B$ maps to $C$ via $g$ (both in $\mathcal{C}$), we can compose the morphisms and map $A$ to $C$ directly via $f \then g$. When we apply a functor, this property needs to be preserved for any such three objects $A$, $B$, and $C$.  
+Here, $A$, $B$, and $C$ are three objects in category $\mathcal{C}$ and $F(A)$, $F(B)$, and $F(C)$ are the same three objects mapped to category $\mathcal{D}$ (and the same for morphisms $f$ and $g$). The diagram commuting means that following any two parallel arrows (same source and destination) gives us the same result. For instance, to get from $A$ to $F(C)$, we may either:
 
-In simple terms, the second property of functors means that, if we have a way to move from $A$ to $C$ in $\mathcal{C}$, we *must* have a way to move from $F(A)$ to $F(C)$ in $\mathcal{D}$ (even if it means staying in the same place - for example, we may map $A$, $B$, $C$ to the same object in $\mathcal{D}$, and map $f$ and $g$ to the identity morpism).
+- Map $A \to C$ (via $f \then g$) and then apply the functor ($F(\text{id}_C)$)
+- Map $A \to B$ (via $f$), apply the functor ($F(\text{id}_B)$), and then map $F(B) \to F(C)$ (via $F(g)$) 
+- Apply the functor immediately ($F(\text{id}_A)$) and then map $F(A) \to F(C)$ (via $F(f \then g) = F(f) \then F(g)$)
 
-#### Aggregation: A functor from the preorder of data subsets to the preorder of summary statistics
+The second property of functors states that all of the above paths must lead to the same object $F(C)$ (if $F$ is a functor).
 
-As mentioned before, we start with a preorder of data subsets ordered by inclusion, which can be re-interpreted as a category. When we aggregate, we summarize each of these subsets by one or more metrics. We can imagine the process of summarizing data subsets as a functor, mapping from the space of data subsets ordered by set inclusion to the space of summary statistics or metrics, also ordered in some way.  
+```{r}
+#| results: "hold"
+x <- 1:10
+y <- 11:20
+z <- 21:30
 
-But before we go on to do that, we need to one more trick. We can recast the set inclusion relations in Figure \@ref(fig:barplot-preorder) as set union. Specifically, instead of the arrows simply denoting the fact that, for example, segment 1 is a subset of bar 1, we can be explicit about the fact that, to get bar 1, we need to take the union of segment 1 and *all the other segments within the bar*: 
+sum(c(c(x, y), z))      # F(f;g)
+sum(c(sum(c(x, y)), z)) # F(f);F(g)
+
+mean(c(c(x, y), z))       # F(f;g)
+mean(c(mean(c(x, y)), z)) # F(f);F(g)
+```
+
+```{r}
+#| results: "hold"
+is_functorial <- function(fn, x, y, z) {
+  fn(c(c(x, y), z)) == fn(c(fn(c(x, y)), z))
+}
+
+is_functorial(sum, x, y, z)
+is_functorial(max, x, y, z)
+is_functorial(prod, x, y, z)
+is_functorial(function(x) sqrt(sum(x^2)), x, y, z) # Euclidean distance
+is_functorial(mean, x, y, z)
+is_functorial(sd, x, y, z)
+```
+
+#### Aggregation: A functor from the preorder of data subsets to the preorder of summary statistics {#aggregation-functor}
+
+As we have established before, when visualizing data, we may start with a preorder of data subsets ordered by sibling subset union, as in Figure \@ref(fig:barplot-preorder2) (reproduced below for reminder). We would like to translate these data subsets into summary statistics, in a way that preserves the inherent structure in the data subset preorder. As we will see, the way to do this is via a functor.
 
 ```{r barplot-preorder22}
 #| echo: false
-#| fig-cap: "The preorder of data subsets corresponding to a barplot, this time ordered by set union."
+#| fig-cap: "A diagram of a barplot/spineplot represented as a preorder of data subsets corresponding to a set union, reproduced."
 knitr::include_graphics("./figures/barplot-preorder2.png") 
 ```
 
-Now, given that we want to preserve the structure of the diagram above, it is natural that we want to preserve properties of set union. For our purposes, two important property of set union we may want to preserve are:
+But first, let's discuss the summary statistics. Since we want to summarize each data subset, then, it is given that we should end up with an equal number of summaries. For instance, if $D = \{ D_D, D_{B_1}, \ldots D_{B_n}, D_{S_1}, \ldots, D_{S_k} \}$ is the set of data subsets corresponding to the whole data set, bars, and segments, respectively, and $S$ is the set of summaries, then $\lvert D \lvert = \lvert S \lvert$. Further, since $D$ is actually part of a preorder, then, intuitively, $S$ should be a part of a preorder as well. 
 
-- Unitality: $A \cup \varnothing = A$ (for all sets $A$).
-- Associativity: $A \cup (B \cup C) = (A \cup B) \cup C = A \cup B \cup C$ (for all sets $A$, $B$, and $C$).
+What should be the order relation between the summaries in $S$? In $(D, \cup)$, the order relation is given by set union with the sibling subsets. In the preorder of summaries, we want the order relation to be some operation that "behaves like set union", in a way that it represents the operation of *combining sibling summaries*. We can label it with the symbol $\otimes$, such that the resulting preorder is $(S, \otimes)$:
 
-The first property, unitality, is relatively straightforward. It simply means that the union of any set with the empty set is just the original set. We can also interpret this as the identity arrow from each object back to itself (since the union of any set with the empty set, $- \cup \varnothing$, is just the original set). By the functor laws:
+```{r}
+#| echo: false
+#| fig-cap: "A diagram of barplot/spineplot summary statistic preorder, ordered by the combine operator $\\otimes$." 
+knitr::include_graphics("./figures/barplot-preorder4.png") 
+```
 
-$$F(A \cup \varnothing) = F(A) \otimes F(\varnothing) = F(A)$$
+As before, each $\otimes$ in the diagram above corresponds to the operation of combining a summary with the other sibling summaries, such that, for example, the label for the arrow $S_{S_1} \to S_{B_1}$ should be $- \otimes S_{S_1} \otimes S_{S_2}$.
 
-Therefore, the summary operation $F$ must be produce a valid summary when applied to the empty set $\varnothing$, and this summary must be unital, such that when combined with any other summary simply yields back the original summary.  
+Now comes the key point. Suppose that we have some summary operation $F: D \to S$ which maps data subsets to summaries. To preserve the structure of $(D, \cup)$, the operation should be functorial, such that, when joining some subset with two (disjoint) subsets $D_{i}$ and $D_{j}$ and summarizing:
+
+$$F(- \cup D_{i} \then - \cup D_{j}) = F(- \cup D_i) \then F(- \cup D_j)$$
+
+The expression above looks somewhat hairy, however, it can be simplified by nothing that:
+
+- $F(- \cup D_i ) = - \otimes F(D_i)$ (by definition of our functor: lifting a union operation to the space of summaries amounts to combining summaries)
+- Since $\cup$ and $\otimes$ are binary operators, we can omit the composition operator $\then$
+
+Leading to:
+
+$$F(- \cup D_i \cup D_j) = - \otimes F(D_i) \otimes F(D_j)$$
+
+Without loss of generality, by choosing the empty set $\varnothing$ as the starting subset ($-$), the equation reduces to:
+
+\begin{equation}
+
+F(D_i \cup D_j) = F(D_i) \otimes F(D_j)
+(\#eq:summary-functor-composition)
+
+\end{equation}
+
+
+
+In other words, *it should not matter whether we first take the union of the underlying data and then summarize the resulting superset, or first summarize the subsets and then combine them via the operation $\otimes$*.
+
+Finally, we should note that, to be fully functorial, the operation should also preserve identities:
+
+\begin{equation}
+
+F(\text{id}_{D_i}) = \text{id}_{F(D_i)}
+(\#eq:summary-functor-identity)
+
+\end{equation}
+
+#### Functorial summaries and set union
+
+Let's explore the functoriality of summary statistics in more concrete terms. First, as was mentioned in Section \@ref(plots-as-preorders), the identity morphism for a data subset is just union with the empty set, $- \cup \varnothing$. Therefore, preserving identities as per Equation \@ref(eq:summary-functor-identity) amounts to:
+
+$$F(\text{id}_{D_i}) = F(D_i \cup \varnothing) = F(D_i) \otimes F(\varnothing) = F(D_i) = \text{id}_{F(D_i)}$$
+
+This means that the summary operation $F$ must be defined for the empty set, and should return some "neutral" value $F(\varnothing)$, which, when combined with any other summary, just returns the same summary back. 
+
+Second, as per Equation \@ref(eq:summary-functor-composition), the summary should distribute across set union:
+
+$$F(D_i \cup D_j) = F(D_i) \otimes F(D_j)$$
+
+This distributive property should hold over *all* disjoint subsets of the data as these correspond to all possible arrows we can draw in the set union diagram of the data subset preorder. The smallest (non-empty) disjoint subsets are individual data points $d_i \in D$. Thus, the summary operation needs to distribute over data points:
+
+$$F(d_1 \cup d_2 \cup \ldots \cup d_k) = F(d_1) \otimes F(d_2) \otimes \ldots \otimes F(d_k)$$
+
+Thus, in some way, $F$ *really is* the combination operator $\otimes$. We can write:
+
+$$F(d_1 \cup d_2 \cup \ldots d_k) = d_1 \otimes d_2 \otimes \ldots d_k$$
 
 The second property, associativity, is a bit more interesting. It means that the order in which we take union of multiple sets does not matter. We can describe it via the following commutative diagram: 
 

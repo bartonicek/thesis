@@ -293,3 +293,9 @@ zooming
 inverses-1
 fig:barplot-preorder3
 fig:barplot-preorder22
+fig:unnamed-chunk-21
+functors-and-set-union
+eq:summary-functor-composition
+eq:summary-functor-identity
+aggregation-functor
+functorial-summaries-and-set-union
