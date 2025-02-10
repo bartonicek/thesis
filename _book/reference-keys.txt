@@ -291,3 +291,5 @@ margins
 panning
 zooming
 inverses-1
+fig:barplot-preorder3
+fig:barplot-preorder22

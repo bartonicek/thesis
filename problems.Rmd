@@ -10,13 +10,13 @@ Designing an interactive data visualization system presents a unique set of chal
 
 ## The structure of this chapter: Data visualization pipeline
 
-When creating visualizations, it is rarely the case that we can plot the raw data directly, as is. Instead, before it can be rendered, the data often has to pass through several distinct transformation stages. Together, these stages form a data visualization pipeline [see e.g. @chi2000; @wickham2009; @wu2024]. 
+When creating visualizations, be they static or interactive, it is rarely the case that we can plot the raw data directly, as is. Instead, before the data can be rendered, it often has to pass through several distinct transformation steps or stages. Together, these steps form a data visualization pipeline [see e.g. @chi2000; @wickham2009; @wu2024]. Each of these steps come with its inherent set of considerations and challenges, particularly when interaction is involved. 
 
-Take, for instance, the typical barplot. There are several steps to drawing a barplot. First, we have to divide the data into parts, based on the levels of some categorical variable. Second, we need to summarize or aggregate each part by some metric, usually either sum or count. Third, we need to take these summaries and map them to visual encodings, such as x-axis position, y-axis position, and length. Finally, we use these encodings to render the individual bars as rectangles on a computer screen [see e.g. @franconeri2021].
+Take, for instance, the typical barplot. There are several steps to drawing a barplot. First, we have to divide the data into parts, based on the levels of some categorical variable. Second, we need to summarize or aggregate each part by some metric, usually either sum or count. Third, we need to take these summaries and map them to visual encodings, such as x-axis position, y-axis position, and length. Finally, we use these encodings and render the individual bars as rectangles on a computer screen [see e.g. @franconeri2021].
 
-These four steps - partitioning, aggregation, scaling/encoding, and rendering - are common to all data visualization systems, be they static or interactive. However, interactivity does present some unique challenges, since user interaction may affect any of the four stages. As a result, the changes may need to be propagated throughout the entire pipeline. Finding a general and efficient way to implement this propagation remains an open research topic [@wickham2009; @franconeri2021]. Consequently, discussions of interaction within the context of the data visualization pipeline are often fairly vague [see @dimara2019; @wu2024].
+These four steps - partitioning, aggregation, scaling/encoding, and rendering - are common to both static and interactive visualization systems. However, interactivity does present some unique challenges. User interaction may affect any of the four stages, and as a result, changes need to be propagated accordingly. Finding a general and efficient way to implement this propagation remains an open research topic [@wickham2009; @franconeri2021]. Consequently, discussions of interaction within the context of the data visualization pipeline are often fairly vague [see @dimara2019; @wu2024].
 
-This chapter tries to address some of this conceptual ambiguity. It is organized in a way to mirror the data visualization pipeline, discussing each of the four steps in depth, and exploring challenges related to their implementation in interactive systems. Ultimately, my goal is to demonstrate that integrating interaction into certain parts of the pipeline, particularly the aggregation step, is more complex than commonly acknowledged. Further, if the goal is to build truly generic and robust interactive data visualization systems, this complexity must be addressed [see also @wu2024].
+This chapter attempts to clarify some of this conceptual ambiguity. Mirroring the data visualization pipeline, it delves into each of the four steps, discussing them and exploring challenges related to their implementation in interactive systems. The central argument is that integrating interaction, particularly at the aggregation stage, is significantly more complex than typically recognized. Further, if the goal is to build truly generic and robust interactive data visualization systems, this complexity must be addressed [see also @wu2024].
 
 ## Partitioning
 
@@ -24,12 +24,12 @@ The first step of any data visualization pipeline is to divide the data into par
 
 This partitioning operation fairly intuitive for aggregate plots (e.g. typical barplots and histograms), where each object represents multiple rows of the data. However, even one-to-one representations of the data (e.g. scatter plots and parallel coordinate plots), can be viewed this way, specifically, as slicing the table of $n$ rows into $n$ smaller tables of one row each. Similarly, plots with a single geometric object (e.g. a radar plot) can be considered as taking the entire data set as the one and only subset.
 
-Thus, the process of splitting our data into subsets may appear fairly straightforward. However, it does raise two fundamental questions:
+Thus, the process of splitting our data into subsets may appear as a fairly straightforward operation, however, it does raise two fundamental questions:
 
 - How much of the original data should the subsets contain?
 - What should be the relationship between the subsets?
 
-While common data visualization practices provide implicit solutions to these questions, in the data visualization literature, explicit answers are rarely given. This is unfortunate because choosing how to partition our data is a highly consequential decision: it involves making assumptions about both the data itself and the goals we have with the visualization. In interactive data visualization particularly, the relationships between the parts of our data become of crucial importance. Therefore, discussing these two questions in greater depth is essential.
+While common data visualization practices provide implicit solutions to these questions, explicit formulations are rarely given in the data visualization literature. This lack of clarity is problematic because how we choose to partition our data is a highly consequential decision: when we do it, we make assumptions, about data itself and the goals of the visualization process. In interactive data visualization particularly, the relationships between the parts of our data become of crucial importance. Therefore, discussing these two questions in greater depth is essential.
 
 ### Showing the full data {#show-all-data}
 
@@ -316,7 +316,7 @@ Like barplots, spineplots represent some summary statistic (usually counts), agg
 
 Although barplot and spineplot represent the same underlying data, turning one into the other is not always easy. Specifically, while many grammar-based visualization systems offer a simple declarative syntax for defining barplots, they lack such simple syntax for spineplots. For instance, to draw a spineplot in `ggplot2`, we first need to do a substantial amount of data wrangling (creating the plot in the right panel of Figure \@ref(fig:barplot-spineplot) took over 10 lines of code, using standard `dplyr` syntax). This same hierarchical dependence applies to other "normalized" types of plots, such as spinograms, as well as innately hierarchical displays such as treemaps and mosaic plots [see e.g. @theus2002; slingsby2009].
 
-#### Partitions and hierarchy {#hierarchy}
+### Partitions, hierarchy, and preorders {#hierarchy}
 
 Why are spineplots so tricky? The reason is that they force us to confront the hierarchical nature of (interactive) graphics [@mcdonald1990; @keller2024]. Specifically, while in a barplot, we can get by with a single flat partition of the data, in a spineplot, the data is summarized and stacked *along and across* different levels of aggregation [@wu2024]:
 
@@ -333,7 +333,7 @@ knitr::include_graphics("./figures/spineplot-tree.png")
 
 In \@ref(fig:spineplot-tree), each vertical level represents a data partition, and arrows indicate relationships between data subsets, such that a bar subset is composed of segment subsets, and the whole data set is in turn composed of bar subsets. This same tree can be used to represent both barplots and spineplots. For a stacked barplot, this tree structure can be implicit, since we can work with the lowest level of the partitioning only (the segments; ignoring details such as maintaining correct stacking order). However, for spineplots, this hierarchical structure is essential. In spineplots, we apply transformations *across* the levels of the hierarchy: we need to normalize the statistics corresponding to each segment by the values within the parent bar. This is only possible if each segment can reference its parent bar in some way.
 
-Thus, to be able to model a broad class of plots, we need a way to encode a hierarchical partitioning of our data. Furthermore, for reasons that will become clear later, it may be beneficial to introduce a more formal, mathematical framework for thinking about this hierarchy. A simple algebraic structures for encoding hierarchies is a preorder. 
+Thus, to be able to model a broad class of plots, we need a way to encode a hierarchical partitioning of our data. Furthermore, for reasons that will become clear later, it may be beneficial to introduce a more formal, mathematical framework for thinking about this hierarchy. A simple algebraic structure for encoding such class of hierarchies is a preorder.
 
 #### Plots as preorders {#plots-as-preorders}
 
@@ -343,19 +343,37 @@ We can turn our hierarchy of data subsets in Figure \@ref(fig:spineplot-tree) in
 
 ```{r barplot-preorder}
 #| echo: false
-#| fig-cap: "A diagram of a preorder of data subsets ordered by inclusion, corresponding to a barplot or spinogram. $W$ represents the whole data set, $B_i$ represent bars, and $S_j$ represent individual bar segments. Arrows indicate set inclusion."
+#| fig-cap: "A diagram of a barplot or spinogram, represented as a preorder ordered by set inclusion. $D$ represents the whole data set, $B_i$ represent bars, and $S_j$ represent individual bar segments. Arrows indicate set inclusion."
 knitr::include_graphics("./figures/barplot-preorder.png") 
 ```
 
-Notice the similarity to Figure \@ref(fig:spineplot-tree). There really is not anything new here, we are simply being more explicit about our data assumptions. The real utility of this approach will be revealed later. However, for now, it may be useful to revise our definition of a regular plot:  
+The set inclusion relation is a simple and valid way to describe the relationship between the data subsets, however, it is not entirely precise enough for our purposes later. Specifically, data corresponding to a bar segment is not just an arbitrary subset of the data corresponding to the bar, *it is the specific subset that, when combined with all the other sibling segments, gives us the whole bar*. Thus, we can be even more explicit by describing the relationship via set union: 
+
+```{r barplot-preorder2}
+#| echo: false
+#| fig-cap: "A more precise version of the diagram of a barplot/spinogram, with the relation identified as set union with the sibling subsets."
+knitr::include_graphics("./figures/barplot-preorder2.png") 
+```
+
+Here, in Figure \@ref(fig:barplot-preorder2), the set union symbol ($\cup$) on the arrows indicates set union *with all the other sibling subsets*. Explicitly listing all of the subsets would make the diagram cluttered, however, for a smaller part of the diagram such as Bar 1, it would look as follows:
+
+```{r barplot-preorder3}
+#| echo: false
+#| fig-cap: "A diagram of a barplot/spineplot bar as preorder, with the set union relationships described explictly."
+knitr::include_graphics("./figures/barplot-preorder3.png") 
+```
+
+Figure \@ref(fig:barplot-preorder3) illustrates the simple fact that Bar 1 is formed by combining the data subset of Segment 1 with those of Segments 2 and 3 using set union (and similarly for Segments 2 and 3). It is simply a more detailed view of a section of Figure \@ref(fig:barplot-preorder2). We could expand this diagram to encompass all other bars, segments, and the entire data set.
+
+In summary, our data subset hierarchy can be described as a preorder, where the ordering is defined by set union with all relevant sibling subsets. This is really the same idea as Figure \@ref(fig:spineplot-tree), we are simply being more explicit about our data assumptions. The real utility of this approach will be revealed later, in Section \@ref(aggregation). However, for now, it may be useful to revise our definition of a regular plot:
 
 :::{.definition name="Regular plot 2"}
-Regular plot is a plot where the geometric objects within one layer represent a preorder of data subsets ordered by inclusion (such that there is a bijection between these objects and the data subsets, and the subsets on the same order level represent a partition of the data). 
+Regular plot is a plot where the geometric objects within one layer represent a preorder of data subsets ordered by sibling subset union (such that there is a bijection between these objects and the data subsets, and the subsets on the same order level represent a partition of the data). 
 :::
 
 #### The graph behind the graph
 
-To summarize, *graphs are graphs*. As a bit of a playful side-note, this view is not shared by everyone. Particularly, the poster of the following meme shared on the Mathematical Mathematics Memes Facebook group [@mathematicalmathematics2024] might not agree:
+To summarize the main point of this entire section, *graphs are graphs*. As a bit of a playful side-note, this view is not shared by everyone. Particularly, the poster of the following meme shared on the Mathematical Mathematics Memes Facebook group [@mathematicalmathematics2024] might not agree:
 
 ```{r meme}
 #| echo: false
@@ -367,7 +385,9 @@ knitr::include_graphics("./figures/graphs-cosplayers.jpg")
 
 I hope I have made a reasonably strong case here that many data visualization types are not "delusional cosplayers". By organizing our data into a preorder, we induce a graph-like, part-whole relationship on the subsets. Thus, graphs really are graphs. 
 
-However, organizing our data into a preorder introduces a new kind of challenge: preserving the inherent structure. Preorders are algebraic objects imbued with structure, and, intuitively, it would be wrong to disregard this structure in the subsequent steps of the data visualization pipeline. For example, in a barplot, if we split our bars into segments, it would be inconsistent to stack some segments on top of each other while plotting others side-by-side. Clearly, any further manipulation of the hierarchically partitioned data should *respect this underlying structure*. However, what does it really mean to respect the structure of our data? This question will be explored in detail in the following section, which deals with the next step of the data visualization pipeline: aggregation.   
+However, organizing our data into a preorder introduces a new kind of challenge: preserving the inherent structure. Preorders, as algebraic objects, have structure encoded in their order relations. Intuitively, it would be wrong to disregard this structure in the subsequent steps of the data visualization pipeline. For instance, imagine taking a barplot, dividing the bars into segments, and then stacking half of the segments while placing the other half side-by-side. Clearly, something would be wrong with this approach. Visualization methods should respect the inherent hierarchy within our data.
+
+However, what does it *really* mean to respect the structure of our data? This question will be explored in detail in the following section, which deals with the next step of the data visualization pipeline: aggregation.   
 
 ## Aggregation
 
@@ -523,20 +543,20 @@ My conclusion diverges from @wilhelm2008. I contend that, while overlaying/stack
 
 ### Stackable summaries: A brief journey into Category Theory
 
-Now it is finally time to discuss what makes certain statistics stackable. To do this, I will need to use some fundamental concepts from category theory. These concepts are described in greater detail in the [Appendix: Mathematical Theory](#mathematical-theory) - the reader is advised to consult this section if they are unfamiliar with the material (links to appropriate sections will also be provided throughout the following text).
+Let's briefly recap the key points so far. In section \@ref(partitioning), I advocated for modeling plots as a hierarchy of partitions, particularly a preorder of data subsets ordered by set union. Starting with the full data set, we divide it into disjoint subsets, each corresponding to a geometric object. These subsets can then be further subdivided, representing parts of those objects (such as those resulting from linked selection). As discussed in Section \@ref(hierarchy), we end up with a tree-like structure that encodes this part-whole relationship, which can be formally described as a preorder.
 
-Let's briefly recap the key points so far. In section \@ref(partitioning), I advocated for modeling plots as a hierarchy of partitions. Specifically, starting with the full data set, we divide it into disjoint subsets, each corresponding to a geometric object. These subsets can then be further subdivided, representing parts of those objects (such as those resulting from linked selection). As discussed in Section \@ref(hierarchy), we end up with a tree-like structure that encodes this part-whole relationship, which can be formally described as a preorder.
+Further, in Section \@ref(stacking-not-graphical), I demonstrated that some "stackable" summary statistics have the property of preserving the part-whole relationships in the data hierarchy, whereas others do not. I have also and pointed to other researchers who have noted this problem. Additionally, I have argued that preserving these part-whole relationship in our visualizations is desirable, particularly when interaction is involved. They simplify certain interactive behaviors, make them more intuitive and "natural," and reduce the workload interactive data visualization systems need to do.
 
-Further, I have made the argument that, when summarizing our data, we should choose summary statistics which preserve this hierarchical, part-whole structure of the data. In Section \ref(stacking-not-graphical), I showed an example of visualizations which violate this structure, by stacking "unstackable" summary statistics, and pointed to other researchers who have noted this problem. I have also showed that this property of being "stackable" is *not* unique to sums and counts.
+Now it is finally time to discuss what makes certain statistics stackable. To do this, I will need to use some concepts from category theory. These concepts are described in greater detail in the [Appendix: Mathematical Theory](#mathematical-theory) - the reader is advised to consult this section if they are unfamiliar with the material (links to appropriate sections will also be provided throughout the text). As a final note, although category theory is a very complex field, only introductory concepts - which are sufficient for our purposes - will be used here.
 
 #### Generalizing preorders: Categories
 
-Before, I had formalized the hierarchy of data subsets as a preorder. Now, we need to take one step further towards abstraction by describing preorders within the framework of category theory, specifically as categories.
+Previously, I had formalized the hierarchy of data subsets as a preorder, an algebraic concept with a structure that we want to preserve. However, to truly formalize the concept of preserving structure, we need to take one more step towards abstraction. Specifically, it is necessary to recast preorders as categories, a fundamental concept in category theory.
 
-Although often perceived as complex, the definition of a [category](#categories) is actually quite straightforward. In simple terms, a category $\mathcal{C}$ is just a collection of objects, connected by arrows, that conforms to a few properties. More specifically, when we have a category $\mathcal{C}$:
+The definition of a [category](#categories) is quite straightforward. In simple terms, a category $\mathcal{C}$ is just a collection of objects, connected by arrows, that conforms to several properties. More specifically, when we have a category $\mathcal{C}$:
 
 - We have a collection of objects $\text{Ob}(\mathcal{C})$
-- For every pair of objects $c_1, c_2 \in \text{Ob}(\mathcal{C})$, there is a set of of arrows (morphisms) $c_1 \to c_2$, $\mathcal{C}(c_1, c_2)$
+- For every pair of objects $c_1, c_2 \in \text{Ob}(\mathcal{C})$, there is a set of of arrows (morphisms) $c_1 \to c_2$ (this set of arrows is often denoted as $\mathcal{C}(c_1, c_2)$)
 
 Further:
 
@@ -548,35 +568,38 @@ Finally, the arrows need to conform to two properties:
 - Composing with the identity morphism leaves arrows unchanged: $\text{id}_{c_1} \then f = f \then \text{id}_{c_2} = f$
 - Composition is associative: $f \then (g \then h) = (f \then g) \then h = f \then g \then h$
 
-For example, the following is a diagram of a simple category with 2 objects and a single non-identity morphism, called $\underline{\textbf{2}}$:
+For example, the following is a diagram of a simple category with two objects and a single non-identity morphism, called $\underline{\textbf{2}}$:
 
 ```{r category-two1}
 #| echo: false
 knitr::include_graphics("./figures/category-two.png")
 ```
 
-What are the objects? What are the arrows? That is all left for us to specify. The abstract nature of the definition can make it difficult to grasp initially, however, there are some fairly straightforward examples that can help. For instance, one simple class of categories are those where the objects $c \in \text{Ob}(\mathcal{C})$ are elements of some set. However, it is important to keep in mind that the definition is far, far broader - the objects could themselves be sets, more complex algebraic structures such as groups, rings, or graphs, or even entire categories.    
-One simple example of a category is a preorder. Specifically, it can be shown that every preorder is in fact a category. Given a preorder on a set $S$, define the objects $c \in \text{Ob}(\mathcal{C})$ as the elements in $s \in S$, and, for any two objects $a$, $b$, define at most one morphism $a \to b$ if $a \leq b$ (and no morphism if $a \not \leq b$). Then, the two properties of preorders just fall out of the definition of a category:
+Here, the morphism $f$ simply means we can get from object 1 (left) to object 2 (right). Based on the rules of a category, we can infer that, for example, $(\text{id}_1 \then f) \then \text{id}_2 = \text{id}_1 \then (f \then \text{id}_2) = f$. As a final note, since the identity arrows are always present, they are often not drawn explicitly in diagrams of categories (however, they are presumed to be there). 
 
-- Reflexivity: that is just the identity morphism. For every $c \in \text{Ob}(\mathcal{C})$, we have $\text{id}_c : c \to c$
-- Transitivity: that is just composition of morphisms. Given $f: a \to b$ ($a \leq b$) and $g: b \to c$ ($b \leq c$), we can define $h: a \to c$ as $h = f \then g$ ($a \leq c$)
+Now, what are the objects? What are the arrows? That is all left for us to specify. For example, the objects and arrows could be elements of a set and relations, sets and functions, or even entire categories and a generalizations of functions called functors (which we will discuss later). This abstract nature of categories can be initially difficult to grasp. However, there are some fairly straightforward examples that can help. 
 
-In our concrete case of the preorder of data subsets ordered by inclusion, we can easily reuse the same diagram from Section \@ref(plots-as-preorders), that is, Figure \@ref(fig:barplot-preorder), and re-intepret it as a category:
+A key example, relevant to our discussion, are preorders. Specifically, it can be shown that every preorder is in fact a category. Given a preorder on a set $S$, define the objects $c \in \text{Ob}(\mathcal{C})$ as the elements in $s \in S$, and, for any two objects $c_1$ and $c_2$, define at most one morphism $c_1 \to c_2$ if $c_1 \leq c_2$ (and no morphism if $c_1 \not \leq c_2$). Then, the two properties of preorders just fall out of the definition of a category:
+
+- Reflexivity: this is just the identity morphism. For every $c \in \text{Ob}(\mathcal{C})$, we have $\text{id}_c : c \to c$
+- Transitivity: this is just composition of morphisms. Given $f: c_1 \to c_2$ ($c_1 \leq c_2$) and $g: c_2 \to c_3$ ($c_2 \leq c_3$), we can define $h: c_1 \to c_3$ as $h = f \then g$ ($c_1 \leq c_3$)
+
+In our concrete case of preorder of data subsets ordered by set union, we can easily reuse the diagram from Section \@ref(plots-as-preorders) - Figure \@ref(fig:barplot-preorder2) - and re-intepret it as a category:
 
 ```{r}
 #| echo: false
-knitr::include_graphics("./figures/barplot-preorder.png") 
+knitr::include_graphics("./figures/barplot-preorder2.png") 
 ```
 
-Here, the objects are again just the data subsets, such as the whole data set $W$, the bars $B_i$, and the segments $S_j$. The morphisms are the arrows indicating the set inclusion relationship. The fact that there is an arrow between $S_1$ and $B_1$, but no arrow between $S_1$ and $S_2$ simply means that segment 1 is a subset of bar 1, but segments 1 and 2 are disjoint. As mentioned above, reflexivity and transitivity fall out of the definition of a category.
+Here, the objects are again just the data subsets, such as the whole data set $D$, the bars $B_i$, and the segments $S_j$. The morphisms are the arrows indicating set union with the sibling subsets. As before, the fact that there is an arrow between $S_1$ and $B_1$ simply means that Segment 1 can be combined with other segments to form Bar 1 (and  the absence of an arrow between $S_1$ and $S_2$ indicates that segments are disjoint). Identity morphisms are not explicitly shown, but they are of course present (every subset can be combined with the empty set $\varnothing$ to get back the original set). Finally, as mentioned above, reflexivity and transitivity automatically fall out of the definition of a category.
 
-While the benefits of this abstract reformulation of preorders might not be immediately apparent, I encourage the reader to bear with me. In the next sections, I will show the advantages of thinking about our data and visualizations categorically.
+While the benefits of this abstract reformulation of preorders may not be immediately apparent, I encourage the reader to bear with me. In the next sections, I will show the advantages of thinking about our data and visualizations categorically.
 
 #### Structure preserving maps: Functors
 
-A second fundamental concept in category theory is that of a structure-preserving map or a [functor](#functors). A functor is a mapping from one category to another, such that the properties of the first category are preserved or reflected in its embedding within the second [this can also be thought of as drawing a diagram of the the first category inside the second category, @fong2019]. 
+A second fundamental concept in category theory is that of a structure-preserving map or a [functor](#functors). A functor is a mapping from one category to another which preserves the relationships within the first category [this can also be thought of as drawing a diagram of the the first category inside the second category, @fong2019]. 
 
-In category theoretic terms, a functor $F: \mathcal{C} \to \mathcal{D}$ is a mapping from category $\mathcal{C}$ to category $\mathcal{D}$ such that:
+In more precise terms, a functor $F: \mathcal{C} \to \mathcal{D}$ is a mapping from category $\mathcal{C}$ to category $\mathcal{D}$ such that:
 
 - Every object in $c \in \text{Ob}(\mathcal{C})$ is mapped to some object $d \in \text{Ob}(\mathcal{D})$
 - Every morphism $f: c_1 \to c_2$ in $\mathcal{C}(c_1, c_2)$ is mapped to some morphism in $\mathcal{D}(F(c_1), F(c_2))$, i.e. $F(f): F(c_1) \to F(c_2)$
@@ -586,7 +609,7 @@ Further, this mapping is subject to two fundamental properties:
 - Identities are preserved: $F(\text{id}_c) = \text{id}_{F(c)}$
 - Composition is too: $F(f \then g) = F(f) \then F(g)$
 
-The first property simply states that objects cannot be separated from their identities. The second property is more interesting, since it tells us that all compositions (chains of arrows) must be preserved. Other than that, we are free to map the objects and arrows as we wish. We can map multiple objects in $\text{Ob}(\mathcal{C})$ to a single object in $\text{Ob}(\mathcal{D})$, "squish" a morphism (or a chain of morphisms) in $\mathcal{C}$ by mapping it to an identity morphism in $\mathcal{D}$, or "stretch" a morphism in $\mathcal{C}$ by mapping it to a composite morphism in $\mathcal{D}$. However, we cannot "tear" or "rip" any morphism or chain of morphisms in $\mathcal{C}$ into multiple parts in $\mathcal{D}$. 
+The first property is fairly intuitive and simply states that objects cannot be separated from their identities. The second property is more interesting, since it tells us that all compositions (chains of arrows) must be preserved. Other than that, we are free to map the objects and arrows as we wish. For instance, we can map multiple objects in $\text{Ob}(\mathcal{C})$ to a single object in $\text{Ob}(\mathcal{D})$, "squish" a morphism (or a chain of morphisms) in $\mathcal{C}$ by mapping it to an identity morphism in $\mathcal{D}$, or "stretch" a morphism in $\mathcal{C}$ by mapping it to a composite morphism in $\mathcal{D}$. However, we cannot "rip" or "tear" any morphism or chain of morphisms in $\mathcal{C}$ into multiple morphisms or chains in $\mathcal{D}$. 
 
 This second property of preserving composition can be described by the following commutative diagram:
 
@@ -606,7 +629,7 @@ As mentioned before, we start with a preorder of data subsets ordered by inclusi
 
 But before we go on to do that, we need to one more trick. We can recast the set inclusion relations in Figure \@ref(fig:barplot-preorder) as set union. Specifically, instead of the arrows simply denoting the fact that, for example, segment 1 is a subset of bar 1, we can be explicit about the fact that, to get bar 1, we need to take the union of segment 1 and *all the other segments within the bar*: 
 
-```{r barplot-preorder2}
+```{r barplot-preorder22}
 #| echo: false
 #| fig-cap: "The preorder of data subsets corresponding to a barplot, this time ordered by set union."
 knitr::include_graphics("./figures/barplot-preorder2.png") 
