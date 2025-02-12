@@ -257,3 +257,9 @@ references
 fig:unnamed-chunk-1
 fig:unnamed-chunk-21
 fig:unnamed-chunk-19
+fig:unnamed-chunk-2
+changing-size-and-opacity
+sorting-and-reordering
+parameter-manipulation
+animation-and-projection
+fig:unnamed-chunk-8

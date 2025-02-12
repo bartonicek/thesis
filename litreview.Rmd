@@ -324,19 +324,21 @@ If we accept this proposition, then several important consequences follow. First
 
 ### Common interactive features {#common-features}
 
-This section describes several common types of interactive features that tend to frequently appear in interactive data visualization systems. It is only meant as an overview [for comprehensive taxonomies of interactive features, see @dimara2019; @yi2007]. For each feature, I highlight its properties, common use cases, and implementation constraints. 
+This section describes several common types of interactive features that tend to frequently appear in general interactive data visualization systems. It is only meant as an overview [for comprehensive taxonomies of interactive features, see @dimara2019; @yi2007]. For each feature, I highlight its properties, common use cases, and implementation constraints. 
 
-#### Changing size and alpha
+#### Changing size and opacity
 
-One of the simplest and most widely-implemented interactive features is the ability to adjust the size and transparency of geometric objects. In other words, the user may dynamically shrink or grow the objects and make them more or less opaque. This can be particularly useful at high data volumes, as reducing the size or alpha might show certain trends that would be otherwise hidden. For example, in scatterplots, shrinking points and making them semi-transparent reduces overplotting and can provide an approximation to a 2D kernel density plot [see e.g. @dang2010]. Similar technique can work for parallel coordinates plot as well [@theus2008].
+One of the simplest and most widely-implemented interactive features is the ability to adjust the size and opacity of geometric objects. This feature gives the user the ability to dynamically shrink or grow objects and make semi-transparent, fully transparent, or opaque. 
 
-This feature is usually quite easy to implement, since it involves the visual attributes only. In other words, when we manipulate size or alpha of geometric objects in our plots, we usually do not need to worry about what data these objects represent or where it came from. As such, it is relatively simple to implement this feature "on top" of an existing static visualization layer [see @bracsoveanu2017].
+The ability to shrink objects or make them semi-transparent can be particularly useful at high data volumes, since this can reveal trends that may be otherwise hidden due to overplotting. For example, in scatterplots, shrinking points and making them semi-transparent makes it possible to identify high-density regions and can in fact provide an approximation to a 2D kernel density plot [see e.g. @dang2010]. The same applies to all other types of plots where the where objects or glyphs may be plotted on top of each other at high densities, such as parallel coordinate plots [@theus2008].
+
+This feature usually fairly easy to implement, since it involves manipulating visual attributes only. Specifically, in many interactive systems, size and alpha multipliers are independent parameters of the visual representation, which do not depend on the underlying data in any way. In other words, when we manipulate size or opacity of geometric objects in our plots, we do not need to worry about what data these objects represent. Compared to other interactive features, this makes it relatively simple to add this functionality to an existing static visualization system [see @bracsoveanu2017].
 
 #### Zooming and panning
 
-Zooming and panning are two fundamental interactive features, often used in tandem. Because of their association, and the fact that they both involve interactive manipulation of scale limits, I discuss them here simultaneously, in a single subsection.
+Another two significantly related interactive features are zooming and panning. They are often used in tandem, and both involve interactive manipulation of scale limits. For this reason, I discuss them here simultaneously, in a single subsection.
 
-Zooming, depicted in Figure \@ref(fig:zooming), allows the user to magnify a specific region of a single plot. Typically, this is done creating a rectangular selection and the plot scales are then automatically adjusted to match this region. Zooming allows the user to get a better sense of the trend within the magnified region, and discover patterns that may be otherwise obscured due to overplotting or improper aspect ratio [see e.g. @buja1996; @dix1998; @unwin1999; @theus2008; @yi2007]. 
+Zooming, depicted in Figure \@ref(fig:zooming), allows the user to magnify into a specific region of a plot. A common approach involves creating a rectangular selection and the axis scales are then automatically adjusted to match this region, however, other techniques do exist, for instance a symmetric zoom centered on a point using a mouse wheel. Zooming is useful because it allows the user to get a better sense of the trend within the magnified region, and discover patterns that may be otherwise obscured due to overplotting or improper aspect ratio [see e.g. @buja1996; @dix1998; @unwin1999; @theus2008; @yi2007]. 
 
 ```{r zooming}
 #| echo: false
@@ -344,7 +346,7 @@ Zooming, depicted in Figure \@ref(fig:zooming), allows the user to magnify a spe
 knitr::include_graphics("./figures/zooming.png")
 ```
 
-However, after zooming into a region, it is often helpful retain the ability to traverse the wider plot area, while maintaining the same level of zoom and aspect ratio. This is what panning is for. By performing an action like right-clicking and dragging, the user can shift the center of the zoomed in region around the plot. 
+After zooming, it is useful to retain the ability to navigate the wider plot region while preserving the current zoom level and aspect ratio. Panning addresses this need. By performing some action, typically right-click and drag, the user can move the center of the zoomed-in region around, exploring different areas of the plot. 
 
 ```{r panning}
 #| echo: false
@@ -352,23 +354,39 @@ However, after zooming into a region, it is often helpful retain the ability to 
 knitr::include_graphics("./figures/panning.png")
 ```
 
-Since these features can be implemented with scales only, implementing zooming and panning might seem relatively straightforward, however, even here, there are few issues to consider. First, whereas continuous axes can be be zoomed and/or panned by simply modifying the axis limits, zooming other types of scales such as discrete ones require a bit more consideration [see e.g. @wilkinson2012]. Second, with nested zooming, maintaining a reversible history of previous states is essential [@unwin1999]. Third, at times, it can be useful to link scale updates across multiple plots, such that, for example, zooming or panning a plot in a scatterplot matrix produces the same updates in other plots with the same variables on one of the axes. Finally, an advanced feature that can be also quite useful when combined with hierarchical data such as geographic information is logical or semantic zooming [@keim2002; @unwin1999; @yi2007]. In logical zooming, magnification does not only increase the size of the zoomed-in objects, but also the level of detail the objects show, making this a more complex feature than general zooming involving scales only.
+Zooming and panning can be implemented by manipulating scales only, and this also makes them generally fairly straightforward to implement, similar to changing size and opacity. However, there are a few issues to consider. First, whereas continuous axes can be be zoomed and/or panned by simply modifying the axis limits, zooming discrete axes requires a bit more nuance [see e.g. @wilkinson2012]. Second, it is often desirable to give the user the ability to zoom-in multiple levels deep, and this makes maintaining a reversible history of previous zoom-states essential [@unwin1999]. Third, at times, it can be useful to link scale updates across multiple plots, such that, for example, zooming or panning a plot in a scatterplot matrix produces the same actions in other plots with the same variable on one of the axes. Finally, an advanced feature that can be also quite useful is semantic or logical zooming [@keim2002; @unwin1999; @yi2007]. This technique goes beyond magnifying objects; it also increases the level of detail the objects display as the user zooms in. Semantic zooming can be particularly powerful when combined with hierarchical data such as geographic information, however, it also introduces additional complexity, since the effects of the zoom action propagate beyond x- and y-axis scales. 
 
 #### Querying
 
-Querying is another popular interactive feature that is usually fairly simple to implement. As shown in Figure \@ref(fig:querying), the way querying is typically implemented is that when a user mouses over a particular geometric object, a tooltip or a small table is displayed, showing values corresponding to the underlying data point(s) [@urbanek2003]. This makes it possible to look up precise values that would otherwise be available only approximately via the visual representation. 
+Querying is another popular interactive feature that is usually fairly straightforward to implement. As shown in Figure \@ref(fig:querying), the way querying is typically implemented is that when a user mouses over a particular geometric object, a tooltip or a small table is displayed, showing values corresponding to the underlying data point(s) [@urbanek2003]. This makes it possible to look up precise values that would otherwise be available only approximately via the visual representation. 
 
 ```{r querying}
 #| echo: false
-#| fig-cap: "Querying involves hovering over an object to display its associated data values in a table or pop-up. Notice that this can include both plotted values (weight, mileage) as well as values that are not directly represented in the plot (car name, cylinders)."
+#| fig-cap: "Querying involves hovering over an object to display its associated data values in a table or pop-up. Notice that this can include both plotted values (`weight`, `mileage`) as well as values that are not directly represented in the plot (car name, `cylinders`)."
 knitr::include_graphics("./figures/querying.png")
 ```
 
 Querying is useful because it allows us to combine the best features of graphics and tables. Specifically, it allows us overcome the dichotomy pointed out by John Tukey in his famous paper on the role of graphics in data exploration: "graphics are for the qualitative/descriptive [...] never for the carefully quantitative (tables do that better)" and "graphics are for comparison [...] not for access to individual amounts" [@tukey1993]. By providing the option to query geometric objects, it allows the user to seamlessly transition between the high-level analytic overview that the graphic provides and the low-level quantitative information of the table.
 
-Additionally, querying also allow us to show more information than can be displayed via the visual encodings alone (see again Figure \@ref(fig:querying)). Specifically, whereas most plots can encode only two or three variables, we can assign an arbitrary number of key-value pairs to the rows query table. However, it is crucial to balance the need for detail against the risk of visual clutter. Too many rows may overtax the attention of the visualization consumer and also lead to clipping/overplotting issues if the table cannot fit the plotting area. Further, there are [better methods](#bidirectional-communication) for retrieving very detailed information from interactive visualizations.    
+Additionally, querying also allow us to show more information than can be displayed via the visual encodings alone (see again Figure \@ref(fig:querying)). Specifically, whereas most plots can encode only two or three variables, we can assign an arbitrary number of key-value pairs to the rows of the query table/pop-up. However, it is crucial to balance the need for detail against the risk of visual clutter. Too many rows may overtax the attention of the user and also can lead to clipping/overplotting issues, if the query table cannot fit the plotting area. Further, there are [better methods](#bidirectional-communication) for retrieving very detailed information from interactive visualizations.    
 
-While querying one-to-one representations of the data such as points in a scatterplot is relatively simple, querying aggregate objects such as bars in a barplot/histograms presents some challenges. In the case of one-to-one representations, we can always simply retrieve the corresponding row of the data, however, in the case of aggregate objects, a single object may correspond to multiple rows and there may be no obvious way to summarize them. For instance, when querying a bar in a barplot, should we return the sum of the underlying continuous variable, some other numeric summary such as the mean or maximum, the set of all unique values, or perhaps something else entirely? Likewise, querying objects in the presence of selection or highlighting (see Section \@ref(linked-selection)) also presents some questions - should we return summaries corresponding to the entire object, the highlighted parts, or both?
+While querying is also one of the more straightforward features to implement, it does present certain challenges. First, a naive implementation might simply display derived data values in the state just before they are mapped to visual attributes via scales, however, these are not always the most informative. For instance, in a stacked barplot, returning the original (unstacked) values is more useful than the stacked ones. Second, aggregate plots such as barplots or histograms do generally present some design decisions. In the case of one-to-one plots such as scatterplots, query data for an object (point) can be obtained by simply retrieving the corresponding row. However, in aggregate plots like barplots and histograms, a single object may correspond to multiple rows. This necessitates summarizing the underlying data, and often there may be no single "correct" summary. For instance, when querying a bar in a barplot, should we return the sum of the underlying continuous variable, some other numeric summary such as the mean or maximum, the set of all unique values, multiple of these summaries, or perhaps something else entirely? Similar ambiguities arise when querying objects which are partially selected or highlighted (see Section \@ref(linked-selection)): should the query return summaries corresponding to the entire object, the highlighted parts, or both?
+
+#### Sorting and reordering
+
+With plots which display discrete (unordered) data, a highly useful feature can be to sort or reorder objects based on some criterion. For example, with barplots, in the absence of other ordering rules, bars are typically ordered by the lexographical order of the x-axis variable. However, sometimes, we can glean interesting patterns by sorting the bars by their height (and thus the corresponding statistics).
+
+```{r}
+#| echo: false
+#| fig-cap: "Sorting or reordering can highlight interesting trends. For instance, sorting lexicographically ordered bars (left) by bar height (right) immediately reveals a significant gap between the five tallest bars and the rest (gray dashed line)."
+knitr::include_graphics("./figures/sorting.png")
+```
+
+#### Parameter manipulation
+
+A general class of interactive features 
+
+#### Animation and projection
 
 #### Changing representation
 
