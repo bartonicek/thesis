@@ -13,7 +13,7 @@ px <- ggplot(data.frame()) +
 
 p1 <- ggplot(df, aes(diagnosis, cases)) +
   geom_bar(stat = "summary", fun = "sum", fill = pal_dark_3[1]) +
-  scale_x_discrete(labels = NULL) +
+  scale_x_discrete(labels = NULL, expand = c(0.2, 0.2)) +
   scale_y_continuous(labels = NULL) +
   labs(x = NULL, y = NULL) +
   guides(fill = "none")
@@ -28,7 +28,7 @@ p2 <- ggplot(df, aes(diagnosis2, cases)) +
   geom_segment(data = data.frame(), aes(x = 9, y = e[1] + 3e3, xend = 9, yend = e[2] - 3e3),
                arrow = arrow(length = unit(0.05, "inches"), end = "both", type = "closed"),
                col = "grey60", lwd = 0) +
-  scale_x_discrete(labels = NULL) +
+  scale_x_discrete(labels = NULL, expand = c(0.2, 0.2)) +
   scale_y_continuous(labels = NULL) +
   labs(x = NULL, y = NULL) +
   guides(fill = "none")

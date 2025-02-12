@@ -263,3 +263,5 @@ sorting-and-reordering
 parameter-manipulation
 animation-and-projection
 fig:unnamed-chunk-8
+fig:sorting
+complexity-of-features
