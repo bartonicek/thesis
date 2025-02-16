@@ -24,12 +24,18 @@ df_spine2 <- df |>
 # Need to reorder the rows to make ggplot2 layer the bars in the right order
 df_spine2 <- df_spine2[c(2 * 0:2 + 2, 2 * 0:2 + 1), ]
 
+px <- ggplot(data.frame()) +
+  geom_segment(aes(x = -0.8, y = 0, xend = 0.8, yend = 0),
+               arrow = arrow(length = unit(0.05, "inches"), type = "closed")) +
+  scale_x_continuous(limits = c(-1, 1)) +
+  scale_y_continuous(limits = c(-1, 1)) +
+  theme_void()
+
 p1 <- ggplot(df2, aes(group, y = value, fill = selection)) +
   geom_col(position = position_stack(), col = "white") +
   scale_fill_manual(values = pal_dark_3) +
   guides(fill = "none", count = "none") +
   labs(x = NULL, y = "Sum") +
-  clean_theme +
   theme(plot.margin = unit(c(0, 0.25, 0, 0), units = "cm"))
 
 p2 <- ggplot(df_spine2, aes(position, prop_cum, width = sum, fill = selection)) +
@@ -38,10 +44,9 @@ p2 <- ggplot(df_spine2, aes(position, prop_cum, width = sum, fill = selection)) 
   scale_fill_manual(values = pal_dark_3[2:1]) +
   labs(x = NULL, y = "Proportion") +
   guides(fill = "none") +
-  clean_theme +
   theme(plot.margin = unit(c(0, 0, 0, 0.25), units = "cm"))
 
-p <- p1 + p2
+p <- p1 + px + p2 + plot_layout(widths = c(1, 1/4, 1))
 
 ggsave("./figures/barplot-spineplot.png", p, dpi = 300,
        width = def_width, height = def_height, units = "in")

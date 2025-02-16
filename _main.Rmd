@@ -1,4 +1,92 @@
 ---
+title: "Fluent Graphics"
+author: "Adam Bartonicek"
+site: bookdown::bookdown_site
+documentclass: book
+output:
+  #bookdown::html_document2: default
+  bookdown::gitbook: default
+bibliography: [references.bib]
+biblio-style: "apalike"
+link-citations: true
+editor_options: 
+  chunk_output_type: console
+header-includes:
+  - \usepackage{tikz-cd}
+---
+
+# Abstract 
+
+Placeholder
+
+
+
+<!--chapter:end:index.Rmd-->
+
+# Introduction {#introduction}
+
+> It’s written here: ‘In the Beginning was the Word!’ <br>
+> Here I stick already! Who can help me? It’s absurd, <br>
+> [...] <br>
+> The Spirit helps me! I have it now, intact. <br>
+> And firmly write: ‘In the Beginning was the Act!
+>
+> Faust, Part I, Johann Wolfgang von Goethe [-@goethe2015]
+
+Humans are intensely visual creatures. About 20-30% of our brain is involved in visual processing [@van2003; @sheth2016], utilizing a highly sophisticated and powerful visual processing pipeline [see e.g. @goebel2004; @knudsen2020; for a brief review, see @ware2019]. It is well-established the brain can process certain salient visual stimuli in sub-20-millisecond times, outside of conscious attention [@ledoux2000; @ledoux2003], and that people can make accurate, parallel, and extremely rapid visual judgements, in phenomena known as subitizing and pre-attentive processing [@mandler1982; @treisman1985]. These features make the visual cortex the most powerful information channel that humans possess, both in terms of bandwidth and throughput.
+
+Statisticians have known about this power of visual presentation for a long time. Starting with early charts and maps, data visualization co-evolved alongside mathematical statistics, offering an alternative and complementary perspective [for a review, see @friendly2006 or Section \@ref(brief-history)]. While mathematical statistics tended to focus on confirmatory hypothesis testing, data visualization provided avenues for unsupervised exploration, "forcing us to notice that which we would never expect to see" [@tukey1977]. Eventually, this valuable role of forcing us to see the unexpected established data visualization as a respected tool within the applied statistician's toolkit.
+
+Seeing an object from a distance is one thing, but being able to also touch, manipulate, and probe it is another. Within the human brain, action and perception are not independent, but are instead intricately linked, mutually reinforcing processes [see e.g. @dijkerman2007; @lederman2009]. Beginning in the 1970's, statisticians acquired a new set of tools for exploiting this connection. The advent of computer graphics and interactive data visualization transformed the idea of "interrogating a chart" from a mere turn of phrase into tangible reality. All of a sudden, it became possible to work with the visual representation of data in a tactile way, getting new perspectives and insights at the stroke of a key or click of a button. 
+
+This compelling union of the visual and the tactile has made interactive data visualization a popular method of presenting data. Nowadays, there are many packages and libraries for building interactive data visualizations across all the major data analytic languages. Interactive figures make frequent appearance in online news articles and commercial dashboards. However, despite this apparent popularity, significant gaps remain in the use and understanding of interactive visualizations. Individual analysts rarely utilize interactive data visualization tools [see e.g. @batch2017], the availability of certain more sophisticated interactive features is fairly limited (see Section \@ref(litreview)), and researchers still point to a lack of a general interactive data visualization pipeline [@wickham2009; @vanderplas2020]. 
+
+This thesis explores these interactive data visualization paradoxes and the inherent challenges surrounding interactive data visualization pipelines more specifically. I argue that, contrary to some prevailing views, interactivity is not simply an add-on to static graphics. Instead, interactive visualizations must be designed with interactivity as a primary consideration. Furthermore, I contend that certain interactive features fundamentally influence the types of visualizations that can be effectively presented. My claim is that popular types of interactive visualizations exhibit a particular kind congruence between graphics, statistics, and interaction, and that the absence of this congruence results in suboptimal visualizations. I formalize this congruence using the framework of category theory. Finally, I validate these theoretical concepts by developing an open-source interactive data visualization library and demonstrate its application to real-world data.
+
+#### Thesis Overview
+
+The thesis is organized as follows. Section \@ref(litreview) reviews the history of interactive data visualization and discusses general trends and issues in the field. Section \@ref(problems), focuses on specific problems encountered when designing an interactive data visualization pipeline. Section \@ref(goals), outlines the the goals and aims that guided the development of the interactive data visualization library. Section \@ref(system) details the system's components and design considerations. Section \@ref(applied-example), presents an applied example of exploring a real-world data set using the developed library. Finally, Section \@ref(discussion), discusses lessons learned and potential future research directions.
+
+<!--chapter:end:introduction.Rmd-->
+
+
+# Background {#litreview}
+
+Placeholder
+
+
+## Brief history of interactive data visualization {#brief-history}
+### Static data visualization: From ancient times to the space age
+### Early interactive data visualization: By statisticians for statisticians {#early-interactive}
+#### Open-source Statistical Computing
+#### Common features and limitations of early interactive systems
+### Interactive data visualization and the internet: Web-based interactivity {#web-based}
+#### D3
+#### Plotly and Highcharts
+#### Vega and Vega-Lite
+#### Common features and limitations of web-based interactive systems
+## What even is interactive data visualization? {#what-is-interactive-visualization}
+### Interactive vs. interacting with {#interactive-interacting}
+### Interactive *enough*?
+### Complexity of interactive features {#complexity-of-features}
+### Working definition
+### Common interactive features {#common-features}
+#### Changing size and opacity
+#### Zooming and panning
+#### Querying
+#### Sorting and reordering
+#### Parametric interaction
+#### Animation and projection
+#### Representation switching
+#### Linked selection {#linked-selection}
+## General data visualization theory
+### Visualization goals
+### Visual perception {#visual-perception}
+### Scales and measurement {#scales-measurement}
+
+<!--chapter:end:litreview.Rmd-->
+
+---
 output: html_document
 editor_options: 
   chunk_output_type: console
@@ -778,7 +866,7 @@ is_monoid(median, 0, x, y, z)
 is_monoid(sd, 0, x, y, z)
 ```
 
-Couple of notes. First, based on what we have shown before, we could simplify the problem by defining `fn` to always take two scalar arguments instead of a vector. This would clearly demonstrate that e.g. `mean2 == median2` (median of even number of elements is the average of the middle two), and so if we can show that one function is not associative, the other is neither. Also, more intuitively, with 3 values, summarizing with `median2` amounts to averaging the values pairwise, and clearly this is a different operation from picking the middle value.
+Couple of notes. First, based on what we have shown before, we could simplify the problem by defining `fn` to always take two scalar arguments instead of a vector. This would clearly demonstrate that e.g. `mean2 == median2` (median of even number of elements is the average of the middle two), and so if we can show that one function is not associative, the other is not either. Also, more intuitively, with 3 values, summarizing with `median2` amounts to averaging the values pairwise, and clearly this is a different operation from picking the middle value.
 
 Second, technically, the properties of associativity and unitality should hold for *all* possible values, thus testing that a summary function passes the `is_monoid` test for any three specific data vectors is not sufficient to call it a monoid. For instance, it is the case that `mean(c(c(1, 2), 3/2)) == mean(c(mean(c(1, 2)), 3/2))`, however this does not prove that `mean` is associative (in fact, with a little bit of algebra, it can be shown that the equality holds for any triplets $x, y, z$ where $3x + 3y + 6z = 4x + 4y + 4z$). However, a single counter-example does disprove the summary function being monoidal, as is the case, for example, with `mean`, `median`, and `sd` above.
 
@@ -1052,4 +1140,180 @@ Thus, a key difference between the models of scales discussed above, and the mod
 I contend that having different types for the domain and codomain has several disadvantages. First, it impedes code reuse, since we cannot simply use the same object in either place. Second, it complicates the mental model: the user has to hold a completely different concept for the domain and codomain in their head. Finally, the models of scales outlined above are designed to work in only one direction: from the data to the visual attribute. To go the other way around, from the visual attribute to the data, other, specialized functions have to be implemented.
 
 Instead, I propose a unified model where the data domain and visual attribute codomain differ only in the context they are used. Details will be discussed in Section \@ref(scales). 
+
+
+<!--chapter:end:problems.Rmd-->
+
+
+# Goals {#goals}
+
+Placeholder
+
+
+## User profile
+## Programming interface
+## User interface
+## Interactive features
+
+<!--chapter:end:goals.Rmd-->
+
+
+# High-level design
+
+Placeholder
+
+
+### User profile
+## Programming paradigm
+### Imperative programming
+### Functional programming
+### Object oriented programming
+#### Abstraction
+#### Encapsulation
+#### Polymorphism
+#### Inheritance
+#### Domain-driven design
+#### Criticism of OOP
+### Data oriented programming
+#### Data first
+#### The data
+#### The code
+##### Encapsulation
+##### Inheritance
+## Reactivity
+## Data representation
+#### Row-based vs. column-based
+#### Performance
+## Rendering engine
+
+<!--chapter:end:design.Rmd-->
+
+
+# System description {#system}
+
+Placeholder
+
+
+## Core requirements
+## Application Programming Interface (`plotscaper`)
+### Basic example
+### The scene and the schema {#scene-and-schema}
+### HTML document embedding
+## Interactive figure platform (`plotscape`)
+### Indexable {#Indexable}
+### Getter {#Getter}
+### Dataframe
+### Reactive
+### Factors
+#### Bijection factors
+#### Constant factors
+#### String factors
+#### Binned factors
+#### Product factors
+##### Computing product indices
+### Reducers
+#### Motivation
+### Scales {#scales}
+#### Overview
+#### Limits of modeling scales as simple functions {#simple-scale-limits}
+#### Solution: Two-component scales {#two-component-scales}
+##### Beyond linear maps
+##### Inverses 
+##### Some other remarks about the two-component scale system
+#### Past implementations of scales
+#### Proposed model of scales
+##### Zero and one
+##### Direction
+##### Multipliers
+##### The Full Monty
+### Expanses
+#### Continuous expanses
+#### Point expanses
+#### Band expanses
+
+<!--chapter:end:system.Rmd-->
+
+
+# Applied example
+
+Placeholder
+
+
+### About the data set
+### Interactive exploration
+#### The relationship between cases and days
+#### Number of cases over time
+#### Age and child and adolescent mental health
+#### Prevalence of diagnoses
+#### Prevalence of diagnoses over time
+#### Characteristics of patient cohorts over time
+## Summary
+
+<!--chapter:end:example.Rmd-->
+
+# Discussion
+
+Discussion will go here.
+
+<!--chapter:end:discussion.Rmd-->
+
+
+# Glossary
+
+Placeholder
+
+
+#### API {#API}
+#### Array of Structs (AoS) vs. Struct of Arrays (SoA) {#SoA}
+#### JSON {#JSON}
+#### IDE
+#### SVG
+
+<!--chapter:end:glossary.Rmd-->
+
+
+# Appendix
+
+Placeholder
+
+
+#### Encapsulation in DOP {#dop-encapsulation}
+
+<!--chapter:end:appendix.Rmd-->
+
+
+# Mathematical theory
+
+Placeholder
+
+
+#### Note on past applications of abstract algebra and category theory to data visualization
+### Relations {#relations}
+### Functions {#functions}
+#### More on bijections {#bijections}
+#### Composition
+#### The image and the pre-image
+### Partitions {#partitions}
+### Preorders {#preorders}
+#### Specializing preorders
+#### Structure preserving maps: Monotone maps
+### Monoids
+#### Simple examples of monoids
+#### Beyond numbers
+#### Specializing monoids
+#### Structure preserving maps: Monoid homomorphisms {#monoid-homomorphism}
+### Groups
+#### Simple examples of groups
+#### Structure preserving maps: Group homomorphisms {#group-homomorphism}
+### Categories {#categories}
+#### Isomorphisms within categories {#isomorphism}
+#### Algebraic structures as categories {#algebraic-as-categories}
+### Functors {#functors}
+
+<!--chapter:end:math.Rmd-->
+
+# References
+
+
+<!--chapter:end:references.Rmd-->
 

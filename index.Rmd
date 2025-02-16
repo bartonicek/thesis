@@ -45,8 +45,11 @@ knitr::knit_engines$set(ts = function(options) {
     ts_path <- get_ts_filepath(options$code[1]) 
     ts_conn <- file(ts_path)
     writeLines(code, ts_conn)
-  
-    out <- system2("~/.bun/bin/bun", c("run", ts_path), stdout = TRUE)
+    
+    
+    out <- paste("~/.bun/bin/bun run", ts_path) |> 
+      system(intern = TRUE, ignore.stderr = TRUE)
+    
     close(ts_conn)
   }
   
