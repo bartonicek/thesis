@@ -257,3 +257,10 @@ isomorphism
 algebraic-as-categories
 functors
 references
+fig:unnamed-chunk-1
+fig:unnamed-chunk-19
+whole-equal-to-sum-of-its-parts-monoids
+other-properties-inverses-commutativity
+inverses-2
+whole-equal-to-the-sum-of-its-parts-monoids
+groups-and-inverses

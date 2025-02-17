@@ -1,0 +1,29 @@
+\documentclass[tikz]{standalone}
+\usepackage{tikz-cd}
+
+\begin{document}
+\begin{tikzcd}
+	&&& D_D \\
+	& {D_{B_1}} && \ldots && {D_{B_n}} \\
+	{D_{S_1}} & {D_{S_2}} & {D_{S_3}} & \ldots & {D_{S_{k - 2}}} & {D_{S_{k - 1}}} & {D_{S_{k}}}
+	\arrow["\cup", shift right, from=2-2, to=1-4]
+	\arrow["\cup"', shift right, from=2-6, to=1-4]
+	\arrow["\cup", shift right, from=3-1, to=2-2]
+	\arrow["\cup", shift right, from=3-2, to=2-2]
+	\arrow["\cup"', shift right, from=3-3, to=2-2]
+	\arrow["\cup", shift right, from=3-5, to=2-6]
+	\arrow["\cup"', shift right, from=3-6, to=2-6]
+	\arrow["\cup"', shift right, from=3-7, to=2-6]
+	\arrow["\setminus", shift right, to=2-2, from=1-4]
+	\arrow["\setminus"', shift right, to=2-6, from=1-4]
+	\arrow["\setminus", shift right, to=3-1, from=2-2]
+	\arrow["\setminus", shift right, to=3-2, from=2-2]
+	\arrow["\setminus"', shift right, to=3-3, from=2-2]
+	\arrow["\setminus", shift right, to=3-5, from=2-6]
+	\arrow["\setminus"', shift right, to=3-6, from=2-6]
+	\arrow["\setminus"', shift right, to=3-7, from=2-6]
+\end{tikzcd}
+\end{document}
+
+
+

@@ -642,9 +642,9 @@ If the elements of $S$ are objects in a category $\mathcal{S}$, what should be t
 knitr::include_graphics("./figures/barplot-preorder4.png") 
 ```
 
-As before, each $\otimes$ in the diagram above corresponds to the operation of combining a summary with the other sibling summaries, such that, for example, the label for the arrow $S_{S_1} \to S_{B_1}$ should be $- \otimes S_{S_1} \otimes S_{S_2}$. In words, "a segment subset combines into a bar subset".
+As before, each $\otimes$ in the diagram above corresponds to the operation of combining a summary with the other sibling summaries, such that, for example, the label for the arrow $S_{S_1} \to S_{B_1}$ should be $- \otimes S_{S_1} \otimes S_{S_2}$. In words, "a segment summary combines into a bar summary".
 
-Now comes the key point. Suppose that we have some summary function $F: D \to S$ which maps data subsets to summaries. To preserve the structure of $\mathcal{D}$, the operation should be a functor $F: \mathcal{D} \to \mathcal{S}$, which maps data subsets in $D$ to summaries in $S$ and set unions $D_i \cup D_j$ to combinations of summaries $S_i \otimes S_j$, in a way which preserves composition. Specifically, by substituting our morphisms into the composition-preserving property of functors:
+Now comes the key point. Suppose that we have some summary function $F: D \to S$ which maps data subsets to summaries. To preserve the structure of $\mathcal{D}$, the operation should be a functor $F: \mathcal{D} \to \mathcal{S}$, which maps data subsets in $D$ to summaries in $S$ and set unions $D_i \cup D_j$ to combinations of summaries $S_i \otimes S_j$, such that composition and identities are preserved. Specifically, by substituting our morphisms into the composition-preserving property of functors:
 
 $$F(- \cup D_{i} \then - \cup D_{j}) = F(- \cup D_i) \then F(- \cup D_j)$$
 
@@ -681,23 +681,29 @@ F(\text{id}_{D_i}) = \text{id}_{F(D_i)}
 
 Let's explore the functoriality of summary statistics in more concrete terms. First, as was mentioned in Section \@ref(plots-as-preorders), the identity morphism for a data subset is just union with the empty set, $- \cup \varnothing$. Therefore, preserving identities as per Equation \@ref(eq:summary-functor-identity) amounts to:
 
-$$F(\text{id}_{D_i}) = F(D_i \cup \varnothing) = F(D_i) \otimes F(\varnothing) = F(D_i) = \text{id}_{F(D_i)}$$
+\begin{aligned}
 
-This means that the summary operation $F$ must be defined for the empty set, and should return some "neutral" value $F(\varnothing)$, which, when combined with any other summary, just returns the same summary back. 
+F(\text{id}_{D_i}) &= F(D_i \cup \varnothing) \\
+                   &= F(D_i) \otimes F(\varnothing) \\ 
+                   &= F(D_i) \otimes e \\
+                   &= F(D_i) = \text{id}_{F(D_i)}
+\end{aligned}
 
-Second, as per Equation \@ref(eq:summary-functor-composition), the summary should distribute across set union:
+This means that the summary operation $F$ must be defined for the empty set, and should return some "neutral" element $e = F(\varnothing) \in S$, which, when combined with any other summary, just returns the same summary back. 
+
+Second, as per Equation \@ref(eq:summary-functor-composition), the summary should distribute across set union via the combination operator $\otimes$:
 
 $$F(D_i \cup D_j) = F(D_i) \otimes F(D_j)$$
 
-This distributive property should hold over *all* disjoint subsets of the data as these correspond to all possible arrows we can draw in the set union diagram of the data subset preorder. Further, we can imagine any set $D_i$ to be the union of the smallest possible (non-empty) disjoint subsets: single data points (rows) $d_j \in D_i$. Thus, the summary operation should distribute over individual data points:
+This distributive property should hold over *all* disjoint subsets of the data as these correspond to all possible arrows we can draw in the set union diagram of the data subset preorder (Figure \@ref(fig:barplot-preorder2)). Further, given any set $D_i \in D$, the smallest possible (non-empty) disjoint subset is a single data point (row) $d_j \in D_i$. Thus, the summary operation should distribute over individual data points:
 
 $$F(d_1 \cup d_2 \cup \ldots \cup d_n) = F(d_1) \otimes F(d_2) \otimes \ldots \otimes F(d_n)$$
 
-Thus, in a certain way, $F$ *really is* the binary combination operator $\otimes$^[Technically, if $d_i$ represents a single data row, with multiple named data values corresponding to columns, the summary operation $F$ should also select the appropriate value(s) while remaining closed under repeated applications. For instance, if we are summarizing a variable named `x`, the following R function fullfills these criteria: `pick_sum <- function(s, d) ifelse(is.numeric(d), s + d, s + d$x); Reduce(pick_sum, lapply(1:3, \(n) list(x = n)), 0)`.]. We can write:
+Thus, from a certain point of view, $F$ *is* the binary combination operator $\otimes$^[Technically, if $d_i$ represents a single data row, with multiple named data values corresponding to columns, the summary operation $F$ should also select the appropriate value(s) while remaining closed under repeated applications. For instance, if we are summarizing a variable named `x`, the following R function fullfills these criteria: `pick_sum <- function(s, d) ifelse(is.numeric(d), s + d, s + d$x); Reduce(pick_sum, lapply(1:3, \(n) list(x = n)), 0)`.]. With a bit of handwaving, we can write:
 
 $$F(d_1 \cup d_2 \cup \ldots d_k) = d_1 \otimes d_2 \otimes \ldots d_n$$
 
-Just to drive the point home, we can also imagine going the other way around and combining the summaries of two data subsets $D_i$ and $D_j$. Then:
+Just to drive the point home, we can also follow the equality the other way, starting with combining the summaries of two data subsets $F(D_i)$ and $F(D_j)$. Then:
 
 \begin{aligned}
 
@@ -707,11 +713,15 @@ F(D_i) \otimes F(D_j) &= (d_{i1} \otimes d_{i2} \otimes \ldots d_{in}) \otimes (
 
 \end{aligned}
 
-Again, this shows that combining summaries leads to a valid summary of the underlying subset union, which is precisely the desired property we set out to find.
+Again, this shows that combining summaries leads to a valid summary of the underlying set union, which is precisely the desired property we set out to find.
 
-#### Stackable summaries: Monoids
+Finally, we can also consider the case when $F$ is *not* functorial, i.e. $F(D_i \cup D_j) \neq F(D_i) \otimes F(D_j)$. This corresponds to a situation where the summary of the superset somehow contains some additional "non-additive" information that the summaries of either of the two subsets do not. More generally, these situation where the *whole is more than "sum" of its parts* are called an *interactive* or *generative effects* [@adam2017; @fong2019]. Generative effects apply to a broader class of mappings than just the specific case with set union we have outlined here, however, the idea of (not) preserving composition ($F(f \then g) \neq F(f) \then F(g)$) is the same. For our summary statistics to be well-behaved under features like linked selection, they should *not* have any kind of generative effect.   
 
-I have argued that, for plots to be well-behaved under certain kinds of interactions such as linked selection, the summary statistics we display should "behave like set union". Specifically, they should be a functor from the preorder of data subsets. This has lead to two key insights: the summary statistic should be based on some binary associative operation $\otimes$, and the summarized values should be equipped with some "neutral" value that is the result of summarizing an empty set. It turns out there is a well-known algebraic structure with these exact properties: a monoid. 
+#### Whole equal to the sum of its parts: Monoids
+
+Above, I have argued that, for plots to be well-behaved under certain kinds of interactions such as linked selection, the summary statistics we display should *"behave like set union"*. Specifically, they should be a functor from the preorder of data subsets, such that combining two summaries gives the same result as summarizing the union of the underlying data. Conversely, the summary of the union should result in no non-additive "surprises" or generative effects. 
+
+The framing of the summary mapping $F$ as functor has lead to two key insights: the summary statistic should be based on some binary associative operation $\otimes$, and the summarized values should be equipped with some "neutral" value that is the result of summarizing an empty set. It turns out there is a well-known algebraic structure with these exact properties: a monoid. 
 
 Formally, a monoid $(M, e, \otimes)$ is a set $M$ equipped with a binary operation $\otimes$ and a special neutral element $e$, such that the operation is:
 
@@ -730,7 +740,7 @@ $$\text{"quick " ++ (" brown" ++ " fox")}  \text{} = \text{("quick " ++ " brown 
 
 While most summary statistics we care about in data visualization are quantitative, the fact that some non-numeric data summaries can behave like set union may be still interesting to ponder.
 
-Further, even the set union $\cup$ operation forms a monoid, the empty set $\varnothing$ as the neutral/identity element. So, in a certain way, the mapping of data subsets to summaries $F$ can be seen as a mapping between two monoids - a *monoid homomorphism* (which is just an alternative term for a functor between monoids that comes from abstract algebra). However, $F$ is more than just a monoid homomorphism; monoids alone do not capture the hierarchical structure we want. Instead, $F$ is a mapping between two structures (categories) that have the features of both a monoid *and* a preorder. As a sidenote, the technical term for a monoid that is also a preorder is, unsurprisingly, a *monoidal preorder* [@nlab2024e]. Thus, $F$ could technically be called a *"monoidal preorder homomorphism"*, however, it is far easier and clearer to simply refer to it as a functor.
+Further, even the set union $\cup$ operation itself forms a monoid, with the empty set $\varnothing$ as the neutral/identity element. Thus, in a certain way, the mapping of data subsets to summaries $F$ can be seen as a mapping between two monoids: a *monoid homomorphism* (which is just an abstract algebra term for a functor between monoids). However, $F$ is more than just a monoid homomorphism; monoids alone do not capture the hierarchical structure of $\mathcal{D}$ and $\mathcal{P}$. Instead, $F$ is a mapping between two categories that have the features of both a monoid *and* preorder. As a sidenote, the technical term for a monoid that is also a preorder is, unsurprisingly, a *monoidal preorder* [@nlab2024e]. Thus, $F$ could technically be called a *"monoidal preorder homomorphism"*. However, I believe it is far easier and clearer to simply refer to $F$ as a functor.
 
 #### Monoids in code
 
@@ -778,9 +788,55 @@ is_monoid(median, 0, x, y, z)
 is_monoid(sd, 0, x, y, z)
 ```
 
-Couple of notes. First, based on what we have shown before, we could simplify the problem by defining `fn` to always take two scalar arguments instead of a vector. This would clearly demonstrate that e.g. `mean2 == median2` (median of even number of elements is the average of the middle two), and so if we can show that one function is not associative, the other is neither. Also, more intuitively, with 3 values, summarizing with `median2` amounts to averaging the values pairwise, and clearly this is a different operation from picking the middle value.
+A couple of points. First, based on what we have shown before, we could simplify our task by defining `fn` to always take two scalar arguments instead of a vector. This binary formulation would demonstrate that, for example, `mean2 == median2 == function(x, y) (x + y) / 2` (median of even number of elements is the average of the middle two), and so if we can show that `(x + y) / 2` is not associative, we disprove both `mean2` and `median2` being a monoid. Also, more intuitively, with three or more values, applying `median2` amounts to repeatedly averaging values pairwise, and this operation is clearly different from simply picking the middle value. Furthermore, the binary formulation of `fn` also makes the absence of a neutral element `e` clearer. For instance, it is not difficult to see that there is no (constant) value `e` such that `(x + e) / 2 == x` for all `x`. Thus, generally, it might make more sense to always formulate `fn` as a binary function; however, in the code block above, I used the vector formulation to ensure consistency with function definitions of `mean`, `median`, and `sd`. 
 
-Second, technically, the properties of associativity and unitality should hold for *all* possible values, thus testing that a summary function passes the `is_monoid` test for any three specific data vectors is not sufficient to call it a monoid. For instance, it is the case that `mean(c(c(1, 2), 3/2)) == mean(c(mean(c(1, 2)), 3/2))`, however this does not prove that `mean` is associative (in fact, with a little bit of algebra, it can be shown that the equality holds for any triplets $x, y, z$ where $3x + 3y + 6z = 4x + 4y + 4z$). However, a single counter-example does disprove the summary function being monoidal, as is the case, for example, with `mean`, `median`, and `sd` above.
+Second, the properties of associativity and unitality should hold for *all* possible values. Thus, testing that a function passes the `is_monoid` test for any three specific values is not sufficient to demonstrate that it is a monoid. For instance, while it is the case that `mean(c(c(2, 4), 3)) == mean(c(mean(c(2, 4)), 3))`, this does not prove that `mean` is associative (in fact, with a bit of high-school algebra, it can be shown that the equality holds for any triplets $x, y, z$ where $3x + 3y + 6z = 4x + 4y + 4z$). However, a single counter-example *does* disprove that the summary function is monoid, as is the case, for example, with `mean`, `median`, and `sd` functions above. Thus, while not a hard-and-fast rule, the `is_monoid` function can nevertheless be useful for some basic sanity checks about the suitability of certain summary statistics.
+
+#### Groups and inverses
+
+Suppose we have our summary functor $F$ which summarizes a data subset $D_i$ by repeatedly applying some monoidal operation $\otimes$. As we have shown, given two data subsets $D_i$ and $D_j$, $F(D_i) \otimes F(D_j) = F(D_i \cup D_j)$. More concretely, with data subsets $D_1, D_2, D_3, \ldots$, it is the case that, for example:
+
+\begin{aligned}
+
+&F(D_1) = F(D_1) \\
+&F(D_1) \otimes F(D_2) = F(D_1 \cup D_2) \\
+&F(D_1) \otimes F(D_2) \otimes F(D_3) = F(D_1 \cup D_2 \cup D_3) \\
+&F(D_1) \otimes F(D_2) \otimes F(D_3) \otimes \ldots = F(D_1 \cup D_2 \cup D_3 \cup \ldots)
+
+\end{aligned}
+
+Now, comparing the statistic $F(D_1)$ with $F(D_1) \otimes F(D_2)$ amounts to comparing the summaries of $D_1$ with that of $D_1 \cup D_2$. For instance, in a barplot where $D_{S_1}$ and $D_{S_2}$ represent segment subsets that together form a bar subset, $D_{B_1} = D_{S_1} \cup D_{S_2}$, comparing $F(D_{S_1})$ and $F(D_{S_1}) \otimes F(D_{S_2})$ amounts to comparing the summary on the subset $D_{S_1}$ with that of $D_{S_1} \cup D_{S_2}$, i.e. the summary of all cases in the bar.
+
+Why is this important? It is critical to note that *comparing $D_i$ with $D_i \cup D_j$ is different from comparing $D_i$ with $D_j$ directly*. That is, while $F(D_i) \otimes F(D_j) = F(D_i \cup D_j)$ is a valid summary of $D_i \cup D_j$, *there is no guarantee that we will be able to recover $F(D_j)$ from it*. $F(D_i) \otimes F(D_j)$ may collapse information contained in $F(D_i)$ and $F(D_j)$ individually. If we want to use the combined summary $F(D_i \cup D_j)$ to compare $D_i$ and $D_j$ *as disjoint subsets*, then we also require the presence of an inverse operator $\otimes^{-1}$:
+
+$$F(D_i) \otimes F(D_j) = F(D_i \cup D_j) \iff F(D_i \cup D_j) \otimes^{-1} F(D_j) = F(D_i)$$
+
+Specifically, we want some inverse operator $\otimes^{-1}$ that would allow our statistic *to also preserve/distribute over set difference* ($\setminus$). Specifically, we could imagine taking the diagram in Figure \@ref(fig:barplot-preorder2) and adding a second set of arrows pointing in the opposite direction, labeled with $\setminus$. Then, for $F$ to be a functor, it would have to preserve the composition of these set difference arrows as well.
+
+Fortunately, we do not have to search for a monoid with an inverse operator; this is precisely the definition of another famous algebraic structure: a group. Groups are well-studied in group theory and subject to many interesting results [see e.g., @pinter2010]. However, for our purposes, a group is just a monoid equipped with the inverse operator $\otimes^{-1}$, subject to^[The inverse operator needs to be two-sided, since so is set difference.]:
+
+$$x \otimes y = z \iff (z \otimes^{-1} x = y) \wedge (z \otimes^{-1} y = x)$$
+
+When the inverse operator is not present, we can still compare $D_i$ with $D_i \cup D_j$, however, direct comparisons of $D_i$ and $D_j$ may no longer be possible after combining with $\otimes$. For instance, a typical example of a monoid which lacks inverse is the maximum operator. It is easy to show that maximum is associative:
+
+$$\max(x, \max(y, z)) = \max(\max(x, y), z)$$
+
+And it also has a neutral element, namely $-\infty$, thus maximum is a valid monoid. However, maximum lacks an inverse $\otimes^{-1}$:
+
+$$\not \exists \otimes^{-1} \text{ s. t. } \max(x, y) \otimes^{-1} y = x$$
+
+
+Thus, for example, if it is the case that:
+
+$$\max(x, y) = 8$$
+
+Then, even if we know that $y = 8$, there is no way to recover the value of $x$. Thus, in a certain sense, maximum irretrievably discards information contained in its operands. This is different from generative effects/not preserving composition/lack of associativity, which is about validity: a maximum of maximums is always equal to the maximum of all cases. It is just that there is no meaningful way to "subtract" from a maximum: once we choose the larger value, the smaller is lost. 
+
+This abstract distinction between groups and monoids, and the presence (absence) of inverses translates into tangible differences in interactive behavior. When implementing linked selection, some interactive systems allow the user to define only a single selection group, whereas others allow multiple. This seemingly minor difference in implementation has a large impact on the kinds of statistics we are able to effectively represent. Specifically, with single-group selection, the user defines a single "special" subset that is then compared against the entirety of the data, i.e. a highlighted subset $D_i$ that is compared against some superset $D_j \supseteq D_i$. Crucially, the "rest" of the data, $D_j \setminus D_i$, plays a secondary role: we only care about it in as much as it contributes to the superset $D_j$. As such, it is enough if the combination operator $\otimes$ is a part of a monoid. However, in multi-group selection, we actually care about comparing the individual disjoint subsets $D_i, D_j, D_k, \ldots$ that result from selection. Thus, we require the inverse operator $\otimes^{-1}$ and $\otimes$ needs to be a part of a group.
+
+Thus, monoids and groups present two fundamentally different models for linked selection. If we care about using parts of a geometric object to compare some "special" highlighted subset $D_i$ against the subset representing the rest of the data $D_j \supseteq D_i$, then it is enough for the underlying summary statistic to be a monoid. However, if $D_i$ and $D_j$ are disjoint, $D_i \cap D_j = \varnothing$, and we care about comparing $D_i$ and $D_j$ directly, then we also need the inverse operator $\otimes^{-1}$ and the underlying summary needs to be a group.
+
+This distinction even has interesting implications for data interpretation. For instance, the reason why the maximum operator works well in Figure \ref(fig:barplot-maximums) is because we are comparing a "special subset" of the study participants ("smokers") against that of all participants ("smokers *and* non-smokers"). In other words, with the smoking status variable, it makes sense to compare one category with a union of both. This is not the case for all categorical variables, however. For instance, with a gender variable, it would rarely make sense to think of "men" as a special subset of "men and women", or vice versa; the vast majority of time, we are interested in comparing men and women directly, as disjoint subsets. Conversely, this is also the case why monoids work with single-group linked selection: the selected points really are a "special" subset, and the subset representing the "rest" of the data is only interesting in that it is part of "all" of the data points to compare against. However, with multiple groups, disjoint comparisons become essential.      
 
 #### Transforming summaries
 
