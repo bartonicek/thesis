@@ -6,7 +6,7 @@ editor_options:
 
 ```{r}
 #| echo: false
-# knitr::opts_chunk$set(eval = FALSE)
+knitr::opts_chunk$set(eval = FALSE)
 ```
 
 # Applied example
@@ -62,7 +62,7 @@ Fortunately, as we will see, `plotscaper` makes it easy to create these weighted
 We start by exploring the relationship between the two primary continuous variables of interest: `cases` (the number of patients in a given subgroup released from care) and `days` (the total number of days the given subgroup of patients spent in care). Intuitively, we would expect a positive, linear relationship between these variables, such that a larger patient groups should spend more days in care. We can use `plotscaper` to visualize this relationship via a scatterplot:
 
 ```{r}
-#| fig-cap: "Relationship between the number of cases in a given patient subgroup and the total number of days they spent in care."
+#| eval: false
 library(plotscaper) # Load in the package
 
 df |>
@@ -71,42 +71,66 @@ df |>
   render() # Render the schema into an interactive figure
 ```
 
+```{r example-cases-days}
+#| echo: false
+#| eval: true
+#| out-extra: 'style="border: none;"'
+#| fig-cap: "Relationship between the number of cases in a patient subgroup and the total number of days spent in care."
+knitr::include_url("./figures/example-cases-days.html")
+```
+
+
 Interestingly, the points did not show a simple linear trend. Instead, they seemed to cluster in three distinct "leaflets", each exhibiting a roughly linear trend. This suggests the presence of a pooling effect, such that the overall trend is the result of combining three distinct groups. Closer inspection of the data reveals that the `stay_category` variable has three levels: short-term (< 3 months), medium-term (3-6 months), and long-term (6+ months) care. Color-coding the cases indeed confirms that the three levels of `stay_category` correspond to the leaflets:
 
 ```{r}
-#| fig-cap: "The data exhibits a pooling effect: while patient groups within each care duration category (short-term, medium-term, and long-term) individually show a linear relationship, this does not hold when the groups are considered together."
+#| eval: false
 df |>
   create_schema() |>
   add_scatterplot(c("cases", "days")) |>
   add_barplot(c("stay_category", "cases")) |> # y-axis is weighted by cases
-  assign_cases(which(df$stay_category == "short-term"), 1) |> # Mark short-term green
-  assign_cases(which(df$stay_category == "long-term"), 2) |> # Mark long-term red
+  assign_cases(which(df$stay_category == "short"), 1) |> # Mark short-term green
+  assign_cases(which(df$stay_category == "long"), 2) |> # Mark long-term red
   render()
 ```
 
-> Try clicking on the bars in the barplot to confirm there is a fairly minimal overlap between the data points in the three categories. To remove all selection, double-click the figure.
+```{r example-cases-stay-cat}
+#| echo: false
+#| eval: true
+#| out-extra: 'style="border: none;"'
+#| fig-cap: "The relationship between cases and days is subject to a pooling effect: while patient groups within each care duration category (short-term, medium-term, and long-term) exhibit a linear relationship individually, this does not hold when the groups are considered together."
+knitr::include_url("./figures/example-cases-stay-cat.html")
+```
 
-However, the pooling effect does not itself explain the absence of points between the three leaflets. If the distribution of cases and days within each of the three `stay_category` levels were uniform, we should expect to see more points within the gaps between the leaflets. This additionally suggests a potential selection process, where patients are less likely to be discharged at durations near the category boundaries. We can confirm this by plotting the average number of days a group of patients spent in care:
+> Click on the barplot bars to confirm there is a fairly minimal overlap between points belonging to the three categories (selected points will be brought to the foreground). To remove all selection, double-click the figure.
+
+However, the pooling effect does not itself explain the absence of points between the three leaflets. If the distribution of cases and days within each of the three `stay_category` levels were uniform, we should expect to see more points in the gaps between the leaflets. This additionally suggests a potential selection process, where patients are less likely to be discharged at durations near the category boundaries. We can confirm this by plotting the average number of days spent in care:
 
 ```{r}
-
+#| eval: false
 # Compute the average number of days spent in treatment
 df$avg_days <- df$days / df$cases 
-  
-df |> 
+
+df |>  
   create_schema() |>
   add_scatterplot(c("cases", "avg_days")) |>
   add_barplot(c("stay_category", "cases")) |>
   assign_cases(which(df$stay_category == "short-term"), 1) |>
   assign_cases(which(df$stay_category == "long-term"), 2) |>
-  set_scale("scatterplot1", "y", # Log-transform the scatterplot's y-axis
+  set_scale("scatterplot1", "y", # Log-transform the y-axis
             transformation = "log10", default = TRUE) |>
   render()
 ```
 
+```{r example-cases-avg-days}
+#| echo: false
+#| eval: true
+#| out-extra: 'style="border: none;"'
+knitr::include_url("./figures/example-cases-avg-days.html")
+```
+
 Now we can clearly see the gaps between the three different distributions along the y-axis. 
 
-> Try querying the points near the gaps by pressing the `Q` key and hovering over them. You should observe that the gaps roughly span the 60-90 day and 150-210 day ranges, corresponding to 2-3 months and 5-7 months, respectively. 
+> Try querying the points near the y-axis gaps by pressing the `Q` key and hovering over them. You should observe that the gaps roughly span the 60-90 day and 150-210 day ranges, corresponding to 2-3 months and 5-7 months, respectively. 
 
 The trend we see in the scatterplot above strong indication of a selection process is at work. Specifically, it seems that patients who stay in treatment for more than two months are likely to be transferred to medium-term care and kept around for longer, and, likewise, those who stay in treatment for more than five months are likely to be moved to long-term care. There are likely administrative of health-insurance related reasons for this trend, nevertheless, it is still an interesting pattern to take note of.
 
@@ -115,6 +139,7 @@ The trend we see in the scatterplot above strong indication of a selection proce
 A key question is how have the numbers of patients in treatment evolved over time. We can investigate this by plotting the same scatterplot as we did in the section above, as well as two barplots showing the total number of cases and the total number days in treatment, within each year. We can also include a histogram of the number of days, for a good measure:
 
 ```{r}
+#| eval: false
 schema <- df |>
   create_schema() |>
   add_scatterplot(c("cases", "days")) |>
@@ -126,13 +151,20 @@ schema <- df |>
 schema |> render()
 ```
 
-From the barplots, we can immediately see an interesting pattern: while the numbers of cases seem to have declined over time, the number of days patients spend in care seem to seems to have stayed fairly constant. This suggest that while fewer patients are being hospitalized, they are spending longer time in care.
+```{r example-cases-days-time}
+#| echo: false
+#| eval: true
+#| out-extra: 'style="border: none;"'
+knitr::include_url("./figures/example-cases-days-time.html")
+```
 
-We can indeed confirm this interactively. Try clicking on the bars corresponding to the year 2010 and 2022, in either of the two barplots (feel free to mark either of the bars by holding down the `1` or `2` keys and clicking them). It is clearly visible that, compared to 2010, in 2022 there were more patients in long term care, and the relationship between the number of cases and the number of days in care was steeper.
+From the barplots, we can immediately see an interesting pattern: while the numbers of cases seem to have declined over time, the number of days patients spent in care seem to seems to have remained fairly constant. This suggest that while there are fewer patients over all, they are being hospitalized for longer.
 
-While, on its own, the declining number of cases over time might appear as a positive development, the constant number days in treatment suggests a more worrying trend. Specifically, treatment facility placements are limited resource [@who2022], and the fact that days in treatment have stayed constant while cases have declined may indicate that the healthcare system is becoming burdened by long-term care patients, reducing its capacity to serve new patients.
+We can confirm this interactively. Click on the bars corresponding to the year 2010 and 2022, in either of the two barplots (feel free to mark either of the bars by holding down the `1` or `2` keys and clicking them). You should see that, compared to 2010, there were more patients in long term care in 2022, and the relationship between the number of cases and the number of days in care was steeper.
 
-We can also scrutinize the trend more closely by zooming into the histogram:
+On its own, the declining number of cases over time might appear as a positive development; however, the constant number days in treatment suggests a more worrying trend. Specifically, treatment facility placements are limited resource [@who2022], and the fact that days in treatment have stayed constant while cases have declined may indicate that the Czech healthcare system is becoming burdened by patients in long-term care, reducing its capacity to serve new clients.
+
+Another way we can scrutinize the trend more closely by zooming into the histogram:
 
 ```{r}
 schema |> 
@@ -142,18 +174,20 @@ schema |>
   render()
 ```
 
-```{r}
+```{r example-cases-days-time-zoom}
 #| echo: false
-knitr::opts_chunk$set(eval = TRUE)
+#| eval: true
+#| out-extra: 'style="border: none;"'
+knitr::include_url("./figures/example-cases-days-time-zoom.html")
 ```
 
-> You can also zoom into a plot interactively by clicking and dragging to select a rectangular region in the plot and pressing the `Z` key. You can chain multiple zooms to magnify small areas. If you want to undo zooming, press either the `X` key to undo the revert one level of zoom, or `R` to reset the figure to its default state (including zoom level).
+> You can zoom into a plot in two ways: programmatically using the `zoom` function (as shown above), or manually by clicking and dragging to select a rectangular region and pressing the `Z` key. You can chain multiple zooms to magnify small regions of the plot. To undo zooming, press either the `X` to revert back one level of zoom, or `R` to reset the figure to its default state (including the default zoom level).
 
-By clicking on the two bars, you should be able to see that, compared with 2010, the distribution of days spent in treatment in 2022 had a fatter tail, suggesting that patients spent longer periods of time in care.
+By clicking on the two bars, you should be able to see that, compared to 2010, the 2022 distribution of days spent in treatment had a fatter tail, suggesting that there were more patients who spent very long time in care.
 
 #### Age and child and adolescent mental health
 
-Child and adolescent mental health is a particularly important aspect of the global mental health decline. Childhood mental health disorders are particularly concerning since they can happen during critical developmental periods, leading to life-long consequences [see e.g. @keeley2021]. Furthermore, compared to adults, children have less agency in addressing mental health challenges, relying heavily on primary caregivers and schools.
+The global mental health decline affects adults and children alike, however, childhood mental health disorders are particularly concerning. If these disorders manifest during critical developmental periods, they can have serious, often life-long consequences, causing irreversible changes in brain physiology even with successful treatment [see e.g. @keeley2021]. Children also have less agency than adults in managing their mental health, relying heavily on caregivers and schools for support. For these reasons and more, monitoring the mental health of children and adolescents is critical.
 
 Fortunately, the overall proportion of children and adolescents in the data set was fairly low, amounting to <9% of all cases and <6% of the total number of days spent in treatment:
 
@@ -163,10 +197,10 @@ aggregate(cbind(cases, days) ~ care_category, sum, data = df) |>
   data.frame()
 ```
 
-However, we may be interested in investigating how these patient counts have evolved over time. To do this, we can make use of the following figure:
+To investigate how these numbers evolved over time, we can make use of the following figure:
 
 ```{r}
-
+#| eval: false
 # Create a figure layout with two small plots in the left
 # column, and one tall plot in the right column
 layout <- matrix(c(
@@ -183,11 +217,18 @@ df |>
   render() 
 ```
 
-To explore how the proportion of child and adolescent patients has evolved over time, we will need to use a slightly more complex interactive workflow than we have used so far. Try taking the following steps:
+```{r example-cases-days-children}
+#| echo: false
+#| eval: true
+#| out-extra: 'style="border: none;"'
+knitr::include_url("./figures/example-cases-days-children.html")
+```
 
-> 1. Mark the cases corresponding to children and adolescents by clicking on the corresponding bar in the right barplot, while holding down the `1` key
-2. Normalize the two leftmost barplots, corresponding to the number of cases and the total number of days in treatment by year, by clicking on the plots and pressing the `N` key (you can reverse back to absolute counts by pressing the `N` key again)
-3. Zoom into the regions of the two barplots containing the green cases by clicking-and-dragging to select a rectangular region and pressing the `Z` key.
+So far, we have been using a fairly simple interactive workflow that could be easily recreated via code, taking only one or two interactive actions at a time. However, now it is time to see the full potential of interactivity by chaining several interactive actions together. To explore how the proportion of child and adolescent patients evolved over time, try taking the following steps:
+
+> 1. Mark the cases corresponding to children: click on the corresponding bar in the right barplot while holding down the `1` key.
+2. Normalize the two leftmost barplots: click each of on the plots to activate it and press the `N` key while the plot is active (you can revert back to absolute counts by pressing the `N` key again).
+3. Zoom into the regions of the leftmost barplots containing selected cases: click-and-drag to select a rectangular region and pressing the `Z` key.
 
 By following these steps, you should end up with a figure similar to the one below:
 

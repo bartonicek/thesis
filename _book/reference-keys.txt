@@ -264,3 +264,5 @@ other-properties-inverses-commutativity
 inverses-2
 whole-equal-to-the-sum-of-its-parts-monoids
 groups-and-inverses
+fig:example-cases-days
+fig:example-cases-stay-cat

@@ -49,4 +49,8 @@ Finally, there were some useful features which were relatively simple to impleme
 
 Some features I did not choose to implement were complex logical selection, semantic zooming, and [LIST OTHERS]. Logical selection refers to the ability of being able to use logical operators such as AND, OR, and XOR with selection events to create more complex selections [see e.g. @theus2008]. While this feature can be undeniably a powerful tool in the hands of more advanced users, its utility for novices is debatable. @wills2000 argued that selection systems should be simple, powerful, and forgiving, and as such, I did not choose to prioritize complex selection operators, opting instead for simple transient/persistent selection. More sophisticated selection operators could also always be implemented later. As for semantic zooming, I did not choose to prioritize this feature since, while also undeniably useful in certain situations, it is fairly complex and applies only to a limited set of plot types such as maps. Generally, I focused on features that could apply across many different plot types, and this gave features like semantic zooming lower priority.
 
-
+```{r}
+#| echo: false
+#| out-extra: 'style="border: none;"'
+knitr::include_url("./figures/example-cases-days.html")
+```
