@@ -287,7 +287,7 @@ div.csl-indent {
 <div id="applied-example" class="section level1 hasAnchor" number="8">
 <h1><span class="header-section-number">8</span> Applied example<a href="applied-example.html#applied-example" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <blockquote>
-<p>Please note that the data set used in this section is fairly large (~70,000 rows) and so this section takes a while to load.</p>
+<p>Please note that the data set used in this section is fairly large (~70,000 rows) and so the figures take some time to load (please allow ~30 seconds).</p>
 </blockquote>
 <p>This section demonstrates a typical interactive workflow with <code>plotscaper</code>. The goal is to showcase the package’s key features and capabilities by exploring a large, real-world data set, pertaining to a pressing issue: mental health.</p>
 <p>Mental health is a global concern. In developed nations, mental health disorders are primary contributor to years lived with disability, significantly impacting both the well-being of individuals and the economic productivity of entire countries <span class="citation">(<a href="#ref-who2022">Organization 2022</a>)</span>. This issue, however, extends beyond developed nations. The global burden of mental health disorders has been steadily rising over the recent decades, a trend which is particularly concerning in low-income countries where access to mental health services is even more limited <span class="citation">(<a href="#ref-patel2018">Patel et al. 2018</a>)</span>.</p>
@@ -314,9 +314,90 @@ div.csl-indent {
 ## $ cases                  &lt;int&gt; 13, 3, 2, 3, 1, 2, 2, 32, 2, 2, 1, 12, 1, 1, 2,…
 ## $ days                   &lt;int&gt; 196, 345, 38, 108, 1, 47, 319, 3813, 120, 256, …</code></pre>
 <p>The data contains over 68,000 rows, totaling over 410,000 individual-patient hospitalizations. Each row records the number patients with a particular set of of characteristics released from a treatment facility during a given year, and the number of days the patients spent in treatment in total.</p>
-<p>In the original version of the data set, the column names as well as the labels of the categorical variables are in Czech. To make the analysis more easily accessible to non-Czech speakers, I took the liberty of translating most of these to English (excluding the <code>region</code> variable). The translation script is available in the <a href="https://github.com/bartonicek/thesis/blob/master/longterm_care_translate.R">thesis repository</a>. Additionally, the <a href="https://www.nzip.cz/data/2060-dlouhodoba-psychiatricka-pece">data set website</a> contains a JSON schema with a text description of each of the variables <span class="citation">(<a href="#ref-soukupova2023">Soukupová et al. 2023</a>)</span>. I translated these descriptions as well and provide them below, in Table <a href="#tab:longterm-care-schema"><strong>??</strong></a>:</p>
+<p>In the original version of the data set, the column names as well as the labels of the categorical variables are in Czech. To make the analysis more easily accessible to non-Czech speakers, I took the liberty of translating most of these to English (excluding the <code>region</code> variable). The translation script is available in the <a href="https://github.com/bartonicek/thesis/blob/master/longterm_care_translate.R">thesis repository</a>. Additionally, the <a href="https://www.nzip.cz/data/2060-dlouhodoba-psychiatricka-pece">data set website</a> contains a JSON schema with a text description of each of the variables <span class="citation">(<a href="#ref-soukupova2023">Soukupová et al. 2023</a>)</span>. I translated these descriptions as well and provide them below, in Table <a href="applied-example.html#tab:longterm-care-schema">8.1</a>:</p>
+<table>
+<caption><span id="tab:longterm-care-schema">Table 8.1: </span>Schema of the long-term care data set, including the original column names (Czech), as well as translated names and descriptions.</caption>
+<colgroup>
+<col width="12%" />
+<col width="16%" />
+<col width="70%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Translated name</th>
+<th align="left">Original name</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">year</td>
+<td align="left">rok</td>
+<td align="left">The year hospitalization was terminated</td>
+</tr>
+<tr class="even">
+<td align="left">region_code</td>
+<td align="left">kraj_kod</td>
+<td align="left">Region code based on the NUTS 3 classification</td>
+</tr>
+<tr class="odd">
+<td align="left">region</td>
+<td align="left">kraj_nazev</td>
+<td align="left">Region where the facility was located</td>
+</tr>
+<tr class="even">
+<td align="left">sex</td>
+<td align="left">pohlavi</td>
+<td align="left">Classification of patients’ sex</td>
+</tr>
+<tr class="odd">
+<td align="left">diagnosis</td>
+<td align="left">zakladni_diagnoza</td>
+<td align="left">The primary diagnosis of the psychiatric disorder based on the ICD-10 classification</td>
+</tr>
+<tr class="even">
+<td align="left">reason_for_termination</td>
+<td align="left">ukonceni</td>
+<td align="left">The reason for termination of care</td>
+</tr>
+<tr class="odd">
+<td align="left">age_category</td>
+<td align="left">vekova_kategorie</td>
+<td align="left">Classification of patients’ age category</td>
+</tr>
+<tr class="even">
+<td align="left">stay_category</td>
+<td align="left">kategorie_delky_hospitalizace</td>
+<td align="left">Classification of hospitalization based on length: short-term (&lt; 3 months), medium-term (3-6 months), and long-term (6+ months)</td>
+</tr>
+<tr class="odd">
+<td align="left">field</td>
+<td align="left">obor</td>
+<td align="left">The field of psychiatric care</td>
+</tr>
+<tr class="even">
+<td align="left">care_category</td>
+<td align="left">kategorie_pece</td>
+<td align="left">Classification of care: child or adult</td>
+</tr>
+<tr class="odd">
+<td align="left">cases</td>
+<td align="left">pocet_hospitalizaci</td>
+<td align="left">The total number of cases/hospitalizations in the given subgroup of patients</td>
+</tr>
+<tr class="even">
+<td align="left">days</td>
+<td align="left">delka_hospitlizace</td>
+<td align="left">The total time spent in care, in days (= sum of the number of days all patients in a given subgroup spent in care)</td>
+</tr>
+</tbody>
+</table>
 <p>Before we go on to explore the data set with interactive figures, there are a couple of things to note about the data set. The first is that the data has been pre-aggregated, such that each row represents the combined number of releases within a given subgroup of patients. For example, the first row indicates that, in the year 2019, 13 women aged 40-49 were released from treatment facilities in Olomoucký kraj (region), after receiving short-term care for F10 ICD-10 diagnosis <span class="citation">(mental and behavioural disorders due to alcohol use, <a href="#ref-icd2024a">World Health Organization 2024a</a>)</span> for a sum total of 196 days:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="applied-example.html#cb3-1" tabindex="-1"></a>df[<span class="dv">1</span>, ]</span></code></pre></div>
+<pre><code>##   year region_code         region    sex diagnosis reason_for_termination
+## 1 2019       CZ071 Olomoucký kraj female       f10                release
+##   age_category stay_category      field care_category cases days
+## 1        40–49         short psychiatry         adult    13  196</code></pre>
 <p>The reason for this aggregation is likely to anonymize the data and reduce the risk of identifying individual patients <span class="citation">(see e.g. <a href="#ref-pina2024">Pina et al. 2024</a>)</span>. However, when creating visualizations, we need to take the fact that each row represents a group of patients into account. For instance, when drawing a barplot, simply plotting row counts would not be appropriate, since that would ignore the size of the patient groups. Instead, to represent the data properly, we should aggregate (sum) either <code>cases</code> or <code>days</code>, depending on the question of interest. The same applies to all other aggregation plots, such as histograms <span class="citation">(i.e. weighted histograms, see e.g. <a href="#ref-unwin2008">Unwin, Theus, and Härdle 2008</a>)</span> and fluctuation diagrams.</p>
 <p>Fortunately, as we will see, <code>plotscaper</code> makes it easy to create these weighted types visualizations. And further, while the information this aggregated data provides inherently less granular information than patient-level records, we will see that it still preserves a large amount of structure.</p>
 </div>
@@ -325,12 +406,12 @@ div.csl-indent {
 <div id="the-relationship-between-cases-and-days" class="section level4 hasAnchor" number="8.0.2.1">
 <h4><span class="header-section-number">8.0.2.1</span> The relationship between cases and days<a href="applied-example.html#the-relationship-between-cases-and-days" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>We start by exploring the relationship between the two primary continuous variables of interest: <code>cases</code> (the number of patients in a given subgroup released from care) and <code>days</code> (the total number of days the given subgroup of patients spent in care). Intuitively, we would expect a positive, linear relationship between these variables, such that a larger patient groups should spend more days in care. We can use <code>plotscaper</code> to visualize this relationship via a scatterplot:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="applied-example.html#cb4-1" tabindex="-1"></a><span class="fu">library</span>(plotscaper) <span class="co"># Load in the package</span></span>
-<span id="cb4-2"><a href="applied-example.html#cb4-2" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="applied-example.html#cb4-3" tabindex="-1"></a>df <span class="sc">|&gt;</span></span>
-<span id="cb4-4"><a href="applied-example.html#cb4-4" tabindex="-1"></a>  <span class="fu">create_schema</span>() <span class="sc">|&gt;</span> <span class="co"># Create a declarative schema for the figure</span></span>
-<span id="cb4-5"><a href="applied-example.html#cb4-5" tabindex="-1"></a>  <span class="fu">add_scatterplot</span>(<span class="fu">c</span>(<span class="st">&quot;cases&quot;</span>, <span class="st">&quot;days&quot;</span>)) <span class="sc">|&gt;</span> <span class="co"># Add a scatterplot</span></span>
-<span id="cb4-6"><a href="applied-example.html#cb4-6" tabindex="-1"></a>  <span class="fu">render</span>() <span class="co"># Render the schema into an interactive figure</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="applied-example.html#cb5-1" tabindex="-1"></a><span class="fu">library</span>(plotscaper) <span class="co"># Load in the package</span></span>
+<span id="cb5-2"><a href="applied-example.html#cb5-2" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="applied-example.html#cb5-3" tabindex="-1"></a>df <span class="sc">|&gt;</span></span>
+<span id="cb5-4"><a href="applied-example.html#cb5-4" tabindex="-1"></a>  <span class="fu">create_schema</span>() <span class="sc">|&gt;</span> <span class="co"># Create a declarative schema for the figure</span></span>
+<span id="cb5-5"><a href="applied-example.html#cb5-5" tabindex="-1"></a>  <span class="fu">add_scatterplot</span>(<span class="fu">c</span>(<span class="st">&quot;cases&quot;</span>, <span class="st">&quot;days&quot;</span>)) <span class="sc">|&gt;</span> <span class="co"># Add a scatterplot</span></span>
+<span id="cb5-6"><a href="applied-example.html#cb5-6" tabindex="-1"></a>  <span class="fu">render</span>() <span class="co"># Render the schema into an interactive figure</span></span></code></pre></div>
 <div class="figure"><span style="display:block;" id="fig:example-cases-days"></span>
 <iframe src="./figures/example-cases-days.html" width="672" height="400px" data-external="1" style="border: none;">
 </iframe>
@@ -339,13 +420,13 @@ Figure 8.1: Relationship between the number of cases in a patient subgroup and t
 </p>
 </div>
 <p>Interestingly, the points did not show a simple linear trend. Instead, they seemed to cluster in three distinct “leaflets”, each exhibiting a roughly linear trend. This suggests the presence of a pooling effect, such that the overall trend is the result of combining three distinct groups. Closer inspection of the data reveals that the <code>stay_category</code> variable has three levels: short-term (&lt; 3 months), medium-term (3-6 months), and long-term (6+ months) care. Color-coding the cases indeed confirms that the three levels of <code>stay_category</code> correspond to the leaflets:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="applied-example.html#cb5-1" tabindex="-1"></a>df <span class="sc">|&gt;</span></span>
-<span id="cb5-2"><a href="applied-example.html#cb5-2" tabindex="-1"></a>  <span class="fu">create_schema</span>() <span class="sc">|&gt;</span></span>
-<span id="cb5-3"><a href="applied-example.html#cb5-3" tabindex="-1"></a>  <span class="fu">add_scatterplot</span>(<span class="fu">c</span>(<span class="st">&quot;cases&quot;</span>, <span class="st">&quot;days&quot;</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb5-4"><a href="applied-example.html#cb5-4" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;stay_category&quot;</span>, <span class="st">&quot;cases&quot;</span>)) <span class="sc">|&gt;</span> <span class="co"># y-axis is weighted by cases</span></span>
-<span id="cb5-5"><a href="applied-example.html#cb5-5" tabindex="-1"></a>  <span class="fu">assign_cases</span>(<span class="fu">which</span>(df<span class="sc">$</span>stay_category <span class="sc">==</span> <span class="st">&quot;short&quot;</span>), <span class="dv">1</span>) <span class="sc">|&gt;</span> <span class="co"># Mark short-term green</span></span>
-<span id="cb5-6"><a href="applied-example.html#cb5-6" tabindex="-1"></a>  <span class="fu">assign_cases</span>(<span class="fu">which</span>(df<span class="sc">$</span>stay_category <span class="sc">==</span> <span class="st">&quot;long&quot;</span>), <span class="dv">2</span>) <span class="sc">|&gt;</span> <span class="co"># Mark long-term red</span></span>
-<span id="cb5-7"><a href="applied-example.html#cb5-7" tabindex="-1"></a>  <span class="fu">render</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="applied-example.html#cb6-1" tabindex="-1"></a>df <span class="sc">|&gt;</span></span>
+<span id="cb6-2"><a href="applied-example.html#cb6-2" tabindex="-1"></a>  <span class="fu">create_schema</span>() <span class="sc">|&gt;</span></span>
+<span id="cb6-3"><a href="applied-example.html#cb6-3" tabindex="-1"></a>  <span class="fu">add_scatterplot</span>(<span class="fu">c</span>(<span class="st">&quot;cases&quot;</span>, <span class="st">&quot;days&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb6-4"><a href="applied-example.html#cb6-4" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;stay_category&quot;</span>, <span class="st">&quot;cases&quot;</span>)) <span class="sc">|&gt;</span> <span class="co"># y-axis is weighted by cases</span></span>
+<span id="cb6-5"><a href="applied-example.html#cb6-5" tabindex="-1"></a>  <span class="fu">assign_cases</span>(<span class="fu">which</span>(df<span class="sc">$</span>stay_category <span class="sc">==</span> <span class="st">&quot;short&quot;</span>), <span class="dv">1</span>) <span class="sc">|&gt;</span> <span class="co"># Mark short-term green</span></span>
+<span id="cb6-6"><a href="applied-example.html#cb6-6" tabindex="-1"></a>  <span class="fu">assign_cases</span>(<span class="fu">which</span>(df<span class="sc">$</span>stay_category <span class="sc">==</span> <span class="st">&quot;long&quot;</span>), <span class="dv">2</span>) <span class="sc">|&gt;</span> <span class="co"># Mark long-term red</span></span>
+<span id="cb6-7"><a href="applied-example.html#cb6-7" tabindex="-1"></a>  <span class="fu">render</span>()</span></code></pre></div>
 <div class="figure"><span style="display:block;" id="fig:example-cases-stay-cat"></span>
 <iframe src="./figures/example-cases-stay-cat.html" width="672" height="400px" data-external="1" style="border: none;">
 </iframe>
@@ -357,18 +438,18 @@ Figure 8.2: The relationship between cases and days is subject to a pooling effe
 <p>Click on the barplot bars to confirm there is a fairly minimal overlap between points belonging to the three categories (selected points will be brought to the foreground). To remove all selection, double-click the figure.</p>
 </blockquote>
 <p>However, the pooling effect does not itself explain the absence of points between the three leaflets. If the distribution of cases and days within each of the three <code>stay_category</code> levels were uniform, we should expect to see more points in the gaps between the leaflets. This additionally suggests a potential selection process, where patients are less likely to be discharged at durations near the category boundaries. We can confirm this by plotting the average number of days spent in care:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="applied-example.html#cb6-1" tabindex="-1"></a><span class="co"># Compute the average number of days spent in treatment</span></span>
-<span id="cb6-2"><a href="applied-example.html#cb6-2" tabindex="-1"></a>df<span class="sc">$</span>avg_days <span class="ot">&lt;-</span> df<span class="sc">$</span>days <span class="sc">/</span> df<span class="sc">$</span>cases </span>
-<span id="cb6-3"><a href="applied-example.html#cb6-3" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="applied-example.html#cb6-4" tabindex="-1"></a>df <span class="sc">|&gt;</span>  </span>
-<span id="cb6-5"><a href="applied-example.html#cb6-5" tabindex="-1"></a>  <span class="fu">create_schema</span>() <span class="sc">|&gt;</span></span>
-<span id="cb6-6"><a href="applied-example.html#cb6-6" tabindex="-1"></a>  <span class="fu">add_scatterplot</span>(<span class="fu">c</span>(<span class="st">&quot;cases&quot;</span>, <span class="st">&quot;avg_days&quot;</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb6-7"><a href="applied-example.html#cb6-7" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;stay_category&quot;</span>, <span class="st">&quot;cases&quot;</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb6-8"><a href="applied-example.html#cb6-8" tabindex="-1"></a>  <span class="fu">assign_cases</span>(<span class="fu">which</span>(df<span class="sc">$</span>stay_category <span class="sc">==</span> <span class="st">&quot;short-term&quot;</span>), <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
-<span id="cb6-9"><a href="applied-example.html#cb6-9" tabindex="-1"></a>  <span class="fu">assign_cases</span>(<span class="fu">which</span>(df<span class="sc">$</span>stay_category <span class="sc">==</span> <span class="st">&quot;long-term&quot;</span>), <span class="dv">2</span>) <span class="sc">|&gt;</span></span>
-<span id="cb6-10"><a href="applied-example.html#cb6-10" tabindex="-1"></a>  <span class="fu">set_scale</span>(<span class="st">&quot;scatterplot1&quot;</span>, <span class="st">&quot;y&quot;</span>, <span class="co"># Log-transform the y-axis</span></span>
-<span id="cb6-11"><a href="applied-example.html#cb6-11" tabindex="-1"></a>            <span class="at">transformation =</span> <span class="st">&quot;log10&quot;</span>, <span class="at">default =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
-<span id="cb6-12"><a href="applied-example.html#cb6-12" tabindex="-1"></a>  <span class="fu">render</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="applied-example.html#cb7-1" tabindex="-1"></a><span class="co"># Compute the average number of days spent in treatment</span></span>
+<span id="cb7-2"><a href="applied-example.html#cb7-2" tabindex="-1"></a>df<span class="sc">$</span>avg_days <span class="ot">&lt;-</span> df<span class="sc">$</span>days <span class="sc">/</span> df<span class="sc">$</span>cases </span>
+<span id="cb7-3"><a href="applied-example.html#cb7-3" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="applied-example.html#cb7-4" tabindex="-1"></a>df <span class="sc">|&gt;</span>  </span>
+<span id="cb7-5"><a href="applied-example.html#cb7-5" tabindex="-1"></a>  <span class="fu">create_schema</span>() <span class="sc">|&gt;</span></span>
+<span id="cb7-6"><a href="applied-example.html#cb7-6" tabindex="-1"></a>  <span class="fu">add_scatterplot</span>(<span class="fu">c</span>(<span class="st">&quot;cases&quot;</span>, <span class="st">&quot;avg_days&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb7-7"><a href="applied-example.html#cb7-7" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;stay_category&quot;</span>, <span class="st">&quot;cases&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb7-8"><a href="applied-example.html#cb7-8" tabindex="-1"></a>  <span class="fu">assign_cases</span>(<span class="fu">which</span>(df<span class="sc">$</span>stay_category <span class="sc">==</span> <span class="st">&quot;short-term&quot;</span>), <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-9"><a href="applied-example.html#cb7-9" tabindex="-1"></a>  <span class="fu">assign_cases</span>(<span class="fu">which</span>(df<span class="sc">$</span>stay_category <span class="sc">==</span> <span class="st">&quot;long-term&quot;</span>), <span class="dv">2</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-10"><a href="applied-example.html#cb7-10" tabindex="-1"></a>  <span class="fu">set_scale</span>(<span class="st">&quot;scatterplot1&quot;</span>, <span class="st">&quot;y&quot;</span>, <span class="co"># Log-transform the y-axis</span></span>
+<span id="cb7-11"><a href="applied-example.html#cb7-11" tabindex="-1"></a>            <span class="at">transformation =</span> <span class="st">&quot;log10&quot;</span>, <span class="at">default =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-12"><a href="applied-example.html#cb7-12" tabindex="-1"></a>  <span class="fu">render</span>()</span></code></pre></div>
 <iframe src="./figures/example-cases-avg-days.html" width="672" height="400px" data-external="1" style="border: none;">
 </iframe>
 <p>Now we can clearly see the gaps between the three different distributions along the y-axis.</p>
@@ -380,26 +461,26 @@ Figure 8.2: The relationship between cases and days is subject to a pooling effe
 <div id="number-of-cases-over-time" class="section level4 hasAnchor" number="8.0.2.2">
 <h4><span class="header-section-number">8.0.2.2</span> Number of cases over time<a href="applied-example.html#number-of-cases-over-time" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>A key question is how have the numbers of patients in treatment evolved over time. We can investigate this by plotting the same scatterplot as we did in the section above, as well as two barplots showing the total number of cases and the total number days in treatment, within each year. We can also include a histogram of the number of days, for a good measure:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="applied-example.html#cb7-1" tabindex="-1"></a>schema <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
-<span id="cb7-2"><a href="applied-example.html#cb7-2" tabindex="-1"></a>  <span class="fu">create_schema</span>() <span class="sc">|&gt;</span></span>
-<span id="cb7-3"><a href="applied-example.html#cb7-3" tabindex="-1"></a>  <span class="fu">add_scatterplot</span>(<span class="fu">c</span>(<span class="st">&quot;cases&quot;</span>, <span class="st">&quot;days&quot;</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb7-4"><a href="applied-example.html#cb7-4" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;year&quot;</span>, <span class="st">&quot;cases&quot;</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb7-5"><a href="applied-example.html#cb7-5" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;year&quot;</span>, <span class="st">&quot;days&quot;</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb7-6"><a href="applied-example.html#cb7-6" tabindex="-1"></a>  <span class="fu">add_histogram</span>(<span class="fu">c</span>(<span class="st">&quot;days&quot;</span>, <span class="st">&quot;days&quot;</span>)) <span class="sc">|&gt;</span> <span class="co"># Again, make sure to weigh the y-axis</span></span>
-<span id="cb7-7"><a href="applied-example.html#cb7-7" tabindex="-1"></a>  <span class="fu">set_parameters</span>(<span class="st">&quot;histogram1&quot;</span>, <span class="at">width =</span> <span class="dv">20</span>) <span class="co"># Set histogram binwidth to 20 days</span></span>
-<span id="cb7-8"><a href="applied-example.html#cb7-8" tabindex="-1"></a></span>
-<span id="cb7-9"><a href="applied-example.html#cb7-9" tabindex="-1"></a>schema <span class="sc">|&gt;</span> <span class="fu">render</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="applied-example.html#cb8-1" tabindex="-1"></a>schema <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
+<span id="cb8-2"><a href="applied-example.html#cb8-2" tabindex="-1"></a>  <span class="fu">create_schema</span>() <span class="sc">|&gt;</span></span>
+<span id="cb8-3"><a href="applied-example.html#cb8-3" tabindex="-1"></a>  <span class="fu">add_scatterplot</span>(<span class="fu">c</span>(<span class="st">&quot;cases&quot;</span>, <span class="st">&quot;days&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb8-4"><a href="applied-example.html#cb8-4" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;year&quot;</span>, <span class="st">&quot;cases&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb8-5"><a href="applied-example.html#cb8-5" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;year&quot;</span>, <span class="st">&quot;days&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb8-6"><a href="applied-example.html#cb8-6" tabindex="-1"></a>  <span class="fu">add_histogram</span>(<span class="fu">c</span>(<span class="st">&quot;days&quot;</span>, <span class="st">&quot;days&quot;</span>)) <span class="sc">|&gt;</span> <span class="co"># Again, make sure to weigh the y-axis</span></span>
+<span id="cb8-7"><a href="applied-example.html#cb8-7" tabindex="-1"></a>  <span class="fu">set_parameters</span>(<span class="st">&quot;histogram1&quot;</span>, <span class="at">width =</span> <span class="dv">20</span>) <span class="co"># Set histogram binwidth to 20 days</span></span>
+<span id="cb8-8"><a href="applied-example.html#cb8-8" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="applied-example.html#cb8-9" tabindex="-1"></a>schema <span class="sc">|&gt;</span> <span class="fu">render</span>()</span></code></pre></div>
 <iframe src="./figures/example-cases-days-time.html" width="672" height="400px" data-external="1" style="border: none;">
 </iframe>
 <p>From the barplots, we can immediately see an interesting pattern: while the numbers of cases seem to have declined over time, the number of days patients spent in care seem to seems to have remained fairly constant. This suggest that while there are fewer patients over all, they are being hospitalized for longer.</p>
 <p>We can confirm this interactively. Click on the bars corresponding to the year 2010 and 2022, in either of the two barplots (feel free to mark either of the bars by holding down the <code>1</code> or <code>2</code> keys and clicking them). You should see that, compared to 2010, there were more patients in long term care in 2022, and the relationship between the number of cases and the number of days in care was steeper.</p>
 <p>On its own, the declining number of cases over time might appear as a positive development; however, the constant number days in treatment suggests a more worrying trend. Specifically, treatment facility placements are limited resource <span class="citation">(<a href="#ref-who2022">Organization 2022</a>)</span>, and the fact that days in treatment have stayed constant while cases have declined may indicate that the Czech healthcare system is becoming burdened by patients in long-term care, reducing its capacity to serve new clients.</p>
 <p>Another way we can scrutinize the trend more closely by zooming into the histogram:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="applied-example.html#cb8-1" tabindex="-1"></a>schema <span class="sc">|&gt;</span> </span>
-<span id="cb8-2"><a href="applied-example.html#cb8-2" tabindex="-1"></a>  <span class="fu">assign_cases</span>(<span class="fu">which</span>(df<span class="sc">$</span>year <span class="sc">==</span> <span class="dv">2010</span>), <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
-<span id="cb8-3"><a href="applied-example.html#cb8-3" tabindex="-1"></a>  <span class="fu">assign_cases</span>(<span class="fu">which</span>(df<span class="sc">$</span>year <span class="sc">==</span> <span class="dv">2022</span>), <span class="dv">2</span>) <span class="sc">|&gt;</span></span>
-<span id="cb8-4"><a href="applied-example.html#cb8-4" tabindex="-1"></a>  <span class="fu">zoom</span>(<span class="st">&quot;histogram1&quot;</span>, <span class="fu">c</span>(<span class="sc">-</span><span class="dv">100</span>, <span class="dv">0</span>, <span class="fl">3e03</span>, <span class="fl">1e05</span>), <span class="at">units =</span> <span class="st">&quot;data&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb8-5"><a href="applied-example.html#cb8-5" tabindex="-1"></a>  <span class="fu">render</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="applied-example.html#cb9-1" tabindex="-1"></a>schema <span class="sc">|&gt;</span> </span>
+<span id="cb9-2"><a href="applied-example.html#cb9-2" tabindex="-1"></a>  <span class="fu">assign_cases</span>(<span class="fu">which</span>(df<span class="sc">$</span>year <span class="sc">==</span> <span class="dv">2010</span>), <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb9-3"><a href="applied-example.html#cb9-3" tabindex="-1"></a>  <span class="fu">assign_cases</span>(<span class="fu">which</span>(df<span class="sc">$</span>year <span class="sc">==</span> <span class="dv">2022</span>), <span class="dv">2</span>) <span class="sc">|&gt;</span></span>
+<span id="cb9-4"><a href="applied-example.html#cb9-4" tabindex="-1"></a>  <span class="fu">zoom</span>(<span class="st">&quot;histogram1&quot;</span>, <span class="fu">c</span>(<span class="sc">-</span><span class="dv">100</span>, <span class="dv">0</span>, <span class="fl">3e03</span>, <span class="fl">1e05</span>), <span class="at">units =</span> <span class="st">&quot;data&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb9-5"><a href="applied-example.html#cb9-5" tabindex="-1"></a>  <span class="fu">render</span>()</span></code></pre></div>
 <iframe src="./figures/example-cases-days-time-zoom.html" width="672" height="400px" data-external="1" style="border: none;">
 </iframe>
 <blockquote>
@@ -411,56 +492,68 @@ Figure 8.2: The relationship between cases and days is subject to a pooling effe
 <h4><span class="header-section-number">8.0.2.3</span> Age and child and adolescent mental health<a href="applied-example.html#age-and-child-and-adolescent-mental-health" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>The global mental health decline affects adults and children alike, however, childhood mental health disorders are particularly concerning. If these disorders manifest during critical developmental periods, they can have serious, often life-long consequences, causing irreversible changes in brain physiology even with successful treatment <span class="citation">(see e.g. <a href="#ref-keeley2021">Keeley 2021</a>)</span>. Children also have less agency than adults in managing their mental health, relying heavily on caregivers and schools for support. For these reasons and more, monitoring the mental health of children and adolescents is critical.</p>
 <p>Fortunately, the overall proportion of children and adolescents in the data set was fairly low, amounting to &lt;9% of all cases and &lt;6% of the total number of days spent in treatment:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="applied-example.html#cb9-1" tabindex="-1"></a><span class="fu">aggregate</span>(<span class="fu">cbind</span>(cases, days) <span class="sc">~</span> care_category, sum, <span class="at">data =</span> df) <span class="sc">|&gt;</span></span>
-<span id="cb9-2"><a href="applied-example.html#cb9-2" tabindex="-1"></a>  <span class="fu">lapply</span>(<span class="cf">function</span>(x) { <span class="cf">if</span> (<span class="fu">is.numeric</span>(x)) <span class="fu">return</span>(x <span class="sc">/</span> <span class="fu">sum</span>(x)) <span class="cf">else</span> x }) <span class="sc">|&gt;</span></span>
-<span id="cb9-3"><a href="applied-example.html#cb9-3" tabindex="-1"></a>  <span class="fu">data.frame</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="applied-example.html#cb10-1" tabindex="-1"></a><span class="fu">aggregate</span>(<span class="fu">cbind</span>(cases, days) <span class="sc">~</span> care_category, sum, <span class="at">data =</span> df) <span class="sc">|&gt;</span></span>
+<span id="cb10-2"><a href="applied-example.html#cb10-2" tabindex="-1"></a>  <span class="fu">lapply</span>(<span class="cf">function</span>(x) { <span class="cf">if</span> (<span class="fu">is.numeric</span>(x)) <span class="fu">return</span>(x <span class="sc">/</span> <span class="fu">sum</span>(x)) <span class="cf">else</span> x }) <span class="sc">|&gt;</span></span>
+<span id="cb10-3"><a href="applied-example.html#cb10-3" tabindex="-1"></a>  <span class="fu">data.frame</span>()</span></code></pre></div>
+<pre><code>##   care_category      cases       days
+## 1         adult 0.91028915 0.94285172
+## 2         child 0.08971085 0.05714828</code></pre>
 <p>To investigate how these numbers evolved over time, we can make use of the following figure:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="applied-example.html#cb10-1" tabindex="-1"></a><span class="co"># Create a figure layout with two small plots in the left</span></span>
-<span id="cb10-2"><a href="applied-example.html#cb10-2" tabindex="-1"></a><span class="co"># column, and one tall plot in the right column</span></span>
-<span id="cb10-3"><a href="applied-example.html#cb10-3" tabindex="-1"></a>layout <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(</span>
-<span id="cb10-4"><a href="applied-example.html#cb10-4" tabindex="-1"></a>  <span class="dv">1</span>, <span class="dv">3</span>,</span>
-<span id="cb10-5"><a href="applied-example.html#cb10-5" tabindex="-1"></a>  <span class="dv">2</span>, <span class="dv">3</span></span>
-<span id="cb10-6"><a href="applied-example.html#cb10-6" tabindex="-1"></a>), <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb10-7"><a href="applied-example.html#cb10-7" tabindex="-1"></a></span>
-<span id="cb10-8"><a href="applied-example.html#cb10-8" tabindex="-1"></a>df <span class="sc">|&gt;</span></span>
-<span id="cb10-9"><a href="applied-example.html#cb10-9" tabindex="-1"></a>  <span class="fu">create_schema</span>() <span class="sc">|&gt;</span></span>
-<span id="cb10-10"><a href="applied-example.html#cb10-10" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;year&quot;</span>, <span class="st">&quot;cases&quot;</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb10-11"><a href="applied-example.html#cb10-11" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;year&quot;</span>, <span class="st">&quot;days&quot;</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb10-12"><a href="applied-example.html#cb10-12" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;care_category&quot;</span>, <span class="st">&quot;cases&quot;</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb10-13"><a href="applied-example.html#cb10-13" tabindex="-1"></a>  <span class="fu">set_layout</span>(layout) <span class="sc">|&gt;</span> <span class="co"># Set the layout</span></span>
-<span id="cb10-14"><a href="applied-example.html#cb10-14" tabindex="-1"></a>  <span class="fu">render</span>() </span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="applied-example.html#cb12-1" tabindex="-1"></a><span class="co"># Create a figure layout with two small plots in the left</span></span>
+<span id="cb12-2"><a href="applied-example.html#cb12-2" tabindex="-1"></a><span class="co"># column, and one tall plot in the right column</span></span>
+<span id="cb12-3"><a href="applied-example.html#cb12-3" tabindex="-1"></a>layout <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(</span>
+<span id="cb12-4"><a href="applied-example.html#cb12-4" tabindex="-1"></a>  <span class="dv">1</span>, <span class="dv">3</span>,</span>
+<span id="cb12-5"><a href="applied-example.html#cb12-5" tabindex="-1"></a>  <span class="dv">2</span>, <span class="dv">3</span></span>
+<span id="cb12-6"><a href="applied-example.html#cb12-6" tabindex="-1"></a>), <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb12-7"><a href="applied-example.html#cb12-7" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="applied-example.html#cb12-8" tabindex="-1"></a>df <span class="sc">|&gt;</span></span>
+<span id="cb12-9"><a href="applied-example.html#cb12-9" tabindex="-1"></a>  <span class="fu">create_schema</span>() <span class="sc">|&gt;</span></span>
+<span id="cb12-10"><a href="applied-example.html#cb12-10" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;year&quot;</span>, <span class="st">&quot;cases&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb12-11"><a href="applied-example.html#cb12-11" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;year&quot;</span>, <span class="st">&quot;days&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb12-12"><a href="applied-example.html#cb12-12" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;care_category&quot;</span>, <span class="st">&quot;cases&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb12-13"><a href="applied-example.html#cb12-13" tabindex="-1"></a>  <span class="fu">set_layout</span>(layout) <span class="sc">|&gt;</span> <span class="co"># Set the layout</span></span>
+<span id="cb12-14"><a href="applied-example.html#cb12-14" tabindex="-1"></a>  <span class="fu">render</span>() </span></code></pre></div>
 <iframe src="./figures/example-cases-days-children.html" width="672" height="400px" data-external="1" style="border: none;">
 </iframe>
-<p>To explore how the proportion of child and adolescent patients has evolved over time, we will need to use a slightly more complex interactive workflow than we have used so far. Try taking the following steps:</p>
+<p>So far, we have been using a fairly simple interactive workflow that could be easily recreated via code, taking only one or two interactive actions at a time. However, now it is time to see the full potential of interactivity by chaining several interactive actions together. To explore how the proportion of child and adolescent patients evolved over time, try taking the following steps:</p>
 <blockquote>
 <ol style="list-style-type: decimal">
-<li>Mark the cases corresponding to children and adolescents by clicking on the corresponding bar in the right barplot, while holding down the <code>1</code> key</li>
-<li>Normalize the two leftmost barplots, corresponding to the number of cases and the total number of days in treatment by year, by clicking on the plots and pressing the <code>N</code> key (you can reverse back to absolute counts by pressing the <code>N</code> key again)</li>
-<li>Zoom into the regions of the two barplots containing the green cases by clicking-and-dragging to select a rectangular region and pressing the <code>Z</code> key.</li>
+<li>Mark the cases corresponding to children: click on the corresponding bar in the right barplot while holding down the <code>1</code> key.</li>
+<li>Normalize the two leftmost barplots: click each of on the plots to activate it and press the <code>N</code> key while the plot is active (you can revert back to absolute counts by pressing the <code>N</code> key again).</li>
+<li>Zoom into the regions of the leftmost barplots containing selected cases: click-and-drag to select a rectangular region and pressing the <code>Z</code> key.</li>
 </ol>
 </blockquote>
 <p>By following these steps, you should end up with a figure similar to the one below:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="applied-example.html#cb11-1" tabindex="-1"></a>df <span class="sc">|&gt;</span></span>
-<span id="cb11-2"><a href="applied-example.html#cb11-2" tabindex="-1"></a>  <span class="fu">create_schema</span>() <span class="sc">|&gt;</span></span>
-<span id="cb11-3"><a href="applied-example.html#cb11-3" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;year&quot;</span>, <span class="st">&quot;cases&quot;</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb11-4"><a href="applied-example.html#cb11-4" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;year&quot;</span>, <span class="st">&quot;days&quot;</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb11-5"><a href="applied-example.html#cb11-5" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;care_category&quot;</span>, <span class="st">&quot;cases&quot;</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb11-6"><a href="applied-example.html#cb11-6" tabindex="-1"></a>  <span class="fu">assign_cases</span>(<span class="fu">which</span>(df<span class="sc">$</span>care_category <span class="sc">==</span> <span class="st">&quot;child&quot;</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb11-7"><a href="applied-example.html#cb11-7" tabindex="-1"></a>  plotscaper<span class="sc">::</span><span class="fu">normalize</span>(<span class="st">&quot;barplot1&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb11-8"><a href="applied-example.html#cb11-8" tabindex="-1"></a>  plotscaper<span class="sc">::</span><span class="fu">normalize</span>(<span class="st">&quot;barplot2&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb11-9"><a href="applied-example.html#cb11-9" tabindex="-1"></a>  <span class="fu">zoom</span>(<span class="st">&quot;barplot1&quot;</span>, <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.15</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb11-10"><a href="applied-example.html#cb11-10" tabindex="-1"></a>  <span class="fu">zoom</span>(<span class="st">&quot;barplot2&quot;</span>, <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.15</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb11-11"><a href="applied-example.html#cb11-11" tabindex="-1"></a>  <span class="fu">set_layout</span>(layout) <span class="sc">|&gt;</span></span>
-<span id="cb11-12"><a href="applied-example.html#cb11-12" tabindex="-1"></a>  <span class="fu">render</span>() </span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="applied-example.html#cb13-1" tabindex="-1"></a>df <span class="sc">|&gt;</span></span>
+<span id="cb13-2"><a href="applied-example.html#cb13-2" tabindex="-1"></a>  <span class="fu">create_schema</span>() <span class="sc">|&gt;</span></span>
+<span id="cb13-3"><a href="applied-example.html#cb13-3" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;year&quot;</span>, <span class="st">&quot;cases&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb13-4"><a href="applied-example.html#cb13-4" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;year&quot;</span>, <span class="st">&quot;days&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb13-5"><a href="applied-example.html#cb13-5" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;care_category&quot;</span>, <span class="st">&quot;cases&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb13-6"><a href="applied-example.html#cb13-6" tabindex="-1"></a>  <span class="fu">assign_cases</span>(<span class="fu">which</span>(df<span class="sc">$</span>care_category <span class="sc">==</span> <span class="st">&quot;child&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb13-7"><a href="applied-example.html#cb13-7" tabindex="-1"></a>  plotscaper<span class="sc">::</span><span class="fu">normalize</span>(<span class="st">&quot;barplot1&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb13-8"><a href="applied-example.html#cb13-8" tabindex="-1"></a>  plotscaper<span class="sc">::</span><span class="fu">normalize</span>(<span class="st">&quot;barplot2&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb13-9"><a href="applied-example.html#cb13-9" tabindex="-1"></a>  <span class="fu">zoom</span>(<span class="st">&quot;barplot1&quot;</span>, <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.15</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb13-10"><a href="applied-example.html#cb13-10" tabindex="-1"></a>  <span class="fu">zoom</span>(<span class="st">&quot;barplot2&quot;</span>, <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.15</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb13-11"><a href="applied-example.html#cb13-11" tabindex="-1"></a>  <span class="fu">set_layout</span>(layout) <span class="sc">|&gt;</span></span>
+<span id="cb13-12"><a href="applied-example.html#cb13-12" tabindex="-1"></a>  <span class="fu">render</span>() </span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:example-cases-days-children-marked"></span>
+<iframe src="./figures/example-cases-days-children-marked.html" width="672" height="400px" data-external="1" style="border: none;">
+</iframe>
+<p class="caption">
+Figure 8.3: While the proportion of days spent in treatment by children and adolescent has declined, the proportion of cases that children and adolescents make up has increased.
+</p>
+</div>
 <p>Interestingly, the two barplots show the opposite trend. While the proportion of the treatment days used by children and adolescents has declined over time, the proportion of total cases they make up has increased. The relative increase in cases appears to be driven by an overall decline in patient numbers: in absolute counts, the number of child and adolescent patients has remained fairly constant between 2010 to 2022, while the total patient count has decreased.</p>
 <p>We can also get a more granular breakdown by plotting the age category variable:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="applied-example.html#cb12-1" tabindex="-1"></a>df <span class="sc">|&gt;</span></span>
-<span id="cb12-2"><a href="applied-example.html#cb12-2" tabindex="-1"></a>  <span class="fu">create_schema</span>() <span class="sc">|&gt;</span></span>
-<span id="cb12-3"><a href="applied-example.html#cb12-3" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;age_category&quot;</span>, <span class="st">&quot;cases&quot;</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb12-4"><a href="applied-example.html#cb12-4" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;year&quot;</span>, <span class="st">&quot;cases&quot;</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb12-5"><a href="applied-example.html#cb12-5" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;age_category&quot;</span>, <span class="st">&quot;days&quot;</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb12-6"><a href="applied-example.html#cb12-6" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;year&quot;</span>, <span class="st">&quot;days&quot;</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb12-7"><a href="applied-example.html#cb12-7" tabindex="-1"></a>  <span class="fu">render</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="applied-example.html#cb14-1" tabindex="-1"></a>df <span class="sc">|&gt;</span></span>
+<span id="cb14-2"><a href="applied-example.html#cb14-2" tabindex="-1"></a>  <span class="fu">create_schema</span>() <span class="sc">|&gt;</span></span>
+<span id="cb14-3"><a href="applied-example.html#cb14-3" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;age_category&quot;</span>, <span class="st">&quot;cases&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb14-4"><a href="applied-example.html#cb14-4" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;year&quot;</span>, <span class="st">&quot;cases&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb14-5"><a href="applied-example.html#cb14-5" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;age_category&quot;</span>, <span class="st">&quot;days&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb14-6"><a href="applied-example.html#cb14-6" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;year&quot;</span>, <span class="st">&quot;days&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb14-7"><a href="applied-example.html#cb14-7" tabindex="-1"></a>  <span class="fu">render</span>()</span></code></pre></div>
+<iframe src="./figures/example-cases-days-age.html" width="672" height="400px" data-external="1" style="border: none;">
+</iframe>
 <p>Again, if we interrogate the figure by employing interactive actions such as selection, zooming, and normalization, we can discover that one age category in which there has been steady growth in both the proportion of cases and days spend in treatment are 70-79 year olds. This aligns with the limited placement availability hypothesis: while these patients account for a relatively small fraction of the total cases, they represent a disproportionately large and increasing proportion of days in treatment. Later, we will also see evidence that many of these patients suffer from neurodegenerative diseases, which require intensive long-term care. It may be the case that, with increasing life-expectancy, the healthcare system is not able to handle the influx of older patients, limiting the availability of placements.</p>
 </div>
 <div id="prevalence-of-diagnoses" class="section level4 hasAnchor" number="8.0.2.4">
@@ -468,10 +561,10 @@ Figure 8.2: The relationship between cases and days is subject to a pooling effe
 <p>Another important information we can glean from the data set is the prevalence of different diagnoses and their demographic characteristics. The data set identifies mental disorders according to ICD-10, an internationally recognized disease classification system published by the World Health organization which organizes various diseases into categories based on aetiology <span class="citation">(<a href="#ref-icd2024a">World Health Organization 2024a</a>)</span>.</p>
 <p>It is first necessary to discuss the coding scheme of the diagnoses. The codes were directly translated from the Czech version of the data set <span class="citation">(<a href="#ref-soukupova2023">Soukupová et al. 2023</a>)</span>. The vast majority diagnoses come from the F category, which represents mental and behavioral disorders, although there are also few references to the G category, which classifies diseases of the nervous system. Further, note that while some levels of the <code>diagnosis</code> variable represent a singular ICD-10 diagnosis (e.g. <code>f10</code>), others represent a range of diagnoses (e.g. <code>f11-f19</code>), a union (e.g. <code>f0 and g30</code>), or an exclusive difference (e.g. <code>f4 without f42</code>).</p>
 <p>Importantly, some of the codes also represent a range of diagnoses <em>implicitly</em>. For instance, whereas <code>f10</code> code refers to the F10 diagnosis (alcohol-use disorders), the part <code>f4</code> in <code>f4 without f42</code> does <em>not</em> refer to the F04 diagnosis (organic amnesic syndrome, not induced by alcohol and other psychoactive substances) but instead to the F40-F48 range of diagnoses <span class="citation">(neurotic, stress-related and somatoform disorders, <a href="#ref-icd2024a">World Health Organization 2024a</a>)</span>. Likewise, <code>f2</code> represents F20-F29 (schizophrenia, schizotypal and delusional disorders), <code>f7</code> represents F70-F79 (mental retardation), and <code>f5</code> represents F50-F59 (behavioural syndromes associated with physiological disturbances and physical factors). I have confirmed this via personal communication with the data set’s authors <span class="citation">(<a href="#ref-melicharova2025">Melicharová 2025</a>)</span>.</p>
-<p>Table <a href="applied-example.html#tab:icd10">8.1</a> lists codes used in the data, in order of their prevalence (the number of all cases across all time), along with a short description based on the ICD-10 <span class="citation">(<a href="#ref-icd2024a">World Health Organization 2024a</a>)</span>, and some clarifying notes in parentheses that I myself have added:</p>
+<p>Table <a href="applied-example.html#tab:icd10">8.2</a> lists codes used in the data, in order of their prevalence (the number of all cases across all time), along with a short description based on the ICD-10 <span class="citation">(<a href="#ref-icd2024a">World Health Organization 2024a</a>)</span>, and some clarifying notes in parentheses that I myself have added:</p>
 <table class="table" style="color: black; width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:icd10">Table 8.1: </span>The data diagnosis code and ICD-10 description
+<span id="tab:icd10">Table 8.2: </span>The data diagnosis code and ICD-10 description
 </caption>
 <thead>
 <tr>
@@ -598,40 +691,47 @@ Obsessive-compulsive disorder
 </tbody>
 </table>
 <p>To explore the prevalence of the various diagnoses as well as their demographic characteristics, we create another interactive figure. For this figure, I decided to plot the following variables: <code>diagnosis</code>, <code>age_category</code>, <code>sex</code>, and <code>reason_for_termination</code>. These seemed like the most interesting demographic variables. The <code>region</code> variable could also be an interesting choice, however, initial exploration did not reveal any interesting trends so I decided to omit it.</p>
-<p>From now on, I will describe interesting features of the data in text rather than through individual figures. You are encouraged to verify these findings by interacting with the figure, using the various techniques that have been discussed so far.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="applied-example.html#cb13-1" tabindex="-1"></a><span class="co"># Create ordering for barplots based on frequency</span></span>
-<span id="cb13-2"><a href="applied-example.html#cb13-2" tabindex="-1"></a>order_df <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(cases <span class="sc">~</span> diagnosis, sum, <span class="at">data =</span> df)</span>
-<span id="cb13-3"><a href="applied-example.html#cb13-3" tabindex="-1"></a>order_df <span class="ot">&lt;-</span> order_df[<span class="fu">order</span>(order_df<span class="sc">$</span>cases), ]</span>
-<span id="cb13-4"><a href="applied-example.html#cb13-4" tabindex="-1"></a></span>
-<span id="cb13-5"><a href="applied-example.html#cb13-5" tabindex="-1"></a>order_df2 <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(cases <span class="sc">~</span> reason_for_termination, sum, <span class="at">data =</span> df)</span>
-<span id="cb13-6"><a href="applied-example.html#cb13-6" tabindex="-1"></a>order_df2 <span class="ot">&lt;-</span> order_df2[<span class="fu">order</span>(order_df2<span class="sc">$</span>cases), ]</span>
-<span id="cb13-7"><a href="applied-example.html#cb13-7" tabindex="-1"></a></span>
-<span id="cb13-8"><a href="applied-example.html#cb13-8" tabindex="-1"></a>df <span class="sc">|&gt;</span></span>
-<span id="cb13-9"><a href="applied-example.html#cb13-9" tabindex="-1"></a>  <span class="fu">create_schema</span>() <span class="sc">|&gt;</span></span>
-<span id="cb13-10"><a href="applied-example.html#cb13-10" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;diagnosis&quot;</span>, <span class="st">&quot;cases&quot;</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb13-11"><a href="applied-example.html#cb13-11" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;age_category&quot;</span>, <span class="st">&quot;cases&quot;</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb13-12"><a href="applied-example.html#cb13-12" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;sex&quot;</span>, <span class="st">&quot;cases&quot;</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb13-13"><a href="applied-example.html#cb13-13" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;reason_for_termination&quot;</span>, <span class="st">&quot;cases&quot;</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb13-14"><a href="applied-example.html#cb13-14" tabindex="-1"></a>  <span class="co"># Sort the bars by prevalence (can also do interactively by pressing `O` key)</span></span>
-<span id="cb13-15"><a href="applied-example.html#cb13-15" tabindex="-1"></a>  <span class="fu">set_scale</span>(<span class="st">&quot;barplot1&quot;</span>, <span class="st">&quot;x&quot;</span>, <span class="at">breaks =</span> order_df<span class="sc">$</span>diagnosis) <span class="sc">|&gt;</span> </span>
-<span id="cb13-16"><a href="applied-example.html#cb13-16" tabindex="-1"></a>  <span class="fu">set_scale</span>(<span class="st">&quot;barplot4&quot;</span>, <span class="st">&quot;x&quot;</span>, <span class="at">breaks =</span> order_df2<span class="sc">$</span>reason_for_termination) <span class="sc">|&gt;</span> </span>
-<span id="cb13-17"><a href="applied-example.html#cb13-17" tabindex="-1"></a>  <span class="fu">render</span>()</span></code></pre></div>
-<p>From the barplot in the top left panel of the Figure <a href="#fig:prevalence"><strong>??</strong></a>, we can immediately see that the majority patient load was taken up by the top five most common disorders. There were over 40,000 cases with each of these disorders, and together they made up over 75% of all cases (319,557 out of 414,242).</p>
+<p>From now on, I will describe interesting features of the data in text rather than through individual figures. You are encouraged to verify these findings by interacting with the figures and using the techniques discussed so far.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="applied-example.html#cb15-1" tabindex="-1"></a><span class="co"># Create ordering for barplots based on frequency</span></span>
+<span id="cb15-2"><a href="applied-example.html#cb15-2" tabindex="-1"></a>order_df <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(cases <span class="sc">~</span> diagnosis, sum, <span class="at">data =</span> df)</span>
+<span id="cb15-3"><a href="applied-example.html#cb15-3" tabindex="-1"></a>order_df <span class="ot">&lt;-</span> order_df[<span class="fu">order</span>(order_df<span class="sc">$</span>cases), ]</span>
+<span id="cb15-4"><a href="applied-example.html#cb15-4" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="applied-example.html#cb15-5" tabindex="-1"></a>order_df2 <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(cases <span class="sc">~</span> reason_for_termination, sum, <span class="at">data =</span> df)</span>
+<span id="cb15-6"><a href="applied-example.html#cb15-6" tabindex="-1"></a>order_df2 <span class="ot">&lt;-</span> order_df2[<span class="fu">order</span>(order_df2<span class="sc">$</span>cases), ]</span>
+<span id="cb15-7"><a href="applied-example.html#cb15-7" tabindex="-1"></a></span>
+<span id="cb15-8"><a href="applied-example.html#cb15-8" tabindex="-1"></a>df <span class="sc">|&gt;</span></span>
+<span id="cb15-9"><a href="applied-example.html#cb15-9" tabindex="-1"></a>  <span class="fu">create_schema</span>() <span class="sc">|&gt;</span></span>
+<span id="cb15-10"><a href="applied-example.html#cb15-10" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;diagnosis&quot;</span>, <span class="st">&quot;cases&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb15-11"><a href="applied-example.html#cb15-11" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;age_category&quot;</span>, <span class="st">&quot;cases&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb15-12"><a href="applied-example.html#cb15-12" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;sex&quot;</span>, <span class="st">&quot;cases&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb15-13"><a href="applied-example.html#cb15-13" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;reason_for_termination&quot;</span>, <span class="st">&quot;cases&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb15-14"><a href="applied-example.html#cb15-14" tabindex="-1"></a>  <span class="co"># Sort the bars by prevalence (can also do interactively by pressing `O` key)</span></span>
+<span id="cb15-15"><a href="applied-example.html#cb15-15" tabindex="-1"></a>  <span class="fu">set_scale</span>(<span class="st">&quot;barplot1&quot;</span>, <span class="st">&quot;x&quot;</span>, <span class="at">breaks =</span> order_df<span class="sc">$</span>diagnosis) <span class="sc">|&gt;</span> </span>
+<span id="cb15-16"><a href="applied-example.html#cb15-16" tabindex="-1"></a>  <span class="fu">set_scale</span>(<span class="st">&quot;barplot4&quot;</span>, <span class="st">&quot;x&quot;</span>, <span class="at">breaks =</span> order_df2<span class="sc">$</span>reason_for_termination) <span class="sc">|&gt;</span> </span>
+<span id="cb15-17"><a href="applied-example.html#cb15-17" tabindex="-1"></a>  <span class="fu">render</span>()</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:example-cases-diagnosis"></span>
+<iframe src="./figures/example-cases-diagnosis.html" width="672" height="400px" data-external="1" style="border: none;">
+</iframe>
+<p class="caption">
+Figure 8.4: Majority of patient load was taken up by the top five most common disorders: alcohol-use disorders, schizophrenia, Alzheimer’s disease, neurotic and stress-related disorders, and psychoactive substance disorders.
+</p>
+</div>
+<p>The barplot in the top left panel of the Figure <a href="applied-example.html#fig:example-cases-diagnosis">8.4</a> shows that the five most common disorders accounted for the majority of patient cases. Each of these disorders affected over 40,000 patients between 2010 and 2022, representing over 75% of all cases (319,557 out of 414,242).</p>
 <blockquote>
-<p>Press the <code>Q</code> key and hover over the bars in the top left panel of Figure <a href="#fig:prevalence"><strong>??</strong></a> to see what disorder each represents.</p>
+<p>Press the <code>Q</code> key and hover over the bars in the top left panel of Figure <a href="applied-example.html#fig:example-cases-diagnosis">8.4</a> to see what diagnosis each represents.</p>
 </blockquote>
 <p>In order of prevalence, the top five disorders were, were: alcohol-use disorders, schizophrenia, Alzheimer’s disease, neurotic and stress-related disorders, and disorders caused by psychoactive substances (excluding alcohol). Overall, the high prevalence of these disorders is fairly, given that their high socio-economic impact is well-known to psychiatrists. Nevertheless, it may be illustrative to take a closer look at this data and examine demographic trends.</p>
-<p>First, alcohol use disorders were the most common diagnosis. This is not surprising, since, globally, alcohol use disorders rank among the most common disorders and are associated with high mortality due to chronic health conditions and injury <span class="citation">(<a href="#ref-carvalho2019">Carvalho et al. 2019</a>)</span>. In the data set, this diagnosis was about twice as common in men and showed a fairly symmetric, normal-shaped age distribution, occurring the most frequently in 40-49 and 50-59 year-olds (this can be seen by selecting the corresponding bar in the top-left panel of figure Figure <a href="#fig:prevalence"><strong>??</strong></a> and normalizing the age-category barplot).</p>
+<p>First, alcohol use disorders were the most common diagnosis. This is not surprising, since, globally, alcohol use disorders rank among the most common disorders and are associated with high mortality due to chronic health conditions and injury <span class="citation">(<a href="#ref-carvalho2019">Carvalho et al. 2019</a>)</span>. In the data set, this diagnosis was about twice as common in men and showed a fairly symmetric, normal-shaped age distribution, occurring the most frequently in 40-49 and 50-59 year-olds (this can be seen by selecting the corresponding bar in the top-left panel of figure Figure <a href="applied-example.html#fig:example-cases-diagnosis">8.4</a> and normalizing the age-category barplot).</p>
 <p>The second most prevalent category of diagnoses were schizophrenia, schizotypal, and delusional disorders. While the individual lifetime prevalence of schizophrenia is not as high as some other disorders on this list, the reason for its high representation in the data set is likely its chronic and serious nature. Among those with mental illness, people with schizophrenia have one of the lowest life expectancies <span class="citation">(see e.g. <a href="#ref-chang2011">Chang et al. 2011</a>)</span>, and often require multi-year or even life-long hospitalization <span class="citation">(<a href="#ref-messias2007">Messias, Chen, and Eaton 2007</a>)</span>. This debilitating nature of schizophrenia has prompted some experts to describe it as “arguably one of the most severe health conditions affecting mankind” <span class="citation">(see e.g. <a href="#ref-messias2007">Messias, Chen, and Eaton 2007</a>; <a href="#ref-tandon2024">Tandon et al. 2024</a>)</span>. In the data set at hand, schizophrenic disorders had a fairly balanced sex ratio and a fairly flat age distribution.</p>
 <p>Third most prevalent disorder categories was Alzheimer’s disease. The high prevalence of this disorder is unfortunately also to be expected, as, in developed countries, Alzheimer’s disease tends the leading cause of long-term psychiatric care in old age <span class="citation">(see e.g. <a href="#ref-cao2020">Cao et al. 2020</a>; <a href="#ref-langa2017">Langa et al. 2017</a>)</span>. It also tends to be more prevalent in women. These patterns could be seen fairly well in the data set: the age distribution of Alzheimer’s disease was strongly skewed, occurring much more frequently in older patients (and, in fact, making up the majority of &gt;70 year-old patients), and the diagnosis was about ~40% more prevalent in women than in men. We can also see that Alzheimer’s patient made up the vast majority of patients who had died in care, further reinforcing its status as a disease of old age.</p>
 <p>The fourth most prevalent category of disorders were neurotic, stress-related, and somatoform disorders (excluding the obsessive-compulsive disorder, F42) which was classified as its own category in the data set. This category includes disorders such as specific phobias, generalized anxiety disorder, and the post-traumatic stress disorder <span class="citation">(<a href="#ref-icd2024a">World Health Organization 2024a</a>)</span>. These disorders are known to be relatively common, occur roughly twice as often in women as in men, and have a generally even age distribution, with decline in prevalence in older age <span class="citation">(<a href="#ref-bandelow2015">Bandelow and Michaelis 2015</a>)</span>. This pattern could be seen well in the data set, with women making up the majority of the cases and the age distribution being fairly uniform, until a drop-off starting at about 60-69 years of age. In fact, these disorders were the most common diagnosis for women under 40:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="applied-example.html#cb14-1" tabindex="-1"></a>df<span class="sc">$</span>age_category_n <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">factor</span>(df<span class="sc">$</span>age_category, <span class="at">ordered =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb14-2"><a href="applied-example.html#cb14-2" tabindex="-1"></a>under_40 <span class="ot">&lt;-</span> <span class="fu">unique</span>(df<span class="sc">$</span>age_category_n[df<span class="sc">$</span>age_category <span class="sc">==</span> <span class="st">&quot;30–39&quot;</span>])</span>
-<span id="cb14-3"><a href="applied-example.html#cb14-3" tabindex="-1"></a></span>
-<span id="cb14-4"><a href="applied-example.html#cb14-4" tabindex="-1"></a><span class="fu">subset</span>(df, sex <span class="sc">==</span> <span class="st">&quot;female&quot;</span> <span class="sc">&amp;</span> age_category_n <span class="sc">&lt;=</span> under_40) <span class="sc">|&gt;</span></span>
-<span id="cb14-5"><a href="applied-example.html#cb14-5" tabindex="-1"></a>  (\(x) <span class="fu">aggregate</span>(cases <span class="sc">~</span> diagnosis, sum, <span class="at">data =</span> x))() <span class="sc">|&gt;</span></span>
-<span id="cb14-6"><a href="applied-example.html#cb14-6" tabindex="-1"></a>  (\(x) x[<span class="fu">order</span>(<span class="sc">-</span>x<span class="sc">$</span>cases), ])() <span class="sc">|&gt;</span></span>
-<span id="cb14-7"><a href="applied-example.html#cb14-7" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">5</span>) <span class="sc">|&gt;</span> knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">align =</span> <span class="st">&quot;ll&quot;</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="applied-example.html#cb16-1" tabindex="-1"></a>df<span class="sc">$</span>age_category_n <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">factor</span>(df<span class="sc">$</span>age_category, <span class="at">ordered =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb16-2"><a href="applied-example.html#cb16-2" tabindex="-1"></a>under_40 <span class="ot">&lt;-</span> <span class="fu">unique</span>(df<span class="sc">$</span>age_category_n[df<span class="sc">$</span>age_category <span class="sc">==</span> <span class="st">&quot;30–39&quot;</span>])</span>
+<span id="cb16-3"><a href="applied-example.html#cb16-3" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="applied-example.html#cb16-4" tabindex="-1"></a><span class="fu">subset</span>(df, sex <span class="sc">==</span> <span class="st">&quot;female&quot;</span> <span class="sc">&amp;</span> age_category_n <span class="sc">&lt;=</span> under_40) <span class="sc">|&gt;</span></span>
+<span id="cb16-5"><a href="applied-example.html#cb16-5" tabindex="-1"></a>  (\(x) <span class="fu">aggregate</span>(cases <span class="sc">~</span> diagnosis, sum, <span class="at">data =</span> x))() <span class="sc">|&gt;</span></span>
+<span id="cb16-6"><a href="applied-example.html#cb16-6" tabindex="-1"></a>  (\(x) x[<span class="fu">order</span>(<span class="sc">-</span>x<span class="sc">$</span>cases), ])() <span class="sc">|&gt;</span></span>
+<span id="cb16-7"><a href="applied-example.html#cb16-7" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">5</span>) <span class="sc">|&gt;</span> knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">align =</span> <span class="st">&quot;ll&quot;</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -669,20 +769,22 @@ Obsessive-compulsive disorder
 <div id="prevalence-of-diagnoses-over-time" class="section level4 hasAnchor" number="8.0.2.5">
 <h4><span class="header-section-number">8.0.2.5</span> Prevalence of diagnoses over time<a href="applied-example.html#prevalence-of-diagnoses-over-time" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>We can also scrutinize the prevalence of different mental disorders over time. Again, we need to distinguish between the number of cases versus the number of days patients spent in care. We can use the following figure:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="applied-example.html#cb15-1" tabindex="-1"></a>df <span class="sc">|&gt;</span></span>
-<span id="cb15-2"><a href="applied-example.html#cb15-2" tabindex="-1"></a>  <span class="fu">create_schema</span>() <span class="sc">|&gt;</span></span>
-<span id="cb15-3"><a href="applied-example.html#cb15-3" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;diagnosis&quot;</span>, <span class="st">&quot;cases&quot;</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb15-4"><a href="applied-example.html#cb15-4" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;year&quot;</span>, <span class="st">&quot;cases&quot;</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb15-5"><a href="applied-example.html#cb15-5" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;year&quot;</span>, <span class="st">&quot;days&quot;</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb15-6"><a href="applied-example.html#cb15-6" tabindex="-1"></a>  <span class="fu">set_layout</span>(<span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>), <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb15-7"><a href="applied-example.html#cb15-7" tabindex="-1"></a>  <span class="fu">set_scale</span>(<span class="st">&quot;barplot1&quot;</span>, <span class="st">&quot;x&quot;</span>, <span class="at">breaks =</span> order_df<span class="sc">$</span>diagnosis) <span class="sc">|&gt;</span></span>
-<span id="cb15-8"><a href="applied-example.html#cb15-8" tabindex="-1"></a>  <span class="fu">render</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="applied-example.html#cb17-1" tabindex="-1"></a>df <span class="sc">|&gt;</span></span>
+<span id="cb17-2"><a href="applied-example.html#cb17-2" tabindex="-1"></a>  <span class="fu">create_schema</span>() <span class="sc">|&gt;</span></span>
+<span id="cb17-3"><a href="applied-example.html#cb17-3" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;diagnosis&quot;</span>, <span class="st">&quot;cases&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb17-4"><a href="applied-example.html#cb17-4" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;year&quot;</span>, <span class="st">&quot;cases&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb17-5"><a href="applied-example.html#cb17-5" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;year&quot;</span>, <span class="st">&quot;days&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb17-6"><a href="applied-example.html#cb17-6" tabindex="-1"></a>  <span class="fu">set_layout</span>(<span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>), <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb17-7"><a href="applied-example.html#cb17-7" tabindex="-1"></a>  <span class="fu">set_scale</span>(<span class="st">&quot;barplot1&quot;</span>, <span class="st">&quot;x&quot;</span>, <span class="at">breaks =</span> order_df<span class="sc">$</span>diagnosis) <span class="sc">|&gt;</span></span>
+<span id="cb17-8"><a href="applied-example.html#cb17-8" tabindex="-1"></a>  <span class="fu">render</span>()</span></code></pre></div>
+<iframe src="./figures/example-cases-diagnosis-time.html" width="672" height="400px" data-external="1" style="border: none;">
+</iframe>
 <p>Overall, over time, the proportion of both cases and days in treatment the various diagnoses made up seemed to remain fairly constant, with perhaps a slight general decreasing trend in the number of cases. Of the top five diagnoses, the one which seemed to buck this trend was schizophrenia (F20-F29), which had a fairly marked increasing trend in the proportion of days. Furthermore, the number of cases related to psychoactive substance use disorders (excluding alcohol) seemed to also be rising slightly.</p>
-<p>Of the rarer disorders, the one in which there seemed to be a significant relative rise in both the proportion of cases and days in treatment were mental and behavioral disorders associated with physiological disturbances and physical factors (F50-F59). This category includes disorders such as anorexia, bulimia, sleep disorders, and sexual dysfunction disorders. Given that this category was more prevalent in women and young people (as can be seen by interrogating Figure <a href="#fig:prevalence"><strong>??</strong></a>), the likely explanation for this trend is rise in the number of cases of anorexia and bulimia. There also seemed to be slight of a decrease in the number of days spent in treatment by patients with stress-related disorders (F40-F49 without F42) and depression disorders (F32 and F33).</p>
+<p>Of the rarer disorders, the one in which there seemed to be a significant relative rise in both the proportion of cases and days in treatment were mental and behavioral disorders associated with physiological disturbances and physical factors (F50-F59). This category includes disorders such as anorexia, bulimia, sleep disorders, and sexual dysfunction disorders. Given that this category was more prevalent in women and young people (as can be seen by interrogating Figure <a href="applied-example.html#fig:example-cases-diagnosis">8.4</a>), the likely explanation for this trend is rise in the number of cases of anorexia and bulimia. There also seemed to be slight of a decrease in the number of days spent in treatment by patients with stress-related disorders (F40-F49 without F42) and depression disorders (F32 and F33).</p>
 <p>We can quickly verify these findings by fitting simple linear regressions for each diagnosis. First, we can model the number of cases by year:</p>
 <table class="table" style="color: black; margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:cases-by-year">Table 8.2: </span>Simple linear regressions of the number of cases by year for each diagnosis
+<span id="tab:cases-by-year">Table 8.3: </span>Simple linear regressions of the number of cases by year for each diagnosis
 </caption>
 <thead>
 <tr>
@@ -948,7 +1050,7 @@ f42
 <p>We can do the same for the number of days by year:</p>
 <table class="table" style="color: black; margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:days-by-year">Table 8.3: </span>Simple linear regressions of the number of days by year for each diagnosis
+<span id="tab:days-by-year">Table 8.4: </span>Simple linear regressions of the number of days by year for each diagnosis
 </caption>
 <thead>
 <tr>
@@ -1215,16 +1317,23 @@ f42
 <div id="characteristics-of-patient-cohorts-over-time" class="section level4 hasAnchor" number="8.0.2.6">
 <h4><span class="header-section-number">8.0.2.6</span> Characteristics of patient cohorts over time<a href="applied-example.html#characteristics-of-patient-cohorts-over-time" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>One final things we are going to investigate are characteristics of patient cohorts. Specifically, given that each row of data represents one patient cohort within a given year, of a given sex, diagnosis, and so on, we can investigate whether there were any interesting patterns within the patient cohorts over time. One way we can do this is via the following figure:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="applied-example.html#cb16-1" tabindex="-1"></a>df <span class="sc">|&gt;</span></span>
-<span id="cb16-2"><a href="applied-example.html#cb16-2" tabindex="-1"></a>  <span class="fu">create_schema</span>() <span class="sc">|&gt;</span></span>
-<span id="cb16-3"><a href="applied-example.html#cb16-3" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;diagnosis&quot;</span>, <span class="st">&quot;cases&quot;</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb16-4"><a href="applied-example.html#cb16-4" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;year&quot;</span>, <span class="st">&quot;cases&quot;</span>), <span class="fu">list</span>(<span class="at">reducer =</span> <span class="st">&quot;max&quot;</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb16-5"><a href="applied-example.html#cb16-5" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;year&quot;</span>, <span class="st">&quot;days&quot;</span>), <span class="fu">list</span>(<span class="at">reducer =</span> <span class="st">&quot;max&quot;</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb16-6"><a href="applied-example.html#cb16-6" tabindex="-1"></a>  <span class="fu">set_scale</span>(<span class="st">&quot;barplot1&quot;</span>, <span class="st">&quot;x&quot;</span>, <span class="at">breaks =</span> order_df<span class="sc">$</span>diagnosis) <span class="sc">|&gt;</span></span>
-<span id="cb16-7"><a href="applied-example.html#cb16-7" tabindex="-1"></a>  <span class="fu">set_layout</span>(<span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>), <span class="at">nrow =</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb16-8"><a href="applied-example.html#cb16-8" tabindex="-1"></a>  <span class="fu">render</span>()</span></code></pre></div>
-<p>In Figure <a href="#fig:cohort"><strong>??</strong></a>, I show plots of diagnoses, as well as a summary of days and cases over time. However, note that, whereas all barplots of days and cases over time shown before had sum (of cases and days) as the y-axis summary statistic, the two barplots in the lower half of figure Figure <a href="#fig:cohort"><strong>??</strong></a> show maximum, not sum. These plots effectively tell us the size and the number of days in treatment for the largest/longest hospitalized patient cohort within a given year. Based on theory in Section <a href="problems.html#problems">4</a>, we know that these plots will behave well under linked selection (with one selection group).</p>
-<p>By investigating the diagnoses, we can discover some interesting trends in the patient cohorts. Specifically, by comparing the schizophrenia (F20-F29) and the Alzheimer’s disease diagnoses (F0 and G30), we can see that they show a complementary trend in the maximum number of days hospitalized. Specifically, whereas Alzheimer’s disease generally accounted for the longest-hospitalized patient cohorts up until 2016, schizophrenia accounted for the longest-hospitalized patient cohorts for five of the six years following 2016 (excluding 2020, where Alzheimer’s disease narrowly beat it out). This occured despite schizophrenia patient cohorts shrinking in size over time and the fact that Alzheimer’s disease was more restricted in terms of age-range, so we would naturally expect larger cohorts (due to “lumping”). On that note, developmental disorders (F80-F99), despite the making up only a small proportion of the total number cases, made up many of the largest patients cohorts year over year. This is understandable given that these patients came almost exclusively from the youngest age group and were otherwise relatively homogeneous.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="applied-example.html#cb18-1" tabindex="-1"></a>df <span class="sc">|&gt;</span></span>
+<span id="cb18-2"><a href="applied-example.html#cb18-2" tabindex="-1"></a>  <span class="fu">create_schema</span>() <span class="sc">|&gt;</span></span>
+<span id="cb18-3"><a href="applied-example.html#cb18-3" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;diagnosis&quot;</span>, <span class="st">&quot;cases&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb18-4"><a href="applied-example.html#cb18-4" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;year&quot;</span>, <span class="st">&quot;cases&quot;</span>), <span class="fu">list</span>(<span class="at">reducer =</span> <span class="st">&quot;max&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb18-5"><a href="applied-example.html#cb18-5" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;year&quot;</span>, <span class="st">&quot;days&quot;</span>), <span class="fu">list</span>(<span class="at">reducer =</span> <span class="st">&quot;max&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb18-6"><a href="applied-example.html#cb18-6" tabindex="-1"></a>  <span class="fu">set_scale</span>(<span class="st">&quot;barplot1&quot;</span>, <span class="st">&quot;x&quot;</span>, <span class="at">breaks =</span> order_df<span class="sc">$</span>diagnosis) <span class="sc">|&gt;</span></span>
+<span id="cb18-7"><a href="applied-example.html#cb18-7" tabindex="-1"></a>  <span class="fu">set_layout</span>(<span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>), <span class="at">nrow =</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb18-8"><a href="applied-example.html#cb18-8" tabindex="-1"></a>  <span class="fu">render</span>()</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:example-cases-diagnosis-max"></span>
+<iframe src="./figures/example-cases-diagnosis-max.html" width="672" height="400px" data-external="1" style="border: none;">
+</iframe>
+<p class="caption">
+Figure 8.5: While Alzheimer’s patients accounted for the longest hospitalized cohorts prior to 2016, following 2016, the longest hospitalized cohorts tended to be schizophrenia patients.
+</p>
+</div>
+<p>In Figure <a href="applied-example.html#fig:example-cases-diagnosis-max">8.5</a>, I show plots of diagnoses, as well as a summary of days and cases over time. However, note that, whereas all barplots of days and cases over time shown before had sum (of cases and days) as the y-axis summary statistic, the two barplots in the lower half of figure Figure <a href="applied-example.html#fig:example-cases-diagnosis-max">8.5</a> show maximum, not sum. These plots effectively tell us the size and the number of days in treatment for the largest/longest hospitalized patient cohort within a given year. Based on theory in Section <a href="problems.html#problems">4</a>, we know that these plots will behave well under linked selection (with one selection group).</p>
+<p>By investigating the diagnoses, we can discover some interesting trends in the patient cohorts. Specifically, by comparing the schizophrenia (F20-F29) and the Alzheimer’s disease diagnoses (F0 and G30), we can see that they show a complementary trend in the maximum number of days hospitalized. Specifically, whereas Alzheimer’s disease generally accounted for the longest-hospitalized patient cohorts up until 2016, schizophrenia accounted for the longest-hospitalized patient cohorts for five of the six years following 2016 (excluding 2020, where Alzheimer’s disease narrowly beat it out). This occurred despite schizophrenia patient cohorts shrinking in size over time and the fact that Alzheimer’s disease was more restricted in terms of age-range, so we would naturally expect larger cohorts (due to “lumping”). On that note, developmental disorders (F80-F99), despite the making up only a small proportion of the total number cases, made up many of the largest patients cohorts year over year. This is understandable given that these patients came almost exclusively from the youngest age group and were otherwise relatively homogeneous.</p>
 </div>
 </div>
 <div id="summary" class="section level2 hasAnchor" number="8.1">

@@ -3,6 +3,9 @@ output: html_document
 editor_options: 
   chunk_output_type: console
 ---
+
+\newcommand\thenb{⨾}
+
 # Mathematical theory
 
 This chapter provides an overview of essential concepts from category theory and abstract algebra, as well as more general mathematics. Starting with some foundational topics, such as functions, relations, and orders, it slowly builds up to more advanced concepts such as categories, monoids, and functors. Readers familiar these concepts may feel free to skip ahead. However, even the fundamental concepts will be used throughout the thesis, so a refresher might be beneficial. 
@@ -133,16 +136,16 @@ There are several different ways to denote function composition. One is to write
 
 1. $h = g \circ f$ (read: "apply $g$ after $f$")
 2. $h = gf$ (same as above)
-3. $h = f \then g$ (read "apply $f$ then $g$")
+3. $h = f \thenb g$ (read "apply $f$ then $g$")
 :::
 
-Throughout this thesis, I will use the bracket notation ($h(x) = g(f(x))$) when explicitly referring to the variable, and the postfix/fat semicolon notation ($h = f \then g$) otherwise. 
+Throughout this thesis, I will use the bracket notation ($h(x) = g(f(x))$) when explicitly referring to the variable, and the postfix/fat semicolon notation ($h = f \thenb g$) otherwise. 
 
 Surjectivity, injectivity, and bijectivity propagate through composition: composition of two surjective functions is surjective, composition of two injective functions is injective, and composition of two bijective functions is bijective. However, the converse does not necessarily hold: a bijective function does not have to be composed of two bijections:
 
 ```{r bijection}
 #| echo: false
-#| fig-cap: "A bijection does not necessarily have to be composed of bijections. The function $f$ is not surjective, and the function $g$ is not injective, nevertheless, their composition $f \\then g$ yields a bijective function."
+#| fig-cap: "A bijection does not necessarily have to be composed of bijections. The function $f$ is not surjective, and the function $g$ is not injective, nevertheless, their composition $f \\thenb g$ yields a bijective function."
 
 knitr::include_graphics("./figures/bijection-composition.png")
 ```
@@ -407,20 +410,20 @@ To give an example of a monoid homomorphism, suppose that our first monoid is st
 $$10 = f(\text{"helloworld"}) = f(\text{"hello"} \text{++} \text{"world"}) = f(\text{"hello"}) + f(\text{"world"}) = 5 + 5$$
 $$e_N = 0 = f("") = f(e_M)$$
 
-Like monotone maps, monoid homomorphisms also compose. Proof: suppose $f: X \to Y$ and $g: Y \to Z$ are monoid homomorphisms. Then the composite function $f \then g$ preserves the product:
+Like monotone maps, monoid homomorphisms also compose. Proof: suppose $f: X \to Y$ and $g: Y \to Z$ are monoid homomorphisms. Then the composite function $f \thenb g$ preserves the product:
 
 \begin{aligned}
 
-(f \then g)(x_1 \otimes x_2) & = g(f(x_1 \otimes_X x_2)) \\
+(f \thenb g)(x_1 \otimes x_2) & = g(f(x_1 \otimes_X x_2)) \\
 & = g(f(x_1) \otimes_Y f(x_2)) \\
 & = g(f(x_1)) \otimes_Z g(f(x_2)) \\
-& = (f \then g)(x_1) \otimes_Z (f \then g)(x_2)
+& = (f \thenb g)(x_1) \otimes_Z (f \thenb g)(x_2)
 
 \end{aligned}
 
 As well as the identity element:
 
-$$(f \then g)(e_X) = g(f(e_X)) = g(e_Y) = e_Z$$
+$$(f \thenb g)(e_X) = g(f(e_X)) = g(e_Y) = e_Z$$
 
 And again, as with monotone maps, if we have two monoid homomorphisms which form a bijection, we can speak of a monoid isomorphism. A famous example is the bijection between multiplication of real numbers $(\mathbb{R}, 1, \cdot)$ and the summation of real numbers $(\mathbb{R}, 0, +)$, where the monoid homomorphisms are $f(x) = \log(x)$ and $g(y) = e^y$.
 
@@ -476,12 +479,12 @@ To define a category $\mathcal{C}$, we specify:
 - A collection of objects $\text{Ob}(\mathcal{C})$
 - For every two objects $c, d \in \text{Ob}(\mathcal{C})$, we define a set of morphisms (arrows) $\mathcal{C}(c, d)$ 
 - For any object $c \in \text{Ob}(\mathcal{C})$, we define a special morphism $\text{id}_c \in \mathcal{C}(c, c)$, called the identity morphism
-- For every three objects $c_1, c_2, c_3 \in \text{Ob}(\mathcal{C})$ and two morphisms $f \in \mathcal{C}(c_1, c_2)$ and $g \in \mathcal{C}(c_2, c_3)$, we define a composite morphism $f \then g \in \mathcal{C}(c_1, c_3)$  
+- For every three objects $c_1, c_2, c_3 \in \text{Ob}(\mathcal{C})$ and two morphisms $f \in \mathcal{C}(c_1, c_2)$ and $g \in \mathcal{C}(c_2, c_3)$, we define a composite morphism $f \thenb g \in \mathcal{C}(c_1, c_3)$  
 
 Such that the composition operation is:
 
-1. Unital: $\text{id}_{c_1} \then f = f$, and $f \then \text{id}_{c_2}=f$
-2. Associative: $(f \then g) \then h = f \then (g \then h) = f \then g \then h$
+1. Unital: $\text{id}_{c_1} \thenb f = f$, and $f \thenb \text{id}_{c_2}=f$
+2. Associative: $(f \thenb g) \thenb h = f \thenb (g \thenb h) = f \thenb g \thenb h$
 
 (for all $f \in \mathcal{C}(c_1, c2)$, $g \in \mathcal{C}(c_2, c3)$, and $f \in \mathcal{C}(c_3, c4)$, and $c_1, c_2, c_3, c_4 \in \text{Ob}(\mathcal{C})$)
 
@@ -496,7 +499,7 @@ To give a concrete example, here is a diagram of a simple category with two obje
 knitr::include_graphics("./figures/category-two.png")
 ```
 
-The properties of a category simply tells us that staying in one place before or after moving to a different place is that same as just moving, $\text{id}_1 \then f = f \then \text{id}_2 = f$, and that how we choose to "lump" the different parts of our journey together does not matter, $(\text{id}_1 \then f) \then \text{id}_2 = \text{id}_1 \then (f \then \text{id}_2)$.
+The properties of a category simply tells us that staying in one place before or after moving to a different place is that same as just moving, $\text{id}_1 \thenb f = f \thenb \text{id}_2 = f$, and that how we choose to "lump" the different parts of our journey together does not matter, $(\text{id}_1 \thenb f) \thenb \text{id}_2 = \text{id}_1 \thenb (f \thenb \text{id}_2)$.
 
 The power of categories is their flexibility. This lies in the definitions of "objects" and "morphisms", which are left vague on purpose. The result is that we can use categories to define a broad class of structures, even very simple, familiar one. For instance, we could define a category where the objects can be elements in a set, and the morphisms can serve as indicator of some kind of relationship. Then the category would encode a [relation](#relations). 
 
@@ -509,13 +512,13 @@ Before we go on to discuss specific examples of categories, there is one more im
 ::: {.definition name="Isomorphism"}
 Within a category, a morphism $f: x \to y$ is called an isomorphism if there exists another morphism $g: y \to x$ such that:
 
-- $f \then g = \text{id}_X$
-- $g \then f = \text{id}_Y$
+- $f \thenb g = \text{id}_X$
+- $g \thenb f = \text{id}_Y$
 
 $f$ and $g$ are then inverses to each other, such that $f = g^{-1}$ and $g = f^{-1}$, equivalently.
 :::
 
-Notice that the definition above is similar to that of a bijection, however, we are gently stripping away reference to specific elements, such as with $g(f(x)) = x$ and are instead only referring to the morphisms $f \then g = id_{x}$. While this difference might seem superficial, it is important, because it turns out we can encode more information in morphisms than we can in elements. Specifically, while before we talked about transformations which preserve the identity of elements *and* some additional structure, defining isomorphisms purely in terms of morphisms allows us to do away with this distinction.   
+Notice that the definition above is similar to that of a bijection, however, we are gently stripping away reference to specific elements, such as with $g(f(x)) = x$ and are instead only referring to the morphisms $f \thenb g = id_{x}$. While this difference might seem superficial, it is important, because it turns out we can encode more information in morphisms than we can in elements. Specifically, while before we talked about transformations which preserve the identity of elements *and* some additional structure, defining isomorphisms purely in terms of morphisms allows us to do away with this distinction.   
 
 Note that I have mentioned that the definition above is *one* way of defining isomorphisms, *within a category*. Without getting ahead of ourselves too much, it turns out there is another way of defining isomorphisms, *between categories*. This duality of definition of isomorphism does not cause problems, since, as was mentioned above, the definition of a category is broad enough such that the objects in a category can be other categories, and the morphisms can be transformations between categories. More on this later.   
 
@@ -532,7 +535,7 @@ Before, we defined a preorder as tuple consisting of a set and a relation, $(X, 
 It turns out, if we define preorder as a category with at most one morphism between each pair of objects, the properties of reflexivity and associativity automatically fall out of the definition. Specifically, let the elements $x \in X$ be the objects in the category $\mathcal{X}$ corresponding to the preorder $(X, \leq)$, and let the relation $\leq$ be represented by presence of a morphism between two objects (of which can there be only one). 
 
 1. Reflexity: $x \leq x$ for all $x \in X$. This is just the identity morphism $\text{id}_x$, which always exists and is the only morphism in $\mathcal{X}(x, x)$ for all $x \in X = \text{Ob}(\mathcal{X})$
-2. Associativity: $x \leq y$ and $y \leq z$ $\implies x \leq z$. This is the consequence of associativity of composition in categories: if there is a morphism $x \to y$ and $y \to z$, then we automatically get a morphism $f \then g: x \to z$.
+2. Associativity: $x \leq y$ and $y \leq z$ $\implies x \leq z$. This is the consequence of associativity of composition in categories: if there is a morphism $x \to y$ and $y \to z$, then we automatically get a morphism $f \thenb g: x \to z$.
 
 The example above of casting a preorder as a category was fairly intuitive, since the elements $x \in X$ mapped to objects and the relation $\leq$ mapped to morphisms. However, with other types of algebraic structures, the mapping can be a bit more intricate. For example:
 
@@ -547,7 +550,7 @@ Here, we need to break away from the intuitive way of thinking of objects as ele
 knitr::include_graphics("./figures/monoid-category.png")
 ```
 
-Here, the object in the category does not really represent anything, and all of the information is encoded in morphisms and their composition. Specifically, the identity morphism is equal to the monoidal unit zero, and the only other morphism, $1$, represents the number one. Composition of morphisms represents addition. Then, any natural number $n \in \mathbb{N}$ can be represented as a composition of arrows, $1 = 1$, $2 = 1 \then 1$, $3 = 1 \then 1 \then 1$, etc... [this is in fact similar to Peano axiomatization of natural numbers, see @stepanov2014]. 
+Here, the object in the category does not really represent anything, and all of the information is encoded in morphisms and their composition. Specifically, the identity morphism is equal to the monoidal unit zero, and the only other morphism, $1$, represents the number one. Composition of morphisms represents addition. Then, any natural number $n \in \mathbb{N}$ can be represented as a composition of arrows, $1 = 1$, $2 = 1 \thenb 1$, $3 = 1 \thenb 1 \thenb 1$, etc... [this is in fact similar to Peano axiomatization of natural numbers, see @stepanov2014]. 
 
 ::: {.proposition}
 A group is a category with one object where every morphism is an isomorphism
@@ -568,7 +571,7 @@ Given two categories $\mathcal{C}$ and $\mathcal{D}$, to specify a functor $F: \
 Such the action of the functor $F$ on the morphisms in $\mathcal{C}$:
 
 1. Preserves identities: for every object $c \in \text{Ob}(\mathcal{C})$, $F(\text{id}_c) = \text{id}_{F(c)}$
-2. Preserves composition: for every three objects $c_1, c_2, c_3 \in \text{Ob}(\mathcal{C})$ and two morphisms $f: c_1 \to c_2$ and $g: c_2 \to c_3$, $F(f \then g) = F(f) \then F(g)$
+2. Preserves composition: for every three objects $c_1, c_2, c_3 \in \text{Ob}(\mathcal{C})$ and two morphisms $f: c_1 \to c_2$ and $g: c_2 \to c_3$, $F(f \thenb g) = F(f) \thenb F(g)$
 
 :::
 
