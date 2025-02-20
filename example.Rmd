@@ -1,28 +1,28 @@
 ---
-output: html_document
-editor_options: 
+output:
+  pdf_document: default
+  html_document: default
+editor_options:
   chunk_output_type: console
 ---
 
 ```{r}
 #| echo: false
-# knitr::opts_chunk$set(eval = FALSE)
+knitr::opts_chunk$set(eval = FALSE)
 get_format <- function() {
   rmarkdown::all_output_formats(knitr::current_input())
 }
 
-# include_figure <- function(path) {
-#   if (get_format() == "bookdown::pdf_document2") {
-#     knitr::include_graphics(gsub(".html", ".png", path))
-#   } else {
-#     knitr::include_url(path)
-#   }
-# }
+include_figure <- function(path) {
+  # if (knitr::is_html_output()) knitr::include_url(path)
+  # else knitr::include_graphics(gsub(".html", ".png", path))
+}
 ```
 
 ```{r}
 #| echo: false
 #| eval: false
+# Script to generate screenshots
 examples <- list.files("./figures") |> 
   (\(x) { x[startsWith(x, "example") & endsWith(x, ".html")] })()
 
@@ -31,7 +31,6 @@ outs <- gsub(".html", ".png", urls)
 
 webshot2::webshot(urls, outs, delay = 30)
 ```
-
 
 # Applied example
 
@@ -52,7 +51,6 @@ The Long-term Care data set [@soukupova2023] contains longitudinal information a
 Here's the data set at a quick glance:
 
 ```{r}
-#| 
 df <- read.csv("./data/longterm_care.csv")
 dplyr::glimpse(df)
 ```
@@ -99,7 +97,7 @@ df |>
 #| echo: false
 #| out-extra: 'style="border: none;"'
 #| fig-cap: "Relationship between the number of cases in a patient subgroup and the total number of days spent in care."
-knitr::include_url("./figures/example-cases-days.html")
+include_figure("./figures/example-cases-days.html")
 ```
 
 
@@ -174,7 +172,6 @@ schema |> render()
 
 ```{r example-cases-days-time}
 #| echo: false
-#| eval: true
 #| out-extra: 'style="border: none;"'
 knitr::include_url("./figures/example-cases-days-time.html")
 ```
@@ -198,7 +195,6 @@ schema |>
 
 ```{r example-cases-days-time-zoom}
 #| echo: false
-#| eval: true
 #| out-extra: 'style="border: none;"'
 knitr::include_url("./figures/example-cases-days-time-zoom.html")
 ```
@@ -241,7 +237,6 @@ df |>
 
 ```{r example-cases-days-children}
 #| echo: false
-#| eval: true
 #| out-extra: 'style="border: none;"'
 knitr::include_url("./figures/example-cases-days-children.html")
 ```
@@ -272,7 +267,6 @@ df |>
 
 ```{r example-cases-days-children-marked}
 #| echo: false
-#| eval: true
 #| out-extra: 'style="border: none;"'
 #| fig-cap: "While the proportion of days spent in treatment by children and adolescent has declined, the proportion of cases that children and adolescents make up has increased."
 knitr::include_url("./figures/example-cases-days-children-marked.html")
@@ -296,7 +290,6 @@ df |>
 
 ```{r example-cases-days-age}
 #| echo: false
-#| eval: true
 #| out-extra: 'style="border: none;"'
 knitr::include_url("./figures/example-cases-days-age.html")
 ```
@@ -315,7 +308,6 @@ Table \@ref(tab:icd10) lists codes used in the data, in order of their prevalenc
 
 ```{r icd10}
 #| echo: false
-#| eval: true
 icd10 <- read.csv("./data/longterm_care_icd10.csv", header = FALSE)
 
 kableExtra::kbl(icd10,
@@ -351,7 +343,6 @@ df |>
 
 ```{r example-cases-diagnosis}
 #| echo: false
-#| eval: true
 #| out-extra: 'style="border: none;"'
 #| fig-cap: "Majority of patient load was taken up by the top five most common disorders: alcohol-use disorders, schizophrenia, Alzheimer's disease, neurotic and stress-related disorders, and psychoactive substance disorders."
 knitr::include_url("./figures/example-cases-diagnosis.html")
@@ -372,7 +363,6 @@ Third most prevalent disorder categories was Alzheimer's disease. The high preva
 The fourth most prevalent category of disorders were neurotic, stress-related, and somatoform disorders (excluding the obsessive-compulsive disorder, F42) which was classified as its own category in the data set. This category includes disorders such as specific phobias, generalized anxiety disorder, and the post-traumatic stress disorder [@icd2024a]. These disorders are known to be relatively common, occur roughly twice as often in women as in men, and have a generally even age distribution, with decline in prevalence in older age [@bandelow2015]. This pattern could be seen well in the data set, with women making up the majority of the cases and the age distribution being fairly uniform, until a drop-off starting at about 60-69 years of age. In fact, these disorders were the most common diagnosis for women under 40:
 
 ```{r}
-#| eval: true
 df$age_category_n <- as.numeric(factor(df$age_category, ordered = TRUE))
 under_40 <- unique(df$age_category_n[df$age_category == "30–39"])
 
@@ -407,7 +397,6 @@ df |>
 
 ```{r example-cases-diagnosis-time}
 #| echo: false
-#| eval: true
 #| out-extra: 'style="border: none;"'
 knitr::include_url("./figures/example-cases-diagnosis-time.html")
 ```
@@ -419,7 +408,6 @@ Of the rarer disorders, the one in which there seemed to be a significant relati
 We can quickly verify these findings by fitting simple linear regressions for each diagnosis. First, we can model the number of cases by year:
 
 ```{r cases-by-year}
-#| eval: true
 #| echo: false
 
 library(kableExtra)
@@ -454,7 +442,6 @@ As we can see in Table \@ref(tab:prevalence-over-time), for most diagnoses, ther
 We can do the same for the number of days by year:
 
 ```{r days-by-year}
-#| eval: true
 #| echo: false
 
 library(kableExtra)
@@ -504,7 +491,6 @@ df |>
 
 ```{r example-cases-diagnosis-max}
 #| echo: false
-#| eval: true
 #| out-extra: 'style="border: none;"'
 #| fig-cap: "While Alzheimer's patients accounted for the longest hospitalized cohorts prior to 2016, following 2016, the longest hospitalized cohorts tended to be schizophrenia patients."
 knitr::include_url("./figures/example-cases-diagnosis-max.html")
