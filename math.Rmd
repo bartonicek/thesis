@@ -314,30 +314,24 @@ Proof: suppose $e_1$ and $e_2$ are elements in $M$ that have the unital property
 
 One common example of a monoid is summation on natural numbers (including zero), $(\mathbb{N}, 0, +)$:
 
-\begin{aligned}
-
+\begin{align}
 1 + 0 = 0 + 1 = 1 & \qquad \text{(unitality)} \\
 1 + (2 + 3) = (1 + 2) + 3 = 1 + 2 + 3 & \qquad \text{(associativity)}
-
-\end{aligned}
+\end{align}
 
 Another example of a monoid are products of real numbers $(\mathbb{R}, 1, \times)$:
 
-\begin{aligned} 
-
+\begin{align} 
 1 \cdot 2 = 2 \cdot 1 = 2 & \qquad \text{(unitality)} \\
 2 \cdot (2 \cdot 3) = (1 \cdot 2) \cdot 3 = 1 \cdot 2 \cdot 3 & \qquad \text{(associativity)}
-
-\end{aligned}
+\end{align}
 
 Even the maximum and minimum operators are monoids, as long as we take the extended real/natural numbers as our set $M$. Here's an example with the maximum operator on the extended real number line, $(\mathbb{R}, -\infty, \max)$:
 
-\begin{aligned}
-
+\begin{align}
 \max(x, -\infty) = \max(-\infty, x) = x & \qquad \text{(unitality)} \\
 \max(x, \max(y, z)) = \max(\max(x, y), z) & \qquad \text{(associativity)}
-
-\end{aligned}
+\end{align}
 
 However, there are also many mathemamatical operators which do not conform to the definition of a monoid. One such counterexample is exponentiation. Exponentiation does not meet the definition of a monoid, since it is not associative:
 
@@ -365,12 +359,10 @@ $$||(||(x, y)||_2, z)||_2 = \sqrt{\bigg(\sqrt{(x^2 + y^2)}\bigg)^2 + z^2} = \sqr
 
 Even completely non-number like entities can form monoids. For example, the operation of concatenating strings is a monoid, since it is associative and comes equipped with a neutral element (the empty string):
 
-\begin{aligned}
-
+\begin{align}
 \text{"hello"} + \text{""} = \text{""} + \text{"hello"} = \text{"hello"} & \qquad \text{(unitality)} \\ 
 (\text{"quick"} + \text{"brown"}) + \text{"fox"} = \text{"quick"} + (\text{"brown"} + \text{"fox"}) & \qquad \text{(associativity)}
-
-\end{aligned}
+\end{align}
 
 Likewise, the concatenation of lists or arrays also forms a monoid [see @milewski2018].
 
@@ -412,14 +404,12 @@ $$e_N = 0 = f("") = f(e_M)$$
 
 Like monotone maps, monoid homomorphisms also compose. Proof: suppose $f: X \to Y$ and $g: Y \to Z$ are monoid homomorphisms. Then the composite function $f \thenb g$ preserves the product:
 
-\begin{aligned}
-
+\begin{align}
 (f \thenb g)(x_1 \otimes x_2) & = g(f(x_1 \otimes_X x_2)) \\
 & = g(f(x_1) \otimes_Y f(x_2)) \\
 & = g(f(x_1)) \otimes_Z g(f(x_2)) \\
 & = (f \thenb g)(x_1) \otimes_Z (f \thenb g)(x_2)
-
-\end{aligned}
+\end{align}
 
 As well as the identity element:
 

@@ -1,11 +1,11 @@
 rmd_files: [
             "index.Rmd",
-            # "introduction.Rmd", "litreview.Rmd",
-            # "problems.Rmd", "goals.Rmd", "design.Rmd",
-            "system.Rmd",
-            "example.Rmd",
-            # "discussion.Rmd",
-            # "glossary.Rmd", "appendix.Rmd", "math.Rmd", "references.Rmd"
+            "introduction.Rmd",
+            "litreview.Rmd",
+            # "problems.Rmd",
+            "goals.Rmd", "design.Rmd",
+            "system.Rmd", "example.Rmd", "discussion.Rmd",
+            "glossary.Rmd", "appendix.Rmd", "math.Rmd", "references.Rmd"
             ]
 delete_merged_file: false
 

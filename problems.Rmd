@@ -685,13 +685,13 @@ F(\text{id}_{D_i}) = \text{id}_{F(D_i)}
 
 Let's explore the functoriality of summary statistics in more concrete terms. First, as was mentioned in Section \@ref(plots-as-preorders), the identity morphism for a data subset is just union with the empty set, $- \cup \varnothing$. Therefore, preserving identities as per Equation \@ref(eq:summary-functor-identity) amounts to:
 
-\begin{aligned}
+\begin{align}
 
 F(\text{id}_{D_i}) &= F(D_i \cup \varnothing) \\
                    &= F(D_i) \otimes F(\varnothing) \\ 
                    &= F(D_i) \otimes e \\
                    &= F(D_i) = \text{id}_{F(D_i)}
-\end{aligned}
+\end{align}
 
 This means that the summary operation $F$ must be defined for the empty set, and should return some "neutral" element $e = F(\varnothing) \in S$, which, when combined with any other summary, just returns the same summary back. 
 
@@ -709,13 +709,13 @@ $$F(d_1 \cup d_2 \cup \ldots d_k) = d_1 \otimes d_2 \otimes \ldots d_n$$
 
 Just to drive the point home, we can also follow the equality the other way, starting with combining the summaries of two data subsets $F(D_i)$ and $F(D_j)$. Then:
 
-\begin{aligned}
+\begin{align}
 
 F(D_i) \otimes F(D_j) &= (d_{i1} \otimes d_{i2} \otimes \ldots d_{in}) \otimes (d_{j1} \otimes d_{j1} \otimes \ldots d_{jk}) \\
 &= d_{i1} \otimes d_{i2} \otimes \ldots d_{in} \otimes d_{j1} \otimes d_{j1} \otimes \ldots d_{jk} \qquad \text{(by associativity)} \\
 &= F(D_i \cup D_j)
 
-\end{aligned}
+\end{align}
 
 Again, this shows that combining summaries leads to a valid summary of the underlying set union, which is precisely the desired property we set out to find.
 
@@ -802,14 +802,14 @@ Second, the properties of associativity and unitality should hold for *all* poss
 
 Suppose we have our summary functor $F$ which summarizes a data subset $D_i$ by repeatedly applying some monoidal operation $\otimes$. As we have shown, given two data subsets $D_i$ and $D_j$, $F(D_i) \otimes F(D_j) = F(D_i \cup D_j)$. More concretely, with data subsets $D_1, D_2, D_3, \ldots$, it is the case that, for example:
 
-\begin{aligned}
+\begin{align}
 
 &F(D_1) = F(D_1) \\
 &F(D_1) \otimes F(D_2) = F(D_1 \cup D_2) \\
 &F(D_1) \otimes F(D_2) \otimes F(D_3) = F(D_1 \cup D_2 \cup D_3) \\
 &F(D_1) \otimes F(D_2) \otimes F(D_3) \otimes \ldots = F(D_1 \cup D_2 \cup D_3 \cup \ldots)
 
-\end{aligned}
+\end{align}
 
 Now, comparing the statistic $F(D_1)$ with $F(D_1) \otimes F(D_2)$ amounts to comparing the summaries of $D_1$ with that of $D_1 \cup D_2$. For instance, in a barplot where $D_{S_1}$ and $D_{S_2}$ represent segment subsets that together form a bar subset, $D_{B_1} = D_{S_1} \cup D_{S_2}$, comparing $F(D_{S_1})$ and $F(D_{S_1}) \otimes F(D_{S_2})$ amounts to comparing the summary on the subset $D_{S_1}$ with that of $D_{S_1} \cup D_{S_2}$, i.e. the summary of all cases in the bar.
 
@@ -1026,12 +1026,12 @@ Importantly, the margins are independent of the data domain $D$ and the visual a
 
 Now, suppose we also want to pan the plot 25% to the right. Again, all we need to do is to change the parameters of the rescale function for the x-axis scale. For example, using the scale with 10% symmetric margins above, we can simply increment the scale limits by 0.25:
 
-\begin{aligned}
+\begin{align}
 
 r(p) &= (0.1 + 0.25) + p \cdot [(0.9 + 0.25) - (0.1 + 0.25)] \\
     &= 0.35 + p \cdot (1.15 - 0.35)
 
-\end{aligned}
+\end{align}
 
 
 Now, the "least" data point $d \in D$ will get mapped to 0.35 (10% margin + 25% to the right), whereas the "greatest" data point will get mapped to 1.15 (25% to the right - 10% margin). Notice that, again, this is entirely independent of $D$ and $V$. That is, for instance, we can pan a continuous scale the exact same way we can pan a discrete scale.

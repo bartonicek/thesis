@@ -4,6 +4,25 @@ editor_options:
   chunk_output_type: console
 ---
 
+```{r}
+#| echo: false
+knitr::opts_chunk$set(
+  out.width = "100%",
+  out.height = "100%"
+)
+
+include_figure <- function(path) {
+  if (knitr::is_html_output()) knitr::include_url(path)
+  else knitr::include_graphics(gsub(".html", ".png", path))
+}
+
+if (knitr::is_html_output()) {
+  knitr::opts_chunk$set(
+    out.extra = 'style="border: none;"' # Get rid of iframe borders
+  )
+}
+```
+
 # Background {#litreview}
 
 ## Brief history of interactive data visualization {#brief-history}
@@ -131,7 +150,7 @@ svg
 
 ```{r d3-scatterplot}
 #| echo: false
-#| fig-cap: "Example of a scatterplot in D3.js. The code was taken from D3 Graph Gallery [@holtz2022b] and adjusted to use ES6 syntax and slightly more informative variable names/comments."
+#| fig-cap: "Example of a scatterplot built with D3.js. The code was taken from D3 Graph Gallery [@holtz2022b] and adjusted to use ES6 syntax and slightly more informative variable names/comments."
 knitr::include_graphics("./figures/d3-scatterplot.png")
 ```
 
@@ -143,12 +162,37 @@ Finally, D3.js visualizations are rendered as Scalable Vector Graphics (SVG) by 
 
 Building upon the low-level infrastructure that D3 provides, many packages such as Plotly.js [@plotly2022] and Highcharts [@highcharts2024] provide high-level abstractions which make the process of building interactive figures easier for the average user. Unlike D3 which provides low-level utilities such as data transformations, scales, and geometric objects, these packages provide a simple declarative framework for rendering entire plots using a static [JSON] schema.
 
-Here's how to render the same scatterplot in Plotly:
+Here's how we can render the same scatterplot in Plotly, using the R `plotly` package [@sievert2020]:
+
+```{r}
+#| eval: false
+library(plotly)
+data <- data.frame(x = 1:5, y = c(0.41, 4.62, 7.62, 6.54, 9.61))
+plot_ly(data, x = ~x, y = ~y)
+```
+
+```{r}
+#| echo: false
+#| eval: false
+
+urls <- list.files("./figures", "scatterplot.html", full.names = TRUE)
+outs <- gsub(".html", ".png", urls)
+
+webshot2::webshot(urls, outs, delay = 30)
+```
+
+```{r plotly-scatterplot}
+#| echo: false
+#| fig-cap: "Example of a scatterplot with `plotly`."
+include_figure("./figures/plotly-scatterplot.html")
+```
+
+Here's the correponding code in JavaScript:
 
 ```{js}
 #| eval: false
 const data = [{
-  x: [1, 2, 3, 4, 5, 6],
+  x: [1, 2, 3, 4, 5],
   y: [0.41, 4.62, 7.62, 6.54, 9.61],
   mode: 'markers',
   type: 'scatter'
@@ -156,29 +200,10 @@ const data = [{
 
 Plotly.newPlot('app', data);
 ```
-<script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
-<div id="app" style="width: 500px; height: 500px"></div>
-```{js}
-#| echo: false
-const data = [{
-  x: [1, 2, 3, 4, 5, 6],
-  y: [0.41, 4.62, 7.62, 6.54, 9.61],
-  mode: 'markers',
-  type: 'scatter'
-}];
-Plotly.newPlot('app', data);
-```
-<!-- This is a dummy code chunk to provide a figure label to the JS block above -->
-```{r plotly-scatterplot}
-#| echo: false
-#| out-width: 0px
-#| out-height: 0px
-#| fig-cap: "Example of a scatterplot in Plotly.js. The code was taken from the official Plotly documentation [@plotly2024c] and slightly simplified."
-plot(0, 0)
-```
-Clearly, compared with the D3 code used to create Figure \@ref(fig:d3-scatterplot), the code for creating Figure \@ref(fig:plotly-scatterplot) is much terser. Many details, such as the axis limits and margins, point size and colour, gridlines, and widgets, are handled implicitly, via default values and automatic inference. Also, note that the figure provides some interactive features by default, such as zooming, panning, and tooltip on hover. Reactivity is handled automatically using systems built on the native DOM Event Target interface [@mdn2024a].
 
-Highcharts provides a similar JSON-based interface for specifying plots. While perhaps slightly more flexible than Plotly, it also requires more verbose specifications. Because of the similarity, I will not provide a separate example here [interested reader should look up the library website, @highcharts2024].
+Clearly, compared to the D3 code used to create Figure \@ref(fig:d3-scatterplot), the code for creating Figure \@ref(fig:plotly-scatterplot) is much terser. Many details, such as the axis limits and margins, point size and colour, gridlines, and widgets, are handled implicitly, via default values and automatic inference. Also, note that the figure provides some interactive features by default, such as zooming, panning, and tooltip on hover. Reactivity is handled automatically using systems built on the native DOM Event Target interface [@mdn2024a].
+
+Highcharts provides a similar JSON-based interface for specifying plots. While perhaps slightly more flexible than Plotly, it also requires more verbose specifications. Because of the similarity, I will not provide a separate example here [interested reader should look up the package's website, @highcharts2024].
 
 Finally, like D3, both plotly.js and Highcharts also render the graphics in SVG by default. However, unlike D3, they both also provide alternative rendering engines based on WebGL [@highschartsboost2022; @plotly2024b]. This makes them more ergonomic for use with large data sets. 
 
@@ -190,17 +215,44 @@ However, this added flexibility does come at a cost. Compared to the high-level 
 
 Vega-Lite [@satyanarayan2015] attempts to remedy this complexity by providing a high-level interface to Vega. Here's how we can define a scatterplot with zooming, panning, and tooltip on hover in Vega-Lite:
 
-<script src="https://cdn.jsdelivr.net/npm/vega@5.30.0"></script>
-<script src="https://cdn.jsdelivr.net/npm/vega-lite@5.21.0"></script>
-<script src="https://cdn.jsdelivr.net/npm/vega-embed@6.26.0"></script>
+```{r}
+#| eval: false
 
-<div id="vegalite-plot" style="width: 500px; height: 500px"></div>
+library(vegawidget)
+
+plot_spec <- list(
+    `$schema` = vega_schema(),
+    width = 500,
+    height = 300,
+    data = list(values = data),
+    mark = list(type = "point", tooltip = TRUE),
+    encoding = list(
+      x = list(field = "x", type = "quantitative"),
+      y = list(field = "y", type = "quantitative")
+    ),
+    params = list(list(name = "grid", 
+                       select = "interval", 
+                       bind = "scales"))
+  )
+
+plot_spec |> vegawidget()
+```
+
+```{r vegalite-scatterplot}
+#| echo: false
+#| fig-cap: "Example of a scatterplot built with `vegalite`."
+# saveWidget(vegawidget(w), "./figures/vegalite-scatterplot.html")
+include_figure("./figures/vegalite-scatterplot.html")
+```
+
+Just for clarity, the R code above corresponds to the following declarative JSON schema:
 
 ```{js}
-const spec = {
+#| eval: false
+{
   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
   width: 500,
-  height: 500,
+  height: 300,
   data: { values: [
     { x: 1, y: 0.41 },
     { x: 2, y: 4.62 },
@@ -215,8 +267,6 @@ const spec = {
   },
   params: [{ name: "grid", select: "interval", bind: "scales" }]
 };
-
-vegaEmbed("#vegalite-plot", spec);
 ```
 
 Note that the zooming and panning capability is provided by the `params` property, which declaratively specifies a list of plot parameters that can be modified by interaction [see @vegalite2024a]. In the case above, the specification creates a two-way binding between plot scales and mouse selection events [@vegalite2024b].   

@@ -68,6 +68,7 @@ Given the reasons above, I've adopted a similar approach to `ggplot2`, giving th
 Here's a basic example of creating an interactive figure with `plotscaper`:
 
 ```{r}
+#| eval: false
 library(plotscaper)
 
 create_schema(mtcars) |>
@@ -652,7 +653,6 @@ Simple scale functions like the one above can work fine for basic data visualiza
 Let's take the first point as a motivating example. Consider what happens to data points at the limits of the data range under the simple linear mapping:   
 
 ```{r}
-#| out-width: 800px
 #| fig-align: 'center'
 x <- 1:10
 y <- rnorm(10, 0, 5)
@@ -666,7 +666,6 @@ The plot above shows values scaled using the simple linear mapping along the x-a
 To address this problem, most data visualization systems automatically expand the range of the domain by some pre-specified percentage:
 
 ```{r}
-#| out-width: 800px
 #| fig-align: 'center'
 # By default, the plot() function automatically expands the x- and y-axis
 # limits by approximately 4% on each end, see `xaxs` in ?graphics::par

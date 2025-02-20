@@ -416,7 +416,7 @@ order_df3 <- aggregate(cases ~ diagnosis, sum, data = df)
 order_df3 <- order_df3[order(-order_df3$cases), ]
 fits <- fits[match(1:14, match(fits$diagnosis, order_df3$diagnosis)), ]
 
-knitr::kable(fits, align = "lllll", format = "html",
+knitr::kable(fits, align = "lllll",
              caption = "Simple linear regressions of the number of cases by year for each diagnosis") |>
   kable_styling() |>
   column_spec(2, color = ifelse(fits$beta < 0, "red", "black")) |>
@@ -450,7 +450,7 @@ order_df3 <- aggregate(cases ~ diagnosis, sum, data = df)
 order_df3 <- order_df3[order(-order_df3$cases), ]
 fits <- fits[match(1:14, match(fits$diagnosis, order_df3$diagnosis)), ]
 
-knitr::kable(fits, align = "lllll", format = "html",
+knitr::kable(fits, align = "lllll",
              caption = "Simple linear regressions of the number of days by year for each diagnosis") |>
   kable_styling() |>
   column_spec(2, color = ifelse(fits$beta < 0, "red", "black")) |>
