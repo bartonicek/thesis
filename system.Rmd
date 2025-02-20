@@ -2,6 +2,7 @@
 output: html_document
 editor_options: 
   chunk_output_type: console
+alway_allow_html: true
 ---
 
 # System description {#system}
@@ -710,12 +711,12 @@ $$s(d) = v_{min} + \frac{d - d_{min}}{d_{max} - d_{min}} \cdot (v_{max} - v_{min
 
 If we look closely, we may be able to see that there are two parts to the function:
 
-$$s(d) = \color{steelblue}{v_{min} +} \color{indianred}{\frac{\color{black}{d} - d_{min}}{d_{max} - d_{min}}} \color{steelblue}{\cdot (v_{max} - v_{min})}$$
+<!-- $$s(d) = \color{steelblue}{v_{min} +} \color{indianred}{\frac{\color{black}{d} - d_{min}}{d_{max} - d_{min}}} \color{steelblue}{\cdot (v_{max} - v_{min})}$$ -->
 
 That is, the linear mapping is composed of two simpler functions:
 
-- $\color{indianred}{n(d) = (d - d_{min}) / (d_{max} - d_{min})}$ takes a data value $d \in D$ and maps it to the interval $[0, 1]$
-- $\color{steelblue}{u(p) = v_{min} + p \cdot (v_{max} - v_{min})}$ takes a value in $[0, 1]$ and maps it to a visual attribute value $v \in V$ 
+<!-- - $\color{indianred}{n(d) = (d - d_{min}) / (d_{max} - d_{min})}$ takes a data value $d \in D$ and maps it to the interval $[0, 1]$ -->
+<!-- - $\color{steelblue}{u(p) = v_{min} + p \cdot (v_{max} - v_{min})}$ takes a value in $[0, 1]$ and maps it to a visual attribute value $v \in V$  -->
 
 This leads us to the following definition of a scale:
 

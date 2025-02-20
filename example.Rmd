@@ -1,21 +1,11 @@
----
-output:
-  pdf_document: default
-  html_document: default
-editor_options:
-  chunk_output_type: console
----
 
 ```{r}
 #| echo: false
 knitr::opts_chunk$set(eval = FALSE)
-get_format <- function() {
-  rmarkdown::all_output_formats(knitr::current_input())
-}
 
 include_figure <- function(path) {
-  # if (knitr::is_html_output()) knitr::include_url(path)
-  # else knitr::include_graphics(gsub(".html", ".png", path))
+  if (knitr::is_html_output()) include_figure(path)
+  else knitr::include_graphics(gsub(".html", ".png", path))
 }
 ```
 
@@ -23,8 +13,7 @@ include_figure <- function(path) {
 #| echo: false
 #| eval: false
 # Script to generate screenshots
-examples <- list.files("./figures") |> 
-  (\(x) { x[startsWith(x, "example") & endsWith(x, ".html")] })()
+examples <- list.files("./figures", "^example.+html")
 
 urls <- paste0("./figures/", examples)
 outs <- gsub(".html", ".png", urls)
@@ -95,11 +84,10 @@ df |>
 
 ```{r example-cases-days}
 #| echo: false
-#| out-extra: 'style="border: none;"'
+#| eval: true
 #| fig-cap: "Relationship between the number of cases in a patient subgroup and the total number of days spent in care."
-include_figure("./figures/example-cases-days.html")
+knitr::include_url("./figures/example-cases-days.html")
 ```
-
 
 Interestingly, the points did not show a simple linear trend. Instead, they seemed to cluster in three distinct "leaflets", each exhibiting a roughly linear trend. This suggests the presence of a pooling effect, such that the overall trend is the result of combining three distinct groups. Closer inspection of the data reveals that the `stay_category` variable has three levels: short-term (< 3 months), medium-term (3-6 months), and long-term (6+ months) care. Color-coding the cases indeed confirms that the three levels of `stay_category` correspond to the leaflets:
 
@@ -118,7 +106,7 @@ df |>
 #| echo: false
 #| out-extra: 'style="border: none;"'
 #| fig-cap: "The relationship between cases and days is subject to a pooling effect: while patient groups within each care duration category (short-term, medium-term, and long-term) exhibit a linear relationship individually, this does not hold when the groups are considered together."
-knitr::include_url("./figures/example-cases-stay-cat.html")
+include_figure("./figures/example-cases-stay-cat.html")
 ```
 
 > Click on the barplot bars to confirm there is a fairly minimal overlap between points belonging to the three categories (selected points will be brought to the foreground). To remove all selection, double-click the figure.
@@ -144,7 +132,7 @@ df |>
 ```{r example-cases-avg-days}
 #| echo: false
 #| out-extra: 'style="border: none;"'
-knitr::include_url("./figures/example-cases-avg-days.html")
+include_figure("./figures/example-cases-avg-days.html")
 ```
 
 Now we can clearly see the gaps between the three different distributions along the y-axis. 
@@ -173,7 +161,7 @@ schema |> render()
 ```{r example-cases-days-time}
 #| echo: false
 #| out-extra: 'style="border: none;"'
-knitr::include_url("./figures/example-cases-days-time.html")
+include_figure("./figures/example-cases-days-time.html")
 ```
 
 From the barplots, we can immediately see an interesting pattern: while the numbers of cases seem to have declined over time, the number of days patients spent in care seem to seems to have remained fairly constant. This suggest that while there are fewer patients over all, they are being hospitalized for longer.
@@ -196,7 +184,7 @@ schema |>
 ```{r example-cases-days-time-zoom}
 #| echo: false
 #| out-extra: 'style="border: none;"'
-knitr::include_url("./figures/example-cases-days-time-zoom.html")
+include_figure("./figures/example-cases-days-time-zoom.html")
 ```
 
 > You can zoom into a plot in two ways: programmatically using the `zoom` function (as shown above), or manually by clicking and dragging to select a rectangular region and pressing the `Z` key. You can chain multiple zooms to magnify small regions of the plot. To undo zooming, press either the `X` to revert back one level of zoom, or `R` to reset the figure to its default state (including the default zoom level).
@@ -238,7 +226,7 @@ df |>
 ```{r example-cases-days-children}
 #| echo: false
 #| out-extra: 'style="border: none;"'
-knitr::include_url("./figures/example-cases-days-children.html")
+include_figure("./figures/example-cases-days-children.html")
 ```
 
 So far, we have been using a fairly simple interactive workflow that could be easily recreated via code, taking only one or two interactive actions at a time. However, now it is time to see the full potential of interactivity by chaining several interactive actions together. To explore how the proportion of child and adolescent patients evolved over time, try taking the following steps:
@@ -269,7 +257,7 @@ df |>
 #| echo: false
 #| out-extra: 'style="border: none;"'
 #| fig-cap: "While the proportion of days spent in treatment by children and adolescent has declined, the proportion of cases that children and adolescents make up has increased."
-knitr::include_url("./figures/example-cases-days-children-marked.html")
+include_figure("./figures/example-cases-days-children-marked.html")
 ```
 
 Interestingly, the two barplots show the opposite trend. While the proportion of the treatment days used by children and adolescents has declined over time, the proportion of total cases they make up has increased. The relative increase in cases appears to be driven by an overall decline in patient numbers: in absolute counts, the number of child and adolescent patients has remained fairly constant between 2010 to 2022, while the total patient count has decreased.
@@ -291,7 +279,7 @@ df |>
 ```{r example-cases-days-age}
 #| echo: false
 #| out-extra: 'style="border: none;"'
-knitr::include_url("./figures/example-cases-days-age.html")
+include_figure("./figures/example-cases-days-age.html")
 ```
 
 Again, if we interrogate the figure by employing interactive actions such as selection, zooming, and normalization, we can discover that one age category in which there has been steady growth in both the proportion of cases and days spend in treatment are 70-79 year olds. This aligns with the limited placement availability hypothesis: while these patients account for a relatively small fraction of the total cases, they represent a disproportionately large and increasing proportion of days in treatment. Later, we will also see evidence that many of these patients suffer from neurodegenerative diseases, which require intensive long-term care. It may be the case that, with increasing life-expectancy, the healthcare system is not able to handle the influx of older patients, limiting the availability of placements. 
@@ -345,7 +333,7 @@ df |>
 #| echo: false
 #| out-extra: 'style="border: none;"'
 #| fig-cap: "Majority of patient load was taken up by the top five most common disorders: alcohol-use disorders, schizophrenia, Alzheimer's disease, neurotic and stress-related disorders, and psychoactive substance disorders."
-knitr::include_url("./figures/example-cases-diagnosis.html")
+include_figure("./figures/example-cases-diagnosis.html")
 ```
 
 The barplot in the top left panel of the Figure \@ref(fig:example-cases-diagnosis) shows that the five most common disorders accounted for the majority of patient cases. Each of these disorders affected over 40,000 patients between 2010 and 2022, representing over 75% of all cases (319,557 out of 414,242).     
@@ -398,7 +386,7 @@ df |>
 ```{r example-cases-diagnosis-time}
 #| echo: false
 #| out-extra: 'style="border: none;"'
-knitr::include_url("./figures/example-cases-diagnosis-time.html")
+include_figure("./figures/example-cases-diagnosis-time.html")
 ```
 
 Overall, over time, the proportion of both cases and days in treatment the various diagnoses made up seemed to remain fairly constant, with perhaps a slight general decreasing trend in the number of cases. Of the top five diagnoses, the one which seemed to buck this trend was schizophrenia (F20-F29), which had a fairly marked increasing trend in the proportion of days. Furthermore, the number of cases related to psychoactive substance use disorders (excluding alcohol) seemed to also be rising slightly.
@@ -493,7 +481,7 @@ df |>
 #| echo: false
 #| out-extra: 'style="border: none;"'
 #| fig-cap: "While Alzheimer's patients accounted for the longest hospitalized cohorts prior to 2016, following 2016, the longest hospitalized cohorts tended to be schizophrenia patients."
-knitr::include_url("./figures/example-cases-diagnosis-max.html")
+include_figure("./figures/example-cases-diagnosis-max.html")
 ```
 
 In Figure \@ref(fig:example-cases-diagnosis-max), I show plots of diagnoses, as well as a summary of days and cases over time. However, note that, whereas all barplots of days and cases over time shown before had sum (of cases and days) as the y-axis summary statistic, the two barplots in the lower half of figure Figure \@ref(fig:example-cases-diagnosis-max) show maximum, not sum. These plots effectively tell us the size and the number of days in treatment for the largest/longest hospitalized patient cohort within a given year. Based on theory in Section \@ref(problems), we know that these plots will behave well under linked selection (with one selection group).

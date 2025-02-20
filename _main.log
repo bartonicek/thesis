@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.11.14)  20 FEB 2025 09:42
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.11.14)  20 FEB 2025 10:20
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -446,98 +446,7 @@ File: pgflibraryarrows.meta.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \pgfarrowlength=\dimen283
 \pgfarrowwidth=\dimen284
 \pgfarrowlinewidth=\dimen285
-))) (/home/adam/.TinyTeX/texmf-dist/tex/latex/multirow/multirow.sty
-Package: multirow 2024/11/12 v2.9 Span multiple rows of a table
-\multirow@colwidth=\skip66
-\multirow@cntb=\count320
-\multirow@dima=\skip67
-\bigstrutjot=\dimen286
-) (/home/adam/.TinyTeX/texmf-dist/tex/latex/wrapfig/wrapfig.sty
-\wrapoverhang=\dimen287
-\WF@size=\dimen288
-\c@WF@wrappedlines=\count321
-\WF@box=\box74
-\WF@everypar=\toks39
-Package: wrapfig 2003/01/31  v 3.6
-) (/home/adam/.TinyTeX/texmf-dist/tex/latex/float/float.sty
-Package: float 2001/11/08 v1.3d Float enhancements (AL)
-\c@float@type=\count322
-\float@exts=\toks40
-\float@box=\box75
-\@float@everytoks=\toks41
-\@floatcapt=\box76
-) (/home/adam/.TinyTeX/texmf-dist/tex/latex/colortbl/colortbl.sty
-Package: colortbl 2024/07/06 v1.0i Color table columns (DPC)
-\everycr=\toks42
-\minrowclearance=\skip68
-\rownum=\count323
-) (/home/adam/.TinyTeX/texmf-dist/tex/latex/pdflscape/pdflscape.sty
-Package: pdflscape 2022-10-27 v0.13 Display of landscape pages in PDF
-(/home/adam/.TinyTeX/texmf-dist/tex/latex/pdflscape/pdflscape-nometadata.sty
-Package: pdflscape-nometadata 2022-10-28 v0.13 Display of landscape pages in PDF (HO)
-(/home/adam/.TinyTeX/texmf-dist/tex/latex/graphics/lscape.sty
-Package: lscape 2020/05/28 v3.02 Landscape Pages (DPC)
-)
-Package pdflscape Info: Auto-detected driver: pdftex on input line 81.
-)) (/home/adam/.TinyTeX/texmf-dist/tex/latex/tabu/tabu.sty
-Package: tabu 2019/01/11 v2.9 - flexible LaTeX tabulars (FC+tabu-fixed)
-(/home/adam/.TinyTeX/texmf-dist/tex/latex/varwidth/varwidth.sty
-Package: varwidth 2009/03/30 ver 0.92;  Variable-width minipages
-\@vwid@box=\box77
-\sift@deathcycles=\count324
-\@vwid@loff=\dimen289
-\@vwid@roff=\dimen290
-)
-\c@taburow=\count325
-\tabu@nbcols=\count326
-\tabu@cnt=\count327
-\tabu@Xcol=\count328
-\tabu@alloc=\count329
-\tabu@nested=\count330
-\tabu@target=\dimen291
-\tabu@spreadtarget=\dimen292
-\tabu@naturalX=\dimen293
-\tabucolX=\dimen294
-\tabu@Xsum=\dimen295
-\extrarowdepth=\dimen296
-\abovetabulinesep=\dimen297
-\belowtabulinesep=\dimen298
-\tabustrutrule=\dimen299
-\tabu@thebody=\toks43
-\tabu@footnotes=\toks44
-\tabu@box=\box78
-\tabu@arstrutbox=\box79
-\tabu@hleads=\box80
-\tabu@vleads=\box81
-\tabu@cellskip=\skip69
-) (/home/adam/.TinyTeX/texmf-dist/tex/latex/threeparttable/threeparttable.sty
-Package: threeparttable 2003/06/13  v 3.0
-\@tempboxb=\box82
-) (/home/adam/.TinyTeX/texmf-dist/tex/latex/threeparttablex/threeparttablex.sty
-Package: threeparttablex 2013/07/23 v0.3 by daleif
-(/home/adam/.TinyTeX/texmf-dist/tex/latex/environ/environ.sty
-Package: environ 2014/05/04 v0.3 A new way to define environments
-(/home/adam/.TinyTeX/texmf-dist/tex/latex/trimspaces/trimspaces.sty
-Package: trimspaces 2009/09/17 v1.1 Trim spaces around a token list
-))
-\TPTL@width=\skip70
-) (/home/adam/.TinyTeX/texmf-dist/tex/generic/ulem/ulem.sty
-\UL@box=\box83
-\UL@hyphenbox=\box84
-\UL@skip=\skip71
-\UL@hook=\toks45
-\UL@height=\dimen300
-\UL@pe=\count331
-\UL@pixel=\dimen301
-\ULC@box=\box85
-Package: ulem 2019/11/18
-\ULdepth=\dimen302
-) (/home/adam/.TinyTeX/texmf-dist/tex/latex/makecell/makecell.sty
-Package: makecell 2009/08/03 V0.1e Managing of Tab Column Heads and Cells
-\rotheadsize=\dimen303
-\c@nlinenum=\count332
-\TeXr@lab=\toks46
-) (/home/adam/.TinyTeX/texmf-dist/tex/latex/bookmark/bookmark.sty
+))) (/home/adam/.TinyTeX/texmf-dist/tex/latex/bookmark/bookmark.sty
 Package: bookmark 2023-12-10 v1.31 PDF bookmarks (HO)
 (/home/adam/.TinyTeX/texmf-dist/tex/latex/hyperref/hyperref.sty
 Package: hyperref 2024-11-05 v7.01l Hypertext links for LaTeX
@@ -568,13 +477,13 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 (/home/adam/.TinyTeX/texmf-dist/tex/latex/kvoptions/kvoptions.sty
 Package: kvoptions 2022-06-15 v3.15 Key value format for package options (HO)
 ))
-\c@section@level=\count333
+\c@section@level=\count320
 ) (/home/adam/.TinyTeX/texmf-dist/tex/generic/stringenc/stringenc.sty
 Package: stringenc 2019/11/29 v1.12 Convert strings between diff. encodings (HO)
 )
-\@linkdim=\dimen304
-\Hy@linkcounter=\count334
-\Hy@pagecounter=\count335
+\@linkdim=\dimen286
+\Hy@linkcounter=\count321
+\Hy@pagecounter=\count322
 (/home/adam/.TinyTeX/texmf-dist/tex/latex/hyperref/pd1enc.def
 File: pd1enc.def 2024-11-05 v7.01l Hyperref: PDFDocEncoding definition (HO)
 Now handling font encoding PD1 ...
@@ -582,7 +491,7 @@ Now handling font encoding PD1 ...
 ) (/home/adam/.TinyTeX/texmf-dist/tex/generic/intcalc/intcalc.sty
 Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
 )
-\Hy@SavedSpaceFactor=\count336
+\Hy@SavedSpaceFactor=\count323
 (/home/adam/.TinyTeX/texmf-dist/tex/latex/hyperref/puenc.def
 File: puenc.def 2024-11-05 v7.01l Hyperref: PDF Unicode definition (HO)
 Now handling font encoding PU ...
@@ -596,21 +505,21 @@ Package hyperref Info: Plain pages OFF on input line 4172.
 Package hyperref Info: Backreferencing OFF on input line 4177.
 Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
 Package hyperref Info: Bookmarks ON on input line 4424.
-\c@Hy@tempcnt=\count337
+\c@Hy@tempcnt=\count324
 (/home/adam/.TinyTeX/texmf-dist/tex/latex/url/url.sty
 \Urlmuskip=\muskip18
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )
 LaTeX Info: Redefining \url on input line 4763.
-\XeTeXLinkMargin=\dimen305
+\XeTeXLinkMargin=\dimen287
 (/home/adam/.TinyTeX/texmf-dist/tex/generic/bitset/bitset.sty
 Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
 (/home/adam/.TinyTeX/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty
 Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO)
 ))
-\Fld@menulength=\count338
-\Field@Width=\dimen306
-\Fld@charsize=\dimen307
+\Fld@menulength=\count325
+\Field@Width=\dimen288
+\Fld@charsize=\dimen289
 Package hyperref Info: Hyper figures OFF on input line 6042.
 Package hyperref Info: Link nesting OFF on input line 6047.
 Package hyperref Info: Hyper index ON on input line 6050.
@@ -622,9 +531,9 @@ Package hyperref Info: PDF/A mode OFF on input line 6072.
 Package: atbegshi-ltx 2021/01/10 v1.0c Emulation of the original atbegshi
 package with kernel methods
 )
-\Hy@abspage=\count339
-\c@Item=\count340
-\c@Hfootnote=\count341
+\Hy@abspage=\count326
+\c@Item=\count327
+\c@Hfootnote=\count328
 )
 Package hyperref Info: Driver (autodetected): hpdftex.
 (/home/adam/.TinyTeX/texmf-dist/tex/latex/hyperref/hpdftex.def
@@ -633,8 +542,8 @@ File: hpdftex.def 2024-11-05 v7.01l Hyperref driver for pdfTeX
 Package: atveryend-ltx 2020/08/19 v1.0a Emulation of the original atveryend package
 with kernel methods
 )
-\Fld@listcount=\count342
-\c@bookmark@seq@number=\count343
+\Fld@listcount=\count329
+\c@bookmark@seq@number=\count330
 (/home/adam/.TinyTeX/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
 Package: rerunfilecheck 2022-07-10 v1.10 Rerun checks for auxiliary files (HO)
 (/home/adam/.TinyTeX/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty
@@ -642,73 +551,93 @@ Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
 )
 Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 285.
 )
-\Hy@SectionHShift=\skip72
+\Hy@SectionHShift=\skip66
 ) (/home/adam/.TinyTeX/texmf-dist/tex/latex/bookmark/bkm-pdftex.def
 File: bkm-pdftex.def 2023-12-10 v1.31 bookmark driver for pdfTeX and luaTeX (HO)
-\BKM@id=\count344
-))
-LaTeX Font Info:    Trying to load font information for T1+lmr on input line 170.
+\BKM@id=\count331
+)) (/home/adam/.TinyTeX/texmf-dist/tex/latex/amscls/amsthm.sty
+Package: amsthm 2020/05/29 v2.20.6
+\thm@style=\toks39
+\thm@bodyfont=\toks40
+\thm@headfont=\toks41
+\thm@notefont=\toks42
+\thm@headpunct=\toks43
+\thm@preskip=\skip67
+\thm@postskip=\skip68
+\thm@headsep=\skip69
+\dth@everypar=\toks44
+)
+\c@theorem=\count332
+\c@lemma=\count333
+\c@corollary=\count334
+\c@proposition=\count335
+\c@conjecture=\count336
+\c@definition=\count337
+\c@example=\count338
+\c@exercise=\count339
+\c@hypothesis=\count340
+LaTeX Font Info:    Trying to load font information for T1+lmr on input line 173.
 (/home/adam/.TinyTeX/texmf-dist/tex/latex/lm/t1lmr.fd
 File: t1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 ) (/home/adam/.TinyTeX/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2024-05-08 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count345
-\l__pdf_internal_box=\box86
+\l__color_backend_stack_int=\count341
+\l__pdf_internal_box=\box74
 ) (./_main.aux)
 \openout1 = `_main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 170.
-LaTeX Font Info:    ... okay on input line 170.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 170.
-LaTeX Font Info:    ... okay on input line 170.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 170.
-LaTeX Font Info:    ... okay on input line 170.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 170.
-LaTeX Font Info:    ... okay on input line 170.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 170.
-LaTeX Font Info:    ... okay on input line 170.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 170.
-LaTeX Font Info:    ... okay on input line 170.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 170.
-LaTeX Font Info:    ... okay on input line 170.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 170.
-LaTeX Font Info:    ... okay on input line 170.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 170.
-LaTeX Font Info:    ... okay on input line 170.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 173.
+LaTeX Font Info:    ... okay on input line 173.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 173.
+LaTeX Font Info:    ... okay on input line 173.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 173.
+LaTeX Font Info:    ... okay on input line 173.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 173.
+LaTeX Font Info:    ... okay on input line 173.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 173.
+LaTeX Font Info:    ... okay on input line 173.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 173.
+LaTeX Font Info:    ... okay on input line 173.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 173.
+LaTeX Font Info:    ... okay on input line 173.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 173.
+LaTeX Font Info:    ... okay on input line 173.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 173.
+LaTeX Font Info:    ... okay on input line 173.
 (/home/adam/.TinyTeX/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 485.
 (/home/adam/.TinyTeX/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
-Package hyperref Info: Link coloring OFF on input line 170.
-LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 172.
+Package hyperref Info: Link coloring OFF on input line 173.
+LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 175.
 (/home/adam/.TinyTeX/texmf-dist/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for OML+lmm on input line 172.
+LaTeX Font Info:    Trying to load font information for OML+lmm on input line 175.
 (/home/adam/.TinyTeX/texmf-dist/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 172.
+LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 175.
 (/home/adam/.TinyTeX/texmf-dist/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 172.
+LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 175.
 (/home/adam/.TinyTeX/texmf-dist/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 172.
+(Font)              <12> on input line 175.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 172.
+(Font)              <8> on input line 175.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 172.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 172.
+(Font)              <6> on input line 175.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 175.
 (/home/adam/.TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 172.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 175.
 (/home/adam/.TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
@@ -720,7 +649,17 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 
 [2
 
-] (./_main.toc)
+] (./_main.toc
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <10> on input line 3.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <7> on input line 3.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <5> on input line 3.
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 4.
+(/home/adam/.TinyTeX/texmf-dist/tex/latex/lm/t1lmtt.fd
+File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
+))
 \tf@toc=\write5
 \openout5 = `_main.toc'.
 
@@ -740,1217 +679,252 @@ Chapter 1.
 
 ]
 Chapter 2.
+LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 199.
+(/home/adam/.TinyTeX/texmf-dist/tex/latex/lm/ts1lmr.fd
+File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
+)
 
-LaTeX Warning: Citation `ref-goethe2015' on page 7 undefined on input line 192.
+[7{/home/adam/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}]
+LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <14.4> not available
+(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 224.
 
-
-LaTeX Warning: Citation `ref-van2003' on page 7 undefined on input line 195.
-
-
-LaTeX Warning: Citation `ref-sheth2016' on page 7 undefined on input line 195.
-
-
-LaTeX Warning: Citation `ref-goebel2004' on page 7 undefined on input line 195.
-
-
-LaTeX Warning: Citation `ref-knudsen2020' on page 7 undefined on input line 195.
+Overfull \hbox (32.39157pt too wide) in paragraph at lines 224--224
+[]\T1/lmr/bx/n/14.4 Application Pro-gram-ming In-ter-face (\T1/lmtt/b/n/14.4 plotscaper\T1/lmr/bx/n/14.4 ) 
+ []
 
 
-LaTeX Warning: Citation `ref-ware2019' on page 7 undefined on input line 195.
+LaTeX Warning: Reference `goals' on page 8 undefined on input line 226.
+
+LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <10> not available
+(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 230.
+
+Overfull \hbox (400.49783pt too wide) in paragraph at lines 250--250
+[]\T1/lmtt/m/n/10 ##  [1] "data"        "layers"      "scales"      "guides"      "mapping"     "theme"       "coordinates" "facet"       "plot_env"    "layout"[] 
+ []
 
 
-LaTeX Warning: Citation `ref-ledoux2000' on page 7 undefined on input line 195.
+Overfull \hbox (400.49783pt too wide) in paragraph at lines 273--273
+[]\T1/lmtt/m/n/10 ##  [1] "data"        "layers"      "scales"      "guides"      "mapping"     "theme"       "coordinates" "facet"       "plot_env"    "layout"[] 
+ []
 
 
-LaTeX Warning: Citation `ref-ledoux2003' on page 7 undefined on input line 195.
-
-
-LaTeX Warning: Citation `ref-mandler1982' on page 7 undefined on input line 195.
-
-
-LaTeX Warning: Citation `ref-treisman1985' on page 7 undefined on input line 195.
-
-
-LaTeX Warning: Citation `ref-friendly2006' on page 7 undefined on input line 197.
-
-
-LaTeX Warning: Citation `ref-tukey1977' on page 7 undefined on input line 197.
-
-
-LaTeX Warning: Citation `ref-dijkerman2007' on page 7 undefined on input line 199.
-
-
-LaTeX Warning: Citation `ref-lederman2009' on page 7 undefined on input line 199.
-
-
-
-[7]
-
-LaTeX Warning: Citation `ref-batch2017' on page 8 undefined on input line 201.
-
-
-LaTeX Warning: Citation `ref-wickham2009' on page 8 undefined on input line 201.
-
-
-LaTeX Warning: Citation `ref-vanderplas2020' on page 8 undefined on input line 201.
-
-
-LaTeX Warning: Reference `goals' on page 8 undefined on input line 207.
-
-
-LaTeX Warning: Reference `system' on page 8 undefined on input line 207.
-
-
-LaTeX Warning: Reference `applied-example' on page 8 undefined on input line 207.
-
-
-LaTeX Warning: Reference `discussion' on page 8 undefined on input line 207.
+LaTeX Warning: Reference `litreview' on page 8 undefined on input line 290.
 
 
 
 [8]
-Chapter 3.
+Underfull \hbox (badness 10000) in paragraph at lines 292--294
 
-LaTeX Warning: Citation `ref-beniger1978' on page 9 undefined on input line 213.
-
-
-LaTeX Warning: Citation `ref-dix1998' on page 9 undefined on input line 213.
-
-
-LaTeX Warning: Citation `ref-friendly2006' on page 9 undefined on input line 213.
-
-
-LaTeX Warning: Citation `ref-friendly2021' on page 9 undefined on input line 213.
-
-
-LaTeX Warning: Citation `ref-young2011' on page 9 undefined on input line 213.
-
-
-LaTeX Warning: Citation `ref-mansfield2020' on page 9 undefined on input line 217.
-
-
-LaTeX Warning: Citation `ref-beniger1978' on page 9 undefined on input line 217.
-
-
-LaTeX Warning: Citation `ref-friendly2021' on page 9 undefined on input line 217.
-
-<./figures/si427.jpg, id=58, 2095.83pt x 1177.39874pt>
-File: ./figures/si427.jpg Graphic file (type jpg)
-<use ./figures/si427.jpg>
-Package pdftex.def Info: ./figures/si427.jpg  used on input line 221.
-(pdftex.def)             Requested size: 979.02806pt x 549.99995pt.
-
-Overfull \hbox (634.02806pt too wide) in paragraph at lines 221--222
- [][] 
  []
 
 
-LaTeX Warning: Float too large for page by 72.49995pt on input line 226.
 
+[9]
+Overfull \hbox (116.99866pt too wide) in paragraph at lines 318--318
+[]\T1/lmtt/m/n/10 ## file:////tmp/RtmpVg9u4I/file39512a8a9847/widget395165b00b64.html screenshot completed[] 
+ []
 
-LaTeX Warning: Citation `ref-kvasz2006' on page 9 undefined on input line 228.
+<_main_files/figure-latex/unnamed-chunk-5-1.pdf, id=89, 614.295pt x 794.97pt>
+File: _main_files/figure-latex/unnamed-chunk-5-1.pdf Graphic file (type pdf)
+<use _main_files/figure-latex/unnamed-chunk-5-1.pdf>
+Package pdftex.def Info: _main_files/figure-latex/unnamed-chunk-5-1.pdf  used on input line 320.
+(pdftex.def)             Requested size: 345.0058pt x 446.4781pt.
 
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
-LaTeX Warning: Citation `ref-friendly2021' on page 9 undefined on input line 228.
 
 
+[10]
 
-[9
-
-]
-
-[10 <./figures/si427.jpg>]
-
-LaTeX Warning: Citation `ref-friendly2021' on page 11 undefined on input line 230.
-
-
-LaTeX Warning: Citation `ref-etymonline2024' on page 11 undefined on input line 230.
-
-
-LaTeX Warning: Citation `ref-beniger1978' on page 11 undefined on input line 230.
-
-
-LaTeX Warning: Citation `ref-friendly2021' on page 11 undefined on input line 230.
-
-
-LaTeX Warning: Citation `ref-young2011' on page 11 undefined on input line 230.
-
-
-LaTeX Warning: Citation `ref-friendly2021' on page 11 undefined on input line 230.
-
-
-LaTeX Warning: Citation `ref-freedman1999' on page 11 undefined on input line 230.
-
-
-LaTeX Warning: Citation `ref-friendly2021' on page 11 undefined on input line 230.
-
-
-LaTeX Warning: Citation `ref-brasseur2005' on page 11 undefined on input line 230.
-
-
-LaTeX Warning: Citation `ref-fienberg1992' on page 11 undefined on input line 232.
-
-
-LaTeX Warning: Citation `ref-freedman1999' on page 11 undefined on input line 232.
-
-
-LaTeX Warning: Citation `ref-fienberg1992' on page 11 undefined on input line 232.
-
-
-LaTeX Warning: Citation `ref-friendly2006' on page 11 undefined on input line 234.
-
-
-LaTeX Warning: Citation `ref-young2011' on page 11 undefined on input line 234.
-
-
-LaTeX Warning: Citation `ref-clayton2021' on page 11 undefined on input line 234.
-
-
-LaTeX Warning: Citation `ref-friendly2021' on page 11 undefined on input line 234.
-
-
-LaTeX Warning: Citation `ref-tukey1962' on page 11 undefined on input line 236.
-
-
-LaTeX Warning: Citation `ref-tukey1977' on page 11 undefined on input line 236.
-
-
-LaTeX Warning: Citation `ref-bertin1967' on page 11 undefined on input line 236.
-
-
-LaTeX Warning: Citation `ref-abbate1999' on page 11 undefined on input line 236.
-
-
-LaTeX Warning: Citation `ref-backus1978' on page 11 undefined on input line 236.
-
-
-
-[11]
-
-LaTeX Warning: Citation `ref-cleveland1985' on page 12 undefined on input line 238.
-
-
-LaTeX Warning: Citation `ref-cleveland1993' on page 12 undefined on input line 238.
-
-
-LaTeX Warning: Citation `ref-cleveland1984' on page 12 undefined on input line 238.
-
-
-LaTeX Warning: Citation `ref-tufte2001' on page 12 undefined on input line 238.
-
-
-LaTeX Warning: Citation `ref-wilkinson2012' on page 12 undefined on input line 238.
-
-
-LaTeX Warning: Citation `ref-fowlkes1969' on page 12 undefined on input line 244.
-
-
-LaTeX Warning: Citation `ref-kruskal1964' on page 12 undefined on input line 244.
-
-<./figures/prim9.png, id=74, 3405.72375pt x 1228.59pt>
-File: ./figures/prim9.png Graphic file (type png)
-<use ./figures/prim9.png>
-Package pdftex.def Info: ./figures/prim9.png  used on input line 248.
-(pdftex.def)             Requested size: 1524.66257pt x 550.0109pt.
-
-Overfull \hbox (1179.66257pt too wide) in paragraph at lines 248--249
- [][] 
+[11 <./_main_files/figure-latex/unnamed-chunk-5-1.pdf>]
+Overfull \hbox (43.49887pt too wide) in paragraph at lines 366--366
+[]\T1/lmtt/m/n/10 ##   .. ..$ id       : 'scalar' chr "1163513f-370a-420e-bac4-1a9b4dfca4d3"[] 
  []
 
 
-LaTeX Warning: Float too large for page by 60.5109pt on input line 253.
-
-
-LaTeX Warning: Citation `ref-fisherkeller1974' on page 12 undefined on input line 255.
-
-
-LaTeX Warning: Citation `ref-donoho1988' on page 12 undefined on input line 255.
-
-
-LaTeX Warning: Citation `ref-velleman1989' on page 12 undefined on input line 255.
-
-
-LaTeX Warning: Citation `ref-tierney1990' on page 12 undefined on input line 255.
-
-
-LaTeX Warning: Citation `ref-swayne1998' on page 12 undefined on input line 255.
-
-<./figures/xlisp-stat.png, id=77, 960.58875pt x 642.4pt>
-File: ./figures/xlisp-stat.png Graphic file (type png)
-<use ./figures/xlisp-stat.png>
-Package pdftex.def Info: ./figures/xlisp-stat.png  used on input line 259.
-(pdftex.def)             Requested size: 822.44054pt x 550.01248pt.
-
-Overfull \hbox (477.44054pt too wide) in paragraph at lines 259--260
- [][] 
+Overfull \hbox (43.49887pt too wide) in paragraph at lines 366--366
+[]\T1/lmtt/m/n/10 ##   .. ..$ id       : 'scalar' chr "f40157d8-adbc-428e-bac1-b088e8235b08"[] 
  []
-
-
-LaTeX Warning: Float too large for page by 83.95691pt on input line 264.
-
-
-LaTeX Warning: Citation `ref-swayne2003' on page 12 undefined on input line 268.
-
-
-LaTeX Warning: Citation `ref-unwin1996' on page 12 undefined on input line 268.
-
-
-LaTeX Warning: Citation `ref-theus2002' on page 12 undefined on input line 268.
-
-
-LaTeX Warning: Citation `ref-unwin2006' on page 12 undefined on input line 268.
-
-
-LaTeX Warning: Citation `ref-urbanek2003' on page 12 undefined on input line 268.
-
-
-LaTeX Warning: Citation `ref-urbanek2011' on page 12 undefined on input line 268.
-
-LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 268.
-(/home/adam/.TinyTeX/texmf-dist/tex/latex/lm/t1lmtt.fd
-File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-)
-
-LaTeX Warning: Citation `ref-xie2014' on page 12 undefined on input line 268.
 
 
 
 [12]
 
-[13 <./figures/prim9.png>]
+[13]
 
-[14 <./figures/xlisp-stat.png>]
-<./figures/mondrian.png, id=97, 1144.275pt x 421.575pt>
-File: ./figures/mondrian.png Graphic file (type png)
-<use ./figures/mondrian.png>
-Package pdftex.def Info: ./figures/mondrian.png  used on input line 272.
-(pdftex.def)             Requested size: 1144.04521pt x 421.49033pt.
-
-Overfull \hbox (799.04521pt too wide) in paragraph at lines 272--273
- [][] 
- []
+LaTeX Warning: Citation `ref-rmarkdown2024' on page 14 undefined on input line 398.
 
 
-LaTeX Warning: Citation `ref-urbanek2001' on page 15 undefined on input line 279.
-
-
-LaTeX Warning: Citation `ref-urbanek2002' on page 15 undefined on input line 279.
-
-
-LaTeX Warning: Citation `ref-wickham2011' on page 15 undefined on input line 279.
-
-
-LaTeX Warning: Citation `ref-spyrison2020' on page 15 undefined on input line 279.
-
-
-LaTeX Warning: Citation `ref-lee2021' on page 15 undefined on input line 279.
-
-
-LaTeX Warning: Citation `ref-lee2022a' on page 15 undefined on input line 279.
-
-
-LaTeX Warning: Citation `ref-cook1995' on page 15 undefined on input line 279.
-
-
-LaTeX Warning: Citation `ref-waddell2023' on page 15 undefined on input line 279.
-
-
-LaTeX Warning: Citation `ref-shiny2024' on page 15 undefined on input line 279.
-
-
-Underfull \hbox (badness 1430) in paragraph at lines 285--285
-[]\T1/lmr/bx/n/12 Interactive data vi-su-al-iza-tion and the in-ter-net:
- []
-
-
-LaTeX Warning: Citation `ref-wirfs-brock2020' on page 15 undefined on input line 287.
-
-
-Underfull \vbox (badness 3312) has occurred while \output is active []
+LaTeX Warning: Reference `row-based-or-column-based' on page 14 undefined on input line 406.
 
 
 
-[15]
-
-[16 <./figures/mondrian.png>]
-
-LaTeX Warning: Citation `ref-heer2005' on page 17 undefined on input line 289.
-
-
-LaTeX Warning: Citation `ref-flare2020' on page 17 undefined on input line 289.
-
-
-LaTeX Warning: Citation `ref-clark2017' on page 17 undefined on input line 289.
-
-
-LaTeX Warning: Citation `ref-dao2020' on page 17 undefined on input line 289.
-
-
-LaTeX Warning: Citation `ref-bostock2022' on page 17 undefined on input line 293.
-
-LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <10> not available
-(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 299.
-
-
-[17]
-<./figures/d3-scatterplot.png, id=120, 825.0825pt x 835.12pt>
-File: ./figures/d3-scatterplot.png Graphic file (type png)
-<use ./figures/d3-scatterplot.png>
-Package pdftex.def Info: ./figures/d3-scatterplot.png  used on input line 347.
-(pdftex.def)             Requested size: 543.42307pt x 550.03404pt.
-
-Overfull \hbox (198.42307pt too wide) in paragraph at lines 347--348
- [][] 
- []
-
-
-LaTeX Warning: Float too large for page by 48.53404pt on input line 352.
-
-
-LaTeX Warning: Citation `ref-r2024' on page 18 undefined on input line 354.
-
-
-LaTeX Warning: Citation `ref-wickham2016' on page 18 undefined on input line 354.
-
-
-LaTeX Warning: Citation `ref-react2024' on page 18 undefined on input line 354.
-
-
-LaTeX Warning: Citation `ref-vue2024' on page 18 undefined on input line 354.
-
-
-LaTeX Warning: Citation `ref-svelte2024' on page 18 undefined on input line 354.
-
-
-LaTeX Warning: Citation `ref-plotly2022' on page 18 undefined on input line 360.
-
-
-LaTeX Warning: Citation `ref-highcharts2024' on page 18 undefined on input line 360.
-
-
-
-[18]
-
-[19 <./figures/d3-scatterplot.png>]
-LaTeX Font Info:    Trying to load font information for TS1+lmtt on input line 369.
+[14]
+LaTeX Font Info:    Trying to load font information for TS1+lmtt on input line 448.
 (/home/adam/.TinyTeX/texmf-dist/tex/latex/lm/ts1lmtt.fd
 File: ts1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-<_main_files/figure-latex/plotly-scatterplot-1.pdf, id=133, 469.755pt x 325.215pt>
-File: _main_files/figure-latex/plotly-scatterplot-1.pdf Graphic file (type pdf)
-<use _main_files/figure-latex/plotly-scatterplot-1.pdf>
-Package pdftex.def Info: _main_files/figure-latex/plotly-scatterplot-1.pdf  used on input line 381.
-(pdftex.def)             Requested size: 0.0pt x 0.0pt.
 
-LaTeX Warning: Citation `ref-mdn2024a' on page 20 undefined on input line 388.
-
-
-LaTeX Warning: Citation `ref-highcharts2024' on page 20 undefined on input line 390.
-
-
-LaTeX Warning: Citation `ref-highschartsboost2022' on page 20 undefined on input line 392.
-
-
-LaTeX Warning: Citation `ref-plotly2024b' on page 20 undefined on input line 392.
-
-
-LaTeX Warning: Citation `ref-satyanarayan2015' on page 20 undefined on input line 396.
-
-
-LaTeX Warning: Citation `ref-vega2024a' on page 20 undefined on input line 396.
+[15]
+Underfull \hbox (badness 4060) in paragraph at lines 478--479
+[]\T1/lmr/m/n/10 Note that, by def-i-ni-tion, ev-ery \T1/lmtt/m/n/10 Getter<T> \T1/lmr/m/n/10 is also au-to-mat-i-cally an
+ []
 
 
 
-[20{/home/adam/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc} <./_main_files/figure-latex/plotly-scatterplot-1.pdf>]
+[16]
 
-LaTeX Warning: Citation `ref-vega2024b' on page 21 undefined on input line 398.
-
-
-LaTeX Warning: Citation `ref-satyanarayan2015' on page 21 undefined on input line 400.
+LaTeX Warning: Hyper reference `SoA' on page 17 undefined on input line 527.
 
 
-LaTeX Warning: Citation `ref-vegalite2024a' on page 21 undefined on input line 429.
+LaTeX Warning: Hyper reference `SoA' on page 17 undefined on input line 539.
 
 
-LaTeX Warning: Citation `ref-vegalite2024b' on page 21 undefined on input line 429.
+LaTeX Warning: Hyper reference `SoA' on page 17 undefined on input line 539.
+
+
+LaTeX Warning: Hyper reference `Scene' on page 17 undefined on input line 543.
+
+
+
+[17]
+
+[18{/home/adam/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}]
+
+LaTeX Warning: Hyper reference `Partitions' on page 19 undefined on input line 605.
+
+
+
+[19]
+
+LaTeX Warning: Hyper reference `Productux5cux2520factors' on page 20 undefined on input line 626.
+
+
+LaTeX Warning: Hyper reference `Dataframe' on page 20 undefined on input line 628.
+
+
+Overfull \hbox (59.24883pt too wide) in paragraph at lines 639--639
+[]\T1/lmtt/m/n/10 ##  [1] (0,5]  (0,5]  (0,5]  (0,5]  (0,5]  (5,10] (5,10] (5,10] (5,10] (5,10][] 
+ []
+
+
+LaTeX Warning: Hyper reference `SoA' on page 20 undefined on input line 656.
+
+
+
+[20{/home/adam/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}]
+
+LaTeX Warning: Hyper reference `Productux5cux2520factors' on page 21 undefined on input line 658.
 
 
 
 [21]
 
-LaTeX Warning: Citation `ref-holtz2022' on page 22 undefined on input line 435.
-
-
-LaTeX Warning: Citation `ref-plotly2022' on page 22 undefined on input line 435.
-
-
-LaTeX Warning: Citation `ref-plotly2022' on page 22 undefined on input line 435.
-
-
-LaTeX Warning: Citation `ref-vegalite2022' on page 22 undefined on input line 435.
-
-
-LaTeX Warning: Citation `ref-kunst2022' on page 22 undefined on input line 435.
-
-
-LaTeX Warning: Citation `ref-htmlwidgets2021' on page 22 undefined on input line 437.
-
-
-LaTeX Warning: Citation `ref-shiny2024' on page 22 undefined on input line 437.
-
-LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 445.
-(/home/adam/.TinyTeX/texmf-dist/tex/latex/lm/ts1lmr.fd
-File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-)
-
-LaTeX Warning: Citation `ref-crosstalk2025' on page 22 undefined on input line 445.
-
-
-LaTeX Warning: Citation `ref-keller2024' on page 22 undefined on input line 449.
-
-
-LaTeX Warning: Citation `ref-batch2017' on page 22 undefined on input line 449.
+LaTeX Warning: Hyper reference `Bijectionux5cux2520factors' on page 22 undefined on input line 682.
 
 
 
 [22]
 
-LaTeX Warning: Citation `ref-wikipedia2022' on page 23 undefined on input line 458.
-
-
-LaTeX Warning: Citation `ref-vanderplas2020' on page 23 undefined on input line 463.
-
-
-LaTeX Warning: Citation `ref-dimara2019' on page 23 undefined on input line 463.
-
-
-LaTeX Warning: Citation `ref-elmqvist2011' on page 23 undefined on input line 463.
-
-
-LaTeX Warning: Citation `ref-pike2009' on page 23 undefined on input line 463.
-
-
-LaTeX Warning: Citation `ref-sarikaya2018' on page 23 undefined on input line 463.
-
-
-LaTeX Warning: Citation `ref-dimara2019' on page 23 undefined on input line 465.
-
-
-LaTeX Warning: Citation `ref-elmqvist2011' on page 23 undefined on input line 465.
-
-
-LaTeX Warning: Citation `ref-dimara2019' on page 23 undefined on input line 480.
-
-
-LaTeX Warning: Citation `ref-pike2009' on page 23 undefined on input line 480.
-
-
-LaTeX Warning: Citation `ref-yi2007' on page 23 undefined on input line 480.
-
-
-LaTeX Warning: Citation `ref-buja1996' on page 23 undefined on input line 480.
-
-
-LaTeX Warning: Citation `ref-kelleher2015' on page 23 undefined on input line 480.
-
-
-LaTeX Warning: Citation `ref-leman2013' on page 23 undefined on input line 480.
-
-
-LaTeX Warning: Citation `ref-wills2008' on page 23 undefined on input line 480.
-
-
-LaTeX Warning: Citation `ref-brehmer2013' on page 23 undefined on input line 480.
-
-
-LaTeX Warning: Citation `ref-dimara2019' on page 23 undefined on input line 480.
-
-
-LaTeX Warning: Citation `ref-dix1998' on page 23 undefined on input line 480.
-
-
-LaTeX Warning: Citation `ref-pike2009' on page 23 undefined on input line 480.
-
-
-LaTeX Warning: Citation `ref-quadri2021' on page 23 undefined on input line 480.
-
-
-LaTeX Warning: Citation `ref-yi2007' on page 23 undefined on input line 480.
-
-
-LaTeX Warning: Citation `ref-brehmer2013' on page 23 undefined on input line 482.
-
-
-LaTeX Warning: Citation `ref-dimara2019' on page 23 undefined on input line 482.
-
-
-
 [23]
 
-LaTeX Warning: Citation `ref-brodbeck2009' on page 24 undefined on input line 490.
-
-
-LaTeX Warning: Citation `ref-becker1987' on page 24 undefined on input line 490.
-
-
-LaTeX Warning: Citation `ref-buja1996' on page 24 undefined on input line 490.
-
-
-LaTeX Warning: Citation `ref-rheingans2002' on page 24 undefined on input line 490.
-
-
-LaTeX Warning: Citation `ref-jankun2007' on page 24 undefined on input line 490.
-
-
-LaTeX Warning: Citation `ref-dimara2019' on page 24 undefined on input line 490.
-
-
-LaTeX Warning: Citation `ref-kehrer2012' on page 24 undefined on input line 492.
-
-
-LaTeX Warning: Citation `ref-buja1996' on page 24 undefined on input line 492.
-
-
-LaTeX Warning: Citation `ref-keim2002' on page 24 undefined on input line 492.
-
-
-LaTeX Warning: Citation `ref-unwin1999' on page 24 undefined on input line 492.
-
-
-LaTeX Warning: Citation `ref-chen2008' on page 24 undefined on input line 492.
-
-
-LaTeX Warning: Citation `ref-shneiderman2003' on page 24 undefined on input line 492.
-
-
-LaTeX Warning: Citation `ref-leman2013' on page 24 undefined on input line 492.
-
-
-LaTeX Warning: Citation `ref-self2018' on page 24 undefined on input line 492.
-
-
-LaTeX Warning: Citation `ref-pike2009' on page 24 undefined on input line 492.
+LaTeX Warning: Hyper reference `Partitions' on page 24 undefined on input line 762.
 
 
 
-[24]
-
-LaTeX Warning: Citation `ref-dimara2019' on page 25 undefined on input line 494.
-
-
-LaTeX Warning: Citation `ref-yi2007' on page 25 undefined on input line 494.
-
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 500.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 500.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 500.
-
-Overfull \hbox (1022.16437pt too wide) in paragraph at lines 500--515
- [][] 
- []
-
-
-LaTeX Warning: Citation `ref-foley1990' on page 25 undefined on input line 523.
-
-
-LaTeX Warning: Citation `ref-howard1995' on page 25 undefined on input line 523.
-
-
-LaTeX Warning: Citation `ref-dimara2019' on page 25 undefined on input line 523.
-
-
-LaTeX Warning: Citation `ref-urbanek2011' on page 25 undefined on input line 523.
-
-
+[24{/home/adam/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}]
 
 [25]
 
-LaTeX Warning: Citation `ref-dimara2019' on page 26 undefined on input line 529.
-
-
-LaTeX Warning: Citation `ref-kosara2016' on page 26 undefined on input line 535.
-
-
-LaTeX Warning: Citation `ref-kosara2016' on page 26 undefined on input line 535.
-
-
-LaTeX Warning: Citation `ref-tukey1977' on page 26 undefined on input line 535.
-
-
-LaTeX Warning: Citation `ref-unwin2018' on page 26 undefined on input line 535.
-
-
-LaTeX Warning: Citation `ref-cairo2014' on page 26 undefined on input line 537.
-
-
-LaTeX Warning: Citation `ref-cairo2019' on page 26 undefined on input line 537.
-
-
-LaTeX Warning: Citation `ref-gelman2013' on page 26 undefined on input line 537.
-
-
-LaTeX Warning: Citation `ref-tufte2001' on page 26 undefined on input line 537.
-
-
-LaTeX Warning: Citation `ref-abukhodair2013' on page 26 undefined on input line 537.
-
-
-LaTeX Warning: Citation `ref-franconeri2021' on page 26 undefined on input line 537.
+LaTeX Warning: Hyper reference `Factors' on page 26 undefined on input line 817.
 
 
 
 [26]
-
-LaTeX Warning: Citation `ref-dimara2019' on page 27 undefined on input line 549.
-
-
-LaTeX Warning: Citation `ref-unwin2006' on page 27 undefined on input line 549.
-
-
-LaTeX Warning: Citation `ref-yi2007' on page 27 undefined on input line 549.
-
-
-LaTeX Warning: Citation `ref-dang2010' on page 27 undefined on input line 555.
-
-
-LaTeX Warning: Citation `ref-theus2008' on page 27 undefined on input line 555.
-
-
-LaTeX Warning: Citation `ref-bracsoveanu2017' on page 27 undefined on input line 557.
-
-
-
-[27]
-
-LaTeX Warning: Citation `ref-buja1996' on page 28 undefined on input line 563.
-
-
-LaTeX Warning: Citation `ref-dix1998' on page 28 undefined on input line 563.
-
-
-LaTeX Warning: Citation `ref-unwin1999' on page 28 undefined on input line 563.
-
-
-LaTeX Warning: Citation `ref-theus2008' on page 28 undefined on input line 563.
-
-
-LaTeX Warning: Citation `ref-yi2007' on page 28 undefined on input line 563.
-
-<./figures/zooming.png, id=211, 361.35pt x 216.81pt>
-File: ./figures/zooming.png Graphic file (type png)
-<use ./figures/zooming.png>
-Package pdftex.def Info: ./figures/zooming.png  used on input line 567.
+<./figures/barplot-spineplot.png, id=223, 361.35pt x 216.81pt>
+File: ./figures/barplot-spineplot.png Graphic file (type png)
+<use ./figures/barplot-spineplot.png>
+Package pdftex.def Info: ./figures/barplot-spineplot.png  used on input line 825.
 (pdftex.def)             Requested size: 361.36566pt x 216.81938pt.
 
-Overfull \hbox (16.36566pt too wide) in paragraph at lines 567--568
- [][] 
- []
-
-<./figures/panning.png, id=212, 361.35pt x 325.215pt>
-File: ./figures/panning.png Graphic file (type png)
-<use ./figures/panning.png>
-Package pdftex.def Info: ./figures/panning.png  used on input line 578.
-(pdftex.def)             Requested size: 361.37668pt x 325.23901pt.
-
-Overfull \hbox (16.37668pt too wide) in paragraph at lines 578--579
+Overfull \hbox (16.36566pt too wide) in paragraph at lines 825--826
  [][] 
  []
 
 
-LaTeX Warning: Citation `ref-wilkinson2012' on page 28 undefined on input line 585.
 
-
-LaTeX Warning: Citation `ref-unwin1999' on page 28 undefined on input line 585.
-
-
-LaTeX Warning: Citation `ref-keim2002' on page 28 undefined on input line 585.
-
-
-LaTeX Warning: Citation `ref-unwin1999' on page 28 undefined on input line 585.
-
-
-LaTeX Warning: Citation `ref-yi2007' on page 28 undefined on input line 585.
+[27 <./figures/barplot-spineplot.png>]
+Underfull \vbox (badness 2359) has occurred while \output is active []
 
 
 
 [28]
 
-[29 <./figures/zooming.png>]
+[29]
+<_main_files/figure-latex/unnamed-chunk-30-1.pdf, id=266, 469.755pt x 325.215pt>
+File: _main_files/figure-latex/unnamed-chunk-30-1.pdf Graphic file (type pdf)
+<use _main_files/figure-latex/unnamed-chunk-30-1.pdf>
+Package pdftex.def Info: _main_files/figure-latex/unnamed-chunk-30-1.pdf  used on input line 955.
+(pdftex.def)             Requested size: 469.78969pt x 325.23901pt.
 
-[30 <./figures/panning.png>]
-
-LaTeX Warning: Citation `ref-urbanek2003' on page 31 undefined on input line 589.
-
-
-LaTeX Warning: Citation `ref-xie2014' on page 31 undefined on input line 589.
-
-<./figures/querying.png, id=229, 361.35pt x 216.81pt>
-File: ./figures/querying.png Graphic file (type png)
-<use ./figures/querying.png>
-Package pdftex.def Info: ./figures/querying.png  used on input line 593.
-(pdftex.def)             Requested size: 361.36566pt x 216.81938pt.
-
-Overfull \hbox (16.36566pt too wide) in paragraph at lines 593--594
- [][] 
+Overfull \hbox (124.78969pt too wide) in paragraph at lines 955--955
+ [] 
  []
 
 
-LaTeX Warning: Citation `ref-tukey1993' on page 31 undefined on input line 600.
 
+[30]
+<_main_files/figure-latex/unnamed-chunk-31-1.pdf, id=273, 469.755pt x 325.215pt>
+File: _main_files/figure-latex/unnamed-chunk-31-1.pdf Graphic file (type pdf)
+<use _main_files/figure-latex/unnamed-chunk-31-1.pdf>
+Package pdftex.def Info: _main_files/figure-latex/unnamed-chunk-31-1.pdf  used on input line 969.
+(pdftex.def)             Requested size: 469.78969pt x 325.23901pt.
 
-LaTeX Warning: Citation `ref-unwin2006' on page 31 undefined on input line 600.
-
-
-
-[31 <./figures/querying.png>]
-
-LaTeX Warning: Hyper reference `bidirectional-communication' on page 32 undefined on input line 602.
-
-
-LaTeX Warning: Citation `ref-unwin2006' on page 32 undefined on input line 604.
-
-
-LaTeX Warning: Citation `ref-unwin2000' on page 32 undefined on input line 608.
-
-
-LaTeX Warning: Citation `ref-unwin2006' on page 32 undefined on input line 608.
-
-<./figures/sorting.png, id=240, 361.35pt x 216.81pt>
-File: ./figures/sorting.png Graphic file (type png)
-<use ./figures/sorting.png>
-Package pdftex.def Info: ./figures/sorting.png  used on input line 612.
-(pdftex.def)             Requested size: 361.36566pt x 216.81938pt.
-
-Overfull \hbox (16.36566pt too wide) in paragraph at lines 612--613
- [][] 
+Overfull \hbox (124.78969pt too wide) in paragraph at lines 969--969
+ [] 
  []
 
 
-LaTeX Warning: Citation `ref-unwin2006' on page 32 undefined on input line 619.
 
+[31 <./_main_files/figure-latex/unnamed-chunk-30-1.pdf>]
 
-LaTeX Warning: Citation `ref-unwin2006' on page 32 undefined on input line 619.
+[32 <./_main_files/figure-latex/unnamed-chunk-31-1.pdf>]
 
-
-LaTeX Warning: Citation `ref-urbanek2011' on page 32 undefined on input line 619.
-
-
-LaTeX Warning: Citation `ref-unwin2000' on page 32 undefined on input line 619.
-
-
-
-[32]
-
-[33 <./figures/sorting.png>]
-
-LaTeX Warning: Citation `ref-unwin2006' on page 34 undefined on input line 621.
-
-
-LaTeX Warning: Citation `ref-leman2013' on page 34 undefined on input line 625.
-
-
-LaTeX Warning: Citation `ref-self2018' on page 34 undefined on input line 625.
-
-
-LaTeX Warning: Citation `ref-urbanek2011' on page 34 undefined on input line 625.
-
-
-LaTeX Warning: Citation `ref-bishop2006' on page 34 undefined on input line 631.
-
-
-LaTeX Warning: Citation `ref-urbanek2011' on page 34 undefined on input line 631.
-
-
-LaTeX Warning: Citation `ref-leman2013' on page 34 undefined on input line 633.
-
-
-LaTeX Warning: Citation `ref-self2018' on page 34 undefined on input line 633.
-
-
-
-[34{/home/adam/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/home/adam/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/home/adam/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}]
-
-LaTeX Warning: Citation `ref-shiny2024' on page 35 undefined on input line 635.
-
-
-LaTeX Warning: Citation `ref-wickham2009' on page 35 undefined on input line 635.
-
-
-LaTeX Warning: Citation `ref-vanderplas2020' on page 35 undefined on input line 635.
-
-
-LaTeX Warning: Citation `ref-xie2014' on page 35 undefined on input line 635.
-
-
-LaTeX Warning: Citation `ref-chen2008' on page 35 undefined on input line 639.
-
-
-LaTeX Warning: Citation `ref-lee2022b' on page 35 undefined on input line 639.
-
-
-LaTeX Warning: Citation `ref-rosling2011' on page 35 undefined on input line 641.
-
-
-LaTeX Warning: Citation `ref-asimov1985' on page 35 undefined on input line 643.
-
-
-LaTeX Warning: Citation `ref-buja1986' on page 35 undefined on input line 643.
-
-
-LaTeX Warning: Citation `ref-cook1995' on page 35 undefined on input line 643.
-
-
-LaTeX Warning: Citation `ref-cook1995' on page 35 undefined on input line 643.
-
-
-LaTeX Warning: Citation `ref-wickham2011' on page 35 undefined on input line 643.
-
-
-LaTeX Warning: Citation `ref-chen2008' on page 35 undefined on input line 643.
-
-
-LaTeX Warning: Citation `ref-lee2022b' on page 35 undefined on input line 643.
-
-
-LaTeX Warning: Citation `ref-cook1995' on page 35 undefined on input line 643.
-
-
-LaTeX Warning: Citation `ref-wickham2011' on page 35 undefined on input line 643.
-
-
-LaTeX Warning: Citation `ref-lee2022a' on page 35 undefined on input line 643.
-
-
-LaTeX Warning: Citation `ref-lee2022b' on page 35 undefined on input line 643.
-
-
-
-[35]
-
-LaTeX Warning: Citation `ref-rosling2011' on page 36 undefined on input line 645.
-
-
-LaTeX Warning: Citation `ref-chen2008' on page 36 undefined on input line 645.
-
-
-LaTeX Warning: Citation `ref-wilkinson2012' on page 36 undefined on input line 649.
-
-
-LaTeX Warning: Citation `ref-yi2007' on page 36 undefined on input line 649.
-
-<./figures/barplot-spineplot.png, id=279, 361.35pt x 216.81pt>
-File: ./figures/barplot-spineplot.png Graphic file (type png)
-<use ./figures/barplot-spineplot.png>
-Package pdftex.def Info: ./figures/barplot-spineplot.png  used on input line 655.
-(pdftex.def)             Requested size: 361.36566pt x 216.81938pt.
-
-Overfull \hbox (16.36566pt too wide) in paragraph at lines 655--656
- [][] 
+[33]
+Underfull \hbox (badness 1735) in paragraph at lines 1078--1079
+ \T1/lmr/bx/n/10 2.3.7.3.1 Be-yond lin-ear maps[] \T1/lmr/m/n/10 An-other big ad-van-tage of the two-
  []
 
 
-LaTeX Warning: Citation `ref-becker1987' on page 36 undefined on input line 668.
 
+[34]
 
-LaTeX Warning: Citation `ref-buja1996' on page 36 undefined on input line 668.
-
-
-LaTeX Warning: Citation `ref-wilhelm2003' on page 36 undefined on input line 668.
-
-
-LaTeX Warning: Citation `ref-heer2012' on page 36 undefined on input line 668.
-
-
-LaTeX Warning: Citation `ref-ward2015' on page 36 undefined on input line 668.
-
-
-LaTeX Warning: Citation `ref-ware2019' on page 36 undefined on input line 668.
-
-
-LaTeX Warning: Citation `ref-dix1998' on page 36 undefined on input line 668.
-
-
-LaTeX Warning: Citation `ref-wilhelm2008' on page 36 undefined on input line 668.
-
-
-LaTeX Warning: Citation `ref-wills2008' on page 36 undefined on input line 668.
-
-
+[35{/home/adam/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}]
 
 [36]
 
-[37 <./figures/barplot-spineplot.png>]
-<./figures/linked-selection.png, id=292, 361.35pt x 216.81pt>
-File: ./figures/linked-selection.png Graphic file (type png)
-<use ./figures/linked-selection.png>
-Package pdftex.def Info: ./figures/linked-selection.png  used on input line 672.
-(pdftex.def)             Requested size: 361.36566pt x 216.81938pt.
+[37]
 
-Overfull \hbox (16.36566pt too wide) in paragraph at lines 672--673
- [][] 
- []
-
-
-LaTeX Warning: Citation `ref-wilhelm2008' on page 38 undefined on input line 679.
-
-
-LaTeX Warning: Citation `ref-hauser2002' on page 38 undefined on input line 679.
-
-
-LaTeX Warning: Citation `ref-splechtna2018' on page 38 undefined on input line 679.
-
-
-LaTeX Warning: Citation `ref-wills2008' on page 38 undefined on input line 679.
-
-
-LaTeX Warning: Citation `ref-satyanarayan2016' on page 38 undefined on input line 679.
-
-
-LaTeX Warning: Citation `ref-theus2002' on page 38 undefined on input line 679.
-
-
-LaTeX Warning: Citation `ref-urbanek2003' on page 38 undefined on input line 679.
-
-
-LaTeX Warning: Citation `ref-wills2000' on page 38 undefined on input line 679.
-
-
-LaTeX Warning: Citation `ref-wills2008' on page 38 undefined on input line 679.
-
-
-LaTeX Warning: Citation `ref-satyanarayan2015' on page 38 undefined on input line 681.
-
-
-LaTeX Warning: Citation `ref-satyanarayan2016' on page 38 undefined on input line 681.
-
-
-LaTeX Warning: Citation `ref-theus2002' on page 38 undefined on input line 681.
-
-
-LaTeX Warning: Citation `ref-urbanek2003' on page 38 undefined on input line 681.
-
-
-LaTeX Warning: Citation `ref-urbanek2011' on page 38 undefined on input line 681.
-
-
-
-[38 <./figures/linked-selection.png>]
-
-LaTeX Warning: Citation `ref-urbanek2003' on page 39 undefined on input line 683.
-
-
-LaTeX Warning: Citation `ref-wilhelm2008' on page 39 undefined on input line 683.
-
-
-LaTeX Warning: Citation `ref-wills2008' on page 39 undefined on input line 683.
-
-
-LaTeX Warning: Citation `ref-wilhelm2008' on page 39 undefined on input line 683.
-
-
-LaTeX Warning: Citation `ref-urbanek2011' on page 39 undefined on input line 683.
-
-
-LaTeX Warning: Citation `ref-wilhelm2008' on page 39 undefined on input line 685.
-
-
-LaTeX Warning: Reference `stacking-part-whole' on page 39 undefined on input line 685.
-
-
-LaTeX Warning: Citation `ref-ruiz2021' on page 39 undefined on input line 687.
-
-
-LaTeX Warning: Citation `ref-urbanek2011' on page 39 undefined on input line 687.
-
-
-LaTeX Warning: Citation `ref-pike2009' on page 39 undefined on input line 687.
-
-<./figures/line-consistency.png, id=302, 361.35pt x 216.81pt>
-File: ./figures/line-consistency.png Graphic file (type png)
-<use ./figures/line-consistency.png>
-Package pdftex.def Info: ./figures/line-consistency.png  used on input line 693.
-(pdftex.def)             Requested size: 361.36566pt x 216.81938pt.
-
-Overfull \hbox (16.36566pt too wide) in paragraph at lines 693--694
- [][] 
- []
-
-
+[38]
 
 [39]
 
-LaTeX Warning: Citation `ref-brehmer2013' on page 40 undefined on input line 706.
-
-
-LaTeX Warning: Citation `ref-franconeri2021' on page 40 undefined on input line 706.
-
-
-LaTeX Warning: Citation `ref-sarikaya2018' on page 40 undefined on input line 706.
-
-
-LaTeX Warning: Citation `ref-brehmer2013' on page 40 undefined on input line 706.
-
-
-LaTeX Warning: Citation `ref-kandel2012' on page 40 undefined on input line 706.
-
-
-LaTeX Warning: Citation `ref-sarikaya2018' on page 40 undefined on input line 706.
-
-
-LaTeX Warning: Citation `ref-brehmer2013' on page 40 undefined on input line 706.
-
-
-LaTeX Warning: Citation `ref-tufte2001' on page 40 undefined on input line 706.
-
-
-Underfull \vbox (badness 2884) has occurred while \output is active []
-
-
-
-[40 <./figures/line-consistency.png>]
-
-LaTeX Warning: Citation `ref-brehmer2013' on page 41 undefined on input line 708.
-
-
-LaTeX Warning: Citation `ref-pike2009' on page 41 undefined on input line 708.
-
-
-LaTeX Warning: Citation `ref-ward2015' on page 41 undefined on input line 710.
-
-
-LaTeX Warning: Citation `ref-nytimes2025' on page 41 undefined on input line 724.
-
-
+[40]
 
 [41]
 
-LaTeX Warning: Citation `ref-franconeri2021' on page 42 undefined on input line 728.
-
-
-LaTeX Warning: Citation `ref-quadri2021' on page 42 undefined on input line 728.
-
-
-LaTeX Warning: Citation `ref-cleveland1984' on page 42 undefined on input line 730.
-
-
-LaTeX Warning: Citation `ref-heer2010' on page 42 undefined on input line 732.
-
-
-LaTeX Warning: Citation `ref-cleveland1984' on page 42 undefined on input line 732.
-
-
-LaTeX Warning: Citation `ref-demiralp2014' on page 42 undefined on input line 732.
-
-
-LaTeX Warning: Citation `ref-saket2017' on page 42 undefined on input line 732.
-
-
-LaTeX Warning: Citation `ref-reda2018' on page 42 undefined on input line 732.
-
-
-LaTeX Warning: Citation `ref-mackinlay1986' on page 42 undefined on input line 732.
-
-
-LaTeX Warning: Citation `ref-franconeri2021' on page 42 undefined on input line 732.
-
-
-LaTeX Warning: Citation `ref-quadri2021' on page 42 undefined on input line 732.
-
-
-LaTeX Warning: Reference `scales-composition' on page 42 undefined on input line 736.
-
-
-LaTeX Warning: Citation `ref-hand1996' on page 42 undefined on input line 738.
-
-
-LaTeX Warning: Citation `ref-michell1986' on page 42 undefined on input line 738.
-
-
-LaTeX Warning: Citation `ref-tal2025' on page 42 undefined on input line 738.
-
-
-LaTeX Warning: Citation `ref-humphry2013' on page 42 undefined on input line 738.
-
-
-LaTeX Warning: Citation `ref-michell2021' on page 42 undefined on input line 738.
-
-
-
 [42]
 
-LaTeX Warning: Citation `ref-stevens1946' on page 43 undefined on input line 740.
-
-
-Overfull \hbox (219.83794pt too wide) in paragraph at lines 746--759
- [][] 
- []
-
-
-LaTeX Warning: Citation `ref-stevens1946' on page 43 undefined on input line 761.
-
-
-LaTeX Warning: Citation `ref-stevens1946' on page 43 undefined on input line 767.
-
-
-
 [43]
-
-LaTeX Warning: Citation `ref-stevens1946' on page 44 undefined on input line 769.
-
-
-LaTeX Warning: Citation `ref-stevens1946' on page 44 undefined on input line 771.
-
-
-LaTeX Warning: Citation `ref-krantz1971' on page 44 undefined on input line 771.
-
-
-LaTeX Warning: Citation `ref-michell2021' on page 44 undefined on input line 771.
-
-
-LaTeX Warning: Citation `ref-tal2025' on page 44 undefined on input line 771.
-
-
-LaTeX Warning: Citation `ref-stevens1951' on page 44 undefined on input line 771.
-
-
-LaTeX Warning: Citation `ref-luce1959' on page 44 undefined on input line 771.
-
-
-LaTeX Warning: Citation `ref-lord1953' on page 44 undefined on input line 771.
-
-
-LaTeX Warning: Citation `ref-tukey1986' on page 44 undefined on input line 771.
-
-
-LaTeX Warning: Citation `ref-velleman1993' on page 44 undefined on input line 771.
-
-
-LaTeX Warning: Citation `ref-wilkinson2012' on page 44 undefined on input line 771.
-
-
-LaTeX Warning: Citation `ref-wilkinson2012' on page 44 undefined on input line 773.
-
-
-LaTeX Warning: Citation `ref-wickham2024' on page 44 undefined on input line 773.
-
-
-LaTeX Warning: Citation `ref-cleveland1985' on page 44 undefined on input line 773.
-
-
-LaTeX Warning: Citation `ref-wilkinson2012' on page 44 undefined on input line 773.
+Underfull \hbox (badness 2165) in paragraph at lines 1440--1441
+ \T1/lmr/bx/n/10 2.3.7.5.2 Di-rec-tion[] \T1/lmr/m/n/10 In the same way we can think about ex-pand-
+ []
 
 
 
 [44]
 
 [45]
-Underfull \hbox (badness 5161) in paragraph at lines 874--875
-\T1/lmr/m/it/10 ceed-ings of the work-ing con-fer-ence on Ad-vanced vi-sual in-ter-faces\T1/lmr/m/n/10 ,
- []
-
-
 
 [46]
 
@@ -1960,22 +934,147 @@ Underfull \hbox (badness 5161) in paragraph at lines 874--875
 
 [49]
 
-! LaTeX Error: Unicode character ́ (U+0301)
-               not set up for use with LaTeX.
+[50]
+Underfull \hbox (badness 4291) in paragraph at lines 1754--1755
+\T1/lmr/m/n/10 While \T1/lmtt/m/n/10 ExpansePoint \T1/lmr/m/n/10 places val-ues at equidis-tant points along $\OT1/lmr/m/n/10 [0\OML/lmm/m/it/10 ; \OT1/lmr/m/n/10 1]$\T1/lmr/m/n/10 ,
+ []
 
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.1066 Ruiz, Jenny, Estefanı́
-                               a Serral, and Monique Snoeck. 2021. {``Unifyi... 
+
+Underfull \hbox (badness 2302) in paragraph at lines 1754--1755
+\T1/lmtt/m/n/10 ExpanseBand \T1/lmr/m/n/10 places val-ues at the mid-points of cor-re-spond-ing bins or
+ []
+
+
+
+[51]
+
+[52]
+
+[53]
+
+[54
+
+]
+Chapter 3.
+
+
+[55]
+
+LaTeX Warning: Reference `tab:longterm-care-schema' on page 56 undefined on input line 1839.
+
+
+
+[56]
+<./figures/example-cases-days.png, id=461, 782.925pt x 494.84875pt>
+File: ./figures/example-cases-days.png Graphic file (type png)
+<use ./figures/example-cases-days.png>
+Package pdftex.def Info: ./figures/example-cases-days.png  used on input line 1872.
+(pdftex.def)             Requested size: 782.73195pt x 494.72673pt.
+
+Overfull \hbox (437.73195pt too wide) in paragraph at lines 1872--1873
+ [][] 
+ []
+
+
+
+[57]
+
+[58 <./figures/example-cases-days.png>]
+
+[59]
+
+[60]
+
+[61]
+
+[62]
+
+[63]
+
+LaTeX Warning: Reference `tab:icd10' on page 64 undefined on input line 2061.
+
+
+LaTeX Warning: Reference `fig:example-cases-diagnosis' on page 64 undefined on input line 2089.
+
+
+LaTeX Warning: Reference `fig:example-cases-diagnosis' on page 64 undefined on input line 2092.
+
+
+
+[64]
+
+LaTeX Warning: Reference `fig:example-cases-diagnosis' on page 65 undefined on input line 2097.
+
+
+
+[65]
+
+[66]
+
+LaTeX Warning: Reference `fig:example-cases-diagnosis' on page 67 undefined on input line 2142.
+
+
+LaTeX Warning: Reference `tab:prevalence-over-time' on page 67 undefined on input line 2146.
+
+
+
+[67]
+
+LaTeX Warning: Reference `fig:example-cases-diagnosis-max' on page 68 undefined on input line 2169.
+
+
+LaTeX Warning: Reference `fig:example-cases-diagnosis-max' on page 68 undefined on input line 2169.
+
+
+LaTeX Warning: Reference `problems' on page 68 undefined on input line 2169.
+
+
+
+[68]
+Underfull \hbox (badness 1122) in paragraph at lines 2194--2195
+\T1/lmr/m/n/10 Alzheimer's pa-tients, over time, schizophre-nia pa-tients be-came the
+ []
+
+
+
+[69]
+Underfull \hbox (badness 1845) in paragraph at lines 2200--2201
+\T1/lmr/m/it/10 Mark-down Pub-lish-ing Sys-tem\T1/lmr/m/n/10 . []$https : / / CRAN . R -[] project . org / package =
+ []
+
+
+
+[70]
+
+[71]
+Underfull \hbox (badness 10000) in paragraph at lines 2314--2315
+[]$\T1/lmr/m/n/10 https : / / www . reddit . com / r / dataisbeautiful / comments / 3mp9r7 / comment /
+ []
+
+
+
+[72] (./_main.aux)
+ ***********
+LaTeX2e <2024-11-01>
+L3 programming layer <2024-11-02>
+ ***********
+
+LaTeX Warning: There were undefined references.
+
+ ) 
 Here is how much of TeX's memory you used:
- 24312 strings out of 475322
- 455646 string characters out of 5770296
- 828963 words of memory out of 5000000
- 46490 multiletter control sequences out of 15000+600000
- 641387 words of font info for 92 fonts, out of 8000000 for 9000
+ 22934 strings out of 475322
+ 432264 string characters out of 5770296
+ 797166 words of memory out of 5000000
+ 45175 multiletter control sequences out of 15000+600000
+ 637956 words of font info for 93 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 98i,9n,101p,1690b,521s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 98i,9n,101p,1184b,590s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</home/adam/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></home/adam/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></home/adam/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb></home/adam/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></home/adam/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi7.pfb></home/adam/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></home/adam/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb></home/adam/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb></home/adam/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr6.pfb></home/adam/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb></home/adam/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr8.pfb></home/adam/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb></home/adam/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmro10.pfb></home/adam/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></home/adam/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb></home/adam/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmtk10.pfb></home/adam/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt10.pfb></home/adam/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmtti10.pfb></home/adam/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmtto10.pfb></home/adam/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on _main.pdf (72 pages, 789010 bytes).
+PDF statistics:
+ 772 PDF objects out of 1000 (max. 8388607)
+ 633 compressed objects within 7 object streams
+ 185 named destinations out of 1000 (max. 500000)
+ 94 words of extra memory for PDF output out of 10000 (max. 10000000)
 
-!  ==> Fatal error occurred, no output PDF file produced!

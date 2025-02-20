@@ -3,9 +3,10 @@ title: "Fluent Graphics"
 author: "Adam Bartonicek"
 site: bookdown::bookdown_site
 documentclass: book
+always_allow_html: true
 output:
-  #bookdown::html_document2: default
-  bookdown::gitbook: default
+  bookdown::gitbook:
+    css: styles.css
 bibliography: [references.bib]
 biblio-style: "apalike"
 link-citations: true
@@ -17,637 +18,561 @@ header-includes:
 
 # Abstract 
 
-Interactive data visualization has become a staple of modern data presentation. Yet, despite its growing popularity, there still exists many unresolved issues which make the process of producing rich interactive data visualizations difficult. Chief among these is the problem of data pipelines: how do we design a framework for turning raw data into summary statistics that can then be visualized, efficiently, on demand, and in a visually coherent way? Despite seeming like a straightforward task, there are in fact many subtle problems that arise when designing such a pipeline, and some of these may require a dramatic shift in perspective. In this thesis, I argue that, in order to design coherent generic interactive data visualization systems, we need to ground our thinking in concepts from some fairly abstract areas of mathematics including category theory and abstract algebra. By leveraging these algebraic concepts, we may be able to build more flexible and expressive interactive data visualization systems.
+Placeholder
 
-```{r}
-#| echo: false
-
-knitr::opts_chunk$set(
-  fig.align = "center"
-)
-
-directory <- tempdir()
-
-get_ts_filepath <- function(x) {
-  if (endsWith(x, ".ts")) {
-    paste0(directory, "/", trimws(gsub("//", "", x)))
-  } else {
-    tempfile(tmpdir = directory, fileext = ".ts")
-  }
-}
-
-# Create a TypeScript knitr engine
-knitr::knit_engines$set(ts = function(options) {
-  code <- paste0(options$code, collapse = "\n")
-  out <- ""
-  
-  if (options$eval) {
-    ts_path <- get_ts_filepath(options$code[1]) 
-    ts_conn <- file(ts_path)
-    writeLines(code, ts_conn)
-    
-    
-    out <- paste("~/.bun/bin/bun run", ts_path) |> 
-      system(intern = TRUE, ignore.stderr = TRUE)
-    
-    close(ts_conn)
-  }
-  
-  knitr::engine_output(options, code, out)
-})
-
-```
-
-```{r}
-#| echo: false
-
-pal_paired_1 <- palette.colors(2, "Paired")
-pal_paired_3 <- palette.colors(6, "Paired")[c(1, 2, 5, 6, 3, 4)]
-pal_light_3 <- pal_paired_3[1:3]
-pal_dark_3 <- pal_paired_3[2 * 1:3]
-
-library(ggplot2)
-
-clean_theme <- theme_bw() +
-  theme(
-  axis.ticks = element_blank(),
-  panel.grid = element_blank()
-)
-
-theme_set(clean_theme)
-```
-
-\newcommand\then{⨾}
 
 
 <!--chapter:end:index.Rmd-->
 
-# Introduction {#introduction}
 
-> It’s written here: ‘In the Beginning was the Word!’ <br>
-> Here I stick already! Who can help me? It’s absurd, <br>
-> [...] <br>
-> The Spirit helps me! I have it now, intact. <br>
-> And firmly write: ‘In the Beginning was the Act!
->
-> Faust, Part I, Johann Wolfgang von Goethe [-@goethe2015]
+# System description {#system}
 
-Humans are intensely visual creatures. About 20-30% of our brain is involved in visual processing [@van2003; @sheth2016], utilizing a highly sophisticated and powerful visual processing pipeline [see e.g. @goebel2004; @knudsen2020; for a brief review, see @ware2019]. It is well-established the brain can process certain salient visual stimuli in sub-20-millisecond times, outside of conscious attention [@ledoux2000; @ledoux2003], and that people can make accurate, parallel, and extremely rapid visual judgements, in phenomena known as subitizing and pre-attentive processing [@mandler1982; @treisman1985]. These features make the visual cortex the most powerful information channel that humans possess, both in terms of bandwidth and throughput.
+Placeholder
 
-Statisticians have known about this power of visual presentation for a long time. Starting with early charts and maps, data visualization co-evolved alongside mathematical statistics, offering an alternative and complementary perspective [for a review, see @friendly2006 or Section \@ref(brief-history)]. While mathematical statistics tended to focus on confirmatory hypothesis testing, data visualization provided avenues for unsupervised exploration, "forcing us to notice that which we would never expect to see" [@tukey1977]. Eventually, this valuable role of forcing us to see the unexpected established data visualization as a respected tool within the applied statistician's toolkit.
 
-Seeing an object from a distance is one thing, but being able to also touch, manipulate, and probe it is another. Within the human brain, action and perception are not independent, but are instead intricately linked, mutually reinforcing processes [see e.g. @dijkerman2007; @lederman2009]. Beginning in the 1970's, statisticians acquired a new set of tools for exploiting this connection. The advent of computer graphics and interactive data visualization transformed the idea of "interrogating a chart" from a mere turn of phrase into tangible reality. All of a sudden, it became possible to work with the visual representation of data in a tactile way, getting new perspectives and insights at the stroke of a key or click of a button. 
+## Core requirements
+## Application Programming Interface (`plotscaper`)
+### Basic example
+### The scene and the schema {#scene-and-schema}
+### HTML document embedding
+## Interactive figure platform (`plotscape`)
+### Indexable {#Indexable}
+### Getter {#Getter}
+### Dataframe
+### Reactive
+### Factors
+#### Bijection factors
+#### Constant factors
+#### String factors
+#### Binned factors
+#### Product factors
+##### Computing product indices
+### Reducers
+#### Motivation
+### Scales {#scales}
+#### Overview
+#### Limits of modeling scales as simple functions {#simple-scale-limits}
+#### Solution: Two-component scales {#two-component-scales}
+##### Beyond linear maps
+##### Inverses 
+##### Some other remarks about the two-component scale system
+#### Past implementations of scales
+#### Proposed model of scales
+##### Zero and one
+##### Direction
+##### Multipliers
+##### The Full Monty
+### Expanses
+#### Continuous expanses
+#### Point expanses
+#### Band expanses
 
-This compelling union of the visual and the tactile has made interactive data visualization a popular method of presenting data. Nowadays, there are many packages and libraries for building interactive data visualizations across all the major data analytic languages. Interactive figures make frequent appearance in online news articles and commercial dashboards. However, despite this apparent popularity, significant gaps remain in the use and understanding of interactive visualizations. Individual analysts rarely utilize interactive data visualization tools [see e.g. @batch2017], the availability of certain more sophisticated interactive features is fairly limited (see Section \@ref(litreview)), and researchers still point to a lack of a general interactive data visualization pipeline [@wickham2009; @vanderplas2020]. 
+<!--chapter:end:system.Rmd-->
 
-This thesis explores these interactive data visualization paradoxes and the inherent challenges surrounding interactive data visualization pipelines more specifically. I argue that, contrary to some prevailing views, interactivity is not simply an add-on to static graphics. Instead, interactive visualizations must be designed with interactivity as a primary consideration. Furthermore, I contend that certain interactive features fundamentally influence the types of visualizations that can be effectively presented. My claim is that popular types of interactive visualizations exhibit a particular kind congruence between graphics, statistics, and interaction, and that the absence of this congruence results in suboptimal visualizations. I formalize this congruence using the framework of category theory. Finally, I validate these theoretical concepts by developing an open-source interactive data visualization library and demonstrate its application to real-world data.
-
-#### Thesis Overview
-
-The thesis is organized as follows. Section \@ref(litreview) reviews the history of interactive data visualization and discusses general trends and issues in the field. Section \@ref(problems), focuses on specific problems encountered when designing an interactive data visualization pipeline. Section \@ref(goals), outlines the the goals and aims that guided the development of the interactive data visualization library. Section \@ref(system) details the system's components and design considerations. Section \@ref(applied-example), presents an applied example of exploring a real-world data set using the developed library. Finally, Section \@ref(discussion), discusses lessons learned and potential future research directions.
-
-<!--chapter:end:introduction.Rmd-->
-
----
-output: html_document
-editor_options: 
-  chunk_output_type: console
----
-
-# Background {#litreview}
-
-## Brief history of interactive data visualization {#brief-history}
-
-Data visualization has a rich and intricate history, and a comprehensive treatment is beyond the scope of the present thesis. Nevertheless, in this section, I will provide a brief overview, with a particular focus on the later developments related to interactive visualization. For a more detailed historical account, readers should refer to @beniger1978, @dix1998, @friendly2006, @friendly2021, or @young2011.
-
-### Static data visualization: From ancient times to the space age
-
-The idea of graphically representing abstract information is very old. As one concrete example, a clay tablet recording a land survey during the Old Babylonian period (approximately 1900-1600 BCE) has recently been identified as the earliest visual depiction of the Pythagorean theorem [@mansfield2020]. Other examples of early abstract visualizations include maps of geographic regions and the night sky, and these were also the first to introduce the idea of coordinate systems [@beniger1978; @friendly2021].
-
-```{r}
-#| echo: false
-#| fig-cap: "Photos of the tablet Si. 427 which has recently been identified as the earliest depiction of the Pythagorean theorem [@mansfield2020]. Left: the obverse of the tablet depicts a diagram of a field, inscribed with areas. Right: the reverse of the tablet contains a table of numbers, corresponding to the calculation of the areas. Source: Wikimedia Commons [@mansfield2024]."
-knitr::include_graphics("./figures/si427.jpg")
-```
-
-For a long time, coordinate systems remained tied to geography and maps. However, with the arrival of the early modern age, this was about to change. In the 16-17th century, the works of the 9th century algebraist Al-Khwarizmi percolated into Europe, and with them the idea of representing unknown quantities by variables [@kvasz2006]. This idea culminated with Descartes, who introduced the concept of visualizing algebraic relationships as objects in a 2D plane, forging a powerful link between Euclidean geometry and algebra [@friendly2021]. Coordinate systems were thus freed of their connection to geography, and the x- and y-axes could now be used to represent an arbitrary "space" spanned by two variables.
-
-Descartes' invention of drawing abstract relationships as objects in a 2D plane was initially only used to plot mathematical functions. However, it would not be long until people realized that observations of the real world could be visualized as well. A true pioneer in this arena was William Playfair, who popularized visualization as a way of presenting socioeconomic data and invented many types of plots still in use today, such as the barplot, lineplot, and pie chart [@friendly2021]. Further, with the emergence of modern nation states in the 19th century, the collection of data and *statistics* ["things of the state", @etymonline2024] became widespread, leading to a "golden age" of statistical graphics [@beniger1978; @friendly2021; @young2011]. This period saw the emergence of other graphical lumnaries, such as Étienne-Jules Marey and Charles Joseph Minard [@friendly2021], as well as some ingenious examples of the use of statistical graphics to solve real-world problems, including John Snow's investigation into the London cholera outbreak [@freedman1999; @friendly2021] and Florence Nightingale's reporting on the unsanitary treatment of wounded British soldiers during the Crimean War [@brasseur2005], both of which lead to a great reduction of preventable deaths. 
-
-Simultaneously, the field of mathematical statistics was also experiencing significant developments. Building upon the foundation laid by mathematical prodigies such as Jakob Bernoulli, Abraham de Moivre, Pierre Simon Laplace, and Carl Friedrich Gauss, early 19th century pioneers such as Adolph Quetelet and Francis Galton began developing statistical techniques for uncovering hidden trends in the newly unearthed treasure trove of socioeconomic data [@fienberg1992; @freedman1999]. In the late 19th and early 20th century, these initial efforts were greatly advanced by the theoretical work of figures such as Karl Pearson, Ronald A. Fisher, Jerzy Neyman, and Harold Jeffreys, who established statistics as a discipline in its own right and facilitated its dissemination throughout many scientific fields [@fienberg1992].
-
-As mathematical statistics gained prominence in the early 20th century, data visualization declined. Perceived as less rigorous than "serious" statistical analysis, it got relegated to an auxiliary position, ushering in "dark age" of statistical graphics [@friendly2006; @young2011]. This development may have been partly driven by the early frequentist statisticians' aspiration to establish statistics as a foundation for determining objective truths about the world and society, motivated by personal socio-political goals [see @clayton2021]. Be it as it may, while statistical graphics also did get popularized and entered the mainstream during this time, only a few interesting developments took place [@friendly2021].      
-
-However, beginning in the late 1950's, a series of developments took place which would restore the prominence of data visualization and make it more accessible than ever. Firstly, on the theoretical front, the work of certain academic heavy-weights greatly elevated data visualization and its prestige. Particularly, John Tukey [-@tukey1962; -@tukey1977] fervently championed exploratory data analysis and placed data visualization in its centre. Around the same time, Jacques Bertin published his famous *Sémiologie graphique* [-@bertin1967], which was one of the first works to attempt to lay out a comprehensive system of visual encodings and scales. Secondly, at the more applied level, the development of personal computers [see e.g. @abbate1999] and high-level programming languages such as FORTRAN in 1954 [@backus1978], made the process of rendering production-grade figures easier and more accessible than ever before. Combined, these developments fueled a surge in the use and dissemination of data visualizations.  
-
-As the millennium drew to a close, several other important developments solidified the foundation of static data visualization. First, William Cleveland made significant contributions to the field, laying out many important principles for scientific data visualization [@cleveland1985; @cleveland1993]. Of note, his seminal study on the impact of the choice of visual encodings on statistical judgements remains widely cited today [@cleveland1984]. Similarly, Edward Tufte introduced essential principles for designing effective graphics, coining terms such as *chartjunk* and *data-to-ink ratio* [@tufte2001]. Finally, Leland Wilkinson's groundbreaking Grammar of Graphics [-@wilkinson2012] introduced a comprehensive system for designing charts based on simple algebraic rules, influencing nearly every subsequent software package and research endeavor in the field of visualization.
-
-### Early interactive data visualization: By statisticians for statisticians {#early-interactive}
-
-Compared to static data visualization, interactive data visualization is much more of a recent development. Consequently, less has been written about its history, owing to the shorter timeline, as well as the rapid evolution of software in the time since its inception and the proprietary nature of some systems. Nevertheless, the brief history of interactive data visualization is still rather compelling.
-
-Following the boom of static data visualization in the 1950's, interactive data visualization would not be left far behind. It started with tools designed for niche, specialized tasks. For example, @fowlkes1969 designed a system which allowed the users to view probability plots under different configurations of parameters and transformations, whereas @kruskal1964 created a tool for visualizing multidimensional scaling. 
 
 ```{r}
 #| echo: false
-#| fig-cap: "John Tukey showcasing the PRIM-9 system (left), with an example of a projected scatterplot [right, @fisherkeller1974]. Screenshots were taken from a video available at: [ASA Statistical Graphics Video Library](https://community.amstat.org/jointscsg-section/media/videos))"
-knitr::include_graphics("./figures/prim9.png")
+knitr::opts_chunk$set(eval = FALSE)
+
+include_figure <- function(path) {
+  if (knitr::is_html_output()) include_figure(path)
+  else knitr::include_graphics(gsub(".html", ".png", path))
+}
 ```
-
-However, researchers soon recognized the potential of interactive data visualization as a general-purpose tool for exploring data. The first such general-purpose system was PRIM-9 [@fisherkeller1974]. PRIM-9 allowed for exploration of multivariate data via interactive features such as projection, rotation, masking, and filtering. Following PRIM-9, the late 1980's saw the emergence of a new generation of systems which provided an even wider range of capabilities. Tools like MacSpin [@donoho1988], Data Desk [@velleman1989], XLISP-STAT [@tierney1990], and XGobi [@swayne1998] introduced features such as interactive scaling, rotation, linked views, and grand tours (for a glimpse into these systems, excellent video-documentaries are available at [ASA Statistical Graphics Video Library](https://community.amstat.org/jointscsg-section/media/videos)).
-
-```{r xlisp-stat}
-#| echo: false
-#| fig-cap: "Example of interactive control of histogram highlighting in XLISP-STAT. Note that, unlike in many current data visualization systems, aggregation plots were sensitive to data order (not commutative). This non-commutative behavior meant that, for instance, a highlighted segment could appear in the middle of a bar (as seen in the figure above) or multiple non-adjacent highlighted cases might appear as 'stripes'. Figure reproduced from @tierney1990."
-
-knitr::include_graphics("./figures/xlisp-stat.png")
-```
-
-#### Open-source Statistical Computing
-
-The proliferation of open-source, general-purpose statistical computing software such as S and R further democratized the access to interactive data visualization tools. Building on XGobi's foundation, GGobi [@swayne2003], expanded upon on XGobi and provided an integration layer for R. Other tools like MANET [@unwin1996] and Mondrian [@theus2002] introduced sophisticated linking techniques, with features such as selection sequences, allowing the users to combine a series of selections via logical operators [see also @unwin2006]. Further, iPlots [@urbanek2003] implemented a general framework for interactive plotting in R, allowing not only for one-shot rendering interactive figures from R but also for direct programmatic manipulation. This package was later expanded expanded for big data capabilities in iPlots eXtreme [@urbanek2011]. Finally, the `cranvas` package [@xie2014] introduced a reactive programming paradigm for defining the infrastructure for interactive graphics directly in R, using the model-view-controller (MVC) architecture.         
 
 ```{r}
 #| echo: false
-#| fig-align: "center"
-#| fig-cap: "Examples of interactive features in Mondrian [@theus2002]: selection operators (left) and mosaic plot with querying (right)."
-knitr::include_graphics("./figures/mondrian.png")
-```
-
-Alongside the more general interactive data visualization frameworks mentioned above, there were also more specialized packages designed for specific techniques and models. For instance, `KLIMT` was developed for interactive visualization of classification and regression trees [@urbanek2001; @urbanek2002]. Similarly, packages like `tourr` [@wickham2011], `spinifex` [@spyrison2020], `liminal` [@lee2021; @lee2022a] provided tools for exploring large multivariate data sets via grand tour projections [see @cook1995]. Generally, over time, there seems to have been a trend towards more of these specialized tools within the R community, and fewer of the general, high-level frameworks [although there were some notable exceptions, such as the `loon` package, @waddell2023]. Currently, it seems that R users typically encounter interactive visualizations as part of Shiny [@shiny2024] dashboards, or through R wrappers of interactive data visualization packages ported over from the JavaScript ecosystem (see Section \@ref(web-based)).
-
-#### Common features and limitations of early interactive systems
-
-A common thread among these interactive data visualization systems is that they were designed by statisticians with primary focus on data exploration. High-level analytic features such as linked views, rotation/projection, and interactive manipulation of model parameters made frequent appearance. While these features were powerful, they also contributed to a steeper learning curve, potentially limiting adoption by users without a strong data analytic background. Furthermore, these early tools were typically standalone applications, with only later packages like GGobi and iplots offering integration with other data analysis software and languages. Finally, they often offerered only limited customization options and this made them less suitable for data presentation.
-
-### Interactive data visualization and the internet: Web-based interactivity {#web-based}
-
-The end of the millennium marked the arrival of a new class of technologies which impacted interactive data visualization just as much as almost every other field of human endeavor. The rise of the internet in the mid 1990's made it possible to create interactive applications that could be accessed by anyone, from anywhere. This was aided by the dissemination of robust and standardized web browsers, as well as the development of JavaScript as a high-level programming language for the web  [for a tour of the language's history, see e.g. @wirfs-brock2020]. Soon, interactive visualizations became just one of many emerging technologies within the burgeoning web ecosystem. 
-
-Early web-based interactive data visualization systems tended to rely on external plugins. Examples of these include Prefuse [@heer2005] and Flare [developed around 2008, @flare2020], which leveraged the Java runtime and Adobe Flash Player, respectively. However, as browser technologies advanced, particularly as JavaScript's performance improved thanks to advances in just-in-time compilation [JIT, see e.g. @clark2017; @dao2020], it became possible to create complex interactive experiences directly in the browser. This led to the emergence of several popular web-native interactive data visualization systems in the early 2010s, many of which remain widely used today. 
-
-#### D3
-
-D3.js [@bostock2022] is one of the earliest and most influential web-based visualization systems. As a general, low-level framework for visualizing data, D3 provides of a suite of specialized JavaScript modules for various aspects of the data visualization workflow, including data parsing, transformation, scaling, and DOM interaction. 
-
-For instance, here's how to create a basic scatterplot in D3:
-
-```{js}
 #| eval: false
-import * as d3 from "d3";
+# Script to generate screenshots
+examples <- list.files("./figures", "^example.+html")
 
-const plot = document.querySelector<HTMLDivElement>("#d3-plot")!;
-const data = [
-  { x: 1, y: 0.41 },
-  { x: 2, y: 4.62 },
-  { x: 3, y: 7.62 },
-  { x: 4, y: 6.54 },
-  { x: 5, y: 9.61 },
-];
+urls <- paste0("./figures/", examples)
+outs <- gsub(".html", ".png", urls)
 
-const margin = { top: 10, right: 30, bottom: 30, left: 60 };
-const width = parseFloat(plot.style.width);
-const height = parseFloat(plot.style.height);
-
-// Create a SVG element, resize it, and append it to #d3-plot
-const svg = d3
-  .select("#d3-plot")
-  .append("svg")
-  .attr("width", width + margin.left + margin.right)
-  .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-// Create x and y scales and append them to
-const scaleX = d3.scaleLinear().domain([0, 6]).range([0, width]);
-const scaleY = d3.scaleLinear().domain([10, 0]).range([0, height]);
-svg
-  .append("g")
-  .attr("transform", "translate(0," + height + ")")
-  .call(d3.axisBottom(scaleX));
-svg.append("g").call(d3.axisLeft(scaleY));
-
-// Add points
-svg
-  .append("g")
-  .selectAll("dot")
-  .data(data)
-  .enter()
-  .append("circle")
-  .attr("cx", (d) => scaleX(d.x))
-  .attr("cy", (d) => scaleY(d.y))
-  .attr("r", 2);
+webshot2::webshot(urls, outs, delay = 30)
 ```
 
-```{r d3-scatterplot}
+# Applied example
+
+> Please note that the data set used in this section is fairly large (~70,000 rows) and so the figures take some time to load (please allow ~30 seconds).
+
+This section demonstrates a typical interactive workflow with `plotscaper`. The goal is to showcase the package's key features and capabilities by exploring a large, real-world data set, pertaining to a pressing issue: mental health.
+
+Mental health is a global concern. In developed nations, mental health disorders are primary contributor to years lived with disability, significantly impacting both the well-being of individuals and the economic productivity of entire countries [@who2022]. This issue, however, extends beyond developed nations. The global burden of mental health disorders has been steadily rising over the recent decades, a trend which is particularly concerning in low-income countries where access to mental health services is even more limited [@patel2018].
+
+Having had personal experience with friends and relatives impacted by mental health issues, as well as having majored in psychology during my undergraduate studies, I have had a long-standing interest in the topic. It is clear to me that mental health is a key challenge that the world is facing today, and the first step towards solving it will require clearly identifying key trends and patterns. For this reason, I chose to dedicate this section to an exploration of a large longitudinal mental health data set.  
+
+### About the data set
+
+The [Institute of Health Information and Statistics of the Czech Republic](https://www.uzis.cz/index-en.php) (IHIS, ÚZIS in Czech) is a government agency established by the Czech Ministry of Health. Its primary responsibility is the collection, processing, and reporting of medical data within the country of Czechia [@uzis2024]. Of interest, the institute provides high-quality, open-access medical data, including information about the use and manufacture of pharmaceutics, fiscal and employment records from healthcare facilities, and various epidemiological data sets.
+
+The Long-term Care data set [@soukupova2023] contains longitudinal information about long-term psychiatric care in Czechia. More specifically, it contains aggregated data on individuals released from psychiatric care facilities between 2010 and 2022. It includes information such the region of the treatment facility, the sex of the patients, age category, diagnosis based on the international ICD-10 classification [@icd2024a; @icd2024b], the number of hospitalizations, and the total number of days spent in care by the given subset of patients. 
+
+Here's the data set at a quick glance:
+
+```{r}
+df <- read.csv("./data/longterm_care.csv")
+dplyr::glimpse(df)
+```
+
+The data contains over 68,000 rows, totaling over 410,000 individual-patient hospitalizations. Each row records the number patients with a particular set of of characteristics released from a treatment facility during a given year, and the number of days the patients spent in treatment in total.
+
+In the original version of the data set, the column names as well as the labels of the categorical variables are in Czech. To make the analysis more easily accessible to non-Czech speakers, I took the liberty of translating most of these to English (excluding the `region` variable). The translation script is available in the [thesis repository](https://github.com/bartonicek/thesis/blob/master/longterm_care_translate.R). Additionally, the [data set website](https://www.nzip.cz/data/2060-dlouhodoba-psychiatricka-pece) contains a JSON schema with a text description of each of the variables [@soukupova2023]. I translated these descriptions as well and provide them below, in Table \@ref(tab:longterm-care-schema):
+
+```{r longterm-care-schema}
 #| echo: false
-#| fig-cap: "Example of a scatterplot in D3.js. The code was taken from D3 Graph Gallery [@holtz2022b] and adjusted to use ES6 syntax and slightly more informative variable names/comments."
-knitr::include_graphics("./figures/d3-scatterplot.png")
+schema <- read.csv("./data/longterm_care_schema.csv")
+knitr::kable(schema, 
+             col.names = c("Translated name", "Original name", "Description"), 
+             caption = "Schema of the long-term care data set, including the original column names (Czech), as well as translated names and descriptions.")
 ```
 
-As you can see from Figure \@ref(fig:d3-scatterplot) and the corresponding code, D3 is a fairly low-level framework. Compared to typical high-level plotting functionalities such as those provided by base R or `ggplot2` [@r2024; @wickham2016], the user has to handle many low-level details such as scaling and appending of primitives explicitly. This is also the case with interaction. While D3 does provide some methods for handling reactive DOM events, it does not itself provide a system for dispatching and coordinating these events - instead, it delegates this responsibility to the user, and encourages the use of reactive Web frameworks such as React [@react2024], Vue [@vue2024], or Svelte [@svelte2024]. 
+Before we go on to explore the data set with interactive figures, there are a couple of things to note about the data set. The first is that the data has been pre-aggregated, such that each row represents the combined number of releases within a given subgroup of patients. For example, the first row indicates that, in the year 2019, 13 women aged 40-49 were released from treatment facilities in Olomoucký kraj (region), after receiving short-term care for F10 ICD-10 diagnosis [mental and behavioural disorders due to alcohol use, @icd2024a] for a sum total of 196 days:
 
-Finally, D3.js visualizations are rendered as Scalable Vector Graphics (SVG) by default. This ensures lossless scaling but may impact rendering performance at high data volumes. While various unofficial alternative rendering engines based on the HTML 5 Canvas element or WebGL, do exist, there are no official libraries with such functionalities as of this date.
+```{r}
+df[1, ]
+```
 
-#### Plotly and Highcharts
+The reason for this aggregation is likely to anonymize the data and reduce the risk of identifying individual patients [see e.g. @pina2024]. However, when creating visualizations, we need to take the fact that each row represents a group of patients into account. For instance, when drawing a barplot, simply plotting row counts would not be appropriate, since that would ignore the size of the patient groups. Instead, to represent the data properly, we should aggregate (sum) either `cases` or `days`, depending on the question of interest. The same applies to all other aggregation plots, such as histograms [i.e. weighted histograms, see e.g. @unwin2008] and fluctuation diagrams.
 
-Building upon the low-level infrastructure that D3 provides, many packages such as Plotly.js [@plotly2022] and Highcharts [@highcharts2024] provide high-level abstractions which make the process of building interactive figures easier for the average user. Unlike D3 which provides low-level utilities such as data transformations, scales, and geometric objects, these packages provide a simple declarative framework for rendering entire plots using a static [JSON] schema.
+Fortunately, as we will see, `plotscaper` makes it easy to create these weighted types visualizations. And further, while the information this aggregated data provides inherently less granular information than patient-level records, we will see that it still preserves a large amount of structure.
 
-Here's how to render the same scatterplot in Plotly:
+### Interactive exploration
 
-```{js}
+#### The relationship between cases and days
+
+We start by exploring the relationship between the two primary continuous variables of interest: `cases` (the number of patients in a given subgroup released from care) and `days` (the total number of days the given subgroup of patients spent in care). Intuitively, we would expect a positive, linear relationship between these variables, such that a larger patient groups should spend more days in care. We can use `plotscaper` to visualize this relationship via a scatterplot:
+
+```{r}
 #| eval: false
-const data = [{
-  x: [1, 2, 3, 4, 5, 6],
-  y: [0.41, 4.62, 7.62, 6.54, 9.61],
-  mode: 'markers',
-  type: 'scatter'
-}];
+library(plotscaper) # Load in the package
 
-Plotly.newPlot('app', data);
+df |>
+  create_schema() |> # Create a declarative schema for the figure
+  add_scatterplot(c("cases", "days")) |> # Add a scatterplot
+  render() # Render the schema into an interactive figure
 ```
-<script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
-<div id="app" style="width: 500px; height: 500px"></div>
-```{js}
+
+```{r example-cases-days}
 #| echo: false
-const data = [{
-  x: [1, 2, 3, 4, 5, 6],
-  y: [0.41, 4.62, 7.62, 6.54, 9.61],
-  mode: 'markers',
-  type: 'scatter'
-}];
-Plotly.newPlot('app', data);
+#| eval: true
+#| fig-cap: "Relationship between the number of cases in a patient subgroup and the total number of days spent in care."
+knitr::include_url("./figures/example-cases-days.html")
 ```
-<!-- This is a dummy code chunk to provide a figure label to the JS block above -->
-```{r plotly-scatterplot}
+
+Interestingly, the points did not show a simple linear trend. Instead, they seemed to cluster in three distinct "leaflets", each exhibiting a roughly linear trend. This suggests the presence of a pooling effect, such that the overall trend is the result of combining three distinct groups. Closer inspection of the data reveals that the `stay_category` variable has three levels: short-term (< 3 months), medium-term (3-6 months), and long-term (6+ months) care. Color-coding the cases indeed confirms that the three levels of `stay_category` correspond to the leaflets:
+
+```{r}
+#| eval: false
+df |>
+  create_schema() |>
+  add_scatterplot(c("cases", "days")) |>
+  add_barplot(c("stay_category", "cases")) |> # y-axis is weighted by cases
+  assign_cases(which(df$stay_category == "short"), 1) |> # Mark short-term green
+  assign_cases(which(df$stay_category == "long"), 2) |> # Mark long-term red
+  render()
+```
+
+```{r example-cases-stay-cat}
 #| echo: false
-#| out-width: 0px
-#| out-height: 0px
-#| fig-cap: "Example of a scatterplot in Plotly.js. The code was taken from the official Plotly documentation [@plotly2024c] and slightly simplified."
-plot(0, 0)
-```
-Clearly, compared with the D3 code used to create Figure \@ref(fig:d3-scatterplot), the code for creating Figure \@ref(fig:plotly-scatterplot) is much terser. Many details, such as the axis limits and margins, point size and colour, gridlines, and widgets, are handled implicitly, via default values and automatic inference. Also, note that the figure provides some interactive features by default, such as zooming, panning, and tooltip on hover. Reactivity is handled automatically using systems built on the native DOM Event Target interface [@mdn2024a].
-
-Highcharts provides a similar JSON-based interface for specifying plots. While perhaps slightly more flexible than Plotly, it also requires more verbose specifications. Because of the similarity, I will not provide a separate example here [interested reader should look up the library website, @highcharts2024].
-
-Finally, like D3, both plotly.js and Highcharts also render the graphics in SVG by default. However, unlike D3, they both also provide alternative rendering engines based on WebGL [@highschartsboost2022; @plotly2024b]. This makes them more ergonomic for use with large data sets. 
-
-#### Vega and Vega-Lite
-
-Vega [@satyanarayan2015; @vega2024a] is another popular interactive data visualization package. Like Plotly and Highcharts, Vega is also partially built upon the foundation of D3 and uses JSON schema for plot specification. However, Vega is more low-level and implements a lot of custom functionality. This allows it to offer more fine-grained customization of graphics and interactive behavior, leading to greater flexibility.
-
-However, this added flexibility does come at a cost. Compared to the high-level frameworks like Plotly and Highcharts, Vega is significantly more verbose. For instance, creating a scatterplot matrix with linked selection in Vega requires over 300 lines of JSON specification, not including the data and using default formatting [@vega2024b].
-
-Vega-Lite [@satyanarayan2015] attempts to remedy this complexity by providing a high-level interface to Vega. Here's how we can define a scatterplot with zooming, panning, and tooltip on hover in Vega-Lite:
-
-<script src="https://cdn.jsdelivr.net/npm/vega@5.30.0"></script>
-<script src="https://cdn.jsdelivr.net/npm/vega-lite@5.21.0"></script>
-<script src="https://cdn.jsdelivr.net/npm/vega-embed@6.26.0"></script>
-
-<div id="vegalite-plot" style="width: 500px; height: 500px"></div>
-
-```{js}
-const spec = {
-  $schema: "https://vega.github.io/schema/vega-lite/v5.json",
-  width: 500,
-  height: 500,
-  data: { values: [
-    { x: 1, y: 0.41 },
-    { x: 2, y: 4.62 },
-    { x: 3, y: 7.62 },
-    { x: 4, y: 6.54 },
-    { x: 5, y: 9.61 }]
-  },
-  mark: {"type": "point", "tooltip": true},
-  encoding: {
-    x: { field: "x", type: "quantitative" },
-    y: { field: "y", type: "quantitative" }
-  },
-  params: [{ name: "grid", select: "interval", bind: "scales" }]
-};
-
-vegaEmbed("#vegalite-plot", spec);
+#| out-extra: 'style="border: none;"'
+#| fig-cap: "The relationship between cases and days is subject to a pooling effect: while patient groups within each care duration category (short-term, medium-term, and long-term) exhibit a linear relationship individually, this does not hold when the groups are considered together."
+include_figure("./figures/example-cases-stay-cat.html")
 ```
 
-Note that the zooming and panning capability is provided by the `params` property, which declaratively specifies a list of plot parameters that can be modified by interaction [see @vegalite2024a]. In the case above, the specification creates a two-way binding between plot scales and mouse selection events [@vegalite2024b].   
+> Click on the barplot bars to confirm there is a fairly minimal overlap between points belonging to the three categories (selected points will be brought to the foreground). To remove all selection, double-click the figure.
 
-#### Common features and limitations of web-based interactive systems
+However, the pooling effect does not itself explain the absence of points between the three leaflets. If the distribution of cases and days within each of the three `stay_category` levels were uniform, we should expect to see more points in the gaps between the leaflets. This additionally suggests a potential selection process, where patients are less likely to be discharged at durations near the category boundaries. We can confirm this by plotting the average number of days spent in care:
 
-In general, these contemporary web-based interactive data visualization systems offer a great deal of flexibility, making them well-suited to modern data presentation. However, all of this expressiveness does seem to come at a cost. Compared to the earlier statistical graphics systems, described in Section \@ref(early-interactive), many of the more advanced features that used to be common are either missing or require a significant effort to implement, such that they are only accessible to expert users. This is evidenced by their infrequent appearance in documentation and example gallery pages. 
+```{r}
+#| eval: false
+# Compute the average number of days spent in treatment
+df$avg_days <- df$days / df$cases 
 
-For instance, the [R Graph Gallery entry on Interactive Charts](https://r-graph-gallery.com/interactive-charts.html) [@holtz2022] features multiple interactive figures implemented in the JavaScript libraries described above. However, all of these examples show only surface-level, single-plot interactive features such zooming, panning, hovering, 3D rotation, and node repositioning. The [Plotly Dash documentation page on Interactive Visualizations](https://dash.plotly.com/interactive-graphing) [@plotly2022] does feature two examples of simple linked cross-filtering, however, the vast majority of visualizations in the [Plotly R Open Source Graphing Library documentation page](https://plotly.com/r/) [@plotly2022] show examples only surface-level interactivity. Similarly, [VegaLite Gallery pages on Interactive Charts](https://vega.github.io/vega-lite/examples/#interactive-charts) [@vegalite2022] feature many examples, however, only a limited number of examples show linked or parametric interactivity (see e.g. [Interactive Multiview Displays](https://vega.github.io/vega-lite/examples/#interactive-multi-view-displays)). Finally, the [Highcharter Showcase Page ](https://jkunst.com/highcharter/articles/showcase.html) [@kunst2022] does not feature any examples of linking.
+df |>  
+  create_schema() |>
+  add_scatterplot(c("cases", "avg_days")) |>
+  add_barplot(c("stay_category", "cases")) |>
+  assign_cases(which(df$stay_category == "short-term"), 1) |>
+  assign_cases(which(df$stay_category == "long-term"), 2) |>
+  set_scale("scatterplot1", "y", # Log-transform the y-axis
+            transformation = "log10", default = TRUE) |>
+  render()
+```
 
-Even when advanced features such as linking and parametric manipulation are supported, they are often limited in some way. For example, the following is a quote from the website of Crosstalk, a package designed to enable linking in R, using web-based interactive widgets created with the `htmlwidgets` package [@htmlwidgets2021] or R Shiny [@shiny2024]:
+```{r example-cases-avg-days}
+#| echo: false
+#| out-extra: 'style="border: none;"'
+include_figure("./figures/example-cases-avg-days.html")
+```
 
-> "Crosstalk currently only works for linked brushing and filtering of views that show individual data points, not aggregate or summary views (where “observations” is defined as a single row in a data frame). For example, histograms are not supported since each bar represents multiple data points; but scatter plot points each represent a single data point, so they are supported."
->
->- @crosstalk2025
+Now we can clearly see the gaps between the three different distributions along the y-axis. 
 
-Of course, with enough effort, these web-based visualization systems can still be used to create rich figures with advanced interactive features such as linked views and parametric interaction. However, implementing these features often requires stepping down a level of abstraction and dealing with low-level language primitives. This defeats the purpose of using a high-level libraries and creates a barrier to entry for casual users [@keller2024]. It also may explain why interactive visualizations are nowadays mainly used for data presentation, not data exploration [@batch2017]. With the high upfront cost of learning these package's APIs, creating rich interactive figures may be a task best suited for dedicated developers working inside large organizations, rather than individual researchers/analysts.  
+> Try querying the points near the y-axis gaps by pressing the `Q` key and hovering over them. You should observe that the gaps roughly span the 60-90 day and 150-210 day ranges, corresponding to 2-3 months and 5-7 months, respectively. 
 
-## What even is interactive data visualization? {#what-is-interactive-visualization}
+The trend we see in the scatterplot above strong indication of a selection process is at work. Specifically, it seems that patients who stay in treatment for more than two months are likely to be transferred to medium-term care and kept around for longer, and, likewise, those who stay in treatment for more than five months are likely to be moved to long-term care. There are likely administrative of health-insurance related reasons for this trend, nevertheless, it is still an interesting pattern to take note of.
 
-> If it looks like a duck, swims like a duck, and quacks like a duck, then it probably is a duck. 
->
-> [...] The irony is that while the phrase is often cited as proof of abductive reasoning, it is not proof, as the mechanical duck is still not a living duck
->
-> [Duck Test](https://en.wikipedia.org/wiki/Duck_test) entry, [@wikipedia2022] 
+#### Number of cases over time
 
-In the previous section (Section \@ref(brief-history)), I provided an overview of the history and present state of interactive data visualization, discussing a number of features and systems. However, while doing so, I avoided one crucial question: what constitutes an interactive data visualization? 
+A key question is how have the numbers of patients in treatment evolved over time. We can investigate this by plotting the same scatterplot as we did in the section above, as well as two barplots showing the total number of cases and the total number days in treatment, within each year. We can also include a histogram of the number of days, for a good measure:
 
-Surprisingly, despite the widespread popularity of interactive visualizations, there is no universally agreed-upon definition of interactivity [@vanderplas2020]. Within the data visualization literature, the terms "interactive" and "interaction" are rarely explicitly defined. And even when they are, the definitions are often incongruent or even contradictory [see e.g. @dimara2019; @elmqvist2011; @pike2009]. Finally, similar conceptual ambiguity extends to other terms commonly used in the field, such as a "dashboard" [@sarikaya2018].     
+```{r}
+#| eval: false
+schema <- df |>
+  create_schema() |>
+  add_scatterplot(c("cases", "days")) |>
+  add_barplot(c("year", "cases")) |>
+  add_barplot(c("year", "days")) |>
+  add_histogram(c("days", "days")) |> # Again, make sure to weigh the y-axis
+  set_parameters("histogram1", width = 20) # Set histogram binwidth to 20 days
 
-This lack of a clear consensus makes the task of discussing interactive data visualization difficult. Ignoring the issue could lead to confusion, while a truly comprehensive dive into the terminology surrounding interactive data visualization could become excessively verbose, as evidenced by the existence of research papers dedicated to the topic [see e.g. @dimara2019; @elmqvist2011]. To address this issue, this section aims to provide a concise overview of how interactivity has been conceptualized in the literature. The goal is to establish a clear framework for understanding "interactive" and "interaction" within the context of this thesis.
+schema |> render()
+```
 
-### Interactive vs. interacting with {#interactive-interacting}
+```{r example-cases-days-time}
+#| echo: false
+#| out-extra: 'style="border: none;"'
+include_figure("./figures/example-cases-days-time.html")
+```
 
-First, the word "visualization" in "interactive data visualization" can be interpreted in two different ways:
+From the barplots, we can immediately see an interesting pattern: while the numbers of cases seem to have declined over time, the number of days patients spent in care seem to seems to have remained fairly constant. This suggest that while there are fewer patients over all, they are being hospitalized for longer.
 
-1. As a noun: a concrete chart or figure
-2. As a nominalized verb: the process of interacting with a figure
+We can confirm this interactively. Click on the bars corresponding to the year 2010 and 2022, in either of the two barplots (feel free to mark either of the bars by holding down the `1` or `2` keys and clicking them). You should see that, compared to 2010, there were more patients in long term care in 2022, and the relationship between the number of cases and the number of days in care was steeper.
 
-In data visualization literature, both interpretations are frequently used, leading to significant ambiguity [@dimara2019; @pike2009; see also @yi2007]. On one hand, some researchers focus on the mathematical and computational aspects of visualization, discussing specific systems and implementations [see e.g. @buja1996; @kelleher2015; @leman2013; @wills2008]. Others prioritize the more cognitive or human-computer interaction (HCI) aspects of interactive data visualization, exploring what impact different kinds of visualization techniques have on the user's ability to derive insights from the data [see e.g. @brehmer2013; @dimara2019; @dix1998; @pike2009; @quadri2021; @yi2007]. 
+On its own, the declining number of cases over time might appear as a positive development; however, the constant number days in treatment suggests a more worrying trend. Specifically, treatment facility placements are limited resource [@who2022], and the fact that days in treatment have stayed constant while cases have declined may indicate that the Czech healthcare system is becoming burdened by patients in long-term care, reducing its capacity to serve new clients.
 
-Of course, many interactive data visualization papers discuss both implementation and user experience. However, the dual interpretation of the term "interactive data visualization" does complicate literature search. It also highlights the interdisciplinary nature of the field, showing its connections to statistics, computer science, applied mathematics, business analytics, HCI, and cognitive psychology [see @brehmer2013; @dimara2019]. While this interdisciplinary nature of interactive data visualization is certainly a strength, it can also lead to confusion. As such I think it is necessary to clearly define key terms. 
+Another way we can scrutinize the trend more closely by zooming into the histogram:
 
-To ensure clarity throughout thesis, the term *"interactive data visualization"* will primarily refer to concrete charts or figures. When referring to the *practice* of interactive data visualization, I will attempt to use more active phrasing such as *"interacting with a visualization"* or *"user's interaction with a visualization"*, to indicate that what is being referred to is the activity or process of visualization, rather than any concrete figure or chart. 
+```{r}
+#| eval: false
+schema |> 
+  assign_cases(which(df$year == 2010), 1) |>
+  assign_cases(which(df$year == 2022), 2) |>
+  zoom("histogram1", c(-100, 0, 3e03, 1e05), units = "data") |>
+  render()
+```
 
-### Interactive *enough*?
+```{r example-cases-days-time-zoom}
+#| echo: false
+#| out-extra: 'style="border: none;"'
+include_figure("./figures/example-cases-days-time-zoom.html")
+```
 
-Even when we use the term "interactive data visualization" to refer to concrete charts or figures, the meaning still remains fairly ambiguous. What is the bar for calling a figure "interactive"? What features should interactive figures have? Surprisingly, it is hard to find consensus on these topics among data visualization researchers, and the criteria tend to vary a lot, such that the same figure may be considered interactive by some but not by others. 
+> You can zoom into a plot in two ways: programmatically using the `zoom` function (as shown above), or manually by clicking and dragging to select a rectangular region and pressing the `Z` key. You can chain multiple zooms to magnify small regions of the plot. To undo zooming, press either the `X` to revert back one level of zoom, or `R` to reset the figure to its default state (including the default zoom level).
 
-Some researchers adopt a broad definition of interactive data visualization, considering almost any figure combined with an interactive graphical user interface (GUI) as interactive, as long as it allows for some level of user manipulation  [@brodbeck2009]. For others, the speed of the computer's responses to user input is important, with faster updates translating to greater interactivity [@becker1987; @buja1996]. Some also differentiate between "interactive" and "dynamic" manipulation, such that interactive manipulation involves discrete actions such as pressing a button or selecting an item from a drop-down menu, whereas dynamic manipulation involves continuous actions, like moving a slider or clicking-and-dragging to highlight a rectangular area [@rheingans2002; @jankun2007; see also @dimara2019]. 
+By clicking on the two bars, you should be able to see that, compared to 2010, the 2022 distribution of days spent in treatment had a fatter tail, suggesting that there were more patients who spent very long time in care.
 
-However, many other researchers ascribe to a much narrower view of interactive data visualization, which hinges on high-level analytic features that allow efficient exploration of the data. These features include the ability to generate different views of the data (by e.g. zooming, panning, sorting, and filtering), and the reactive propagation of changes between connected or "linked" parts of a figure [@kehrer2012; @buja1996; @keim2002; @unwin1999; @chen2008]. An often cited guideline is the visual information seeking mantra: overview first, zoom and filter, then details-on-demand [@shneiderman2003]. Similarly, in visual analytics research, a distinction is made between "surface-level" (or "low-level") and "parametric" (or "high-level") interactions, where surface-level interactions manipulate attributes of the visual domain only (e.g. zooming and panning), whereas parametric interactions manipulate attributes of mathematical models or algorithms underlying the visualization [@leman2013; @self2018; @pike2009]. 
+#### Age and child and adolescent mental health
 
-Table \@ref(tab:definitions) provides a concise summary of the several perspectives on interactivity discussed above. It meant to serve as a reference point for future discussions within the text, though it is important to note that this is not an exhaustive list. For a more comprehensive taxonomy of interactive visualization systems and features, see e.g. @dimara2019, @yi2007.
+The global mental health decline affects adults and children alike, however, childhood mental health disorders are particularly concerning. If these disorders manifest during critical developmental periods, they can have serious, often life-long consequences, causing irreversible changes in brain physiology even with successful treatment [see e.g. @keeley2021]. Children also have less agency than adults in managing their mental health, relying heavily on caregivers and schools for support. For these reasons and more, monitoring the mental health of children and adolescents is critical.
 
-```{r definitions}
+Fortunately, the overall proportion of children and adolescents in the data set was fairly low, amounting to <9% of all cases and <6% of the total number of days spent in treatment:
+
+```{r}
+aggregate(cbind(cases, days) ~ care_category, sum, data = df) |>
+  lapply(function(x) { if (is.numeric(x)) return(x / sum(x)) else x }) |>
+  data.frame()
+```
+
+To investigate how these numbers evolved over time, we can make use of the following figure:
+
+```{r}
+#| eval: false
+# Create a figure layout with two small plots in the left
+# column, and one tall plot in the right column
+layout <- matrix(c(
+  1, 3,
+  2, 3
+), nrow = 2, byrow = TRUE)
+
+df |>
+  create_schema() |>
+  add_barplot(c("year", "cases")) |>
+  add_barplot(c("year", "days")) |>
+  add_barplot(c("care_category", "cases")) |>
+  set_layout(layout) |> # Set the layout
+  render() 
+```
+
+```{r example-cases-days-children}
+#| echo: false
+#| out-extra: 'style="border: none;"'
+include_figure("./figures/example-cases-days-children.html")
+```
+
+So far, we have been using a fairly simple interactive workflow that could be easily recreated via code, taking only one or two interactive actions at a time. However, now it is time to see the full potential of interactivity by chaining several interactive actions together. To explore how the proportion of child and adolescent patients evolved over time, try taking the following steps:
+
+> 1. Mark the cases corresponding to children: click on the corresponding bar in the right barplot while holding down the `1` key.
+2. Normalize the two leftmost barplots: click each of on the plots to activate it and press the `N` key while the plot is active (you can revert back to absolute counts by pressing the `N` key again).
+3. Zoom into the regions of the leftmost barplots containing selected cases: click-and-drag to select a rectangular region and pressing the `Z` key.
+
+By following these steps, you should end up with a figure similar to the one below:
+
+```{r}
+#| eval: false
+df |>
+  create_schema() |>
+  add_barplot(c("year", "cases")) |>
+  add_barplot(c("year", "days")) |>
+  add_barplot(c("care_category", "cases")) |>
+  assign_cases(which(df$care_category == "child")) |>
+  plotscaper::normalize("barplot1") |>
+  plotscaper::normalize("barplot2") |>
+  zoom("barplot1", c(0, 0, 1, 0.15)) |>
+  zoom("barplot2", c(0, 0, 1, 0.15)) |>
+  set_layout(layout) |>
+  render() 
+```
+
+```{r example-cases-days-children-marked}
+#| echo: false
+#| out-extra: 'style="border: none;"'
+#| fig-cap: "While the proportion of days spent in treatment by children and adolescent has declined, the proportion of cases that children and adolescents make up has increased."
+include_figure("./figures/example-cases-days-children-marked.html")
+```
+
+Interestingly, the two barplots show the opposite trend. While the proportion of the treatment days used by children and adolescents has declined over time, the proportion of total cases they make up has increased. The relative increase in cases appears to be driven by an overall decline in patient numbers: in absolute counts, the number of child and adolescent patients has remained fairly constant between 2010 to 2022, while the total patient count has decreased.
+
+We can also get a more granular breakdown by plotting the age category variable:
+
+```{r}
+#| eval: false
+df |>
+  create_schema() |>
+  add_barplot(c("age_category", "cases")) |>
+  add_barplot(c("year", "cases")) |>
+  add_barplot(c("age_category", "days")) |>
+  add_barplot(c("year", "days")) |>
+  render()
+```
+
+
+```{r example-cases-days-age}
+#| echo: false
+#| out-extra: 'style="border: none;"'
+include_figure("./figures/example-cases-days-age.html")
+```
+
+Again, if we interrogate the figure by employing interactive actions such as selection, zooming, and normalization, we can discover that one age category in which there has been steady growth in both the proportion of cases and days spend in treatment are 70-79 year olds. This aligns with the limited placement availability hypothesis: while these patients account for a relatively small fraction of the total cases, they represent a disproportionately large and increasing proportion of days in treatment. Later, we will also see evidence that many of these patients suffer from neurodegenerative diseases, which require intensive long-term care. It may be the case that, with increasing life-expectancy, the healthcare system is not able to handle the influx of older patients, limiting the availability of placements. 
+
+#### Prevalence of diagnoses
+
+Another important information we can glean from the data set is the prevalence of different diagnoses and their demographic characteristics. The data set identifies mental disorders according to ICD-10, an internationally recognized disease classification system published by the World Health organization which organizes various diseases into categories based on aetiology [@icd2024a]. 
+
+It is first necessary to discuss the coding scheme of the diagnoses. The codes were directly translated from the Czech version of the data set [@soukupova2023]. The vast majority diagnoses come from the F category, which represents mental and behavioral disorders, although there are also few references to the G category, which classifies diseases of the nervous system. Further, note that while some levels of the `diagnosis` variable represent a singular ICD-10 diagnosis (e.g. `f10`), others represent a range of diagnoses (e.g. `f11-f19`), a union (e.g. `f0 and g30`), or an exclusive difference (e.g. `f4 without f42`). 
+
+Importantly, some of the codes also represent a range of diagnoses *implicitly*. For instance, whereas `f10` code refers to the F10 diagnosis (alcohol-use disorders), the part `f4` in `f4 without f42` does *not* refer to the F04 diagnosis (organic amnesic syndrome, not induced by alcohol and other psychoactive substances) but instead to the F40-F48 range of diagnoses [neurotic, stress-related and somatoform disorders, @icd2024a]. Likewise, `f2` represents F20-F29 (schizophrenia, schizotypal and delusional disorders), `f7` represents F70-F79 (mental retardation), and `f5` represents F50-F59 (behavioural syndromes associated with physiological disturbances and physical factors). I have confirmed this via personal communication with the data set's authors [@melicharova2025].
+
+Table \@ref(tab:icd10) lists codes used in the data, in order of their prevalence (the number of all cases across all time), along with a short description based on the ICD-10 [@icd2024a], and some clarifying notes in parentheses that I myself have added: 
+
+```{r icd10}
+#| echo: false
+icd10 <- read.csv("./data/longterm_care_icd10.csv", header = FALSE)
+
+kableExtra::kbl(icd10,
+                col.names = c("Code", "Description"),
+                caption = "The data diagnosis code and ICD-10 description") |> 
+  kableExtra::kable_styling(full_width = FALSE)
+```
+
+To explore the prevalence of the various diagnoses as well as their demographic characteristics, we create another interactive figure. For this figure, I decided to plot the following variables: `diagnosis`, `age_category`, `sex`, and `reason_for_termination`. These seemed like the most interesting demographic variables. The `region` variable could also be an interesting choice, however, initial exploration did not reveal any interesting trends so I decided to omit it. 
+
+From now on, I will describe interesting features of the data in text rather than through individual figures. You are encouraged to verify these findings by interacting with the figures and using the techniques discussed so far.
+
+```{r}
+#| eval: false
+# Create ordering for barplots based on frequency
+order_df <- aggregate(cases ~ diagnosis, sum, data = df)
+order_df <- order_df[order(order_df$cases), ]
+
+order_df2 <- aggregate(cases ~ reason_for_termination, sum, data = df)
+order_df2 <- order_df2[order(order_df2$cases), ]
+
+df |>
+  create_schema() |>
+  add_barplot(c("diagnosis", "cases")) |>
+  add_barplot(c("age_category", "cases")) |>
+  add_barplot(c("sex", "cases")) |>
+  add_barplot(c("reason_for_termination", "cases")) |>
+  # Sort the bars by prevalence (can also do interactively by pressing `O` key)
+  set_scale("barplot1", "x", breaks = order_df$diagnosis) |> 
+  set_scale("barplot4", "x", breaks = order_df2$reason_for_termination) |> 
+  render()
+```
+
+```{r example-cases-diagnosis}
+#| echo: false
+#| out-extra: 'style="border: none;"'
+#| fig-cap: "Majority of patient load was taken up by the top five most common disorders: alcohol-use disorders, schizophrenia, Alzheimer's disease, neurotic and stress-related disorders, and psychoactive substance disorders."
+include_figure("./figures/example-cases-diagnosis.html")
+```
+
+The barplot in the top left panel of the Figure \@ref(fig:example-cases-diagnosis) shows that the five most common disorders accounted for the majority of patient cases. Each of these disorders affected over 40,000 patients between 2010 and 2022, representing over 75% of all cases (319,557 out of 414,242).     
+
+> Press the `Q` key and hover over the bars in the top left panel of Figure \@ref(fig:example-cases-diagnosis) to see what diagnosis each represents.
+
+In order of prevalence, the top five disorders were, were: alcohol-use disorders, schizophrenia, Alzheimer's disease, neurotic and stress-related disorders, and disorders caused by psychoactive substances (excluding alcohol). Overall, the high prevalence of these disorders is fairly, given that their high socio-economic impact is well-known to psychiatrists. Nevertheless, it may be illustrative to take a closer look at this data and examine demographic trends.  
+
+First, alcohol use disorders were the most common diagnosis. This is not surprising, since, globally, alcohol use disorders rank among the most common disorders and are associated with high mortality due to chronic health conditions and injury [@carvalho2019]. In the data set, this diagnosis was about twice as common in men and showed a fairly symmetric, normal-shaped age distribution, occurring the most frequently in 40-49 and 50-59 year-olds (this can be seen by selecting the corresponding bar in the top-left panel of figure Figure \@ref(fig:example-cases-diagnosis) and normalizing the age-category barplot). 
+
+The second most prevalent category of diagnoses were schizophrenia, schizotypal, and delusional disorders. While the individual lifetime prevalence of schizophrenia is not as high as some other disorders on this list, the reason for its high representation in the data set is likely its chronic and serious nature. Among those with mental illness, people with schizophrenia have one of the lowest life expectancies [see e.g. @chang2011], and often require multi-year or even life-long hospitalization [@messias2007]. This debilitating nature of schizophrenia has prompted some experts to describe it as "arguably one of the most severe health conditions affecting mankind" [see e.g. @messias2007; @tandon2024]. In the data set at hand, schizophrenic disorders had a fairly balanced sex ratio and a fairly flat age distribution.
+
+Third most prevalent disorder categories was Alzheimer's disease. The high prevalence of this disorder is unfortunately also to be expected, as, in developed countries, Alzheimer's disease tends the leading cause of long-term psychiatric care in old age [see e.g. @cao2020; @langa2017]. It also tends to be more prevalent in women. These patterns could be seen fairly well in the data set: the age distribution of Alzheimer's disease was strongly skewed, occurring much more frequently in older patients (and, in fact, making up the majority of >70 year-old patients), and the diagnosis was about ~40% more prevalent in women than in men. We can also see that Alzheimer's patient made up the vast majority of patients who had died in care, further reinforcing its status as a disease of old age.
+
+The fourth most prevalent category of disorders were neurotic, stress-related, and somatoform disorders (excluding the obsessive-compulsive disorder, F42) which was classified as its own category in the data set. This category includes disorders such as specific phobias, generalized anxiety disorder, and the post-traumatic stress disorder [@icd2024a]. These disorders are known to be relatively common, occur roughly twice as often in women as in men, and have a generally even age distribution, with decline in prevalence in older age [@bandelow2015]. This pattern could be seen well in the data set, with women making up the majority of the cases and the age distribution being fairly uniform, until a drop-off starting at about 60-69 years of age. In fact, these disorders were the most common diagnosis for women under 40:
+
+```{r}
+df$age_category_n <- as.numeric(factor(df$age_category, ordered = TRUE))
+under_40 <- unique(df$age_category_n[df$age_category == "30–39"])
+
+subset(df, sex == "female" & age_category_n <= under_40) |>
+  (\(x) aggregate(cases ~ diagnosis, sum, data = x))() |>
+  (\(x) x[order(-x$cases), ])() |>
+  head(5) |> knitr::kable(align = "ll", row.names = FALSE)
+```
+
+
+The fifth and final of the top five diagnoses were disorders due to use of psychoactive substances. This finding is also not particularly surprising, since, among European countries, Czechia ranks moderately high in consumption psychoactive substances, particularly ecstasy and cannabis [@mounteney2016]. By contrast to some of the earlier categories, this diagnosis was significantly more common in males and in young people, showing a skewed age distribution with peak in the 20-29 category. Interestingly, the patients in this category also made up a fairly high proportion of those who had their care terminated early. It is hard to say what this means exactly (a more detailed coding schema for this variable is not available), however, other disorders with high proportion of early terminations included personality disorders (F60-F61 and F62-F69), suggesting that perhaps some patients may be released from care early because of serious behavioral problems.  
+
+Overall, the high prevalence of the top five diagnoses seemed to stem from their broad scope which encompassed a wide range of disorders. For instance, alcohol and other psychoactive substance use disorders can manifest in diverse symptoms, including dependence, psychosis, and amnesic syndrome  [@icd2024a]. Similarly, as was mentioned above, the stress-related diagnosis covers a broad spectrum of conditions. Alzheimer's disease was one notable exception, representing a fairly specific diagnosis with well-established physiological markers such as the presence of amyloid plaques and neurofibrillary tangles [see e.g. @deture2019]. It could be the case that, under a different classification scheme, Alzheimer's disease would be the most prevalent disorder. 
+
+Regardless, the diagnoses which followed the top five tended to be more specific, generally encompassing only one or two ICD-10 codes. Such was the case, for example, for depressive episode and recurrent depressive disorder (F32-F33), specific and mixed personality disorders (F60-F61), and so on. While it could be the case that these disorders would rank higher if some of the top five diagnoses were more granular as well, it is also possible that these disorders require less long-term care due to being more amenable to outpatient treatment methods [see e.g. @roiser2012].    
+
+#### Prevalence of diagnoses over time
+
+We can also scrutinize the prevalence of different mental disorders over time. Again, we need to distinguish between the number of cases versus the number of days patients spent in care. We can use the following figure:
+
+```{r}
+#| eval: false
+df |>
+  create_schema() |>
+  add_barplot(c("diagnosis", "cases")) |>
+  add_barplot(c("year", "cases")) |>
+  add_barplot(c("year", "days")) |>
+  set_layout(matrix(c(1, 1, 2, 3), nrow = 2, byrow = TRUE)) |>
+  set_scale("barplot1", "x", breaks = order_df$diagnosis) |>
+  render()
+```
+
+```{r example-cases-diagnosis-time}
+#| echo: false
+#| out-extra: 'style="border: none;"'
+include_figure("./figures/example-cases-diagnosis-time.html")
+```
+
+Overall, over time, the proportion of both cases and days in treatment the various diagnoses made up seemed to remain fairly constant, with perhaps a slight general decreasing trend in the number of cases. Of the top five diagnoses, the one which seemed to buck this trend was schizophrenia (F20-F29), which had a fairly marked increasing trend in the proportion of days. Furthermore, the number of cases related to psychoactive substance use disorders (excluding alcohol) seemed to also be rising slightly.
+
+Of the rarer disorders, the one in which there seemed to be a significant relative rise in both the proportion of cases and days in treatment were mental and behavioral disorders associated with physiological disturbances and physical factors (F50-F59). This category includes disorders such as anorexia, bulimia, sleep disorders, and sexual dysfunction disorders. Given that this category was more prevalent in women and young people (as can be seen by interrogating Figure \@ref(fig:example-cases-diagnosis)), the likely explanation for this trend is rise in the number of cases of anorexia and bulimia. There also seemed to be slight of a decrease in the number of days spent in treatment by patients with stress-related disorders (F40-F49 without F42) and depression disorders (F32 and F33).
+
+We can quickly verify these findings by fitting simple linear regressions for each diagnosis. First, we can model the number of cases by year:
+
+```{r cases-by-year}
 #| echo: false
 
 library(kableExtra)
 
-tab <- data.frame(
-  type = c("User interaction", 
-           "Real-time updates", 
-           "Plot- and data-space manipulation",
-           "Linked views",
-           "Parametric updates"),
+fits <- lapply(split(df, df$diagnosis), function(x) {
+  broom::tidy(lm(cases ~ year, data = x), conf.int = TRUE)[2, ]
+  }) |> (\(x) do.call(`rbind`, x))()
 
-  details = c("The user can interactively manipulate the figure in some way",
-              "The user's interactions propagate into the visualization with little to no lag",
-              'The user can interactively explore different parts of the data set by doing actions which effectively amount to "subsetting" rows of the data (e.g. zooming, panning, and filtering)',
-              r"(The user's interactions propagate across multiple plots (e.g. linked highlighting))",
-              "The user can manipulate the parameters of some underlying mathematical model or algorithm (e.g. histogram bins, grand tour projections, etc...)"),
-  papers = c("@brodbeck2009", 
-             "@becker1987, @buja1996, @jankun2007, and @rheingans2002", 
-             "@buja1996, @keim2002, @shneiderman2003, and @unwin1999", 
-             "@buja1996, @keim2002, @kehrer2012, @unwin1999, @theus2008, @wilhelm2008, @wills2008", 
-             "@leman2013, @pike2009")
-)
+fits$diagnosis <- rownames(fits)
+fits <- subset(fits, select = c(diagnosis, estimate,
+                                  conf.low, conf.high, p.value))
+names(fits) <- c("diagnosis", "beta", "lower 95% CI", "upper 95% CI", "p-value")
+fits$`p-value` <- ifelse(fits$`p-value` < 0.001, "< 0.001", round(fits$`p-value`, 3))
+fits$beta <- round(fits$beta, 2)
+fits$`lower 95% CI` <- round(fits$`lower 95% CI`, 2)
+fits$`upper 95% CI` <- round(fits$`upper 95% CI`, 2)
 
-colnames(tab) <- c("Name", "Details", "Selected references")
-kableExtra::kbl(tab, caption = "Summary of the perspectives on interactivity") |> 
-  kable_styling(full_width = FALSE)
+order_df3 <- aggregate(cases ~ diagnosis, sum, data = df)
+order_df3 <- order_df3[order(-order_df3$cases), ]
+fits <- fits[match(1:14, match(fits$diagnosis, order_df3$diagnosis)), ]
+
+knitr::kable(fits, align = "lllll", format = "html",
+             caption = "Simple linear regressions of the number of cases by year for each diagnosis") |>
+  kable_styling() |>
+  column_spec(2, color = ifelse(fits$beta < 0, "red", "black")) |>
+  column_spec(3, color = ifelse(fits$`lower 95% CI` < 0, "red", "black")) |>
+  column_spec(4, color = ifelse(fits$`upper 95% CI` < 0, "red", "black"))
 ```
 
-### Complexity of interactive features {#complexity-of-features}
+As we can see in Table \@ref(tab:prevalence-over-time), for most diagnoses, there seemed to be a decreasing trend in the number of cases over time. The only diagnosis for which the number of cases was significantly *increasing* over time was F50-F59, confirming the observations made in the interactive figure.
 
-The way we define interactivity is not just a matter of taste or preference: it has a significant impact on the complexity and feasibility of our systems. As we will see in Section \@ref(common-features), some simple features are fairly easy to implement, requiring just a thin interactive layer over a static data visualization system, whereas others come with a significant overhead, requiring an entirely different framework than static visualization.
+We can do the same for the number of days by year:
 
-To make the point with a particularly blunt example, many programming languages support a read-evaluate-print loop (REPL). This allows interactive code execution from the command line: the user inputs code, the interpreter evaluates it, outputs results, and waits for more input. If the language supports plotting, running code to generate plots could be considered an "interactive data visualization system." User interaction with the REPL modifies the visual output, and with fast-enough input, updates could appear almost instantly (thus satisfying the user interaction and real-time update definitions of interactivity, see table). This would make almost every programming language an "interactive data visualization system", requiring no additional effort.
-
-However, I would argue that, today, this view stretches the concept of interactivity. It is true that, historically, the command line was considered a highly interactive user interface [see e.g. @foley1990; @howard1995]. However, with advancements in processor speeds and the widespread adoption of graphical user interfaces (GUIs), user expectations have evolved. Nowadays, we typically associate interactivity with direct manipulation of visual elements and immediate feedback [@dimara2019; @urbanek2011]. Thus, we can see that what's considered "interactive" evolves over time. 
-
-But even with figures that are manipulated directly, there still are considerable differences in what different features imply for implementation requirements. Some features, like changing color or opacity of points in a scatterplot affect only the visual attributes of the plot and not the underlying data representation. This makes them simple to implement as they do not require any specialized data structures or complex computations, and the primary cost lies in re-rendering the visualization.
-
-In contrast, some interactive features require a lot more infrastructure. For instance, filtering, linked highlighting, or parametric interaction require specialized data structures and algorithms beyond those that would be required in static plots. This is because, each time the user engages in an interaction, entirely new summaries of the underlying data may need to be computed. 
-
-To give a concrete example, when a user selects several points in a linked scatterplot (see Section \@ref(linked-selection)), we first have to find the ids of all the selected cases, recompute the statistics underlying all other linked plots (such as counts/sums in barplots or histograms), train all of the relevant scales, and only then can we re-render the figure. Likewise, when interactively manipulating a histogram's binwidth, we need to recompute the number of cases in each bin whenever the binwidth changes. To maintain the illusion of smooth, "continuous" interaction [@dimara2019], these computations need to happen fast, and as such, computational efficiency becomes imperative at high data volumes.
-
-### Working definition
-
-As discussed in previous sections, the definition "interactive data visualization" varies across fields and researchers. Moreover, when building interactive data visualization systems, different definitions imply varying levels of implementation complexity. Thus, we need to establish clear criteria for our specific definition. 
-
-Data visualization can be broadly categorized into two primary modes: presentation and exploration. While both modes share a bulk of common techniques, each comes with a different set of goals and challenges [@kosara2016]. Data presentation starts from the assumption that we have derived most of the important insights from our data already, and the goal is now to communicate these insights clearly and make an impactful and lasting impression [@kosara2016]. In contrast, data exploration begins from a position of incomplete knowledge - we accept that there are facts about our data we might not be aware of. Thus, when we explore data with visualizations, the goal is to help us see what we might otherwise miss or might not even think to look for [@tukey1977; @unwin2018].    
-
-However, it is not always the case that more complex visuals necessarily translate to better statistical insights. In static visualization, it is a well-established that plots can include seemingly sophisticated features which do not promote the acquisition of statistical insights in any way [@cairo2014; @cairo2019; @gelman2013; @tufte2001]. Similarly, adding interactivity to a visualization does not always improve its statistical legibility [see e.g. @abukhodair2013; @franconeri2021]. 
-
-I propose to treat interactive features the same way we treat visual features in static visualization. Specifically, I propose the following working definition:
-
-> When building interactive data visualization systems, we should prioritize interactive features which promote statistical understanding.
-
-If we accept this proposition, then several important consequences follow. First, we must favor high-level, data-dependent, parametric interactions over the purely graphical ones. That is not to say that purely graphical interactive features cannot useful. For instance, in the case of overplotting, changing the size or alpha of points in a scatterplot can help us see features that would otherwise remain hidden. Nevertheless, I argue that the ability to see entirely new representations of the data is what makes some interactive data visualizations systems particularly powerful. The interactive features that enable this, such as linked highlighting and parameter manipulation, go beyond aesthetics, and empower the users to explore the data in a much more dynamic way, compared to static graphics.
-
-### Common interactive features {#common-features}
-
-This section describes several common types of interactive features that tend to frequently appear in general interactive data visualization systems. It is only meant as an overview [for more comprehensive taxonomies of interactive features, see @dimara2019; @unwin2006; @yi2007]. For each feature, I highlight its core properties, common use cases, and implementation requirements. 
-
-#### Changing size and opacity
-
-One of the simplest and most widely-implemented interactive features is the ability to adjust the size and opacity of geometric objects. This feature gives the user the ability to dynamically shrink or grow objects and make semi-transparent, fully transparent, or opaque. 
-
-The ability to shrink objects or make them semi-transparent can be particularly useful at high data volumes, since this can reveal trends that may be otherwise hidden due to overplotting. For example, in scatterplots, shrinking points and making them semi-transparent makes it possible to identify high-density regions and can in fact provide an approximation to a 2D kernel density plot [see e.g. @dang2010]. The same applies to all other types of plots where the where objects or glyphs may be plotted on top of each other at high densities, such as parallel coordinate plots [@theus2008].
-
-This feature usually fairly easy to implement, since it involves manipulating visual attributes only. Specifically, in many interactive systems, size and alpha multipliers are independent parameters of the visual representation, which do not depend on the underlying data in any way. In other words, when we manipulate size or opacity of geometric objects in our plots, we do not need to worry about what data these objects represent. Compared to other interactive features, this makes it relatively simple to add this functionality to an existing static visualization system [see @bracsoveanu2017].
-
-#### Zooming and panning
-
-Another two significantly related interactive features are zooming and panning. They are often used in tandem, and both involve interactive manipulation of scale limits. For this reason, I discuss them here simultaneously, in a single subsection.
-
-Zooming, depicted in Figure \@ref(fig:zooming), allows the user to magnify into a specific region of a plot. A common approach involves creating a rectangular selection and the axis scales are then automatically adjusted to match this region, however, other techniques do exist, for instance a symmetric zoom centered on a point using a mouse wheel. Zooming is useful because it allows the user to get a better sense of the trend within the magnified region, and discover patterns that may be otherwise obscured due to overplotting or improper aspect ratio [see e.g. @buja1996; @dix1998; @unwin1999; @theus2008; @yi2007]. 
-
-```{r zooming}
-#| echo: false
-#| fig-cap: "Zooming involves shrinking the axis limits to obtain a more detailed view of the data. Typically, the user selects a rectangular region of the plot (left) and the plot scales are then adjusted so that the region fills up the entire plot area (right). Notice the change in the axis limits."
-knitr::include_graphics("./figures/zooming.png")
-```
-
-After zooming, it is useful to retain the ability to navigate the wider plot region while preserving the current zoom level and aspect ratio. Panning addresses this need. By performing some action, typically right-click and drag, the user can move the center of the zoomed-in region around, exploring different areas of the plot. 
-
-```{r panning}
-#| echo: false
-#| fig-cap: "Panning involves moving the axis limits while retaining the same zoom level and axis ratio. After zooming into a rectangular region (top row), the user can around the plot region, usually by clicking and dragging (bottom row)."
-knitr::include_graphics("./figures/panning.png")
-```
-
-Zooming and panning can be implemented by manipulating scales only, and this also makes them generally fairly straightforward to implement, similar to changing size and opacity. However, there are a few issues to consider. First, whereas continuous axes can be be zoomed and/or panned by simply modifying the axis limits, zooming discrete axes requires a bit more nuance [see e.g. @wilkinson2012]. Second, it is often desirable to give the user the ability to zoom-in multiple levels deep, and this makes maintaining a reversible history of previous zoom-states essential [@unwin1999]. Third, at times, it can be useful to link scale updates across multiple plots, such that, for example, zooming or panning a plot in a scatterplot matrix produces the same actions in other plots with the same variable on one of the axes. Finally, an advanced feature that can be also quite useful is semantic or logical zooming [@keim2002; @unwin1999; @yi2007]. This technique goes beyond magnifying objects; it also increases the level of detail the objects display as the user zooms in. Semantic zooming can be particularly powerful when combined with hierarchical data such as geographic information, however, it also introduces additional complexity, since the effects of the zoom action propagate beyond x- and y-axis scales. 
-
-#### Querying
-
-Querying is another popular interactive feature that is usually fairly straightforward to implement. As shown in Figure \@ref(fig:querying), the way querying is typically implemented is that when a user mouses over a particular geometric object, a small table of key-value pairs is displayed via a tool-tip/pop-up, showing a summary of the underlying data point(s) [@urbanek2003; @xie2014]. This makes it possible to look up precise values that would otherwise be available only approximately via the visual representation. 
-
-```{r querying}
-#| echo: false
-#| fig-cap: "Querying involves hovering over an object to display its associated data values in a table or pop-up. Notice that this can include both plotted values (`weight`, `mileage`) as well as values that are not directly represented in the plot (car name, `cylinders`)."
-knitr::include_graphics("./figures/querying.png")
-```
-
-Querying is useful because it combines the best features of graphics and tables. Specifically, it allows the user to overcome Tukey's famous prescriptions: "graphics are for the qualitative/descriptive [...] never for the carefully quantitative (tables do that better)", and: "graphics are for comparison [...] not for access to individual amounts" [@tukey1993]. By providing the option to query individual objects, the user can seamlessly transition between the high-level analytic overview of the graphic and low-level quantitative detail of a table. This facilitates high-precision analytic tasks, such as identifying specific outliers or calculating exact magnitudes of differences [@unwin2006].
-
-Additionally, querying also allow us to show more information than is displayed via the visual encodings alone (see again Figure \@ref(fig:querying)). Specifically, whereas most plots can encode only two or three variables, we can assign an arbitrary number of key-value pairs to the rows of the query table/pop-up. However, it is crucial to balance the level of detail against visual clutter. Too many rows may overtax the attention of the user and also can lead to clipping/overplotting issues, if the query table cannot fit inside the plotting area. Further, there are [better methods](#bidirectional-communication) for retrieving very detailed information from interactive visualizations.    
-
-Finally, while querying is also one of the more straightforward features, its implementation does present certain challenges. First, a naive implementation might simply display derived data values in the state just before they are mapped to visual attributes via scales, however, these are not always the most informative. For instance, in a stacked barplot, returning the original (unstacked) values is more useful than the stacked ones. Second, aggregate plots such as barplots or histograms do generally present some design decisions [see @unwin2006]. In the case of one-to-one plots such as scatterplots, query data for an object (point) can be obtained by simply retrieving the corresponding row. However, in aggregate plots like barplots and histograms, a single object may correspond to multiple rows. This necessitates summarizing the underlying data, and often there may be no single "correct" summary. For instance, when querying a bar in a barplot, should we return the sum of the underlying continuous variable, some other numeric summary such as the mean or maximum, the set of all unique values, multiple of these summaries, or perhaps something else entirely? Similar ambiguities arise when querying objects which are partially selected or highlighted (see Section \@ref(linked-selection)): should the query return summaries corresponding to the entire object, the highlighted parts, or both?
-
-#### Sorting and reordering
-
-With plots of discrete (unordered) data, a highly useful feature can be to sort or reorder objects based on some criterion [see @unwin2000; @unwin2006]. For example, with barplots, in the absence of other ordering rules, bars are typically ordered by the lexographical order of the x-axis variable. However, sometimes, we can glean interesting patterns by sorting the bars in some other order, for example by their height, see Figure \@ref(fig:sorting).
-
-```{r sorting}
-#| echo: false
-#| fig-cap: "Sorting or reordering can highlight interesting trends. For instance, sorting lexicographically ordered bars (left) by bar height (right) in the figure above immediately reveals a significant gap between the five tallest bars and the rest (gray dashed line)."
-knitr::include_graphics("./figures/sorting.png")
-```
-
-There are more sophisticated ways to sort objects in a plot than just sorting bars by height, however. For instance, in plots which show multiple summary statistics, any may serve as the basis for the sorting rule; for instance a boxplot may be sorted by the median, upper and lower quartile, the maximum, and the minimum [@unwin2006]. Likewise, in the presence of selection/highlighting, objects may be sorted by the summary statistic on the highlighted parts. Alternatively, some systems allow users to permute the order of discrete scales manually by swapping the position of categories pairwise, a feature which can be particularly useful in parallel coordinate plots [@unwin2006; @urbanek2011]. Finally, in the presence of many categories, sorting may also be usefully combined with lumping categories below a certain threshold together [@unwin2000].
-
-Like zooming and panning, basic sorting typically involves the manipulation of axis scales only, making it also a fairly straightforward feature to implement. However, the more sophisticated sorting features can pose non-trivial implementation challenges [@unwin2006]. For instance, sorting by custom summary statistics or manually permuting discrete scale order may require specialized system components and behavior.
-
-#### Parametric interaction
-
-As discussed in Section \@ref(complexity-of-features), another valuable class of interactive features are those which affect the computation of the summary statistics underlying the graphic [also called "parametric interaction", @leman2013; @self2018; @urbanek2011]. These features extend beyond simple manipulation of visual attributes, requiring that user interaction penetrates much deeper into the data visualization pipeline. Fundamentally, these features involve the manipulation of the parameters of some underlying mathematical model or algorithm.    
-
-An illustrative and popular example of parameter manipulation is dynamically changing histogram binwidth or anchor. Assuming a fixed binwidth $w$ and an anchor $a$, we can describe a histogram via a function $h$ that, for each observation of a continuous variable $x_i$ returns an index $j$ of the corresponding bin, such that, for an ordered list of bins breaks $b_j$, we have $x_i \in [b_{j}, b_{j + 1})$^[Technically, if there are any values $x_i < a$, we will have negative indices ($j < 0$), and if all values are significantly larger than the anchor, such that $x_i > a + w$, the indices will not start at 1. So, to implement the histogram properly, we should shift all indices by subtracting the minimum index. Finally, if the histogram binwidth is not fixed, $h$ becomes more complex as well.]:
-
-$$h(x_i; a, w) = \lfloor (x_i - a) / w \rfloor + 1$$
-
-Thus, a histogram really is a kind of a mathematical model, and can in fact be seen as a crude form of density estimation [see e.g. @bishop2006, pp. 120-122]. Manipulating histogram bins amounts to manipulating the parameters of the function $h$. Crucially, unlike changes to surface-level visual attributes like size or opacity, changing binwidth or anchor requires recomputing the underlying summary statistics [@urbanek2011]. As noted in Section \@ref(complexity-of-features), these changes can have significant downstream effects. For instance, increasing the binwidth may cause certain bins to contain more data points than the current maximum, potentially requiring the adjustment of the upper y-axis limit, to prevent the bars from overflowing the plotting area.
-
-There are other, more complex types of parametric interaction, than just changing histogram binwidth or anchor. These include, for example, modifying the bandwidth of a kernel density estimator, specifying the number of clusters in a clustering algorithm, or manipulating splitting criteria in classification and regression trees, as well as regularization parameters in smooth fits [for some more examples, see @leman2013; @self2018]. 
-
-Because parametric interaction necessitates recalculating the plot's underlying summary statistics, it is both more computationally expensive and as well as more difficult to implement. The interactive system must be able to respond to user input by recomputing relevant summaries and updating dependent plot parameters. In some systems such as Shiny [@shiny2024], the common approach is to re-render the entire plot from scratch each time any interaction occurs. However, this can become prohibitively expensive when these deep, parametric interactions are combined with rapid interactions closer to the surface of the visualization pipeline. Thus, the development of generic and efficient data visualization pipelines still remains an open research problem [@wickham2009; @vanderplas2020; @xie2014].   
-
-#### Animation and projection
-
-A particularly useful form of parametric interaction involves the ability to control a continuous traversal through a series of states, observing the resulting changes as animation. This technique is especially useful when combined with projective techniques such as the grand tour [see @chen2008; for a recent comprehensive review, see @lee2022b], and for this reason I discuss them both here, within the same subsection.
-
-A common and straightforward application of interactive animation is visualizing transitions in data subsets ordered by a specific variable, such as time. A particularly famous example of this technique is the [interactive animation of the Gapminder data set](https://www.gapminder.org/tools/#$chart-type=bubbles&url=v2) [@rosling2011], which illustrates the joint evolution of GDP and life expectancy for countries worldwide. The interactive control of the timeline (play, pause, and pan) empowers users to explore time-dependent trends within this relatively high-dimensional data set, revealing trends that would be challenging to visualize by other means. For instance, the visualization clearly depicts the profound drop in both GDP and life expectancy during the second world war, followed by the subsequent rapid recovery and growth after 1945.
-
-Interactive animation becomes particularly powerful when coupled with techniques like the grand tour [@asimov1985; @buja1986; @cook1995], designed for exploring high-dimensional datasets. Because data visualizations are typically limited to two dimensions, effectively representing high-dimensional data is challenging. The grand tour technique addresses this issue by projecting the data onto a series of lower-dimensional (two-dimensional) subspaces, interpolating between these projections, and animating the results to create a "tour" of different data views [@cook1995]. By surveying this series of projections, the users may discover high-dimensional outliers, clusters, or non-linear dependencies [@wickham2011], and this discovery can be greatly aided by interactive controls of the animation's timeline or even manual control of the tour's direction [@chen2008; @lee2022b]. Finally, the technique also integrates well with other interactive features, such as linked selection and querying/tooltips [@cook1995; @wickham2011; @lee2022a; @lee2022b].
-
-The implementation complexity of interactive animation varies considerably depending on its application. While animating data subsets based on a single variable, as in the Gapminder visualization [@rosling2011], presents no greater implementation challenges than previously discussed techniques, computing the grand tour path requires specialized algorithms [see, e.g., @chen2008, for a brief description]. However, if the data subsets corresponding to each animation frame are pre-computed, the animation itself is generally fairly straightforward to implement.
-
-#### Representation switching
-
-Another specialized kind of parametric (or semi-parametric) interaction involves changing the representation of the underlying data. It is well known that the same data can often be visualized using various sets of visual encodings [@wilkinson2012], with some being more effective for answering specific questions than others. Enabling users to switch between these various representations provides greater flexibility for data exploration [@yi2007]. However, for certain plot types, changing the representation involves more than just altering surface-level visual attributes; it also necessitates recalculating derived statistics.
-
-A typical example is switching between a barplot and a spineplot, see Figure \@ref(fig:barplot-spineplot1). Barplots are effective for comparing absolute quantities. Specifically, by encoding categories along the x-axis and continuous quantities along the y-axis (bar height), we can easily compare the quantities across categories. Color-coding parts of the bars as segments allows us to visualize a second categorical variable, enabling subgroup comparisons of absolute values. However, barplots are less well-suited for comparing the *proportions* represented by these segments, particularly when bar heights vary considerably.
-
-```{r barplot-spineplot1}
-#| echo: false
-#| fig-cap: "Switching representation can be an effective way to derive new insights from the data. A barplot (left) represents the same underlying data as a spineplot (right), however, the former is better for comparing absolute counts whereas the latter is better for comparing proportions. Note that in the spineplot, it is much easier to see that the proportion of the red cases is the same in categories B and C."
-knitr::include_graphics("./figures/barplot-spineplot.png")
-```
-
-Spineplots, on the other hand, present a way of visualizing the same sort of data as a barplot while making it much easier to compare proportions. Specifically, in a spineplot, the heights of the bars are all normalized to 1, such that the segments show a proportion of the total, and the original values are instead encoded as the bar width, which is stacked along the x-axis. Thus, the fixed height of bars makes it easy to compare the segments proportionally.
-
-Other examples of switching of representations include switching from a histogram to spinogram (a normalized version of the histogram) and switching between aggregate geometric objects and individual points (e.g. boxplot, parallel coordinate plots).
-
-#### Linked selection {#linked-selection}
-
-Linked selection, also known as linked brushing, linked highlighting, or linked views, is often considered one of the most versatile and powerful interactive data visualization features [see e.g. @becker1987; @buja1996; @wilhelm2003; @heer2012; @ward2015; @ware2019]. Fundamentally, it involves creating a figure with multiple "linked" plots. The user can then click or click-and-drag over objects in one plot, and the corresponding cases are highlighted across all the other plots, see Figure \@ref(fig:linked-selection). This makes it possible to quickly quickly explore trends across different dynamically-generated subsets of the data [@dix1998]. The ability to quickly materialize alternative views of the data makes this a particularly effective tool for data exploration [@wilhelm2008; @wills2008].
-
-```{r linked-selection}
-#| echo: false
-#| fig-cap: "Linked selection involves highlighting the same cases across all plots. The user can select some objects in one plot, such as points in a scatterplot (top left), and the corresponding cases are higlighted in all the other plots. Source of the underlying data is the `mtcars` dataset [@henderson1981]."
-knitr::include_graphics("./figures/linked-selection.png")
-```
-
-Despite the fact that the user experience of linked selection is usually fairly intuitive, there are many subtle considerations that go into implementing the feature [for a good overview, see @wilhelm2008]. First, there is the issue of how the user makes the selection. Typically, clicking selects a single objects and clicking-and-dragging selects multiple objects in a rectangular region (similar to how selecting files and folders works on desktop GUIs of most operating systems). In some systems, the users may also drag the selection region around ("brushing"), form a continuous "lasso" selection, select lines in a particular angular range, or points at a particular distance from a centroid [see e.g. @hauser2002; @splechtna2018; @wills2008]. Further, when one variables is continuous and the other is derived (such as the x- and y-axes in a histogram), the interaction may also be simplified by restricting selection/brushing to the primary axis [@satyanarayan2016]. Finally, the selections can be combined by various operators such as OR, AND, NOT, and XOR, to form unions, intersections, and other types of logical subsets [@theus2002; @urbanek2003; @wills2000; @wills2008]. 
-
-Second, there is the issue of who should dispatch and respond to selection events. In presentation-focused interactive data visualization and dashboarding systems, this responsibility is kept flexible, such that some plots may only dispatch, only respond, do both, or neither [@satyanarayan2015; @satyanarayan2016]. However, in systems focused on data exploration, the convention is typically for all plots to both dispatch and respond to selection events, such that they may be interacted with in the same way. [@theus2002; @urbanek2003; @urbanek2011].
-
-Third, there is the issue of what to link. In the case of data represented by a two-dimensional table or data frame, the most common method is to link cases taken on the same observational level (identity linking), such that each row gets assigned a value representing the selection status [@urbanek2003; @wilhelm2008; @wills2008]. However, in the case of more complex data, more advanced linking schemes are also available, such as hierarchical and distance-based linking [@wilhelm2008; @urbanek2011]. 
-
-Third, there is the issue of displaying selection. This issue will be touched upon in more detail later, in Section \@ref(problems). Briefly, @wilhelm2008 identifies three methods for displaying linked selection: replacement, overlaying, and repetition. Replacement involves replacing the entire plot with a new graphic; overlaying involves superimposing the objects representing the selected subsets on top of the original objects; and repetition involves displaying the selected objects alongside the original ones. Wilhelm identifies issues with all three techniques, although he does seem to generally come down in favor of repetition (however, see my argument in Section \@ref(stacking-part-whole)).
-
-A fourth and final issue in linked selection, and arguably one of the core concerns of the present thesis, is consistency. This topic will be coming up again and again, particularly in Section \@ref(problems). Consistent and predictable features are a cornerstone of good user interface design [see e.g. @ruiz2021]. However, as discussed above, the design an interactive data visualization system supporting linked selection presents many design decisions, each with its own set of implementation constraints. Achieving a consistent user interface through the right combination of these decisions is a known challenge [@urbanek2011; @pike2009]. 
-
-For example, while the approach of allowing objects to independently dispatch and display selection events offers great flexibility, it can also lead to a less intuitive user experience. Put simply, when users select objects in one linked plot by clicking them, they might reasonably expect the same functionality in other plots. If that is not the case (if, for instance, other plots support only displaying but not dispatching selection events), their expectation will be violated. Thus, it might be reasonable to require that all objects can both dispatch and display selection events. However, this places some fundamental constraints on these objects. For instance, how do we draw a lineplot line where only some of the underlying cases are selected? Do we draw a sequence of differently-coloured line segments, leading to a striped "candy cane" pattern (see Figure \@ref(fig:line-consistency))? Do we draw two separate lines? If so, how do we then dispatch selection events on these lines which are already conditional on selection? Like turning over a rock and disturbing a host of creepy-crawlies, linked selection reveals a complex web of visualization design challenges that defy a satisfying, generic solution.
-
-```{r line-consistency}
-#| echo: false
-#| fig-cap: "Displaying selection is not always trivial. A good example is a lineplot (right). Whereas a point in a scatterplot displays a single case (row) and a bar in a barplot displays a simple subset of cases, a line segment in a lineplot connects two data points. As such, it is not clear whether to highlight the segment *starting* at the selected point, *ending* at the selected point, or, e.g., half a segment on each side of the point. Further, since the geometry of a segmented line is not commutative (row order matters), we end up with a striped 'candy cane' pattern that is not easily interpretable."
-knitr::include_graphics("./figures/line-consistency.png")
-```
-
-## General data visualization theory
-
-The following sections briefly explore several key theoretical topics in data visualization: the goals and purpose of visualizations, the mechanisms of visual perception, and the theory of scales and measurement. While mainly discussed in the context of static visualization, these topics are equally relevant to interactive visualization and present some unique challenges. My goal is not to give an exhaustive review - each of these topics is substantial enough to serve as a thesis topic in its own right. Instead, I just want to give a brief overview of these topics, highlight some key points, and discuss how they may relate to my own work. 
-
-### Visualization goals
-
-An important fact about data visualization is that, fundamentally, a chart can be used by many different people for many different things [for a review, see e.g. @brehmer2013; @franconeri2021; @sarikaya2018]. For example, applied researchers may create figures as part of their workflow, aiming to better understand the data they had collected, spot errors and anomalies, and come up with new ideas and hypotheses [@brehmer2013; see also @kandel2012]. Conversely, data scientists and data analysts in the public and private sector may visualize already familiar data sets to communicate important information, drive decisions, or convince or persuade stakeholders [@sarikaya2018]. Finally, some figures may be created out of a sense of curiosity or for pure aesthetic enjoyment [@brehmer2013; @tufte2001]. Depending on the end-goals of the user and the desired target audience, certain visualization techniques, methods, or styles may become more useful than others.
-
-As mentioned in Section \@ref(interactive-interacting), much has been written about the goals and experiences a user might have while creating data visualizations. For instance, @brehmer2013 formalized a typology of abstract visualization tasks, based around three adverbs: *why* is a task is performed, *how* it is performed, and *what* does it pertain to. In the *why* part of their typology, they list the following reasons for why a user may engage in the process of visualizing data: to consume (present, discover, or enjoy), produce, search (lookup, browse, locate, and explore), and query (identify, compare, summarize). As another example, @pike2009 list the following high-level goals a user might have when interacting with a visualization: explore, analyze, browse, assimilate, triage, asses, understand, compare. And there are many other typologies and taxonomies of data visualization tasks and goals in the literature.     
-
-Personally, when it comes to classifying interactive data visualization goals, I prefer the following short list provided by @ward2015:
-
-- Exploration: The user wants to examine a data set
-- Confirmation: The user wants to verify a fact or a hypothesis
-- Presentation: The user wants to use the visualization to convince or inspire an audience 
-- Interactive presentation: The user wants to take the audience on a guided tour of key insights
-
-I believe this list maps fairly well onto interactive data visualization systems found in the wild, such as the ones discussed in Section \@ref(brief-history). Specifically, as mentioned before, in the history of interactive data visualization, the earlier statistical systems seemed to primarily focus on exploration and confirmation, whereas the newer web-based systems seem to prioritize presentation. The interactive presentation category is interesting, since, I would argue, it is far more specific and less common than the other categories, however, by singling it out, Ward et al. make an interesting point. By incorporating time and intentionality, sequential interactive presentations, such as those found in the Graphics section of the New York Times [@nytimes2025], really are quite unique.   
-
-### Visual perception {#visual-perception}
-
-Another important research topic in data visualization is visual perception. Specifically, given that we use visual attributes such as position, color, length, or area to encode various aspects of our data, researchers have tried to answer the question of how to use these attributes in a way that best leverages the human visual system. Fortunately, this research has been quite fruitful, yielding precise and actionable guidelines [for a review, see @franconeri2021; @quadri2021].
-
-A landmark work in this area has been that of @cleveland1984. In this study, the authors conducted a series of empirical experiments in which they investigated people's ability to accurately judge quantities based on different visual encodings. They found that judgments based on position along a common scale were the most accurate, followed by length-based comparisons, and then angle-based comparisons. 
-
-The findings were later corroborated by other authors. @heer2010 replicated the @cleveland1984 study, and included judgements of circular and rectangular areas which were found to be less accurate than position, length, or angle. Other authors have extended these experiments to other visual encodings, such as color or density [e.g. @demiralp2014; @saket2017; @reda2018]. Together, these findings have been used to create rankings of visual encodings, with researchers generally agreeing on the following ordered list: position, length, area, angle, and intensity [from most effective to least, @mackinlay1986; @franconeri2021; @quadri2021].    
-
-### Scales and measurement {#scales-measurement}
-
-Visualizing data involves mapping values to graphical attributes. As discussed in the previous section, certain visual attributes are better for visualizing particular types of data, and vice versa. However, even when we pick an appropriate visual attribute to represent our data with, there are still many choices in how to perform the mapping. For instance, suppose we have some variable $x$ with values $\{ 1, 2, 3 \}$. Should these be treated as magnitudes, a simple ordering, or even just category labels that may be permuted at will? In most data visualization systems, this metadata encoding of values into visual attributes is handled specialized components called scales or coordinate systems, and I will discuss their implementation in detail later, in Section \@ref(scales-composition). However, it is first necessary to discuss some theoretical issues involving scales.  
-
-A particular challenge when discussing scales in data visualization is that the topic unavoidably intersects with a research area that has a particularly long and contentious history: theory of measurement [see e.g. @hand1996; @michell1986; @tal2025]. Theory of measurement (not to be confused with measure theory, with which it nevertheless shares some overlap) is the research area which tries to answer the deceptively simple question: what does it mean to measure something? This seemingly trivial problem has inspired long and fiery debates within the fields of mathematics, philosophy, and social science. Particularly, in psychology, where assigning numerical values non-physical phenomena such as moods and mental states is a central concern, the topic has garnered a significant amount of attention, creating a dense body of research [see e.g. @humphry2013; @michell2021].
-
-Arguably, the most influential work in this field has been that of @stevens1946. In his fairly concise paper, Stevens defined a *scale* as method of assigning numbers to values, and introduced a four-fold classification classification, namely: nominal, ordinal, interval, and ratio scales (see Table \@ref(tab:stevens-scales)).
-
-```{r stevens-scales}
+```{r days-by-year}
 #| echo: false
 
-tab <- data.frame(
-  v1 = c("Nominal", "Ordinal", "Interval", "Ratio"),
-  v2 = c("Isomorphism",
-         "Monotone map",
-         "Affine transformation",
-         "Linear map"),
-  v3 = c("Are $x$ and $y$ the same?", 
-         "Is $x$ is greater than $y$?", 
-         "How far is $x$ from $y$?",
-         "How many times is $x$ greater than $y$?"),
-  v4 = c("$x' = f(x)$, where $f$ is a bijection", 
-         "$x' = f(x)$, where $f$ is a monotone bijection", 
-         "$x' = ax + b$, for $a, b \\in \\mathbb{R}$", 
-         "$x' = ax$, for $a \\in \\mathbb{R}$")
-)
+library(kableExtra)
 
-col_names <- c("Scale", 
-               "Structure",
-               "Comparison", 
-               "Valid transformations")
-knitr::kable(tab, col.names = col_names, 
-             caption = "Types of scales identified by Stevens (1946)")
+fits <- lapply(split(df, df$diagnosis), function(x) {
+  broom::tidy(lm(days ~ year, data = x), conf.int = TRUE)[2, ]
+  }) |> (\(x) do.call(`rbind`, x))()
 
+fits$diagnosis <- rownames(fits)
+fits <- subset(fits, select = c(diagnosis, estimate,
+                                  conf.low, conf.high, p.value))
+names(fits) <- c("diagnosis", "beta", "lower 95% CI", "upper 95% CI", "p-value")
+fits$`p-value` <- ifelse(fits$`p-value` < 0.001, "< 0.001", round(fits$`p-value`, 3))
+fits$beta <- round(fits$beta, 2)
+fits$`lower 95% CI` <- round(fits$`lower 95% CI`, 2)
+fits$`upper 95% CI` <- round(fits$`upper 95% CI`, 2)
+
+order_df3 <- aggregate(cases ~ diagnosis, sum, data = df)
+order_df3 <- order_df3[order(-order_df3$cases), ]
+fits <- fits[match(1:14, match(fits$diagnosis, order_df3$diagnosis)), ]
+
+knitr::kable(fits, align = "lllll", format = "html",
+             caption = "Simple linear regressions of the number of days by year for each diagnosis") |>
+  kable_styling() |>
+  column_spec(2, color = ifelse(fits$beta < 0, "red", "black")) |>
+  column_spec(3, color = ifelse(fits$`lower 95% CI` < 0, "red", "black")) |>
+  column_spec(4, color = ifelse(fits$`upper 95% CI` < 0, "red", "black"))
 ```
 
-The Steven's [-@stevens1946] typology is based on invariance under transformation. Specifically, for each class of scales, we define a set of transformations that preserve valid comparisons. The set of valid transformations shrinks as we move from one class of scales to another.  
+Here, the situation was a bit more varied. For most diagnoses, the number of days patients spent in care seemed to increase, with particularly large increases being observed for schizophrenia (F20-F29), Alzheimer's disease (F02 and G30), mental retardation (F70-F79), and personality disorders (F62-F69). The two diagnosis for which the number of days in treatment actually decreased were, interestingly, stress-related disorders (F40-F49 without F42) and depression disorders (F32 and F33).      
 
-For nominal scales, any kind of bijective transformation is valid. Intuitively, we can think of the scale as assigning labels to values, and any kind re-labeling is valid, as long as it preserves equality of the underlying values. For instance, given a nominal scale with three values, we can assign the labels $\{ \text{red}, \text{green}, \text{blue} \}$ or $\{ \text{monday}, \text{tuesday}, \text{wednesday} \}$ in any way we like, as long as each value maps to a unique label. This identifies the underlying mathematical structure as an isomorphism.
+#### Characteristics of patient cohorts over time
 
-Ordinal scales are more restrictive, since, on top of preserving equality, transformations also need to preserve order. For example, if we want to assign the labels $\{ \text{monday}, \text{tuesday}, \text{wednesday} \}$ to an ordinal scale with three values, there is only one way to do it that preserves the underlying order: assign the least values to $\text{monday}$, the middle value to $\text{tuesday}$, and the greatest value to $\text{wednesday}$ (assuming we order the labels/days in the usual day-of-week order). However, there is no notion of distance between the labels: we could just as well assign the values labels in $\mathbb{N}$ such as $\{ 10, 20, 30 \}$, $\{1, 2, 9999 \}$, and so on. Thus, the fundamental mathematical structure is that of a monotone map.
+One final things we are going to investigate are characteristics of patient cohorts. Specifically, given that each row of data represents one patient cohort within a given year, of a given sex, diagnosis, and so on, we can investigate whether there were any interesting patterns within the patient cohorts over time. One way we can do this is via the following figure:
 
-Interval scales need to additionally preserve equality of intervals. This means that, for any three values $a, b,$ and $c$, if the distances between $a$ and $b$ and $b$ and $c$ are equal, $d(a, b) = d(b, c)$, then so should be the distances between the scaled labels, $d^*(f(a), f(b)) = d^*(f(b), f(c)$. For most real applications, this limits interval scales to the class of affine transformations of the form $f(x) = ax + b$. A canonical example of an interval scale is the conversion formula of degrees Celsius to Fahrenheit: $f(c) = 9/5 \cdot c + 32$ [@stevens1946]. This example also highlights an important property of interval scales: the zero point can be arbitrary and ratios are not meaningful. Specifically, since the zero points of both Celsius and Fahrenheit scales were chosen based on arbitrary metrics (freezing temperatures of water and brine, respectively), it does not make sense to say that, e.g. 20°C is "twice as hot" as 10°C, in the same way that it does not make sense to say that 2000 CE is "twice as late" as 1000 CE.  
+```{r}
+#| eval: false
+df |>
+  create_schema() |>
+  add_barplot(c("diagnosis", "cases")) |>
+  add_barplot(c("year", "cases"), list(reducer = "max")) |>
+  add_barplot(c("year", "days"), list(reducer = "max")) |>
+  set_scale("barplot1", "x", breaks = order_df$diagnosis) |>
+  set_layout(matrix(c(1, 1, 2, 3), nrow = 2)) |>
+  render()
+```
 
-Finally, ratio scales also need to preserve the equality of ratios. Specifically, if $a/b = b/c$ then $f(a)/f(b) = f(b) / f(c)$. As a consequence, this also means that the scale must have a well-defined zero-point. Examples of ratio scales include physical magnitudes such as height and weight, which have a well-defined zero point [@stevens1946].
+```{r example-cases-diagnosis-max}
+#| echo: false
+#| out-extra: 'style="border: none;"'
+#| fig-cap: "While Alzheimer's patients accounted for the longest hospitalized cohorts prior to 2016, following 2016, the longest hospitalized cohorts tended to be schizophrenia patients."
+include_figure("./figures/example-cases-diagnosis-max.html")
+```
 
-Steven's [-@stevens1946] typology sparked a considerable debate, on multiple fronts. First, since the original publication, many authors have sought to either expand upon or criticize Steven's typology. However, despite some monumental efforts towards a unified theory, such as that of @krantz1971, measurement has remained a hotly debated topic to this day [see e.g. @michell2021; @tal2025]. Second, more relevant to statistics, some authors such as @stevens1951 and @luce1959 used the theory to define come up with prescriptive rules for statistical transformations, suggesting that, for example, taking the mean of an ordinal variable is wrong since the meaning of the average operator is not preserved under monotone transformations. However, this issue was hotly contested by statisticians such as @lord1953, @tukey1986, and @velleman1993, who argued that many well-established statistical practices, such as rank-based tests and coefficients of variations, rely on such "impermissible" statistics but can nevertheless yield valuable insights. More broadly, these authors also argued that data is not really meaningful on its own, but instead derives its meaning from the statistical questions it is used to answer [see also @wilkinson2012].        
+In Figure \@ref(fig:example-cases-diagnosis-max), I show plots of diagnoses, as well as a summary of days and cases over time. However, note that, whereas all barplots of days and cases over time shown before had sum (of cases and days) as the y-axis summary statistic, the two barplots in the lower half of figure Figure \@ref(fig:example-cases-diagnosis-max) show maximum, not sum. These plots effectively tell us the size and the number of days in treatment for the largest/longest hospitalized patient cohort within a given year. Based on theory in Section \@ref(problems), we know that these plots will behave well under linked selection (with one selection group).
 
-At this point, the discussion around measurement has arguably become far too dense and theoretical, and most data visualization researchers seem to avoid delving into it too deeply [see e.g. @wilkinson2012]. Nevertheless, there are still some areas where the issues of measurement and Steven's typology do crop up. For instance, when scaling area based on a continuous variable, a common recommendation is to start the scale at zero to ensure accurate representations of ratios [see e.g. @wickham2024], aligning with Steven's definition of a ratio scale. Likewise, the long-standing debate around whether the base of a barplot should always start at zero [see e.g. @cleveland1985; @wilkinson2012] also carries echoes of the measurement debate. Ultimately, it may yet require long time to settle the issues around measurement, however, there are definitely some ideas within the literature that data visualization can benefit from.    
+By investigating the diagnoses, we can discover some interesting trends in the patient cohorts. Specifically, by comparing the schizophrenia (F20-F29) and the Alzheimer's disease diagnoses (F0 and G30), we can see that they show a complementary trend in the maximum number of days hospitalized. Specifically, whereas Alzheimer's disease generally accounted for the longest-hospitalized patient cohorts up until 2016, schizophrenia accounted for the longest-hospitalized patient cohorts for five of the six years following 2016 (excluding 2020, where Alzheimer's disease narrowly beat it out). This occurred despite schizophrenia patient cohorts shrinking in size over time and the fact that Alzheimer's disease was more restricted in terms of age-range, so we would naturally expect larger cohorts (due to "lumping"). On that note, developmental disorders (F80-F99), despite the making up only a small proportion of the total number cases, made up many of the largest patients cohorts year over year. This is understandable given that these patients came almost exclusively from the youngest age group and were otherwise relatively homogeneous.
+
+## Summary
+
+I have used the Long-term Care data set [@soukupova2023] to demonstrate the typical data analytic workflow using `plotscaper`. By creating interactive figures and leveraging a suite of interactive features such as linked selection, representation switching, querying, and zooming and panning, we were able to quickly discover many interesting features about the data set, highlighting the usefulness of the package and interactive data visualization in general.
+
+Some key take-away points were:
+
+- Since 2010, the number of cases has generally decreased, while the number of treatment days has remained constant, suggesting that fewer individuals are receiving long-term psychiatric care, but for longer durations. This suggests a limited placement availability hypothesis, where the healthcare system may be struggling to accommodate new patients due to existing patient load. 
+- The trend of decreasing number of cases and increasing number of days was reversed for children, who represented a growing proportion of patients but a smaller proportion of treatment days over time.
+- The proportion of treatment days represented by older patients (60-69 and 70-79 year olds) has increased over time, further supporting the limited placement hypothesis, since these patients often require longer care.
+- There were few patients staying in care for periods of between 2-3 months and 5-7 months, suggesting that there may be potential selection mechanisms influencing hospitalization duration (e.g. administrative reasons).
+- The five most common diagnoses were, in order: alcohol use disorders, schizophrenia, Alzheimer's disease, stress-related disorders, and psychoactive substance use disorders. Patient demographics for these disorders showed some very strong trends which largely aligned with the existing literature.
+- One diagnostic category which actually shown a significant increase in the number of cases over time were behavioural syndromes associated with physiological disturbances and physical factors. Given that this category includes disorders like anorexia and bulimia, and that the majority of cases were young women, this suggests that, while rare, eating disorders may be on the rise, and should be given attention.
+- While initially, the longest hospitalized patient cohorts tended to be Alzheimer's patients, over time, schizophrenia patients became the longest hospitalized patient cohorts
 
 
-<!--chapter:end:litreview.Rmd-->
+<!--chapter:end:example.Rmd-->
 

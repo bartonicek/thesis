@@ -1,0 +1,48 @@
+\contentsline {chapter}{\numberline {1}Abstract}{5}{chapter.1}%
+\contentsline {chapter}{\numberline {2}System description}{7}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Core requirements}{7}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Application Programming Interface (\texttt {plotscaper})}{8}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}Basic example}{10}{subsection.2.2.1}%
+\contentsline {subsection}{\numberline {2.2.2}The scene and the schema}{12}{subsection.2.2.2}%
+\contentsline {subsection}{\numberline {2.2.3}HTML document embedding}{14}{subsection.2.2.3}%
+\contentsline {section}{\numberline {2.3}Interactive figure platform (\texttt {plotscape})}{14}{section.2.3}%
+\contentsline {subsection}{\numberline {2.3.1}Indexable}{14}{subsection.2.3.1}%
+\contentsline {subsection}{\numberline {2.3.2}Getter}{15}{subsection.2.3.2}%
+\contentsline {subsection}{\numberline {2.3.3}Dataframe}{17}{subsection.2.3.3}%
+\contentsline {subsection}{\numberline {2.3.4}Reactive}{18}{subsection.2.3.4}%
+\contentsline {subsection}{\numberline {2.3.5}Factors}{19}{subsection.2.3.5}%
+\contentsline {subsubsection}{\numberline {2.3.5.1}Bijection factors}{21}{subsubsection.2.3.5.1}%
+\contentsline {subsubsection}{\numberline {2.3.5.2}Constant factors}{22}{subsubsection.2.3.5.2}%
+\contentsline {subsubsection}{\numberline {2.3.5.3}String factors}{22}{subsubsection.2.3.5.3}%
+\contentsline {subsubsection}{\numberline {2.3.5.4}Binned factors}{23}{subsubsection.2.3.5.4}%
+\contentsline {subsubsection}{\numberline {2.3.5.5}Product factors}{23}{subsubsection.2.3.5.5}%
+\contentsline {paragraph}{\numberline {2.3.5.5.1}Computing product indices}{24}{paragraph.2.3.5.5.1}%
+\contentsline {subsection}{\numberline {2.3.6}Reducers}{26}{subsection.2.3.6}%
+\contentsline {subsubsection}{\numberline {2.3.6.1}Motivation}{26}{subsubsection.2.3.6.1}%
+\contentsline {subsection}{\numberline {2.3.7}Scales}{28}{subsection.2.3.7}%
+\contentsline {subsubsection}{\numberline {2.3.7.1}Overview}{29}{subsubsection.2.3.7.1}%
+\contentsline {subsubsection}{\numberline {2.3.7.2}Limits of modeling scales as simple functions}{30}{subsubsection.2.3.7.2}%
+\contentsline {subsubsection}{\numberline {2.3.7.3}Solution: Two-component scales}{33}{subsubsection.2.3.7.3}%
+\contentsline {paragraph}{\numberline {2.3.7.3.1}Beyond linear maps}{34}{paragraph.2.3.7.3.1}%
+\contentsline {paragraph}{\numberline {2.3.7.3.2}Inverses}{35}{paragraph.2.3.7.3.2}%
+\contentsline {paragraph}{\numberline {2.3.7.3.3}Some other remarks about the two-component scale system}{37}{paragraph.2.3.7.3.3}%
+\contentsline {subsubsection}{\numberline {2.3.7.4}Past implementations of scales}{38}{subsubsection.2.3.7.4}%
+\contentsline {subsubsection}{\numberline {2.3.7.5}Proposed model of scales}{39}{subsubsection.2.3.7.5}%
+\contentsline {paragraph}{\numberline {2.3.7.5.1}Zero and one}{40}{paragraph.2.3.7.5.1}%
+\contentsline {paragraph}{\numberline {2.3.7.5.2}Direction}{44}{paragraph.2.3.7.5.2}%
+\contentsline {paragraph}{\numberline {2.3.7.5.3}Multipliers}{45}{paragraph.2.3.7.5.3}%
+\contentsline {paragraph}{\numberline {2.3.7.5.4}The Full Monty}{46}{paragraph.2.3.7.5.4}%
+\contentsline {subsection}{\numberline {2.3.8}Expanses}{48}{subsection.2.3.8}%
+\contentsline {subsubsection}{\numberline {2.3.8.1}Continuous expanses}{49}{subsubsection.2.3.8.1}%
+\contentsline {subsubsection}{\numberline {2.3.8.2}Point expanses}{50}{subsubsection.2.3.8.2}%
+\contentsline {subsubsection}{\numberline {2.3.8.3}Band expanses}{51}{subsubsection.2.3.8.3}%
+\contentsline {chapter}{\numberline {3}Applied example}{55}{chapter.3}%
+\contentsline {subsection}{\numberline {3.0.1}About the data set}{55}{subsection.3.0.1}%
+\contentsline {subsection}{\numberline {3.0.2}Interactive exploration}{57}{subsection.3.0.2}%
+\contentsline {subsubsection}{\numberline {3.0.2.1}The relationship between cases and days}{57}{subsubsection.3.0.2.1}%
+\contentsline {subsubsection}{\numberline {3.0.2.2}Number of cases over time}{60}{subsubsection.3.0.2.2}%
+\contentsline {subsubsection}{\numberline {3.0.2.3}Age and child and adolescent mental health}{61}{subsubsection.3.0.2.3}%
+\contentsline {subsubsection}{\numberline {3.0.2.4}Prevalence of diagnoses}{63}{subsubsection.3.0.2.4}%
+\contentsline {subsubsection}{\numberline {3.0.2.5}Prevalence of diagnoses over time}{67}{subsubsection.3.0.2.5}%
+\contentsline {subsubsection}{\numberline {3.0.2.6}Characteristics of patient cohorts over time}{68}{subsubsection.3.0.2.6}%
+\contentsline {section}{\numberline {3.1}Summary}{69}{section.3.1}%
