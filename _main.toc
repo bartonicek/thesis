@@ -38,11 +38,11 @@
 \contentsline {subsubsection}{\numberline {2.3.8.3}Band expanses}{51}{subsubsection.2.3.8.3}%
 \contentsline {chapter}{\numberline {3}Applied example}{55}{chapter.3}%
 \contentsline {subsection}{\numberline {3.0.1}About the data set}{55}{subsection.3.0.1}%
-\contentsline {subsection}{\numberline {3.0.2}Interactive exploration}{57}{subsection.3.0.2}%
-\contentsline {subsubsection}{\numberline {3.0.2.1}The relationship between cases and days}{57}{subsubsection.3.0.2.1}%
-\contentsline {subsubsection}{\numberline {3.0.2.2}Number of cases over time}{60}{subsubsection.3.0.2.2}%
-\contentsline {subsubsection}{\numberline {3.0.2.3}Age and child and adolescent mental health}{61}{subsubsection.3.0.2.3}%
-\contentsline {subsubsection}{\numberline {3.0.2.4}Prevalence of diagnoses}{63}{subsubsection.3.0.2.4}%
-\contentsline {subsubsection}{\numberline {3.0.2.5}Prevalence of diagnoses over time}{67}{subsubsection.3.0.2.5}%
-\contentsline {subsubsection}{\numberline {3.0.2.6}Characteristics of patient cohorts over time}{68}{subsubsection.3.0.2.6}%
-\contentsline {section}{\numberline {3.1}Summary}{69}{section.3.1}%
+\contentsline {subsection}{\numberline {3.0.2}Interactive exploration}{58}{subsection.3.0.2}%
+\contentsline {subsubsection}{\numberline {3.0.2.1}The relationship between cases and days}{58}{subsubsection.3.0.2.1}%
+\contentsline {subsubsection}{\numberline {3.0.2.2}Number of cases over time}{61}{subsubsection.3.0.2.2}%
+\contentsline {subsubsection}{\numberline {3.0.2.3}Age and child and adolescent mental health}{63}{subsubsection.3.0.2.3}%
+\contentsline {subsubsection}{\numberline {3.0.2.4}Prevalence of diagnoses}{67}{subsubsection.3.0.2.4}%
+\contentsline {subsubsection}{\numberline {3.0.2.5}Prevalence of diagnoses over time}{72}{subsubsection.3.0.2.5}%
+\contentsline {subsubsection}{\numberline {3.0.2.6}Characteristics of patient cohorts over time}{79}{subsubsection.3.0.2.6}%
+\contentsline {section}{\numberline {3.1}Summary}{80}{section.3.1}%

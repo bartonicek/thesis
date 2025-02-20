@@ -1,11 +1,22 @@
 
 ```{r}
 #| echo: false
-knitr::opts_chunk$set(eval = FALSE)
+# knitr::opts_chunk$set(eval = FALSE)
+
+knitr::opts_chunk$set(
+  out.width = "100%",
+  out.height = "100%"
+)
 
 include_figure <- function(path) {
-  if (knitr::is_html_output()) include_figure(path)
+  if (knitr::is_html_output()) knitr::include_url(path)
   else knitr::include_graphics(gsub(".html", ".png", path))
+}
+
+if (knitr::is_html_output()) {
+  knitr::opts_chunk$set(
+    out.extra = 'style="border: none;"' # Get rid of iframe borders
+  )
 }
 ```
 
@@ -13,9 +24,7 @@ include_figure <- function(path) {
 #| echo: false
 #| eval: false
 # Script to generate screenshots
-examples <- list.files("./figures", "^example.+html")
-
-urls <- paste0("./figures/", examples)
+urls <- list.files("./figures", "^example.+html", full.names = TRUE)
 outs <- gsub(".html", ".png", urls)
 
 webshot2::webshot(urls, outs, delay = 30)
@@ -84,9 +93,8 @@ df |>
 
 ```{r example-cases-days}
 #| echo: false
-#| eval: true
 #| fig-cap: "Relationship between the number of cases in a patient subgroup and the total number of days spent in care."
-knitr::include_url("./figures/example-cases-days.html")
+include_figure("./figures/example-cases-days.html")
 ```
 
 Interestingly, the points did not show a simple linear trend. Instead, they seemed to cluster in three distinct "leaflets", each exhibiting a roughly linear trend. This suggests the presence of a pooling effect, such that the overall trend is the result of combining three distinct groups. Closer inspection of the data reveals that the `stay_category` variable has three levels: short-term (< 3 months), medium-term (3-6 months), and long-term (6+ months) care. Color-coding the cases indeed confirms that the three levels of `stay_category` correspond to the leaflets:
@@ -104,7 +112,6 @@ df |>
 
 ```{r example-cases-stay-cat}
 #| echo: false
-#| out-extra: 'style="border: none;"'
 #| fig-cap: "The relationship between cases and days is subject to a pooling effect: while patient groups within each care duration category (short-term, medium-term, and long-term) exhibit a linear relationship individually, this does not hold when the groups are considered together."
 include_figure("./figures/example-cases-stay-cat.html")
 ```
@@ -131,7 +138,6 @@ df |>
 
 ```{r example-cases-avg-days}
 #| echo: false
-#| out-extra: 'style="border: none;"'
 include_figure("./figures/example-cases-avg-days.html")
 ```
 
@@ -160,7 +166,6 @@ schema |> render()
 
 ```{r example-cases-days-time}
 #| echo: false
-#| out-extra: 'style="border: none;"'
 include_figure("./figures/example-cases-days-time.html")
 ```
 
@@ -183,7 +188,6 @@ schema |>
 
 ```{r example-cases-days-time-zoom}
 #| echo: false
-#| out-extra: 'style="border: none;"'
 include_figure("./figures/example-cases-days-time-zoom.html")
 ```
 
@@ -225,7 +229,6 @@ df |>
 
 ```{r example-cases-days-children}
 #| echo: false
-#| out-extra: 'style="border: none;"'
 include_figure("./figures/example-cases-days-children.html")
 ```
 
@@ -255,7 +258,6 @@ df |>
 
 ```{r example-cases-days-children-marked}
 #| echo: false
-#| out-extra: 'style="border: none;"'
 #| fig-cap: "While the proportion of days spent in treatment by children and adolescent has declined, the proportion of cases that children and adolescents make up has increased."
 include_figure("./figures/example-cases-days-children-marked.html")
 ```
@@ -278,7 +280,6 @@ df |>
 
 ```{r example-cases-days-age}
 #| echo: false
-#| out-extra: 'style="border: none;"'
 include_figure("./figures/example-cases-days-age.html")
 ```
 
@@ -331,7 +332,6 @@ df |>
 
 ```{r example-cases-diagnosis}
 #| echo: false
-#| out-extra: 'style="border: none;"'
 #| fig-cap: "Majority of patient load was taken up by the top five most common disorders: alcohol-use disorders, schizophrenia, Alzheimer's disease, neurotic and stress-related disorders, and psychoactive substance disorders."
 include_figure("./figures/example-cases-diagnosis.html")
 ```
@@ -385,7 +385,6 @@ df |>
 
 ```{r example-cases-diagnosis-time}
 #| echo: false
-#| out-extra: 'style="border: none;"'
 include_figure("./figures/example-cases-diagnosis-time.html")
 ```
 
@@ -479,7 +478,6 @@ df |>
 
 ```{r example-cases-diagnosis-max}
 #| echo: false
-#| out-extra: 'style="border: none;"'
 #| fig-cap: "While Alzheimer's patients accounted for the longest hospitalized cohorts prior to 2016, following 2016, the longest hospitalized cohorts tended to be schizophrenia patients."
 include_figure("./figures/example-cases-diagnosis-max.html")
 ```
