@@ -9,7 +9,7 @@ editor_options:
 knitr::opts_chunk$set(
   out.width = "100%",
   out.height = "100%"
-)
+) # For LaTeX output to render correctly
 
 include_figure <- function(path) {
   if (knitr::is_html_output()) knitr::include_url(path)
@@ -31,7 +31,7 @@ Data visualization has a rich and intricate history, and a comprehensive treatme
 
 ### Static data visualization: From ancient times to the space age
 
-The idea of graphically representing abstract information is very old. As one concrete example, a clay tablet recording a land survey during the Old Babylonian period (approximately 1900-1600 BCE) has recently been identified as the earliest visual depiction of the Pythagorean theorem [@mansfield2020]. Other examples of early abstract visualizations include maps of geographic regions and the night sky, and these were also the first to introduce the idea of coordinate systems [@beniger1978; @friendly2021].
+The idea of graphically representing abstract information is very old. As one concrete example, a clay tablet recording a land survey during the Old Babylonian period (approximately 1900-1600 BCE) has recently been identified as the earliest visual depiction of the Pythagorean theorem [@mansfield2020]. Other examples of early abstract visualizations include maps of geographic regions and the night sky, and these were also the first to introduce the idea of a system of coordinates [@beniger1978; @friendly2021].
 
 ```{r}
 #| echo: false
@@ -74,7 +74,7 @@ knitr::include_graphics("./figures/xlisp-stat.png")
 
 #### Open-source Statistical Computing
 
-The proliferation of open-source, general-purpose statistical computing software such as S and R further democratized the access to interactive data visualization tools. Building on XGobi's foundation, GGobi [@swayne2003], expanded upon on XGobi and provided an integration layer for R. Other tools like MANET [@unwin1996] and Mondrian [@theus2002] introduced sophisticated linking techniques, with features such as selection sequences, allowing the users to combine a series of selections via logical operators [see also @unwin2006]. Further, iPlots [@urbanek2003] implemented a general framework for interactive plotting in R, allowing not only for one-shot rendering interactive figures from R but also for direct programmatic manipulation. This package was later expanded expanded for big data capabilities in iPlots eXtreme [@urbanek2011]. Finally, the `cranvas` package [@xie2014] introduced a reactive programming paradigm for defining the infrastructure for interactive graphics directly in R, using the model-view-controller (MVC) architecture.         
+The proliferation of open-source, general-purpose statistical computing software such as S and R further democratized the access to interactive data visualization tools [see also @leeuw2004]. Building on XGobi's foundation, GGobi [@swayne2003], expanded upon on XGobi and provided an integration layer for R. Other tools like MANET [@unwin1996] and Mondrian [@theus2002] introduced sophisticated linking techniques, with features such as selection sequences, allowing the users to combine a series of selections via logical operators [see also @unwin2006]. Further, iPlots [@urbanek2003] implemented a general framework for interactive plotting in R, allowing not only for one-shot rendering interactive figures from R but also for direct programmatic manipulation. This package was later expanded expanded for big data capabilities in iPlots eXtreme [@urbanek2011]. Finally, the `cranvas` package [@xie2014] introduced a set of reactive programming primitives that could be used for building the infrastructure underlying interactive graphics directly in R, within the model-view-controller (MVC) framework.   
 
 ```{r}
 #| echo: false
@@ -83,7 +83,11 @@ The proliferation of open-source, general-purpose statistical computing software
 knitr::include_graphics("./figures/mondrian.png")
 ```
 
-Alongside the more general interactive data visualization frameworks mentioned above, there were also more specialized packages designed for specific techniques and models. For instance, `KLIMT` was developed for interactive visualization of classification and regression trees [@urbanek2001; @urbanek2002]. Similarly, packages like `tourr` [@wickham2011], `spinifex` [@spyrison2020], `liminal` [@lee2021; @lee2022a] provided tools for exploring large multivariate data sets via grand tour projections [see @cook1995]. Generally, over time, there seems to have been a trend towards more of these specialized tools within the R community, and fewer of the general, high-level frameworks [although there were some notable exceptions, such as the `loon` package, @waddell2023]. Currently, it seems that R users typically encounter interactive visualizations as part of Shiny [@shiny2024] dashboards, or through R wrappers of interactive data visualization packages ported over from the JavaScript ecosystem (see Section \@ref(web-based)).
+Alongside the more general interactive data visualization frameworks mentioned above, there were also more specialized packages designed for specific techniques and models. For instance, `KLIMT` was developed for interactive visualization of classification and regression trees [@urbanek2001; @urbanek2002]. Similarly, packages like `tourr` [@wickham2011], `spinifex` [@spyrison2020], `liminal` [@lee2021; @lee2022a] provided tools for exploring large multivariate data sets via grand tour projections [see @cook1995]. 
+
+Another important milestone in the history of interactivity in R was the development of Shiny [@shiny2024; see also @sievert2020; @wickham2021], a general framework for developing web apps in R. Shiny uses a client-server MVC-like model, whereby the user defines an R-based server and a web-based UI/controller layer (which is scaffolded in R, but which transpiles to HTML, CSS, and JavaScript). Bi-directional communication between the client and the server is handled via WebSockets [@mdn2024g], facilitated through the `httpuv` package [@cheng2024]. The primary advantage of Shiny is that it gives less technical R users the ability to easily create rich interactive web apps, including interactive data visualizations (by re-rendering static plots). The one major downside of Shiny is that, since every interactive event has to do a round-trip from the client to the R server and back again, high-frequency interactions (such as brushing scatterplot points) can become prohibitively slow, particularly at larger data volumes [although there are ways to mitigate this, @sievert2020].   
+
+Over time, there seems to have been a trend towards more of the specialized tools within the R community, and fewer of the general, high-level frameworks [although there were some notable exceptions, such as the `loon` package, @waddell2023]. Currently, it seems that R users typically encounter interactive visualizations as part of Shiny [@shiny2024] dashboards, or through R wrappers of interactive data visualization packages ported over from the JavaScript ecosystem (see Section \@ref(web-based)).
 
 #### Common features and limitations of early interactive systems
 

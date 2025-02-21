@@ -55,10 +55,6 @@
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 <link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
 <script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
-<link href="libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
-<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
-<script src="libs/plotscape-0.0.0/main.iife.js"></script>
-<script src="libs/plotscaper-binding-0.2.6/plotscaper.js"></script>
 
 
 <style type="text/css">
@@ -332,52 +328,52 @@ against T-rex, Grug take T-rex: at least grug see T-rex.”</p>
 <p>While there are may different interpretations of OOP, there are several concepts which tend to be shared by most implementations. The core idea of OOP is that programs should be modeled as networks of objects: independent units of computation which bundle related data (properties, members) and code (methods, virtual functions) together <span class="citation">(<a href="#ref-booch2008">Booch et al. 2008</a>)</span>. Objects are self-contained, and own hidden, private state; they expose only a limited public interface. To communicate with each other, objects send each other messages <span class="citation">(<a href="#ref-meyer1997">Meyer 1997</a>)</span>. In this way, they behave similarly to networks of biological cells <span class="citation">(this was the inspiration for Alan Kay, one of the creators of Smalltalk, who also coined the term “object oriented,” <a href="#ref-kay1996">Kay 1996</a>)</span>.</p>
 <p>Each object is instantiated based on a class, a sort of a blueprint which provides the object with a type as well as implementation of its methods. Classes can be associated with each other in various ways. For example, a class may inherit methods and properties from a parent class (superclass), such that it can make use of the parent’s implementation. Alternatively, a class may be composed of other classes, by having their instances as properties.</p>
 <p>Here’s a basic example one might see in an introductory OOP text-book (for some reasons, animals are a popular metaphor in introductory OOP texts). We start with a base class <code>Animal</code>:</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb23-1"><a href="high-level-design.html#cb23-1" tabindex="-1"></a><span class="co">// Animal.ts</span></span>
-<span id="cb23-2"><a href="high-level-design.html#cb23-2" tabindex="-1"></a><span class="kw">type</span> Food <span class="op">=</span> { nutrition<span class="op">:</span> <span class="dt">number</span> }<span class="op">;</span></span>
-<span id="cb23-3"><a href="high-level-design.html#cb23-3" tabindex="-1"></a></span>
-<span id="cb23-4"><a href="high-level-design.html#cb23-4" tabindex="-1"></a><span class="im">export</span> <span class="kw">class</span> Animal {</span>
-<span id="cb23-5"><a href="high-level-design.html#cb23-5" tabindex="-1"></a>  <span class="co">// Class properties with default values</span></span>
-<span id="cb23-6"><a href="high-level-design.html#cb23-6" tabindex="-1"></a>  x <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> </span>
-<span id="cb23-7"><a href="high-level-design.html#cb23-7" tabindex="-1"></a>  y <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb23-8"><a href="high-level-design.html#cb23-8" tabindex="-1"></a>  nutrition <span class="op">=</span> <span class="dv">100</span><span class="op">;</span></span>
-<span id="cb23-9"><a href="high-level-design.html#cb23-9" tabindex="-1"></a></span>
-<span id="cb23-10"><a href="high-level-design.html#cb23-10" tabindex="-1"></a>  <span class="co">// A basic method shared by all Animals</span></span>
-<span id="cb23-11"><a href="high-level-design.html#cb23-11" tabindex="-1"></a>  <span class="fu">move</span>(dx<span class="op">:</span> <span class="dt">number</span><span class="op">,</span> dy<span class="op">:</span> <span class="dt">number</span>) {</span>
-<span id="cb23-12"><a href="high-level-design.html#cb23-12" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">x</span> <span class="op">+=</span> dx<span class="op">;</span></span>
-<span id="cb23-13"><a href="high-level-design.html#cb23-13" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">y</span> <span class="op">+=</span> dy<span class="op">;</span></span>
-<span id="cb23-14"><a href="high-level-design.html#cb23-14" tabindex="-1"></a>  }</span>
-<span id="cb23-15"><a href="high-level-design.html#cb23-15" tabindex="-1"></a></span>
-<span id="cb23-16"><a href="high-level-design.html#cb23-16" tabindex="-1"></a>  <span class="co">// Default eat method</span></span>
-<span id="cb23-17"><a href="high-level-design.html#cb23-17" tabindex="-1"></a>  <span class="fu">eat</span>(food<span class="op">:</span> Food) {</span>
-<span id="cb23-18"><a href="high-level-design.html#cb23-18" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">nutrition</span> <span class="op">+=</span> food<span class="op">.</span><span class="at">nutrition</span><span class="op">;</span></span>
-<span id="cb23-19"><a href="high-level-design.html#cb23-19" tabindex="-1"></a>  }</span>
-<span id="cb23-20"><a href="high-level-design.html#cb23-20" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb25-1"><a href="high-level-design.html#cb25-1" tabindex="-1"></a><span class="co">// Animal.ts</span></span>
+<span id="cb25-2"><a href="high-level-design.html#cb25-2" tabindex="-1"></a><span class="kw">type</span> Food <span class="op">=</span> { nutrition<span class="op">:</span> <span class="dt">number</span> }<span class="op">;</span></span>
+<span id="cb25-3"><a href="high-level-design.html#cb25-3" tabindex="-1"></a></span>
+<span id="cb25-4"><a href="high-level-design.html#cb25-4" tabindex="-1"></a><span class="im">export</span> <span class="kw">class</span> Animal {</span>
+<span id="cb25-5"><a href="high-level-design.html#cb25-5" tabindex="-1"></a>  <span class="co">// Class properties with default values</span></span>
+<span id="cb25-6"><a href="high-level-design.html#cb25-6" tabindex="-1"></a>  x <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> </span>
+<span id="cb25-7"><a href="high-level-design.html#cb25-7" tabindex="-1"></a>  y <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb25-8"><a href="high-level-design.html#cb25-8" tabindex="-1"></a>  nutrition <span class="op">=</span> <span class="dv">100</span><span class="op">;</span></span>
+<span id="cb25-9"><a href="high-level-design.html#cb25-9" tabindex="-1"></a></span>
+<span id="cb25-10"><a href="high-level-design.html#cb25-10" tabindex="-1"></a>  <span class="co">// A basic method shared by all Animals</span></span>
+<span id="cb25-11"><a href="high-level-design.html#cb25-11" tabindex="-1"></a>  <span class="fu">move</span>(dx<span class="op">:</span> <span class="dt">number</span><span class="op">,</span> dy<span class="op">:</span> <span class="dt">number</span>) {</span>
+<span id="cb25-12"><a href="high-level-design.html#cb25-12" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">x</span> <span class="op">+=</span> dx<span class="op">;</span></span>
+<span id="cb25-13"><a href="high-level-design.html#cb25-13" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">y</span> <span class="op">+=</span> dy<span class="op">;</span></span>
+<span id="cb25-14"><a href="high-level-design.html#cb25-14" tabindex="-1"></a>  }</span>
+<span id="cb25-15"><a href="high-level-design.html#cb25-15" tabindex="-1"></a></span>
+<span id="cb25-16"><a href="high-level-design.html#cb25-16" tabindex="-1"></a>  <span class="co">// Default eat method</span></span>
+<span id="cb25-17"><a href="high-level-design.html#cb25-17" tabindex="-1"></a>  <span class="fu">eat</span>(food<span class="op">:</span> Food) {</span>
+<span id="cb25-18"><a href="high-level-design.html#cb25-18" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">nutrition</span> <span class="op">+=</span> food<span class="op">.</span><span class="at">nutrition</span><span class="op">;</span></span>
+<span id="cb25-19"><a href="high-level-design.html#cb25-19" tabindex="-1"></a>  }</span>
+<span id="cb25-20"><a href="high-level-design.html#cb25-20" tabindex="-1"></a>}</span></code></pre></div>
 <p>Next, we subclass the <code>Animal</code> class and create a <code>Dog</code> class:</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb24-1"><a href="high-level-design.html#cb24-1" tabindex="-1"></a><span class="im">import</span> { Animal } <span class="im">from</span> <span class="st">&quot;./Animal.ts&quot;</span></span>
-<span id="cb24-2"><a href="high-level-design.html#cb24-2" tabindex="-1"></a></span>
-<span id="cb24-3"><a href="high-level-design.html#cb24-3" tabindex="-1"></a><span class="kw">type</span> Meat <span class="op">=</span> { type<span class="op">:</span> <span class="vs">`meat`</span><span class="op">;</span> nutrition<span class="op">:</span> <span class="dt">number</span> }<span class="op">;</span></span>
-<span id="cb24-4"><a href="high-level-design.html#cb24-4" tabindex="-1"></a></span>
-<span id="cb24-5"><a href="high-level-design.html#cb24-5" tabindex="-1"></a><span class="kw">class</span> Dog <span class="kw">extends</span> Animal {</span>
-<span id="cb24-6"><a href="high-level-design.html#cb24-6" tabindex="-1"></a>  <span class="co">// Overwrite superclass method - dogs only eat meat</span></span>
-<span id="cb24-7"><a href="high-level-design.html#cb24-7" tabindex="-1"></a>  <span class="fu">eat</span>(food<span class="op">:</span> Meat) { </span>
-<span id="cb24-8"><a href="high-level-design.html#cb24-8" tabindex="-1"></a>    <span class="kw">super</span><span class="op">.</span><span class="fu">eat</span>(food)<span class="op">;</span> <span class="co">// Call superclass method</span></span>
-<span id="cb24-9"><a href="high-level-design.html#cb24-9" tabindex="-1"></a>  }</span>
-<span id="cb24-10"><a href="high-level-design.html#cb24-10" tabindex="-1"></a></span>
-<span id="cb24-11"><a href="high-level-design.html#cb24-11" tabindex="-1"></a>  <span class="co">// Dogs also makes a specific dog-like sound</span></span>
-<span id="cb24-12"><a href="high-level-design.html#cb24-12" tabindex="-1"></a>  <span class="fu">getSound</span>() { </span>
-<span id="cb24-13"><a href="high-level-design.html#cb24-13" tabindex="-1"></a>    <span class="cf">return</span> <span class="vs">`Woof!`</span><span class="op">;</span></span>
-<span id="cb24-14"><a href="high-level-design.html#cb24-14" tabindex="-1"></a>  }</span>
-<span id="cb24-15"><a href="high-level-design.html#cb24-15" tabindex="-1"></a>}</span>
-<span id="cb24-16"><a href="high-level-design.html#cb24-16" tabindex="-1"></a></span>
-<span id="cb24-17"><a href="high-level-design.html#cb24-17" tabindex="-1"></a><span class="kw">const</span> dog <span class="op">=</span> <span class="kw">new</span> <span class="fu">Dog</span>()<span class="op">;</span></span>
-<span id="cb24-18"><a href="high-level-design.html#cb24-18" tabindex="-1"></a></span>
-<span id="cb24-19"><a href="high-level-design.html#cb24-19" tabindex="-1"></a><span class="co">// Dog inherits all of the methods and properties of Animal</span></span>
-<span id="cb24-20"><a href="high-level-design.html#cb24-20" tabindex="-1"></a>dog<span class="op">.</span><span class="fu">move</span>(<span class="op">-</span><span class="dv">10</span><span class="op">,</span> <span class="dv">10</span>)<span class="op">;</span> </span>
-<span id="cb24-21"><a href="high-level-design.html#cb24-21" tabindex="-1"></a>dog<span class="op">.</span><span class="fu">eat</span>({ type<span class="op">:</span> <span class="vs">`meat`</span><span class="op">,</span> nutrition<span class="op">:</span> <span class="dv">10</span> })<span class="op">;</span> <span class="co">// This is fine</span></span>
-<span id="cb24-22"><a href="high-level-design.html#cb24-22" tabindex="-1"></a><span class="co">// dog.eat({ type: `vegatable`, nutrition: 10 }); // This would result in a compiler error</span></span>
-<span id="cb24-23"><a href="high-level-design.html#cb24-23" tabindex="-1"></a></span>
-<span id="cb24-24"><a href="high-level-design.html#cb24-24" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>([<span class="vs">`x`</span><span class="op">,</span> <span class="vs">`y`</span><span class="op">,</span> <span class="vs">`nutrition`</span>]<span class="op">.</span><span class="fu">map</span>(e <span class="kw">=&gt;</span> <span class="vs">`</span><span class="sc">${</span>e<span class="sc">}</span><span class="vs">: </span><span class="sc">${</span>dog[e]<span class="sc">}</span><span class="vs">`</span>)<span class="op">.</span><span class="fu">join</span>(<span class="vs">`, `</span>))</span>
-<span id="cb24-25"><a href="high-level-design.html#cb24-25" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(dog<span class="op">.</span><span class="fu">getSound</span>())<span class="op">;</span></span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb26-1"><a href="high-level-design.html#cb26-1" tabindex="-1"></a><span class="im">import</span> { Animal } <span class="im">from</span> <span class="st">&quot;./Animal.ts&quot;</span></span>
+<span id="cb26-2"><a href="high-level-design.html#cb26-2" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="high-level-design.html#cb26-3" tabindex="-1"></a><span class="kw">type</span> Meat <span class="op">=</span> { type<span class="op">:</span> <span class="vs">`meat`</span><span class="op">;</span> nutrition<span class="op">:</span> <span class="dt">number</span> }<span class="op">;</span></span>
+<span id="cb26-4"><a href="high-level-design.html#cb26-4" tabindex="-1"></a></span>
+<span id="cb26-5"><a href="high-level-design.html#cb26-5" tabindex="-1"></a><span class="kw">class</span> Dog <span class="kw">extends</span> Animal {</span>
+<span id="cb26-6"><a href="high-level-design.html#cb26-6" tabindex="-1"></a>  <span class="co">// Overwrite superclass method - dogs only eat meat</span></span>
+<span id="cb26-7"><a href="high-level-design.html#cb26-7" tabindex="-1"></a>  <span class="fu">eat</span>(food<span class="op">:</span> Meat) { </span>
+<span id="cb26-8"><a href="high-level-design.html#cb26-8" tabindex="-1"></a>    <span class="kw">super</span><span class="op">.</span><span class="fu">eat</span>(food)<span class="op">;</span> <span class="co">// Call superclass method</span></span>
+<span id="cb26-9"><a href="high-level-design.html#cb26-9" tabindex="-1"></a>  }</span>
+<span id="cb26-10"><a href="high-level-design.html#cb26-10" tabindex="-1"></a></span>
+<span id="cb26-11"><a href="high-level-design.html#cb26-11" tabindex="-1"></a>  <span class="co">// Dogs also makes a specific dog-like sound</span></span>
+<span id="cb26-12"><a href="high-level-design.html#cb26-12" tabindex="-1"></a>  <span class="fu">getSound</span>() { </span>
+<span id="cb26-13"><a href="high-level-design.html#cb26-13" tabindex="-1"></a>    <span class="cf">return</span> <span class="vs">`Woof!`</span><span class="op">;</span></span>
+<span id="cb26-14"><a href="high-level-design.html#cb26-14" tabindex="-1"></a>  }</span>
+<span id="cb26-15"><a href="high-level-design.html#cb26-15" tabindex="-1"></a>}</span>
+<span id="cb26-16"><a href="high-level-design.html#cb26-16" tabindex="-1"></a></span>
+<span id="cb26-17"><a href="high-level-design.html#cb26-17" tabindex="-1"></a><span class="kw">const</span> dog <span class="op">=</span> <span class="kw">new</span> <span class="fu">Dog</span>()<span class="op">;</span></span>
+<span id="cb26-18"><a href="high-level-design.html#cb26-18" tabindex="-1"></a></span>
+<span id="cb26-19"><a href="high-level-design.html#cb26-19" tabindex="-1"></a><span class="co">// Dog inherits all of the methods and properties of Animal</span></span>
+<span id="cb26-20"><a href="high-level-design.html#cb26-20" tabindex="-1"></a>dog<span class="op">.</span><span class="fu">move</span>(<span class="op">-</span><span class="dv">10</span><span class="op">,</span> <span class="dv">10</span>)<span class="op">;</span> </span>
+<span id="cb26-21"><a href="high-level-design.html#cb26-21" tabindex="-1"></a>dog<span class="op">.</span><span class="fu">eat</span>({ type<span class="op">:</span> <span class="vs">`meat`</span><span class="op">,</span> nutrition<span class="op">:</span> <span class="dv">10</span> })<span class="op">;</span> <span class="co">// This is fine</span></span>
+<span id="cb26-22"><a href="high-level-design.html#cb26-22" tabindex="-1"></a><span class="co">// dog.eat({ type: `vegatable`, nutrition: 10 }); // This would result in a compiler error</span></span>
+<span id="cb26-23"><a href="high-level-design.html#cb26-23" tabindex="-1"></a></span>
+<span id="cb26-24"><a href="high-level-design.html#cb26-24" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>([<span class="vs">`x`</span><span class="op">,</span> <span class="vs">`y`</span><span class="op">,</span> <span class="vs">`nutrition`</span>]<span class="op">.</span><span class="fu">map</span>(e <span class="kw">=&gt;</span> <span class="vs">`</span><span class="sc">${</span>e<span class="sc">}</span><span class="vs">: </span><span class="sc">${</span>dog[e]<span class="sc">}</span><span class="vs">`</span>)<span class="op">.</span><span class="fu">join</span>(<span class="vs">`, `</span>))</span>
+<span id="cb26-25"><a href="high-level-design.html#cb26-25" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(dog<span class="op">.</span><span class="fu">getSound</span>())<span class="op">;</span></span></code></pre></div>
 <pre><code>## x: -10, y: 10, nutrition: 110
 ## Woof!</code></pre>
 <p>This is only a toy example of OOP code. In real applications, when writing OOP code, one may also rely on more advanced language features such as interfaces, abstract classes, and generics, however, a detailed discussion of these features is outside of the scope of the present thesis. Nevertheless, what is important to discuss are some fundamental theoretical ideas behind OOP.</p>
@@ -440,42 +436,42 @@ against T-rex, Grug take T-rex: at least grug see T-rex.”</p>
 <p>Thus, encapsulation of data is certainly possible in DOP. However, a question still remains whether it is a good idea. While in OOP, encapsulation is generally seen as a net positive, in DOP it is thought to come with trade-offs. It does provide an additional layer of security, however, it also makes systems more complex and harder to debug <span class="citation">(<a href="#ref-fabian2018">Fabian 2018</a>; <a href="#ref-sharvit2022">Sharvit 2022</a>)</span>. And, even with full encapsulation, users may still come to rely on hidden features of the system <span class="citation">(<a href="#ref-fabian2018">Fabian 2018</a>)</span>. Ultimately, it is necessary to weigh the pros and cons of encapsulating data within the context of the specific use-case.</p>
 <p>Some languages also have features which allow for a weak form encapsulation which is compatible with DOP. In JavaScript, this can be implemented by using symbol keys for object properties <span class="citation">(<a href="#ref-mdn2024f">MDN 2024c</a>)</span>. Symbols are builtin primitive in JavaScript and are guaranteed to be unique. If we assign a property to an object using an unexported symbol as the key, the user will still be able to inspect the object and see the property, however, they will not be able to access it without using reflection. This is actually in line with the data hiding concept as laid out by <span class="citation">Meyer (<a href="#ref-meyer1997">1997</a>)</span>.</p>
 <p>I actually found this form a weak encapsulation a good fit for <code>plotscape</code>. For example, here is how I implemented the <code>Meta</code> mixin which allows use to store arbitrary metadata on objects:</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb26-1"><a href="high-level-design.html#cb26-1" tabindex="-1"></a><span class="co">// Meta.ts</span></span>
-<span id="cb26-2"><a href="high-level-design.html#cb26-2" tabindex="-1"></a><span class="kw">const</span> METADATA <span class="op">=</span> <span class="bu">Symbol</span>(<span class="st">&quot;metadata&quot;</span>)<span class="op">;</span></span>
-<span id="cb26-3"><a href="high-level-design.html#cb26-3" tabindex="-1"></a><span class="kw">type</span> METADATA <span class="op">=</span> <span class="kw">typeof</span> METADATA<span class="op">;</span></span>
-<span id="cb26-4"><a href="high-level-design.html#cb26-4" tabindex="-1"></a></span>
-<span id="cb26-5"><a href="high-level-design.html#cb26-5" tabindex="-1"></a><span class="im">export</span> <span class="kw">interface</span> Meta<span class="op">&lt;</span>T <span class="kw">extends</span> <span class="bu">Record</span><span class="op">&lt;</span><span class="dt">string</span><span class="op">,</span> <span class="dt">any</span><span class="op">&gt;&gt;</span> {</span>
-<span id="cb26-6"><a href="high-level-design.html#cb26-6" tabindex="-1"></a>  [METADATA]<span class="op">:</span> T<span class="op">;</span></span>
-<span id="cb26-7"><a href="high-level-design.html#cb26-7" tabindex="-1"></a>}</span>
-<span id="cb26-8"><a href="high-level-design.html#cb26-8" tabindex="-1"></a></span>
-<span id="cb26-9"><a href="high-level-design.html#cb26-9" tabindex="-1"></a><span class="im">export</span> <span class="im">namespace</span> <span class="dt">Meta</span> {</span>
-<span id="cb26-10"><a href="high-level-design.html#cb26-10" tabindex="-1"></a>  <span class="im">export</span> <span class="kw">function</span> <span class="kw">of</span><span class="op">&lt;</span>T <span class="kw">extends</span> <span class="bu">Object</span><span class="op">&gt;</span>(object<span class="op">:</span> T) {</span>
-<span id="cb26-11"><a href="high-level-design.html#cb26-11" tabindex="-1"></a>    <span class="cf">return</span> { <span class="op">...</span><span class="kw">object</span><span class="op">,</span> [METADATA]<span class="op">:</span> {} }<span class="op">;</span></span>
-<span id="cb26-12"><a href="high-level-design.html#cb26-12" tabindex="-1"></a>  }</span>
-<span id="cb26-13"><a href="high-level-design.html#cb26-13" tabindex="-1"></a></span>
-<span id="cb26-14"><a href="high-level-design.html#cb26-14" tabindex="-1"></a>  <span class="im">export</span> <span class="kw">function</span> <span class="kw">get</span><span class="op">&lt;</span>T <span class="kw">extends</span> Meta<span class="op">&gt;</span>(object<span class="op">:</span> T<span class="op">,</span> key<span class="op">:</span> <span class="kw">keyof</span> T[METADATA]) {</span>
-<span id="cb26-15"><a href="high-level-design.html#cb26-15" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">object</span>[METADATA][key]<span class="op">;</span></span>
-<span id="cb26-16"><a href="high-level-design.html#cb26-16" tabindex="-1"></a>  }</span>
-<span id="cb26-17"><a href="high-level-design.html#cb26-17" tabindex="-1"></a></span>
-<span id="cb26-18"><a href="high-level-design.html#cb26-18" tabindex="-1"></a>  <span class="im">export</span> <span class="kw">function</span> <span class="kw">set</span><span class="op">&lt;</span>T <span class="kw">extends</span> Meta<span class="op">,</span> K <span class="kw">extends</span> <span class="kw">keyof</span> T[METADATA]<span class="op">&gt;</span>(</span>
-<span id="cb26-19"><a href="high-level-design.html#cb26-19" tabindex="-1"></a>    object<span class="op">:</span> T<span class="op">,</span></span>
-<span id="cb26-20"><a href="high-level-design.html#cb26-20" tabindex="-1"></a>    key<span class="op">:</span> K<span class="op">,</span></span>
-<span id="cb26-21"><a href="high-level-design.html#cb26-21" tabindex="-1"></a>    value<span class="op">:</span> T[METADATA][K]</span>
-<span id="cb26-22"><a href="high-level-design.html#cb26-22" tabindex="-1"></a>  ) {</span>
-<span id="cb26-23"><a href="high-level-design.html#cb26-23" tabindex="-1"></a>    <span class="kw">object</span>[METADATA][key] <span class="op">=</span> value<span class="op">;</span></span>
-<span id="cb26-24"><a href="high-level-design.html#cb26-24" tabindex="-1"></a>  }</span>
-<span id="cb26-25"><a href="high-level-design.html#cb26-25" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb28-1"><a href="high-level-design.html#cb28-1" tabindex="-1"></a><span class="co">// Meta.ts</span></span>
+<span id="cb28-2"><a href="high-level-design.html#cb28-2" tabindex="-1"></a><span class="kw">const</span> METADATA <span class="op">=</span> <span class="bu">Symbol</span>(<span class="st">&quot;metadata&quot;</span>)<span class="op">;</span></span>
+<span id="cb28-3"><a href="high-level-design.html#cb28-3" tabindex="-1"></a><span class="kw">type</span> METADATA <span class="op">=</span> <span class="kw">typeof</span> METADATA<span class="op">;</span></span>
+<span id="cb28-4"><a href="high-level-design.html#cb28-4" tabindex="-1"></a></span>
+<span id="cb28-5"><a href="high-level-design.html#cb28-5" tabindex="-1"></a><span class="im">export</span> <span class="kw">interface</span> Meta<span class="op">&lt;</span>T <span class="kw">extends</span> <span class="bu">Record</span><span class="op">&lt;</span><span class="dt">string</span><span class="op">,</span> <span class="dt">any</span><span class="op">&gt;&gt;</span> {</span>
+<span id="cb28-6"><a href="high-level-design.html#cb28-6" tabindex="-1"></a>  [METADATA]<span class="op">:</span> T<span class="op">;</span></span>
+<span id="cb28-7"><a href="high-level-design.html#cb28-7" tabindex="-1"></a>}</span>
+<span id="cb28-8"><a href="high-level-design.html#cb28-8" tabindex="-1"></a></span>
+<span id="cb28-9"><a href="high-level-design.html#cb28-9" tabindex="-1"></a><span class="im">export</span> <span class="im">namespace</span> <span class="dt">Meta</span> {</span>
+<span id="cb28-10"><a href="high-level-design.html#cb28-10" tabindex="-1"></a>  <span class="im">export</span> <span class="kw">function</span> <span class="kw">of</span><span class="op">&lt;</span>T <span class="kw">extends</span> <span class="bu">Object</span><span class="op">&gt;</span>(object<span class="op">:</span> T) {</span>
+<span id="cb28-11"><a href="high-level-design.html#cb28-11" tabindex="-1"></a>    <span class="cf">return</span> { <span class="op">...</span><span class="kw">object</span><span class="op">,</span> [METADATA]<span class="op">:</span> {} }<span class="op">;</span></span>
+<span id="cb28-12"><a href="high-level-design.html#cb28-12" tabindex="-1"></a>  }</span>
+<span id="cb28-13"><a href="high-level-design.html#cb28-13" tabindex="-1"></a></span>
+<span id="cb28-14"><a href="high-level-design.html#cb28-14" tabindex="-1"></a>  <span class="im">export</span> <span class="kw">function</span> <span class="kw">get</span><span class="op">&lt;</span>T <span class="kw">extends</span> Meta<span class="op">&gt;</span>(object<span class="op">:</span> T<span class="op">,</span> key<span class="op">:</span> <span class="kw">keyof</span> T[METADATA]) {</span>
+<span id="cb28-15"><a href="high-level-design.html#cb28-15" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">object</span>[METADATA][key]<span class="op">;</span></span>
+<span id="cb28-16"><a href="high-level-design.html#cb28-16" tabindex="-1"></a>  }</span>
+<span id="cb28-17"><a href="high-level-design.html#cb28-17" tabindex="-1"></a></span>
+<span id="cb28-18"><a href="high-level-design.html#cb28-18" tabindex="-1"></a>  <span class="im">export</span> <span class="kw">function</span> <span class="kw">set</span><span class="op">&lt;</span>T <span class="kw">extends</span> Meta<span class="op">,</span> K <span class="kw">extends</span> <span class="kw">keyof</span> T[METADATA]<span class="op">&gt;</span>(</span>
+<span id="cb28-19"><a href="high-level-design.html#cb28-19" tabindex="-1"></a>    object<span class="op">:</span> T<span class="op">,</span></span>
+<span id="cb28-20"><a href="high-level-design.html#cb28-20" tabindex="-1"></a>    key<span class="op">:</span> K<span class="op">,</span></span>
+<span id="cb28-21"><a href="high-level-design.html#cb28-21" tabindex="-1"></a>    value<span class="op">:</span> T[METADATA][K]</span>
+<span id="cb28-22"><a href="high-level-design.html#cb28-22" tabindex="-1"></a>  ) {</span>
+<span id="cb28-23"><a href="high-level-design.html#cb28-23" tabindex="-1"></a>    <span class="kw">object</span>[METADATA][key] <span class="op">=</span> value<span class="op">;</span></span>
+<span id="cb28-24"><a href="high-level-design.html#cb28-24" tabindex="-1"></a>  }</span>
+<span id="cb28-25"><a href="high-level-design.html#cb28-25" tabindex="-1"></a>}</span></code></pre></div>
 <p>Now we can import the module and use it to add secret metadata to arbitrary data objects:</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb27-1"><a href="high-level-design.html#cb27-1" tabindex="-1"></a><span class="im">import</span> { Meta } <span class="im">from</span> <span class="st">&quot;./Meta.ts&quot;</span></span>
-<span id="cb27-2"><a href="high-level-design.html#cb27-2" tabindex="-1"></a></span>
-<span id="cb27-3"><a href="high-level-design.html#cb27-3" tabindex="-1"></a><span class="kw">interface</span> User <span class="kw">extends</span> Meta<span class="op">&lt;</span>{ id<span class="op">:</span> <span class="dt">number</span> }<span class="op">&gt;</span> {</span>
-<span id="cb27-4"><a href="high-level-design.html#cb27-4" tabindex="-1"></a>  name<span class="op">:</span> <span class="dt">string</span><span class="op">;</span></span>
-<span id="cb27-5"><a href="high-level-design.html#cb27-5" tabindex="-1"></a>}</span>
-<span id="cb27-6"><a href="high-level-design.html#cb27-6" tabindex="-1"></a></span>
-<span id="cb27-7"><a href="high-level-design.html#cb27-7" tabindex="-1"></a><span class="kw">const</span> user<span class="op">:</span> User <span class="op">=</span> Meta<span class="op">.</span><span class="fu">of</span>({ name<span class="op">:</span> <span class="st">&quot;Adam&quot;</span> })<span class="op">;</span></span>
-<span id="cb27-8"><a href="high-level-design.html#cb27-8" tabindex="-1"></a>Meta<span class="op">.</span><span class="fu">set</span>(user<span class="op">,</span> <span class="vs">`id`</span><span class="op">,</span> <span class="dv">1337</span>)<span class="op">;</span></span>
-<span id="cb27-9"><a href="high-level-design.html#cb27-9" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(user)</span>
-<span id="cb27-10"><a href="high-level-design.html#cb27-10" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(Meta<span class="op">.</span><span class="fu">get</span>(user<span class="op">,</span> <span class="vs">`id`</span>))<span class="op">;</span></span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb29-1"><a href="high-level-design.html#cb29-1" tabindex="-1"></a><span class="im">import</span> { Meta } <span class="im">from</span> <span class="st">&quot;./Meta.ts&quot;</span></span>
+<span id="cb29-2"><a href="high-level-design.html#cb29-2" tabindex="-1"></a></span>
+<span id="cb29-3"><a href="high-level-design.html#cb29-3" tabindex="-1"></a><span class="kw">interface</span> User <span class="kw">extends</span> Meta<span class="op">&lt;</span>{ id<span class="op">:</span> <span class="dt">number</span> }<span class="op">&gt;</span> {</span>
+<span id="cb29-4"><a href="high-level-design.html#cb29-4" tabindex="-1"></a>  name<span class="op">:</span> <span class="dt">string</span><span class="op">;</span></span>
+<span id="cb29-5"><a href="high-level-design.html#cb29-5" tabindex="-1"></a>}</span>
+<span id="cb29-6"><a href="high-level-design.html#cb29-6" tabindex="-1"></a></span>
+<span id="cb29-7"><a href="high-level-design.html#cb29-7" tabindex="-1"></a><span class="kw">const</span> user<span class="op">:</span> User <span class="op">=</span> Meta<span class="op">.</span><span class="fu">of</span>({ name<span class="op">:</span> <span class="st">&quot;Adam&quot;</span> })<span class="op">;</span></span>
+<span id="cb29-8"><a href="high-level-design.html#cb29-8" tabindex="-1"></a>Meta<span class="op">.</span><span class="fu">set</span>(user<span class="op">,</span> <span class="vs">`id`</span><span class="op">,</span> <span class="dv">1337</span>)<span class="op">;</span></span>
+<span id="cb29-9"><a href="high-level-design.html#cb29-9" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(user)</span>
+<span id="cb29-10"><a href="high-level-design.html#cb29-10" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(Meta<span class="op">.</span><span class="fu">get</span>(user<span class="op">,</span> <span class="vs">`id`</span>))<span class="op">;</span></span></code></pre></div>
 <pre><code>## {
 ##   name: &quot;Adam&quot;,
 ##   [Symbol(metadata)]: {
@@ -488,43 +484,43 @@ against T-rex, Grug take T-rex: at least grug see T-rex.”</p>
 <h5><span class="header-section-number">6.1.4.3.2</span> Inheritance<a href="high-level-design.html#inheritance-1" class="anchor-section" aria-label="Anchor link to header"></a></h5>
 <p>In OOP, primary mechanisms for code reuse are inheritance and composition.</p>
 <p>In DOP, since data is generic and separate from behavior, we can call functions from arbitrary modules with any compatible data, and this makes code reuse trivial. For example, here’s a simplified version of the <code>Reactive</code> interface (Observer pattern) from <code>plotscape</code>:</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb29-1"><a href="high-level-design.html#cb29-1" tabindex="-1"></a></span>
-<span id="cb29-2"><a href="high-level-design.html#cb29-2" tabindex="-1"></a><span class="kw">const</span> LISTENERS <span class="op">=</span> <span class="bu">Symbol</span>(<span class="vs">`listeners`</span>)<span class="op">;</span> <span class="co">// A unique symbol, to avoid namespace clashes</span></span>
-<span id="cb29-3"><a href="high-level-design.html#cb29-3" tabindex="-1"></a><span class="kw">type</span> Dict <span class="op">=</span> <span class="bu">Record</span><span class="op">&lt;</span><span class="dt">string</span><span class="op">,</span> <span class="dt">any</span><span class="op">&gt;;</span> <span class="co">// Generic dictionary type</span></span>
-<span id="cb29-4"><a href="high-level-design.html#cb29-4" tabindex="-1"></a><span class="kw">type</span> Callback <span class="op">=</span> (data<span class="op">:</span> Dict) <span class="kw">=&gt;</span> <span class="dt">void</span><span class="op">;</span> <span class="co">// Generic callback function type</span></span>
-<span id="cb29-5"><a href="high-level-design.html#cb29-5" tabindex="-1"></a></span>
-<span id="cb29-6"><a href="high-level-design.html#cb29-6" tabindex="-1"></a><span class="kw">interface</span> Reactive {</span>
-<span id="cb29-7"><a href="high-level-design.html#cb29-7" tabindex="-1"></a>  [LISTENERS]<span class="op">:</span> <span class="bu">Record</span><span class="op">&lt;</span><span class="dt">string</span><span class="op">,</span> Callback[]<span class="op">&gt;;</span></span>
-<span id="cb29-8"><a href="high-level-design.html#cb29-8" tabindex="-1"></a>}</span>
-<span id="cb29-9"><a href="high-level-design.html#cb29-9" tabindex="-1"></a></span>
-<span id="cb29-10"><a href="high-level-design.html#cb29-10" tabindex="-1"></a><span class="im">namespace</span> <span class="dt">Reactive</span> {</span>
-<span id="cb29-11"><a href="high-level-design.html#cb29-11" tabindex="-1"></a>  <span class="im">export</span> <span class="kw">function</span> <span class="kw">of</span><span class="op">&lt;</span>T <span class="kw">extends</span> <span class="bu">Object</span><span class="op">&gt;</span>(object<span class="op">:</span> T)<span class="op">:</span> T <span class="op">&amp;</span> Reactive {</span>
-<span id="cb29-12"><a href="high-level-design.html#cb29-12" tabindex="-1"></a>    <span class="cf">return</span> { <span class="op">...</span><span class="kw">object</span><span class="op">,</span> [LISTENERS]<span class="op">:</span> {} }<span class="op">;</span></span>
-<span id="cb29-13"><a href="high-level-design.html#cb29-13" tabindex="-1"></a>  }</span>
-<span id="cb29-14"><a href="high-level-design.html#cb29-14" tabindex="-1"></a></span>
-<span id="cb29-15"><a href="high-level-design.html#cb29-15" tabindex="-1"></a>  <span class="im">export</span> <span class="kw">function</span> <span class="fu">listen</span>(object<span class="op">:</span> Reactive<span class="op">,</span> event<span class="op">:</span> <span class="dt">string</span><span class="op">,</span> cb<span class="op">:</span> Callback) {</span>
-<span id="cb29-16"><a href="high-level-design.html#cb29-16" tabindex="-1"></a>    <span class="cf">if</span> (<span class="op">!</span><span class="kw">object</span>[LISTENERS][<span class="bu">event</span>]) <span class="kw">object</span>[LISTENERS][<span class="bu">event</span>] <span class="op">=</span> []<span class="op">;</span></span>
-<span id="cb29-17"><a href="high-level-design.html#cb29-17" tabindex="-1"></a>    <span class="kw">object</span>[LISTENERS][<span class="bu">event</span>]<span class="op">.</span><span class="fu">push</span>(cb)<span class="op">;</span></span>
-<span id="cb29-18"><a href="high-level-design.html#cb29-18" tabindex="-1"></a>  }</span>
-<span id="cb29-19"><a href="high-level-design.html#cb29-19" tabindex="-1"></a></span>
-<span id="cb29-20"><a href="high-level-design.html#cb29-20" tabindex="-1"></a>  <span class="im">export</span> <span class="kw">function</span> <span class="fu">dispatch</span>(object<span class="op">:</span> Reactive<span class="op">,</span> event<span class="op">:</span> <span class="dt">string</span><span class="op">,</span> data<span class="op">:</span> Dict) {</span>
-<span id="cb29-21"><a href="high-level-design.html#cb29-21" tabindex="-1"></a>    <span class="cf">for</span> (<span class="kw">const</span> cb <span class="kw">of</span> <span class="kw">object</span>[LISTENERS][<span class="bu">event</span>] <span class="op">??</span> []) <span class="fu">cb</span>(data)<span class="op">;</span></span>
-<span id="cb29-22"><a href="high-level-design.html#cb29-22" tabindex="-1"></a>  }</span>
-<span id="cb29-23"><a href="high-level-design.html#cb29-23" tabindex="-1"></a>}</span>
-<span id="cb29-24"><a href="high-level-design.html#cb29-24" tabindex="-1"></a></span>
-<span id="cb29-25"><a href="high-level-design.html#cb29-25" tabindex="-1"></a><span class="kw">interface</span> Dog <span class="kw">extends</span> Reactive {</span>
-<span id="cb29-26"><a href="high-level-design.html#cb29-26" tabindex="-1"></a>  name<span class="op">:</span> <span class="dt">string</span></span>
-<span id="cb29-27"><a href="high-level-design.html#cb29-27" tabindex="-1"></a>}</span>
-<span id="cb29-28"><a href="high-level-design.html#cb29-28" tabindex="-1"></a></span>
-<span id="cb29-29"><a href="high-level-design.html#cb29-29" tabindex="-1"></a><span class="im">namespace</span> <span class="dt">Dog</span> {</span>
-<span id="cb29-30"><a href="high-level-design.html#cb29-30" tabindex="-1"></a>  <span class="im">export</span> <span class="kw">function</span> <span class="kw">of</span>(name<span class="op">:</span> <span class="dt">string</span>) {</span>
-<span id="cb29-31"><a href="high-level-design.html#cb29-31" tabindex="-1"></a>    <span class="cf">return</span> Reactive<span class="op">.</span><span class="fu">of</span>({ name })</span>
-<span id="cb29-32"><a href="high-level-design.html#cb29-32" tabindex="-1"></a>  }</span>
-<span id="cb29-33"><a href="high-level-design.html#cb29-33" tabindex="-1"></a>}</span>
-<span id="cb29-34"><a href="high-level-design.html#cb29-34" tabindex="-1"></a></span>
-<span id="cb29-35"><a href="high-level-design.html#cb29-35" tabindex="-1"></a><span class="kw">const</span> dog <span class="op">=</span> Dog<span class="op">.</span><span class="fu">of</span>(<span class="vs">`Terry`</span>)</span>
-<span id="cb29-36"><a href="high-level-design.html#cb29-36" tabindex="-1"></a>Reactive<span class="op">.</span><span class="fu">listen</span>(dog<span class="op">,</span> <span class="vs">`car goes by`</span><span class="op">,</span> () <span class="kw">=&gt;</span> <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="vs">`Woof!`</span>))</span>
-<span id="cb29-37"><a href="high-level-design.html#cb29-37" tabindex="-1"></a>Reactive<span class="op">.</span><span class="fu">dispatch</span>(dog<span class="op">,</span> <span class="vs">`car goes by`</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb31-1"><a href="high-level-design.html#cb31-1" tabindex="-1"></a></span>
+<span id="cb31-2"><a href="high-level-design.html#cb31-2" tabindex="-1"></a><span class="kw">const</span> LISTENERS <span class="op">=</span> <span class="bu">Symbol</span>(<span class="vs">`listeners`</span>)<span class="op">;</span> <span class="co">// A unique symbol, to avoid namespace clashes</span></span>
+<span id="cb31-3"><a href="high-level-design.html#cb31-3" tabindex="-1"></a><span class="kw">type</span> Dict <span class="op">=</span> <span class="bu">Record</span><span class="op">&lt;</span><span class="dt">string</span><span class="op">,</span> <span class="dt">any</span><span class="op">&gt;;</span> <span class="co">// Generic dictionary type</span></span>
+<span id="cb31-4"><a href="high-level-design.html#cb31-4" tabindex="-1"></a><span class="kw">type</span> Callback <span class="op">=</span> (data<span class="op">:</span> Dict) <span class="kw">=&gt;</span> <span class="dt">void</span><span class="op">;</span> <span class="co">// Generic callback function type</span></span>
+<span id="cb31-5"><a href="high-level-design.html#cb31-5" tabindex="-1"></a></span>
+<span id="cb31-6"><a href="high-level-design.html#cb31-6" tabindex="-1"></a><span class="kw">interface</span> Reactive {</span>
+<span id="cb31-7"><a href="high-level-design.html#cb31-7" tabindex="-1"></a>  [LISTENERS]<span class="op">:</span> <span class="bu">Record</span><span class="op">&lt;</span><span class="dt">string</span><span class="op">,</span> Callback[]<span class="op">&gt;;</span></span>
+<span id="cb31-8"><a href="high-level-design.html#cb31-8" tabindex="-1"></a>}</span>
+<span id="cb31-9"><a href="high-level-design.html#cb31-9" tabindex="-1"></a></span>
+<span id="cb31-10"><a href="high-level-design.html#cb31-10" tabindex="-1"></a><span class="im">namespace</span> <span class="dt">Reactive</span> {</span>
+<span id="cb31-11"><a href="high-level-design.html#cb31-11" tabindex="-1"></a>  <span class="im">export</span> <span class="kw">function</span> <span class="kw">of</span><span class="op">&lt;</span>T <span class="kw">extends</span> <span class="bu">Object</span><span class="op">&gt;</span>(object<span class="op">:</span> T)<span class="op">:</span> T <span class="op">&amp;</span> Reactive {</span>
+<span id="cb31-12"><a href="high-level-design.html#cb31-12" tabindex="-1"></a>    <span class="cf">return</span> { <span class="op">...</span><span class="kw">object</span><span class="op">,</span> [LISTENERS]<span class="op">:</span> {} }<span class="op">;</span></span>
+<span id="cb31-13"><a href="high-level-design.html#cb31-13" tabindex="-1"></a>  }</span>
+<span id="cb31-14"><a href="high-level-design.html#cb31-14" tabindex="-1"></a></span>
+<span id="cb31-15"><a href="high-level-design.html#cb31-15" tabindex="-1"></a>  <span class="im">export</span> <span class="kw">function</span> <span class="fu">listen</span>(object<span class="op">:</span> Reactive<span class="op">,</span> event<span class="op">:</span> <span class="dt">string</span><span class="op">,</span> cb<span class="op">:</span> Callback) {</span>
+<span id="cb31-16"><a href="high-level-design.html#cb31-16" tabindex="-1"></a>    <span class="cf">if</span> (<span class="op">!</span><span class="kw">object</span>[LISTENERS][<span class="bu">event</span>]) <span class="kw">object</span>[LISTENERS][<span class="bu">event</span>] <span class="op">=</span> []<span class="op">;</span></span>
+<span id="cb31-17"><a href="high-level-design.html#cb31-17" tabindex="-1"></a>    <span class="kw">object</span>[LISTENERS][<span class="bu">event</span>]<span class="op">.</span><span class="fu">push</span>(cb)<span class="op">;</span></span>
+<span id="cb31-18"><a href="high-level-design.html#cb31-18" tabindex="-1"></a>  }</span>
+<span id="cb31-19"><a href="high-level-design.html#cb31-19" tabindex="-1"></a></span>
+<span id="cb31-20"><a href="high-level-design.html#cb31-20" tabindex="-1"></a>  <span class="im">export</span> <span class="kw">function</span> <span class="fu">dispatch</span>(object<span class="op">:</span> Reactive<span class="op">,</span> event<span class="op">:</span> <span class="dt">string</span><span class="op">,</span> data<span class="op">:</span> Dict) {</span>
+<span id="cb31-21"><a href="high-level-design.html#cb31-21" tabindex="-1"></a>    <span class="cf">for</span> (<span class="kw">const</span> cb <span class="kw">of</span> <span class="kw">object</span>[LISTENERS][<span class="bu">event</span>] <span class="op">??</span> []) <span class="fu">cb</span>(data)<span class="op">;</span></span>
+<span id="cb31-22"><a href="high-level-design.html#cb31-22" tabindex="-1"></a>  }</span>
+<span id="cb31-23"><a href="high-level-design.html#cb31-23" tabindex="-1"></a>}</span>
+<span id="cb31-24"><a href="high-level-design.html#cb31-24" tabindex="-1"></a></span>
+<span id="cb31-25"><a href="high-level-design.html#cb31-25" tabindex="-1"></a><span class="kw">interface</span> Dog <span class="kw">extends</span> Reactive {</span>
+<span id="cb31-26"><a href="high-level-design.html#cb31-26" tabindex="-1"></a>  name<span class="op">:</span> <span class="dt">string</span></span>
+<span id="cb31-27"><a href="high-level-design.html#cb31-27" tabindex="-1"></a>}</span>
+<span id="cb31-28"><a href="high-level-design.html#cb31-28" tabindex="-1"></a></span>
+<span id="cb31-29"><a href="high-level-design.html#cb31-29" tabindex="-1"></a><span class="im">namespace</span> <span class="dt">Dog</span> {</span>
+<span id="cb31-30"><a href="high-level-design.html#cb31-30" tabindex="-1"></a>  <span class="im">export</span> <span class="kw">function</span> <span class="kw">of</span>(name<span class="op">:</span> <span class="dt">string</span>) {</span>
+<span id="cb31-31"><a href="high-level-design.html#cb31-31" tabindex="-1"></a>    <span class="cf">return</span> Reactive<span class="op">.</span><span class="fu">of</span>({ name })</span>
+<span id="cb31-32"><a href="high-level-design.html#cb31-32" tabindex="-1"></a>  }</span>
+<span id="cb31-33"><a href="high-level-design.html#cb31-33" tabindex="-1"></a>}</span>
+<span id="cb31-34"><a href="high-level-design.html#cb31-34" tabindex="-1"></a></span>
+<span id="cb31-35"><a href="high-level-design.html#cb31-35" tabindex="-1"></a><span class="kw">const</span> dog <span class="op">=</span> Dog<span class="op">.</span><span class="fu">of</span>(<span class="vs">`Terry`</span>)</span>
+<span id="cb31-36"><a href="high-level-design.html#cb31-36" tabindex="-1"></a>Reactive<span class="op">.</span><span class="fu">listen</span>(dog<span class="op">,</span> <span class="vs">`car goes by`</span><span class="op">,</span> () <span class="kw">=&gt;</span> <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="vs">`Woof!`</span>))</span>
+<span id="cb31-37"><a href="high-level-design.html#cb31-37" tabindex="-1"></a>Reactive<span class="op">.</span><span class="fu">dispatch</span>(dog<span class="op">,</span> <span class="vs">`car goes by`</span>)</span></code></pre></div>
 <pre><code>## Woof!</code></pre>
 </div>
 </div>

@@ -2,7 +2,7 @@ rmd_files: [
             "index.Rmd",
             "introduction.Rmd",
             "litreview.Rmd",
-            # "problems.Rmd",
+            "problems.Rmd",
             "goals.Rmd", "design.Rmd",
             "system.Rmd", "example.Rmd", "discussion.Rmd",
             "glossary.Rmd", "appendix.Rmd", "math.Rmd", "references.Rmd"
