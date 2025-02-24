@@ -204,7 +204,11 @@ div.csl-indent {
 <li class="chapter" data-level="4.3.2" data-path="problems.html"><a href="problems.html#stackable-summaries-a-brief-journey-into-category-theory"><i class="fa fa-check"></i><b>4.3.2</b> Stackable summaries: A brief journey into Category Theory</a></li>
 </ul></li>
 <li class="chapter" data-level="4.4" data-path="problems.html"><a href="problems.html#scaling"><i class="fa fa-check"></i><b>4.4</b> Scaling and encoding</a></li>
-<li class="chapter" data-level="4.5" data-path="problems.html"><a href="problems.html#rendering"><i class="fa fa-check"></i><b>4.5</b> Rendering</a></li>
+<li class="chapter" data-level="4.5" data-path="problems.html"><a href="problems.html#rendering"><i class="fa fa-check"></i><b>4.5</b> Rendering</a>
+<ul>
+<li class="chapter" data-level="4.5.1" data-path="problems.html"><a href="problems.html#graphics-format"><i class="fa fa-check"></i><b>4.5.1</b> Graphics format</a></li>
+<li class="chapter" data-level="4.5.2" data-path="problems.html"><a href="problems.html#layers"><i class="fa fa-check"></i><b>4.5.2</b> Graphical layers</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="goals.html"><a href="goals.html"><i class="fa fa-check"></i><b>5</b> Goals</a>
 <ul>
@@ -256,7 +260,10 @@ div.csl-indent {
 </ul></li>
 <li class="chapter" data-level="9" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>9</b> Discussion</a></li>
 <li class="chapter" data-level="10" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>10</b> Glossary</a></li>
-<li class="chapter" data-level="11" data-path="appendix.html"><a href="appendix.html"><i class="fa fa-check"></i><b>11</b> Appendix</a></li>
+<li class="chapter" data-level="11" data-path="appendix.html"><a href="appendix.html"><i class="fa fa-check"></i><b>11</b> Appendix</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="appendix.html"><a href="appendix.html#gauss-russian-monoids"><i class="fa fa-check"></i><b>11.1</b> Gauss method and the russian peasant algorithm for monoids</a></li>
+</ul></li>
 <li class="chapter" data-level="12" data-path="mathematical-theory.html"><a href="mathematical-theory.html"><i class="fa fa-check"></i><b>12</b> Mathematical theory</a>
 <ul>
 <li class="chapter" data-level="12.0.1" data-path="mathematical-theory.html"><a href="mathematical-theory.html#relations"><i class="fa fa-check"></i><b>12.0.1</b> Relations</a></li>
@@ -327,14 +334,14 @@ div.csl-indent {
 Figure 4.1: Relationship between temperature and the number of O-ring failures within the 1986 Challenger data. Left: the original plot as presented during the pre-launch teleconference. Right: a reproduced plot of the same data, including the original data points (black), the excluded data points with zero failures (grey), and an estimated logistic regression fit (red). The source of right-panel data is <span class="citation">Dalal, Fowlkes, and Hoadley (<a href="#ref-dalal1989">1989</a>)</span>.
 </p>
 </div>
-<p>However, data hiding can also occur in more subtle ways, such as the above-mentioned poor design choices. Consider, for example, axis limits. <span class="citation">Cleveland (<a href="#ref-cleveland1985">1985</a>)</span> argues that axis limits should generally be expanded to avoid inadvertently obscuring data near these limits <span class="citation">(see also e.g. <a href="#ref-chen2008">Chen et al. 2008, 64</a>)</span>. Take the following two scatterplots:</p>
-<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-1"></span>
-<img src="figures/expand-scatterplot.png" alt="Without expanding axis limits, objects at or near the limits become less salient. Left: axis limits match the data limits exactly, and so the points in the top-left and bottom-right corner of the plot are represented by smaller area and the overall trend is distorted. Right: by expanding axis limits, we can ensure that trend is represented faithfully." width="750" />
+<p>However, data hiding can also occur in more subtle ways, such as the above-mentioned poor design choices. Consider, for example, axis limits. <span class="citation">Cleveland (<a href="#ref-cleveland1985">1985</a>)</span> argues that axis limits should generally be expanded to avoid inadvertently obscuring data near the edges of the plot <span class="citation">(see also e.g. <a href="#ref-chen2008">Chen et al. 2008, 64</a>)</span>.</p>
+<div class="figure"><span style="display:block;" id="fig:expanding-axis-limits"></span>
+<img src="figures/expand-scatterplot.png" alt="Without expanding axis limits, objects near the edges of the plot become less salient. Left: axis limits match the data limits exactly, and so the points in the top-left and bottom-right corner of the plot are represented by smaller area and the overall trend is distorted. Right: by expanding axis limits, we can ensure that trend is represented faithfully." width="750" />
 <p class="caption">
-Figure 4.2: Without expanding axis limits, objects at or near the limits become less salient. Left: axis limits match the data limits exactly, and so the points in the top-left and bottom-right corner of the plot are represented by smaller area and the overall trend is distorted. Right: by expanding axis limits, we can ensure that trend is represented faithfully.
+Figure 4.2: Without expanding axis limits, objects near the edges of the plot become less salient. Left: axis limits match the data limits exactly, and so the points in the top-left and bottom-right corner of the plot are represented by smaller area and the overall trend is distorted. Right: by expanding axis limits, we can ensure that trend is represented faithfully.
 </p>
 </div>
-<p>In the left scatterplot, the axis limits match the data limits exactly, whereas in the right plot, they are expanded by a small fraction <span class="citation">(5%, <code>ggplot2</code> default, <a href="#ref-wickham2016">Wickham 2016</a>)</span>. The left scatterplot provides a misleading representation of the underlying trend, as data points near or at the axis limits (top-left and bottom-right corners) are represented by a smaller area, compared to points near the centre of the plot. For instance, the point in the bottom-right corner of the plot lies simultaneously at the limits of the x- and y-axis, and is thus represented by one-quarter of the area of the points in the center.</p>
+<p>Figure <a href="problems.html#fig:expanding-axis-limits">4.2</a> illustrates the effect of (not) expanding axis limits. The axis limits of the left scatterplot match the data limits exactly, which results in a misleading representation, since points near the edges of the plot are represented by smaller area (compared to points in the center of the plot). For instance, the point in the bottom-right corner of the plot lies simultaneously at the x- and y-axis limits, and is thus represented by only one-quarter of the area. In contrast, in the right scatterplot, the axis limits are expanded by a small fraction <span class="citation">(5%, <code>ggplot2</code> default, <a href="#ref-wickham2016">Wickham 2016</a>)</span>, guaranteeing that all data points are represented by equal area<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>.</p>
 <p>Finally, there is the issue of data hiding due to missing or incomplete data, which is a bit more complicated. While techniques of visualizing data with missing values do exist <span class="citation">(see e.g. <a href="#ref-unwin1996">Unwin et al. 1996</a>; <a href="#ref-tierney2023">Tierney and Cook 2023</a>)</span>, they are often tied to specific visualization types and styles, and few general solutions are available. Properly analyzing the patterns of missingness in the data often calls for a full-fledged separate visualization workflow <span class="citation">(<a href="#ref-tierney2023">Tierney and Cook 2023</a>)</span>.</p>
 <p>Either way, data hiding is something we should be mindful of. Unless there is a clear and justifiable reason, no data should be arbitrarily removed or discarded, and we should pick good visual representations to represent all of our data faithfully. In the ideal case, the visualization should present a clear and unambiguous mapping between the graphics and the data <span class="citation">(<a href="#ref-ziemkiewicz2009">Ziemkiewicz and Kosara 2009</a>)</span>.</p>
 </div>
@@ -1268,7 +1275,7 @@ Figure 4.13: A joke image shared in the Mathematical Mathematics Memes Facebook 
 <blockquote>
 <p>“We have tried to avoid adding functions, graphs, or operators that do not work independently across the system. There are doubtless many statistical graphics the system in this book cannot completely specify. We can add many different graphs, transformations, types of axes, annotations, etc., but there are two limitations we will always face with a formal system.</p>
 </blockquote>
-<p>The grammar-based model offers many advantages, including simplicity and expressive power. This has contributed to its widespread adoption and implementation in many data visualization systems <span class="citation">(see e.g. <a href="#ref-mcnutt2022">McNutt 2022</a>; <a href="#ref-kim2022">Kim et al. 2022</a>; <a href="#ref-vanderplas2020">Vanderplas, Cook, and Hofmann 2020</a>; <a href="#ref-wickham2010">Wickham 2010</a>; <a href="#ref-satyanarayan2014">Satyanarayan, Wongsuphasawat, and Heer 2014</a>; <a href="#ref-satyanarayan2016">Satyanarayan et al. 2016</a>)</span>. The canonical example is the famous <code>ggplot2</code> package <span class="citation">(<a href="#ref-wickham2010">Wickham 2010</a>)</span>. In <code>ggplot2</code>, plots are built out of components such as geometric objects (called <code>geoms</code>), statistical summaries (<code>stats</code>), and scales. These components can be flexibly combined, allowing the user to express a wide range of graphics using a small set of primitives. The expressive power of <code>ggplot2</code> has made it one of the most popular R packages of all time.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>.</p>
+<p>The grammar-based model offers many advantages, including simplicity and expressive power. This has contributed to its widespread adoption and implementation in many data visualization systems <span class="citation">(see e.g. <a href="#ref-mcnutt2022">McNutt 2022</a>; <a href="#ref-kim2022">Kim et al. 2022</a>; <a href="#ref-vanderplas2020">Vanderplas, Cook, and Hofmann 2020</a>; <a href="#ref-wickham2010">Wickham 2010</a>; <a href="#ref-satyanarayan2014">Satyanarayan, Wongsuphasawat, and Heer 2014</a>; <a href="#ref-satyanarayan2016">Satyanarayan et al. 2016</a>)</span>. The canonical example is the famous <code>ggplot2</code> package <span class="citation">(<a href="#ref-wickham2010">Wickham 2010</a>)</span>. In <code>ggplot2</code>, plots are built out of components such as geometric objects (called <code>geoms</code>), statistical summaries (<code>stats</code>), and scales. These components can be flexibly combined, allowing the user to express a wide range of graphics using a small set of primitives. The expressive power of <code>ggplot2</code> has made it one of the most popular R packages of all time.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>.</p>
 <p>However, despite its advantages, the grammar-based model has one fundamental flaw: graphics and statistics are not truly independent <span class="citation">(see also <a href="#ref-wu2024">Wu and Chang 2024</a>)</span>. Instead, the visual representation of data must be congruent with its mathematical properties. This constraint, while present even in static visualizations, becomes especially critical in interactive contexts. Let’s illustrate this point with an example of real-world data.</p>
 </div>
 <div id="stacking-not-graphical" class="section level4 hasAnchor" number="4.3.1.2">
@@ -1493,7 +1500,7 @@ F(\text{id}_{D_i}) &amp;= F(D_i \cup \varnothing) \\
 <p><span class="math display">\[F(D_i \cup D_j) = F(D_i) \otimes F(D_j)\]</span></p>
 <p>This distributive property should hold over <em>all</em> disjoint subsets of the data as these correspond to all possible arrows we can draw in the set union diagram of the data subset preorder (Figure <a href="problems.html#fig:barplot-preorder2">4.12</a>). Further, given any set <span class="math inline">\(D_i \in D\)</span>, the smallest possible (non-empty) disjoint subset is a single data point (row) <span class="math inline">\(d_j \in D_i\)</span>. Thus, the summary operation should distribute over individual data points:</p>
 <p><span class="math display">\[F(d_1 \cup d_2 \cup \ldots \cup d_n) = F(d_1) \otimes F(d_2) \otimes \ldots \otimes F(d_n)\]</span></p>
-<p>Thus, from a certain point of view, <span class="math inline">\(F\)</span> <em>is</em> the binary combination operator <span class="math inline">\(\otimes\)</span><a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>. With a bit of handwaving, we can write:</p>
+<p>Thus, from a certain point of view, <span class="math inline">\(F\)</span> <em>is</em> the binary combination operator <span class="math inline">\(\otimes\)</span><a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>. With a bit of handwaving, we can write:</p>
 <p><span class="math display">\[F(d_1 \cup d_2 \cup \ldots d_k) = d_1 \otimes d_2 \otimes \ldots d_n\]</span></p>
 <p>Just to drive the point home, we can also follow the equality the other way, starting with combining the summaries of two data subsets <span class="math inline">\(F(D_i)\)</span> and <span class="math inline">\(F(D_j)\)</span>. Then:</p>
 <p><span class="math display">\[\begin{align}
@@ -1524,12 +1531,12 @@ F(D_i) \otimes F(D_j) &amp;= (d_{i1} \otimes d_{i2} \otimes \ldots d_{in}) \otim
 <p><span class="math display">\[\text{&quot;hello&quot; ++ &quot;&quot;} = \text{&quot;&quot; ++ &quot;hello&quot; } = \text{&quot;hello&quot;} \]</span>
 <span class="math display">\[\text{&quot;quick &quot; ++ (&quot; brown&quot; ++ &quot; fox&quot;)}  \text{} = \text{(&quot;quick &quot; ++ &quot; brown &quot;) ++ &quot; fox&quot;} = \text{&quot;quick brown fox&quot;}\]</span></p>
 <p>While most summary statistics we care about in data visualization are quantitative, the fact that some non-numeric data summaries can behave like set union may be still interesting to ponder.</p>
-<p>Further, even the set union <span class="math inline">\(\cup\)</span> operation itself forms a monoid, with the empty set <span class="math inline">\(\varnothing\)</span> as the neutral/identity element. Thus, in a certain way, the mapping of data subsets to summaries <span class="math inline">\(F\)</span> can be seen as a mapping between two monoids: a <em>monoid homomorphism</em> (which is just an abstract algebra term for a functor between monoids). However, <span class="math inline">\(F\)</span> is more than just a monoid homomorphism; monoids alone do not capture the hierarchical structure of <span class="math inline">\(\mathcal{D}\)</span> and <span class="math inline">\(\mathcal{P}\)</span>. Instead, <span class="math inline">\(F\)</span> is a mapping between two categories that have the features of both a monoid <em>and</em> preorder. As a sidenote, the technical term for a monoid that is also a preorder is, unsurprisingly, a <em>monoidal preorder</em> <span class="citation">(<a href="#ref-nlab2024e">nLab 2025</a>)</span>. Thus, <span class="math inline">\(F\)</span> could technically be called a <em>“monoidal preorder homomorphism”</em>. However, I believe it is far easier and clearer to simply refer to <span class="math inline">\(F\)</span> as a functor.</p>
+<p>Further, even the set union <span class="math inline">\(\cup\)</span> operation itself forms a monoid, with the empty set <span class="math inline">\(\varnothing\)</span> as the neutral/identity element. Thus, in a certain way, the mapping of data subsets to summaries <span class="math inline">\(F\)</span> can be seen as a mapping between two monoids: a <em>monoid homomorphism</em> (which is just an abstract algebra term for a functor between monoids). However, <span class="math inline">\(F\)</span> is more than just a monoid homomorphism; monoids alone do not capture the hierarchical structure of <span class="math inline">\(\mathcal{D}\)</span> and <span class="math inline">\(\mathcal{P}\)</span>. Instead, <span class="math inline">\(F\)</span> is a mapping between two categories that have the features of both a monoid <em>and</em> preorder. As a sidenote, a monoid that is also a preorder is called, unsurprisingly, a <em>monoidal preorder</em> <span class="citation">(<a href="#ref-nlab2024e">nLab 2025</a>)</span>. Thus, <span class="math inline">\(F\)</span> could technically be called a <em>“monoidal preorder homomorphism”</em>, however, I believe it is far easier and clearer to simply refer to <span class="math inline">\(F\)</span> as a functor.</p>
 <p>As a final note, a key consequence of the associativity of monoids is linerizability. Specifically, an arbitrary expression built with an associative binary function <span class="math inline">\(f\)</span>, e.g. <span class="math inline">\(f(f(x, y), f(z, f(u, w)))\)</span> can always be rewritten as a linear sequence of steps (e.g. <span class="math inline">\(f(x, f(y, f(z, f(u, w))))\)</span>). This effectively flattens the expression tree into a linear chain <span class="citation">(<a href="#ref-adam2017">Adam 2017</a>)</span>.</p>
 </div>
-<div id="monoids-in-code" class="section level4 hasAnchor" number="4.3.2.6">
-<h4><span class="header-section-number">4.3.2.6</span> Monoids in code<a href="problems.html#monoids-in-code" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>Monoids translate well to code and are in fact frequently used in functional programming <span class="citation">(see e.g. <a href="#ref-milewski2018">Milewski 2018</a>; <a href="#ref-stepanov2014">Stepanov and Rose 2014</a>)</span>. Further, we can even test whether an arbitrary summary function conforms to our specific functorial properties. For instance, in R, if we replace the set union operation with vector/array concatenation (the <code>c()</code> function), and provided that we have some three representative data vectors <code>x</code>, <code>y</code>, and <code>z</code>, we can test associativity as follows:</p>
+<div id="programming-with-monoids" class="section level4 hasAnchor" number="4.3.2.6">
+<h4><span class="header-section-number">4.3.2.6</span> Programming with monoids<a href="problems.html#programming-with-monoids" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Monoids translate well to code and are in fact frequently used in programming, particularly functional programming <span class="citation">(see e.g. <a href="#ref-milewski2018">Milewski 2018</a>; <a href="#ref-stepanov2009">Stepanov and McJones 2009</a>; <a href="#ref-stepanov2014">Stepanov and Rose 2014</a>)</span>. Further, we can even test whether an arbitrary summary function conforms to our specific functorial properties. For instance, in R, if we replace the set union operation with vector/array concatenation (the <code>c()</code> function), and provided that we have some three representative data vectors <code>x</code>, <code>y</code>, and <code>z</code>, we can test associativity as follows:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="problems.html#cb12-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span></span>
 <span id="cb12-2"><a href="problems.html#cb12-2" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">11</span><span class="sc">:</span><span class="dv">20</span></span>
 <span id="cb12-3"><a href="problems.html#cb12-3" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="dv">21</span><span class="sc">:</span><span class="dv">30</span></span>
@@ -1572,8 +1579,9 @@ F(D_i) \otimes F(D_j) &amp;= (d_{i1} \otimes d_{i2} \otimes \ldots d_{in}) \otim
 ## [1] FALSE
 ## [1] FALSE
 ## [1] FALSE</code></pre>
-<p>A couple of points. First, based on what we have shown before, we could simplify our task by defining <code>fn</code> to always take two scalar arguments instead of a vector. This binary formulation would demonstrate that, for example, <code>mean2 == median2 == function(x, y) (x + y) / 2</code> (median of even number of elements is the average of the middle two), and so if we can show that <code>(x + y) / 2</code> is not associative, we disprove both <code>mean2</code> and <code>median2</code> being a monoid. Also, more intuitively, with three or more values, applying <code>median2</code> amounts to repeatedly averaging values pairwise, and this operation is clearly different from simply picking the middle value. Furthermore, the binary formulation of <code>fn</code> also makes the absence of a neutral element <code>e</code> clearer. For instance, it is not difficult to see that there is no (constant) value <code>e</code> such that <code>(x + e) / 2 == x</code> for all <code>x</code>. Thus, generally, it might make more sense to always formulate <code>fn</code> as a binary function; however, in the code block above, I used the vector formulation to ensure consistency with function definitions of <code>mean</code>, <code>median</code>, and <code>sd</code>.</p>
-<p>Second, the properties of associativity and unitality should hold for <em>all</em> possible values. Thus, testing that a function passes the <code>is_monoid</code> test for any three specific values is not sufficient to demonstrate that it is a monoid. For instance, while it is the case that <code>mean(c(c(2, 4), 3)) == mean(c(mean(c(2, 4)), 3))</code>, this does not prove that <code>mean</code> is associative (in fact, with a bit of high-school algebra, it can be shown that the equality holds for any triplets <span class="math inline">\(x, y, z\)</span> where <span class="math inline">\(3x + 3y + 6z = 4x + 4y + 4z\)</span>). However, a single counter-example <em>does</em> disprove that the summary function is monoid, as is the case, for example, with <code>mean</code>, <code>median</code>, and <code>sd</code> functions above. Thus, while not a hard-and-fast rule, the <code>is_monoid</code> function can nevertheless be useful for some basic sanity checks about the suitability of certain summary statistics.</p>
+<p>A couple of points. First, based on what we have shown before, we could simplify our task by defining <code>fn</code> to a binary function which takes two (scalar) arguments instead of a vector. This binary formulation would demonstrate that, for example, <code>mean2 == median2 == function(x, y) (x + y) / 2</code> (median of even number of elements is the average of the middle two), and so if we can show that <code>(x + y) / 2</code> is not associative, we disprove both <code>mean2</code> and <code>median2</code> being monoids. Also, more intuitively, with three or more values, applying <code>median2</code> amounts to repeatedly averaging values pairwise, and this operation is clearly different from simply picking the middle value. Furthermore, the binary formulation of <code>fn</code> also makes the absence of a neutral element <code>e</code> clearer. For instance, it is not difficult to see that there is no (constant) value <code>e</code> such that <code>(x + e) / 2 == x</code> for all <code>x</code>. Thus, generally, it might make more sense to always formulate <code>fn</code> as a binary function. However, in the code block above, I used the vector formulation to ensure consistency with function definitions of <code>mean</code>, <code>median</code>, and <code>sd</code>.</p>
+<p>Second, the properties of associativity and unitality should hold for <em>all</em> possible values. Thus, testing that a function passes the <code>is_monoid</code> test for any three specific values is not sufficient. For instance, while it is the case that <code>mean(c(c(2, 4), 3)) == mean(c(mean(c(2, 4)), 3))</code>, this does not prove that <code>mean</code> is associative<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>. However, a single counter-example does definitely prove that a summary function is <em>not</em> monoid, as is the case, for example, with <code>mean</code>, <code>median</code>, and <code>sd</code> functions above. Thus, while not a fool-proof method, the <code>is_monoid</code> function serves as a valuable sanity check for potential monoid candidates.</p>
+<p>Finally, monoids also imply certain computational advantages. Specifically, because the operation of reducing a set of <span class="math inline">\(n\)</span> elements via a monoid translates into <span class="math inline">\(n - 1\)</span> binary operations, we know we can always compute the result in linear (<span class="math inline">\(O(n)\)</span>) time (provided that the product <span class="math inline">\(\otimes\)</span> itself is constant). Additionally, due to associativity, monoids are easily parallelizable (embarassingly parallel), making them useful distributed computing strategies such as MapReduce <span class="citation">(<a href="#ref-lin2013">Lin 2013</a>)</span>. Finally, when the total product consists of repeatedly combining the same element (i.e. <span class="math inline">\(a \otimes a \otimes a \otimes \ldots\)</span>), the result can be computed in sub-linear <span class="math inline">\(O(\log n)\)</span> time, by applying the ancient Egyptian/Russian peasant multiplication-via-squaring algorithm <span class="citation">(<a href="#ref-stepanov2009">Stepanov and McJones 2009</a>; <a href="#ref-stepanov2014">Stepanov and Rose 2014</a>)</span><a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a>.</p>
 </div>
 <div id="groups-and-inverses" class="section level4 hasAnchor" number="4.3.2.7">
 <h4><span class="header-section-number">4.3.2.7</span> Groups and inverses<a href="problems.html#groups-and-inverses" class="anchor-section" aria-label="Anchor link to header"></a></h4>
@@ -1590,7 +1598,7 @@ F(D_i) \otimes F(D_j) &amp;= (d_{i1} \otimes d_{i2} \otimes \ldots d_{in}) \otim
 <p>Why is this important? It is critical to note that <em>comparing <span class="math inline">\(D_i\)</span> with <span class="math inline">\(D_i \cup D_j\)</span> is different from comparing <span class="math inline">\(D_i\)</span> with <span class="math inline">\(D_j\)</span> directly</em>. That is, while <span class="math inline">\(F(D_i) \otimes F(D_j) = F(D_i \cup D_j)\)</span> is a valid summary of <span class="math inline">\(D_i \cup D_j\)</span>, <em>there is no guarantee that we will be able to recover <span class="math inline">\(F(D_j)\)</span> from it</em>. <span class="math inline">\(F(D_i) \otimes F(D_j)\)</span> may collapse information contained in <span class="math inline">\(F(D_i)\)</span> and <span class="math inline">\(F(D_j)\)</span> individually. If we want to use the combined summary <span class="math inline">\(F(D_i \cup D_j)\)</span> to compare <span class="math inline">\(D_i\)</span> and <span class="math inline">\(D_j\)</span> <em>as disjoint subsets</em>, then we also require the presence of an inverse operator <span class="math inline">\(\otimes^{-1}\)</span>:</p>
 <p><span class="math display">\[F(D_i) \otimes F(D_j) = F(D_i \cup D_j) \iff F(D_i \cup D_j) \otimes^{-1} F(D_j) = F(D_i)\]</span></p>
 <p>Specifically, we want some inverse operator <span class="math inline">\(\otimes^{-1}\)</span> that would allow our statistic <em>to also preserve/distribute over set difference</em> (<span class="math inline">\(\setminus\)</span>). Specifically, we could imagine taking the diagram in Figure <a href="problems.html#fig:barplot-preorder2">4.12</a> and adding a second set of arrows pointing in the opposite direction, labeled with <span class="math inline">\(\setminus\)</span>. Then, for <span class="math inline">\(F\)</span> to be a functor, it would have to preserve the composition of these set difference arrows as well.</p>
-<p>Fortunately, we do not have to search for a monoid with an inverse operator; this is precisely the definition of another famous algebraic structure: a group. Groups are well-studied in group theory and subject to many interesting results <span class="citation">(see e.g., <a href="#ref-pinter2010">Pinter 2010</a>)</span>. However, for our purposes, a group is just a monoid equipped with the inverse operator <span class="math inline">\(\otimes^{-1}\)</span>, subject to<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>:</p>
+<p>Fortunately, we do not have to search for a monoid with an inverse operator; this is precisely the definition of another famous algebraic structure: a group. Groups are well-studied in group theory and subject to many interesting results <span class="citation">(see e.g., <a href="#ref-pinter2010">Pinter 2010</a>)</span>. However, for our purposes, a group is just a monoid equipped with the inverse operator <span class="math inline">\(\otimes^{-1}\)</span>, subject to<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a>:</p>
 <p><span class="math display">\[x \otimes y = z \iff (z \otimes^{-1} x = y) \wedge (z \otimes^{-1} y = x)\]</span></p>
 <p>When the inverse operator is not present, we can still compare <span class="math inline">\(D_i\)</span> with <span class="math inline">\(D_i \cup D_j\)</span>, however, direct comparisons of <span class="math inline">\(D_i\)</span> and <span class="math inline">\(D_j\)</span> may no longer be possible after combining with <span class="math inline">\(\otimes\)</span>. For instance, a typical example of a monoid which lacks inverse is the maximum operator. It is easy to show that maximum is associative:</p>
 <p><span class="math display">\[\max(x, \max(y, z)) = \max(\max(x, y), z)\]</span></p>
@@ -1607,7 +1615,7 @@ F(D_i) \otimes F(D_j) &amp;= (d_{i1} \otimes d_{i2} \otimes \ldots d_{in}) \otim
 <h4><span class="header-section-number">4.3.2.8</span> Transforming summaries: Stacking, normalizing, and shifting<a href="problems.html#transforming-summaries-stacking-normalizing-and-shifting" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>Finally, once we have computed our tree/category of summaries <span class="math inline">\(\mathcal{S}\)</span> via the functor <span class="math inline">\(F: \mathcal{S} \to \mathcal{D}\)</span>, we may also need to transform these summaries further, while respecting the structure of the tree. Indeed, such is the precise nature of stacking, as well as normalization in plots such as spineplots and spinograms.</p>
 <p>Specifically, consider the diagram of <span class="math inline">\(\mathcal{S}\)</span> again:</p>
-<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-21"></span>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-20"></span>
 <img src="figures/barplot-preorder4.png" alt="Reproduction of Figure \@ref(fig:barplot-preorder4): a diagram of barplot/spineplot summary statistic preorder/category, ordered by the combination operator $\otimes$." width="686" />
 <p class="caption">
 Figure 4.23: Reproduction of Figure <a href="problems.html#fig:barplot-preorder4">4.22</a>: a diagram of barplot/spineplot summary statistic preorder/category, ordered by the combination operator <span class="math inline">\(\otimes\)</span>.
@@ -1652,7 +1660,7 @@ Figure 4.24: The top 10 longest source files within the <code>ggplot2</code> cod
 <p><span class="math display">\[s: [d_{min}, d_{max}] \to [v_{min}, v_{max}] \qquad d_{min}, d_{max}, v_{min}, v_{max} \in \mathbb{R}\]</span></p>
 <p>For example, suppose our data takes values in the range from 1 to 10 and we want to plot it along the x-axis, within a 800 pixels wide plotting region. Then, our scale is simply:</p>
 <p><span class="math display">\[s_x: [1, 10] \to [0, 800]\]</span></p>
-<p>Now, there is an infinite number of functions that fit this signature. However, one particularly nice and simple candidate is the following function:</p>
+<p>Now, there is an infinite number of functions that fit this signature. However, one particularly nice and simple candidate is the following function<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a>:</p>
 <div class="definition">
 <p><span id="def:linear-mapping" class="definition"><strong>Definition 4.3  (Simple linear mapping) </strong></span><span class="math display">\[s(d) = v_{min} + \frac{d - d_{min}}{d_{max} - d_{min}} \cdot (v_{max} - v_{min})\]</span></p>
 </div>
@@ -1664,18 +1672,18 @@ Figure 4.24: The top 10 longest source files within the <code>ggplot2</code> cod
 <li><span class="math inline">\(s_x(10) = (10 - 1) / 9 \cdot 800 = 800\)</span></li>
 <li><span class="math inline">\(s_x(d) \in [0, 800]\)</span> for any <span class="math inline">\(d \in [1, 10]\)</span></li>
 </ul>
-<p>That is, the function maps the data value 1 to pixel 0 (left border of the plotting region), value 10 to to pixel 800 (right border of the plotting region), and any value in between 1 and 10 inside the interval 0 to 800, proportionally to where in the data range it is located.</p>
+<p>That is, the function maps the data value 1 to pixel 0 (left border of the plotting region), value 10 to to pixel 800 (right border of the plotting region), and any value in between 1 and 10 inside the interval 0 to 800, proportionally to where in the data range it is located. In computer science, this function is also often known as <em>linear interpolation</em> <span class="citation">(or <em>lerp</em> for short, see e.g. <a href="#ref-shirley2009">Shirley, Ashikhmin, and Marschner 2009</a>)</span></p>
 </div>
 <div id="simple-scale-limits" class="section level4 hasAnchor" number="4.4.0.2">
 <h4><span class="header-section-number">4.4.0.2</span> Limits of modeling scales with simple functions<a href="problems.html#simple-scale-limits" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>Simple linear maps like the one above can work fine for basic data visualization systems. However, once we begin to add more features, this design can become prohibitive. Consider, for example, what happens if we want to:</p>
+<p>Simple linear maps like the one in Definition <a href="problems.html#def:linear-mapping">4.3</a> can work fine for basic data visualization systems. However, once we begin adding more features to our scales, this design can become prohibitive. Consider, for example, what happens if we want to:</p>
 <ul>
 <li>Expand the scale limits</li>
 <li>Scale discrete data</li>
 <li>Apply non-linear transformations</li>
 <li>Pan, zoom, reverse, reorder, or otherwise modify the scale interactively</li>
 </ul>
-<p>Having a single function with hard-coded values makes these operations difficult. Let’s take the first point in the list above as a motivating example. Consider what happens to data points at the limits of the data range under the simple linear mapping:</p>
+<p>While a single function could handle all these tasks, adding all of the required arguments might make it overly complex and difficult to reason about. Let’s take the first point in the list above as a motivating example. Consider what happens to data points at the limits of the data range under the simple linear mapping:</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="problems.html#cb16-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123456</span>)</span>
 <span id="cb16-2"><a href="problems.html#cb16-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span></span>
 <span id="cb16-3"><a href="problems.html#cb16-3" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">10</span>, <span class="dv">0</span>, <span class="dv">5</span>)</span>
@@ -1683,14 +1691,14 @@ Figure 4.24: The top 10 longest source files within the <code>ggplot2</code> cod
 <span id="cb16-5"><a href="problems.html#cb16-5" tabindex="-1"></a></span>
 <span id="cb16-6"><a href="problems.html#cb16-6" tabindex="-1"></a><span class="co"># xaxs = &quot;i&quot; makes sure the x-axis limits match the data range exactly</span></span>
 <span id="cb16-7"><a href="problems.html#cb16-7" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">col =</span> col, <span class="at">cex =</span> <span class="dv">3</span>, <span class="at">xaxs =</span> <span class="st">&quot;i&quot;</span>, <span class="at">pch =</span> <span class="dv">19</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-22-1.png" width="800px" style="display: block; margin: auto;" /></p>
-<p>The plot above shows values scaled using the simple linear mapping along the x-axis, that is, <span class="math inline">\(s: [1, 10] \to [0, 800]\)</span> (effect of the <code>xaxs = "i"</code> argument). Notice that, since the positions of the points representing the values 1 and 10 (highlighted in red) get mapped to pixel values 0 and 800 (the left and right border of the plot), only half of each point is visible. This is problematic: as was discussed in Section <a href="problems.html#show-all-data">4.2.1</a>, a fundamental principles of graphical integrity is that our graphics should not downplay or hide certain features of the data <span class="citation">(<a href="#ref-tufte2001">Tufte 2001</a>)</span>. Since the points near the axis limits are represented by only 1/2 of the area, they become less visually salient, and this is particularly problematic since these points are more likely to be outliers.</p>
+<p><img src="_main_files/figure-html/unnamed-chunk-21-1.png" width="800px" style="display: block; margin: auto;" /></p>
+<p>The plot above shows values scaled using the simple linear mapping along the x-axis, that is, <span class="math inline">\(s: [1, 10] \to [0, 800]\)</span> (effect of the <code>xaxs = "i"</code> argument). Notice that, since the positions of the points representing the values 1 and 10 (highlighted in red) get mapped to pixel values 0 and 800 (the left and right border of the plot), only half of each point is visible. This is problematic: as was discussed in Section <a href="problems.html#show-all-data">4.2.1</a>, a fundamental principles of graphical integrity is that our graphics should not downplay or hide certain features of the data <span class="citation">(<a href="#ref-tufte2001">Tufte 2001</a>)</span>. Since the points near the axis limits are represented by only a fraction of the area of the rest, they become less visually salient, and this is particularly problematic since these points are more likely to be outliers.</p>
 <p>To address this problem, most data visualization systems automatically expand the range of the domain by some pre-specified percentage:</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="problems.html#cb17-1" tabindex="-1"></a><span class="co"># By default, the base R plot() function automatically expands the x- and y-axis</span></span>
 <span id="cb17-2"><a href="problems.html#cb17-2" tabindex="-1"></a><span class="co"># limits by approximately 4% on each end, see `xaxs` in ?graphics::par</span></span>
 <span id="cb17-3"><a href="problems.html#cb17-3" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">col =</span> col, <span class="at">cex =</span> <span class="dv">3</span>, <span class="at">pch =</span> <span class="dv">19</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-23-1.png" width="800px" style="display: block; margin: auto;" /></p>
-<p>We could achieve this by expanding our data range by some hard-coded percentage, for example, a symmetric 10% margin on each side:</p>
+<p><img src="_main_files/figure-html/unnamed-chunk-22-1.png" width="800px" style="display: block; margin: auto;" /></p>
+<p>We could achieve this by expanding our data range by some pre-specified percentage, for example, a symmetric 10% margin on each side:</p>
 <p><span class="math display" id="eq:margins">\[\begin{equation}
 
   s(d) = v_{min} + \bigg[ 0.1 + \frac{d - d_{min}}{d_{max} - d_{min}} \cdot (0.9 - 0.1)
@@ -1698,7 +1706,14 @@ Figure 4.24: The top 10 longest source files within the <code>ggplot2</code> cod
   \tag{4.3}
 
 \end{equation}\]</span></p>
-<p>However, this design becomes prohibitive as more features are added. For example, if we want to map some discrete data values to the same visual attribute codomain <span class="math inline">\(V\)</span>, do we have to design an entirely new mapping function? Similarly, what if we want to apply a different margin on each side, shift both margins by an equal amount, or flip the scale’s direction? It would be useful if there were some way to abstract out the data domain <span class="math inline">\(D\)</span> and the visual attribute <span class="math inline">\(V\)</span>, such that we could apply some common operations to the scale regardless of its specific implementation.</p>
+<p>Now, if we wanted these margins to be modifiable parameters as well, we should include them in the function signature:</p>
+<p><span class="math display">\[\begin{equation}
+
+  s(d; m_{lower}, m_{upper}) = v_{min} + \bigg[ m_{lower} + \frac{d - d_{min}}{d_{max} - d_{min}} \cdot (m_{upper} - m_{lower})
+            \bigg] \cdot (v_{max} - v_{min})
+
+\end{equation}\]</span></p>
+<p>Likewise, we should probably include the data and visual attribute limits in the function signature as well, i.e. <span class="math inline">\(s(d; d_{min}, d_{max}, v_{min}, v_{max}, m_{lower}, m_{upper})\)</span>. However, as you can see, the function signature as well as the body start becoming fairly busy and hard to reason about, making this design prohibitive. For example, if we wanted to map some discrete data values to the same visual attribute codomain <span class="math inline">\(V\)</span>, would we have to design an entirely new mapping function? Similarly, what if we want apply some other transformation, such as flipping the scale’s direction? It would be useful if there were some way to abstract out the data domain <span class="math inline">\(D\)</span> and the visual attribute codomain <span class="math inline">\(V\)</span>, such that we could apply some common operations to the scale regardless of its specific implementation.</p>
 </div>
 <div id="scales-composition" class="section level4 hasAnchor" number="4.4.0.3">
 <h4><span class="header-section-number">4.4.0.3</span> Solution: Scales as function composition<a href="problems.html#scales-composition" class="anchor-section" aria-label="Anchor link to header"></a></h4>
@@ -1715,11 +1730,11 @@ s(d) = \color{steelblue}{v_{min} +} \bigg[ \color{seagreen}{0.1 +} \color{indian
 \end{equation}\]</span></p>
 <p>That is, the linear mapping can be interpreted as a composition of three simpler functions:</p>
 <ul>
-<li><span class="math inline">\(\color{indianred}{n_D(d) = (d - d_{min}) / (d_{max} - d_{min})}\)</span> takes a data value <span class="math inline">\(d \in D\)</span> and maps it to the interval <span class="math inline">\([0, 1]\)</span><a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a></li>
+<li><span class="math inline">\(\color{indianred}{n_D(d) = (d - d_{min}) / (d_{max} - d_{min})}\)</span> takes a data value <span class="math inline">\(d \in D\)</span> and maps it to the interval <span class="math inline">\([0, 1]\)</span><a href="#fn8" class="footnote-ref" id="fnref8"><sup>8</sup></a></li>
 <li><span class="math inline">\(\color{seagreen}{r(p) = 0.1 + p \cdot (0.9 - 0.1)}\)</span> takes a value in <span class="math inline">\([0, 1]\)</span> and maps it elsewhere in <span class="math inline">\([0, 1]\)</span></li>
 <li><span class="math inline">\(\color{steelblue}{u_V(p) = v_{min} + p \cdot (v_{max} - v_{min})}\)</span> takes a value in <span class="math inline">\([0, 1]\)</span> and maps it to a visual attribute value <span class="math inline">\(v \in V\)</span></li>
 </ul>
-<p>In other words, instead of thinking of scale as mapping from <span class="math inline">\(D\)</span> to <span class="math inline">\(V\)</span> directly, we can break the mapping into three distinct steps. This leads us to the following definition of a scale:</p>
+<p>In other words, instead of thinking of scale as direct mapping from <span class="math inline">\(D\)</span> to <span class="math inline">\(V\)</span> directly, we can break the transformation into three distinct stages. This leads us to the following definition of a scale:</p>
 <div class="definition">
 <p><span id="def:scale" class="definition"><strong>Definition 4.4  (Scale as function composition) </strong></span>A scale <span class="math inline">\(s: D \to V\)</span> can be created by composing:</p>
 <ul>
@@ -1729,6 +1744,8 @@ s(d) = \color{steelblue}{v_{min} +} \bigg[ \color{seagreen}{0.1 +} \color{indian
 </ul>
 <p>Such that:</p>
 <p><span class="math display">\[s(d) = u_V(r(n_D(d)))\]</span></p>
+<p>or, more tersely:</p>
+<p><span class="math inline">\(s = n_D ⨾r ⨾u_V\)</span></p>
 </div>
 <p>This is the proposed model of scales in a nutshell. However, there are several important points which bear explaining in more detail.</p>
 <div id="reusability-and-discrete-scales" class="section level5 hasAnchor" number="4.4.0.3.1">
@@ -1762,7 +1779,7 @@ For example, if our data takes on discrete values such that, e.g. <span class="
 </div>
 <div id="panning" class="section level6 hasAnchor" number="4.4.0.3.3.2">
 <h6><span class="header-section-number">4.4.0.3.3.2</span> Panning<a href="problems.html#panning" class="anchor-section" aria-label="Anchor link to header"></a></h6>
-<p>Now, suppose we also want to pan the plot 25% to the right. Again, all we need to do is to change the parameters of the rescale function for the x-axis scale. For example, using the scale with 10% symmetric margins above, we can simply increment the scale limits by 0.25:</p>
+<p>Now, suppose we also want to pan the plot 25% to the right. Again, all we need to do is to change the parameters of the rescale function for the x-axis scale. For example, using the scale with 10% symmetric margins above, we can simply increment the margins by 0.25:</p>
 <p><span class="math display">\[\begin{align}
 
 r(p) &amp;= (0.1 + 0.25) + p \cdot [(0.9 + 0.25) - (0.1 + 0.25)] \\
@@ -1831,7 +1848,44 @@ because it can substantially simplify the structure of a set of data.”</p>
 </div>
 <div id="rendering" class="section level2 hasAnchor" number="4.5">
 <h2><span class="header-section-number">4.5</span> Rendering<a href="problems.html#rendering" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Assuming we have done the work of splitting our data into subsets, summarizing these subsets, and encoding the resulting summaries as visual encodings/aesthetics, only the final part of the visualization pipeline remains: rendering. During this stage, we take all of our pre-computed quantities and render these into a visual representation on the computer screen. This process relies on several different components, which will be discussed in the present section.</p>
+<div id="graphics-format" class="section level3 hasAnchor" number="4.5.1">
+<h3><span class="header-section-number">4.5.1</span> Graphics format<a href="problems.html#graphics-format" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The first issue related to rendering that is important to discuss is the format used to encode and render the graphics. Currently, the two most overwhelmingly popular classes of image encoding formats are raster- or bitmap-based, and vector-based. Both come with an inherent set of advantages and disadvantages, which will be discussed in the relevant subsections below.</p>
+<div id="raster-images" class="section level4 hasAnchor" number="4.5.1.1">
+<h4><span class="header-section-number">4.5.1.1</span> Raster images<a href="problems.html#raster-images" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Raster (also known as bitmap) graphics represent images as two-dimensional grid of pixels <span class="citation">(see e.g. <a href="#ref-beatty1983">Beatty 1983</a>; <a href="#ref-folley1996"><strong>folley1996?</strong></a>)</span>. More specifically, images are encoded as an array of bytes, with a header of metadata (the number of rows and columns, the pixel datatype) and subsequent bytes representing individual pixels. Each pixel typically consists of three or four numerical intensities, such as the red, green, and blue color intensities, as well as opacity (alpha channel).</p>
+<p>The raster encoding is fairly natural</p>
+</div>
+<div id="vector-images" class="section level4 hasAnchor" number="4.5.1.2">
+<h4><span class="header-section-number">4.5.1.2</span> Vector images<a href="problems.html#vector-images" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Scalable Vector Graphics <span class="citation">(SVG, <a href="#ref-quint2003">Quint 2003</a>)</span> is the most popular vector graphics format. Based on the XML markup language, SVG encodes a graphic as a tree of nodes, similar to the Document Object Model (DOM) used on the web and encoded via HTML. SVG files are typically stored in plain-text format, with nodes enclosed by tags which may be given attributes.</p>
+</div>
+<div id="frames" class="section level4 hasAnchor" number="4.5.1.3">
+<h4><span class="header-section-number">4.5.1.3</span> Frames<a href="problems.html#frames" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Frames or canvases are a key component of the rendering pipeline <span class="citation">(see <a href="#ref-wilkinson2012">Wilkinson 2012</a>; <a href="#ref-wilhelm2003">Wilhelm 2003</a>)</span>. Put simply, a frame describes a two-dimensional region where most of the graphical elements are placed.</p>
+<p>Ultimately, every frame will reduce to a set of pixels, and so it is natural to think of them as such. However, it is important to mention that there are alternative representations. For example, the scalable vector graphics (<a href="SVG">SVG</a>) format describes</p>
+<p>Further, while in many data visualization systems, frames contain <em>all</em> of the graphical elements, this is not always the case. In web-based interactive visualization frameworks, for example, some elements of the plot may be represented via external DOM nodes. For instance, a query pop-up may be represented via a <code>div</code>/<code>table</code> element, entirely independent from the <code>canvas</code>/<code>svg</code> element used to render the data.</p>
+<p>Further, frames may represent all of the graphical elements related to a plot, although, at times, in web-based interactive visualization frameworks, certain graphical elements may also be represented via external DOM nodes (for instance, a pop-up window resulting from querying may be represented via a <code>div</code> element). Frame dimensions, usually limited by the window/viewport size but not always <span class="citation">(see <a href="#ref-wilhelm2003">Wilhelm 2003</a>)</span>, are measured in pixels, with scales (see Section <span class="citation">(<a href="#ref-ref"><strong>ref?</strong></a>)</span>(scales)) mapping plot coordinates to these dimensions. Finally, as will be discussed in Section <a href="problems.html#layers">4.5.2</a>, a single plot usually consists of multiple frames stacked on top of each other in layers, particularly in interactive graphics.</p>
+</div>
+</div>
+<div id="layers" class="section level3 hasAnchor" number="4.5.2">
+<h3><span class="header-section-number">4.5.2</span> Graphical layers<a href="problems.html#layers" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Layering is a common technique in raster graphics, particularly when interaction is involved. Instead of using a single graphical canvas or frame for rendering, different classes of graphical elements are rendered on separate, semi-transparent layers which are stacked vertically and ordered by a z-index.</p>
+<p>Rendering elements in distinct layers offers two key benefits: simplified rendering logic and improved performance. First, by separating the rendering of different classes of elements into different layers, rendering order becomes less critical, since we know that the classes will be plotted on top of each other in the correct order (e.g. we do not have to worry about plotting axes before geometric objects or vice versa). Second, separate graphical layers allow for computationally efficient strategic updates <span class="citation">(<a href="#ref-urbanek2011">Urbanek 2011</a>; <a href="#ref-wilhelm2008">Wilhelm 2008</a>)</span>. For instance, during linked selection, if the user clicks and drags to select a rectangular region, we can do fast updates to the layer rendering the selection rectangle (since re-rendering a single rectangle is cheap) and throttle updates on the layer representing selected objects (since many objects have to be re-rendered, e.g. thousands of points in a scatterplot). Layers representing graphical elements independent of selection, such as axes, do not have to be re-rendered at all.</p>
+<p><span class="citation">Urbanek (<a href="#ref-urbanek2011">2011</a>)</span> identifies the following four fundamental graphical layers (ordered from top-most to bottom-most):</p>
+<ul>
+<li>Interaction layer</li>
+<li>Selection layer</li>
+<li>Objects layer</li>
+<li>Background layer</li>
+</ul>
+<div id="graphical-elements" class="section level4 hasAnchor" number="4.5.2.1">
+<h4><span class="header-section-number">4.5.2.1</span> Graphical elements<a href="problems.html#graphical-elements" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The graphical elements may include geometric objects which are direct representations of the data, such as points, lines, or areas, as well as auxiliary elements such as axis breaks and labels, grid-lines, titles, and additional annotations.</p>
 
+</div>
+</div>
 </div>
 </div>
 <h3> References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -1844,6 +1898,9 @@ Alsallakh, Bilal, Wolfgang Aigner, Silvia Miksch, and Helwig Hauser. 2013. <span
 </div>
 <div id="ref-alsallakh2014" class="csl-entry">
 Alsallakh, Bilal, Luana Micallef, Wolfgang Aigner, Helwig Hauser, Silvia Miksch, and Peter Rodgers. 2014. <span>“Visualizing Sets and Set-Typed Data: State-of-the-Art and Future Challenges.”</span> <em>Eurographics Conference on Visualization (EuroVis)</em>.
+</div>
+<div id="ref-beatty1983" class="csl-entry">
+Beatty, John C. 1983. <span>“Raster Graphics and Color.”</span> <em>The American Statistician</em> 37 (1): 60–75.
 </div>
 <div id="ref-bertin1983" class="csl-entry">
 Bertin, Jacques. 1983. <em>Semiology of Graphics</em>. University of Wisconsin press.
@@ -1953,6 +2010,9 @@ Lawvere, F William, and Stephen H Schanuel. 2009. <em>Conceptual Mathematics: A 
 <div id="ref-lex2014" class="csl-entry">
 Lex, Alexander, Nils Gehlenborg, Hendrik Strobelt, Romain Vuillemot, and Hanspeter Pfister. 2014. <span>“UpSet: Visualization of Intersecting Sets.”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em> 20 (12): 1983–92.
 </div>
+<div id="ref-lin2013" class="csl-entry">
+Lin, Jimmy. 2013. <span>“Monoidify! Monoids as a Design Principle for Efficient Mapreduce Algorithms.”</span> <em>arXiv Preprint arXiv:1304.7544</em>.
+</div>
 <div id="ref-lisnic2024" class="csl-entry">
 Lisnic, Maxim, Zach Cutler, Marina Kogan, and Alexander Lex. 2024. <span>“Visualization Guardrails: Designing Interventions Against Cherry-Picking in Interactive Data Explorers.”</span> <a href="https://osf.io/preprints/osf/4j9nr">https://osf.io/preprints/osf/4j9nr</a>.
 </div>
@@ -1992,6 +2052,9 @@ Plotly Inc. 2023. <span>“<span>Plotly: Low-Code Data App Development</span>.�
 <div id="ref-quadri2021" class="csl-entry">
 Quadri, Ghulam Jilani, and Paul Rosen. 2021. <span>“A Survey of Perception-Based Visualization Studies by Task.”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em>.
 </div>
+<div id="ref-quint2003" class="csl-entry">
+Quint, Antoine. 2003. <span>“Scalable Vector Graphics.”</span> <em>IEEE MultiMedia</em> 10 (3): 99–102.
+</div>
 <div id="ref-roberts2000" class="csl-entry">
 Roberts, Jonathan C, Rob Knight, Mark Gibbins, and Nimesh Patel. 2000. <span>“Multiple Window Visualization on the Web Using VRML and the EAI.”</span> In <em>Proceedings of the Seventh UK VR-SIG Conference</em>, 149–57. SChEME.
 </div>
@@ -2003,6 +2066,9 @@ Satyanarayan, Arvind, Ryan Russell, Jane Hoffswell, and Jeffrey Heer. 2015. <spa
 </div>
 <div id="ref-satyanarayan2014" class="csl-entry">
 Satyanarayan, Arvind, Kanit Wongsuphasawat, and Jeffrey Heer. 2014. <span>“Declarative Interaction Design for Data Visualization.”</span> In <em>Proceedings of the 27th Annual ACM Symposium on User Interface Software and Technology</em>, 669–78.
+</div>
+<div id="ref-shirley2009" class="csl-entry">
+Shirley, Peter, Michael Ashikhmin, and Steve Marschner. 2009. <em>Fundamentals of Computer Graphics</em>. AK Peters/CRC Press.
 </div>
 <div id="ref-sievert2020" class="csl-entry">
 Sievert, Carson. 2020. <em>Interactive Web-Based Data Visualization with r, Plotly, and Shiny</em>. Chapman; Hall/CRC.
@@ -2043,6 +2109,9 @@ Tversky, Amos, and Daniel Kahneman. 1983. <span>“Extensional Versus Intuitive 
 <div id="ref-unwin1996" class="csl-entry">
 Unwin, Antony, George Hawkins, Heike Hofmann, and Bernd Siegl. 1996. <span>“Interactive Graphics for Data Sets with Missing Values—MANET.”</span> <em>Journal of Computational and Graphical Statistics</em> 5 (2): 113–22.
 </div>
+<div id="ref-urbanek2011" class="csl-entry">
+Urbanek, Simon. 2011. <span>“iPlots eXtreme: Next-Generation Interactive Graphics Design and Implementation of Modern Interactive Graphics.”</span> <em>Computational Statistics</em> 26 (3): 381–93.
+</div>
 <div id="ref-vanderplas2020" class="csl-entry">
 Vanderplas, Susan, Dianne Cook, and Heike Hofmann. 2020. <span>“Testing Statistical Charts: What Makes a Good Graph?”</span> <em>Annual Review of Statistics and Its Application</em> 7: 61–88.
 </div>
@@ -2070,8 +2139,11 @@ Wickham, Hadley, Michael Lawrence, Dianne Cook, Andreas Buja, Heike Hofmann, and
 <div id="ref-wickham2023" class="csl-entry">
 Wickham, Hadley, Thomas Lin Pedersen, and Dana Seidel. 2023. <em>Scales: Scale Functions for Visualization</em>. <a href="https://CRAN.R-project.org/package=scales">https://CRAN.R-project.org/package=scales</a>.
 </div>
+<div id="ref-wilhelm2003" class="csl-entry">
+Wilhelm, Adalbert. 2003. <span>“<span class="nocase">User interaction at various levels of data displays</span>.”</span> <em>Comput. Statist. Data Anal.</em> 43 (4): 471–94. <a href="https://doi.org/10.1016/S0167-9473(02)00288-8">https://doi.org/10.1016/S0167-9473(02)00288-8</a>.
+</div>
 <div id="ref-wilhelm2008" class="csl-entry">
-Wilhelm, Adalbert. 2008. <span>“Linked Views for Visual Exploration.”</span> In <em>Handbook of Data Visualization</em>, 200–214. Springer Science &amp; Business Media.
+———. 2008. <span>“Linked Views for Visual Exploration.”</span> In <em>Handbook of Data Visualization</em>, 200–214. Springer Science &amp; Business Media.
 </div>
 <div id="ref-wilke2019" class="csl-entry">
 Wilke, Claus O. 2019. <em>Fundamentals of Data Visualization: A Primer on Making Informative and Compelling Figures</em>. O’Reilly Media.
@@ -2098,10 +2170,14 @@ Ziemkiewicz, Caroline, and Robert Kosara. 2009. <span>“Embedding Information V
 <div class="footnotes">
 <hr />
 <ol start="1">
-<li id="fn1"><p>Being the top most downloaded CRAN package as of 4th of December 2024, <span class="citation">Data Science Meta (<a href="#ref-rmeta2024">2024</a>)</span><a href="problems.html#fnref1" class="footnote-back">↩︎</a></p></li>
-<li id="fn2"><p>Technically, if <span class="math inline">\(d_i\)</span> represents a single data row, with multiple named data values corresponding to columns, the summary operation <span class="math inline">\(F\)</span> should also select the appropriate value(s) while remaining closed under repeated applications. For instance, if we are summarizing a variable named <code>x</code>, the following R function fullfills these criteria: <code>pick_sum &lt;- function(s, d) ifelse(is.numeric(d), s + d, s + d$x); Reduce(pick_sum, lapply(1:3, \(n) list(x = n)), 0)</code>.<a href="problems.html#fnref2" class="footnote-back">↩︎</a></p></li>
-<li id="fn3"><p>The inverse operator needs to be two-sided, since so is set difference.<a href="problems.html#fnref3" class="footnote-back">↩︎</a></p></li>
-<li id="fn4"><p>More on this below.<a href="problems.html#fnref4" class="footnote-back">↩︎</a></p></li>
+<li id="fn1"><p>Technically, this is also a function of the points’ radii, and thus to definitely guarantee that no points will overlap the plot’s edges, the axis limits would have to be expanded by a fraction that is greater than the radius of the largest point, however, this is rarely done in practice.<a href="problems.html#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>Being the top most downloaded CRAN package as of 4th of December 2024, <span class="citation">Data Science Meta (<a href="#ref-rmeta2024">2024</a>)</span><a href="problems.html#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>Technically, if <span class="math inline">\(d_i\)</span> represents a single data row, with multiple named data values corresponding to columns, the summary operation <span class="math inline">\(F\)</span> should also select the appropriate value(s) while remaining closed under repeated applications. For instance, if we are summarizing a variable named <code>x</code>, the following R function fullfills these criteria: <code>pick_sum &lt;- function(s, d) ifelse(is.numeric(d), s + d, s + d$x); Reduce(pick_sum, lapply(1:3, \(n) list(x = n)), 0)</code>.<a href="problems.html#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn4"><p>In fact, with a bit of high-school algebra, it can be shown that the average function is associative for any triplets <span class="math inline">\(x, y, z\)</span> where <span class="math inline">\(3x + 3y + 6z = 4x + 4y + 4z\)</span><a href="problems.html#fnref4" class="footnote-back">↩︎</a></p></li>
+<li id="fn5"><p>This method can also be extended to situations where we take the the product of a commutative series with fixed increment, see Appendix <a href="appendix.html#gauss-russian-monoids">11.1</a><a href="problems.html#fnref5" class="footnote-back">↩︎</a></p></li>
+<li id="fn6"><p>The inverse operator needs to be two-sided, since so is set difference.<a href="problems.html#fnref6" class="footnote-back">↩︎</a></p></li>
+<li id="fn7"><p>The function signature should really include the data and visual attribute limits as well, i.e. <span class="math inline">\(s(d; d_{min}, d_{max}, v_{min}, v_{max})\)</span>, I omitted those here to prevent the signature from becoming too busy.<a href="problems.html#fnref7" class="footnote-back">↩︎</a></p></li>
+<li id="fn8"><p>More on this below.<a href="problems.html#fnref8" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>

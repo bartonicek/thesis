@@ -56,15 +56,15 @@ An infamous example of data hiding leading to disastrous real-world consequences
 knitr::include_graphics("./figures/challenger.png")
 ```
 
-However, data hiding can also occur in more subtle ways, such as the above-mentioned poor design choices. Consider, for example, axis limits. @cleveland1985 argues that axis limits should generally be expanded to avoid inadvertently obscuring data near these limits [see also e.g. @chen2008, pp. 64]. Take the following two scatterplots:
+However, data hiding can also occur in more subtle ways, such as the above-mentioned poor design choices. Consider, for example, axis limits. @cleveland1985 argues that axis limits should generally be expanded to avoid inadvertently obscuring data near the edges of the plot [see also e.g. @chen2008, pp. 64].
 
-```{r}
+```{r expanding-axis-limits}
 #| echo: false
-#| fig-cap: "Without expanding axis limits, objects at or near the limits become less salient. Left: axis limits match the data limits exactly, and so the points in the top-left and bottom-right corner of the plot are represented by smaller area and the overall trend is distorted. Right: by expanding axis limits, we can ensure that trend is represented faithfully."
+#| fig-cap: "Without expanding axis limits, objects near the edges of the plot become less salient. Left: axis limits match the data limits exactly, and so the points in the top-left and bottom-right corner of the plot are represented by smaller area and the overall trend is distorted. Right: by expanding axis limits, we can ensure that trend is represented faithfully."
 knitr::include_graphics("./figures/expand-scatterplot.png")
 ```
 
-In the left scatterplot, the axis limits match the data limits exactly, whereas in the right plot, they are expanded by a small fraction [5%, `ggplot2` default, @wickham2016]. The left scatterplot provides a misleading representation of the underlying trend, as data points near or at the axis limits (top-left and bottom-right corners) are represented by a smaller area, compared to points near the centre of the plot. For instance, the point in the bottom-right corner of the plot lies simultaneously at the limits of the x- and y-axis, and is thus represented by one-quarter of the area of the points in the center.
+Figure \@ref(fig:expanding-axis-limits) illustrates the effect of (not) expanding axis limits. The axis limits of the left scatterplot match the data limits exactly, which results in a misleading representation, since points near the edges of the plot are represented by smaller area (compared to points in the center of the plot). For instance, the point in the bottom-right corner of the plot lies simultaneously at the x- and y-axis limits, and is thus represented by only one-quarter of the area. In contrast, in the right scatterplot, the axis limits are expanded by a small fraction [5%, `ggplot2` default, @wickham2016], guaranteeing that all data points are represented by equal area^[Technically, this is also a function of the points' radii, and thus to definitely guarantee that no points will overlap the plot's edges, the axis limits would have to be expanded by a fraction that is greater than the radius of the largest point, however, this is rarely done in practice.].
 
 Finally, there is the issue of data hiding due to missing or incomplete data, which is a bit more complicated. While techniques of visualizing data with missing values do exist [see e.g. @unwin1996; @tierney2023], they are often tied to specific visualization types and styles, and few general solutions are available. Properly analyzing the patterns of missingness in the data often calls for a full-fledged separate visualization workflow [@tierney2023]. 
 
@@ -761,13 +761,13 @@ $$\text{"quick " ++ (" brown" ++ " fox")}  \text{} = \text{("quick " ++ " brown 
 
 While most summary statistics we care about in data visualization are quantitative, the fact that some non-numeric data summaries can behave like set union may be still interesting to ponder.
 
-Further, even the set union $\cup$ operation itself forms a monoid, with the empty set $\varnothing$ as the neutral/identity element. Thus, in a certain way, the mapping of data subsets to summaries $F$ can be seen as a mapping between two monoids: a *monoid homomorphism* (which is just an abstract algebra term for a functor between monoids). However, $F$ is more than just a monoid homomorphism; monoids alone do not capture the hierarchical structure of $\mathcal{D}$ and $\mathcal{P}$. Instead, $F$ is a mapping between two categories that have the features of both a monoid *and* preorder. As a sidenote, the technical term for a monoid that is also a preorder is, unsurprisingly, a *monoidal preorder* [@nlab2024e]. Thus, $F$ could technically be called a *"monoidal preorder homomorphism"*. However, I believe it is far easier and clearer to simply refer to $F$ as a functor.
+Further, even the set union $\cup$ operation itself forms a monoid, with the empty set $\varnothing$ as the neutral/identity element. Thus, in a certain way, the mapping of data subsets to summaries $F$ can be seen as a mapping between two monoids: a *monoid homomorphism* (which is just an abstract algebra term for a functor between monoids). However, $F$ is more than just a monoid homomorphism; monoids alone do not capture the hierarchical structure of $\mathcal{D}$ and $\mathcal{P}$. Instead, $F$ is a mapping between two categories that have the features of both a monoid *and* preorder. As a sidenote, a monoid that is also a preorder is called, unsurprisingly, a *monoidal preorder* [@nlab2024e]. Thus, $F$ could technically be called a *"monoidal preorder homomorphism"*, however, I believe it is far easier and clearer to simply refer to $F$ as a functor.
 
 As a final note, a key consequence of the associativity of monoids is linerizability. Specifically, an arbitrary expression built with an associative binary function $f$, e.g. $f(f(x, y), f(z, f(u, w)))$ can always be rewritten as a linear sequence of steps (e.g. $f(x, f(y, f(z, f(u, w))))$). This effectively flattens the expression tree into a linear chain [@adam2017].
 
-#### Monoids in code
+#### Programming with monoids
 
-Monoids translate well to code and are in fact frequently used in functional programming [see e.g. @milewski2018; @stepanov2014]. Further, we can even test whether an arbitrary summary function conforms to our specific functorial properties. For instance, in R, if we replace the set union operation with vector/array concatenation (the `c()` function), and provided that we have some three representative data vectors `x`, `y`, and `z`, we can test associativity as follows:
+Monoids translate well to code and are in fact frequently used in programming, particularly functional programming [see e.g. @milewski2018; @stepanov2009; @stepanov2014]. Further, we can even test whether an arbitrary summary function conforms to our specific functorial properties. For instance, in R, if we replace the set union operation with vector/array concatenation (the `c()` function), and provided that we have some three representative data vectors `x`, `y`, and `z`, we can test associativity as follows:
 
 ```{r}
 #| results: "hold"
@@ -811,9 +811,11 @@ is_monoid(median, 0, x, y, z)
 is_monoid(sd, 0, x, y, z)
 ```
 
-A couple of points. First, based on what we have shown before, we could simplify our task by defining `fn` to always take two scalar arguments instead of a vector. This binary formulation would demonstrate that, for example, `mean2 == median2 == function(x, y) (x + y) / 2` (median of even number of elements is the average of the middle two), and so if we can show that `(x + y) / 2` is not associative, we disprove both `mean2` and `median2` being a monoid. Also, more intuitively, with three or more values, applying `median2` amounts to repeatedly averaging values pairwise, and this operation is clearly different from simply picking the middle value. Furthermore, the binary formulation of `fn` also makes the absence of a neutral element `e` clearer. For instance, it is not difficult to see that there is no (constant) value `e` such that `(x + e) / 2 == x` for all `x`. Thus, generally, it might make more sense to always formulate `fn` as a binary function; however, in the code block above, I used the vector formulation to ensure consistency with function definitions of `mean`, `median`, and `sd`. 
+A couple of points. First, based on what we have shown before, we could simplify our task by defining `fn` to a binary function which takes two (scalar) arguments instead of a vector. This binary formulation would demonstrate that, for example, `mean2 == median2 == function(x, y) (x + y) / 2` (median of even number of elements is the average of the middle two), and so if we can show that `(x + y) / 2` is not associative, we disprove both `mean2` and `median2` being monoids. Also, more intuitively, with three or more values, applying `median2` amounts to repeatedly averaging values pairwise, and this operation is clearly different from simply picking the middle value. Furthermore, the binary formulation of `fn` also makes the absence of a neutral element `e` clearer. For instance, it is not difficult to see that there is no (constant) value `e` such that `(x + e) / 2 == x` for all `x`. Thus, generally, it might make more sense to always formulate `fn` as a binary function. However, in the code block above, I used the vector formulation to ensure consistency with function definitions of `mean`, `median`, and `sd`. 
 
-Second, the properties of associativity and unitality should hold for *all* possible values. Thus, testing that a function passes the `is_monoid` test for any three specific values is not sufficient to demonstrate that it is a monoid. For instance, while it is the case that `mean(c(c(2, 4), 3)) == mean(c(mean(c(2, 4)), 3))`, this does not prove that `mean` is associative (in fact, with a bit of high-school algebra, it can be shown that the equality holds for any triplets $x, y, z$ where $3x + 3y + 6z = 4x + 4y + 4z$). However, a single counter-example *does* disprove that the summary function is monoid, as is the case, for example, with `mean`, `median`, and `sd` functions above. Thus, while not a hard-and-fast rule, the `is_monoid` function can nevertheless be useful for some basic sanity checks about the suitability of certain summary statistics.
+Second, the properties of associativity and unitality should hold for *all* possible values. Thus, testing that a function passes the `is_monoid` test for any three specific values is not sufficient. For instance, while it is the case that `mean(c(c(2, 4), 3)) == mean(c(mean(c(2, 4)), 3))`, this does not prove that `mean` is associative^[In fact, with a bit of high-school algebra, it can be shown that the average function is associative for any triplets $x, y, z$ where $3x + 3y + 6z = 4x + 4y + 4z$]. However, a single counter-example does definitely prove that a summary function is *not* monoid, as is the case, for example, with `mean`, `median`, and `sd` functions above. Thus, while not a fool-proof method, the `is_monoid` function serves as a valuable sanity check for potential monoid candidates.
+
+Finally, monoids also imply certain computational advantages. Specifically, because the operation of reducing a set of $n$ elements via a monoid translates into $n - 1$ binary operations, we know we can always compute the result in linear ($O(n)$) time (provided that the product $\otimes$ itself is constant). Additionally, due to associativity, monoids are easily parallelizable (embarassingly parallel), making them useful distributed computing strategies such as MapReduce [@lin2013]. Finally, when the total product consists of repeatedly combining the same element (i.e. $a \otimes a \otimes a \otimes \ldots$), the result can be computed in sub-linear $O(\log n)$ time, by applying the ancient Egyptian/Russian peasant multiplication-via-squaring algorithm [@stepanov2009; @stepanov2014]^[This method can also be extended to situations where we take the the product of a commutative series with fixed increment, see Appendix \@ref(gauss-russian-monoids)].     
 
 #### Groups and inverses
 
@@ -923,7 +925,7 @@ For example, suppose our data takes values in the range from 1 to 10 and we want
 
 $$s_x: [1, 10] \to [0, 800]$$
 
-Now, there is an infinite number of functions that fit this signature. However, one particularly nice and simple candidate is the following function:
+Now, there is an infinite number of functions that fit this signature. However, one particularly nice and simple candidate is the following function^[The function signature should really include the data and visual attribute limits as well, i.e. $s(d; d_{min}, d_{max}, v_{min}, v_{max})$, I omitted those here to prevent the signature from becoming too busy.]:
 
 ::: {.definition #linear-mapping name="Simple linear mapping"}
 $$s(d) = v_{min} + \frac{d - d_{min}}{d_{max} - d_{min}} \cdot (v_{max} - v_{min})$$
@@ -939,18 +941,18 @@ The function acts on the data in the following way:
 - $s_x(10) = (10 - 1) / 9 \cdot 800 = 800$
 - $s_x(d) \in [0, 800]$ for any $d \in [1, 10]$
 
-That is, the function maps the data value 1 to pixel 0 (left border of the plotting region), value 10 to to pixel 800 (right border of the plotting region), and any value in between 1 and 10 inside the interval 0 to 800, proportionally to where in the data range it is located.
+That is, the function maps the data value 1 to pixel 0 (left border of the plotting region), value 10 to to pixel 800 (right border of the plotting region), and any value in between 1 and 10 inside the interval 0 to 800, proportionally to where in the data range it is located. In computer science, this function is also often known as *linear interpolation* [or *lerp* for short, see e.g. @shirley2009]
 
 #### Limits of modeling scales with simple functions {#simple-scale-limits}
 
-Simple linear maps like the one above can work fine for basic data visualization systems. However, once we begin to add more features, this design can become prohibitive. Consider, for example, what happens if we want to:
+Simple linear maps like the one in Definition \@ref(def:linear-mapping) can work fine for basic data visualization systems. However, once we begin adding more features to our scales, this design can become prohibitive. Consider, for example, what happens if we want to:
 
 - Expand the scale limits
 - Scale discrete data
 - Apply non-linear transformations
 - Pan, zoom, reverse, reorder, or otherwise modify the scale interactively
 
-Having a single function with hard-coded values makes these operations difficult. Let's take the first point in the list above as a motivating example. Consider what happens to data points at the limits of the data range under the simple linear mapping:   
+While a single function could handle all these tasks, adding all of the required arguments might make it overly complex and difficult to reason about. Let's take the first point in the list above as a motivating example. Consider what happens to data points at the limits of the data range under the simple linear mapping:   
 
 ```{r}
 #| out-width: 800px
@@ -964,7 +966,7 @@ col <- ifelse(1:10 %in% c(1, 10), "indianred", "grey80")
 plot(x, y, col = col, cex = 3, xaxs = "i", pch = 19)
 ```
 
-The plot above shows values scaled using the simple linear mapping along the x-axis, that is, $s: [1, 10] \to [0, 800]$ (effect of the `xaxs = "i"` argument). Notice that, since the positions of the points representing the values 1 and 10 (highlighted in red) get mapped to pixel values 0 and 800 (the left and right border of the plot), only half of each point is visible. This is problematic: as was discussed in Section \@ref(show-all-data), a fundamental principles of graphical integrity is that our graphics should not downplay or hide certain features of the data [@tufte2001]. Since the points near the axis limits are represented by only 1/2 of the area, they become less visually salient, and this is particularly problematic since these points are more likely to be outliers.    
+The plot above shows values scaled using the simple linear mapping along the x-axis, that is, $s: [1, 10] \to [0, 800]$ (effect of the `xaxs = "i"` argument). Notice that, since the positions of the points representing the values 1 and 10 (highlighted in red) get mapped to pixel values 0 and 800 (the left and right border of the plot), only half of each point is visible. This is problematic: as was discussed in Section \@ref(show-all-data), a fundamental principles of graphical integrity is that our graphics should not downplay or hide certain features of the data [@tufte2001]. Since the points near the axis limits are represented by only a fraction of the area of the rest, they become less visually salient, and this is particularly problematic since these points are more likely to be outliers.    
 
 To address this problem, most data visualization systems automatically expand the range of the domain by some pre-specified percentage:
 
@@ -976,7 +978,7 @@ To address this problem, most data visualization systems automatically expand th
 plot(x, y, col = col, cex = 3, pch = 19)
 ```
 
-We could achieve this by expanding our data range by some hard-coded percentage, for example, a symmetric 10% margin on each side:
+We could achieve this by expanding our data range by some pre-specified percentage, for example, a symmetric 10% margin on each side:
 
 \begin{equation}
 
@@ -986,7 +988,16 @@ We could achieve this by expanding our data range by some hard-coded percentage,
 
 \end{equation}
 
-However, this design becomes prohibitive as more features are added. For example, if we want to map some discrete data values to the same visual attribute codomain $V$, do we have to design an entirely new mapping function? Similarly, what if we want to apply a different margin on each side, shift both margins by an equal amount, or flip the scale's direction? It would be useful if there were some way to abstract out the data domain $D$ and the visual attribute $V$, such that we could apply some common operations to the scale regardless of its specific implementation.
+Now, if we wanted these margins to be modifiable parameters as well, we should include them in the function signature:
+
+\begin{equation}
+
+  s(d; m_{lower}, m_{upper}) = v_{min} + \bigg[ m_{lower} + \frac{d - d_{min}}{d_{max} - d_{min}} \cdot (m_{upper} - m_{lower}) 
+            \bigg] \cdot (v_{max} - v_{min}) 
+
+\end{equation}
+
+Likewise, we should probably include the data and visual attribute limits in the function signature as well, i.e. $s(d; d_{min}, d_{max}, v_{min}, v_{max}, m_{lower}, m_{upper})$. However, as you can see, the function signature as well as the body start becoming fairly busy and hard to reason about, making this design prohibitive. For example, if we wanted to map some discrete data values to the same visual attribute codomain $V$, would we have to design an entirely new mapping function? Similarly, what if we want apply some other transformation, such as flipping the scale's direction? It would be useful if there were some way to abstract out the data domain $D$ and the visual attribute codomain $V$, such that we could apply some common operations to the scale regardless of its specific implementation.
 
 #### Solution: Scales as function composition {#scales-composition}
 
@@ -1011,7 +1022,7 @@ That is, the linear mapping can be interpreted as a composition of three simpler
 - $\color{seagreen}{r(p) = 0.1 + p \cdot (0.9 - 0.1)}$ takes a value in $[0, 1]$ and maps it elsewhere in $[0, 1]$
 - $\color{steelblue}{u_V(p) = v_{min} + p \cdot (v_{max} - v_{min})}$ takes a value in $[0, 1]$ and maps it to a visual attribute value $v \in V$ 
 
-In other words, instead of thinking of scale as mapping from $D$ to $V$ directly, we can break the mapping into three distinct steps. This leads us to the following definition of a scale:
+In other words, instead of thinking of scale as direct mapping from $D$ to $V$ directly, we can break the transformation into three distinct stages. This leads us to the following definition of a scale:
 
 ::: {.definition #scale name="Scale as function composition"}
 
@@ -1024,6 +1035,10 @@ A scale $s: D \to V$ can be created by composing:
 Such that:
 
 $$s(d) = u_V(r(n_D(d)))$$
+
+or, more tersely:
+
+$$s = n_D \thena r \thena u_V$$
 :::
 
 This is the proposed model of scales in a nutshell. However, there are several important points which bear explaining in more detail. 
@@ -1073,7 +1088,7 @@ Importantly, the margins are independent of the data domain $D$ and the visual a
 
 ###### Panning
 
-Now, suppose we also want to pan the plot 25% to the right. Again, all we need to do is to change the parameters of the rescale function for the x-axis scale. For example, using the scale with 10% symmetric margins above, we can simply increment the scale limits by 0.25:
+Now, suppose we also want to pan the plot 25% to the right. Again, all we need to do is to change the parameters of the rescale function for the x-axis scale. For example, using the scale with 10% symmetric margins above, we can simply increment the margins by 0.25:
 
 \begin{align}
 
@@ -1165,3 +1180,47 @@ I contend that having different types for the domain and codomain has several di
 Instead, I propose a unified model where the data domain and visual attribute codomain differ only in the context they are used. Details will be discussed in Section \@ref(scales). 
 
 ## Rendering
+
+Assuming we have done the work of splitting our data into subsets, summarizing these subsets, and encoding the resulting summaries as visual encodings/aesthetics, only the final part of the visualization pipeline remains: rendering. During this stage, we take all of our pre-computed quantities and render these into a visual representation on the computer screen. This process relies on several different components, which will be discussed in the present section.
+
+### Graphics format
+
+The first issue related to rendering that is important to discuss is the format used to encode and render the graphics. Currently, the two most overwhelmingly popular classes of image encoding formats are raster- or bitmap-based, and vector-based. Both come with an inherent set of advantages and disadvantages, which will be discussed in the relevant subsections below.
+
+#### Raster images
+
+Raster (also known as bitmap) graphics represent images as two-dimensional grid of pixels [see e.g. @beatty1983; @folley1996]. More specifically, images are encoded as an array of bytes, with a header of metadata (the number of rows and columns, the pixel datatype) and subsequent bytes representing individual pixels. Each pixel typically consists of three or four numerical intensities, such as the red, green, and blue color intensities, as well as opacity (alpha channel). 
+
+The raster encoding is fairly natural
+
+#### Vector images
+
+Scalable Vector Graphics [SVG, @quint2003] is the most popular vector graphics format. Based on the XML markup language, SVG encodes a graphic as a tree of nodes, similar to the Document Object Model (DOM) used on the web and encoded via HTML. SVG files are typically stored in plain-text format, with nodes enclosed by tags which may be given attributes.
+
+#### Frames
+
+Frames or canvases are a key component of the rendering pipeline [see @wilkinson2012; @wilhelm2003]. Put simply, a frame describes a two-dimensional region where most of the graphical elements are placed. 
+
+Ultimately, every frame will reduce to a set of pixels, and so it is natural to think of them as such. However, it is important to mention that there are alternative representations. For example, the scalable vector graphics ([SVG](SVG)) format describes  
+
+Further, while in many data visualization systems, frames contain *all* of the graphical elements, this is not always the case. In web-based interactive visualization frameworks, for example, some elements of the plot may be represented via external DOM nodes. For instance, a query pop-up may be represented via a `div`/`table` element, entirely independent from the `canvas`/`svg` element used to render the data.  
+
+Further, frames may represent all of the graphical elements related to a plot, although, at times, in web-based interactive visualization frameworks, certain graphical elements may also be represented via external DOM nodes (for instance, a pop-up window resulting from querying may be represented via a `div` element). Frame dimensions, usually limited by the window/viewport size but not always [see @wilhelm2003], are measured in pixels, with scales (see Section @ref(scales)) mapping plot coordinates to these dimensions. Finally, as will be discussed in Section \@ref(layers), a single plot usually consists of multiple frames stacked on top of each other in layers, particularly in interactive graphics.
+
+### Graphical layers {#layers}
+
+Layering is a common technique in raster graphics, particularly when interaction is involved. Instead of using a single graphical canvas or frame for rendering, different classes of graphical elements are rendered on separate, semi-transparent layers which are stacked vertically and ordered by a z-index. 
+
+Rendering elements in distinct layers offers two key benefits: simplified rendering logic and improved performance. First, by separating the rendering of different classes of elements into different layers, rendering order becomes less critical, since we know that the classes will be plotted on top of each other in the correct order (e.g. we do not have to worry about plotting axes before geometric objects or vice versa). Second, separate graphical layers allow for computationally efficient strategic updates [@urbanek2011; @wilhelm2008]. For instance, during linked selection, if the user clicks and drags to select a rectangular region, we can do fast updates to the layer rendering the selection rectangle (since re-rendering a single rectangle is cheap) and throttle updates on the layer representing selected objects (since many objects have to be re-rendered, e.g. thousands of points in a scatterplot). Layers representing graphical elements independent of selection, such as axes, do not have to be re-rendered at all.      
+
+@urbanek2011 identifies the following four fundamental graphical layers (ordered from top-most to bottom-most):
+
+- Interaction layer
+- Selection layer
+- Objects layer
+- Background layer
+
+#### Graphical elements
+
+The graphical elements may include geometric objects which are direct representations of the data, such as points, lines, or areas, as well as auxiliary elements such as axis breaks and labels, grid-lines, titles, and additional annotations.
+

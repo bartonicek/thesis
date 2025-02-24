@@ -55,3 +55,48 @@ console.log(User.getFullName(user));
 ```
 
 Clearly, it is possible to encapsulate data while maintaining separation between data and code. Specifically, the data underpinning `User` is still a plain data object and can be inspected using `console.log`. However, we cannot access or modify its properties outside of the `User` code module.
+
+## Gauss method and the russian peasant algorithm for monoids {#gauss-russian-monoids}
+
+Assume we have a commutative monoid $(M, e, \otimes)$ and a sequence $s$ obtained by repeatedly taking a product of an element $a \in M$ with some fixed increment $b \in M$, such that $s = (a, (a \otimes b), (a \otimes b \otimes b), \ldots)$. If we want to reduce $s$ into a total product $p$ by repeatedly applying the operation $\otimes$, i.e. $p = a \otimes (a \otimes b) \otimes (a \otimes b \otimes b) \otimes \ldots$, then we can use commutativity and associativity to rearrange the expression in the following way:
+
+\begin{align}
+p &= a \otimes (a \otimes b) \otimes (a \otimes b \otimes b) \otimes \ldots \\
+&= (a \otimes b^0) \otimes  (a \otimes b^1) \otimes (a \otimes b^2) \otimes \ldots \otimes \otimes (a \otimes b^{n - 1}) \otimes (a \otimes b^n) \\
+&= [(a \otimes b^0) \otimes (a \otimes b^n)] \otimes [(a \otimes b^1) \otimes (a \otimes b^{n - 1})] \otimes \ldots \\ 
+&= [a \otimes (a \otimes b^n)]^{n / 2} \\
+&= d^{n / 2}
+\end{align}
+
+Where $d = a \otimes (a \otimes b^n)$ is just the product of the first and the last elements in the sequence, respectively. This echoes the Gauss method of summing arithmetic series, although in that case, the repeated operations (sums) can be simplified even further, by relating sums to products ($(1 + n)^{n / 2} = [n(n + 1)] / 2$). Here, we may not necessarily have a way to simplify repeated products, however, since $d$ is fixed, we can use the Russian peasant algorithm to compute the total product in $O(\log n)$ time via squaring:
+
+```{r}
+#| results: 'hold'
+russian_peasant <- function(x, fn, e, n) {
+  result <- e
+
+  while (n > 0) {
+    if (n %% 2 != 0) result <- fn(result, x)
+    n <- floor(n / 2)
+    x <- fn(x, x)
+  }
+
+  result
+}
+
+reduce_sequence <- function(x, fn, e) {
+  d <- fn(x[1], x[length(x)])
+  n <- floor(length(x) / 2)
+  russian_peasant(d, fn, e, n)
+}
+
+x <- 1:8
+sum(x)
+reduce_sequence(x, sum, 0)
+
+x <- 2^(1:8)
+prod(x)
+reduce_sequence(x, prod, 1)
+```
+
+
