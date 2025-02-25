@@ -832,19 +832,19 @@ Suppose we have our summary functor $F$ which summarizes a data subset $D_i$ by 
 
 Now, comparing the statistic $F(D_1)$ with $F(D_1) \otimes F(D_2)$ amounts to comparing the summaries of $D_1$ with that of $D_1 \cup D_2$. For instance, in a barplot where $D_{S_1}$ and $D_{S_2}$ represent segment subsets that together form a bar subset, $D_{B_1} = D_{S_1} \cup D_{S_2}$, comparing $F(D_{S_1})$ and $F(D_{S_1}) \otimes F(D_{S_2})$ amounts to comparing the summary on the subset $D_{S_1}$ with that of $D_{S_1} \cup D_{S_2}$, i.e. the summary of all cases in the bar.
 
-Why is this important? It is critical to note that *comparing $D_i$ with $D_i \cup D_j$ is different from comparing $D_i$ with $D_j$ directly*. That is, while $F(D_i) \otimes F(D_j) = F(D_i \cup D_j)$ is a valid summary of $D_i \cup D_j$, *there is no guarantee that we will be able to recover $F(D_j)$ from it*. $F(D_i) \otimes F(D_j)$ may collapse information contained in $F(D_i)$ and $F(D_j)$ individually. If we want to use the combined summary $F(D_i \cup D_j)$ to compare $D_i$ and $D_j$ *as disjoint subsets*, then we also require the presence of an inverse operator $\otimes^{-1}$:
+Why is this important? It is critical to note that *comparing $D_i$ with $D_i \cup D_j$ is different from comparing $D_i$ with $D_j$ directly*. That is, while $F(D_i) \otimes F(D_j) = F(D_i \cup D_j)$ is a valid summary of $D_i \cup D_j$, *there is no guarantee that we will be able to recover $F(D_j)$ from it*. In other words, $F(D_i) \otimes F(D_j)$ may collapse information contained in either $F(D_i)$ or $F(D_j)$ individually. If we want to use the combined summary $F(D_i) \otimes F(D_j) = F(D_i \cup D_j)$ to compare $D_i$ and $D_j$ *as disjoint subsets*, then we also require the presence of an inverse operator $\otimes^{-1}$, such that:
 
 $$F(D_i) \otimes F(D_j) = F(D_i \cup D_j) \iff F(D_i \cup D_j) \otimes^{-1} F(D_j) = F(D_i)$$
 
 Specifically, we want some inverse operator $\otimes^{-1}$ that would allow our statistic *to also preserve/distribute over set difference* ($\setminus$). Specifically, we could imagine taking the diagram in Figure \@ref(fig:barplot-preorder2) and adding a second set of arrows pointing in the opposite direction, labeled with $\setminus$. Then, for $F$ to be a functor, it would have to preserve the composition of these set difference arrows as well.
 
-Fortunately, we do not have to search for a monoid with an inverse operator; this is precisely the definition of another famous algebraic structure: a group. Groups are well-studied in group theory and subject to many interesting results [see e.g., @pinter2010]. However, for our purposes, a group is just a monoid equipped with the inverse operator $\otimes^{-1}$, subject to^[The inverse operator needs to be two-sided, since so is set difference.]:
+Fortunately, we do not have to search for a monoid with an inverse operator; this is precisely the definition of another famous algebraic structure: a group. Groups are well-studied in group theory and subject to many interesting results [see e.g., @pinter2010]. However, for our purposes, a group is just a monoid equipped with the inverse operator $\otimes^{-1}$, subject to:
 
 $$x \otimes y = z \iff (z \otimes^{-1} x = y) \wedge (z \otimes^{-1} y = x)$$
 
 When the inverse operator is not present, we can still compare $D_i$ with $D_i \cup D_j$, however, direct comparisons of $D_i$ and $D_j$ may no longer be possible after combining with $\otimes$. For instance, a typical example of a monoid which lacks inverse is the maximum operator. It is easy to show that maximum is associative:
 
-$$\max(x, \max(y, z)) = \max(\max(x, y), z)$$
+$$\max(x, \max(y, z)) = \max(\max(x, y), z) = \max(x, y, z)$$
 
 And it also has a neutral element, namely $-\infty$, thus maximum is a valid monoid. However, maximum lacks an inverse $\otimes^{-1}$:
 
@@ -855,13 +855,36 @@ Thus, for example, if it is the case that:
 
 $$\max(x, y) = 8$$
 
-Then, even if we know that $y = 8$, there is no way to recover the value of $x$. Thus, in a certain sense, maximum irretrievably discards information contained in its operands. This is different from generative effects/not preserving composition/lack of associativity, which is about validity: a maximum of maximums is always equal to the maximum of all cases. It is just that there is no meaningful way to "subtract" from a maximum: once we choose the larger value, the smaller is lost. 
+Then, even if we know that $y = 8$, there is no way to recover the value of $x$. In a certain sense, maximum irretrievably discards some of the information contained in its operands. This is different from generative effects/not preserving composition/lack of associativity, which is about validity: a maximum of maximums is always equal to the maximum of all cases, it is just that there is no meaningful way to reverse the effect of the maximum operator: once we pick the larger value, the smaller is lost. 
 
 This abstract distinction between groups and monoids, and the presence (absence) of inverses translates into tangible differences in interactive behavior. When implementing linked selection, some interactive systems allow the user to define only a single selection group, whereas others allow multiple. This seemingly minor difference in implementation has a large impact on the kinds of statistics we are able to effectively represent. Specifically, with single-group selection, the user defines a single "special" subset that is then compared against the entirety of the data, i.e. a highlighted subset $D_i$ that is compared against some superset $D_j \supseteq D_i$. Crucially, the "rest" of the data, $D_j \setminus D_i$, plays a secondary role: we only care about it in as much as it contributes to the superset $D_j$. As such, it is enough if the combination operator $\otimes$ is a part of a monoid. However, in multi-group selection, we actually care about comparing the individual disjoint subsets $D_i, D_j, D_k, \ldots$ that result from selection. Thus, we require the inverse operator $\otimes^{-1}$ and $\otimes$ needs to be a part of a group.
 
-Thus, monoids and groups present two fundamentally different models for linked selection. If we care about using parts of a geometric object to compare some "special" highlighted subset $D_i$ against the subset representing the rest of the data $D_j \supseteq D_i$, then it is enough for the underlying summary statistic to be a monoid. However, if $D_i$ and $D_j$ are disjoint, $D_i \cap D_j = \varnothing$, and we care about comparing $D_i$ and $D_j$ directly, then we also need the inverse operator $\otimes^{-1}$ and the underlying summary needs to be a group.
+Thus, monoids and groups present two fundamentally different models for linked selection. If we care about using parts of a geometric object to compare some "special" highlighted subset $D_i$ against the subset representing the rest of the data $D_j \supseteq D_i$, then it is enough for the underlying summary statistic to form a monoid. However, if $D_i$ and $D_j$ are disjoint, $D_i \cap D_j = \varnothing$, and we care about comparing $D_i$ and $D_j$ directly, then we also need the inverse operator $\otimes^{-1}$ and the underlying summary needs to be a group.
 
-This distinction even has interesting implications for data interpretation. For instance, the reason why the maximum operator works well in Figure \ref(fig:barplot-maximums) is because we are comparing a "special subset" of the study participants ("smokers") against that of all participants ("smokers *and* non-smokers"). In other words, with the smoking status variable, it makes sense to compare one category with a union of both. This is not the case for all categorical variables, however. For instance, with a gender variable, it would rarely make sense to think of "men" as a special subset of "men and women", or vice versa; the vast majority of time, we are interested in comparing men and women directly, as disjoint subsets. Conversely, this is also the case why monoids work with single-group linked selection: the selected points really are a "special" subset, and the subset representing the "rest" of the data is only interesting in that it is part of "all" of the data points to compare against. However, with multiple selection groups, disjoint comparisons become essential.      
+This distinction even has interesting implications for data interpretation. For instance, the reason why the maximum operator works well in Figure \ref(fig:barplot-maximums) is because we are comparing a "special subset" of the study participants ("smokers") against that of all participants ("smokers *and* non-smokers"). In other words, with the smoking status variable, it makes sense to compare one category against the union of both categories. This is not the case for all categorical variables, however. For instance, with a gender variable, it would rarely make sense to think of "men" as a special subset of "men and women", or vice versa; the vast majority of time, we are interested in comparing men and women directly, as disjoint subsets. Conversely, this is also the case why monoids work with single-group linked selection: the selected points really are a "special" subset, and the subset representing the "rest" of the data is only interesting in that it is part of "all" of the data points to compare against. However, with multiple selection groups, disjoint comparisons become essential.     
+
+#### Other properties: monotonicity and commutativity
+
+There are other algebraic properties of set union we may wish to preserve in our visualizations. The two most important ones are monotonicity and commutativity.
+
+##### Monotonicity
+
+One property, which is probably also probably quite desirable to preserve, is monotonicity. In a monoid $(M, e, \otimes)$ with and associated preorder $(M, \leq)$ (i.e. the monoid and preorder jointly form a monoidal preorder), monotonicity is defined as:
+
+$$x_1 \leq x_2 \wedge y_1 \leq y_2 \implies x_1 \otimes y_1 \leq x_2 \otimes y_2$$
+
+Union of disjoint sets is monotonic, in two different ways. First, if we let the comparison operator be set inclusion, $\subseteq$, then it is the case that $A_1 \subseteq A_2 \wedge B_1 \subseteq B_2 \implies A_1 \cup A_2 \subseteq B_1 \cup B_2$. Second, if we let the comparison operator be the comparison of cardinalities, $A \leq B \implies \lvert A \lvert \leq \lvert B \lvert$, then $\lvert A_1 \lvert \leq \lvert A_2 \lvert \wedge \lvert B_1 \lvert \wedge \lvert B_2 \lvert  \implies \lvert A_1 \cup B_1 \lvert \leq \lvert A_2 \cup B_2 \lvert$ (since $\lvert A \cup B \lvert = \lvert A \lvert + \lvert B \lvert$, by disjointness). 
+
+Likewise, when drawing geometric objects composed of parts, we typically consider the parts to be "less" than the whole, i.e. having a smaller area or length. As discussed in Section \@ref(stacking-part-whole), this has certain advantages: we can use the fact that the quantities corresponding to the parts are bounded by the quantities corresponding to the whole to avoid unnecessary computation. However, there are also examples of geometric objects where the *whole is equal to the sum of its parts, but where the parts are not necessarily "less" than the whole*. As an example, such would be the case for the following visualization of vector addition:
+
+```{r lineplot-monotonicty}
+#| echo: false
+#| fig-cap: "A line graphic of a vector is composed of parts that add up to the whole; however, the cumulative length of the line segments is not monotonically increasing."
+knitr::include_graphics("./figures/lineplot-monotonicity.png")
+```
+
+Figure \@ref(fig:lineplot-monotonicity) represents the summation of three two-dimensional vectors. Vector addition forms a monoid, since for any three vectors $\vec{x}, \vec{y}, \vec{z}$, it is associative, $(\vec{x} + \vec{y}) + \vec{z} = \vec{x} + (\vec{y} + \vec{z})$, and unital, $\vec{x} + \vec{0} = \vec{0} + \vec{x} = x$ (where $\vec{0}$ is a vector of zeroes). In practical terms, this means that, by starting from the same position and moving along $\vec{x}$, $\vec{y}$, and $\vec{z}$, we end up in the same spot as if we had moved along $\vec{x} + \vec{y} + \vec{z}$. However, vector addition is not monotonic with respect to vector length; even if $$\lvert \vec{x}_1 \lvert \leq \lvert \vec{x}_2 \lvert \wedge \lvert \vec{y}_1 \lvert \leq \lvert \vec{y}_2 \lvert$$, it may not be the case that $\lvert \vec{x}_1 + \vec{y}_1 \lvert \leq \lvert \vec{x}_2 + \vec{y}_2 \lvert$. For instance, if two vectors $\vec{x}$ and $\vec{y}$ are mutually opposite (point in opposite direction and have equal magnitude), then their combined length will be 0 and so the length of the sum of any arbitrary shorter vectors will be greater, provided these are not opposite either.   
+
 
 #### Transforming summaries: Stacking, normalizing, and shifting
 
@@ -1098,7 +1121,7 @@ r(p) &= (0.1 + 0.25) + p \cdot [(0.9 + 0.25) - (0.1 + 0.25)] \\
 \end{align}
 
 
-Now, the "least" data point $d \in D$ will get mapped to 0.35 (10% margin + 25% to the right), whereas the "greatest" data point will get mapped to 1.15 (25% to the right - 10% margin). Notice that, again, this is entirely independent of $D$ and $V$. That is, for instance, we can pan a continuous scale the exact same way we can pan a discrete scale.
+Now, the "least" data point $d \in D$ gets mapped to 0.35 (10% margin + 25% to the right), whereas the "greatest" data point gets mapped to 1.15 (25% to the right - 10% margin). Notice that, again, this is entirely independent of $D$ and $V$. That is, for instance, we can pan a continuous scale the exact same way we can pan a discrete scale.
 
 ###### Zooming
 
@@ -1109,7 +1132,7 @@ For instance, setting the limits to $-(0.5, 1.5)$ effectively zooms into the mid
 $$r(0.25) = -0.5 + 0.25 \cdot [1.5 - (-0.5)] = 0$$
 $$r(0.75) = -0.5 + 0.75 \cdot [1.5 - (-0.5)] = 1$$
 
-Care must be taken when zooming in the presence of pre-existing limits, such as those caused by margins or multiple levels of zoom. In that case, we need to re-normalize the new limits within the context of the current limits. Coming up with the right formula requires a bit of careful algebra; details of the algorithm are given in Section \@ref(scales).  
+Care must be taken when zooming in the presence of pre-existing limits, such as those caused by margins or multiple levels of zoom. In that case, we need to re-normalize the new limits within the context of the current limits. Coming up with the right formula requires a little bit of careful algebra; details of the algorithm are given in Section \@ref(scales).  
 
 ##### Inverses
 
