@@ -1,8 +1,6 @@
 
 ```{r}
 #| echo: false
-# knitr::opts_chunk$set(eval = FALSE)
-
 knitr::opts_chunk$set(
   out.width = "100%",
   out.height = "100%"

@@ -208,6 +208,7 @@ div.csl-indent {
 <li class="chapter" data-level="4.5" data-path="problems.html"><a href="problems.html#rendering"><i class="fa fa-check"></i><b>4.5</b> Rendering</a>
 <ul>
 <li class="chapter" data-level="4.5.1" data-path="problems.html"><a href="problems.html#frames"><i class="fa fa-check"></i><b>4.5.1</b> Frames</a></li>
+<li class="chapter" data-level="4.5.2" data-path="problems.html"><a href="problems.html#graphical-elements"><i class="fa fa-check"></i><b>4.5.2</b> Graphical elements</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="goals.html"><a href="goals.html"><i class="fa fa-check"></i><b>5</b> Goals</a>
@@ -312,8 +313,8 @@ div.csl-indent {
 </div>
 <div id="partitioning" class="section level2 hasAnchor" number="4.2">
 <h2><span class="header-section-number">4.2</span> Partitioning<a href="problems.html#partitioning" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>The first step of any data visualization pipeline is to divide the data into parts or subsets. The justification for this initial step lies in our ultimate goal: to represent some aspects of our data by one or (usually) more geometric objects <span class="citation">(<a href="#ref-wilkinson2012">Wilkinson 2012</a>; also known as “marks,” <a href="#ref-satyanarayan2016">Satyanarayan et al. 2016</a>; and “graphic items,” <a href="#ref-wills2008">Wills 2008</a>)</span>. Thus, before we can do anything else, we need to define the set of data points each geometric object will represent. In the typical case of two-dimensional tables or data frames, this amounts to slicing the table’s rows into smaller sub-tables.</p>
-<p>The partitioning operation is fairly intuitive for aggregate plots, where each object represents multiple rows of the data. For instance, in a barplot, each bar represents a set of cases corresponding to a category, while in histogram, each bar represents a set of cases in which fall within the same bin along some continuous dimension. However, even one-to-one representations of the data can be viewed this way. For example, in a scatterplot or parallel coordinate plots, each geometric object represents one row of the data, which we can view as its own small table. Similarly, plots with a single geometric object (e.g. density/radar plots) have the underlying set equal to the whole data set.</p>
+<p>The first step of any data visualization pipeline is to divide the data into parts or subsets. The justification for this initial step lies in our ultimate goal: to represent some aspects of our data by drawing one or (usually) more geometric objects <span class="citation">(<a href="#ref-wilkinson2012">Wilkinson 2012</a>; also known as “marks,” <a href="#ref-satyanarayan2016">Satyanarayan et al. 2016</a>; <a href="#ref-bostock2022">Mike Bostock 2022</a>; and “graphic items,” <a href="#ref-wills2008">Wills 2008</a>)</span>. However, before we can do anything else, we need to define the set of data points each geometric object will represent. In the typical case of two-dimensional tables or data frames, this amounts to slicing the data set into multiple smaller sets of rows or tables.</p>
+<p>The partitioning operation is fairly intuitive for aggregate plots, where each object represents several rows of the data. For instance, in a barplot, each bar represents the subset of cases corresponding to a single category, while in histogram, each bar represents the subset of cases which fall within the same bin along some continuous dimension. However, even one-to-one representations of the data may be viewed this way. For example, in scatterplots and parallel coordinate plots, geometric objects (points, lines) can be thought of as representing many small tables of one row each. Similarly, in plots with a single geometric object (e.g. density/radar plots), the corresponding data subset is just the whole data set.</p>
 <p>Thus, the process of splitting our data into subsets is in some way fairly straightforward. However, it does raise two fundamental questions:</p>
 <ul>
 <li>How much of the original data should the subsets contain?</li>
@@ -587,243 +588,130 @@ C
 <tbody>
 <tr>
 <td>
-<table class="table" style="color: black; width: auto !important; margin-left: auto; margin-right: auto;">
+<table>
 <thead>
-<tr>
-<th style="text-align:left;">
-group
-</th>
-<th style="text-align:left;">
-selection
-</th>
-<th style="text-align:right;">
-value
-</th>
+<tr class="header">
+<th align="left">group</th>
+<th align="left">selection</th>
+<th align="right">value</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:left;">
-A
-</td>
-<td style="text-align:left;">
-1
-</td>
-<td style="text-align:right;">
-12
-</td>
+<tr class="odd">
+<td align="left">A</td>
+<td align="left">1</td>
+<td align="right">12</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-A
-</td>
-<td style="text-align:left;">
-1
-</td>
-<td style="text-align:right;">
-21
-</td>
+<tr class="even">
+<td align="left">A</td>
+<td align="left">1</td>
+<td align="right">21</td>
 </tr>
 </tbody>
 </table>
 </td>
 <td>
-<table class="table" style="color: black; width: auto !important; margin-left: auto; margin-right: auto;">
+<table>
 <thead>
-<tr>
-<th style="text-align:left;">
-</th>
-<th style="text-align:left;">
-group
-</th>
-<th style="text-align:left;">
-selection
-</th>
-<th style="text-align:right;">
-value
-</th>
+<tr class="header">
+<th align="left"></th>
+<th align="left">group</th>
+<th align="left">selection</th>
+<th align="right">value</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:left;">
-3
-</td>
-<td style="text-align:left;">
-A
-</td>
-<td style="text-align:left;">
-2
-</td>
-<td style="text-align:right;">
-10
-</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
-<table class="kable_wrapper">
-<tbody>
-<tr>
-<td>
-<table class="table" style="color: black; width: auto !important; margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:left;">
-</th>
-<th style="text-align:left;">
-group
-</th>
-<th style="text-align:left;">
-selection
-</th>
-<th style="text-align:right;">
-value
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-4
-</td>
-<td style="text-align:left;">
-B
-</td>
-<td style="text-align:left;">
-1
-</td>
-<td style="text-align:right;">
-9
-</td>
+<tr class="odd">
+<td align="left">3</td>
+<td align="left">A</td>
+<td align="left">2</td>
+<td align="right">10</td>
 </tr>
 </tbody>
 </table>
 </td>
 <td>
-<table class="table" style="color: black; width: auto !important; margin-left: auto; margin-right: auto;">
+<table>
 <thead>
-<tr>
-<th style="text-align:left;">
-</th>
-<th style="text-align:left;">
-group
-</th>
-<th style="text-align:left;">
-selection
-</th>
-<th style="text-align:right;">
-value
-</th>
+<tr class="header">
+<th align="left"></th>
+<th align="left">group</th>
+<th align="left">selection</th>
+<th align="right">value</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:left;">
-5
-</td>
-<td style="text-align:left;">
-B
-</td>
-<td style="text-align:left;">
-2
-</td>
-<td style="text-align:right;">
-15
-</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
-<table class="kable_wrapper">
-<tbody>
-<tr>
-<td>
-<table class="table" style="color: black; width: auto !important; margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:left;">
-</th>
-<th style="text-align:left;">
-group
-</th>
-<th style="text-align:left;">
-selection
-</th>
-<th style="text-align:right;">
-value
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-6
-</td>
-<td style="text-align:left;">
-C
-</td>
-<td style="text-align:left;">
-1
-</td>
-<td style="text-align:right;">
-15
-</td>
+<tr class="odd">
+<td align="left">4</td>
+<td align="left">B</td>
+<td align="left">1</td>
+<td align="right">9</td>
 </tr>
 </tbody>
 </table>
 </td>
 <td>
-<table class="table" style="color: black; width: auto !important; margin-left: auto; margin-right: auto;">
+<table>
 <thead>
-<tr>
-<th style="text-align:left;">
-</th>
-<th style="text-align:left;">
-group
-</th>
-<th style="text-align:left;">
-selection
-</th>
-<th style="text-align:right;">
-value
-</th>
+<tr class="header">
+<th align="left"></th>
+<th align="left">group</th>
+<th align="left">selection</th>
+<th align="right">value</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:left;">
-7
-</td>
-<td style="text-align:left;">
-C
-</td>
-<td style="text-align:left;">
-2
-</td>
-<td style="text-align:right;">
-12
-</td>
+<tr class="odd">
+<td align="left">5</td>
+<td align="left">B</td>
+<td align="left">2</td>
+<td align="right">15</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-8
+</tbody>
+</table>
 </td>
-<td style="text-align:left;">
-C
+<td>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="left">group</th>
+<th align="left">selection</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">6</td>
+<td align="left">C</td>
+<td align="left">1</td>
+<td align="right">15</td>
+</tr>
+</tbody>
+</table>
 </td>
-<td style="text-align:left;">
-2
-</td>
-<td style="text-align:right;">
-13
-</td>
+<td>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="left">group</th>
+<th align="left">selection</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">7</td>
+<td align="left">C</td>
+<td align="left">2</td>
+<td align="right">12</td>
+</tr>
+<tr class="even">
+<td align="left">8</td>
+<td align="left">C</td>
+<td align="left">2</td>
+<td align="right">13</td>
 </tr>
 </tbody>
 </table>
@@ -841,193 +729,109 @@ C
 <tbody>
 <tr>
 <td>
-<table class="table" style="color: black; width: auto !important; margin-left: auto; margin-right: auto;">
+<table>
 <thead>
-<tr>
-<th style="text-align:left;">
-group
-</th>
-<th style="text-align:left;">
-selection
-</th>
-<th style="text-align:right;">
-value
-</th>
+<tr class="header">
+<th align="left">group</th>
+<th align="left">selection</th>
+<th align="right">value</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:left;">
-A
-</td>
-<td style="text-align:left;">
-1
-</td>
-<td style="text-align:right;">
-33
-</td>
+<tr class="odd">
+<td align="left">A</td>
+<td align="left">1</td>
+<td align="right">33</td>
 </tr>
 </tbody>
 </table>
 </td>
 <td>
-<table class="table" style="color: black; width: auto !important; margin-left: auto; margin-right: auto;">
+<table>
 <thead>
-<tr>
-<th style="text-align:left;">
-group
-</th>
-<th style="text-align:left;">
-selection
-</th>
-<th style="text-align:right;">
-value
-</th>
+<tr class="header">
+<th align="left">group</th>
+<th align="left">selection</th>
+<th align="right">value</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:left;">
-A
-</td>
-<td style="text-align:left;">
-2
-</td>
-<td style="text-align:right;">
-10
-</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
-<table class="kable_wrapper">
-<tbody>
-<tr>
-<td>
-<table class="table" style="color: black; width: auto !important; margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:left;">
-group
-</th>
-<th style="text-align:left;">
-selection
-</th>
-<th style="text-align:right;">
-value
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-B
-</td>
-<td style="text-align:left;">
-1
-</td>
-<td style="text-align:right;">
-9
-</td>
+<tr class="odd">
+<td align="left">A</td>
+<td align="left">2</td>
+<td align="right">10</td>
 </tr>
 </tbody>
 </table>
 </td>
 <td>
-<table class="table" style="color: black; width: auto !important; margin-left: auto; margin-right: auto;">
+<table>
 <thead>
-<tr>
-<th style="text-align:left;">
-group
-</th>
-<th style="text-align:left;">
-selection
-</th>
-<th style="text-align:right;">
-value
-</th>
+<tr class="header">
+<th align="left">group</th>
+<th align="left">selection</th>
+<th align="right">value</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:left;">
-B
-</td>
-<td style="text-align:left;">
-2
-</td>
-<td style="text-align:right;">
-15
-</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
-<table class="kable_wrapper">
-<tbody>
-<tr>
-<td>
-<table class="table" style="color: black; width: auto !important; margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:left;">
-group
-</th>
-<th style="text-align:left;">
-selection
-</th>
-<th style="text-align:right;">
-value
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-C
-</td>
-<td style="text-align:left;">
-1
-</td>
-<td style="text-align:right;">
-15
-</td>
+<tr class="odd">
+<td align="left">B</td>
+<td align="left">1</td>
+<td align="right">9</td>
 </tr>
 </tbody>
 </table>
 </td>
 <td>
-<table class="table" style="color: black; width: auto !important; margin-left: auto; margin-right: auto;">
+<table>
 <thead>
-<tr>
-<th style="text-align:left;">
-group
-</th>
-<th style="text-align:left;">
-selection
-</th>
-<th style="text-align:right;">
-value
-</th>
+<tr class="header">
+<th align="left">group</th>
+<th align="left">selection</th>
+<th align="right">value</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:left;">
-C
+<tr class="odd">
+<td align="left">B</td>
+<td align="left">2</td>
+<td align="right">15</td>
+</tr>
+</tbody>
+</table>
 </td>
-<td style="text-align:left;">
-2
+<td>
+<table>
+<thead>
+<tr class="header">
+<th align="left">group</th>
+<th align="left">selection</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">C</td>
+<td align="left">1</td>
+<td align="right">15</td>
+</tr>
+</tbody>
+</table>
 </td>
-<td style="text-align:right;">
-25
-</td>
+<td>
+<table>
+<thead>
+<tr class="header">
+<th align="left">group</th>
+<th align="left">selection</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">C</td>
+<td align="left">2</td>
+<td align="right">25</td>
 </tr>
 </tbody>
 </table>
@@ -1049,125 +853,73 @@ C
 <tbody>
 <tr>
 <td>
-<table class="table" style="color: black; width: auto !important; margin-left: auto; margin-right: auto;">
+<table>
 <thead>
-<tr>
-<th style="text-align:left;">
-group
-</th>
-<th style="text-align:left;">
-selection
-</th>
-<th style="text-align:right;">
-value
-</th>
+<tr class="header">
+<th align="left">group</th>
+<th align="left">selection</th>
+<th align="right">value</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:left;">
-A
-</td>
-<td style="text-align:left;">
-1
-</td>
-<td style="text-align:right;">
-33
-</td>
+<tr class="odd">
+<td align="left">A</td>
+<td align="left">1</td>
+<td align="right">33</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-A
-</td>
-<td style="text-align:left;">
-2
-</td>
-<td style="text-align:right;">
-43
-</td>
+<tr class="even">
+<td align="left">A</td>
+<td align="left">2</td>
+<td align="right">43</td>
 </tr>
 </tbody>
 </table>
 </td>
 <td>
-<table class="table" style="color: black; width: auto !important; margin-left: auto; margin-right: auto;">
+<table>
 <thead>
-<tr>
-<th style="text-align:left;">
-group
-</th>
-<th style="text-align:left;">
-selection
-</th>
-<th style="text-align:right;">
-value
-</th>
+<tr class="header">
+<th align="left">group</th>
+<th align="left">selection</th>
+<th align="right">value</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:left;">
-B
-</td>
-<td style="text-align:left;">
-1
-</td>
-<td style="text-align:right;">
-9
-</td>
+<tr class="odd">
+<td align="left">B</td>
+<td align="left">1</td>
+<td align="right">9</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-B
-</td>
-<td style="text-align:left;">
-2
-</td>
-<td style="text-align:right;">
-24
-</td>
+<tr class="even">
+<td align="left">B</td>
+<td align="left">2</td>
+<td align="right">24</td>
 </tr>
 </tbody>
 </table>
 </td>
-</tr>
-</tbody>
-</table>
-<table class="table" style="color: black; width: auto !important; margin-left: auto; margin-right: auto;">
+<td>
+<table>
 <thead>
-<tr>
-<th style="text-align:left;">
-group
-</th>
-<th style="text-align:left;">
-selection
-</th>
-<th style="text-align:right;">
-value
-</th>
+<tr class="header">
+<th align="left">group</th>
+<th align="left">selection</th>
+<th align="right">value</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:left;">
-C
-</td>
-<td style="text-align:left;">
-1
-</td>
-<td style="text-align:right;">
-15
-</td>
+<tr class="odd">
+<td align="left">C</td>
+<td align="left">1</td>
+<td align="right">15</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-C
-</td>
-<td style="text-align:left;">
-2
-</td>
-<td style="text-align:right;">
-40
+<tr class="even">
+<td align="left">C</td>
+<td align="left">2</td>
+<td align="right">40</td>
+</tr>
+</tbody>
+</table>
 </td>
 </tr>
 </tbody>
@@ -1248,7 +1000,7 @@ Figure 4.12: A more precise version of the diagram of a barplot/spinogram, with 
 <h4><span class="header-section-number">4.2.4.2</span> The graph behind the graph<a href="problems.html#the-graph-behind-the-graph" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>To summarize the main point of this entire section, <em>graphs are graphs</em>. As a bit of a playful side-note, this view is not shared by everyone. Particularly, the poster of the following meme shared on the Mathematical Mathematics Memes Facebook group <span class="citation">(<a href="#ref-mathematicalmathematics2024">Martínez 2024</a>)</span> might not agree:</p>
 <div class="figure"><span style="display:block;" id="fig:meme"></span>
-<img src="figures/graphs-cosplayers.jpg" alt="A joke image shared in the Mathematical Mathematics Memes Facebook group on the 28th of March, 2024 [@mathematicalmathematics2024]." width="75%" style="border:1px solid black;" />
+<img src="figures/graphs-cosplayers.jpg" alt="A joke image shared in the Mathematical Mathematics Memes Facebook group on the 28th of March, 2024 [@mathematicalmathematics2024]." width="75%" />
 <p class="caption">
 Figure 4.13: A joke image shared in the Mathematical Mathematics Memes Facebook group on the 28th of March, 2024 <span class="citation">(<a href="#ref-mathematicalmathematics2024">Martínez 2024</a>)</span>.
 </p>
@@ -1844,7 +1596,7 @@ because it can substantially simplify the structure of a set of data.”</p>
 </div>
 <div id="comparison-to-past-implementations-of-scales" class="section level4 hasAnchor" number="4.4.0.4">
 <h4><span class="header-section-number">4.4.0.4</span> Comparison to past implementations of scales<a href="problems.html#comparison-to-past-implementations-of-scales" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>Many popular data visualization systems implement a multi-component model of scales similar to the one outlined above, however, they typically omit the <span class="math inline">\(r\)</span> function and implement the <span class="math inline">\(n_D\)</span> and <span class="math inline">\(u_V\)</span> mappings quite differently. For example, in <code>D3</code> <span class="citation">(<a href="#ref-bostock2011">Bostock, Ogievetsky, and Heer 2011</a>)</span>, scales are implemented in a functional style, such that the data domain and the visual attribute codomain are passed as tuples or arrays of values to a higher-order <code>scale*</code> function (such as <code>scaleLinear</code>, <code>scalePoint</code>, or <code>scaleBand</code>), which then returns a new function that can be used for scaling. The domain and codomain can also be modified afterwards, using the <code>scale*.domain</code> and <code>scale*.range</code> methods respectively (JavaScript functions are objects and can have other functions/methods attached to them).</p>
+<p>Many popular data visualization systems implement a multi-component model of scales similar to the one outlined above, however, they typically omit the <span class="math inline">\(r\)</span> function and implement the <span class="math inline">\(n_D\)</span> and <span class="math inline">\(u_V\)</span> mappings quite differently. For example, in <code>D3</code> <span class="citation">(<a href="#ref-bostock2011">Michael Bostock, Ogievetsky, and Heer 2011</a>)</span>, scales are implemented in a functional style, such that the data domain and the visual attribute codomain are passed as tuples or arrays of values to a higher-order <code>scale*</code> function (such as <code>scaleLinear</code>, <code>scalePoint</code>, or <code>scaleBand</code>), which then returns a new function that can be used for scaling. The domain and codomain can also be modified afterwards, using the <code>scale*.domain</code> and <code>scale*.range</code> methods respectively (JavaScript functions are objects and can have other functions/methods attached to them).</p>
 <p>For illustration, here are few examples from the official documentation <span class="citation">(<a href="#ref-d3-scale2024">Observable 2024</a>)</span>:</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb18-1"><a href="problems.html#cb18-1" tabindex="-1"></a><span class="kw">const</span> x <span class="op">=</span> d3<span class="op">.</span><span class="fu">scaleLinear</span>([<span class="dv">10</span><span class="op">,</span> <span class="dv">130</span>]<span class="op">,</span> [<span class="dv">0</span><span class="op">,</span> <span class="dv">960</span>])<span class="op">;</span></span>
 <span id="cb18-2"><a href="problems.html#cb18-2" tabindex="-1"></a><span class="fu">x</span>(<span class="dv">20</span>)<span class="op">;</span> <span class="co">// 80</span></span>
@@ -1885,11 +1637,13 @@ because it can substantially simplify the structure of a set of data.”</p>
 <li>Background layer</li>
 </ul>
 <p>Additionally, in some data visualization systems, certain elements of the visualization may be rendered out-of-frame entirely. For instance, in web-based interactive visualization frameworks, some elements may be represented via external DOM nodes, e.g. a query pop-up may be represented via an independent <code>&lt;div&gt;</code>/<code>&lt;table&gt;</code> element. This can simplify rendering logic: for instance, in the case of the query pop-up, we can offload the work of rendering the table to the browser instead of having it to implement it ourselves. Similarly, many GUI platforms (including browsers) provide ready-made interactive inputs, such as buttons or sliders.</p>
-<div id="graphical-elements" class="section level4 hasAnchor" number="4.5.1.1">
-<h4><span class="header-section-number">4.5.1.1</span> Graphical elements<a href="problems.html#graphical-elements" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>To create a data visualizations, frames need to be populated by graphical elements. These include geometric objects which represent the data directly, such as points, lines, or rectangles, as well as auxiliary graphical elements such as axis breaks and labels, grid-lines, titles, and additional annotations.</p>
-
 </div>
+<div id="graphical-elements" class="section level3 hasAnchor" number="4.5.2">
+<h3><span class="header-section-number">4.5.2</span> Graphical elements<a href="problems.html#graphical-elements" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>To create a data visualizations, frames need to be populated with graphical elements. These include geometric objects which represent the data directly, such as points, lines, or rectangles, as well as auxiliary graphical elements such as axis breaks and labels, grid-lines, titles, and additional annotations.</p>
+<p>Geometric objects directly representing the data are of primary concern, since these are the most likely cause of rendering bottle-necks: typically, they are the most numerous class of elements as well as the most likely to require re-rendering upon interaction. For instance, in scatterplots and lineplots, the number of geometric objects is exactly equivalent to the number of rows. Likewise, in barplots and fluctuation diagrams, larger data set size often implies a greater number of categories and as a consequence more objects to be rendered. Similarly, most interactive features affect the geometric objects in some way, necessitating re-rendering. For instance, zooming, panning, and reordering affect the objects’ position and/or size, while selection and parametric interaction affect the objects internal attributes, as well as the number of objects to render itself.</p>
+<p>In contrast, auxiliary graphical elements are typically few in number, and require re-rendering less frequently. For instance, in a typical plot with continuous axes, there are generally only 4-6 labels for each axis (as an example, in R, the <code>pretty</code> function uses <code>n = 5</code> as the default number of <em>desired</em> intervals used to find axis breaks) and a single title. With two axes, that amounts to 10-14 text strings that need to be rendered, which is generally much less than the number of geometric objects. Additionally, as was mentioned in Section @(stacking-part-whole), with monoidal plots like stacked barplots and histograms, axis labels do not have be to be re-rendered during linked selection. They <em>do</em> need to be re-rendered during zooming and panning, for obvious reasons, however, this is typically fairly cheap. Axis titles need to be re-rendered only during certain kinds of representation switching, such as when switching from a barplot to spineplot.</p>
+
 </div>
 </div>
 </div>
@@ -1909,6 +1663,9 @@ Bertin, Jacques. 1983. <em>Semiology of Graphics</em>. University of Wisconsin p
 </div>
 <div id="ref-bostock2011" class="csl-entry">
 Bostock, Michael, Vadim Ogievetsky, and Jeffrey Heer. 2011. <span>“D<span class="math inline">\(^3\)</span> Data-Driven Documents.”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em> 17 (12): 2301–9.
+</div>
+<div id="ref-bostock2022" class="csl-entry">
+Bostock, Mike. 2022. <span>“D3.js - Data-Driven Documents.”</span> <a href="https://d3js.org">https://d3js.org</a>.
 </div>
 <div id="ref-buja1996" class="csl-entry">
 Buja, Andreas, Dianne Cook, and Deborah F Swayne. 1996. <span>“Interactive High-Dimensional Data Visualization.”</span> <em>Journal of Computational and Graphical Statistics</em> 5 (1): 78–99.

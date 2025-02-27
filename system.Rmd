@@ -5,6 +5,10 @@ editor_options:
 alway_allow_html: true
 ---
 
+```{r}
+knitr::opts_chunk$set(eval = FALSE)
+```
+
 # System description {#system}
 
 This section contains a description of the two packages developed as part of this doctoral project ([plotscape](https://github.com/bartonicek/plotscape) and [plotscaper](https://github.com/bartonicek/plotscaper)). Since `plotscaper` provides high-level application programming interface (API) for R users, whereas `plotscape` is more concerned with more low-level JavaScript functionality, I will organize the sections accordingly, by discussing high-level API concerns alongside `plotscaper` and implementation details alongside `plotscape`. Cross-cutting concerns will be addressed towards the ends of the respective sections. 
@@ -68,7 +72,6 @@ Given the reasons above, I've adopted a similar approach to `ggplot2`, giving th
 Here's a basic example of creating an interactive figure with `plotscaper`:
 
 ```{r}
-#| eval: false
 library(plotscaper)
 
 create_schema(mtcars) |>
@@ -1646,3 +1649,8 @@ Notice that, because of the cumulative nature of the bands, the logic in the fun
 <!-- ``` -->
 
 <!-- ##  -->
+
+```{r}
+#| eval: true
+knitr::opts_chunk$set(eval = TRUE)
+```
