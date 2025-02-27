@@ -12,13 +12,13 @@ p1 <- ggplot(mtcars, aes(wt, mpg, col = fill)) +
   labs(x = "Weight", y = "Mileage")
 
 p2 <- ggplot(mtcars, aes(cyl, fill = fill)) +
-  geom_bar() +
+  geom_bar(col = "white") +
   scale_fill_manual(values = pal_dark_3) +
   guides(fill = "none") +
   labs(x = "Cylinders", y = "Count")
 
 p3 <- ggplot(mtcars, aes(disp, fill = fill)) +
-  geom_histogram(boundary = 0, binwidth = 50) +
+  geom_histogram(boundary = 0, binwidth = 50, col = "white") +
   scale_fill_manual(values = pal_dark_3) +
   guides(fill = "none") +
   labs(x = "Displacement", y = "Count")
