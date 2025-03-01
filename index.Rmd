@@ -1,5 +1,6 @@
 ---
-title: "Fluent Graphics"
+title: "The Algebra of Graphics, Statistics, and Interaction"
+subtitle: "Towards Fluent Data Visualization Pipelines"
 author: "Adam Bartonicek"
 site: bookdown::bookdown_site
 documentclass: book
@@ -8,6 +9,8 @@ output:
   bookdown::gitbook:
     css: styles.css
   bookdown::pdf_document2:
+    latex_engine: xelatex
+  bookdown::pdf_book:
     latex_engine: xelatex
 bibliography: [references.bib]
 biblio-style: "apalike"

@@ -4,6 +4,14 @@ editor_options:
   chunk_output_type: console
 ---
 
+```{r}
+#| echo: false
+knitr::opts_chunk$set(
+  out.width = "100%",
+  out.height = "100%"
+) # For LaTeX output to render correctly
+```
+
 \newcommand\thenb{⨾}
 
 # Mathematical theory

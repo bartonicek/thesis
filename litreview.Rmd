@@ -23,7 +23,7 @@ if (knitr::is_html_output()) {
 }
 ```
 
-# Background {#litreview}
+# Background {#background}
 
 ## Brief history of interactive data visualization {#brief-history}
 
@@ -129,7 +129,8 @@ const svg = d3
   .attr("width", width + margin.left + margin.right)
   .attr("height", height + margin.top + margin.bottom)
   .append("g")
-  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  .attr("transform", 
+        "translate(" + margin.left + "," + margin.top + ")");
 
 // Create x and y scales and append them to
 const scaleX = d3.scaleLinear().domain([0, 6]).range([0, width]);
@@ -471,7 +472,7 @@ Interactive animation becomes particularly powerful when coupled with techniques
 
 The implementation complexity of interactive animation varies considerably depending on its application. While animating data subsets based on a single variable, as in the Gapminder visualization [@rosling2011], presents no greater implementation challenges than previously discussed techniques, computing the grand tour path requires specialized algorithms [see, e.g., @chen2008, for a brief description]. However, if the data subsets corresponding to each animation frame are pre-computed, the animation itself is generally fairly straightforward to implement.
 
-#### Representation switching
+#### Representation switching {#representation-switching}
 
 Another specialized kind of parametric (or semi-parametric) interaction involves changing the representation of the underlying data. It is well known that the same data can often be visualized using various sets of visual encodings [@wilkinson2012], with some being more effective for answering specific questions than others. Enabling users to switch between these various representations provides greater flexibility for data exploration [@yi2007]. However, for certain plot types, changing the representation involves more than just altering surface-level visual attributes; it also necessitates recalculating derived statistics.
 
