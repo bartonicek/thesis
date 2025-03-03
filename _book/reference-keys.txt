@@ -285,3 +285,5 @@ fig:unnamed-chunk-2
 fig:unnamed-chunk-3
 limitations-of-the-theoretical-model
 comparison-disjointness
+high-level-api-plotscaper
+api-design

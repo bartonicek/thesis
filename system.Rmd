@@ -6,35 +6,43 @@ alway_allow_html: true
 ---
 
 ```{r}
-knitr::opts_chunk$set(eval = FALSE)
+# knitr::opts_chunk$set(eval = FALSE)
 ```
 
 # System description {#system}
 
-This section contains a description of the two packages developed as part of this doctoral project ([plotscape](https://github.com/bartonicek/plotscape) and [plotscaper](https://github.com/bartonicek/plotscaper)). Since `plotscaper` provides high-level application programming interface (API) for R users, whereas `plotscape` is more concerned with more low-level JavaScript functionality, I will organize the sections accordingly, by discussing high-level API concerns alongside `plotscaper` and implementation details alongside `plotscape`. Cross-cutting concerns will be addressed towards the ends of the respective sections. 
+This section contains a detailed description of the two software packages developed as part of this doctoral project: ([plotscape](https://github.com/bartonicek/plotscape) and [plotscaper](https://github.com/bartonicek/plotscaper)):
 
-At the time of writing, the `plotscape` repository contains about ~6,400 lines of code (mainly TypeScript), whereas the `plotscaper` repository contains about ~500 lines of R code (counted using the [`cloc` CLI tool](https://github.com/AlDanial/cloc)). 
+- `plotscape`: Written in TypeScript/JavaScript, provides "low-level" interactive visualization utilities
+- `plotscaper`: Written in R, provides a "high-level" wrapper/API for R users 
+
+Several practical consideration have lead to choosing web-technologies as the underlying platform as well as splitting the functionality across two packages. First, web-technologies were chosen is because they provide a simple portable way to do interactive apps in R, having become the de facto standard thanks to good integration, due to packages such as `htmlwidgets` [@htmlwidgets2021] and Shiny [@sievert2020]. Further, to achieve performance and fine-grained control, `plotscape` was implemented independently, in vanilla TypeScript/JavaScript, rather than with some JS-in-R adapter library. The `plotscaper` package was then developed as a high-level wrapper that would make the `plotscape` more accessible and convenient for R users.  
+
+As of writing, `plotscape` comprises of about 6,400 significant lines of code (SLOC; un-minified, primarily TypeScript but also some CSS, includes tests, etc...), whereas the `plotscaper` contains about 500 additional SLOC of R code (both counted using [`cloc`](https://github.com/AlDanial/cloc)). The unpacked size of all files is about 200 kilobytes for `plotscape` and 460 kilobytes for `plotscaper`, fairly modest size in comparison to other interactive data visualization packages (for instance, the `plotly` package takes up about 7.3 megabytes which amounts to over 15x difference).
+
+Since the two packages address fairly well-separable concerns - high-level API design vs. low-level interactive visualization utilites - I organize this section accordingly, by discussing high-level concerns alongside `plotscaper` first and low-level details alongside `plotscape` second. Cross-cutting concerns will be addressed towards ends of the respective sections. However, first, let's briefly review the core requirement of the package(s).
 
 ## Core requirements
 
-The high-level system/API needs to:
+To re-iterate, from Section \@ref(goals), the main requirements for the high-level API (`plotscaper`) were:
 
-- Be accessible to a wide range of users
-- Provide functionality for programmatically creating interactive figures and manipulating them live
+- Provide a framework for creating and manipulating interactive figures geared towards data exploration
+- Be accessible to a wide range of users with varying levels of experience
 - Integrate well with popular tools within the R ecosystem, such as the RStudio IDE and RMarkdown
 
-The low-level system needs to be able to:
+However, first, it was also necessary to design the low-level platform (`plotscape`) on top of which these goals could be realized. The primary purpose of `plotscape` was to provide utilities for:
 
-- Partition the raw data into a hierarchy of parts
-- Compute summary statistics on these parts
-- Transform these summaries while respecting the hierarchy (e.g. stacking, normalizing by parent values)
-- Map these summaries to visual encodings such as x- and y-position, width, height, or area
-- Render geometric objects, axes, etc...
-- Respond to user input and propagate changes reactively
+- Splitting the data into a hierarchy of partitions
+- Computing and transforming summary statistics (e.g. stacking, normalizing), while respecting the hierarchy
+- Mapping these summaries to visual encodings (e.g. x- and y-axis position, width, height, and area)
+- Rendering geometric objects and auxiliary graphical elements
+- Responding to user input and propagating changes throughout the entire pipeline
 
-## Application Programming Interface (`plotscaper`)
+## High-level API (`plotscaper`)
 
-As was discussed in Section \@ref(goals), a primary inspiration for `plotscaper`'s API was the popular R package `ggplot2`. In `ggplot2`, plots are created by chaining together a series of function calls, each of serves to compose an (immutable) plot schema:
+### API design
+
+As mentioned in Section \@ref(goals), a primary inspiration for `plotscaper`'s API was the popular R package `ggplot2`. In `ggplot2`, plots are created by chaining together a series of function calls, each of serves to compose an (immutable) plot schema:
 
 ```{r}
 #| fig-show: "hide"
@@ -58,12 +66,14 @@ names(plot2)
 length(plot2$layers)
 ```
 
-While a popular choice for static graphics, the `ggplot2` API has some disadvantages when it come to interactive graphics. Specifically:
+`ggplot2` is  
 
-- The package is generally designed around the idea of creating individual plots. Although multi-panel figures consisting of repeats of the same plot type can be created via facetting [`facet_wrap()` and `facet_grid()`, @wickham2016], to create multi-panel figures with a mix of different plot types, the users have to reach for external packages such as `gridExtra` [@auguie2017] or `patchwork` [@pedersen2024]. As was discussed in Section \@ref(background), in interactive graphics, customizing individual plots is less important compared with the ability to compose and view multiple plots.
-- The model of composing an immutable plot schema works well for static graphics, however, with interactive graphics, mutability can be highly beneficial as well. Specifically, the ability to directly modify a rendered figure through code is particularly useful. For instance, in live figure, setting the width of a histogram bin to a specific value can be effectively achieved via a simple function call, rather than by having to manipulate a widget or some other control mechanism.   
-- The package was developed before widespread adoption of the pipe operator in R [both `%*%` from `magrittr`, @bache2022; and the native `|>` pipe, @r2024] and so it used the overloaded `+` operator to implement essentially the same functionality. Hadley Wickham himself admitted that if he had discovered the pipe operator earlier, he would have never implemented `ggplot2` with `+` [@wickham2014].
-- Many of the package's core functions make use of non-standard evaluation [e.g. `aes()` and `facet_wrap()`, @wickham2019]. While non-standard evaluation seems to be quite popular within the R community and does make some interactive code more concise, it also makes it more harder to use these functions programmatically [@wickham2019]. For example, using the default `aes()` function, we cannot plot all pairwise combinations of variables in a data set by simply looping over their names - to do this, we need to use a specialized `aes_string()` function that takes variable names as strings. Again, in interactive graphics, it is often highly desirable to be able to manipulate the figure with code, and as such, non-standard evaluation may be less useful in this context.  
+However, while it is the case that the `ggplot2` well-loved by R users, its API has some disadvantages when it come to building interactive figures. Specifically:
+
+- Its design primarily focuses on individual plots. While facetting does make it possible to create multi-panel figures consisting of repeats of the same plot type [see `facet_wrap()` and `facet_grid()`, @wickham2016], multi-panel figures with mixed plot types require external packages such as `gridExtra` [@auguie2017] or `patchwork` [@pedersen2024]. As discussed in Section \@ref(background), in interactive graphics, multi-panel figures composed of different plot types are essential.
+- While the immutable schema model works well for static graphics, in interactive graphics, the ability to modify an already rendered figure can be extremely useful. For example, by directly mutating the figure state via a function call, we can easily set an interactive histogram binwidth to a precise value rather than having to rely on an imprecise widget such as a slider.   
+- Many of the `ggplot2`'s core functions rely on non-standard evaluation [NSE, @wickham2019]. While NSE is fairly popular within the R ecosystem and does offer syntactic conciseness, it also hinders programmatic use [@wickham2019]. For instance, in `ggplot2`, to plot all pairwise combinations of the variables in the data, we cannot simply loop over their names and supply these as arguments to the default `aes` function - instead, we have to use the specialized `aes_string` function which accepts string arguments. Again, in interactive contexts, the ability to easily manipulate figures with code is often highly desirable, and this makes NSE a hindrance.  
+- The package was developed before widespread adoption of the pipe operator [both `%*%` from `magrittr`, @bache2022; and the native R `|>` pipe, @r2024] and its use of the overloaded `+` operator is a noted design flaw [see @wickham2014].
 
 Given the reasons above, I've adopted a similar approach to `ggplot2`, giving the user the ability to create interactive figures by chaining together a series of function calls. However, unlike in `ggplot2`, the primary focus is on building figures out of multiple plots, rather than customizing individual plots. As such, the function calls typically serve to add (or remove) entire plots, although individual plots can still be modified via specialized functions which rely on selectors. Furthermore, the API supports both the creation of immutable plot schemas as well as mutable manipulation of a live figure, using largely the same set of functions. The idea is that the user can choose their preferred workflow based on their circumstances. 
 
