@@ -28,7 +28,7 @@ outs <- gsub(".html", ".png", urls)
 webshot2::webshot(urls, outs, delay = 30)
 ```
 
-# Applied example
+# Applied example {#applied-example}
 
 > Please note that the data set used in this section is fairly large (~70,000 rows) and so the figures take some time to load (please allow ~30 seconds).
 

@@ -6,7 +6,22 @@ alway_allow_html: true
 ---
 
 ```{r}
-# knitr::opts_chunk$set(eval = FALSE)
+#| echo: false
+knitr::opts_chunk$set(
+  out.width = "100%",
+  out.height = "100%"
+)
+
+include_figure <- function(path, height = 400) {
+  if (knitr::is_html_output()) knitr::include_url(path, height)
+  else knitr::include_graphics(gsub(".html", ".png", path))
+}
+
+if (knitr::is_html_output()) {
+  knitr::opts_chunk$set(
+    out.extra = 'style="border: none;"' # Get rid of iframe borders
+  )
+}
 ```
 
 # System description {#system}
@@ -16,33 +31,37 @@ This section contains a detailed description of the two software packages develo
 - `plotscape`: Written in TypeScript/JavaScript, provides "low-level" interactive visualization utilities
 - `plotscaper`: Written in R, provides a "high-level" wrapper/API for R users 
 
-Several practical consideration have lead to choosing web-technologies as the underlying platform as well as splitting the functionality across two packages. First, web-technologies were chosen is because they provide a simple portable way to do interactive apps in R, having become the de facto standard thanks to good integration, due to packages such as `htmlwidgets` [@htmlwidgets2021] and Shiny [@sievert2020]. Further, to achieve performance and fine-grained control, `plotscape` was implemented independently, in vanilla TypeScript/JavaScript, rather than with some JS-in-R adapter library. The `plotscaper` package was then developed as a high-level wrapper that would make the `plotscape` more accessible and convenient for R users.  
+Web-technologies were chosen because they provide a simple and portable way to do interactive apps in R, having become the de facto standard thanks to good integration that packages such as `htmlwidgets` [@htmlwidgets2021] and Shiny [@sievert2020]. The functionality was split across two packages out of practical concerns; rather than relying on some JS-in-R wrapper library, `plotscape` was implemented in vanilla TypeScript/JavaScript directly, to achieve optimal performance and fine-grained control. `plotscaper` was then developed to provide a user-friendly R wrapper around `plotscape`'s functionalities.  
 
-As of writing, `plotscape` comprises of about 6,400 significant lines of code (SLOC; un-minified, primarily TypeScript but also some CSS, includes tests, etc...), whereas the `plotscaper` contains about 500 additional SLOC of R code (both counted using [`cloc`](https://github.com/AlDanial/cloc)). The unpacked size of all files is about 200 kilobytes for `plotscape` and 460 kilobytes for `plotscaper`, fairly modest size in comparison to other interactive data visualization packages (for instance, the `plotly` package takes up about 7.3 megabytes which amounts to over 15x difference).
+As of the time of writing, `plotscape` comprises of about 6,400 significant lines of code (SLOC; un-minified, primarily TypeScript but also some CSS, includes tests, etc...), and `plotscaper` contains about 500 SLOC of R code (both counted using [`cloc`](https://github.com/AlDanial/cloc)). The unpacked size of all files (including minified JS) is about 200 kilobytes for `plotscape` and 460 kilobytes for `plotscaper`, which is fairly modest compared to other interactive data visualization alternatives for R^[For instance, the `plotly` package takes up about 7.3 megabytes, which amounts to over 15x difference.]. Both packages have fairly minimal dependencies.
 
-Since the two packages address fairly well-separable concerns - high-level API design vs. low-level interactive visualization utilites - I organize this section accordingly, by discussing high-level concerns alongside `plotscaper` first and low-level details alongside `plotscape` second. Cross-cutting concerns will be addressed towards ends of the respective sections. However, first, let's briefly review the core requirement of the package(s).
+Since the two packages address fairly well-separable concerns - high-level API design vs. low-level interactive visualization utilites - I organize this section accordingly. First, I discuss general, high-level API concerns alongside `plotscaper`. Second, I delve into the low-level implementation details alongside `plotscape`. There are of course cross-cutting concerns with both packages and those will be addressed towards ends of the respective sections. However, first, let's briefly review the core requirement of the package(s).
 
 ## Core requirements
 
-To re-iterate, from Section \@ref(goals), the main requirements for the high-level API (`plotscaper`) were:
+To re-iterate, from Section \@ref(goals), the core requirements for the high-level API (`plotscaper`) were:
 
 - Provide a framework for creating and manipulating interactive figures geared towards data exploration
 - Be accessible to a wide range of users with varying levels of experience
 - Integrate well with popular tools within the R ecosystem, such as the RStudio IDE and RMarkdown
 
-However, first, it was also necessary to design the low-level platform (`plotscape`) on top of which these goals could be realized. The primary purpose of `plotscape` was to provide utilities for:
+These will be the subject of Section \@ref(high-level-api). However, to realize these goals, it was also necessary to design the low-level platform (`plotscape`) which could support them. The primary purpose of `plotscape` was to provide utilities for the interactive data visualization pipeline:
 
 - Splitting the data into a hierarchy of partitions
-- Computing and transforming summary statistics (e.g. stacking, normalizing), while respecting the hierarchy
+- Computing and transforming summary statistics (e.g. stacking, normalizing)
 - Mapping these summaries to visual encodings (e.g. x- and y-axis position, width, height, and area)
 - Rendering geometric objects and auxiliary graphical elements
-- Responding to user input and propagating changes throughout the entire pipeline
+- Responding to user input and WebSockets requests, and propagating any required updates throughout the pipeline
 
-## High-level API (`plotscaper`)
+Section \@ref(low-level-implementation) will discuss the above-mentioned tasks, and the data structures and algorithms used to support them.
 
-### API design
+## High-level API (`plotscaper`) {#high-level-api}
 
-As mentioned in Section \@ref(goals), a primary inspiration for `plotscaper`'s API was the popular R package `ggplot2`. In `ggplot2`, plots are created by chaining together a series of function calls, each of serves to compose an (immutable) plot schema:
+In Section \@ref(goals), I already discussed some broad, theoretical ideas related to the package's functionality. Here, I focus more on the concrete API - what `plotscaper` code looks like, how are users supposed to understand it, and why was the package designed this way. The goal is to provide a rationale for key design decisions and choices.
+
+### API design {#api-design}
+
+As mentioned in Section \@ref(goals), a primary inspiration for `plotscaper`'s API was the popular R package `ggplot2`. In `ggplot2`, plots are created by chaining together a series of function calls, each adding or modifying a component of an immutable plot schema:
 
 ```{r}
 #| fig-show: "hide"
@@ -50,12 +69,13 @@ library(ggplot2)
 
 # In ggplot, plots are created by chaining a series of function calls
 ggplot(mtcars, aes(wt, mpg)) +
-  geom_point() +
+  geom_point() + # The overloaded `+` operator serves to compose these calls
   scale_x_continuous(limits = c(0, 10))
 ```
 
 ```{r}
-# The ggplot2 call creates an immutable object defining the plot schema
+# The call to ggplot() creates an immutable plot schema object
+
 plot1 <- ggplot(mtcars, aes(wt, mpg))
 names(plot1)
 length(plot1$layers)
@@ -66,37 +86,112 @@ names(plot2)
 length(plot2$layers)
 ```
 
-`ggplot2` is  
+`ggplot2` is well-loved by R users, as evidenced by the package's popularity. However, its API presents certain limitations when building interactive figures. Specifically:
 
-However, while it is the case that the `ggplot2` well-loved by R users, its API has some disadvantages when it come to building interactive figures. Specifically:
-
-- Its design primarily focuses on individual plots. While facetting does make it possible to create multi-panel figures consisting of repeats of the same plot type [see `facet_wrap()` and `facet_grid()`, @wickham2016], multi-panel figures with mixed plot types require external packages such as `gridExtra` [@auguie2017] or `patchwork` [@pedersen2024]. As discussed in Section \@ref(background), in interactive graphics, multi-panel figures composed of different plot types are essential.
-- While the immutable schema model works well for static graphics, in interactive graphics, the ability to modify an already rendered figure can be extremely useful. For example, by directly mutating the figure state via a function call, we can easily set an interactive histogram binwidth to a precise value rather than having to rely on an imprecise widget such as a slider.   
-- Many of the `ggplot2`'s core functions rely on non-standard evaluation [NSE, @wickham2019]. While NSE is fairly popular within the R ecosystem and does offer syntactic conciseness, it also hinders programmatic use [@wickham2019]. For instance, in `ggplot2`, to plot all pairwise combinations of the variables in the data, we cannot simply loop over their names and supply these as arguments to the default `aes` function - instead, we have to use the specialized `aes_string` function which accepts string arguments. Again, in interactive contexts, the ability to easily manipulate figures with code is often highly desirable, and this makes NSE a hindrance.  
+- Its design primarily focuses on individual plots. While facetting does make it possible to create multi-panel figures consisting of repeats of the same plot type [see `facet_wrap()` and `facet_grid()`, @wickham2016], multi-panel figures with mixed plot types require the use of external packages such as `gridExtra` [@auguie2017] or `patchwork` [@pedersen2024]. As discussed in Section \@ref(background), in interactive graphics, multi-panel figures composed of different plot types are essential, and as such, the single-plot model of `ggplot2` is not sufficient.
+- While the immutable schema model works well for static graphics, in interactive graphics, the ability to modify an already rendered figure can be extremely useful. For example, by directly mutating the figure state via a function call, we can easily set an interactive histogram binwidth to a precise value, rather than having to rely on some imprecise widgets/controls such as a slider.   
+- Many of the `ggplot2`'s core functions make heavy use of quotation and non-standard evaluation [NSE, @wickham2019]. While this style is fairly popular within the R ecosystem and does offer certain elegance/syntactic conciseness, it also complicates programmatic use [@wickham2019]. For instance, in `ggplot2`, to plot all pairwise combinations of the variables in a dataframe, we cannot simply loop over their names and supply these as arguments to the default `aes` function - instead, we have to parse the names within the dataframe's environment (this is what the specialized `aes_string` function does). Again, in interactive contexts, the ability to easily manipulate figures with code is often highly desirable, and this makes NSE a hindrance (more on this later).  
 - The package was developed before widespread adoption of the pipe operator [both `%*%` from `magrittr`, @bache2022; and the native R `|>` pipe, @r2024] and its use of the overloaded `+` operator is a noted design flaw [see @wickham2014].
 
-Given the reasons above, I've adopted a similar approach to `ggplot2`, giving the user the ability to create interactive figures by chaining together a series of function calls. However, unlike in `ggplot2`, the primary focus is on building figures out of multiple plots, rather than customizing individual plots. As such, the function calls typically serve to add (or remove) entire plots, although individual plots can still be modified via specialized functions which rely on selectors. Furthermore, the API supports both the creation of immutable plot schemas as well as mutable manipulation of a live figure, using largely the same set of functions. The idea is that the user can choose their preferred workflow based on their circumstances. 
+To address the single-plot focus limitation, a function-chaining approach similar to `ggplot2` was adopted, however, with a focus on multi-panel figure composition. Functions primarily target the entire figure, adding or removing plots. However, specialized functions with selectors can also be used to modify individual plots. To enable mutable figure modification while retaining the benefits of immutability, most functions accept both immutable schemas and references to live figures (details in the following section). Finally, non-standard evaluation was avoided altogether, and functions can be composed using any valid pipe operator (in my examples, I prefer the base R `|>` operator). 
 
-### Basic example
+### Basic example of `plotscaper` code
 
-Here's a basic example of creating an interactive figure with `plotscaper`:
+The code below shows a basic example of an interactive figure. More advanced and realistic applications are shown in Section \@ref(applied-example); this is example is only meant to provide a simple illustration of how interactive figures are built with `plotscaper`:
 
 ```{r}
+#| eval: false
 library(plotscaper)
 
 create_schema(mtcars) |>
   add_scatterplot(c("wt", "mpg")) |>
   add_barplot(c("cyl")) |>
+  set_scale("plot1", "x", min = 0) |>
   render()
 ```
 
-We first initialize a plot schema with the `create_schema()` function that we pass data to (more on that later, in Section \@ref(scene-and-schema)). Next, we chain together a series of function calls of the form `add_*()`, adding individual plots. Variable names are provided via character string vectors. Importantly, these string vectors do not represent direct aesthetic mapping in the same way how the `aes()` function in `ggplot2` does: in the `plotscaper` model, data variables are not directly mapped to aesthetics, but can undergo transformations and interactive remapping. Finally, the figure is rendered with the `render()` call.      
+```{r plotscaper-example1}
+#| echo: false
+#| fig-cap: "An example of a simple interactive figure in `plotscaper`."
+include_figure("./figures/plotscaper_example1.html")
+```
+
+We first initialize the figure schema by calling `create_schema()` with the input data. Next, we chain a series of `add_*()` calls, adding individual plots. Further, we can also manipulate attributes of individual plots, by using, for instance, the `set_scale()` function to set the lower x-axis limit of the scatterplot to zero. All of these functions append instructions to the schema (more on that later, in Section \@ref(scene-and-schema)). Finally, the schema is instantiated into a figure via the call to `render()`. There are several features of this process that bear explaining.
+
+#### Figure vs. plot and selectors
+
+First, note that, as discussed in Section \@ref(api-design), all functions take as their first argument the entire figure and most also manipulate it, unlike in `ggplot2` where the first argument is typically the schema of a single plot (unless when faceting is used). Thus the fundamental object being manipulated is the entire figure, rather than a single plot. Consequently, this design also necessitates the use of selectors for targeting individual plots, as seen in the `set_scale()` call above. I decided to use a simple string selector for this purpose. While alternative selection strategies, such as overloading the extraction (`$`) operator or using a separate selector function were considered, these all presented their own sets of trade-offs. In the end, I found the string selector to be the simplest and most straightforward solution. However, this design choice is open to being revisited in future major releases of the package.
+
+#### Variable names
+
+Second, variable names are specified by simple string vectors. Formally, this means that the function arguments are *not* quoted (which is a bit unfortunate terminology since they *are* surrounded by quotation marks), i.e. in `plotscaper` we write `add_scatterplot(c("x", "y", "z"))` instead of `add_scatterplot(c(x, y, z))`. While this style may be less familiar to some R users, and it does mean that, generally, specifying an encoding does require two extra key strokes, I believe the simplicity of using `plotscaper` programmatically makes it a worthwhile trade-off. For instance, in `plotscaper`, we can easily create an interactive scatterplot matrix (SPLOM) like so:
+
+```{r}
+#| eval: false
+column_names <- names(mtcars)[c(1, 3, 4)]
+schema <- create_schema(mtcars)
+
+for (i in column_names) {
+  for (j in column_names) {
+    if (i == j) schema <- add_histogram(schema, c(i))
+    else schema <- add_scatterplot(schema, c(i, j))
+  }
+}
+
+schema |> render()
+```
+
+```{r plotscaper-example2}
+#| echo: false
+#| fig-cap: "An example of a programmatically-created figure (a scatterplot matrix)."
+include_figure("./figures/plotscaper-example2.html", 800)
+```
+
+While Figure \@ref(plotscaper-example2) could also be of course replicated with quotation/NSE, doing so may require knowledge of [advanced R](https://adv-r.hadley.nz/quasiquotation.html#quasiquotation). While it is the case that many R users are used to the style of calling functions with "naked" variable names, a lot fewer likely posses the ability to write and manipulate these functions effectively. Even more fundamentally, R's NSE is a form of meta-programming [@wickham2019], which, despite its power, is often discouraged due to its potential impact on performance, safety, and readability [see e.g. @phung2009; the discussion at @handmadehero2025]. To encourage programmatic use of `plotscaper`, I chose simple string vectors over quoted arguments, as the inherent trade-off just did not seem worth it.
+
+#### Variables and encodings
+
+Third, note that, unlike in `ggplot2`, variable names are *not* meant to map directly to aesthetics such as x- or y-axis position or size. The reason for this is that, unlike `ggplot2`, `plotscaper` does not try to establish a direct correspondence between variables in the original data and the visual encodings/aesthetics. This is due to the fact that, in many common plot types, aesthetics do not represent variables found in the original data, but instead ones which have been derived in some way. Take, for instance, the following `ggplot()` call:
+
+```{r}
+ggplot(mtcars, aes(x = mpg)) +
+  geom_histogram()
+```
+
+Overtly, it may seem as if the `aes` function simply maps the `mpg` variable to the x-axis. However, this is not correct. Specifically, what is actually mapped to the x-axis are the left and right edges of the histogram bins. These represent derived variables not found in the original data. Likewise, the y-axis variable represents counts within bins which are also a derived variable, and its mapping is created only implicitly. It is easier to see this lack of a direct correspondence when we set custom histogram breaks:     
+
+```{r}
+ggplot(mtcars) +
+  geom_histogram(aes(x = mpg), breaks = c(10, 15, 35))
+```
+
+Now it is easier to see that what gets mapped to the x-axis is *not* the `mpg` variable, but instead a variable entirely external to the data: the histogram breaks. The `mpg` variable gets mapped to the plot only implicitly, by providing support for the binning. Thus, in `ggplot2`, the semantics of `aes(x = mpg, ...)` are completely different with `geom_histogram()` as compared to, for example, `geom_scatter()`.  
+
+This may seem like a minor nitpick, however, it is in fact a fundamental gap in the design. As discussed in Section \@ref(problems), `ggplot2` is based on the Grammar of Graphics model [@wilkinson2012], which centers around the idea of composing plots out of independent, modular components. The fact that the semantics of `aes()` are tied to the `geom` (and `stat`) means that the apparent modularity of `ggplot2` components is a mere illusion.
+
+So what to do? To be perfectly frank, I do not have a perfect solution. In Section \@ref(problems), I demonstrated that, in the general case involving transformation like stacking, `stats` and `geoms` *cannot* be truly independent. Ignoring that, the problem with specifying the aesthetics in a histogram is that, in some sense, we are putting the cart before the horse: ultimately, we want to plot derived variables, so we should specify these in the call to `aes()`, however, we do not know what these variables will be before we add `geom_histogram()`. So the schema should really be organized differently. As per Section \@ref(problems), we could mirror the data visualization pipeline by doing something like:    
+
+```{r}
+#| eval: false
+data |> partition(...) |> aggregate(...) |> encode(...) |> render(...)
+```
+
+In fact, in broad strokes, this is how the data visualization pipeline is implemented in `plotscape` (see Section \@ref(low-level-implementation)). 
+
+However, this model does have one significant downside: it does not lend itself to a simple declarative schema like that of `ggplot2`. I have tried to coming up with such a schema, however, my efforts were largely unsuccessful. As a result, I opted in for the more traditional, nominal style of specifying plots in `plotscaper`, using the various `add_*` functions. While this style may seem less flexible, I hope I have made the case here that the underlying limitations are *not* an exclusive to `plotscape`/`plotscaper`, but extend to `ggplot2` and all other GoG-based data visualization systems. I have simply chosen to leave these limitations explicit, and again, if a solution is found, it can be integrated into future releases of the package.
+
+A final point to mention is that, it could be argued that the benefit of the `ggplot2` model where partitioning and aggregation logic is implicitly tied to the `geom`s is that it makes it easier to mix different kinds of   
 
 ### The scene and the schema {#scene-and-schema}
 
-An key part of the `plotscaper` API is the distinction between the figure schema and the live scene. In short, the schema is an immutable blueprint defining the figure, while scene scene is its live, rendered version. Both can be manipulated using largely the same set of functions. However, whereas manipulatingthe schema simply appends the corresponding function calls to an immutable ledger, manipulating the scene applies the changes directly, in a mutable way. Consequently, the scene can only be manipulated inside an interactive R session [such as, for example, inside the RStudio IDE, @rstudio2024], whereas a figure schema can also be rendered statically, as part of an RMarkdown document, for example.    
+An key part of the `plotscaper` API is the distinction between the figure schema and scene. The schema is an immutable blueprint or ledger, while scene scene is the live, rendered version of the figure. Both can be manipulated using largely the same set of functions. However, while schema manipulation simply appends to the ledger, scene manipulation leads to direct, mutable state-change. Consequently, scene can be only manipulated inside interactive R sessions  (e.g., RStudio IDE [@rstudio2024]), while schemas can also be rendered statically (e.g., in RMarkdown).
 
 Here is an example of the figure schema, using the same code as above:
+
+```{r}
+#| echo: false
+library(plotscaper)
+```
 
 ```{r}
 schema <- create_schema(mtcars) |>
@@ -107,11 +202,11 @@ schema
 str(schema$queue)
 ```
 
-As you can see, the schema is essentially just a list of messages (which are in fact stored as an R `list()` that gets converted to JSON when the figure gets rendered). The `render()` call parses these messages sequentially, applying the changes that create the figure. The main advantage of the schema is that it provides an immutable record, allowing the figure to be recreated in its exact state. Furthermore, the schema can be manipulated programmatically, by e.g. pruning or modifying some of the messages, and, since it is essentially just JSON, it can be easily transported.
+The schema is essentially just a `list()` of messages. Later, during the call to `render()`, these messages are encoded as JSON and sent to the client where they are parsed sequentially to build up the figure. Thus, the schema still provides the benefits of an immutable record, allowing the figure state to be recreated. Further, the schema may be manipulated programmatically, e.g. by pruning or modifying some of the messages. Finally, since the schema is just a JSON, it can be easily transported.
 
-Importantly, the schema does not actually encode the the figure's state directly; instead, it records the sequence of steps that generate that state. This deliberate design choice avoids duplicating the figure's state between the R client (e.g., the RStudio session) and the JavaScript "server" (the live figure). By representing the schema as a simple immutable list of messages, all figure state resides within JavaScript, eliminating the need for reconciliation or synchronization with the R side.
+Notably, the schema records state-generating steps, not the state itself. This design avoids state duplication between the R session/server and the client-side JavaScript object, ensuring that all of the figure state resides on the client. This eliminates the need for synchronization and ensures that the client-side state is the one source of truth.
 
-The scene is implicitly created via the call to `render()`. Under the hood, the call constructs a `htmlwidgets` widget [@htmlwidgets2021] which utilizes custom `plotscape` code to set up and manage the figure. When inside a live interactive R session, the render call also automatically launches an `httpuv` server [@cheng2024] for live communication with the figure. To enable this live communication, the user must first assign the scene object to a variable. Then they can call functions to modify the figure the same way as they would with a schema, however, in this case, the figure is updated live, in a mutable fashion. 
+The `render()` call creates a live figure - a *scene* - by constructing an `htmlwidgets` widget [@htmlwidgets2021] that packages up `plotscape` code, HTML, CSS, and all of the messages provided by the schema. When inside an interactive R session, it also launches an `httpuv` server [@cheng2024] for live communication with the figure. Users can modify the figure by assigning the scene object to a variable and calling functions with this variable as they would with a schema, enabling mutable, live updates.
 
 ```{r}
 #| eval: false
@@ -128,61 +223,66 @@ scene |> add_histogram(c("disp"))
 # Selects cases by rows
 scene |> select_cases(1:10)
 
-# Query selected cases (works in interactive mode only)
+# Query selected cases
 scene |> selected_cases() # 1 2 3 4 5 6 7 8 9 10
 ```
 
-As noted earlier, most functions work on both the schema and the scene. The one exception are state-querying functions, which include `selected_cases()`, `assigned_cases()`, and `get_scale()`. These functions retrieve the figure's state and return it as output in R (without modifying the figure in any way). For example, `selected_cases()` returns the indices of the currently selected cases as a numeric vector. These functions are designed to interactively query the figure's state, and as such it does not make sense to use them with the stateless schema.
+As noted earlier, most `plotscaper` functions are polymorphic in that they work on both the schema and the scene: when called with schema as the first argument, they append to the schema, whereas when called with scene as the first argument (and while inside an interactive R session), they send a WebSockets request through the `httpuv` server to live-update the figure (and the figure may respond with another WebSockets message back). The one exception to the polymorphism are state-querying functions (such as `selected_cases()`, `assigned_cases()`, and `get_scale()`) which send a request to retrieve the rendered figure's state and as such can operate on the scene only.
+
+
+The one exception are state-querying functions, which include . These functions retrieve the figure's state and return it as output in R (without modifying the figure in any way). For example, `selected_cases()` returns the indices of the currently selected cases as a numeric vector. These functions are designed to interactively query the figure's state, and as such it does not make sense to use them with the stateless schema.
 
 ### HTML document embedding
 
 Since `plotscaper` figures are just `htmlwidgets` widgets, they can be statically embedded in HTML documents such as those produced by RMarkdown [@rmarkdown2024] or Quarto [@allaire2024]. More specifically, when a `plotscaper` figure is rendered, `htmlwidgets` [@htmlwidgets2021] is used to construct a widget skeleton (consisting of HTML, CSS, and JavaScript) and injects the JavaScript corresponding to `plotscape`. The resulting widget can then be statically embedded in any kind of HTML document. This is how the `plotscaper` figures are rendered in the present thesis. As mentioned above, this means that the figure cannot be interacted live through code, however, within-figure interactive features such as linked selection and querying still work regardless (since these happen entirely on the JavaScript side). 
 
-## Interactive figure platform (`plotscape`)
+## Low-level implementation (`plotscape`) {#low-level-implementation}
 
 This section describes the actual platform used to produce and manipulate interactive figures, as implemented in `plotscape`. It contains a detailed listing of the system's components, along with descriptions of what each component does.
 
+### System components
+
+This section details the code components of `plotscape`. To explain key concepts, this section uses TypeScript pseudo-code examples (in fact, the TypeScript code is valid code and some will be evaluated in the examples). The reason why TypeScript was chosen over R is that many of the examples are clearer with type signatures.
+
+Many of the examples include a type named after the component and an associated namespace of the same name. TypeScript allows type and value name overloading, such that a type (e.g. `type Foo = Bar[]`) and a runtime variable (`const Foo = "bar"`) with the same name can exist within the same scope. Namespaces are runtime variables so they do not clash with types names. 
+
+This type-namespace style might seem strange, and in some ways it might seem like object-oriented programming (OOP) with extra steps, i.e. where someone might write `const foo = new Foo(); const bar = foo.bar()`, I write `const foo = Foo.create(); const bar = Foo.bar(foo)`, however, I did choose this style for a reason. First, thanks to TypeScript's structural typing, the functions exported from a namespace can be used with *any* variables which match their signature, not just class instances. Second, this approach also promotes functions that work with plain data, which simplifies reasoning: data and code can be considered separately, and one can exist perfectly fine in the absence of the other^[This also makes some examples easier to read, since all of the variables used in a function's body are declared in the signature; one does not have to scroll up to look up class properties which are used in the method's body.]. Finally, this approach can also be more performant than traditional OOP: class instances have to store pointers to virtual method tables to support runtime polymorphism, however, this comes at the cost of increased size and larger potential for cache misses. Thus, plain data structures are preferable when polymorphism is not required, and even when it is, alternative runtime dispatch methods (e.g. even a simple `switch` statement) may be a fine option.  
+
 ### Indexable {#Indexable}
 
-As discussed in Section \@ref(row-based-or-column-based), when it comes to representing data, the column-based model offer several advantages over the row-based model. In this model, data is stored in a dictionary of contiguous arrays (as in, for example, a CSV file). Thus, I chose to represent the fundamental unit of data as a column, a fixed-length array of values.
+One of the first considerations when implementing a data visualization system is how to represent data. Clearly, we want the ability to handle fixed-length arrays of values, however, we may also want to be able to work with constants and derived values as well. For instance, in a typical barplot, the y-axis base is a constant (typically zero). Rather than appending an array of zeros to the data, using a constant (`0`) or a thunk (`() => 0`) is simpler and more memory-efficient. Similarly, arrays of repeated values can be optimized by using two arrays: a short array of unique values or "labels," and a long array of indices (i.e. what base R's `factor` class does). Thus, representing data effectively calls for a generalization of a data "column" which can encompass data types beyond fixed-length arrays.
 
-However, at times, it may be useful to have additional flexibility. Specifically, it may be useful to to extend our definition of a "column" to non-array-like things, such as derived values and values repeated across all rows. This is where `Indexable<T>` comes in. 
-
-An `Indexable<T>` represents a single "column" of data, and is just a union of three basic types:
+The generic type `Indexable<T>` represents such a generalization of a data column. It is simply a union of three basic types: 
 
 ```{ts}
 #| eval: false 
 Indexable<T> = T | T[] | ((index: number) => T)
 ```
 
-In plain words, an `Indexable<T>` is one of three things: 
+In plain words, an `Indexable<T>` can be one of three things: 
 
-- A variable of type `T`
-- An array of `T`s 
-- A callback that takes an index and returns a `T`. 
+- A simple (scalar) value `T`
+- A fixed-length array of `T`'s
+- A function which takes an index as an argument and returns a `T`. 
 
-To extract a value from `Indexable<T>`, we rely on a generalized form of indexed access. The way how this indexed access works depends on the type of the indexable. First, if the indexable is an array, we subset it using the usual square bracket notation. Second, if the indexable is a non-array-like variable (but not a function), we always return it, regardless of the index (we can think of it as the value as being repeated across all rows). Third and finally, if the indexable is a callback, then we call it with the index and take the returned value. A uniform interface for this generalization of indexed access is provided by [`Getter`](#Getter)s.
-
-Altogether, this is similar to Leland Wilkinson's idea of a variable function [-@wilkinson2012].
-
-The main advantage of `Indexable<T>` is that, while the raw data will typically come in the form of arrays, there are many places further down the data visualization pipeline where constants and callbacks are useful. For example, in a typical barplot, the base of the y-axis is set to a constant value, typically zero. While we could hypothetically append an array filled with zeros to the rendering data, it is more convenient and memory efficient to instead use a constant (`0`), or a thunk (`() => 0`). As another example, often, if we have an array of several repeated values, it may be convenient to instead represent it as two arrays: a (short) underlying array of unique values or labels and an array of indices (similar to base R's `factor` class). When we need the actual values, we can use a callback to subset the array of labels.
+This is somewhat similar to Leland Wilkinson's idea of data functions [see @wilkinson2012, pp. 42], although somewhat more constrained. The key functionality which is abstracted over is indexed access to values. A uniform interface for this functionality is provided by provided by [`Getter`](#Getter)s.
 
 ### Getter {#Getter}
 
-A `Getter<T>` is simply a function which takes an index and returns a value of type `T`. To construct a `Getter<T>`, we take an `Indexable<T>` and dispatch on its underlying type. For illustration, here is a (slightly) simplified implementation: 
+A `Getter<T>` is used to provide a uniform interface to accessing values from an `Indexable<T>`. It is simply a function which takes an index and returns a value of type `T`. To construct a `Getter<T>`, we take an `Indexable<T>` and dispatch on the underlying subtype. For illustration purposes, here is a simplified implementation: 
 
 ```{ts}
 // Getter.ts
 export type Getter<T> = (index: number) => T;
 
 export namespace Getter {
-  // Constructor
   export function of<T>(x: Indexable<T>): Getter<T> {
     if (typeof x === `function`) return x;
     else if (Array.isArray(x)) return (index: number) => x[index];
-    else return () => x
+    else return () => x;
   }
 }
+
 ```
 
 we can then create and use `Getter`s like so:
@@ -201,7 +301,7 @@ console.log(getter3(0));
 
 Note that, by definition, every `Getter<T>` is also automatically an `Indexable<T>` (since it is a callback `(index: number) => T`). This means that we can create new getters out of other getters.
 
-The `Getter` namespace also includes several other utility functions. One example is `Getter.constant` which takes in a value `T` and returns a thunk which always returns `T` (i.e. `() => T`). This is useful, for example, when `T` is an array and we always want to return the whole array (not just a single element):
+There are also several utility functions for working with and constructing `Getter`s. The first is `Getter.constant` which takes in a value `T` and returns a thunk which always returns `T` (i.e. `() => T`). This is useful, for example, when `T` is an array and we always want to return the whole array (not just a single element):
 
 ```{ts}
 #| echo: false
@@ -237,7 +337,7 @@ console.log(getter4(0))
 console.log(getter4(1))
 ```
 
-Another utility function is `Getter.proxy`, which takes a `Getter` and an array of indices, and returns a new `Getter` which proxies the access to the original values through the array of indices:
+Another utility function is `Getter.proxy`, which takes a `Getter` and an array of indices, and returns a new `Getter` which proxies the access to the original values through the indices:
 
 ```{ts}
 import { Getter } from "./Getter"
@@ -246,19 +346,19 @@ const proxyGetter = Getter.proxy([`A`, `B`, `C`], [2, 1, 1, 0, 0, 0]);
 console.log([0, 1, 2, 3, 4, 5].map(proxyGetter))
 ```
 
-This function becomes particularly useful when implementing `Factor`s.
+This function becomes particularly useful when implementing other data structures such as `Factor`s.
 
 ### Dataframe
 
-Another fundamental data structure is a `Dataframe`. A `Dataframe` is just a record of [`Indexable`](#Indexable) values:
+In many data analytic workflows, a fundamental data structure is a `Dataframe`. Typically, a `Dataframe` rerpresents a two-dimensional table of columns. In `plotscape`, it is a bit more flexible in that it is just a record of [`Indexable`](#Indexable)s:
 
 ```{ts}
 interface Dataframe {
-  [key: string | symbol]: Indexable
+  [key: string]: Indexable
 }
 ```
 
-In this way, a `Dataframe` is essentially just a [SoA](#SoA) with a bit of extra flexibility. Specifically, while in typical SoA data structures, all properties are usually arrays, in `Dataframe` they are instances of the `Indexable` type, so they may also be constants or functions. For example, the following is a valid instance of a `Dataframe`:
+For example, the following is a valid instance of a `Dataframe`:
 
 ```{ts}
 const data: Dataframe = {

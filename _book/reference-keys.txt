@@ -47,6 +47,9 @@ def:linear-mapping
 eq:margins
 eq:scale-composition
 def:scale
+fig:plotscaper-example1
+fig:plotscaper-example2
+fig:barspine
 def:scale-inverse
 tab:longterm-care-schema
 fig:example-cases-days
@@ -57,7 +60,7 @@ fig:example-cases-diagnosis
 tab:cases-by-year
 tab:days-by-year
 fig:example-cases-diagnosis-max
-fig:unnamed-chunk-133
+fig:unnamed-chunk-138
 def:unlabeled-div-3
 fig:function-subset
 def:unlabeled-div-4
@@ -123,7 +126,7 @@ problems
 the-structure-of-this-chapter-data-visualization-pipeline
 partitioning
 show-all-data
-comparison-and-disjointness
+comparison-disjointness
 the-primarcy-of-disjointness
 disjoint-visualizations-real-world-example
 disjointness-interaction
@@ -201,11 +204,16 @@ performance
 rendering-engine
 system
 core-requirements
-application-programming-interface-plotscaper
-basic-example
+high-level-api
+api-design
+basic-example-of-plotscaper-code
+figure-vs.-plot-and-selectors
+variable-names
+variables-and-encodings
 scene-and-schema
 html-document-embedding
-interactive-figure-platform-plotscape
+low-level-implementation
+system-components
 Indexable
 Getter
 dataframe
@@ -246,7 +254,7 @@ prevalence-of-diagnoses-over-time
 characteristics-of-patient-cohorts-over-time
 summary
 discussion
-background-current-state-of-interactive-data-visualization
+limitations-of-the-theoretical-model
 glossary
 API
 SoA
@@ -280,10 +288,3 @@ isomorphism
 algebraic-as-categories
 functors
 references
-fig:unnamed-chunk-20
-fig:unnamed-chunk-2
-fig:unnamed-chunk-3
-limitations-of-the-theoretical-model
-comparison-disjointness
-high-level-api-plotscaper
-api-design
