@@ -60,7 +60,7 @@ fig:example-cases-diagnosis
 tab:cases-by-year
 tab:days-by-year
 fig:example-cases-diagnosis-max
-fig:unnamed-chunk-138
+fig:unnamed-chunk-140
 def:unlabeled-div-3
 fig:function-subset
 def:unlabeled-div-4
@@ -255,6 +255,7 @@ characteristics-of-patient-cohorts-over-time
 summary
 discussion
 limitations-of-the-theoretical-model
+limitations-of-the-software-packages
 glossary
 API
 SoA
@@ -288,3 +289,7 @@ isomorphism
 algebraic-as-categories
 functors
 references
+reactivity-1
+bijection-and-constant-factors
+discrete-factors
+aggregation-reducers-reduce-and-reduced

@@ -190,7 +190,7 @@ However, this "one-row-one-object" model sidesteps the issue of aggregation (see
 
 However, if we instead model plots as bijection between *parts of data* and the geometric objects, rather than between individual *data points* and geometric objects, aggregation ceases to be a problem. Even after we aggregate a multiple-row subset of the data into a single row summary, this bijection is preserved. Thus, aggregation can be considered a part of the bijection. For instance, if we split our data into ten tables and aggregate each table, we are still left with ten tables of one row each that we can map bijectively to geometric objects.
 
-#### Products of partitions
+#### Products of partitions {#products-of-partitions}
 
 Many types of plots involve data that has partitioned or split across multiple dimensions. This is especially true in interactive data visualization, where features such as linking automatically induce another level of partitioning [@wilhelm2008]. This necessitates a general mechanism for combining partitions into products.
 
@@ -758,7 +758,7 @@ Further, even the set union $\cup$ operation itself forms a monoid, with the emp
 
 As a final note, a key consequence of the associativity of monoids is linerizability. Specifically, an arbitrary expression built with an associative binary function $f$, e.g. $f(f(x, y), f(z, f(u, w)))$ can always be rewritten as a linear sequence of steps (e.g. $f(x, f(y, f(z, f(u, w))))$). This effectively flattens the expression tree into a linear chain [@adam2017].
 
-#### Programming with monoids
+#### Programming with monoids {#programming-with-monoids}
 
 Monoids translate well to code and are in fact frequently used in programming, particularly functional programming [see e.g. @milewski2018; @stepanov2009; @stepanov2014]. Further, we can even test whether an arbitrary summary function conforms to our specific functorial properties. For instance, in R, if we replace the set union operation with vector/array concatenation (the `c()` function), and provided that we have some three representative data vectors `x`, `y`, and `z`, we can test associativity as follows:
 
