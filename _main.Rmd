@@ -127,7 +127,7 @@ Placeholder
 #### Aggregation: A functor from the preorder of data subsets to the preorder of summary statistics {#aggregation-functor}
 #### Functorial summaries and set union
 #### Whole equal to the sum of its parts: Monoids
-#### Programming with monoids
+#### Programming with monoids {#programming-with-monoids}
 #### Groups and inverses
 #### Other properties: monotonicity and commutativity
 ##### Monotonicity
@@ -385,9 +385,9 @@ A final point to mention is that, it could be argued that the benefit of the `gg
 
 ### The scene and the schema {#scene-and-schema}
 
-An key part of the `plotscaper` API is the distinction between the figure schema and scene. The schema is an immutable blueprint or ledger, while scene scene is the live, rendered version of the figure. Both can be manipulated using largely the same set of functions. However, while schema manipulation simply appends to the ledger, scene manipulation leads to direct, mutable state-change. Consequently, scene can be only manipulated inside interactive R sessions  (e.g., RStudio IDE [@rstudio2024]), while schemas can also be rendered statically (e.g., in RMarkdown).
+A key part of the `plotscaper` API is the distinction between two classes of objects representing figures: schemas and scenes. Put simply, a schema is an immutable ledger or blueprint, while a scene is a live, rendered version of the figure. Both can be manipulated using (largely) the same set of functions/methods, however, what these functions actually do changes based on their target. 
 
-Here is an example of the figure schema, using the same code as above:
+As shown before, schema can be created with the `create_schema()` function: 
 
 ```{r}
 #| echo: false
@@ -403,29 +403,40 @@ schema
 str(schema$queue)
 ```
 
-The schema is essentially just a `list()` of messages. Later, during the call to `render()`, these messages are encoded as JSON and sent to the client where they are parsed sequentially to build up the figure. Thus, the schema still provides the benefits of an immutable record, allowing the figure state to be recreated. Further, the schema may be manipulated programmatically, e.g. by pruning or modifying some of the messages. Finally, since the schema is just a JSON, it can be easily transported.
+As you can see, the object created with `create_schema()` is essentially just a `list()` of messages. Modifying the schema by calling functions such as `add_scatterplot()` or `set_scale()` simply appends a new message to the list, similar to how objects of class `ggplot` are modified by the corresponding functions and the `+` operator in `ggplot2` [@wickham2016]. This design makes the schema easy to transport (e.g. as JSON) and modify programmatically. Finally, rendering the schema into a figure requires an explicit call to `render()`. Note that this approach is different from the popular style of implicit rendering (used in e.g. `ggplot2`), where an object is rendered via an overloaded `print()` method; however, there is a good reason for this which will be discussed later. 
 
-Notably, the schema records state-generating steps, not the state itself. This design avoids state duplication between the R session/server and the client-side JavaScript object, ensuring that all of the figure state resides on the client. This eliminates the need for synchronization and ensures that the client-side state is the one source of truth.
+The call to `render()` turns the schema gets turned into a live, interactive figure by constructing an `htmlwidgets` widget [@htmlwidgets2021]. This bundles up the underlying data and `plotscape` code (JavaScript, HTML, CSS) into a standalone widget which may get rendered inside, for example, RStudio viewer or RMarkdown document. All of the schema messages also get forwarded to the widget and applied sequentially, creating the figure.
 
-The `render()` call creates a live figure - a *scene* - by constructing an `htmlwidgets` widget [@htmlwidgets2021] that packages up `plotscape` code, HTML, CSS, and all of the messages provided by the schema. When inside an interactive R session, it also launches an `httpuv` server [@cheng2024] for live communication with the figure. Users can modify the figure by assigning the scene object to a variable and calling functions with this variable as they would with a schema, enabling mutable, live updates.
+Note that, under this model, the schema merely records state-generating steps, not the state itself, and all of the actual state lives on the scene. This design avoids state duplication between the R session (server) and web-browser-based figure (client), eliminating the need for synchronization. While this client-heavy approach deviates from typical client-server architectures, where state predominantly resides on the server, it is essential for achieving responsive interactive visualizations. By keeping most of the state and computation on the client and avoiding round-trips to the server, we can achieve fast updates in response to user interaction [such as mouse movement during linked selection\; this is also why linked selection has poor performance in server-heavy frameworks like Shiny, @shiny2024]. Conversely, as will be discussed below, while the R session (server) may occasionally send and receive messages, these are by comparison much less latency-sensitive, making a "thin" server perfectly viable.
+
+### Client-server communication
+
+While inside an interactive R session (e.g., in RStudio IDE [@rstudio2024]), creating a `plotscaper` figure via a call to `render()` also automatically launches an `httpuv` [@cheng2024] server. This server allows for live, bidirectional communication between the R session (server) and the figure (client). By assigning the output of `render()` to a variable, users receive a handle to this server, and can call functions which can query the figure state and cause mutable, live updates. For instance:
 
 ```{r}
 #| eval: false
-# NOT EVALUATED - works only inside interactive R sessions,
-# not RMarkdown/bookdown documents
+# The code in this chunk is NOT EVALUATED - 
+# it only works only inside interactive R sessions,
+# not inside static RMarkdown/bookdown documents.
+
 scene <- create_schema(mtcars) |>
   add_scatterplot(c("wt", "mpg")) |>
   add_barplot(c("cyl")) |>
   render()
 
-# Adds a histogram, mutating the current figure
+# Adds a histogram, modifying the figure in place
 scene |> add_histogram(c("disp"))
 
-# Selects cases by rows
+# Sets the scatterplot's lower x-axis limit to 0, also in place 
+scene |> set_scale("plot1", "x", min = 0)
+
+# Selects cases corresponding to rows 1 to 10
 scene |> select_cases(1:10)
 
-# Query selected cases
-scene |> selected_cases() # 1 2 3 4 5 6 7 8 9 10
+# Query selected cases - returns their indices
+# as a numeric vector which can be used in other
+# functions or printed to the console
+scene |> selected_cases() # [1] 1 2 3 4 5 6 7 8 9 10
 ```
 
 As noted earlier, most `plotscaper` functions are polymorphic in that they work on both the schema and the scene: when called with schema as the first argument, they append to the schema, whereas when called with scene as the first argument (and while inside an interactive R session), they send a WebSockets request through the `httpuv` server to live-update the figure (and the figure may respond with another WebSockets message back). The one exception to the polymorphism are state-querying functions (such as `selected_cases()`, `assigned_cases()`, and `get_scale()`) which send a request to retrieve the rendered figure's state and as such can operate on the scene only.
@@ -680,7 +691,7 @@ While all `Factor`s share the same fundamental structure - a data partition with
 
 ##### Bijection and constant factors
 
-`Factor.bijection` and `Factor.constant` are two fairly trival factor constructor. `Factor.bijection` creates the finest possible data partition by assigning every case to its own part, whereas `Factor.constant` does the opposite and assigns all cases to a single part. The names of the reflect the mathematical index mapping functions: the bijective function $f(d_i) = i$ for `Factor.bijection` and the constant function $f(d_i) = 0$ for `Factor.constant`. Consequently, the cardinality of `Factor.bijection` is equal to the length of the data, while the cardinality of `Factor.constant` is always one. Both can be assigned arbitrary metadata, which has to have length equal to the cardinality.
+`Factor.bijection` and `Factor.constant` are two fairly trival factor constructor. `Factor.bijection` creates the finest possible data partition by assigning every case to its own part, whereas `Factor.constant` does the opposite and assigns all cases to a single part. The names of the reflect the mathematical index mapping functions: the bijective function $f(i) = i$ for `Factor.bijection` and the constant function $f(i) = 0$ for `Factor.constant`. Consequently, the cardinality of `Factor.bijection` is equal to the length of the data, while the cardinality of `Factor.constant` is always one. Both can be assigned arbitrary metadata, which must have length equal to the cardinality.
 
 Both functions have essentially the same signature:
 
@@ -768,17 +779,18 @@ As with binning, there is also the issue of products creating gaps in indices. A
 
 Finally, `Factor.product` is the only factor constructor which actually assigns to the `parent` property of the output `Factor`. Specifically, the first factor always gets assigned as the parent of the product, creating a hierarchical structure. Technically, there are situations where a product of two factors is simply a "flat" product and not a hierarchy. This is the case, for example, when taking the product of two binned variables in a 2D histogram - the two factors are conceptually equal. However, in practice, this distinction rarely matters. Any computation involving a flat product can simply ignore the `parent` property, and the data is for all other intents and purposes equivalent. This similarity of flat and hierarchical products was also noted by Wilkinson, who used the terminology of cross and nest operators [@wilkinson2012, pp. 61]. 
 
-#### Aggregation: Reducers, reduce, and Reduced
+#### Reducers
 
-As discussed in Section \@ref(aggregation), a key challenge when computing statistical summaries in interactive data visualization systems is doing so in a way that preserves the inherent hierarchy in the data. For instance, when stacking bar segments in a barplot that has been partitioned via linked selection, we want the stacking operation to respect the inherent hierarchical relationships between the segments and the bars. Further, as also demonstrated in Section \@ref(aggregation), this setup suggests particular algebraic structures: groups and monoids
+As discussed in Section \@ref(aggregation), a key challenge when computing statistical summaries in interactive data visualization systems is doing so in a way that preserves the inherent hierarchy in the data. For instance, when stacking bar segments in a barplot that has been partitioned via linked selection, we want the stacking operation to respect the inherent hierarchical relationships between the segments and the bars. Further, as also demonstrated in Section \@ref(aggregation), this setup suggests particular algebraic structures: groups and monoids.
 
 `Reducer`s and associated data structures and procedures provide a way of addressing this challenge. 
 
 ##### Reducers
 
-A `Reducer<T, U>` is simply a data container that stores functionality and metadata associated with a monoid transforming type `T` into type `U`. It has the following interface:
+A `Reducer<T>` is simply a data container that stores functionality and metadata associated with a monoid on type `T`. It has the following interface:
 
 ```{ts}
+// Reducer.ts
 interface Reducer<T> {
   name: string;
   initialfn: () => T;
@@ -786,46 +798,134 @@ interface Reducer<T> {
 }
 ```
 
-That is, a `Reducer<T, U>` has a name, a zero-argument function (or a "thunk") producing a value of type `U`, and a binary function which takes two values of type `T` and produces another `T`. For example, the following are examples of valid `Reducer`s:
+That is, a `Reducer<T>` has a name, a zero-argument function (or a "thunk") producing a value of type `T`, and a binary function which takes two values of type `T` and produces another `T`. The `Reducer` namespace exports these `Reducer`s. Here are a couple of examples:
 
 ```{ts}
-const sum: Reducer<number> = {
-  name: `sum`,
-  initialfn: () => 0,
-  reducefn: (x, y) => x + y,
+#| eval: false
+export namespace Reducer {
+  export const sum: Reducer<number> = {
+    name: `sum`,
+    initialfn: () => 0,
+    reducefn: (x, y) => x + y,
+  };
+
+  export const product: Reducer<number> = {
+    name: `product`,
+    initialfn: () => 1,
+    reducefn: (x, y) => x * y,
+  };
+
+  export const max: Reducer<number> = {
+    name: `max`,
+    initialfn: () => -Infinity,
+    reducefn: (x, y) => Math.max(x, y),
+  };
+
+  export const concat: Reducer<string> = {
+    name: `concat`,
+    initialfn: () => ``,
+    reducefn: (x, y) => x + y,
+    // (string concatenation also uses `+` operator in JavaScript)
+  };
 }
-
-const product: Reducer<number> = {
-  name: `product`,
-  initialfn: () => 1,
-  reducefn: (x, y) => x * y,
-};
-
-
-const max: Reducer<number> = {
-  name: `max`,
-  initialfn: () => -Infinity,
-  reducefn: (x, y) => Math.max(x, y),
-};
-
-const concat: Reducer<number> = {
-  name: `concat`,
-  initialfn: () => ``,
-  reducefn: (x, y) => x + y,
-  // (string concatenation also uses `+` operator in JavaScript)
-};
 ```
 
 For reasons discussed in Section \@ref(aggregation), a `Reducer` *should* be a monoid, meaning that the operation represented by `reducefn` should be associative, and unital (with respect to `initialfn`). That is, the following should hold:
 
 ```{ts}
 #| eval: false
-
 reducefn(reducefn(a, b), c) === reducefn(a, reducefn(b, c))
 reducefn(a, initialfn()) === reducefn(initialfn(), a) === a
 ```
 
-These constraints are not actually enforced in the system. As discussed in Section \@ref(programming-with-monoids), the constraints would need to be checked with *all possible inputs*, which is not practical for large input domains such as floating point numbers or strings. However, the interface of `Reducer` should hopefully evoke monoids in users familiar with functional programming.   
+These constraints are not actually enforced by the system: as discussed in Section \@ref(programming-with-monoids), they would need to be checked with *all possible inputs*, which is not practical for large input domains such as floating point numbers or strings. However, the `Reducer` interface should hopefully be evocative of monoids, to users familiar with functional programming. 
+
+##### Reduced
+
+We can use a `Reducer<T>` to aggregate or fold an array of values of type `T` (`T[]`) over a `Factor`, resulting in an array of values of type `T` of the same length as the `Factor`'s cardinality. The underlying procedure is fairly straightforward and looks something like this:
+
+```{ts}
+#| eval: false
+function reduce<T>(x: T[], factor: Factor, reducer: Reducer<T>): T[] {
+  const result = Array<T>(factor.cardinality);
+  
+  // Initialize values
+  for (let j = 0; j < factor.cardinality; j++) {
+    result[j] = reducer.initialfn();
+  }
+  
+  // Aggregate
+  for (let i = 0; i < factor.indices.length; i++) {
+    const index = factor.indices[i];
+    result[index] = reducer.reducefn(result[index], x[i]);
+  }
+  
+  return result;
+}
+```
+
+After we apply this operation, we could just return the result array `T[]` as in the example above, however, this is limited. Specifically, as discussed in Section \@ref(aggregation), in a data visualization system, we rarely want to treat summaries as a simple "flat" array of values. Instead, in order to correctly apply operations like stacking and normalizing, it is necessary for the summaries to "remember" *how* they have been summarized, over *what* partition, and *which* other summaries they relate to, within the hierarchy of summaries. This is what the `Reduced` data type is for^[Note that, in the example below, we assign string key properties to an array. This would be prohibited in many languages but is perfectly valid in JavaScript/TypeScript due to its highly dynamic nature.]:
+
+```{ts}
+interface Reduced<T = unknown> extends Array<T> {
+  factor: Factor<T>,
+  reducer: Reducer<T>,
+  parent?: Reduced<T>
+  original?: Reduced<T>
+}
+```
+
+The way we use `Reduced` is that we replace the return type of the `reduce` function, and then, inside the function's body, we simply assign the `Factor` and `Reducer<T>` arguments as the `factor` and `reducer` properties to the `result`, after it's been computed:
+
+```{ts}
+function reduce<T>(x: T[], factor: Factor, reducer: Reducer<T>): Reduced<T> {
+  
+  ...
+  
+  result.factor = factor;
+  result.reducer = reducer;
+  
+  return result
+}
+```
+
+That is, now we have the `factor` and `reducer` stored directly alongside array of summaries for future use when applying later transformations like stacking and normalization. This is also where the optional `parent` and `original` properties come in. The `parent` property refers to an array of summaries on the parent partition/`Factor`, whereas `original` refers to the original array of summaries, before any transformations like stacking/normalization have been applied (this is primarily useful when querying).
+
+Speaking of stacking and normalization, the `Reduced` namespace also exposes the `stack`, `normalize`, and `shiftLeft` functions with the following type signatures:
+
+```{ts}
+#| eval: false
+function stack<T>(reduced: Reduced<T>): Reduced<T>
+function normalize<T>(reduced: Reduced<T>, normalizefn: (x: T, y: T) => T): Reduced<T>
+function shiftLeft<T>(reduced: Reduced<T>): Reduced<T>
+```
+
+These functions all take `Reduced` as the first argument and compute transformations that make use of the `factor`, `reducer`, and `parent` properties, returning a new `Reduced`. For instance, the `stack` function uses the `factor` property and its corresponding `parent` property to create an array of indices over which to "stack" the `Reduced` values, and then does exactly this, using the `reducer`. Similarly, the `normalize` function also creates a parent-factor dependent array of indices, and applies a binary function using the values of `Reduced` and `parent`, for instance, dividing each value by its parent values (such as is the case in a spineplot or spinogram). The `shiftLeft` function simply appends the neutral element (`reducer.initialfn()`) as the first element and removes the last element of `Reduced`, essentially "shifting" the values leftwards (again, this is used in a spinogram).  
+
+##### Summaries
+
+With the building blocks of `Indexable`s, `Factor`s, `Reducer`s and `Reduced`s, we now have everything we need to compute the hierarchy of summaries described in Section \@ref(aggregation) and more specifically Section \@ref(aggregation-functor). The `Summaries.of` function exported from the `Summaries` namespace does exactly this:^[Technically, the type signature of the real function as implemented in `plotscape` is a lot more complicated since it heavily relies on generics to correctly infer the type of the summarized data, however, the basic idea is the same.]:
+
+```{ts}
+#| eval: false
+type ReducerTuple<T = unknown> = [Indexable<T>, Reducer<T>];
+function of(summaries: Record<string, ReducerTuple>, factors: Factor[]): Dataframe[]
+```
+
+The `Summaries.of` function takes in a dictionary of `Indexable-Reducer` pairs with matching generic and an array of `Factor`s. It then repeatedly combines the factors pair-wise using `Factor.product` and then computes summaries for each new product factor using the `Indexable-Reducer` pairs in `summaries`. This results in an array of `Dataframe`s with equal length as `factors`, holding the combined data. For example:
+
+```{ts}
+#| eval: false
+const factor1 = Factor.from([`a`, `a`, `b`, `a`, `b`, `c`])
+const factor2 = Factor.product(factor1, Factor.from([0, 0, 0, 1, 1, 1]))
+const summaries = { stat: [[10, 12, 9, 15, 11, 10], Reducer.sum] }
+
+const s = Summaries.of(summaries, [factor1, factor2])
+Dataframe.rows(s[0]) // [ { label: `a`, stat: 37 }, { label: `b`, stat: 20 }, { label: `c`, stat: 10 } ]
+Dataframe.rows(s[1]) // [ { label: `a`, label$: `0`, stat: 22 }, { label: `a`, label$: `1`, stat: 15 }, ... ]
+```
+
+This is the overt behavior of the `Summaries.of` function; however, it also does a couple more things under the hood. First, it links all reduced variables created from `summaries` with their counterpart on the parent data (i.e. assinging the `parent` property on the `Reduced`s). It also sets up a reactive graph, such that when a factor is updated, its corresponding data is updated as well and so are its child factors and their corresponding data.
 
 #### Motivation
 
