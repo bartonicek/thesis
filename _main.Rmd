@@ -457,7 +457,7 @@ This section describes the actual platform used to produce and manipulate intera
 
 Key concepts are explained via example code chunks. All of these represent valid TypeScript code, and selected examples are even evaluated, using the [Bun](https://bun.sh/) runtime [@bun2025]. The reason why TypeScript was chosen over R is that many of the examples are much clearer with explicit type signatures. Further, since `plotscape` is written in TypeScript, many of the examples are taken directly from the codebase, albeit sometimes modified for consistency or conciseness.
 
-A note on the coding style used in the examples. Many of the code examples use TypeScript's `namespace` feature to bundle relevant functionality together, similar to how a `class` bundles data and behaviour together in object-orient programming (OOP), however, unlike in OOP, the namespace serves purely as a container for the functinality unlike class which has to be instantiated. Further, alongside the namespace, many examples also include a type (`interface`) of the same name. TypeScript allows type and value overloading, such that a type (e.g. `interface Foo {}`) and a runtime variable (`const Foo = 123`) with the same name can exist simultaneously, within the same scope. Namespaces are runtime variables and so they do not clash with types names. 
+A note on the coding style used in the examples. Many of the code examples use TypeScript's `namespace` feature to bundle related functionality together, similar to how a class bundles data and behaviour together in object-orient programming (OOP), however, unlike in OOP, the namespace serves purely as a container for the functionality unlike a class which has to be instantiated^[I.e. I use `namespace` like a class with all static methods and properties.]. Further, alongside the namespace, many examples also include a type (`interface`) of the same name. TypeScript allows type and value overloading, such that a type (e.g. `interface Foo {}`) and a runtime variable (`const Foo = 123`) with the same name can exist simultaneously, within the same scope. Namespaces are runtime variables and so they do not clash with types names. 
 
 This type-namespace style may seem like object-oriented programming (OOP) with extra steps, i.e. where someone might write `const foo = new Foo(); const bar = foo.bar()`, I write `const foo = Foo.create(); const bar = Foo.bar(foo)`, however, I did choose this style for a reason. First, thanks to TypeScript's structural typing, the functions exported from a namespace can be used with *any* variables with matching type signature, not just class instances, and this greatly increases the reusability of the code. Second, this approach also promotes functions that operate on plain data, which simplifies reasoning: data and code can be considered separately, and one can exist perfectly fine in the absence of the other^[This also makes some examples easier to read, since all of the variables used in a function's body are declared in the signature; one does not have to scroll all the way up to the top of the class declaration to find the properties used inside the method's body.]. Finally, this data-oriented approach also avoids a hidden cost of OOP: to support runtime polymorphism, class instances have to store pointers to virtual method tables, increasing their size and the potential for cache misses. Plain data structures are often more performant when polymorphism is not required, and in the specific situations where it is, alternative runtime dispatch methods can still be implemented in other ways. Thus, for these reasons, I chose to use this style when implementing `plotscape` and use it here as well for consistency. 
 
@@ -465,7 +465,9 @@ This type-namespace style may seem like object-oriented programming (OOP) with e
 
 A key implementation detail of all interactive applications is reactivity: how a system responds to input and propagates changes. However, despite the fact that interactive user interfaces (UIs) have been around for a long time, there still exist many different, competing approaches to handling reactivity. A particularly famous^[Or perhaps infamous.] example of this is the web ecosystem, where new UI frameworks seem to keep emerging all the time, each offering its unique spin on reactivity [see e.g. @ollila2022]. This makes choosing the right reactivity model challenging. 
 
-Furthermore, reactivity is paramount in interactive data visualization systems due to many user interactions having cascading effects. For instance, when a user changes the binwidth of an interactive histogram, the counts within the bins need to be recomputed, which in turn means that scales may need to be updated, which in turn means that the entire figure may need to be re-rendered, and so on. Also, unlike other types of UI applications, interactive data visualizations have no upper bound on the number of UI elements - the more data the user can visualize the better. This makes efficient updates crucial. While re-rendering a button twice may not be a big deal for a simple webpage or GUI application, unnecessary re-renders of a scatterplot with tens-of-thousands of data points may cripple an interactive data visualization system. For these reasons, I believe a short discussion of reactivity in the context of `plotscaper` is important.  
+Furthermore, reactivity is paramount in interactive data visualization systems due to many user interactions having cascading effects. For instance, when a user changes the binwidth of an interactive histogram, the counts within the bins need to be recomputed, which in turn means that scales may need to be updated, which in turn means that the entire figure may need to be re-rendered, and so on. Also, unlike other types of UI applications, interactive data visualizations have no upper bound on the number of UI elements - the more data the user can visualize the better. This makes efficient updates crucial. While re-rendering a button twice may not be a big deal for a simple webpage or GUI application, unnecessary re-renders of a scatterplot with tens-of-thousands of data points may cripple an interactive data visualization system. 
+
+Because of the reasons outlined above, reactivity was key concern for `plotscape`. While developing the package, I had evaluated and tried out several different reactivity models, before finally settling on a solution. Given the time and effort invested in this process, I believe it is valuable to give a brief overview of these models and discuss their inherent advantages and disadvantages, before presenting my chosen approach in Section \@ref(reactivity-solution). 
 
 #### Observer pattern {#observer}
 
@@ -523,8 +525,6 @@ The example above shows what is in reactive programming known as the diamond pro
 
 Without careful management of dependencies, the lack of global reactive graph awareness that the `Observer` pattern exhibits can create computational bottlenecks in high-performance UIs, particularly interactive data visualizations. Consider an interactive histogram where users can either modify binwidth or directly set breaks. If both are implemented as reactive parameters, a poorly managed dependency graph (e.g., breaks dependent on binwidth, and rendering dependent on both) will result in unnecessary re-renders, impacting performance at high data volumes.
 
-Because of these problems, during the development of `plotscape`, I decided to explore alternative strategies for handling reactivity.
-
 #### Streams
 
 #### Virtual DOM
@@ -535,45 +535,54 @@ The VDOM provides a simple and convenient solution to reactive graph challenges 
 
 #### Signals
 
+Another approach to reactivity that has been steadily gaining traction over the recent years, particularly within the web ecosystem, are signals. Popularized by frameworks such Knockout [@knockout2019] and more recently Solid JS [@solid2024], this approach has recently seen a wave adoptions by many other frameworks including Svelte [@svelte2024] and Angular [@angular2025], and has even seen adoption outside of the JavaScript ecosystem, such as in the Rust-based framework Leptos [@leptos2025].
+
+Signal-based reactivity is built around a core pair of primitives: signals and effects. Signals are reactive values which keep track of their listeners, similar to the `Observer` pattern (Section \@ref(observer)). However, unlike `Observer`s, signals do not need to be subscribed to manually. Instead, listeners automatically subscribe to signals by accessing them, which is where effects come in. Effects are side-effect-causing functions which respond to signal changes, typically by updating the UI, and play a key role in the signal-based automatic subscription model.
+
+While signal-based reactivity might appear complex, its fundamental implementation is surprisingly straightforward. The following example is based on a presentation by Ryan Carniato, the creator of Solid JS [-@carniato2023]:
+
 ```{ts}
-type EffectFn = () => void;
-const currentEffects = [] as EffectFn[];
+export namespace Signal {
+  export function create<T>(x: T): [() => T, (value: T) => void] {
+    const listeners = new Set<() => void>();
 
-function getCurrentEffect(): EffectFn {
-  return currentEffects[currentEffects.length - 1];
+    function get(): T {
+      listeners.add(Effect.getCurrent());
+      return x;
+    }
+
+    function set(value: T) {
+      x = value;
+      for (const l of listeners) l();
+    }
+
+    return [get, set];
+  }
 }
 
-function createSignal<T>(x: T): [() => T, (value: T) => void] {
-  const listeners = new Set<EffectFn>();
+export namespace Effect {
+  const effectStack = [] as (() => void)[];
 
-  function get(): T {
-    listeners.add(getCurrentEffect());
-    return x;
+  export function getCurrent(): () => void {
+    return effectStack[effectStack.length - 1];
   }
 
-  function set(value: T) {
-    x = value;
-    for (const l of listeners) l();
-  }
+  export function create(effectfn: () => void) {
+    function execute() {
+      effectStack.push(execute);
+      effectfn();
+      effectStack.pop();
+    }
 
-  return [get, set];
+    execute();
+  }
 }
 
-function createEffect(effectfn: EffectFn) {
-  function call() {
-    currentEffects.push(call);
-    effectfn();
-    currentEffects.pop();
-  }
-
-  call();
-}
-
-const [price, setPrice] = createSignal(100);
-const [tax, setTax] = createSignal(0.15);
+const [price, setPrice] = Signal.create(100);
+const [tax, setTax] = Signal.create(0.15);
 const priceWithTax = () => Math.round(price() * (1 + tax()) * 100) / 100;
 
-createEffect(() =>
+Effect.create(() =>
   console.log(
     `The current price is ${price()} (${priceWithTax()} with ${tax()}% tax)`
   )
@@ -582,6 +591,8 @@ createEffect(() =>
 setPrice(200);
 setTax(0.12);
 ```
+
+#### Final choice of reactivity model {#reactivity-solution}
 
 ### System components
 
