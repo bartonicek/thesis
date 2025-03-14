@@ -22,9 +22,9 @@ Another potential point of contention are the limitations that the model imposes
 
 During this project, I had time to think through and test out different implementations of the various features of the interactive data visualization system. While I succeeded in some areas, there were also areas which could still use some improvement. 
 
-As discussed in Section \@ref(system), one shortcoming of my system was the absence of a simple declarative schema for specifying interactive graphics. While some parts of the internal codebase such as [REFERENCE WRANGLER] showed some promise, ultimately, plot were defined in a largely procedural way, and the package's user-facing API (`plotscaper`) used nominal plot-type functions. As I argued earlier, I believe this challenge is not unique to my system; many other, overtly declarative data visualization systems offer only partial solutions [see also @wu2024]. There are important reasons for why coming up with declarative schemas for interactive graphics is not easy, such as the lack of a direct correspondence between data variables and encodings (see Section [REFERENCE]) or the hierarchical nature of graphics itself (discussed e.g. in Section \@ref(hierarchy)), 
+As discussed in Section \@ref(system), one shortcoming of my system is the absence of a simple declarative schema for specifying interactive graphics. While some parts of the internal codebase such as [REFERENCE WRANGLER] showed some promise, ultimately, plot were defined in a largely procedural way, and the package's user-facing API (`plotscaper`) used nominal plot-type functions. As I argued earlier, I believe this challenge is not unique to my system; many other, overtly declarative data visualization systems offer only partial solutions [see also @wu2024]. There are important reasons for why coming up with declarative schemas for interactive graphics is not easy, such as the lack of a direct correspondence between data variables and encodings (see Section [REFERENCE]) or the hierarchical nature of graphics itself (discussed e.g. in Section \@ref(hierarchy)), 
 
-
+Further, 
 
 
 

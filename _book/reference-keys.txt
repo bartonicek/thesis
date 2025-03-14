@@ -297,3 +297,8 @@ reducers-1
 summaries
 reduced
 client-server-communication
+observer-pattern
+observer
+streams
+virtual-dom
+signals

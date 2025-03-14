@@ -407,11 +407,11 @@ As you can see, the object created with `create_schema()` is essentially just a 
 
 The call to `render()` turns the schema gets turned into a live, interactive figure by constructing an `htmlwidgets` widget [@htmlwidgets2021]. This bundles up the underlying data and `plotscape` code (JavaScript, HTML, CSS) into a standalone widget which may get rendered inside, for example, RStudio viewer or RMarkdown document. All of the schema messages also get forwarded to the widget and applied sequentially, creating the figure.
 
-Note that, under this model, the schema merely records state-generating steps, not the state itself, and all of the actual state lives on the scene. This design avoids state duplication between the R session (server) and web-browser-based figure (client), eliminating the need for synchronization. While this client-heavy approach deviates from typical client-server architectures, where state predominantly resides on the server, it is essential for achieving responsive interactive visualizations. By keeping most of the state and computation on the client and avoiding round-trips to the server, we can achieve fast updates in response to user interaction [such as mouse movement during linked selection\; this is also why linked selection has poor performance in server-heavy frameworks like Shiny, @shiny2024]. Conversely, as will be discussed below, while the R session (server) may occasionally send and receive messages, these are by comparison much less latency-sensitive, making a "thin" server perfectly viable.
+Note that, under this model, the schema merely records state-generating steps, not the state itself, and all of the actual state lives on the scene. This design avoids state duplication between the R session (server) and web-browser-based figure (client), eliminating the need for synchronization. While this client-heavy approach deviates from typical client-server architectures, where state predominantly resides on the server, it is essential for achieving responsive interactive visualizations. By keeping most of the state and computation on the client and avoiding round-trips to the server, we can achieve fast updates in response to user interaction [such as mouse movement during linked selection\; this is also why features like linked selection tend to have poor performance in server-centric frameworks like Shiny, @shiny2024]. Conversely, as will be discussed below, while the R session (server) may occasionally send and receive messages, these are by comparison much less latency-sensitive, making a "thin" server perfectly viable.
 
 ### Client-server communication
 
-While inside an interactive R session (e.g., in RStudio IDE [@rstudio2024]), creating a `plotscaper` figure via a call to `render()` also automatically launches an `httpuv` [@cheng2024] server. This server allows for live, bidirectional communication between the R session (server) and the figure (client). By assigning the output of `render()` to a variable, users receive a handle to this server, and can call functions which can query the figure state and cause mutable, live updates. For instance:
+While inside an interactive R session (e.g., in RStudio IDE [@rstudio2024]), creating a `plotscaper` figure via calling `render()` also automatically launches a WebSockets server [using the `httpuv` package, @cheng2024]. This server allows for live, two-way communication between the R session (server) and the figure (client). By assigning the output of `render()` to a variable, users can save a handle to this server, and call functions which query the figure's state or cause mutable, live updates. For instance:
 
 ```{r}
 #| eval: false
@@ -424,43 +424,168 @@ scene <- create_schema(mtcars) |>
   add_barplot(c("cyl")) |>
   render()
 
-# Adds a histogram, modifying the figure in place
+# Render the scene
+scene
+
+# Add a histogram, modifying the figure in-place
 scene |> add_histogram(c("disp"))
 
-# Sets the scatterplot's lower x-axis limit to 0, also in place 
+# Set the scatterplot's lower x-axis limit to 0 (also in-place)
 scene |> set_scale("plot1", "x", min = 0)
 
-# Selects cases corresponding to rows 1 to 10
+# Select cases corresponding to rows 1 to 10
 scene |> select_cases(1:10)
 
-# Query selected cases - returns their indices
+# Query selected cases - returns the corresponding
 # as a numeric vector which can be used in other
 # functions or printed to the console
 scene |> selected_cases() # [1] 1 2 3 4 5 6 7 8 9 10
+
 ```
 
-As noted earlier, most `plotscaper` functions are polymorphic in that they work on both the schema and the scene: when called with schema as the first argument, they append to the schema, whereas when called with scene as the first argument (and while inside an interactive R session), they send a WebSockets request through the `httpuv` server to live-update the figure (and the figure may respond with another WebSockets message back). The one exception to the polymorphism are state-querying functions (such as `selected_cases()`, `assigned_cases()`, and `get_scale()`) which send a request to retrieve the rendered figure's state and as such can operate on the scene only.
-
-
-The one exception are state-querying functions, which include . These functions retrieve the figure's state and return it as output in R (without modifying the figure in any way). For example, `selected_cases()` returns the indices of the currently selected cases as a numeric vector. These functions are designed to interactively query the figure's state, and as such it does not make sense to use them with the stateless schema.
+As noted earlier, most `plotscaper` functions are polymorphic `S3` methods which can accept either a schema or a scene as the first argument. When called with schema as the first argument, they append a message to the schema, whereas when called with scene as the first argument (and while inside an interactive R session), they send a WebSockets request through the `httpuv` server, causing a live-update the figure or the server to respond back with data. In more abstract terms, with respect to these functions, the process of rendering a schema is a functor/homomorphism, meaning that we can either call the functions on the schema and then render it, or immediately render the figure and then call the functions, and the result will be the same (provided no user interaction happens in the meantime). The one exception to this rule are state-querying functions such as `selected_cases()`, `assigned_cases()`, and `get_scale()`. These functions send a request to retrieve the rendered figure's state and so it makes little sense to call them on the schema^[Of course, we *could* technically parse the list of messages to retrieve the figure's state as it will be when the figure gets rendered. For instance with `create_schema(...) |> assign_cases(1:10, 2) |> assign_cases(5:10, 3)` we could parse the first five indices belonging to group 2 and the second belonging to group 3. However, since the user has to write the code to modify the figure's state in the first place, the utility of this parsing is not clear.].
 
 ### HTML document embedding
 
-Since `plotscaper` figures are just `htmlwidgets` widgets, they can be statically embedded in HTML documents such as those produced by RMarkdown [@rmarkdown2024] or Quarto [@allaire2024]. More specifically, when a `plotscaper` figure is rendered, `htmlwidgets` [@htmlwidgets2021] is used to construct a widget skeleton (consisting of HTML, CSS, and JavaScript) and injects the JavaScript corresponding to `plotscape`. The resulting widget can then be statically embedded in any kind of HTML document. This is how the `plotscaper` figures are rendered in the present thesis. As mentioned above, this means that the figure cannot be interacted live through code, however, within-figure interactive features such as linked selection and querying still work regardless (since these happen entirely on the JavaScript side). 
+Since `plotscaper` figures are just `htmlwidgets` widgets, they can be statically embedded in HTML documents such as those produced by RMarkdown [@rmarkdown2024] or Quarto [@allaire2024]. More specifically, when a `plotscaper` figure is rendered, `htmlwidgets` [@htmlwidgets2021] is used to bundle the underlying HTML, CSS and JavaScript. The resulting widget can then be statically embedded in any valid HTML document, or saved as a standalone HTML file using the `htlwidgets::saveWidget` function. This is in fact how `plotscaper` figures are rendered in the present thesis. 
+
+As mentioned above, since client-server communication requires a running server, statically rendered figures cannot be interacted through code. However, since within-figure interactive features such as linked selection and querying are entirely client-side, these will work in static environments perfectly fine. This makes `plotscaper` a very useful and convenient to use in interactive reports. 
 
 ## Low-level implementation (`plotscape`) {#low-level-implementation}
 
-This section describes the actual platform used to produce and manipulate interactive figures, as implemented in `plotscape`. It contains a detailed listing of the system's components, along with descriptions of what each component does.
+This section describes the actual platform used to produce and manipulate interactive figures, as implemented in `plotscape`. I first discuss some key implementation details, including reactivity and rendering. Then I provide a detailed listing of the system's components and their functionality.
+
+Key concepts are explained via example code chunks. All of these represent valid TypeScript code, and selected examples are even evaluated, using the [Bun](https://bun.sh/) runtime [@bun2025]. The reason why TypeScript was chosen over R is that many of the examples are much clearer with explicit type signatures. Further, since `plotscape` is written in TypeScript, many of the examples are taken directly from the codebase, albeit sometimes modified for consistency or conciseness.
+
+A note on the coding style used in the examples. Many of the code examples use TypeScript's `namespace` feature to bundle relevant functionality together, similar to how a `class` bundles data and behaviour together in object-orient programming (OOP), however, unlike in OOP, the namespace serves purely as a container for the functinality unlike class which has to be instantiated. Further, alongside the namespace, many examples also include a type (`interface`) of the same name. TypeScript allows type and value overloading, such that a type (e.g. `interface Foo {}`) and a runtime variable (`const Foo = 123`) with the same name can exist simultaneously, within the same scope. Namespaces are runtime variables and so they do not clash with types names. 
+
+This type-namespace style may seem like object-oriented programming (OOP) with extra steps, i.e. where someone might write `const foo = new Foo(); const bar = foo.bar()`, I write `const foo = Foo.create(); const bar = Foo.bar(foo)`, however, I did choose this style for a reason. First, thanks to TypeScript's structural typing, the functions exported from a namespace can be used with *any* variables with matching type signature, not just class instances, and this greatly increases the reusability of the code. Second, this approach also promotes functions that operate on plain data, which simplifies reasoning: data and code can be considered separately, and one can exist perfectly fine in the absence of the other^[This also makes some examples easier to read, since all of the variables used in a function's body are declared in the signature; one does not have to scroll all the way up to the top of the class declaration to find the properties used inside the method's body.]. Finally, this data-oriented approach also avoids a hidden cost of OOP: to support runtime polymorphism, class instances have to store pointers to virtual method tables, increasing their size and the potential for cache misses. Plain data structures are often more performant when polymorphism is not required, and in the specific situations where it is, alternative runtime dispatch methods can still be implemented in other ways. Thus, for these reasons, I chose to use this style when implementing `plotscape` and use it here as well for consistency. 
 
 ### Reactivity
 
+A key implementation detail of all interactive applications is reactivity: how a system responds to input and propagates changes. However, despite the fact that interactive user interfaces (UIs) have been around for a long time, there still exist many different, competing approaches to handling reactivity. A particularly famous^[Or perhaps infamous.] example of this is the web ecosystem, where new UI frameworks seem to keep emerging all the time, each offering its unique spin on reactivity [see e.g. @ollila2022]. This makes choosing the right reactivity model challenging. 
+
+Furthermore, reactivity is paramount in interactive data visualization systems due to many user interactions having cascading effects. For instance, when a user changes the binwidth of an interactive histogram, the counts within the bins need to be recomputed, which in turn means that scales may need to be updated, which in turn means that the entire figure may need to be re-rendered, and so on. Also, unlike other types of UI applications, interactive data visualizations have no upper bound on the number of UI elements - the more data the user can visualize the better. This makes efficient updates crucial. While re-rendering a button twice may not be a big deal for a simple webpage or GUI application, unnecessary re-renders of a scatterplot with tens-of-thousands of data points may cripple an interactive data visualization system. For these reasons, I believe a short discussion of reactivity in the context of `plotscaper` is important.  
+
+#### Observer pattern {#observer}
+
+One of the simplest and most well-known methods for modeling reactivity is the Observer pattern [@gamma1995]. Here's a simple implementation: 
+
+```{ts}
+export namespace Observer {
+  export function create<T>(x: T): T & Observer {
+    return { ...x, listeners: {} };
+  }
+
+  export function listen(x: Observer, event: string, callback: () => void) {
+    if (!x.listeners[event]) x.listeners[event] = [];
+    x.listeners[event].push(callback);
+  }
+
+  export function dispatch(x: Observer, event: string) {
+    if (!x.listeners[event]) return;
+    for (const cb of x.listeners[event]) cb();
+  }
+}
+
+const person = Observer.create({ name: `Joe`, age: 25 });
+Observer.listen(person, `age-increased`, () =>
+  console.log(`${person.name} is now ${person.age} years old.`)
+);
+
+person.age = 26;
+Observer.dispatch(person, `age-increased`);
+```
+
+Internally, an `Observer` object stores a dictionary where the keys are the events that the object can dispatch or notify its listeners of, and values are arrays of callbacks^[In simpler implementations, a single array can be used instead of the dictionary; the listeners are then notified whenever the object "updates".]. Listeners listen (or "subscribe") to specific events by adding their callbacks to the relevant array. When an event occurs, the callbacks in the appropriate array are iterated through and executed in order.
+
+The `Observer` pattern easy to implement and understand, and, compared to alternatives, also tends to be fairly performant. However, a key downside is that the listeners have to subscribe to the `Observer` manually. In other words, whenever client code uses `Observer` values, it needs to be aware of this fact and subscribe to them in order to avoid becoming stale. Further, the logic for orchestrating and synchronizing updates inside the reactive graph has to be implemented manually as well. For instance, by default, there is no mechanism for handling dispatch order: the listeners who subscribed earlier are called first^[This can be solved by adding a priority property to the event callbacks, and sorting the arrays by priority.]. Moreover, when there are shared dependencies, these also have to be resolved manually. See for instance the following example:
+
+```{ts}
+function update(x: { name: string; value: number } & Observer, value: number) {
+  x.value = value;
+  console.log(`${x.name} updated to`, x.value);
+  Observer.dispatch(x, `updated`);
+}
+
+const A = Observer.create({ name: `A`, value: 1 });
+const B = Observer.create({ name: `B`, value: A.value * 10 });
+const C = Observer.create({ name: `C`, value: A.value + B.value });
+
+Observer.listen(A, `updated`, () => update(B, A.value * 10));
+Observer.listen(A, `updated`, () => update(C, A.value + B.value));
+Observer.listen(B, `updated`, () => update(C, A.value + B.value));
+
+update(A, 2); // C will get updated twice
+```
+
+The example above shows what is in reactive programming known as the diamond problem. We have three reactive variables `A`, `B`, and `C`, such that `B` depends on `A`, and `C` depends simultaneously on `A` and `B`. Since `C` depends on `A` and `B`, it has to subscribe to them. However, `C` is not aware of the global context of the reactive graph: it does not know that `B` will update any time `A` does. As such, and update to `A` will trigger *two* updates to `C`. 
+
+Without careful management of dependencies, the lack of global reactive graph awareness that the `Observer` pattern exhibits can create computational bottlenecks in high-performance UIs, particularly interactive data visualizations. Consider an interactive histogram where users can either modify binwidth or directly set breaks. If both are implemented as reactive parameters, a poorly managed dependency graph (e.g., breaks dependent on binwidth, and rendering dependent on both) will result in unnecessary re-renders, impacting performance at high data volumes.
+
+Because of these problems, during the development of `plotscape`, I decided to explore alternative strategies for handling reactivity.
+
+#### Streams
+
+#### Virtual DOM
+
+Within the web ecosystem, a common way of handling reactivity involves something called the virtual DOM (VDOM). This approach, popularized by web frameworks such as React [@react2024] and Vue [@vue2024], involves constructing an independent in-memory tree structure which provides a virtual representation of the UI. Reactive events are bound to nodes or "components" of this tree. Whenever an event occurs, changes cascade throughout the VDOM, starting with the associated component and propagating down through its children. Finally, the VDOM is compared or "diffed" against the actual UI, and only the necessary updates are applied. Note that, despite being named after the web's DOM, the VDOM is a general concept, not tied to any specific programming environment.
+
+The VDOM provides a simple and convenient solution to reactive graph challenges such as the diamond problem described in Section \@ref(observer), as evidenced by the massive popularity of web frameworks such as React or Vue. However, compared to alternatives, it also presents some significant performance trade-offs. Specifically, events near the root component trigger a cascade of updates which propagates throughout a large portion of the tree, even when there is no direct dependence between these events and the child components. Moreover, since the only way for two components to share a piece of state is through their parent, the model naturally encourages a top-heavy hierarchy, further compounding the issue. Finally, depending on the nature and implementation of the UI, the diffing process may be more trouble than its worth: while in a webpage, updating a button or two is a fast operation, in a data visualization system, it may be more efficient to re-render an entire scatterplot from scratch rather than trying to update select few points.
+
+#### Signals
+
+```{ts}
+type EffectFn = () => void;
+const currentEffects = [] as EffectFn[];
+
+function getCurrentEffect(): EffectFn {
+  return currentEffects[currentEffects.length - 1];
+}
+
+function createSignal<T>(x: T): [() => T, (value: T) => void] {
+  const listeners = new Set<EffectFn>();
+
+  function get(): T {
+    listeners.add(getCurrentEffect());
+    return x;
+  }
+
+  function set(value: T) {
+    x = value;
+    for (const l of listeners) l();
+  }
+
+  return [get, set];
+}
+
+function createEffect(effectfn: EffectFn) {
+  function call() {
+    currentEffects.push(call);
+    effectfn();
+    currentEffects.pop();
+  }
+
+  call();
+}
+
+const [price, setPrice] = createSignal(100);
+const [tax, setTax] = createSignal(0.15);
+const priceWithTax = () => Math.round(price() * (1 + tax()) * 100) / 100;
+
+createEffect(() =>
+  console.log(
+    `The current price is ${price()} (${priceWithTax()} with ${tax()}% tax)`
+  )
+);
+
+setPrice(200);
+setTax(0.12);
+```
+
 ### System components
 
-This section details the code components of `plotscape`. To explain key concepts, this section uses TypeScript pseudo-code examples (in fact, the TypeScript code is valid code and some will be evaluated in the examples). The reason why TypeScript was chosen over R is that many of the examples are clearer with type signatures.
-
-Many of the examples include a type named after the component and an associated namespace of the same name. TypeScript allows type and value name overloading, such that a type (e.g. `type Foo = Bar[]`) and a runtime variable (`const Foo = "bar"`) with the same name can exist within the same scope. Namespaces are runtime variables so they do not clash with types names. 
-
-This type-namespace style might seem strange, and in some ways it might seem like object-oriented programming (OOP) with extra steps, i.e. where someone might write `const foo = new Foo(); const bar = foo.bar()`, I write `const foo = Foo.create(); const bar = Foo.bar(foo)`, however, I did choose this style for a reason. First, thanks to TypeScript's structural typing, the functions exported from a namespace can be used with *any* variables which match their signature, not just class instances. Second, this approach also promotes functions that work with plain data, which simplifies reasoning: data and code can be considered separately, and one can exist perfectly fine in the absence of the other^[This also makes some examples easier to read, since all of the variables used in a function's body are declared in the signature; one does not have to scroll up to look up class properties which are used in the method's body.]. Finally, this approach can also be more performant than traditional OOP: class instances have to store pointers to virtual method tables to support runtime polymorphism, however, this comes at the cost of increased size and larger potential for cache misses. Thus, plain data structures are preferable when polymorphism is not required, and even when it is, alternative runtime dispatch methods (e.g. even a simple `switch` statement) may be a fine option.  
+This section details the code components of `plotscape`. 
 
 #### Indexable {#Indexable}
 
