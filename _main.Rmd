@@ -252,7 +252,7 @@ These will be the subject of Section \@ref(high-level-api). However, to realize 
 - Computing and transforming summary statistics (e.g. stacking, normalizing)
 - Mapping these summaries to visual encodings (e.g. x- and y-axis position, width, height, and area)
 - Rendering geometric objects and auxiliary graphical elements
-- Responding to user input and WebSockets requests, and propagating any required updates throughout the pipeline
+- Responding to user input and server requests, propagating any required updates throughout the pipeline
 
 Section \@ref(low-level-implementation) will discuss the above-mentioned tasks, and the data structures and algorithms used to support them.
 
@@ -409,7 +409,7 @@ The call to `render()` turns the schema gets turned into a live, interactive fig
 
 Note that, under this model, the schema merely records state-generating steps, not the state itself, and all of the actual state lives on the scene. This design avoids state duplication between the R session (server) and web-browser-based figure (client), eliminating the need for synchronization. While this client-heavy approach deviates from typical client-server architectures, where state predominantly resides on the server, it is essential for achieving responsive interactive visualizations. By keeping most of the state and computation on the client and avoiding round-trips to the server, we can achieve fast updates in response to user interaction [such as mouse movement during linked selection\; this is also why features like linked selection tend to have poor performance in server-centric frameworks like Shiny, @shiny2024]. Conversely, as will be discussed below, while the R session (server) may occasionally send and receive messages, these are by comparison much less latency-sensitive, making a "thin" server perfectly viable.
 
-### Client-server communication
+### Client-server communication {#communication}
 
 While inside an interactive R session (e.g., in RStudio IDE [@rstudio2024]), creating a `plotscaper` figure via calling `render()` also automatically launches a WebSockets server [using the `httpuv` package, @cheng2024]. This server allows for live, two-way communication between the R session (server) and the figure (client). By assigning the output of `render()` to a variable, users can save a handle to this server, and call functions which query the figure's state or cause mutable, live updates. For instance:
 
@@ -445,11 +445,11 @@ scene |> selected_cases() # [1] 1 2 3 4 5 6 7 8 9 10
 
 As noted earlier, most `plotscaper` functions are polymorphic `S3` methods which can accept either a schema or a scene as the first argument. When called with schema as the first argument, they append a message to the schema, whereas when called with scene as the first argument (and while inside an interactive R session), they send a WebSockets request through the `httpuv` server, causing a live-update the figure or the server to respond back with data. In more abstract terms, with respect to these functions, the process of rendering a schema is a functor/homomorphism, meaning that we can either call the functions on the schema and then render it, or immediately render the figure and then call the functions, and the result will be the same (provided no user interaction happens in the meantime). The one exception to this rule are state-querying functions such as `selected_cases()`, `assigned_cases()`, and `get_scale()`. These functions send a request to retrieve the rendered figure's state and so it makes little sense to call them on the schema^[Of course, we *could* technically parse the list of messages to retrieve the figure's state as it will be when the figure gets rendered. For instance with `create_schema(...) |> assign_cases(1:10, 2) |> assign_cases(5:10, 3)` we could parse the first five indices belonging to group 2 and the second belonging to group 3. However, since the user has to write the code to modify the figure's state in the first place, the utility of this parsing is not clear.].
 
-### HTML document embedding
+### HTML embedding
 
-Since `plotscaper` figures are just `htmlwidgets` widgets, they can be statically embedded in HTML documents such as those produced by RMarkdown [@rmarkdown2024] or Quarto [@allaire2024]. More specifically, when a `plotscaper` figure is rendered, `htmlwidgets` [@htmlwidgets2021] is used to bundle the underlying HTML, CSS and JavaScript. The resulting widget can then be statically embedded in any valid HTML document, or saved as a standalone HTML file using the `htlwidgets::saveWidget` function. This is in fact how `plotscaper` figures are rendered in the present thesis. 
+As `htmlwidgets` widgets, `plotscaper` figures are essentially static webpages. As such, they can be statically embedded in HTML documents such as those produced by RMarkdown [@rmarkdown2024] or Quarto [@allaire2024]. More specifically, when a `plotscaper` figure is rendered, `htmlwidgets` [@htmlwidgets2021] is used to bundle the underlying HTML, CSS and JavaScript. The resulting widget can then be statically embedded in any valid HTML document, or saved as a standalone HTML file using the `htlwidgets::saveWidget` function. This is in fact how `plotscaper` figures are rendered in the present thesis. 
 
-As mentioned above, since client-server communication requires a running server, statically rendered figures cannot be interacted through code. However, since within-figure interactive features such as linked selection and querying are entirely client-side, these will work in static environments perfectly fine. This makes `plotscaper` a very useful and convenient to use in interactive reports. 
+As mentioned above, since client-server communication requires a running server, statically rendered figures cannot be interacted with through code, in the way described in Section \@ref(communication). However, within-figure interactive features such as linked selection and querying are entirely client-side, and as such work perfectly fine in static environments. This makes `plotscaper` a very useful and convenient tool to use in interactive reports. 
 
 ## Low-level implementation (`plotscape`) {#low-level-implementation}
 
@@ -457,9 +457,9 @@ This section describes the actual platform used to produce and manipulate intera
 
 Key concepts are explained via example code chunks. All of these represent valid TypeScript code, and selected examples are even evaluated, using the [Bun](https://bun.sh/) runtime [@bun2025]. The reason why TypeScript was chosen over R is that many of the examples are much clearer with explicit type signatures. Further, since `plotscape` is written in TypeScript, many of the examples are taken directly from the codebase, albeit sometimes modified for consistency or conciseness.
 
-A note on the coding style used in the examples. Many of the code examples use TypeScript's `namespace` feature to bundle related functionality together, similar to how a class bundles data and behaviour together in object-orient programming (OOP), however, unlike in OOP, the namespace serves purely as a container for the functionality unlike a class which has to be instantiated^[I.e. I use `namespace` like a class with all static methods and properties.]. Further, alongside the namespace, many examples also include a type (`interface`) of the same name. TypeScript allows type and value overloading, such that a type (e.g. `interface Foo {}`) and a runtime variable (`const Foo = 123`) with the same name can exist simultaneously, within the same scope. Namespaces are runtime variables and so they do not clash with types names. 
+A note on the coding style used in the examples. Many of the code examples use TypeScript's `namespace` feature to bundle related functionality together, similar to how a class bundles data and behaviour together in object-orient programming (OOP), however, unlike in OOP, the namespace serves purely as a static container unlike a class which has to be instantiated^[That is, I use `namespace`s like a class with all static methods and properties.]. Further, alongside a given namespace, many examples also include a type (`interface`) of the same name. TypeScript allows type and value overloading, such that a type (e.g. `interface Foo {}`) and a runtime variable (`const Foo = 123`) with the same name can exist simultaneously, within the same scope. Namespaces are runtime variables and so they do not clash with types names. 
 
-This type-namespace style may seem like object-oriented programming (OOP) with extra steps, i.e. where someone might write `const foo = new Foo(); const bar = foo.bar()`, I write `const foo = Foo.create(); const bar = Foo.bar(foo)`, however, I did choose this style for a reason. First, thanks to TypeScript's structural typing, the functions exported from a namespace can be used with *any* variables with matching type signature, not just class instances, and this greatly increases the reusability of the code. Second, this approach also promotes functions that operate on plain data, which simplifies reasoning: data and code can be considered separately, and one can exist perfectly fine in the absence of the other^[This also makes some examples easier to read, since all of the variables used in a function's body are declared in the signature; one does not have to scroll all the way up to the top of the class declaration to find the properties used inside the method's body.]. Finally, this data-oriented approach also avoids a hidden cost of OOP: to support runtime polymorphism, class instances have to store pointers to virtual method tables, increasing their size and the potential for cache misses. Plain data structures are often more performant when polymorphism is not required, and in the specific situations where it is, alternative runtime dispatch methods can still be implemented in other ways. Thus, for these reasons, I chose to use this style when implementing `plotscape` and use it here as well for consistency. 
+This type-namespace style may seem like object-oriented programming (OOP) with extra steps, i.e. where someone might write `const foo = new Foo(); const bar = foo.bar()`, I write `const foo = Foo.create(); const bar = Foo.bar(foo)`, however, I did choose this style for a reason. First, thanks to TypeScript's structural typing, the functions exported from a namespace can be called with *any* variables that match type signature, not just class instances. This greatly increases code reusability. Second, this approach also promotes functions that operate on plain data, which simplifies reasoning: data and code can be considered separately, and one can exist perfectly fine in the absence of the other^[This also makes some examples easier to read, since all of the variables used in a function's body are declared in the signature; one does not have to scroll all the way up to the top of the class declaration to find the properties used inside the method's body.]. Finally, this data-oriented approach also avoids a hidden cost of OOP: to support runtime polymorphism, class instances have to store pointers to virtual method tables, increasing their size and the potential for cache misses. Plain data structures are often more performant when polymorphism is not required, and in the specific situations where it is, alternative runtime dispatch methods can still be implemented. Thus, for these reasons, I chose to use this style when implementing `plotscape` and use it here as well for consistency. 
 
 ### Reactivity
 
@@ -474,6 +474,7 @@ Because of the reasons outlined above, reactivity was key concern for `plotscape
 One of the simplest and most well-known methods for modeling reactivity is the Observer pattern [@gamma1995]. Here's a simple implementation: 
 
 ```{ts}
+// Observer.ts
 export namespace Observer {
   export function create<T>(x: T): T & Observer {
     return { ...x, listeners: {} };
@@ -501,9 +502,11 @@ Observer.dispatch(person, `age-increased`);
 
 Internally, an `Observer` object stores a dictionary where the keys are the events that the object can dispatch or notify its listeners of, and values are arrays of callbacks^[In simpler implementations, a single array can be used instead of the dictionary; the listeners are then notified whenever the object "updates".]. Listeners listen (or "subscribe") to specific events by adding their callbacks to the relevant array. When an event occurs, the callbacks in the appropriate array are iterated through and executed in order.
 
-The `Observer` pattern easy to implement and understand, and, compared to alternatives, also tends to be fairly performant. However, a key downside is that the listeners have to subscribe to the `Observer` manually. In other words, whenever client code uses `Observer` values, it needs to be aware of this fact and subscribe to them in order to avoid becoming stale. Further, the logic for orchestrating and synchronizing updates inside the reactive graph has to be implemented manually as well. For instance, by default, there is no mechanism for handling dispatch order: the listeners who subscribed earlier are called first^[This can be solved by adding a priority property to the event callbacks, and sorting the arrays by priority.]. Moreover, when there are shared dependencies, these also have to be resolved manually. See for instance the following example:
+The `Observer` pattern easy to implement and understand, and, compared to alternatives, also tends to be fairly performant. However, a key downside is that the listeners have to subscribe to the `Observer` manually. In other words, whenever client code uses `Observer` values, it needs to be aware of this fact and subscribe to them in order to avoid becoming stale. Further, the logic for synchronizing updates has to be implemented manually as well. For instance, by default, there is no mechanism for handling dispatch order: the listeners who were subscribed earlier in the code are called first^[This can be solved by adding a priority property to the event callbacks, and sorting the arrays by priority.]. Moreover, shared dependencies can cause glitches and these have to be resolved manually as well. See for instance the following example:
 
 ```{ts}
+import { Observer } from "./Observer"
+
 function update(x: { name: string; value: number } & Observer, value: number) {
   x.value = value;
   console.log(`${x.name} updated to`, x.value);
@@ -521,11 +524,55 @@ Observer.listen(B, `updated`, () => update(C, A.value + B.value));
 update(A, 2); // C will get updated twice
 ```
 
-The example above shows what is in reactive programming known as the diamond problem. We have three reactive variables `A`, `B`, and `C`, such that `B` depends on `A`, and `C` depends simultaneously on `A` and `B`. Since `C` depends on `A` and `B`, it has to subscribe to them. However, `C` is not aware of the global context of the reactive graph: it does not know that `B` will update any time `A` does. As such, and update to `A` will trigger *two* updates to `C`. 
+The example above shows what is in reactive programming known as the diamond problem. We have three reactive variables `A`, `B`, and `C`, such that `B` depends on `A`, and `C` depends simultaneously on `A` and `B`. Since `C` depends on `A` and `B`, it has to subscribe to both. However, `C` is not aware of the global context of the reactive graph: it does not know that `B` will update any time `A` does. As such, an update to `A` will trigger *two* updates to `C` despite the fact that, intuitively, it should only cause one. 
 
-Without careful management of dependencies, the lack of global reactive graph awareness that the `Observer` pattern exhibits can create computational bottlenecks in high-performance UIs, particularly interactive data visualizations. Consider an interactive histogram where users can either modify binwidth or directly set breaks. If both are implemented as reactive parameters, a poorly managed dependency graph (e.g., breaks dependent on binwidth, and rendering dependent on both) will result in unnecessary re-renders, impacting performance at high data volumes.
+Without careful management of dependencies, this reactive graph myopia that the `Observer` pattern exhibits can create computational bottlenecks, particularly in high-throughput UIs such as interactive data visualizations. Consider an interactive histogram where users can either modify binwidth or directly set breaks. If both are implemented as reactive parameters, a poorly managed dependency graph (e.g., breaks dependent on binwidth, and rendering dependent on both) will result in unnecessary re-renders, impacting performance at high data volumes.
 
 #### Streams
+
+A radically different approach to reactivity is offered by streams [see e.g. @abelson2022]. Instead of events directly modifying data state, streams separate event generation from event processing, modeling the latter as pure, primarily side-effect-free transformations. These transformations can then be composed via usual function composition to build arbitrarily complex processing logic. Finally, due to the separation between the stateful event producers and stateless event transformations, this approach aligns closely with methods such as generators/iterators as well as functional programming more broadly [@abelson2022; @fogus2013], and has implementations in numerous functional programming languages and libraries, most notably the polyglot Reactive Extensions library [also known as ReactiveX, @reactive2024].
+
+Consider the following implementation of a stream which produces values at 200-millisecond intervals and stops after 1 second: 
+
+```{ts}
+function intervalSteam(milliseconds: number, stopTime: number) {
+  let streamfn = (x: unknown) => x;
+  const result = { pipe };
+
+  function pipe(fn: (x: any) => unknown) {
+    const oldStreamfn = streamfn;
+    streamfn = (x: unknown) => fn(oldStreamfn(x));
+    return result;
+  }
+
+  const startTime = Date.now();
+  let time = Date.now();
+
+  const interval = setInterval(() => {
+    time = Date.now();
+    const diff = time - startTime;
+    if (diff >= stopTime) clearInterval(interval);
+    streamfn(diff);
+  }, milliseconds);
+
+  return result;
+}
+
+const stream = intervalSteam(200, 1000)
+
+
+stream
+  .pipe((x) => [x, Math.round((x / 7) * 100) / 100])
+  .pipe((x) =>
+    console.log(
+      `${x[0]} milliseconds has elapsed (${x[1]} milliseconds in dog years)`
+    )
+  );
+```
+
+As you can see, the event producer (stream) is defined separately from the event processing logic, which is constructed by piping the result of one operation into the next. Because of the associativity of function composition, the stream actually exhibits properties of a functor, meaning that the order of composition - either through direct function composition or `.pipe()` chaining - does not affect the result. Additionally, while the stream transformations themselves are (generally) stateless, they can still produce useful side-effects (as can be seen on the example of the `console.log` call above). Further, because of this fact, they also lend themselves well to modeling asynchronous or even infinite data sequences [@abelson2022; @fogus2013].
+
+While streams can be extremely useful in specific circumstances, their utility as a general model for complex UIs (beyond asynchronous operations) is debatable. Specifically, the inherent statefulness of UIs conflicts with the stateless nature of streams: stateless computations inside the stream have to leak into the rest of the application *somewhere*. Delineating which parts of the logic should go into streams versus which should be bound to UI components complicates development for little real benefit. Consequently, streams are likely not the optimal choice for interactive data visualization, where some state is unavoidable. 
 
 #### Virtual DOM
 
@@ -535,15 +582,16 @@ The VDOM provides a simple and convenient solution to reactive graph challenges 
 
 #### Signals
 
-Another approach to reactivity that has been steadily gaining traction over the recent years, particularly within the web ecosystem, are signals. Popularized by frameworks such Knockout [@knockout2019] and more recently Solid JS [@solid2024], this approach has recently seen a wave adoptions by many other frameworks including Svelte [@svelte2024] and Angular [@angular2025], and has even seen adoption outside of the JavaScript ecosystem, such as in the Rust-based framework Leptos [@leptos2025].
+Another approach to reactivity that has been steadily gaining traction over the recent years, particularly within the web ecosystem, are signals (also known as fine-grained reactivity). Popularized by frameworks such Knockout [@knockout2019] and more recently Solid JS [@solid2024], this approach has recently seen a wave adoptions by many other frameworks including Svelte [@svelte2024] and Angular [@angular2025], and has even seen adoption outside of the JavaScript ecosystem, such as in the Rust-based framework Leptos [@leptos2025].
 
 Signal-based reactivity is built around a core pair of primitives: signals and effects. Signals are reactive values which keep track of their listeners, similar to the `Observer` pattern (Section \@ref(observer)). However, unlike `Observer`s, signals do not need to be subscribed to manually. Instead, listeners automatically subscribe to signals by accessing them, which is where effects come in. Effects are side-effect-causing functions which respond to signal changes, typically by updating the UI, and play a key role in the signal-based automatic subscription model.
 
-While signal-based reactivity might appear complex, its fundamental implementation is surprisingly straightforward. The following example is based on a presentation by Ryan Carniato, the creator of Solid JS [-@carniato2023]:
+While signal-based reactivity might appear complex, its basic implementation is surprisingly straightforward. The following example is based on a presentation by Ryan Carniato, the creator of Solid JS [-@carniato2023]:
 
 ```{ts}
 export namespace Signal {
   export function create<T>(x: T): [() => T, (value: T) => void] {
+    // A set of listeners, similar to Observable
     const listeners = new Set<() => void>();
 
     function get(): T {
@@ -556,12 +604,13 @@ export namespace Signal {
       for (const l of listeners) l();
     }
 
+    // Returns a getter-setter pair
     return [get, set];
   }
 }
 
 export namespace Effect {
-  const effectStack = [] as (() => void)[];
+  const effectStack = [] as (() => void)[]; // A stack of effects
 
   export function getCurrent(): () => void {
     return effectStack[effectStack.length - 1];
@@ -569,9 +618,9 @@ export namespace Effect {
 
   export function create(effectfn: () => void) {
     function execute() {
-      effectStack.push(execute);
-      effectfn();
-      effectStack.pop();
+      effectStack.push(execute);  // Pushes itself onto the stack
+      effectfn();                 // Runs the effect
+      effectStack.pop();          // Pops itself off the stack
     }
 
     execute();
@@ -581,10 +630,13 @@ export namespace Effect {
 const [price, setPrice] = Signal.create(100);
 const [tax, setTax] = Signal.create(0.15);
 const priceWithTax = () => Math.round(price() * (1 + tax()) * 100) / 100;
+// ^ Derived values automatically become signals as well
 
 Effect.create(() =>
   console.log(
-    `The current price is ${price()} (${priceWithTax()} with ${tax()}% tax)`
+    `The current price is` +
+      `${priceWithTax()}` +
+      `(${price()} before ${tax() * 100}% tax)`
   )
 );
 
@@ -592,7 +644,15 @@ setPrice(200);
 setTax(0.12);
 ```
 
-#### Final choice of reactivity model {#reactivity-solution}
+The key detail to notice is the presence of the global stack of effects. Whenever an effect is called, it first pushes itself onto the stack. It then executes, accessing any signals it needs along the way. These signals in turn register the effect as a listener, by accessing it as the top-most element of the effect stack. When the effect is done executing, it pops itself off the stack. Now, whenever one of the accessed signals changes, the effect re-runs again. Crucially, making a derived reactive value is as simple as writing a callback: if an effect calls a function using a signal, it also automatically subscribes to that signal (see the example of `priceWithTax()` above). Importantly, the effect subscribes *only* to this signal and not the derived value itself. In other words, effects only ever subscribe to the leaf nodes of the reactive graph (signals). Derived values computed on the fly (and, if necessary, can be easily memoized^[Memoizing a derived value can be done by creating a new signal and an effect that runs when the original value gets updated.]), and event ordering is simply managed via the runtime call stack.
+
+Signals provide an elegant solution to many problems with reactivity. They automate subscription to events, prevent unnecessary updates, ensure correct update order, and, due to their fine-grained nature, are generally highly performant compared to more cumbersome methods like the virtual DOM. However, again, signals do also introduce their own set of trade-offs. Chief among these, signal's reliance on the call stack for event ordering necessitates their implementation as functions (getter-setter pairs), rather than plain data values. While techniques like object getters/setters or templating [as seen in SolidJS, @solid2024] can be used to hide this fact, it does nevertheless add an extra layer of complexity. Similarly, many features important for performance, like memoization and batching, also require treating signals as distinct from plain data. Having code consist of two sets of entities - plain data and signals - ultimately impacts developer ergonomics.
+
+#### Choice of reactivity model and final thoughts {#reactivity-solution}
+
+At the start of the project, I had used the `Observer` pattern for modeling reactivity. However, I had this idea of letting the users to define reactive parameters that could be used at arbitrary points in the data visualization pipeline. This had led me to explore the various models of reactivity described above, and even do a full rewrite of `plotscape` with signals at one point.
+
+However, eventually, I ended up going back to the `Observer` pattern. The primary reason was developer ergonomics. While many properties of signals like automatic subscription seemed appealing, the need to manage both data and signals as distinct entities proved cumbersome. Deciding which components of my system and their properties should be plain data versus signals added an additional developer overhead and complicated refactoring. Furthemore, I also found that, in the interactive data visualization pipeline, reactivity could be aligned with the four discrete steps: partitioning, aggregation, scaling, and rendering. Specifically, reactive values could be introduced in batch right at the start of each of these four steps, simplifying the reactive graph as well as the overall mental model. Introducing reactivity at other points seem to offer limited practical benefit. Thus, despite the limitations of the `Observer` pattern, the structured nature of the problem (interactive data visualization pipelines) ultimately makes it a good solution in my eyes.
 
 ### System components
 
