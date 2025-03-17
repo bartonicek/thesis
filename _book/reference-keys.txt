@@ -296,3 +296,9 @@ isomorphism
 algebraic-as-categories
 functors
 references
+marker
+aggregation-reducers-reduceds-and-summaries
+eq:product-indices
+transient-persistent
+group-assignment-indices
+fig:transient-persistent-product

@@ -371,7 +371,7 @@ stream
 
 As you can see, the event producer (stream) is defined separately from the event processing logic, which is constructed by piping the result of one operation into the next. Because of the associativity of function composition, the stream actually exhibits properties of a functor, meaning that the order of composition - either through direct function composition or `.pipe()` chaining - does not affect the result. Additionally, while the stream transformations themselves are (generally) stateless, they can still produce useful side-effects (as can be seen on the example of the `console.log` call above). Further, because of this fact, they also lend themselves well to modeling asynchronous or even infinite data sequences [@abelson2022; @fogus2013].
 
-While streams can be extremely useful in specific circumstances, their utility as a general model for complex UIs (beyond asynchronous operations) is debatable. Specifically, the inherent statefulness of UIs conflicts with the stateless nature of streams: stateless computations inside the stream have to leak into the rest of the application *somewhere*. Delineating which parts of the logic should go into streams versus which should be bound to UI components complicates development for little real benefit. Consequently, streams are likely not the optimal choice for interactive data visualization, where some state is unavoidable. 
+While streams can be extremely useful in specific circumstances, their utility as a general model for complex UIs (beyond asynchronous operations) is debatable. Specifically, the inherent statefulness of UIs conflicts with the stateless nature of streams: stateless computations inside the stream have to leak into the rest of the application *somewhere*. Delineating which parts of the logic should go into streams versus which should be bound to UI components adds unnecessary complexity for little real benefit. Consequently, streams are likely not the optimal choice for interactive data visualization, where some state is unavoidable. 
 
 #### Virtual DOM
 
@@ -447,34 +447,34 @@ The key detail to notice is the presence of the global stack of effects. Wheneve
 
 Signals provide an elegant solution to many problems with reactivity. They automate subscription to events, prevent unnecessary updates, ensure correct update order, and, due to their fine-grained nature, are generally highly performant compared to more cumbersome methods like the virtual DOM. However, again, signals do also introduce their own set of trade-offs. Chief among these, signal's reliance on the call stack for event ordering necessitates their implementation as functions (getter-setter pairs), rather than plain data values. While techniques like object getters/setters or templating [as seen in SolidJS, @solid2024] can be used to hide this fact, it does nevertheless add an extra layer of complexity. Similarly, many features important for performance, like memoization and batching, also require treating signals as distinct from plain data. Having code consist of two sets of entities - plain data and signals - ultimately impacts developer ergonomics.
 
-#### Choice of reactivity model and final thoughts {#reactivity-solution}
+#### Reactivity in `plotscape` and final thoughts {#reactivity-solution}
 
-At the start of the project, I had used the `Observer` pattern for modeling reactivity. However, I had this idea of letting the users to define reactive parameters that could be used at arbitrary points in the data visualization pipeline. This had led me to explore the various models of reactivity described above, and even do a full rewrite of `plotscape` with signals at one point.
+At the start of the project, I had used the `Observer` pattern for modeling reactivity. However, I had the idea of letting the users to define reactive parameters that could be used at arbitrary points in the data visualization pipeline. This had led me to explore the various models of reactivity described above, and even do a full rewrite of `plotscape` with signals at one point.
 
-However, eventually, I ended up going back to the `Observer` pattern. The primary reason was developer ergonomics. While many properties of signals like automatic subscription seemed appealing, the need to manage both data and signals as distinct entities proved cumbersome. Deciding which components of my system and their properties should be plain data versus signals added an additional developer overhead and complicated refactoring. Furthemore, I also found that, in the interactive data visualization pipeline, reactivity could be aligned with the four discrete steps: partitioning, aggregation, scaling, and rendering. Specifically, reactive values could be introduced in batch right at the start of each of these four steps, simplifying the reactive graph as well as the overall mental model. Introducing reactivity at other points seem to offer limited practical benefit. Thus, despite the limitations of the `Observer` pattern, the structured nature of the problem (interactive data visualization pipelines) ultimately makes it a good solution in my eyes.
+However, eventually, I ended up reverting back to the `Observer` pattern. The primary reason was developer ergonomics. While many properties of signals like automatic subscription were appealing, the need to manage both data and signals as distinct entities proved cumbersome. Deciding which components of my system and their properties should be plain data versus signals added an additional overhead and made refactoring more complex. Furthemore, I also found that, in the interactive data visualization pipeline, reactivity could be aligned with the four discrete stages: partitioning, aggregation, scaling, and rendering. Specifically, reactive values could be introduced in batch right at the start of each of these four steps, simplifying the reactive graph as well as the overall mental model. Introducing reactivity at other points seem to offer limited practical benefit. Thus, despite the limitations of the `Observer` pattern, the structured nature of the problem (interactive data visualization pipelines) ultimately makes it a good solution in my eyes.
 
 ### System components
 
-This section details the code components of `plotscape`. 
+This section discusses the core components of `plotscape`, detailing their functionality, implementation, and interconnections. The goal is to give an overview and provide a rationale for the design of key parts of the system. As before, TypeScript code examples are provided, and, in general, these map fairly closely to the real codebase.  
 
 #### Indexable {#Indexable}
 
-One of the first considerations when implementing a data visualization system is how to represent data. Clearly, we want the ability to handle fixed-length arrays of values, however, we may also want to be able to work with constants and derived values as well. For instance, in a typical barplot, the y-axis base is a constant (typically zero). Rather than appending an array of zeros to the data, using a constant (`0`) or a thunk (`() => 0`) is simpler and more memory-efficient. Similarly, arrays of repeated values can be optimized by using two arrays: a short array of unique values or "labels," and a long array of indices (i.e. what base R's `factor` class does). Thus, representing data effectively calls for a generalization of a data "column" which can encompass data types beyond fixed-length arrays.
+One of the fundamental considerations when implementing a data visualization system is how to represent a data variable: a generalized sequence of related values. Clearly, the ability to handle fixed-length arrays is essential, however, we may also want to be able to treat constants or derived values as variables. To give an example, in a typical barplot, the y-axis base is a constant, typically zero. While we could hypothetically append an array of zeroes to our data, it is much more convenient and memory efficient to simply use a constant (`0`) or a callback/thunk (`() => 0`). Similarly, at times, arrays of repeated values can be more optimally represented as two arrays: a short array of "labels" and a long array of integer indices (i.e. what base R's `factor` class does). Thus, representing data effectively calls for a generalization of a data "column" which can encompass data types beyond fixed-length arrays.
 
-The generic type `Indexable<T>` represents such a generalization of a data column. It is simply a union of three basic types: 
+The type `Indexable<T>` represents such a generalization of a data column. It is simply a union of three simple types: 
 
 ```{ts}
 #| eval: false 
 Indexable<T> = T | T[] | ((index: number) => T)
 ```
 
-In plain words, an `Indexable<T>` can be one of three things: 
+In plain words, an `Indexable<T>` can be one of the following three objects: 
 
 - A simple (scalar) value `T`
-- A fixed-length array of `T`'s
-- A function which takes an index as an argument and returns a `T`. 
+- A fixed-length array of `T`'s (`T[]`)
+- A function which takes an index as an argument and returns a `T`
 
-This is somewhat similar to Leland Wilkinson's idea of data functions [see @wilkinson2012, pp. 42], although somewhat more constrained. The key functionality which is abstracted over is indexed access to values. A uniform interface for this functionality is provided by provided by [`Getter`](#Getter)s.
+That is, `Indexable`s generalize arrays, providing value access via an index. Arrays behave as expected, scalar values are always returned regardless of the index, and functions are invoked with the index as the first argument (this functionality is provided by [`Getter`](#Getter)s). As a final note, `Indexable`s are somewhat similar to Leland Wilkinson's idea of data functions [see @wilkinson2012, pp. 42], although there are some differences (Wilkinson's data functions are defined more broadly).
 
 #### Getter {#Getter}
 
@@ -485,7 +485,7 @@ A `Getter<T>` is used to provide a uniform interface to accessing values from an
 export type Getter<T> = (index: number) => T;
 
 export namespace Getter {
-  export function of<T>(x: Indexable<T>): Getter<T> {
+  export function create<T>(x: Indexable<T>): Getter<T> {
     if (typeof x === `function`) return x;
     else if (Array.isArray(x)) return (index: number) => x[index];
     else return () => x;
@@ -499,18 +499,16 @@ we can then create and use `Getter`s like so:
 ```{ts}
 import { Getter } from "./Getter"
 
-const getter1 = Getter.of([1, 2, 3])
-const getter2 = Getter.of(99);
-const getter3 = Getter.of((index: number) => index - 1);
+const getter1 = Getter.create([1, 2, 3])
+const getter2 = Getter.create(99);
+const getter3 = Getter.create((index: number) => index - 1);
 
 console.log(getter1(0));
 console.log(getter2(0));
 console.log(getter3(0));
 ```
 
-Note that, by definition, every `Getter<T>` is also automatically an `Indexable<T>` (since it is a callback `(index: number) => T`). This means that we can create new getters out of other getters.
-
-There are also several utility functions for working with and constructing `Getter`s. The first is `Getter.constant` which takes in a value `T` and returns a thunk which always returns `T` (i.e. `() => T`). This is useful, for example, when `T` is an array and we always want to return the whole array (not just a single element):
+Note that, by definition, every `Getter<T>` is also automatically an `Indexable<T>` (since it is a function of the form `(index: number) => T`). This means that we can use `Getter`s to create new `Getter`s. There are also several utility functions for working with `Getter`s. The first is `Getter.constant()` which takes in a value `T` and returns a thunk returning `T` (i.e. `() => T`). This is useful, for example, when `T` is an array and we always want to return the whole array (not just a single element):
 
 ```{ts}
 #| echo: false
@@ -546,20 +544,20 @@ console.log(getter4(0))
 console.log(getter4(1))
 ```
 
-Another useful utility function is `Getter.proxy`, which takes a `Getter` and an array of indices as input and returns a new `Getter` which routes the access to the original values through the indices:
+Another useful utility function is `Getter.proxy()`, which takes a `Getter` and an array of indices as input and returns a new `Getter` which routes the access to the original values through the indices:
 
 ```{ts}
 import { Getter } from "./Getter"
 
-const proxyGetter = Getter.proxy([`A`, `B`, `C`], [2, 1, 1, 0, 0, 0]);
-console.log([0, 1, 2, 3, 4, 5].map(proxyGetter))
+const getter5 = Getter.proxy([`A`, `B`, `C`], [2, 1, 1, 0, 0, 0]);
+console.log([0, 1, 2, 3, 4, 5].map(getter5))
 ```
 
 This function becomes particularly useful when implementing other data structures such as `Factor`s.
 
 #### Dataframe
 
-In many data analytic workflows, a fundamental data structure is a dataframe or a two-dimensional table. As mentioned in Section [REFERENCE], we can represent this data structure as either a dictionary of columns or a list of rows, with the column-wise representation having some advantages for analytical workflows. Thus, in `plotscape`, a `Dataframe` is a dictionary columns, with the extra twist that the columns don't have to be fixed-length arrays but instead [`Indexable`](#Indexable)s:
+In many data analytic workflows, a fundamental data structure is that of a two-dimensional table or dataframe. As mentioned in Section [REFERENCE], we can represent this data structure as either a dictionary of columns or a list of rows, with the column-wise representation having some advantages for analytical workflows. Thus, in `plotscape`, a `Dataframe` is a dictionary columns, with the extra twist that the columns don't have to be fixed-length arrays but instead [`Indexable`](#Indexable)s:
 
 ```{ts}
 interface Dataframe {
@@ -759,22 +757,103 @@ This is all fairly intuitive, however, actually computing the indices of a produ
 
 One crude solution shown in Section \@ref(products-of-partitions) is to treat the factor indices as strings and concatenate them elementwise. This works, but produces an unnecessary computational overhead. There is a better way. Assuming we have two factors with cardinalities $c_1$ and $c_2$, and two indices $i_1$ and $i_2$ corresponding to the same case, we can compute the product index $i_p$ via the following formula:
 
-$$i_{\text{p}} = \max(c_1, c_2) \cdot i_{\text{1}} + i_{\text{2}}$$
+\begin{align}
+k &= max(c_1, c_2) \\
+i_{\text{p}} &= k \cdot i_{\text{1}} + i_{\text{2}}
+(\#eq:product-indices)
+\end{align}
 
-This formula is similar to one discussed in  @wickham2013. Since $i_1$ takes values in $0 \ldots c_1 - 1$ and $i_2$ takes values in $0 \ldots c_2 - 1$, the product index is guaranteed to be unique. Additionally, since the the index corresponding to the first factor gets multiplied by the maximum of the two cardinalities, it gets assigned a greater "weight", preserving the relative order of the two factors. See for example the following table for product indices of two factors of cardinalities 2 and 3:
+This formula is similar to one discussed in  @wickham2013. Since $i_1$ and $i_2$ take values in $0 \ldots c_1 - 1$ and $0 \ldots c_2 - 1$, respectively^[Using zero-based indexing.], the product index is guaranteed to be unique: if $i_1 = 0$ then $i_p = i_2$, if $i_1 = 1$ then $i_p = k + i_2$, and so on. Further, given a product index $i_p$, we can recover the original indices:
+
+\begin{align}
+i_1 &= \lfloor i_p / k \rfloor \\
+i_2 &= i_p \mod k
+\end{align}
+
+This is useful when constructing the product factor data: we need to take all unique product indices and use them to proxy the data of the original two factors. Finally, since the the index corresponding to the first factor is multiplied by $k$, it intuitively gets assigned a greater "weight" and the relative order of the two factors is preserved. See for example the following table of product indices of two factors with cardinalities 2 and 3:
 
 ```{r}
-tab <- expand.grid(i2 = 0:2, i1 = 0:1)
-tab$ip <- 3 * tab$i1 + tab$i2
+#| echo: false
+tab <- expand.grid(i_2 = 0:2, i_1 = 0:1)
+tab$i_product <- 3 * tab$i_1 + tab$i_2
+
+knitr::kable(tab[, c(2, 1, 3)])
+```
+
+It should be mentioned that, as with binning, computing product indices based on Equation \@ref(eq:product-indices) creates gaps. Again, `plotscape` solves this by keeping track of the unique product indices and looping over the indices again to "clean" them, in $O(n)$ time. Further, since we want to retain factor order, `plotscape` also sorts the unique product indices before running the second loop. Hypothetically, with $n$ data points, there can be up $n$ unique product indices (even when $c_1, c_2 < n$), and so this sorting operation makes creating and updating product indices $O(n \cdot \log n)$ worst-case time complexity. However, I contend that, most of the time, the length of the unique product indices will be a fraction of the length of the data, and, further, profiling during development did identify this operation as a computational bottleneck. If sorting did turn out to be a bottleneck, there may be sub-$O(n \cdot \log n)$ algorithms which still preserve the factor order; however, I did not spend time trying to come up with such an algorithm. 
+
+Finally, `Factor.product` is the only factor constructor which actually assigns to the `parent` property of the output `Factor`. Specifically, the first factor always gets assigned as the parent of the product, creating a hierarchical structure. Technically, there are situations where a product of two factors is simply a "flat" product and not a hierarchy. This is the case, for example, when taking the product of two binned variables in a 2D histogram - the two factors are conceptually equal. However, in practice, this distinction rarely matters. Any computation involving a flat product can simply ignore the `parent` property, and the data is for all other intents and purposes equivalent. This similarity of flat and hierarchical products was also noted by Wilkinson, who used the terminology of cross and nest operators [@wilkinson2012, pp. 61]. 
+
+#### Marker
+
+An important component which also serves the function of a `Factor` but deserves its own section is the `Marker`. `Marker` is used to represent group assignment during linked selection, making it a key component of `plotscape`. Moreover, while most of the components discussed so far can exist within the context of a single plot, `Marker` further differs by the fact that it is shared by all plots within the same figure.
+
+`Marker` has the following `Factor`-like interface which will be gradually explained below^[The actual implementation in the current version of `plotscape` differs slightly in several key aspects, however, I chose to use this simplified interface here for clarity.]:
+
+```{ts}
+interface Marker {
+  cardinality: number;
+  indices: number[];
+  data: { layer: number[] };
+  transientIndices: number[];
+}
+```
+
+However, before delving into this interface, let's first discuss some important theoretical concepts related to `Marker`.
+
+##### Transient vs. persistent selection {#transient-persistent}
+
+A key concept in the implementation of `Marker` is the distinction between transient and persistent selection [see also @urbanek2011]. By default, `plotscape` plots are in transient selection mode, meaning that linked selection operations (e.g. clicking, clicking-and-dragging) assign cases the transient selection status. This transient selection status is cleared by subsequent selection events, as well as many other interactions including panning, zooming, representation switching, and change of parameters. To make the results of selection persist across these interactions, the user can assign cases to persistent selection groups (currently, this is down by holding down a numeric key and performing regular selection). Persistent selections are removed only by a dedicated action (double-click).
+
+Importantly, a single data point can be simultaneously assigned to a persistent group *and* also be transiently selected. For example, a data point may belong to the base (unselected) group, transiently selected base group, persistent group one, transiently selected persistent group one, and so on. This means that `plotscape` has a very minimal version of selection operators [see @unwin1996; @theus2002] baked-in: transient and persistent selection are automatically combined via intersection (the `AND` operator). While a full range of selection operators provides much greater flexibility, I contend that this simple transient-persistent model already provides a lot of practical utility. Specifically, it enables a common action in the interactive data visualization workflow: upon identifying an interesting trend with selection, a user may be interested in how the trend changes when conditioning on *another* (`AND`) subset of the data. The transient-persistent model makes this possible, without introducing the overhead having to learn how to use various selection operators. 
+
+```{r transient-persistent-product}
+#| echo: false
+#| fig-cap: "A screenshot of a `plotscaper` figure showing five different selection group assignments: base/no selection (light blue), group one (light green), group two (light red/pink), transiently selected group one (dark green), and transiently selected group two (dark red). The three remaining group assignments - transiently selected base, group three, transiently selected group three - are not shown (to prevent the figure from becoming too busy). Finally, note that, in the barplot (right), the transiently selected bar segments appear at the base of the bars."
+knitr::include_graphics("./figures/transient-persisent-product.png")
+```
+
+Final thing to note is that, during rendering, transient selection status is represented by paired colour shades, see Figure \@ref(fig:transient-persistent-product). That is, each persistent selection group is assigned a unique color, and transient selection is indicated by a darker shade of the same color. This pairing clearly visually differentiates the two selection modes while preserving the identity of the persistent groups.
+
+##### Group assignment indices {#group-indices}
+
+The key responsibility of `Marker` is manage linked selection status (the transient-persistent model discussed in Section \@ref(transient-persistent) above). It does this very similarly to a `Factor`, by maintaining an array of group assignment `indices`. In `plotscape`, each data point can be assigned one of four primary (persistent) groups based on linked selection: base (no selection), persistent selection group one, persistent selection group two, and persistent selection group three. Further, as also discusssed above, each of those groups can be further split in two based on transient selection state (selected or unselected), resulting in $4 \times 2 = 8$ distinct group assignments (such that the `cardinality` of `Marker` is always 8). These group assignments are coded into indices as follows:  
+
+```{r}
+#| echo: false
+tab <- data.frame(
+  group = c("Base", "Group one", "Group two", "Group three", 
+            "Transient base", "Transient group one", "Transient group two", "Transient group three"),
+  index = c(7, 6, 5, 4, 3, 2, 1, 0)
+  )
 
 knitr::kable(tab)
 ```
 
-As with binning, there is also the issue of products creating gaps in indices. Again, `plotscape` solves this by keeping track of the unique product indices and looping through them again to "clean" them, in $O(n)$. Since we want to retain the factor order, we also have to sort the unique product indices, which may hypothetically have worst-case $O(n \cdot \log n)$ time complexity (since even with two factors with cardinalities $c_1, c_2 < n$, there can be $n$ unique product indices), however, most of the time, the length of the unique product indices will only be a fraction of the length of the data.  
+As you can see from the table above, selection groups are mapped to indices in reverse order. Transient group indices have lower values than persistent ones, and persistent groups are sorted in descending order. This reverse ordering is designed to simplify stacking operations. Group assignment inherently implies importance or salience, and, and during stacking, we often want the more "important" selected groups have to higher precedence than less significant, unselected ones [see also @urbanek2011]. For instance, in stacked barplots, the visually salient highlighted bar segments are generally placed at the base (y-axis intercept), and likewise, in dotplots, the highlighted circles are placed at the center, meaning that both have to come first in the aggregation order. Having the group indices coded in reverse order eliminates the need for sorting during later stages of the data visualization pipeline.  
 
-Finally, `Factor.product` is the only factor constructor which actually assigns to the `parent` property of the output `Factor`. Specifically, the first factor always gets assigned as the parent of the product, creating a hierarchical structure. Technically, there are situations where a product of two factors is simply a "flat" product and not a hierarchy. This is the case, for example, when taking the product of two binned variables in a 2D histogram - the two factors are conceptually equal. However, in practice, this distinction rarely matters. Any computation involving a flat product can simply ignore the `parent` property, and the data is for all other intents and purposes equivalent. This similarity of flat and hierarchical products was also noted by Wilkinson, who used the terminology of cross and nest operators [@wilkinson2012, pp. 61]. 
+With four persistent groups (including base), many operations involving transient selection can be efficiently implemented using the third bit of the index. Specifically, as can be seen in table [REFERENCE], persistent indices range from 0 to 3 and transient indices range from 4 to 7. Thus, to determine whether a case is selected, we can do a simple bitwise check of the third bit. Likewise, to add or remove transient selection, we can set the third bit appropriately. 
 
-#### Reducers
+It is important to mention that, while not a necessity, having four persistent groups works well when for the main purpose of `Marker`s: taking products with other factors. With four groups, the number of unique group assignments is eight and the maximum index values is `2^3 - 1 = 7`, resulting in dense `Marker` indices (i.e. all index values from 0 to `cardinality - 1` are valid). If we wanted to implement more persistent selection groups, we could do so by setting a higher bit (e.g. the fourth bit for up to eight persistent groups), however, we may break the correspondence between cardinality and the number of unique indices. Practically, this may not cause any issues, however, as long as we ensure that the `Marker` cardinality is set to $2^{\text{# of the transient bit}}$ which may be different from the number of unique indices. However, I argue that, for most intents and purposes, four persistent selection groups are plenty. It is well-known that human visual capacity is limited, and having more than $4 \times 2 = 8$ different group assignments represented by different colors may overtax the visual system. Beyond that, the ability to have arbitrary number of persistent groups may be implemented in future versions in `plotscape` but has not been a priority up to this point.
+
+##### Updating group assignment indices
+
+As may be already apparent, a key operations that marker has to support have to do with updating the group assignment indices. The `Marker` namespace exports the following three functions for this very purpose:
+
+```{ts}
+#| eval: false
+namespace Marker {
+  export function clearAll(marker: Marker): void {}
+  export function clearTransient(marker: Marker): void {}
+  export function update(marker: Marker, group: number, selectedIndices: number[]): void {}
+}
+```
+
+`Marker.clearAll` clears all group assignments by setting them all indices to the base value (`7`). `Marker.clearTransient` clears transient indices only. This is also where the `transientIndices` property on the `Marker` interface comes handy. Since transient selection is removed by *any* selection group assignment, we know that the indices that were assigned to transient selection last are *all* the transient indices there are. As such, we can optimize the removal of transient selection removal by simply keeping track of which indices were assigned to transient selection last, and once `Marker.clearTransient` is called, simply iterating through these indices (instead of the whole array of indices). 
+
+Finally, the `Marker.update` is the key function for `Marker`. It changes behavior based on the `group` argument. When `group` is one of the persistent groups, it simply iterates through `selectedIndices`, setting each corresponding index in the marker's `indices` array to the `group`'s value. When `group` has a special transient selection value, it instead adds the transient selection status to each marker index via the bitwise operation described in Section \@ref(group-indices). Finally, it should be mentioned that, since any selection group assignment removes transient selection, `Marker.update` always first calls `Marker.clearTransient`.   
+
+#### Aggregation: Reducers, reduceds, and summaries
 
 As discussed in Section \@ref(aggregation), a key challenge when computing statistical summaries in interactive data visualization systems is doing so in a way that preserves the inherent hierarchy in the data. For instance, when stacking bar segments in a barplot that has been partitioned via linked selection, we want the stacking operation to respect the inherent hierarchical relationships between the segments and the bars. Further, as also demonstrated in Section \@ref(aggregation), this setup suggests particular algebraic structures: groups and monoids.
 
@@ -890,24 +969,26 @@ Speaking of stacking and normalization, the `Reduced` namespace also exposes the
 
 ```{ts}
 #| eval: false
-function stack<T>(reduced: Reduced<T>): Reduced<T>
-function normalize<T>(reduced: Reduced<T>, normalizefn: (x: T, y: T) => T): Reduced<T>
-function shiftLeft<T>(reduced: Reduced<T>): Reduced<T>
+export namespace Reduced {
+  export function stack<T>(reduced: Reduced<T>): Reduced<T> {}
+  export function normalize<T>(reduced: Reduced<T>, normalizefn: (x: T, y: T) => T): Reduced<T> {}
+  export function shiftLeft<T>(reduced: Reduced<T>): Reduced<T> {}
+}
 ```
 
 These functions all take `Reduced` as the first argument and compute transformations that make use of the `factor`, `reducer`, and `parent` properties, returning a new `Reduced`. For instance, the `stack` function uses the `factor` property and its corresponding `parent` property to create an array of indices over which to "stack" the `Reduced` values, and then does exactly this, using the `reducer`. Similarly, the `normalize` function also creates a parent-factor dependent array of indices, and applies a binary function using the values of `Reduced` and `parent`, for instance, dividing each value by its parent values (such as is the case in a spineplot or spinogram). The `shiftLeft` function simply appends the neutral element (`reducer.initialfn()`) as the first element and removes the last element of `Reduced`, essentially "shifting" the values leftwards (again, this is used in a spinogram).  
 
 ##### Summaries
 
-With the building blocks of `Indexable`s, `Factor`s, `Reducer`s and `Reduced`s, we now have everything we need to compute the hierarchy of summaries described in Section \@ref(aggregation) and more specifically Section \@ref(aggregation-functor). The `Summaries.of` function exported from the `Summaries` namespace does exactly this:^[Technically, the type signature of the real function as implemented in `plotscape` is a lot more complicated since it heavily relies on generics to correctly infer the type of the summarized data, however, the basic idea is the same.]:
+With the building blocks of `Indexable`s, `Factor`s, `Reducer`s and `Reduced`s, we now have everything we need to compute the hierarchy of summaries described in Section \@ref(aggregation) and more specifically Section \@ref(aggregation-functor). This is the exact purpose of the constructor function exported from the `Summaries` namespace:^[Technically, the type signature of the real function as implemented in `plotscape` is a lot more complicated since it heavily relies on generics to correctly infer the type of the summarized data, however, the basic idea is the same.]:
 
 ```{ts}
 #| eval: false
 type ReducerTuple<T = unknown> = [Indexable<T>, Reducer<T>];
-function of(summaries: Record<string, ReducerTuple>, factors: Factor[]): Dataframe[]
+function create(summaries: Record<string, ReducerTuple>, factors: Factor[]): Dataframe[]
 ```
 
-The `Summaries.of` function takes in a dictionary of `Indexable-Reducer` pairs with matching generic and an array of `Factor`s. It then repeatedly combines the factors pair-wise using `Factor.product` and then computes summaries for each new product factor using the `Indexable-Reducer` pairs in `summaries`. This results in an array of `Dataframe`s with equal length as `factors`, holding the combined data. For example:
+The `Summaries.create` function takes in a dictionary of `Indexable-Reducer` pairs with matching generic and an array of `Factor`s. It then repeatedly combines the factors pair-wise using `Factor.product` and then computes summaries for each new product factor using the `Indexable-Reducer` pairs in `summaries`. This results in an array of `Dataframe`s with equal length as `factors`, holding the combined data. For example:
 
 ```{ts}
 #| eval: false
@@ -915,465 +996,112 @@ const factor1 = Factor.from([`a`, `a`, `b`, `a`, `b`, `c`])
 const factor2 = Factor.product(factor1, Factor.from([0, 0, 0, 1, 1, 1]))
 const summaries = { stat: [[10, 12, 9, 15, 11, 10], Reducer.sum] }
 
-const s = Summaries.of(summaries, [factor1, factor2])
-Dataframe.rows(s[0]) // [ { label: `a`, stat: 37 }, { label: `b`, stat: 20 }, { label: `c`, stat: 10 } ]
-Dataframe.rows(s[1]) // [ { label: `a`, label$: `0`, stat: 22 }, { label: `a`, label$: `1`, stat: 15 }, ... ]
+const summarized = Summaries.create(summaries, [factor1, factor2])
+Dataframe.rows(summarized[0]) // [ { label: `a`, stat: 37 }, { label: `b`, stat: 20 }, { label: `c`, stat: 10 } ]
+Dataframe.rows(summarized[1]) // [ { label: `a`, label$: `0`, stat: 22 }, { label: `a`, label$: `1`, stat: 15 }, ... ]
 ```
 
-This is the overt behavior of the `Summaries.of` function; however, it also does a couple more things under the hood. First, it links all reduced variables created from `summaries` with their counterpart on the parent data (i.e. assinging the `parent` property on the `Reduced`s). It also sets up a reactive graph, such that when a factor is updated, its corresponding data is updated as well and so are its child factors and their corresponding data.
+Thus, the overt behavior of the `Summaries.create()` is to compute summaries using `Reducer`s and combine the resulting data with the corresponding `Factor` data. However, under the hood, the function also does a couple more things. First, it links all reduced variables created from `summaries` with their parent-data counterpart (by assigning the `parent` property on the `Reduced`s). It also sets up a reactive graph, such that when a factor is updated, its corresponding data is updated, and so are its child factors and their corresponding data.
 
-#### Motivation
-
-When we visualize, we draw summary statistics computed on different parts of the data. For example, when drawing a typical barplot, we split the data based on the levels of some categorical variable, count up the number of cases in each part, and then draw bars of corresponding heights.
-
-In the preceding section, I discussed the component used to represent partitioning of the data into parts: [factors](#Factors). Now it is time to discuss the process of actually computing the statistical summaries representing these parts. Interestingly, while all visualizations rely on this process in one way or another, designing a generic pipeline for doing this presents some surprising challenges.
-
-One such important challenge is displaying coherent visualization. This topic has been discussed in the introduction, in Section [ADD REFERENCE]. Briefly, in order to be a valid representation of the data, an interactive data visualization system should compute and render statistics in such a way that the resulting visualization has correct algebraic properties. As was discussed previously, monoids and groups present a framework for ensuring this, and as such should serve as the backbone of our system.
-
-Another challenge is the hierarchical nature of graphics. In interactive data visualization, it is often desirable to be able to convert one specific plot type into a different representation. For example, a typical barplot represents counts along the y-axis. This is useful for comparing absolute counts, however, it is less useful for comparing proportions. As such, some interactive data visualization systems offer the feature of turning a barplot into a spineplot, a normalized version of the plot where the counts are instead presented along the x-axis, in a stacked order, and the y-axis represents proportion of counts, see Figure \@ref(fig:barspine).
-
-```{r barspine}
-#| echo: false
-#| fig-cap: "While barplot and spineplot represent the same underlying summaries, 
-#| each makes it easier to see different aspects of our data. 
-#| Barplot (left) makes it easier to compare absolute counts, 
-#| whereas spineplot (right) makes it easier to compare proportions. 
-#| Notice that the spineplot makes it much easier to see that 
-#| the proportions of blue cases in categories B and C are exactly the same."
-#| fig-align: "center"
-#| fig-height: 4
-
-knitr::include_graphics("./figures/barplot-spineplot.png")
-# library(ggplot2)
-# library(dplyr)
-# library(patchwork)
-# 
-# # seed <- sample(1:1e4, 1)
-# # set.seed(seed)
-# set.seed(8311)
-# 
-# mtcars2 <- mtcars
-# mtcars2$cyl <- factor(mtcars2$cyl, labels = c("A", "B", "C"))
-# mtcars2$am <- sample(mtcars2$am)
-# mtcars2$am <- factor(mtcars2$am, levels = c(1, 0))
-# 
-# mtcars_spine1 <- mtcars2 |> 
-#   group_by(cyl) |>
-#   count() |>
-#   ungroup() |>
-#   mutate(left = cumsum(lag(n, default = 0)), right = cumsum(n), 
-#          position = (left + right) / 2)
-# 
-# mtcars_spine <- mtcars2 |>
-#   count(cyl, am, name = "n_prod") |>
-#   left_join(mtcars_spine1, by = "cyl") |>
-#   mutate(prop = n_prod / n) |>
-#   group_by(cyl) |>
-#   mutate(prop_cum = cumsum(prop))
-# 
-# # Need to reorder the rows to make ggplot2 layer the bars in the right order
-# mtcars_spine <- mtcars_spine[c(2 * 0:2 + 2, 2 * 0:2 + 1), ]
-# 
-# mtcars3 <- mtcars2
-# mtcars3$am <- factor(mtcars3$am, levels = c(0, 1))
-# 
-# p1 <- ggplot(mtcars3, aes(cyl, fill = am)) +
-#   geom_bar(col = "white") +
-#   scale_fill_manual(values = pal_dark_3[2:1]) +
-#   scale_y_continuous(breaks = seq(0, 14, by = 3)) +
-#   guides(fill = "none") +
-#   labs(x = NULL, y = NULL) +
-#   clean_theme
-# 
-# p2 <- ggplot(mtcars_spine, aes(x = position, y = prop_cum, width = n, fill = am)) +
-#   geom_bar(stat = "identity", position = position_identity(), col = "white") +
-#   geom_text(data = mtcars_spine1, col = "white",
-#             aes(x = position, y = 0.9, label = cyl, fill = NULL)) +
-#   scale_x_continuous(breaks = c(0, mtcars_spine$right)) +
-#   scale_fill_manual(values = pal_dark_3) +
-#   guides(fill = "none") +
-#   labs(x = NULL, y = NULL) +
-#   clean_theme
-# 
-# p1 + plot_spacer() + p2 + plot_layout(widths = c(1, 0.05, 1))
-```
-
-However, despite the fact that both barplots and spineplots represent the same underlying summaries (counts), turning one into the other is not always a trivial exercise. For example, in `ggplot2`, it is easy to create a barplot using simple declarative syntax, however, there is no such simple recipe for spineplots - creating the right plot in Figure \@ref(fig:barspine) took over 10 lines of external data wrangling code (using standard `dplyr` syntax).
-
-What is so complicated about spineplots? First of all, both the x- and y-axes represent the same variable: counts. However, the way the variable is used is different:
-
-- Along the x-axis, we stack counts *within the levels of a single factor*
-- Along the y-axis, we stack counts *within the levels of a product of two factors* and normalize them by the counts *within the levels of the parent factor*.   
-
-In other words, the spineplot forces us to confront the fact that the summaries in our plots form a hierarchy. When we compute the summaries underlying a stacked barplot or spineplot, we are not merely computing a matrix of values where the rows and the columns have no underlying meaning - instead, we are implicitly saying that objects along the x-axis (whole bars) represent a coarser level of partitioning compared with the objects (stacked segments) along the y-axis. The only difference between a barplot and spineplot is, in the barplot, we can get away with treating the two factors as if they were independent (had the same "weight"), whereas in the spineplot this is no longer possible.
-
-This is why in declarative data visualization systems such as `ggplot2`, certain types of plots like spineplots are difficult to express. In these systems, the data is implicitly partitioned as a "flat" product of the factor variables. This representation is convenient (e.g. for defining aesthetics via a single call to `aes()`) but makes it impossible to express hierarchical structures such as the one encoded in spineplot.    
-
-Thus, ideally, our system should make it easy specify a pipeline where we compute monoidal summaries of our data within a hierarchy of partitions represented by one or more factor variables, apply some transformations to these summaries (possibly across the levels of the hierarchy), and finally map the summaries to some visual attributes.
-
-### Scales {#scales}
-
-To visualize data, we need to be able to translate values from the space of the data to the space of the graphical device (computer screen). In most data visualization systems, this is done by specialized components called scales or coordinate systems [see e.g. @murrell2005; @wickham2016; @wilkinson2012]. Scales serve as a bridge between what we have (data) and what we see (visual attributes), allowing us to cross from one domain to the other.
-
-There exists is a fair research on the theoretical properties of scales and how they relate to the mechanisms of visual perception [see e.g. @krzywinski2013; @michell1986; @wilkinson2012; @stevens1946]. However, when it comes to applying this knowledge and implementing scales in concrete data visualization systems, a lot less information is available. And, even when such information is available, it is it is often quite high-level of abstract [for some rare counter-examples, see e.g. @murrell2005; @ziemkiewicz2009]. Thus, the following section is based largely on how scales have been implemented in existing data visualization codebases, such as the `ggplot2` R package [@wickham2016] or `d3-scale` module of D3 [@d3-scale2024; also used by Vega @satyanarayan2015], as well as on personal insights gained while implementing the package.
-
-#### Overview
-
-From a high-level perspective, a scale is just a function $s: D \to V$ which translates values of the data $d \in D$ to values of some visual attribute $v \in V$, such as the x- and y-position, length, area, radius, or color [@wilkinson2012]. This function may or may not be invertible, such that, at times, each value of the visual attribute may be identified with a unique data value (but this is not always the case).
-
-One of the most common and typical cases is a scale where both $D$ and $V$ are subsets of the real numbers:
-
-$$s: [d_{min}, d_{max}] \to [v_{min}, v_{max}] \qquad d_{min}, d_{max}, v_{min}, v_{max} \in \mathbb{R}$$
-
-For example, suppose our data takes values in the range from 1 to 10 and we want to plot it along the x-axis, within a 800 pixels wide plotting region. Then, our scale is simply:
-
-$$s_x: [1, 10] \to [0, 800]$$
-
-Now, there is an infinite number of functions that fit this signature. However, one particularly nice and simple candidate is the following function:
-
-::: {.definition #linear-mapping name="Simple linear mapping"}
-$$s(d) = v_{max} + \frac{d - d_{min}}{d_{max} - d_{min}} \cdot (v_{max} - v_{min})$$
-:::
-
-if we substitute the concrete values into the formula, this becomes:
-
-$$s_x(d) = 0 + \frac{d - 1}{10 - 1} \cdot (800 - 0) = [(d - 1) / 9] \cdot 800$$
-
-The function acts on the data in the following way:
-
-- $s_x(1) = (1 - 1) / 9 \cdot 800 = 0$
-- $s_x(10) = (10 - 1) / 9 \cdot 800 = 800$
-- $s_x(d) \in (0, 800)$ for any $d \in (1, 10)$
-
-That is, the function maps the data value 1 to pixel 0 (left border of the plotting region), value 10 to to pixel 800 (right border of the plotting region), and any value in between 1 and 10 inside the interval 0 to 800, proportionally to where in the data range it is located.
-
-It is relatively simple to translate the formula in \@ref(def:linear-mapping) to code:
-
-```{ts}
-// simpleScale.ts
-export function simpleScale(
-  d: number,
-  dmin: number,
-  dmax: number,
-  vmin: number,
-  vmax: number,
-): number {
-  return vmin + ((d - dmin) / (dmax - dmin)) * (vmax - vmin);
-}
-```
-
-And indeed, this function works the way we would expect:
-
-```{ts}
-import { simpleScale } from "./simpleScale.ts"
-
-console.log(simpleScale(1, 1, 10, 0, 800))
-console.log(simpleScale(5.5, 1, 10, 0, 800))
-console.log(simpleScale(10, 1, 10, 0, 800))
-```
-
-#### Limits of modeling scales as simple functions {#simple-scale-limits}
-
-Simple scale functions like the one above can work fine for basic data visualization systems. However, once we begin adding more features, this design becomes prohibitive. Consider, for example, what happens if we want to:
-
-- Expand the scale limits
-- Scale discrete data
-- Apply non-linear transformations
-- Pan, zoom, reverse, reorder, or otherwise modify the scale interactively
-
-Let's take the first point as a motivating example. Consider what happens to data points at the limits of the data range under the simple linear mapping:   
-
-```{r}
-#| fig-align: 'center'
-x <- 1:10
-y <- rnorm(10, 0, 5)
-col <- ifelse(1:10 %in% c(1, 10), "indianred", "grey80")
-
-plot(x, y, col = col, cex = 3, xaxs = "i")
-```
-
-The plot above shows values scaled using the simple linear mapping along the x-axis, that is, $s: [1, 10] \to [0, 800]$ (effect of the `xaxs = "i"` argument). Notice that, since the position of the points representing the values 1 and 10 (highlighted in red) gets mapped to pixel values 0 and 800 (the left and right border of the plot), only half of each point is visible. This is quite undesirable - a fundamental principles of graphical integrity is that our graphics should not arbitrarily downplay or hide certain data points [@tufte2001]. The points at the axis limits are represented by only 1/2 of the area (or less, if at the limits of both axes), making them less salient, and this is especially pernicious since they are likely to be outliers.    
-
-To address this problem, most data visualization systems automatically expand the range of the domain by some pre-specified percentage:
-
-```{r}
-#| fig-align: 'center'
-# By default, the plot() function automatically expands the x- and y-axis
-# limits by approximately 4% on each end, see `xaxs` in ?graphics::par
-plot(x, y, col = col, cex = 3)
-```
-
-We *could* achieve similar effect by modifying the simple linear mapping we have defined above and adding an additional argument:
-
-```{ts}
-// simpleScale2.ts
-export function simpleScale2(
-  d: number,
-  dmin: number,
-  dmax: number,
-  vmin: number,
-  vmax: number,
-  exp: number, // Extra argument
-): number {
-  return (
-    vmin + (exp / 2 + ((d - dmin) / (dmax - dmin)) * (1 - exp)) * (vmax - vmin)
-  );
-}
-```
-
-Now, if we set the `exp` argument to some positive value, the scaled values get mapped closer to the center of the plotting region. For example, setting `exp` to 0.2 moves each of the data limits 10% closer to the center of the plotting region:
-
-```{ts}
-import { simpleScale2 } from "./simpleScale2.ts"
-
-console.log(simpleScale2(1, 1, 10, 0, 800, 0.2));
-console.log(simpleScale2(5.5, 1, 10, 0, 800, 0.2));
-console.log(simpleScale2(10, 1, 10, 0, 800, 0.2));
-```
-
-However, notice that this argument is applied symmetrically. At times, we may want to apply a different margin to each end of the scale. We could solve this by adding two arguments instead of one, e.g. `expLeft` and `expRight`, however, at this point, the function signature starts to become unwieldy. If we have to call the function in multiple places, it may become difficult to remember what each individual argument represents. Further, note that by adding arguments, the logic inside the function's body becomes denser and less readable. Finally, we may want to persist or modify some of the arguments during runtime (such as when panning or zooming). For all of these reasons, it may be a good idea to take a more structured approach and break the function down into several smaller components.
-
-#### Solution: Two-component scales {#two-component-scales}
-
-The linear mapping formula in \@ref(def:linear-mapping) can guide us in decomposing the scale function into smaller, more manageable parts. Let's look at it again:
-
-$$s(d) = v_{min} + \frac{d - d_{min}}{d_{max} - d_{min}} \cdot (v_{max} - v_{min})$$
-
-If we look closely, we may be able to see that there are two parts to the function:
-
-<!-- $$s(d) = \color{steelblue}{v_{min} +} \color{indianred}{\frac{\color{black}{d} - d_{min}}{d_{max} - d_{min}}} \color{steelblue}{\cdot (v_{max} - v_{min})}$$ -->
-
-That is, the linear mapping is composed of two simpler functions:
-
-<!-- - $\color{indianred}{n(d) = (d - d_{min}) / (d_{max} - d_{min})}$ takes a data value $d \in D$ and maps it to the interval $[0, 1]$ -->
-<!-- - $\color{steelblue}{u(p) = v_{min} + p \cdot (v_{max} - v_{min})}$ takes a value in $[0, 1]$ and maps it to a visual attribute value $v \in V$  -->
-
-This leads us to the following definition of a scale:
-
-::: {.definition #scale name="Scale as composition of two functions"}
-
-A scale $s$ can be created by composing:
-
-- A *normalize* function $n: D \to [0, 1]$, mapping data to the interval $[0, 1]$
-- An *unnormalize* function $u: [0, 1] \to V$, mapping value in $[0, 1]$ to the visual attribute codomain
-
-Such that:
-
-$$s(d) = u(n(d))$$
-:::
-
-Note that the terms *normalize* and *unnormalize* are arbitrary, however, I think they make for useful labels. They represent 1-D equivalent of vector normalization, mapping a value in the domain to and from a unit interval $[0, 1]$.   
-
-For the case of the linear mapping, we could rewrite this in code as follows:
-
-```{ts}
-// LinearMap.ts
-export namespace LinearMap {
-  export function normalize(d: number, dmin: number, dmax: number) {
-    return (d - dmin) / (dmax - dmin);
-  }
-
-  export function unnormalize(p: number, vmin: number, vmax: number) {
-    return vmin + p * (vmax - vmin);
-  }
-}
-```
-
-```{ts}
-import { LinearMap } from "./LinearMap.ts"
-
-console.log(LinearMap.normalize(5.5, 1, 10))
-console.log(LinearMap.unnormalize(0.5, 0, 800))
-console.log(LinearMap.unnormalize(LinearMap.normalize(5.5, 1, 10), 0, 800))
-```
-
-This two component system allows for a clean separation of concerns. Specifically, the normalize function only needs to know how to map the data values to $[0, 1]$. It does not need to be aware of where these normalized data values will be mapped to. Conversely, the unnormalize function only needs to understand how to translate values from $[0, 1]$ to the space of the visual attribute (such as x-axis position).
-
-##### Beyond linear maps
-
-Another big advantage of the two-component scale system is that the functions $n$ and $u$ do not need to be a simple linear maps anymore. For example, suppose that our data $D$ takes form of a set of discrete labels, such as $D = \{ Prague,  Vienna, Munich, Salzburg \}$. We can then replace $n$ with a surjective function $n: D \to [0, 1]$ such that:
-
-$$n(d) = \begin{cases}  
-0.2 & \text{if } d = Munich 
-\\ 0.4 & \text{if } d = Prague 
-\\ 0.6 & \text{if } d = Salzburg 
-\\ 0.8 & \text{if } d = Vienna
-\end{cases}$$
-
-In other words, $n$ will place values of $D$ at equidistant points along $[0, 1]$, ordered alphabetically. We can implement this function in code as follows: 
-
-```{ts}
-// PointMap.ts
-export namespace PointMap {
-  export function normalize(d: string, dlabels: string[]) {
-    return (dlabels.indexOf(d) + 1) / (dlabels.length + 1)
-  }
-}
-```
-
-Since the codomain of $n$ is still $[0, 1]$, we can compose it with a simple linear mapping $u$ just as easily as before: 
-
-```{ts}
-import { LinearMap } from "./LinearMap.ts"
-import { PointMap } from "./PointMap.ts"
-
-const labels = ["Munich", "Prague", "Salzburg", "Vienna"];
-
-console.log(PointMap.normalize("Munich", labels));
-console.log(LinearMap.unnormalize(PointMap.normalize("Munich", labels), 0, 800));
-console.log(LinearMap.unnormalize(PointMap.normalize("Prague", labels), 0, 800));
-```
-
-##### Inverses 
-
-Additionally, another property of the two-component scale system that can be useful is that, if both $n$ and $u$ are invertible, then so is $s$. That is, we can easily obtain the inverse scale function by inverting the definition from \@ref(def:scale):
-
-::: {.definition #scale-inverse name="Scale inverse"}
-
-If a scale $s$ is composed of invertible functions $n$ and  $u$, then $s$ is invertible:
-
-$$s^{-1}(v) = n^{-1}(u^{-1}(v))$$
-
-:::
-
-This is the case for the simple linear map: the normalize and unnormalize functions are actually inverses of each other:
-
-```{ts}
-import { LinearMap } from "./LinearMap.ts"
-
-console.log(LinearMap.unnormalize(LinearMap.normalize(300, 0, 500), 0, 500))
-```
-
-However, the inverse may not always exist. In practice, this is often the case when the domain of the data $D$ is smaller than the codomain $[0, 1]$. Take, for example, the discrete point mapping. Since $D$ is finite but $[0, 1]$ has infinitely many values, there will always be some values in $[0, 1]$ that no $d \in D$ maps to. For example, if $D = \{ Munich, Prague, Salzburg, Vienna \}$ and $Munich$ maps to 0.2, $Prague$ maps to $0.4$, and $Salzburg$ maps to $0.8$, then there are no cities which map to 0.9, 0.444, or 0.123456789. Conversely, if we get given those numeric values, then there is no obvious way to map them back to the cities. 
-
-One thing we can do is to replace the inverse/unnormalize function with a weaker form of inverse, called retraction [@lawvere2009]. Specifically, if we have a normalize function $n: D \to [0, 1]$, then an unnormalize retraction $u^*$ will have the property that:
-
-$$u^*(n(d)) = d \qquad \forall d \in D$$
-
-However, the converse doesn't necessarily hold:
-
-$$\neg \big[ n(u^*(v)) = v \qquad \forall v \in V \big]$$
-
-For example, for the discrete point mapping, a retraction may map a value in $[0, 1]$ to the closest data value $d \in D$:
-
-```{ts}
-// PointMap.ts
-export namespace PointMap {
-  export function normalize(d: string, dlabels: string[]) {
-    return (dlabels.indexOf(d) + 1) / (dlabels.length + 1)
-  }
-  
-  // Retraction - find the closest label
-  export function unnormalize(p: number, dlabels: string[]) {
-    const k = Math.round(p * (dlabels.length + 1) - 1)
-    return dlabels[k]
-  }
-}
-
-const labels = ["Munich", "Prague", "Salzburg", "Vienna"];
-
-const [prague, munich] = ["Prague", "Munich"].map(x => PointMap.normalize(x, labels))
-const midpoint = (prague + munich) / 2
-
-// Helper function for stripping away floating point error 
-const strip = (x: number) => parseFloat(x.toPrecision(12))
-
-console.log(`Midpoint between Munich and Prague: `, strip(midpoint))
-console.log(`unnormalize(0.2999): `, PointMap.unnormalize(0.2999, labels))
-console.log(`unnormalize(3): `, PointMap.unnormalize(0.3, labels))
-
-```
-
-While inverses are always unique [@lawvere2009; @fong2019], we may be able to come up with many different retractions for any given function. For example, with the discrete point map above, we could use the floor function instead of rounding and assign label to a value in $[0, 1]$ if it is less than the value of the normalized label (but more than the preceding labels).
-
-The non-uniqueness of retractions presents a bit of a dilemma. How do we decide which retraction to use? And, if a certain retractive implementation of `unnormalize` returns a value, how do we decide if it is the "correct one"? 
-
-However, in practice, this is not much of a problem. While developing the package, I found that I've only ever had to use the `unnormalize` function with continuous data (`LinearMap`), and so the inverse was always well-defined. This is probably also why packages like `ggplot2` and `D3` can get by without this functionality. However, I still find it helpful to include the `unnormalize` function as a first class citizen (instead of it being relegated to some special case), both in terms of the mental model and also for debugging.        
-
-##### Some other remarks about the two-component scale system
-
-It is worth noting that there is nothing inherently special about the interval $[0, 1]$ as the intermediate domain: any finite subset of $\mathbb{R}$ would do. However, the interval $[0, 1]$ is convenient, both in terms of interpretation as well as for implementation, as we will see later.
-
-Finally, so far I have discussed scales as *functions*: the scale function, the normalize function, and unnormalize function. Framing scales as composition of functions leads to a nice correspondence between the mathematical definition and the code. However, in practice, it may be more convenient to implement the domain and codomain as *objects* or *classes*, as we will also see in the following section. The important point is that, no matter how the two components are represented, each is responsible for translating values from/to its domain and the interval $[0, 1]$.
-
-#### Past implementations of scales
-
-Two-component scale systems such as the one sketched out above are fairly standard across data visualization libraries. For example, in `D3` [@bostock2011], scales are implemented in a functional style, such that the data domain and the visual attribute codomain are passed as tuples or arrays of values to a higher-order `scale*` function (such as `scaleLinear`, `scalePoint`, or `scaleBand`), which then returns a new function that can be used for scaling. The domain and codomain can also be changed at a later point, by using the `scale*.domain` and `scale*.range` methods respectively (JavaScript functions are objects and can have other functions/methods attached to them). 
-
-For illustration, here is an example from the official documentation [@d3-scale2024]:
+Finally, to actually render the summarized data, the summaries need to be translated to aesthetic mappings. This happens via the `Summaries.translate()` function. Again, overtly, this function simply maps the array of `Dataframe`s, however, under the hood it also manages reactivity. For instance, the following is a translating function in the definition of a histogram, taken almost directly from the codebase: 
 
 ```{ts}
 #| eval: false
-const x = d3.scaleLinear([10, 130], [0, 960]);
-x(20); // 80
-const color = d3.scaleLinear([10, 100], ["brown", "steelblue"]);
-color(20); // "rgb(154, 52, 57)"
-// The domain and codomain can be changed after initialization
-const y = d3.scaleLinear().domain([10, 130]); 
+const zero = () => 0;
+const coordinates = Summaries.translate(summarized, [
+  (d) => d,
+  (d) => ({
+      x0: d.binMin,
+      y0: zero,
+      x1: d.binMax,
+      y1: d.stat,
+  }),
+  (d) => ({
+    x0: d.binMin,
+    y0: zero,
+    x1: d.binMax,
+    y1: Reduced.stack(d.stat),
+  }),
+]);
 ```
 
-Internally, the `scale*` functions rely on other specialized functions to translate from its domain to the codomain (such as the `normalize()` and `scale()` functions for continuous and discrete/ordinal domains, respectively, and various `interpolate()` functions for codomains). 
+Notice that the translating function actually maps three data sets. The first, representing a summary on the whole data set, is not used directly in histograms but it utility will be explained below. The second, representing summaries across histogram bins (whole bars), is used for axis limits and collision detection during selection. The third, representing summaries across the product of histogram bins and `Marker` status (bar segments), is used for rendering. Notice that, in the case of the `y1` variable in the third data set, we use the `Reduced.stack()` function to stack the bar segments on top of each other, within the appropriate factor level and using the associated `Reducer`.
 
-Similarly, in `ggplot2` [@wickham2016], scales are built upon the `Scale` class, with each subtype implementing `limits` and `palette` properties. The `limits` property is a vector which corresponds to the data domain and the `palette` property is a function which corresponds roughly to the visual codomain (the x- and y-position behave slightly differently, due to being transformed via coordinate systems). Internally, the package uses the `rescale` function from the `scales` package [@wickham2023] to map data values to $[0, 1]$ and then the `palette` function is responsible for mapping these normalized values to the visual attribute. For illustration, here's the full definition of the `map` method on the `ScaleContinuous` class (I've added comments for clarity):
-
-```{r}
-#| eval: false
-map = function(self, x, limits = self$get_limits()) {
-  # Limits are just a tuple, rescale maps x to [0, 1]
-  x <- self$rescale(self$oob(x, range = limits), limits) 
-
-  uniq <- unique0(x)
-  # Palette is a function which returns a vector of attribute values
-  pal <- self$palette(uniq) 
-  scaled <- pal[match(x, uniq)]
-
-  ifelse(!is.na(scaled), scaled, self$na.value)
-}
-```
-
-#### Proposed model of scales
-
-One feature that the models of scales that `D3` and `ggplot2` rely on is that they both treat the data domain and the visual attribute codomain as different types. In `D3`, fundamentally different functions are used to translate from $D \to [0, 1]$ and from $[0, 1] \to V$, and in `ggplot2`, `limits` is a simple vector/tuple whereas `palette` is a function. While these approaches may have some benefits, such as perhaps offering greater flexibility, they also add additional complexity. Specifically, we have to use two different mental models: one when considering the domain and another when considering the codomain. Further, these models of scales only work in one direction: mapping values $D \to V$. For going the the other way, i.e. mapping $V \to D$, other specialized functions have to be used. 
-
-I propose a model of scales which implements both the domain and the codomain as components of the same type: `Expanse`. Fundamentally, this makes it so that the only difference between the data domain and the visual attribute codomain is which property of the scale they are assigned to. 
-
-Here is a (slightly) simplified version of the `Scale` interface:  
+The reason why the histogram data is summarized across three partitions - constant, bins, bins and marker - is to facilitate seamless transition between histograms and spinograms. Histograms and spinograms represent largely the same underlying data (summaries computed across bins), however, spinograms additionally require a whole-dataset summary to establish the upper (right) x-axis limit. By pre-computing summaries on the constant partition, we enable switching between histograms and spinograms without having to re-calculate the summaries, requiring only change in translation/aesthetic mapping. For illustration, here's how the translation of the same underlying data into a spinogram looks like in `plotscape`: 
 
 ```{ts}
 #| eval: false
-interface Scale<D extends Expanse, V extends Expanse> {
-  domain: D
-  codomain: V
+const coordinates = Summaries.translate(summarized, [
+  (d) => d,
+  (d) => ({
+    x0: Reduced.shiftLeft(Reduced.stack(d.stat)),
+    y0: zero,
+    x1: Reduced.stack(d.stat),
+    y1: one,
+  }),
+  (d) => ({
+    x0: Reduced.shiftLeft(Reduced.stack(Reduced.parent(d.stat))),
+    y0: zero,
+    x1: Reduced.stack(Reduced.parent(d.stat)),
+    y1: Reduced.normalize(Reduced.stack(d.stat), (x, y) => x / y),
+  }),
+]);
+```
+
+#### Scales and expanses {#scales-expanses}
+
+As discussed in Section \@ref(scaling), to actually visualize data, we need to be able to translate values from its domain to the domain of the graphical device (computer screen). In many data visualization packages, this work is done by specialized components called scales. The theoretical model of scales `plotscape` uses was already discussed in Section \@ref(scaling), with the key takeway being that a scales are fundamentally composed of two components: its domain and codomain. In Section \@ref(scales-comparison), I briefly discussed the fact that many popular data visualization systems treat the domain and codomain as fundamentally different entities. I argued that this creates unnecessary complexity, and instead suggested a unified model where both the domain and codomain are represented by the same types. In this section, I will discuss the `plotscaper`'s implementation of scales, `Scale`, as well as the implementation of the domain and codomain components - `Expanse`.  
+
+##### Scales {#scales}
+
+As discussed in Section \@ref(scaling), a key idea for creating a generic model of scales is to imagine the scale as being composed of two components, each translating values to and from their respective domain and the real numbers $\mathbb{R}$. That is, first assume we have some generic type `Expanse<T>` and a corresponding namespace which exposes two functions:
+
+```{ts}
+#| eval: false
+
+interface Expanse<T = unknown> {}
+
+export namespace Expanse {
+  export function normalize<T>(expanse: Expanse<T>, x: T): number {}
+  export function unnormalize<T>(expanse: Expanse<T>, x: number): T {}
 }
 ```
 
-`D` and `V` represent the data domain and the visual attribute codomain, respectively.
-
-The two fundamental functions connected to `Scale` are:
+`Expanse` will be discussed in greater detail later in Section \@ref(expanses), however, for now, look simply at the type signatures of `Expanse.normalize` and `Expanse.unnormalize` - these functions do what we want, in that they translate values of type `T` to number and vice versa. Assuming that `Expanse` really behaves this way, we can define the `Scale` interface as follows:
 
 ```{ts}
-function pushforward<D, V>(scale: Scale<D, V>, value: ValueOf<D>): ValueOf<V>
-function pullback<D, V>(scale: Scale<D, V>, value: ValueOf<V>): ValueOf<D>
+#| eval: false
+interface Scale<T, U> {
+  domain: Expanse<T>;
+  codomain: Expanse<U>;
+
+  zero: number;
+  one: number;
+  direction: 1 | -1;
+  scale: number;
+  mult: number;
+}
 ```
 
-The `pushforward` function *pushes values forward* through the scale, first through its domain and then its codomain, and the `pullback` function *pulls values back*, first through its codomain and then through its domain. The `ValueOf` type helper just identifies the type associated with the expanse's data (e.g. `number` for a continuous `Expanse`, `string` for a discrete `Expanse`, etc...). I've omitted the generic type parameter constraint (`<D extends Expanse, V extends Expanse>`) for brevity.
-
-Here is a simplified implementation of the two functions:
+The two primary properties of `Scale` are the `domain` and `codomain`, both of type `Expanse`. The utility of the other several numeric properties was briefly mentioned in Section \@ref(scaling) and will be discussed later, however, for now, we can ignore them. With only the `domain` and `codomain`, we can already implement a simplified version of the main functionality of `Scale` - the `pushforward` and `pullback` functions:
 
 ```{ts}
 #| eval: false
 namespace Scale {
-  function pushforward<D, V>(scale: Scale<D, V>, value: ValueOf<D>): ValueOf<V> {
+  export function pushforward<T, V>(scale: Scale<T, V>, x: T): V {
     const { domain, codomain } = scale;
-    return Expanse.unnormalize(codomain, Expanse.normalize(domain, value));
+    return Expanse.unnormalize(codomain, Expanse.normalize(domain, x));
   }
 
-  function pullback<D, V>(scale: Scale<D, V>, value: ValueOf<V>): ValueOf<D> {
+  export function pullback<T, V>(scale: Scale<T, V>, x: V): T {
     const { domain, codomain } = scale;
     return Expanse.unnormalize(domain, Expanse.normalize(codomain, value))
   }
 }
 ```
+
+As you can see, `Scale.pushforward` takes as its arguments a `Scale<T, U>` and a value of the same type as the `Scale`'s `domain` (`T`). It then normalizes this value to a `number`, using the `domain`, finally turns the number back to the value of codomain's type (`V`) by using the `unnormalize` function.
+
 
 We can see that most of the work is done by the two `Expanse` components: we use `domain` to translates $D \to [0, 1]$ and codomain to translate $[0, 1] \to V$. `Scale` only serves as plumbing, connecting the two together. 
 

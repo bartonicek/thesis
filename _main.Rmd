@@ -572,7 +572,7 @@ stream
 
 As you can see, the event producer (stream) is defined separately from the event processing logic, which is constructed by piping the result of one operation into the next. Because of the associativity of function composition, the stream actually exhibits properties of a functor, meaning that the order of composition - either through direct function composition or `.pipe()` chaining - does not affect the result. Additionally, while the stream transformations themselves are (generally) stateless, they can still produce useful side-effects (as can be seen on the example of the `console.log` call above). Further, because of this fact, they also lend themselves well to modeling asynchronous or even infinite data sequences [@abelson2022; @fogus2013].
 
-While streams can be extremely useful in specific circumstances, their utility as a general model for complex UIs (beyond asynchronous operations) is debatable. Specifically, the inherent statefulness of UIs conflicts with the stateless nature of streams: stateless computations inside the stream have to leak into the rest of the application *somewhere*. Delineating which parts of the logic should go into streams versus which should be bound to UI components complicates development for little real benefit. Consequently, streams are likely not the optimal choice for interactive data visualization, where some state is unavoidable. 
+While streams can be extremely useful in specific circumstances, their utility as a general model for complex UIs (beyond asynchronous operations) is debatable. Specifically, the inherent statefulness of UIs conflicts with the stateless nature of streams: stateless computations inside the stream have to leak into the rest of the application *somewhere*. Delineating which parts of the logic should go into streams versus which should be bound to UI components adds unnecessary complexity for little real benefit. Consequently, streams are likely not the optimal choice for interactive data visualization, where some state is unavoidable. 
 
 #### Virtual DOM
 
@@ -648,34 +648,34 @@ The key detail to notice is the presence of the global stack of effects. Wheneve
 
 Signals provide an elegant solution to many problems with reactivity. They automate subscription to events, prevent unnecessary updates, ensure correct update order, and, due to their fine-grained nature, are generally highly performant compared to more cumbersome methods like the virtual DOM. However, again, signals do also introduce their own set of trade-offs. Chief among these, signal's reliance on the call stack for event ordering necessitates their implementation as functions (getter-setter pairs), rather than plain data values. While techniques like object getters/setters or templating [as seen in SolidJS, @solid2024] can be used to hide this fact, it does nevertheless add an extra layer of complexity. Similarly, many features important for performance, like memoization and batching, also require treating signals as distinct from plain data. Having code consist of two sets of entities - plain data and signals - ultimately impacts developer ergonomics.
 
-#### Choice of reactivity model and final thoughts {#reactivity-solution}
+#### Reactivity in `plotscape` and final thoughts {#reactivity-solution}
 
-At the start of the project, I had used the `Observer` pattern for modeling reactivity. However, I had this idea of letting the users to define reactive parameters that could be used at arbitrary points in the data visualization pipeline. This had led me to explore the various models of reactivity described above, and even do a full rewrite of `plotscape` with signals at one point.
+At the start of the project, I had used the `Observer` pattern for modeling reactivity. However, I had the idea of letting the users to define reactive parameters that could be used at arbitrary points in the data visualization pipeline. This had led me to explore the various models of reactivity described above, and even do a full rewrite of `plotscape` with signals at one point.
 
-However, eventually, I ended up going back to the `Observer` pattern. The primary reason was developer ergonomics. While many properties of signals like automatic subscription seemed appealing, the need to manage both data and signals as distinct entities proved cumbersome. Deciding which components of my system and their properties should be plain data versus signals added an additional developer overhead and complicated refactoring. Furthemore, I also found that, in the interactive data visualization pipeline, reactivity could be aligned with the four discrete steps: partitioning, aggregation, scaling, and rendering. Specifically, reactive values could be introduced in batch right at the start of each of these four steps, simplifying the reactive graph as well as the overall mental model. Introducing reactivity at other points seem to offer limited practical benefit. Thus, despite the limitations of the `Observer` pattern, the structured nature of the problem (interactive data visualization pipelines) ultimately makes it a good solution in my eyes.
+However, eventually, I ended up reverting back to the `Observer` pattern. The primary reason was developer ergonomics. While many properties of signals like automatic subscription were appealing, the need to manage both data and signals as distinct entities proved cumbersome. Deciding which components of my system and their properties should be plain data versus signals added an additional overhead and made refactoring more complex. Furthemore, I also found that, in the interactive data visualization pipeline, reactivity could be aligned with the four discrete stages: partitioning, aggregation, scaling, and rendering. Specifically, reactive values could be introduced in batch right at the start of each of these four steps, simplifying the reactive graph as well as the overall mental model. Introducing reactivity at other points seem to offer limited practical benefit. Thus, despite the limitations of the `Observer` pattern, the structured nature of the problem (interactive data visualization pipelines) ultimately makes it a good solution in my eyes.
 
 ### System components
 
-This section details the code components of `plotscape`. 
+This section discusses the core components of `plotscape`, detailing their functionality, implementation, and interconnections. The goal is to give an overview and provide a rationale for the design of key parts of the system. As before, TypeScript code examples are provided, and, in general, these map fairly closely to the real codebase.  
 
 #### Indexable {#Indexable}
 
-One of the first considerations when implementing a data visualization system is how to represent data. Clearly, we want the ability to handle fixed-length arrays of values, however, we may also want to be able to work with constants and derived values as well. For instance, in a typical barplot, the y-axis base is a constant (typically zero). Rather than appending an array of zeros to the data, using a constant (`0`) or a thunk (`() => 0`) is simpler and more memory-efficient. Similarly, arrays of repeated values can be optimized by using two arrays: a short array of unique values or "labels," and a long array of indices (i.e. what base R's `factor` class does). Thus, representing data effectively calls for a generalization of a data "column" which can encompass data types beyond fixed-length arrays.
+One of the fundamental considerations when implementing a data visualization system is how to represent a data variable: a generalized sequence of related values. Clearly, the ability to handle fixed-length arrays is essential, however, we may also want to be able to treat constants or derived values as variables. To give an example, in a typical barplot, the y-axis base is a constant, typically zero. While we could hypothetically append an array of zeroes to our data, it is much more convenient and memory efficient to simply use a constant (`0`) or a callback/thunk (`() => 0`). Similarly, at times, arrays of repeated values can be more optimally represented as two arrays: a short array of "labels" and a long array of integer indices (i.e. what base R's `factor` class does). Thus, representing data effectively calls for a generalization of a data "column" which can encompass data types beyond fixed-length arrays.
 
-The generic type `Indexable<T>` represents such a generalization of a data column. It is simply a union of three basic types: 
+The type `Indexable<T>` represents such a generalization of a data column. It is simply a union of three simple types: 
 
 ```{ts}
 #| eval: false 
 Indexable<T> = T | T[] | ((index: number) => T)
 ```
 
-In plain words, an `Indexable<T>` can be one of three things: 
+In plain words, an `Indexable<T>` can be one of the following three objects: 
 
 - A simple (scalar) value `T`
-- A fixed-length array of `T`'s
-- A function which takes an index as an argument and returns a `T`. 
+- A fixed-length array of `T`'s (`T[]`)
+- A function which takes an index as an argument and returns a `T`
 
-This is somewhat similar to Leland Wilkinson's idea of data functions [see @wilkinson2012, pp. 42], although somewhat more constrained. The key functionality which is abstracted over is indexed access to values. A uniform interface for this functionality is provided by provided by [`Getter`](#Getter)s.
+That is, `Indexable`s generalize arrays, providing value access via an index. Arrays behave as expected, scalar values are always returned regardless of the index, and functions are invoked with the index as the first argument (this functionality is provided by [`Getter`](#Getter)s). As a final note, `Indexable`s are somewhat similar to Leland Wilkinson's idea of data functions [see @wilkinson2012, pp. 42], although there are some differences (Wilkinson's data functions are defined more broadly).
 
 #### Getter {#Getter}
 
@@ -686,7 +686,7 @@ A `Getter<T>` is used to provide a uniform interface to accessing values from an
 export type Getter<T> = (index: number) => T;
 
 export namespace Getter {
-  export function of<T>(x: Indexable<T>): Getter<T> {
+  export function create<T>(x: Indexable<T>): Getter<T> {
     if (typeof x === `function`) return x;
     else if (Array.isArray(x)) return (index: number) => x[index];
     else return () => x;
@@ -700,18 +700,16 @@ we can then create and use `Getter`s like so:
 ```{ts}
 import { Getter } from "./Getter"
 
-const getter1 = Getter.of([1, 2, 3])
-const getter2 = Getter.of(99);
-const getter3 = Getter.of((index: number) => index - 1);
+const getter1 = Getter.create([1, 2, 3])
+const getter2 = Getter.create(99);
+const getter3 = Getter.create((index: number) => index - 1);
 
 console.log(getter1(0));
 console.log(getter2(0));
 console.log(getter3(0));
 ```
 
-Note that, by definition, every `Getter<T>` is also automatically an `Indexable<T>` (since it is a callback `(index: number) => T`). This means that we can create new getters out of other getters.
-
-There are also several utility functions for working with and constructing `Getter`s. The first is `Getter.constant` which takes in a value `T` and returns a thunk which always returns `T` (i.e. `() => T`). This is useful, for example, when `T` is an array and we always want to return the whole array (not just a single element):
+Note that, by definition, every `Getter<T>` is also automatically an `Indexable<T>` (since it is a function of the form `(index: number) => T`). This means that we can use `Getter`s to create new `Getter`s. There are also several utility functions for working with `Getter`s. The first is `Getter.constant()` which takes in a value `T` and returns a thunk returning `T` (i.e. `() => T`). This is useful, for example, when `T` is an array and we always want to return the whole array (not just a single element):
 
 ```{ts}
 #| echo: false
@@ -747,20 +745,20 @@ console.log(getter4(0))
 console.log(getter4(1))
 ```
 
-Another useful utility function is `Getter.proxy`, which takes a `Getter` and an array of indices as input and returns a new `Getter` which routes the access to the original values through the indices:
+Another useful utility function is `Getter.proxy()`, which takes a `Getter` and an array of indices as input and returns a new `Getter` which routes the access to the original values through the indices:
 
 ```{ts}
 import { Getter } from "./Getter"
 
-const proxyGetter = Getter.proxy([`A`, `B`, `C`], [2, 1, 1, 0, 0, 0]);
-console.log([0, 1, 2, 3, 4, 5].map(proxyGetter))
+const getter5 = Getter.proxy([`A`, `B`, `C`], [2, 1, 1, 0, 0, 0]);
+console.log([0, 1, 2, 3, 4, 5].map(getter5))
 ```
 
 This function becomes particularly useful when implementing other data structures such as `Factor`s.
 
 #### Dataframe
 
-In many data analytic workflows, a fundamental data structure is a dataframe or a two-dimensional table. As mentioned in Section [REFERENCE], we can represent this data structure as either a dictionary of columns or a list of rows, with the column-wise representation having some advantages for analytical workflows. Thus, in `plotscape`, a `Dataframe` is a dictionary columns, with the extra twist that the columns don't have to be fixed-length arrays but instead [`Indexable`](#Indexable)s:
+In many data analytic workflows, a fundamental data structure is that of a two-dimensional table or dataframe. As mentioned in Section [REFERENCE], we can represent this data structure as either a dictionary of columns or a list of rows, with the column-wise representation having some advantages for analytical workflows. Thus, in `plotscape`, a `Dataframe` is a dictionary columns, with the extra twist that the columns don't have to be fixed-length arrays but instead [`Indexable`](#Indexable)s:
 
 ```{ts}
 interface Dataframe {
@@ -960,22 +958,86 @@ This is all fairly intuitive, however, actually computing the indices of a produ
 
 One crude solution shown in Section \@ref(products-of-partitions) is to treat the factor indices as strings and concatenate them elementwise. This works, but produces an unnecessary computational overhead. There is a better way. Assuming we have two factors with cardinalities $c_1$ and $c_2$, and two indices $i_1$ and $i_2$ corresponding to the same case, we can compute the product index $i_p$ via the following formula:
 
-$$i_{\text{p}} = \max(c_1, c_2) \cdot i_{\text{1}} + i_{\text{2}}$$
+\begin{align}
+k &= max(c_1, c_2) \\
+i_{\text{p}} &= k \cdot i_{\text{1}} + i_{\text{2}}
+(\#eq:product-indices)
+\end{align}
 
-This formula is similar to one discussed in  @wickham2013. Since $i_1$ takes values in $0 \ldots c_1 - 1$ and $i_2$ takes values in $0 \ldots c_2 - 1$, the product index is guaranteed to be unique. Additionally, since the the index corresponding to the first factor gets multiplied by the maximum of the two cardinalities, it gets assigned a greater "weight", preserving the relative order of the two factors. See for example the following table for product indices of two factors of cardinalities 2 and 3:
+This formula is similar to one discussed in  @wickham2013. Since $i_1$ and $i_2$ take values in $0 \ldots c_1 - 1$ and $0 \ldots c_2 - 1$, respectively^[Using zero-based indexing.], the product index is guaranteed to be unique: if $i_1 = 0$ then $i_p = i_2$, if $i_1 = 1$ then $i_p = k + i_2$, and so on. Further, given a product index $i_p$, we can recover the original indices:
+
+\begin{align}
+i_1 &= \lfloor i_p / k \rfloor \\
+i_2 &= i_p \mod k
+\end{align}
+
+This is useful when constructing the product factor data: we need to take all unique product indices and use them to proxy the data of the original two factors. Finally, since the the index corresponding to the first factor is multiplied by $k$, it intuitively gets assigned a greater "weight" and the relative order of the two factors is preserved. See for example the following table of product indices of two factors with cardinalities 2 and 3:
 
 ```{r}
-tab <- expand.grid(i2 = 0:2, i1 = 0:1)
-tab$ip <- 3 * tab$i1 + tab$i2
+#| echo: false
+tab <- expand.grid(i_2 = 0:2, i_1 = 0:1)
+tab$i_product <- 3 * tab$i_1 + tab$i_2
+
+knitr::kable(tab[, c(2, 1, 3)])
+```
+
+It should be mentioned that, as with binning, computing product indices based on Equation \@ref(eq:product-indices) creates gaps. Again, `plotscape` solves this by keeping track of the unique product indices and looping over the indices again to "clean" them, in $O(n)$ time. Further, since we want to retain factor order, `plotscape` also sorts the unique product indices before running the second loop. Hypothetically, with $n$ data points, there can be up $n$ unique product indices (even when $c_1, c_2 < n$), and so this sorting operation makes creating and updating product indices $O(n \cdot \log n)$ worst-case time complexity. However, I contend that, most of the time, the length of the unique product indices will be a fraction of the length of the data, and, further, profiling during development did identify this operation as a computational bottleneck. If sorting did turn out to be a bottleneck, there may be sub-$O(n \cdot \log n)$ algorithms which still preserve the factor order; however, I did not spend time trying to come up with such an algorithm. 
+
+Finally, `Factor.product` is the only factor constructor which actually assigns to the `parent` property of the output `Factor`. Specifically, the first factor always gets assigned as the parent of the product, creating a hierarchical structure. Technically, there are situations where a product of two factors is simply a "flat" product and not a hierarchy. This is the case, for example, when taking the product of two binned variables in a 2D histogram - the two factors are conceptually equal. However, in practice, this distinction rarely matters. Any computation involving a flat product can simply ignore the `parent` property, and the data is for all other intents and purposes equivalent. This similarity of flat and hierarchical products was also noted by Wilkinson, who used the terminology of cross and nest operators [@wilkinson2012, pp. 61]. 
+
+#### Marker
+
+An important component which also serves the function of a `Factor` but deserves its own section is the `Marker`. `Marker` is used to represent group assignment during linked selection, making it a key component of `plotscape`. Moreover, while most of the components discussed so far can exist within the context of a single plot, `Marker` further differs by the fact that it is shared by all plots within the same figure.
+
+`Marker` has the following `Factor`-like interface which will be gradually explained below^[The actual implementation in the current version of `plotscape` differs slightly in several key aspects, however, the general idea is the same.]:
+
+```{ts}
+interface Marker {
+  cardinality: number;
+  indices: number[];
+  data: { layer: number[] };
+  transientIndices: number[];
+}
+```
+
+However, before delving into this interface, let's first discuss some important theoretical concepts related to `Marker`.
+
+##### Transient vs. persistent selection {#transient-persistent}
+
+A key concept in the implementation of `Marker` is the distinction between transient and persistent selection [see also @urbanek2011]. By default, `plotscape` plots are in transient selection mode, meaning that linked selection operations (e.g. clicking, clicking-and-dragging) assign cases the transient selection status. This transient selection status is cleared by subsequent selection events, as well as many other interactions including panning, zooming, representation switching, and change of parameters. To make the results of selection persist across these interactions, the user can assign cases to persistent selection groups (currently, this is down by holding down a numeric key and performing regular selection). Persistent selections are removed only by a dedicated action (double-click).
+
+Importantly, a single data point can be simultaneously assigned to a persistent group *and* also be transiently selected. For example, a data point may belong to the base (unselected) group, transiently selected base group, persistent group one, transiently selected persistent group one, and so on. This means that `plotscape` has a very minimal version of selection operators [see @unwin1996; @theus2002] baked-in: transient and persistent selection are automatically combined via intersection (the `AND` operator). While a full range of selection operators provides much greater flexibility, I contend that this simple transient-persistent model already provides a lot of practical utility. Specifically, it enables a common action in the interactive data visualization workflow: upon identifying an interesting trend with selection, a user may be interested in how the trend changes when conditioning on *another* (`AND`) subset of the data. The transient-persistent model makes this possible, without introducing the overhead having to learn how to use various selection operators. 
+
+```{r transient-persistent-product}
+#| echo: false
+#| fig-cap: "A screenshot of a `plotscaper` figure showing five different selection group assignments: base/no selection (light blue), group one (light green), group two (light red/pink), transiently selected group one (dark green), and transiently selected group two (dark red). The three remaining group assignments - transiently selected base, group three, transiently selected group three - are not shown in the figure to prevent it from becoming too busy. Finally, note that, in the barplot (right), the transiently selected bar segments appear at the base of the bars."
+knitr::include_graphics("./figures/transient-persisent-product.png")
+```
+
+Final thing to note is that, during rendering, transient selection status is by paired colour shades, see Figure \@ref(fig:transient-persisent-product). That is, each persistent selection group is assigned a unique color, and transient selection is indicated by a darker shade of the same color. This pairing clearly visually differentiates the two selection modes while preserving the identity of the persistent groups.
+
+##### Group assignment indices
+
+The key responsibility of `Marker` is manage linked selection status (the transient-persistent model discussed in Section \@ref(transient-persistent) above). It does this very similarly to a `Factor`, by maintaining an array of group assignment `indices`. In `plotscape`, each data point can be assigned one of four primary (persistent) groups based on linked selection: base (no selection), persistent selection group one, persistent selection group two, and persistent selection group three. Further, as also discusssed above, each of those groups can be further split in two based on transient selection state (selected or unselected), resulting in $4 \times 2 = 8$ distinct group assignments (such that the `cardinality` of `Marker` is always 8). These group assignments are coded into indices as follows:  
+
+```{r}
+#| echo: false
+tab <- data.frame(
+  group = c("Base", "Group one", "Group two", "Group three", 
+            "Transient base", "Transient group one", "Transient group two", "Transient group three"),
+  index = c(7, 6, 5, 4, 3, 2, 1, 0)
+  )
 
 knitr::kable(tab)
 ```
 
-As with binning, there is also the issue of products creating gaps in indices. Again, `plotscape` solves this by keeping track of the unique product indices and looping through them again to "clean" them, in $O(n)$. Since we want to retain the factor order, we also have to sort the unique product indices, which may hypothetically have worst-case $O(n \cdot \log n)$ time complexity (since even with two factors with cardinalities $c_1, c_2 < n$, there can be $n$ unique product indices), however, most of the time, the length of the unique product indices will only be a fraction of the length of the data.  
+As you can see from the table above, selection groups are mapped to indices in reverse order. Transient group indices have lower values than persistent ones, and persistent groups are sorted in descending order. This reverse ordering is designed to simplify stacking operations. Group assignment inherently implies importance or salience, and, and during stacking, we often want the more "important" selected groups have to higher precedence than less significant, unselected ones [see also @urbanek2011]. For instance, in stacked barplots, the visually salient highlighted bar segments are generally placed at the base (y-axis intercept), and likewise, in dotplots, the highlighted circles are placed at the center, meaning that both have to come first in the aggregation order. Having the group indices coded in reverse order eliminates the need for sorting during later stages of the data visualization pipeline.  
 
-Finally, `Factor.product` is the only factor constructor which actually assigns to the `parent` property of the output `Factor`. Specifically, the first factor always gets assigned as the parent of the product, creating a hierarchical structure. Technically, there are situations where a product of two factors is simply a "flat" product and not a hierarchy. This is the case, for example, when taking the product of two binned variables in a 2D histogram - the two factors are conceptually equal. However, in practice, this distinction rarely matters. Any computation involving a flat product can simply ignore the `parent` property, and the data is for all other intents and purposes equivalent. This similarity of flat and hierarchical products was also noted by Wilkinson, who used the terminology of cross and nest operators [@wilkinson2012, pp. 61]. 
+With four persistent groups (including base), many operations involving transient selection can be efficiently implemented using the third bit of the index. Specifically, as can be seen in table [REFERENCE], persistent indices range from 0 to 3 and transient indices range from 4 to 7. Thus, to determine whether a case is selected, we can do a simple bitwise check of the third bit. Likewise, to add or remove transient selection, we can set the third bit appropriately. 
 
-#### Reducers
+It is important to mention that, while not a necessity, having four persistent groups works well when for the main purpose of `Marker`s: taking products with other factors. With four groups, the number of unique group assignments is eight and the maximum index values is `2^3 - 1 = 7`, resulting in dense `Marker` indices (i.e. all index values from 0 to `cardinality - 1` are valid). If we wanted to implement more persistent selection groups, we could do so by setting a higher bit (e.g. the fourth bit for up to eight persistent groups), however, we may break the correspondence between cardinality and the number of unique indices. Practically, this may not cause any issues, however, as long as we ensure that the `Marker` cardinality is set to $2^{\text{# of the transient bit}}$ which may be different from the number of unique indices. However, I argue that having more than four persistent selection groups is not necessary, for most intents and purposes. It is well-known from data visualization literature that the capacity of the human visual system is limited and having more than $4 \times 2 = 8$ different group assignments represented by different colours may become visually taxing.    
+
+#### Aggregation: Reducers, reduceds, and summaries
 
 As discussed in Section \@ref(aggregation), a key challenge when computing statistical summaries in interactive data visualization systems is doing so in a way that preserves the inherent hierarchy in the data. For instance, when stacking bar segments in a barplot that has been partitioned via linked selection, we want the stacking operation to respect the inherent hierarchical relationships between the segments and the bars. Further, as also demonstrated in Section \@ref(aggregation), this setup suggests particular algebraic structures: groups and monoids.
 
@@ -1100,15 +1162,15 @@ These functions all take `Reduced` as the first argument and compute transformat
 
 ##### Summaries
 
-With the building blocks of `Indexable`s, `Factor`s, `Reducer`s and `Reduced`s, we now have everything we need to compute the hierarchy of summaries described in Section \@ref(aggregation) and more specifically Section \@ref(aggregation-functor). The `Summaries.of` function exported from the `Summaries` namespace does exactly this:^[Technically, the type signature of the real function as implemented in `plotscape` is a lot more complicated since it heavily relies on generics to correctly infer the type of the summarized data, however, the basic idea is the same.]:
+With the building blocks of `Indexable`s, `Factor`s, `Reducer`s and `Reduced`s, we now have everything we need to compute the hierarchy of summaries described in Section \@ref(aggregation) and more specifically Section \@ref(aggregation-functor). This is the exact purpose of the constructor function exported from the `Summaries` namespace:^[Technically, the type signature of the real function as implemented in `plotscape` is a lot more complicated since it heavily relies on generics to correctly infer the type of the summarized data, however, the basic idea is the same.]:
 
 ```{ts}
 #| eval: false
 type ReducerTuple<T = unknown> = [Indexable<T>, Reducer<T>];
-function of(summaries: Record<string, ReducerTuple>, factors: Factor[]): Dataframe[]
+function create(summaries: Record<string, ReducerTuple>, factors: Factor[]): Dataframe[]
 ```
 
-The `Summaries.of` function takes in a dictionary of `Indexable-Reducer` pairs with matching generic and an array of `Factor`s. It then repeatedly combines the factors pair-wise using `Factor.product` and then computes summaries for each new product factor using the `Indexable-Reducer` pairs in `summaries`. This results in an array of `Dataframe`s with equal length as `factors`, holding the combined data. For example:
+The `Summaries.create` function takes in a dictionary of `Indexable-Reducer` pairs with matching generic and an array of `Factor`s. It then repeatedly combines the factors pair-wise using `Factor.product` and then computes summaries for each new product factor using the `Indexable-Reducer` pairs in `summaries`. This results in an array of `Dataframe`s with equal length as `factors`, holding the combined data. For example:
 
 ```{ts}
 #| eval: false
@@ -1116,12 +1178,57 @@ const factor1 = Factor.from([`a`, `a`, `b`, `a`, `b`, `c`])
 const factor2 = Factor.product(factor1, Factor.from([0, 0, 0, 1, 1, 1]))
 const summaries = { stat: [[10, 12, 9, 15, 11, 10], Reducer.sum] }
 
-const s = Summaries.of(summaries, [factor1, factor2])
-Dataframe.rows(s[0]) // [ { label: `a`, stat: 37 }, { label: `b`, stat: 20 }, { label: `c`, stat: 10 } ]
-Dataframe.rows(s[1]) // [ { label: `a`, label$: `0`, stat: 22 }, { label: `a`, label$: `1`, stat: 15 }, ... ]
+const summarized = Summaries.create(summaries, [factor1, factor2])
+Dataframe.rows(summarized[0]) // [ { label: `a`, stat: 37 }, { label: `b`, stat: 20 }, { label: `c`, stat: 10 } ]
+Dataframe.rows(summarized[1]) // [ { label: `a`, label$: `0`, stat: 22 }, { label: `a`, label$: `1`, stat: 15 }, ... ]
 ```
 
-This is the overt behavior of the `Summaries.of` function; however, it also does a couple more things under the hood. First, it links all reduced variables created from `summaries` with their counterpart on the parent data (i.e. assinging the `parent` property on the `Reduced`s). It also sets up a reactive graph, such that when a factor is updated, its corresponding data is updated as well and so are its child factors and their corresponding data.
+Thus, the overt behavior of the `Summaries.create()` is to compute summaries using `Reducer`s and combine the resulting data with the corresponding `Factor` data. However, under the hood, the function also does a couple more things. First, it links all reduced variables created from `summaries` with their parent-data counterpart (by assigning the `parent` property on the `Reduced`s). It also sets up a reactive graph, such that when a factor is updated, its corresponding data is updated, and so are its child factors and their corresponding data.
+
+Finally, to actually render the summarized data, the summaries need to be translated to aesthetic mappings. This happens via the `Summaries.translate()` function. Again, overtly, this function simply maps the array of `Dataframe`s, however, under the hood it also manages reactivity. For instance, the following is a translating function in the definition of a histogram, taken almost directly from the codebase: 
+
+```{ts}
+#| eval: false
+const zero = () => 0;
+const coordinates = Summaries.translate(summarized, [
+  (d) => d,
+  (d) => ({
+      x0: d.binMin,
+      y0: zero,
+      x1: d.binMax,
+      y1: d.stat,
+  }),
+  (d) => ({
+    x0: d.binMin,
+    y0: zero,
+    x1: d.binMax,
+    y1: Reduced.stack(d.stat),
+  }),
+]);
+```
+
+Notice that the translating function actually maps three data sets. The first, representing a summary on the whole data set, is not used directly in histograms but it utility will be explained below. The second, representing summaries across histogram bins (whole bars), is used for axis limits and collision detection during selection. The third, representing summaries across the product of histogram bins and `Marker` status (bar segments), is used for rendering. Notice that, in the case of the `y1` variable in the third data set, we use the `Reduced.stack()` function to stack the bar segments on top of each other, within the appropriate factor level and using the associated `Reducer`.
+
+The reason why the histogram data is summarized across three partitions - constant, bins, bins and marker - is to facilitate seamless transition between histograms and spinograms. Histograms and spinograms represent largely the same underlying data (summaries computed across bins), however, spinograms additionally require a whole-dataset summary to establish the upper (right) x-axis limit. By pre-computing summaries on the constant partition, we enable switching between histograms and spinograms without having to re-calculate the summaries, requiring only change in translation/aesthetic mapping. For illustration, here's how the translation of the same underlying data into a spinogram looks like in `plotscape`: 
+
+```{ts}
+#| eval: false
+const coordinates = Summaries.translate(summarized, [
+  (d) => d,
+  (d) => ({
+    x0: Reduced.shiftLeft(Reduced.stack(d.stat)),
+    y0: zero,
+    x1: Reduced.stack(d.stat),
+    y1: one,
+  }),
+  (d) => ({
+    x0: Reduced.shiftLeft(Reduced.stack(Reduced.parent(d.stat))),
+    y0: zero,
+    x1: Reduced.stack(Reduced.parent(d.stat)),
+    y1: Reduced.normalize(Reduced.stack(d.stat), (x, y) => x / y),
+  }),
+]);
+```
 
 #### Motivation
 
