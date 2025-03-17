@@ -1048,13 +1048,11 @@ const coordinates = Summaries.translate(summarized, [
 ]);
 ```
 
-#### Scales and expanses {#scales-expanses}
+#### Scales {#scales}
 
-As discussed in Section \@ref(scaling), to actually visualize data, we need to be able to translate values from its domain to the domain of the graphical device (computer screen). In many data visualization packages, this work is done by specialized components called scales. The theoretical model of scales `plotscape` uses was already discussed in Section \@ref(scaling), with the key takeway being that a scales are fundamentally composed of two components: its domain and codomain. In Section \@ref(scales-comparison), I briefly discussed the fact that many popular data visualization systems treat the domain and codomain as fundamentally different entities. I argued that this creates unnecessary complexity, and instead suggested a unified model where both the domain and codomain are represented by the same types. In this section, I will discuss the `plotscaper`'s implementation of scales, `Scale`, as well as the implementation of the domain and codomain components - `Expanse`.  
+As discussed in Section \@ref(scaling), to visualize data, we need to translate values from the domain of the data to the domain of the graphical device (computer screen). In many data visualization packages, this work is done by specialized components called scales. The theoretical model of scales `plotscape` uses was already discussed in Section \@ref(scaling), with the key takeway being that a scales are fundamentally composed of two components: its domain and codomain. In Section \@ref(scales-comparison), I briefly discussed the fact that many popular data visualization systems treat the domain and codomain as fundamentally different entities. I argued that this creates unnecessary complexity, and instead suggested a unified model where both the domain and codomain are represented by the same types. In this section, I will discuss the `plotscape`'s implementation of scales, `Scale`.  
 
-##### Scales {#scales}
-
-As discussed in Section \@ref(scaling), a key idea for creating a generic model of scales is to imagine the scale as being composed of two components, each translating values to and from their respective domain and the real numbers $\mathbb{R}$. That is, first assume we have some generic type `Expanse<T>` and a corresponding namespace which exposes two functions:
+In Section \@ref(scaling), I mentioned that a key idea for creating a generic model of scales involves conceptualizing scales as composed of two components, each translating values to and from their respective domain and the real numbers $\mathbb{R}$. In `plotscape`, these components are called `Expanse`s and will be discussed later, in Section \@ref(expanses). However, for now, assume we have some generic type `Expanse<T>` and a corresponding namespace which exposes two functions:
 
 ```{ts}
 #| eval: false
@@ -1067,7 +1065,7 @@ export namespace Expanse {
 }
 ```
 
-`Expanse` will be discussed in greater detail later in Section \@ref(expanses), however, for now, look simply at the type signatures of `Expanse.normalize` and `Expanse.unnormalize` - these functions do what we want, in that they translate values of type `T` to number and vice versa. Assuming that `Expanse` really behaves this way, we can define the `Scale` interface as follows:
+Now, assuming we have some type and namespace `Expanse` that behaves this way, we can define the `Scale` interface as follows:
 
 ```{ts}
 #| eval: false
@@ -1083,7 +1081,7 @@ interface Scale<T, U> {
 }
 ```
 
-The two primary properties of `Scale` are the `domain` and `codomain`, both of type `Expanse`. The utility of the other several numeric properties was briefly mentioned in Section \@ref(scaling) and will be discussed later, however, for now, we can ignore them. With only the `domain` and `codomain`, we can already implement a simplified version of the main functionality of `Scale` - the `pushforward` and `pullback` functions:
+The two primary properties of `Scale` are `domain` and `codomain`, both of type `Expanse`. The utility of the other properties relates to concepts discussed in Section \@ref(scaling-intermediate) and will be discussed later. However, for now, we can focus solely on `domain` and `codomain`. These two properties are sufficient to implement the core functionality of `Scale`: the `pushforward` and `pullback` functions. To explain what these functions do, it may be easiest to just show the code:
 
 ```{ts}
 #| eval: false
@@ -1100,269 +1098,99 @@ namespace Scale {
 }
 ```
 
-As you can see, `Scale.pushforward` takes as its arguments a `Scale<T, U>` and a value of the same type as the `Scale`'s `domain` (`T`). It then normalizes this value to a `number`, using the `domain`, finally turns the number back to the value of codomain's type (`V`) by using the `unnormalize` function.
+The `Scale.pushforward` function takes as its arguments a `Scale<T, U>` and a value of type `T` (corresponding to the scale's domain). It then converts this value to a `number`, using `Expanse.normalize` with `domain` as the first argument. Finally, it converts this number back to the value of type `V` (corresponding to the scale's codomain), using `Expanse.unnormalize`, with the `codomain` as the first argument. Conversely, the `Scale.pullback` function performs the reverse operation: it first normalizes the value within codomain and then unnormalizes it within the domain. In this way, `Scale.pullback` acts as an inverse mapping of the type discussed in Section \@ref(scaling-inverses). Put simply, the `Scale` acts as just a kind of connector or "plumbing" between its corresponding `domain` and `codomain`, converting values from one space to the other.
 
+Thus, most of the heavy lifting related to scaling is done by the `domain` and `codomain` properties, both of type `Expanse`. However, before we go on to discuss `Expanse`, we should explore the remaining `Scale` properties.
 
-We can see that most of the work is done by the two `Expanse` components: we use `domain` to translates $D \to [0, 1]$ and codomain to translate $[0, 1] \to V$. `Scale` only serves as plumbing, connecting the two together. 
+##### Scale properties
 
-I argue that this model provides several benefits. First of all, it makes the code easier to reason about. Since both the `domain` and `codomain` are of the same type, we only need to keep a single mental model in mind. Second, if `domain` and `codomain` provide inverse functions (`unnormalize`), we get the inverse scale function $V \to D$ for free (this is just the `pullback` function).
-
-However, before we discuss `Expanse`, there are also some important functionalities that we may want to implement on `Scale` directly. There are two main reasons for this. First, we may want these functionalities to apply generally, across the various `Expanse` subtypes. Second, by implementing them on `Scale`, we can keep the `Expanse` interface cleaner. These general functionalities will be the subject of the next few sections.    
-
-##### Zero and one
-
-Recall how in Section \@ref(simple-scale-limits), we discussed the problem of expanding axis limits to display margins. Clearly, this is something that we also want to be able to do with our two-component scales. However, since we are designing an interactive data visualization system, we also want to be able to do more with axis limits: we want to be able to manipulate them dynamically during runtime, to implement features such as zooming and panning.
-
-In Section \@ref(simple-scale-limits), we solved the problem of expanding axis limits by adding an additional argument to the `simpleScale` function. However, as was discussed previously, this approach does not scale well for more featureful implementations of scales. So how should we go about implementing dynamic axis limits in the context of the two-component scale system?
-
-Suppose we want to add margins to a scale where both the domain or codomain are continuous, such as the x-axis in a typical scatterplot. To implement margins, we could either expand the range of the data (the domain) or shrink the range of the visual attribute (the codomain). However, expanding the domain seems like a bad idea - this only works if the domain is continuous, and, clearly, we may want to add margins to discrete scales too, such the the x-axis of a barplot. Shrinking the range of the codomain could work (most visual attributes are continuous), however, we would need to implement some custom logic for when the plot gets resized. Also, by treating codomain differently than the codomain, we would be breaking away from our intention of representing both with the same generic `Expanse` type.
-
-So what can we do? As was foreshadowed at end of the previous section, we can put the functionality for expanding axis limits directly onto `Scale`. Specifically, notice that any values passing through a scale are first converted to the interval $[0, 1]$ and then back to the space of either the domain or codomain:
-
-$$D \to [0, 1] \to V$$
-
-If we re-normalize these normalized values in $[0, 1]$, we effectively expand or shrink axis limits without having to touch either the domain or codomain. To give a metaphor, if we imagine `Scale` as a pipe connecting the `domain` and `codomain`, we can manipulate axis limits by stretching or squeezing this pipe, allowing more or less water to flow through.
-
-To actually implement this, we can add two additional parameters to `Scale`, `zero` and `one`:
+Besides `domain` and `codomain`, scale also has five numeric properties: `zero`, `one`, `direction`, `scale`, and `mult`. These properties act as parameters of the (implicit) intermediate domain. They facilitate a range of domain-and-codomain-agnostic scale operations, including zooming, panning, growing/shrinking, and reversing, and are applied during calls to `Scale.pushforward` or `Scale.pullback`. For instance, here's how a "more full"^[This is *almost* the exact implementation, with the only difference being that in `plotscape`, `domain` and `codomain` can additionally be array-valued, so `Scale.pushforward` includes logic for handling this.] implementation of `Scale.pushforward` looks like:
 
 ```{ts}
 #| eval: false
-interface Scale<D extends Expanse, V extends Expanse> {
-  domain: D
-  codomain: V
-  props: { // A dictionary of properties
-    zero: number
-    one: number
-  }
+export function pushforward<T, U>(scale: Scale<T, U>, x: T): U {
+  const { domain, codomain, zero, one, direction, scale, mult } = scale
+  
+  let normalized = Expanse.normalize(domain, x);  // Normalize to [0, 1]
+  normalized = normalized * scale * mult;         // Grow/shrink
+  normalized = zero + normalized * (one - zero);  // Apply margins
+  normalized = 0.5 * (1 - direction) + direction * normalized;  // Apply direction
+  
+  return codomain.unnormalize(normalized);
 }
 ```
 
-Now, we can use these two parameters to implement a new version of the `pushforward` function:
+Let's break down how these properties affect `Scale.pushforward`. First, normalized values get multiplied by the `scale` and `mult`:
 
 ```{ts}
 #| eval: false
-function pushforward<D, V>(scale: Scale<D, V>, value: D): V {
-  const { domain, codomain, props } = scale;
-  const { zero, one } = props
-  let normalized = Expanse.normalize(domain, value)
-  normalized = zero + normalized * (one - zero) // Re-normalize
-  return Expanse.unnormalize(codomain, normalized)
-}
+normalized = normalized * scale * mult;
 ```
 
-The new function's body is a bit more dense, however, the only real change is in the line with the comment. When we re-normalize, we scale the normalized value by the `(zero - one)` range and increment it by `zero`. In other words, `zero` tells us the proportion of the codomain range that the minimum data value gets mapped to, and `one` tells us the proportion of the codomain range that the maximum data value gets mapped to.
+Together, these `scale` and `mult` jointly define a multiplicative factor that gets applied to all values during scaling. The reason for separating them into two properties is to allow for both default and interactive scaling. Often, we want to apply a default scaling factor (`scale`) while still enabling users to dynamically adjust the overall magnitude of multiplication (`mult`). For instance, in a barplot, bars might have a default maximum width corresponding to a fraction of the total plot width (`scale`), but users should still be able to interactively resize them (via `mult`).
 
-For example, suppose we set `zero` to 0.1 and `one` to 0.9. Then we have effectively implemented 10% margins on either side of the scale. If our scale has a $[1, 10]$ domain and $[0, 800]$ codomain, this will result in the following mapping:
-
-- The "minimum" data value (1) gets mapped to 10% of the codomain range (80) 
-  - Because `zero + 0 * (one - zero) = zero = 0.1`
-- The "maximum" data value (10) gets mapped to 90% of the codomain range (720)
-  - Because `zero + 1 * (one - zero) = one = 0.9`
-
-Note the quotation marks around the words "minimum" and "maximum" - there is no requirement for the data to be continuous. For example, if the domain is a discrete `Expanse` which maps the string value `"A"` to zero, then the `pushforward` function will map `"A"` to 10% of the codomain range, just as it did in the case of the continuous domain. Likewise, the codomain could also be discrete - we could use this to implement scales for binned versions of visual attributes such as color or size. 
-
-Thus, we can use `zero` and `one` to implement margins. However, there is much more we can do with these parameters. First, despite the names, `zero` and `one` can both take values *less* than zero and *more* than one. For example, suppose we increment both `zero` and `one` by the same amount, e.g. we set `zero` to 0.1 and `one` to 1.1. Then, the minimum data value will get mapped to the 10% of the codomain range, and the maximum data value will get mapped to 110% of the codomain range (which may lie outside the space representable by the graphic device). If the codomain represents the x-axis position, then we have shifted all of the geometric objects 10% to the right. We have effectively implemented *panning*:
+Second, as discussed in Section \@ref(scaling-intermediate), the `zero` and `one` properties apply proportional margins to the normalized values:
 
 ```{ts}
 #| eval: false
-function move(scale: Scale, amount: number) {
-  scale.props.zero += amount;
-  scale.props.one += amount;
+normalized = zero + normalized * (one - zero);
+```
+
+For instance, assuming that  by `Expanse.normalize` maps the "minimum" and "maximum" values of the domain to 0 and 1, respectively, setting `zero` to 0.1 and `one` to 0.9 expands the scale and applies a symmetric 10% margin on both ends. Importantly, this expansion is consistent across all concrete `Expanse` subtypes used for the `domain` and `codomain`. Further, as also discussed in Section \@ref(scaling-intermediate), incrementing both values by the same amount effectively shifts the scale. Consequently, the implementation of panning is as simple as:
+
+```{ts}
+export function move(scale: Scale, amount: number): void {
+  scale.zero += amount;
+  scale.one += amount;
 }
 ```
 
-That's it. We have implemented a functionality for panning which will work no matter if `domain` translates numbers, strings, or some other more complex data types.
-
-We can also stretch or shrink `zero` and `one` in opposite directions. For example, by setting `zero` to -0.5 and `one` to 1.5, then the minimum and maximum data values will get mapped 50% below and 50% above the limits of the codomain range, respectively, and the 25 and 75 data percentiles will get mapped to the minimum and maximum of the codomain range. If we apply this to the x- or y-axes, we've just implemented *zooming*.
-
-To be perfectly honest, there's a bit more ceremony involved with zooming. Specifically, if we don't start from `zero = 0` and `one = 1` (e.g. if our plot already has margins or if we're zooming in multiple levels deep), then we need to re-normalize within these values. This took me a bit of time to nail down, however, it's just (highschool) algebra:
+Again, this implementation of panning is also domain-and-codomain-agnostic. Further, it can result in `zero` and `one` values outside of $[0, 1]$, which is fine since, as mentioned in Section \@ref(scaling-intermediate), at times we may want to map points outside of the codomain (e.g. scatterplot points with x- and y- coordinates outside of the plot but with plot-overlapping radius). Finally, we can also use the `zero` and `one` properties to zoom into a specific region of the scale, using the `Scale.expand` function. The logic of this function is a bit more complicated, but can be understood with careful application of (highschool) algebra:
 
 ```{ts}
-function rangeInverse(min: number, max: number) {
-  return 1 / (max - min);
+function invertRange(min: number, max: number): number {
+  const rangeInverse = 1 / (max - min);
+    return [-min * rangeInverse, (1 - min) * rangeInverse];
 }
 
-function invertRange(min: number, max: number) {
-  const ri = rangeInverse(min, max);
-  return [-min * ri, ri - min * ri];
-}
+export function expand(scale: Scale, zero: number, one: number): void {
+  const { zero: currentZero, one: currentOne, direction } = scale;
+  const currentRange = currentOne - currentZero;
 
-namespace Scale {
-  export function expand(
-    scale: { props: { zero: number; one: number } },
-    zero: number,
-    one: number
-  ) {
-    const { zero: currentZero, one: currentOne } = scale.props;
-    const currentRange = currentOne - currentZero;
+  // Reflect if direction is backwards
+  if (direction === -1) [zero, one] = [1 - zero, 1 - one];
+
+  // Normalize the zoom values within the current range
+  [zero, one] = [zero, one].map((x) => (x - currentZero) / currentRange);
+  [zero, one] = invertRange(zero, one);
+
+  // Reflect back
+  if (direction === -1) [zero, one] = [1 - zero, 1 - one];
     
-    // Re-normalize within current values
-    zero = (zero - currentZero) / currentRange;
-    one = (one - currentZero) / currentRange;
-
-    // Invert
-    [zero, one] = invertRange(zero, one);
-
-    scale.props.zero = zero;
-    scale.props.one = one;
-  }
-}
-
-const scale1 = { props: { zero: 0, one: 1 } }; // Mock of default scale
-const scale2 = { props: { zero: 0.1, one: 0.9 } }; // Mock of scale with margins
-
-// Zoom into the middle 50% of either scale
-Scale.expand(scale1, 0.25, 0.75);
-Scale.expand(scale2, 0.25, 0.75);
-
-console.log(`Zoomed in scale with no margins`, scale1.props);
-console.log(`Zoomed in scale with 10% margins`, scale2.props);
-```
-
-As you can see, zooming into the middle 50% of a scale that already includes margins has a smaller effect on `zero` and `one`, since the margins have effectively expand the space we're zooming into (i.e., a scale with margins is already *zoomed out*, in a way).
-
-##### Direction
-
-In the same way we can think about expanding/shrinking axis limits in a way that is not coupled to any particular data representation or visual attribute, it may also be helpful to make direction a property of `Scale` rather than either of the `Expanse` components. 
-
-We *could* do this by manipulating the `zero` and `one` properties. For example, by setting `zero` to 1 and `one` to 0, we could effectively reverse the direction of the scale. However, in practice, this would complicate our logic and make it harder for someone to interpret the `Scale` properties. It is a better idea to add an explicit `direction` parameter instead:
-
-```{ts}
-#| eval: false
-interface Scale<D extends Expanse, V extends Expanse> {
-  domain: D
-  codomain: V
-  props: {
-    zero: number
-    one: number
-    direction: 1 | -1 // Extra parameter
-  }
+  scale.zero = zero
+  scale.one = one
 }
 ```
 
-Like with `zero` and `one`, `direction` acts on the normalized values in $[0, 1]$. This means that we need to apply it in any transformations that use these values. For example, here's an updated version of the `move` function:
+The `Scale.expand` function zooms into a proportional region of the scale, using the two numeric arguments as boundaries of this region. For instance, `Expand.scale(scale, 0.25, 0.75)` zooms into the middle 50% of the scale. The key part of this operation is the `invertRange` function. This takes a numeric interval given by $[\min, \max]$ and inverts this, such that, when the simple linear normalizing function $n(x) = (x - \min) / (\max - \min)$ is applied to 0 and 1 with the new values, the result will be $n(0) = a$ and $n(1) = b$, respectively. The rest of the `Scale.expand` function is just book-keeping, handling the case where `zero`, `one`, and `direction` have been set to non-default values.  
+
+Third and finally, the `direction` property gets applied to the normalized values in the following way:
 
 ```{ts}
-export function move(scale: Scale, amount: number) {
-  let { direction, zero, one } = scale.props;
-  zero += direction * amount;
-  one += direction * amount;
-}
+normalized = 0.5 * (1 - direction) + direction * normalized;
 ```
 
-Likewise, the `pushforward`, `pullback`, and `expand` functions also need to take `direction` into account. Either way, with this functionality in place, it becomes trivial to flip or reverse a scale:
+The line of code above is essentially a branchless conditional. When `direction` is 1, then the first term in the sum evaluates to zero and the result is just the value `normalized`. Conversely, when `direction` is -1, the first term evaluates to one and the result is `1 - normalized`, effectively reversing the normalized value. This approach avoids explicit branching, which can be expensive, particularly when the branches are unpredictable. Although the JavaScript engine may be able to optimize a simple `if/else` statement if it was used here, and branch prediction would likely be accurate within long-running loops, this micro-optimization may nevertheless be useful since scaling represents a "hot" code path: it has to occur during any rendering/selection.
 
-```{ts}
-export function flip(scale: Scale) {
-  scale.props.direction -= 1;
-}
-```
+With this detailed explanation, the behavior of `Scale.pushforward` should be clear. The `Scale.pullback` function follows a similar pattern, but with inverse transformations applied in reverse order (i.e. `direction` first, then `zero` and `one`, and finally `scale` and `mult`). This concludes our examination of the `Scale` class. We will now proceed to discuss the type and behavior of its `domain` and `codomain` components: `Expanse`s.
 
-##### Multipliers
+#### Expanses
 
-Finally, it may also be helpful to have the ability to shrink/expand the normalized values by some constant without having to modify properties of either the `domain` or `codomain`. Again, this could be done by using the `zero` and `one` properties, however, it's better to define separate properties instead. Specifically, we can add *two* additional parameters:
+As discussed in the previous section, each `Scale` consists of two properties of type `Expanse`, which represent the space the values are mapped *from* - the `domain` - and the space the values are mapped *to* - the `codomain`. Thus, a `Scale` mainly acts as a sort of a connector between the `domain` and `codomain`, with most of the real work being done by these two properties.
 
-```{ts}
-#| eval: false
-interface Scale<D extends Expanse, V extends Expanse> {
-  domain: D
-  codomain: V
-  props: {
-    zero: number
-    one: number
-    direction: 1 | -1
-    scale: number // Extra parameter
-    mult: number // And another one
-  }
-}
-```
 
-The reason it is better to have two multiplier parameters instead of just one is that there are different reasons for why we may want to multiply values by a constant. First, we may want to multiply the values by some constant that remains fairly static throughout the lifetime of the program/visualization. That is the job of the `scale` parameter. Conversely, we may want to also dynamically manipulate the constant by which the values are multiplied. That is what `mult` is for. Having two multipliers makes it easier to reason about the scale's behavior, as well as to apply changes such as restoring to defaults.
 
-A good example of this is the barplot. In a typical barplot, all bars share the same width, which is some fraction of the width of the entire plotting region. Clearly, this fraction needs to depend on the number of bars in the plot, such that, with $k$ categories/bars, the bar width will be proportional to $k$. However, we may also want to be able to make the bars wider/narrower interactively, e.g. by pressing the `+\-` keys. Thus, the width of the bars is proportional to $c \cdot k$ where $k$ is the static part of the constant (`scale`) and $c$ is the dynamic part of the constant (`mult`).
 
-We apply the constant to the normalized value each time we push/pull a value through a scale:
-
-```{ts}
-#| eval: false
-// This will be included in the body of pushforward(); see below for full example
-let normalized = Expanse.normalize(domain, value)
-normalized = normalized * scale * mult
-```
-
-Finally, we could hypothetically extend this idea to an entire array of different multipliers, that we could reduce into a single constant each time we push a value through a scale. This could be useful in some circumstances, however, in my application, I found that having two parameters was enough to solve all of my scaling problems. Additionally, having an array of multipliers might make the scaling functions slightly less performant, if we have to reduce the array each time we `pushforward`/`pullback`, or it might make keeping track of the state of the `Scale` object slightly more complicated, if we roll these multipliers into one constant each time we update the array. We would also lose the semantic distinction that we have with `scale` and `mult`. This might be a perfectly fine trade-off if our scales require more multipliers, however, I did not find this to be the case in my implementation.  
-
-##### The Full Monty
-
-With all of the pieces in place, we can put together the full implementation of the `pushforward` function.
-
-It may be helpful to define two helper function for applying the `Scale` properties to a normalized value. First, the `applyDirection` function simply applies the `direction` property, such that `applyDirection(x, 1)` is simply the identity whereas `applyDirection(x, -1)` returns `1 - x` (i.e. moving from `one` down):
-
-```{ts}
-function applyDirection(x: number, direction: 1 | -1) {
-  return 0.5 * (1 - direction) + direction * x;
-}
-
-console.log(applyDirection(0.75, 1))
-console.log(applyDirection(0.75, -1))
-console.log(applyDirection(1.25, -1))
-```
-
-Second, we can define the `applyPropsForward` function which takes a normalized value and applies all of the `Scale` properties to it:
-
-```{ts}
-type Props = {
-  zero: number;
-  one: number;
-  direction: -1 | 1;
-  scale: number;
-  mult: number;
-};
-
-function applyPropsForward(x: number, props: Props) {
-  const { zero, one, direction, scale, mult } = props;
-  x = x * scale * mult;
-  x = zero + x * (one - zero);
-  return applyDirection(x, direction);
-}
-```
-
-Now we ready to define the full `pushforward` function. As one final note, we should probably be able to handle the case where the `domain` and `codomain` work on arrays of values rather than scalars (this can be helpful, for example, in the case of a parallel coordinates plot). As such, we can add an `if` block to check where the normalized value is an array and handle appropriately. In total:
-
-```{ts}
-function pushforward<T extends Expanse, U extends Expanse>(
-  scale: Scale<T, U>,
-  value: Expanse.Value<T>,
-): Expanse.Value<U> {
-  const { domain, codomain, props } = scale;
-  let normalized = Expanse.normalize(domain, value);
-
-  if (Array.isArray(normalized)) {
-    normalized = normalized.map((x) => applyPropsForward(x, props));
-  } else {
-    normalized = applyPropsForward(normalized, props);
-  }
-
-  return Expanse.unnormalize(codomain, normalized);
-}
-```
-
-This is the full definition of the `pushforward` function in `plotscape` as of `r Sys.Date()`. The implementation for `pullback` function is very similar, with the only differences being that the order of the `domain` and `codomain` arguments reversed, and it uses the `applyPropsBackward` function, which is not too difficult to derive. 
-
-### Expanses
-
-So far, we have discussed scales, and described them as a sort of bridge between two properties of type `Expanse` -  the domain and the codomain. However, we have left the precise nature of the `Expanse` type vague. Now it is finally time to discuss  `Expanse` and its various subtypes concretely.
-
-As mentioned previously, the job of the `Expanse<T>` is to translate values of type `T` (its domain) to and from the interval $[0, 1]^n$. This makes `Expanse` similar to the maps discussed in Section \@ref(two-component-scales). The reason why the normalized interval is identified as $[0, 1]^n$ instead of the one-dimensional interval $[0, 1]$ is because, sometimes, we may want to map multi-dimensional values. For example, in the parallel-coordinates plot, we want to map values of several different variables to the y-axis. Typically, the dimensionality of the normalized values will be the same as that of `T`, however, we could imagine a situation where it might not be so, for example, we could imagine mapping 3-dimensional vectors to their (normalized) length.  
-
-Most of the functionality is implemented by the specific subtypes of `Expanse`, however, there is also some shared behavior. The simplified interface of `Expanse` is:
-
-```{ts}
-interface Expanse<T> {
-  value: T;
-  normalized: number | number[]
-}
-```
 
 Here, the `value` and `normalized` properties are opaque types (used on type-level only), which simply indicate the domain type `T` and the dimensionality of the normalized values (`number | number[]`). 
 
@@ -1540,271 +1368,6 @@ export namespace ExpanseBand {
 ```
 
 Notice that, because of the cumulative nature of the bands, the logic in the functions' bodies is a bit more complicated. First, to `normalize` a label, we need to first find the index of the label and then return the corresponding midpoint of the band, taking `weights` and `order` into account. Second, to `unnormalize`, we actually have to loop through the array of `cumulativeWeights` - there is no way to determine which bin a normalized value belongs to in $O(1)$ time (as far as I am aware). This is not much of a problem since the `ExpanseBand.unnormalize` is not used anywhere in the system (all scales implemented thus far use only `ExpanseBand.normalize`), however, it is important to be mindful of this.
-
-<!-- Notice that, whereas before we had considered *normalize* as mapping between $D \to [0, 1]$ and *unnormalize* as mapping between $[0, 1] \to V$, we now consider both as mapping between $[0, 1]$ and an arbitrary domain $X$. This domain can represent the data or the visual attribute - the expanse is agnostic about this. -->
-
-<!-- Also, while before we have discussed domains as subsets of $\mathbb{R}$, we can now start thinking about them as arbitrary sets. While subsets of $\mathbb{R}$ and sets of strings are really the only types of domains used in `plotscaper`, the model should readily extends to other sets, as long as a mapping to and from $[0, 1]$ can be provided. -->
-
-<!-- How `normalize` and `unnormalize` are implemented will depend largely on the subtype of `Expanse`, as well as on the desired behavior. For example, as will be discussed later, in `plotscaper`, the normalize and unnormalize methods implemented for `ExpanseContinuous` (subtype of `Expanse<number>`) work largely the same way as in section [SECTION]. However, while `ExpansePoint` and `ExpanseBand` are both subtypes of `Expanse<string>`, they behave differently - `ExpansePoint` maps strings (factor levels) to equidistant points along $[0, 1]$, whereas `ExpanseBand` maps the strings into the middle of "buckets" along $[0, 1]$.    -->
-
-<!-- However, there is also some behavior that we may want to apply the same way across the different expanse subtypes. For example, it seems reasonable that the user should be able to zoom, pan, or reverse axes, regardless of whether a plot shows discrete or continuous data. As such, there may be some properties and functions common to the `Expanse` type. I will discuss these first. -->
-
-<!-- #### Zero and one -->
-
-<!-- The maps may also take in and return values outside of $D^*$ and $[0, 1]$, if adjustments have been made. For instance, in most data visualization packages, x- and y-axis limits are by default expanded some percentage beyond the range of the observed data to avoid the maximum and minimum datapoints from overlapping with the limits. For example, in base R: -->
-
-<!-- ```{r} -->
-<!-- #| fig-height: 4 -->
-<!-- #| fig-cap: "Expanding axes. By default, axes in base R `plot()` function are expanded 4% beyond the range of the data (left). Otherwise, datapoints on the limits of their respective scales end up overlapping with the plot borders (right)." -->
-
-<!-- set.seed(12345) -->
-<!-- x <- rnorm(5) -->
-<!-- y <- rnorm(5) -->
-
-<!-- par(mfrow = c(1, 2)) -->
-<!-- plot(x, y)  -->
-<!-- plot(x, y, xaxs = 'i', yaxs = 'i')  -->
-<!-- ``` -->
-
-<!-- Thus, upon normalizing the minimum and maximum data values, the expanse should return values other than $\{0, 1\}$. Likewise, to support user interactions such as zooming and panning, the expanses may accept and return values outside of $D^*$ and $[0, 1]$.  -->
-
-<!-- Zooming and panning should be orthogonal to the underlying data type, such that user can interact with the plots the same way^[The one exception may be panning barplots and histograms, where the y-axis upper y-axis limit may change but the lower should be fixed at 0, such that panning may shrink or stretch the bars, but not "lift" them up or move them down.], no matter whether their axes are continuous, discrete, or some combination of the two. To this end, I introduce two parameters representing the normalized value ($p$) of the minimum and maximum data point, called *zero* and *one* respectively. These parameters are agnostic to the underlying data type, such that if we have the data type-specific maps $n'$ and $u'$, the complete normalize and unnormalize maps are: -->
-
-<!-- $$n(d) = \text{zero} + n'(d) \cdot (\text{one} - \text{zero})$$ -->
-<!-- $$u(p) = u' \bigg(\frac{p - \text{zero}}{\text{one} - \text{zero}} \bigg)$$ -->
-
-<!-- To simplify, here's what effect setting the two parameters to specific values has: -->
-
-<!-- ```{r} -->
-<!-- #| echo: false -->
-
-<!-- tab <- data.frame( -->
-<!--   Zero = c(0.05, 0.05, -0.5), -->
-<!--   One = c(0.95, 1.05, 1.5), -->
-<!--   Effect = c("Expands the margins by ~5% (actually 5.555...% since 0.05 / 0.9 = 0.0555...)", -->
-<!--              "Shifts the expanse 'up' by 5% (e.g. moves x-axis 5% right)", -->
-<!--              "Zooms into the middle 50% of the expanse (25 percentile goes to 0 and 75th to one)") -->
-<!-- ) -->
-
-
-<!-- knitr::kable(tab) -->
-<!-- ``` -->
-
-<!-- #### Expanse Interface -->
-
-<!-- There are also other behaviours that expanses should support. For instance, we may want to be able to reset the expanse to defaults, retrain when the underlying data changes, and return nicely formatted breaks. How these behaviours are implemented, as well as other types of behavior, may be specific to the underlying data type. Overall, expanse interface may look something like this: -->
-
-<!-- ``` -->
-<!-- interface Expanse<T> { -->
-<!--   normalize(value: T): number -->
-<!--   unnormalize(value: number): T -->
-<!--   defaultize(): this -->
-
-<!--   setZero(zero: number, default: boolean): this -->
-<!--   setOne(one: number, default: boolean): this -->
-<!--   freezeZero(): this -->
-<!--   freezeOne(): this -->
-
-<!--   move(amount: number): this -->
-<!--   expand(zero: number, one: number): this -->
-
-<!--   retrain(values: T[]): this -->
-<!--   breaks(n?: number): T[]   -->
-<!-- } -->
-<!-- ``` -->
-
-<!-- #### Continuous Expanses -->
-
-<!-- The continuous expanse has as its underlying set $[\min, \max] \subseteq \mathbb{R}$. To understand how it works, let's build it step by step.  -->
-
-<!-- We start with the basic normalizing function: -->
-
-<!-- 1. $$n(d) = \frac{d - \min}{\max - \min}$$ -->
-
-<!-- This function takes some data value $d \in [\min, \max]$ and transforms it to $[0, 1]$. Most data visualization systems use a function like this at some step of the scaling processs - see [`scales::rescale`](https://github.com/r-lib/scales/blob/84560bf54e02315477a05384ee67991e9e8fc52c/R/bounds.R#L85) and **D3** [`normalize`](https://github.com/d3/d3-scale/blob/d6904a4bde09e16005e0ad8ca3e25b10ce54fa0d/src/continuous.js#L122).    -->
-
-<!-- This may work well for typical linear scales. However, we may also want to apply some transformation $f$, such as square root or log. Then, to ensure that the observed data values still get normalized to $[0, 1]$, we need to apply the transformation to both $d$ and the limits: -->
-
-<!-- 2. $$\frac{f(d) - f(\min)}{f(\max) - f(\min)}$$ -->
-
-<!-- Finally, as was discussed in [EXPANSES], we want to be able to incorporate the zero and one paramaters, leading to the final normalizing function: -->
-
-<!-- $$n(d) = \text{zero} + \frac{f(d) - f(\min)}{f(\max) - f(\min)} \cdot (\text{zero} - \text{one})$$ -->
-
-<!-- To obtain the unnormalizing function, we can simply invert the normalizing function: -->
-
-<!-- $$u(p) = f^{-1} \bigg\{ f(\min) + \frac{p - \text{zero}}{\text{one} - \text{zero}} \cdot \big[ f(\max) - f(\min) \big] \bigg\}$$ -->
-
-<!-- The function transforms $x$ to a percentage value $p \in [0, 1]$, provided $x$ is within $[\min, \max]$. The value $(\max - \min)$ is also sometimes called the *range* (not to be confused with **D3** `range`).  -->
-
-<!-- We can invert the normalizing function and obtain the unnormalizing function, which is, for some percentage $p \in [0, 1]$: -->
-
-<!-- $$u(p) = \min + p \cdot (\max - \min)$$ -->
-<!-- returns a value within the $[\min, \max]$ range, corresponding to the proportion of the maximum possible distance (range) from the origin ($\min$). For example, $u(0.5)$, returns a value that is located halfway between the limits. -->
-
-<!-- We can implement a simple continuous expanse like so: -->
-
-<!-- ```{ts} -->
-
-<!-- function identity<T>(x: T) { -->
-<!--   return x; -->
-<!-- } -->
-
-<!-- function expanseContinuous(min = 0, max = 1) { -->
-<!--   const [zero, one] = [0, 1] -->
-<!--   const [trans, inv] = [identity, identity] -->
-
-<!--   return { min, max, zero, one, trans, inv, -->
-<!--     range() { -->
-<!--       return this.max - this.min; -->
-<!--     }, -->
-<!--     transRange() { -->
-<!--       const { min, max, trans } = this; -->
-<!--       return trans(max) - trans(min); -->
-<!--     }, -->
-<!--     normalize(x: number) { -->
-<!--       const { min, zero, one, trans } = this; -->
-<!--       const normalized = (trans(x) - trans(min)) / this.transRange(); -->
-<!--       return zero + normalized * (one - zero); -->
-<!--     }, -->
-<!--     unnormalize(p: number) { -->
-<!--       const { min, zero, one, trans, inv } = this; -->
-<!--       return inv(trans(min) + ((p - zero) / (one - zero)) * this.transRange()); -->
-<!--     }, -->
-<!--   }; -->
-<!-- } -->
-
-<!-- const expanse1 = expanseContinuous(1, 10); -->
-
-<!-- console.log(expanse1.normalize(5)); -->
-<!-- console.log(expanse1.unnormalize(0.5)) -->
-<!-- ``` -->
-
-<!-- The functions $n, u$ have several interesting properties. First off, they are inverses to each other and form an *isomorphism*, i.e. $u = n^{-1}$ and $n = u^{-1}$ such that $u(n(x)) = x$ and $n(u(p)) = p$. This also means that each function is a 1-to-1 mapping or *bijection*. In plain words, this means that we cannot get the same percentage by normalizing two different values and vice versa. As a result, we can keep switching between the normalized and unnormalized representations without losing any information:   -->
-
-<!-- ```{r} -->
-<!-- with(expanse, unnormalize(normalize(5))) -->
-<!-- with(expanse, normalize(unnormalize(normalize(unnormalize(0.5))))) -->
-<!-- ``` -->
-
-<!-- ##### Linearity -->
-
-<!-- Another important thing to note is that, while these types of normalizing functions are often called "linear" (e.g. `scaleLinear()` in **D3**), since their graphs form a straight line, they should not be confused with "linear functions", since they do not satisfy the properties of linear functions, namely: -->
-
-<!-- - Additivity: $\text{normalize}(x + c) \neq \text{normalize}(x) + \text{normalize}(c)$ -->
-<!-- - Homogeneity of degree 1: $\text{normalize}(c \cdot x) \neq c \cdot \text{normalize(x)}$. -->
-
-<!-- To illustrate, additivity does not hold when $\min \neq 0$ because: -->
-
-<!-- $$\frac{(x + c) - \min}{(\max - \min)}$$ -->
-<!-- $$= \frac{x - \min}{\max - \min} + \frac{c}{\max - \min}$$ -->
-<!-- $$\neq \frac{x - \min}{\max - min} + \frac{c - \min}{\max - \min}$$ -->
-
-<!-- The same can be easily shown for the $\text{unnormalize}$ map and for homogeneity. -->
-
-<!-- Technically, this is due to a confusion between the definition of a "linear function" and a "linear polynomial". The appropriate term to use would actually be "affine transformation."  -->
-
-<!-- Either way, if the minimum is not 0, we cannot expect the following to be equal: -->
-
-<!-- ```{r} -->
-<!-- with(expanse, c(normalize(5), normalize(3) + normalize(2))) -->
-<!-- ``` -->
-
-<!-- Or the following to be equal: -->
-
-<!-- ```{r} -->
-<!-- with(expanse, c(normalize(2 * 5), 2 * normalize(5))) -->
-<!-- ``` -->
-
-<!-- However, if we keep in mind the fact that the normalizing function calculates the proportion of distance from the origin, we can see that the function in fact behaves linearly within the context of its limits. -->
-
-<!-- For example, consider the range $[1, 10]$. The value $5$ is $4$ units away from the lower limit, i.e. $5 - 1 = 4$, so we can represent it, for example, as the sum of a value that is 3 units away and another that is one unit away, $n(5) = n(4) + n(2)$:  -->
-
-<!-- ```{r} -->
-<!-- with(expanse, c(normalize(5), normalize(4) + normalize(2))) -->
-<!-- ``` -->
-
-<!-- Likewise, again because $5$ represents the distance of $4$ units and $3$ of $2$, we can expect $n(5) = 2 \cdot n(3)$: -->
-
-<!-- ```{r} -->
-<!-- with(expanse, c(normalize(5), 2 * normalize(3))) -->
-<!-- ``` -->
-
-
-
-<!-- ##### Transformations -->
-
-<!-- We can apply transformations to continuous expanses by transforming their limits. The outcome of this is that $\min$ and $\max$ still get mapped to $0$ and $1$ however, the graph of the function is no longer linear. Suppose we have non-linear function $f$, along with an inverse $f^{-1}$. Then: -->
-
-<!-- $$n(x) = \frac{f(x) - f(\min)}{f(\max) - f(\min)}$$ -->
-<!-- $$u(p) = f^{-1} \bigg\{f(\min) + p \cdot \big[ f(\max) - f(\min) \big] \bigg\}$$ -->
-<!-- For example, here's how we could apply the transformation $\bigg( f(x) = \sqrt{x}, \; f^{-1}(x) = x^2 \bigg)$ in code:  -->
-
-<!-- ```{r} -->
-<!-- expanse$trans <- sqrt -->
-<!-- expanse$inv <- function(x) x^2 -->
-
-<!-- # Need to redefine normalize and unnormalize -->
-<!-- expanse$trans_range <- function() with(expanse, trans(max) - trans(min)) -->
-<!-- expanse$normalize <- function(x) { -->
-<!--   with(expanse, (trans(x) - trans(min)) / trans_range()) -->
-<!-- } -->
-<!-- expanse$unnormalize <- function(p) { -->
-<!--   with(expanse, inv(trans(min) + p * trans_range())) -->
-<!-- } -->
-
-<!-- # Normalizing limits still returns c(0, 1) -->
-<!-- c(expanse$normalize(c(1, 10))) -->
-
-<!-- # Notice that these return different values from before though -->
-<!-- expanse$normalize(5) -->
-<!-- expanse$unnormalize(0.5) -->
-
-<!-- x <- seq(1, 10, length = 100) -->
-<!-- p <- seq(0, 1, length = 100) -->
-
-<!-- # The graphs are no longer linear -->
-<!-- par(mfrow = c(1, 2)) -->
-<!-- plot(x, expanse$normalize(x), type = "l", ylab = "normalize(x)") -->
-<!-- plot(p, expanse$unnormalize(p), type = "l", ylab = "unnormalize(p)") -->
-
-<!-- ``` -->
-
-<!-- Transformations such as these can be useful in two ways. First, sometimes we may be able to better see trends in the data when the data has been appropriately transformed. This is the case, for example, when plotting data which varies across orders of magnitude. In this case it may be useful to apply $\log$-transformation. Second, transformations can also be helpful in situations where some graphical attributes are not perceived linearly. For example, when judging differently sized objects, viewers tend judge magnitude based on area rather than side or radius. As such, when drawing objects such as points or squares it can be helpful to apply square root as the inverse transformation. The idea is that, if one point has a data value that is $c$ times bigger than another, it will have $\sqrt{c}$ times bigger radius and $c$ times bigger area. Note that we are talking about the inverse transformation here, i.e. the transformation affecting the unnormalizing function. -->
-
-<!-- One thing to note is that the proportionality of the square-root transformation holds only when $\min = 0$. Otherwise: -->
-
-<!-- $$\sqrt{(\min)^2 + cp \cdot [(\max)^2 - (\min)^2]}$$ -->
-<!-- $$= \sqrt{c} \cdot \sqrt{(\min)^2/c + p \cdot [(\max)^2 - (\min)^2]}$$ -->
-<!-- $$\neq \sqrt{c} \cdot \sqrt{(\min)^2 + p \cdot [(\max)^2 - (\min)^2]}$$ -->
-
-<!-- This is a problem in the existing packages. For example: -->
-
-<!-- ```{r} -->
-
-<!-- library(scales) -->
-<!-- pal <- area_pal(c(1, 5)) -->
-
-<!-- # Comparing cscale to naive implementation -->
-<!-- all.equal(cscale(1:5, pal), sqrt((1:5 - 1) / 4) * 4 + 1) -->
-
-<!-- # Should be equal since 3 is twice as far from 1 as 2 is -->
-<!-- c(cscale(1:5, pal)[3] / cscale(1:5, pal)[2], -->
-<!--   sqrt(2)) -->
-
-<!-- expanse$min <- 1 -->
-<!-- expanse$max <- 5 -->
-<!-- cscale(1:5, pal) -->
-<!-- expanse$unnormalize(1:5 / 5) -->
-
-<!-- expanse -->
-
-<!-- plot(1:5, expanse$unnormalize(1:5 / 5)) -->
-<!-- plot(1:5, cscale(1:5, pal)) -->
-
-<!-- ``` -->
-
-<!-- ##  -->
 
 ```{r}
 #| eval: true
