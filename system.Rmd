@@ -151,25 +151,39 @@ While Figure \@ref(plotscaper-example2) could also be of course replicated with 
 
 #### Variables and encodings
 
-Third, note that, unlike in `ggplot2`, variable names are *not* meant to map directly to aesthetics such as x- or y-axis position or size. The reason for this is that, unlike `ggplot2`, `plotscaper` does not try to establish a direct correspondence between variables in the original data and the visual encodings/aesthetics. This is due to the fact that, in many common plot types, aesthetics do not represent variables found in the original data, but instead ones which have been derived in some way. Take, for instance, the following `ggplot()` call:
+Third, note that, unlike in `ggplot2`, variable names are *not* meant to map directly to aesthetics such as x- or y-axis position or size. The reason for this is that, unlike `ggplot2`, `plotscaper` does not try to establish a direct correspondence between variables in the original data and the visual encodings/aesthetics. This is due to the fact that, in many common plot types, aesthetics really do not represent variables found in the original data, but instead ones which have been computed or derived in some way. Take, for instance, the following `ggplot` call:
 
 ```{r}
-ggplot(mtcars, aes(x = mpg)) +
+#| eval: false
+#| fig-cap: "A simple `ggplot2` call to create a histogram. Note that, unlike with e.g. `geom_scatter`, the variables mapped to the x- and y-axis are not found directly in the data (the `aes` call) but are instead derived in the background."
+ggplot(mtcars, aes(x = mpg)) + 
   geom_histogram()
 ```
 
-Overtly, it may seem as if the `aes` function simply maps the `mpg` variable to the x-axis. However, this is not correct. Specifically, what is actually mapped to the x-axis are the left and right edges of the histogram bins. These represent derived variables not found in the original data. Likewise, the y-axis variable represents counts within bins which are also a derived variable, and its mapping is created only implicitly. It is easier to see this lack of a direct correspondence when we set custom histogram breaks:     
-
 ```{r}
-ggplot(mtcars) +
-  geom_histogram(aes(x = mpg), breaks = c(10, 15, 35))
+#| echo: false
+knitr::include_graphics("./figures/ggplot-histogram-aes.png")
 ```
 
-Now it is easier to see that what gets mapped to the x-axis is *not* the `mpg` variable, but instead a variable entirely external to the data: the histogram breaks. The `mpg` variable gets mapped to the plot only implicitly, by providing support for the binning. Thus, in `ggplot2`, the semantics of `aes(x = mpg, ...)` are completely different with `geom_histogram()` as compared to, for example, `geom_scatter()`.  
+Overtly, it may seem as if the `aes` function simply maps the `mpg` variable to the x-axis. However, this interpretation is incorrect. Specifically, the variable which is actually mapped to the x-axis are the left and right edges of the histogram bins. These represent a derived variable, not found in the original data. Likewise, the y-axis variable represents counts within bins which are also a derived. Setting custom histogram breaks makes this lack of a direct correspondence even clearer:     
 
-This may seem like a minor nitpick, however, it is in fact a fundamental gap in the design. As discussed in Section \@ref(problems), `ggplot2` is based on the Grammar of Graphics model [@wilkinson2012], which centers around the idea of composing plots out of independent, modular components. The fact that the semantics of `aes()` are tied to the `geom` (and `stat`) means that the apparent modularity of `ggplot2` components is a mere illusion.
+```{r}
+#| eval: false
+#| fig-cap: "A `ggplot2` call to create a histogram, with custom breaks. The lack of direct correspondence between `aes` and variables mapped to the axes should now be more obvious: the x-axis variable really depends more on the `breaks` argument to `geom_histogram`, rather than the underlying data."
+ggplot(mtcars, aes(x = mpg)) + 
+  geom_histogram(breaks = c(10, 15, 35))
+```
 
-So what to do? To be perfectly frank, I do not have a perfect solution. In Section \@ref(problems), I demonstrated that, in the general case involving transformation like stacking, `stats` and `geoms` *cannot* be truly independent. Ignoring that, the problem with specifying the aesthetics in a histogram is that, in some sense, we are putting the cart before the horse: ultimately, we want to plot derived variables, so we should specify these in the call to `aes()`, however, we do not know what these variables will be before we add `geom_histogram()`. So the schema should really be organized differently. As per Section \@ref(problems), we could mirror the data visualization pipeline by doing something like:    
+```{r}
+#| echo: false
+knitr::include_graphics("./figures/ggplot-histogram-aes2.png")
+```
+
+Now it is easier to see that what gets mapped to the x-axis is *not* the `mpg` variable. Instead, it is the variable representing the histogram breaks. The `mpg` variable gets mapped to the plot only implicitly, as counts within the bins (the y-axis variable). Thus, in `ggplot` call, the semantics of `aes(x = mpg, ...)` are fundamentally different in `geom_histogram` as compared to, for example, `geom_scatter`.
+
+Arguing over the mapping between data variables andd aesthetics may seem like a minor nitpick, however, it is in fact a fundamental gap in the design. As discussed in Section \@ref(problems), `ggplot2` is based on the Grammar of Graphics model [@wilkinson2012], which centers around the idea of composing plots out of independent, modular components. The fact that the semantics of `aes` are tied to the `geom`s (and `stat`s) means that these `ggplot2` functions are not truly modular or independent.
+
+So what to do? To be perfectly frank, I have not found a perfect solution. In Section \@ref(problems), I proved that, in the general case involving transformations like stacking, `stats` and `geoms` *cannot* be truly independent. Barring that, the problem with specifying aesthetics in plots like histograms is that, in some sense, we are putting the cart before the horse: ultimately, we want to plot derived variables, so we should specify these in the call to `aes`, however, we do not know what the derived variables will be before we add `stats` and `geoms` (like `geom_histogram`) to the `ggplot` schema. So perhaps the schema creation process should organized in a different way. As per Section \@ref(problems), we could mirror the data visualization pipeline by doing something like:    
 
 ```{r}
 #| eval: false
@@ -178,15 +192,17 @@ data |> partition(...) |> aggregate(...) |> encode(...) |> render(...)
 
 In fact, in broad strokes, this is how the data visualization pipeline is implemented in `plotscape` (see Section \@ref(low-level-implementation)). 
 
-However, this model does have one significant downside: it does not lend itself to a simple declarative schema like that of `ggplot2`. I have tried to coming up with such a schema, however, my efforts were largely unsuccessful. As a result, I opted in for the more traditional, nominal style of specifying plots in `plotscaper`, using the various `add_*` functions. While this style may seem less flexible, I hope I have made the case here that the underlying limitations are *not* an exclusive to `plotscape`/`plotscaper`, but extend to `ggplot2` and all other GoG-based data visualization systems. I have simply chosen to leave these limitations explicit, and again, if a solution is found, it can be integrated into future releases of the package.
+However, this model does seem to have one significant downside: it does not lend itself easily to a simple declarative schema like that of `ggplot2`. Despite my attempts, creating such a schema has proven largely unsuccessful. This likely stems from the hierarchical dependencies between the various pipeline stages, as well as the added complexity of integrating reactivity into the pipeline.
 
-A final point to mention is that, it could be argued that the benefit of the `ggplot2` model where partitioning and aggregation logic is implicitly tied to the `geom`s is that it makes it easier to mix different kinds of   
+Be it as it may, this difficulty with declarative schemas is why I opted for the more traditional, nominal style of specifying plots in `plotscaper`(i.e. using functions like `add_scatterplot` or `add_barplot`). While this approach may seem less flexible, I hope I have demonstrated that the underlying limitations are *not* an exclusive to `plotscape`/`plotscaper`, but extend to `ggplot2` and all other GoG-based data visualization systems. I have simply chosen make these limitations more explicit. If a better solution is found, it may be integrated into future releases of the package.
+
+A final point to mention is that, it could be argued that one benefit of the `ggplot2` model where partitioning and aggregation logic (`stat`s) is implicitly tied to `geom`s is that it makes it easier to combine several kinds of `geom`s in one plot. For instance, `geom_histogram` can be combined with `geom_rug`, while single-case `geom_points` can be combined with aggregated summaries computed via `stat_summary`.    
 
 ### The scene and the schema {#scene-and-schema}
 
 A key part of the `plotscaper` API is the distinction between two classes of objects representing figures: schemas and scenes. Put simply, a schema is an immutable ledger or blueprint, while a scene is a live, rendered version of the figure. Both can be manipulated using (largely) the same set of functions/methods, however, what these functions actually do changes based on their target. 
 
-As shown before, schema can be created with the `create_schema()` function: 
+As shown before, schema can be created with the `create_schema` function: 
 
 ```{r}
 #| echo: false
@@ -202,15 +218,15 @@ schema
 str(schema$queue)
 ```
 
-As you can see, the object created with `create_schema()` is essentially just a `list()` of messages. Modifying the schema by calling functions such as `add_scatterplot()` or `set_scale()` simply appends a new message to the list, similar to how objects of class `ggplot` are modified by the corresponding functions and the `+` operator in `ggplot2` [@wickham2016]. This design makes the schema easy to transport (e.g. as JSON) and modify programmatically. Finally, rendering the schema into a figure requires an explicit call to `render()`. Note that this approach is different from the popular style of implicit rendering (used in e.g. `ggplot2`), where an object is rendered via an overloaded `print()` method; however, there is a good reason for this which will be discussed later. 
+As you can see, the object created with `create_schema` is essentially just a `list` of messages. Modifying the schema by calling functions such as `add_scatterplot` or `set_scale` simply appends a new message to the list, similar to how objects of class `ggplot` are modified by the corresponding functions and the `+` operator in `ggplot2` [@wickham2016]. This design makes the schema easy to transport (e.g. as JSON) and modify programmatically. Finally, rendering the schema into a figure requires an explicit call to `render`. Note that this approach is different from the popular style of implicit rendering (used in e.g. `ggplot2`), where an object is rendered via an overloaded `print` method; however, there is a good reason for this which will be discussed later. 
 
-The call to `render()` turns the schema gets turned into a live, interactive figure by constructing an `htmlwidgets` widget [@htmlwidgets2021]. This bundles up the underlying data and `plotscape` code (JavaScript, HTML, CSS) into a standalone widget which may get rendered inside, for example, RStudio viewer or RMarkdown document. All of the schema messages also get forwarded to the widget and applied sequentially, creating the figure.
+The call to `render` turns the schema gets turned into a live, interactive figure by constructing an `htmlwidgets` widget [@htmlwidgets2021]. This bundles up the underlying data and `plotscape` code (JavaScript, HTML, CSS) into a standalone widget which may get rendered inside, for example, RStudio viewer or RMarkdown document. All of the schema messages also get forwarded to the widget and applied sequentially, creating the figure.
 
 Note that, under this model, the schema merely records state-generating steps, not the state itself, and all of the actual state lives on the scene. This design avoids state duplication between the R session (server) and web-browser-based figure (client), eliminating the need for synchronization. While this client-heavy approach deviates from typical client-server architectures, where state predominantly resides on the server, it is essential for achieving responsive interactive visualizations. By keeping most of the state and computation on the client and avoiding round-trips to the server, we can achieve fast updates in response to user interaction [such as mouse movement during linked selection\; this is also why features like linked selection tend to have poor performance in server-centric frameworks like Shiny, @shiny2024]. Conversely, as will be discussed below, while the R session (server) may occasionally send and receive messages, these are by comparison much less latency-sensitive, making a "thin" server perfectly viable.
 
 ### Client-server communication {#communication}
 
-While inside an interactive R session (e.g., in RStudio IDE [@rstudio2024]), creating a `plotscaper` figure via calling `render()` also automatically launches a WebSockets server [using the `httpuv` package, @cheng2024]. This server allows for live, two-way communication between the R session (server) and the figure (client). By assigning the output of `render()` to a variable, users can save a handle to this server, and call functions which query the figure's state or cause mutable, live updates. For instance:
+While inside an interactive R session (e.g., in RStudio IDE [@rstudio2024]), creating a `plotscaper` figure via calling `render` also automatically launches a WebSockets server [using the `httpuv` package, @cheng2024]. This server allows for live, two-way communication between the R session (server) and the figure (client). By assigning the output of `render` to a variable, users can save a handle to this server, and call functions which query the figure's state or cause mutable, live updates. For instance:
 
 ```{r}
 #| eval: false
@@ -242,7 +258,7 @@ scene |> selected_cases() # [1] 1 2 3 4 5 6 7 8 9 10
 
 ```
 
-As noted earlier, most `plotscaper` functions are polymorphic `S3` methods which can accept either a schema or a scene as the first argument. When called with schema as the first argument, they append a message to the schema, whereas when called with scene as the first argument (and while inside an interactive R session), they send a WebSockets request through the `httpuv` server, causing a live-update the figure or the server to respond back with data. In more abstract terms, with respect to these functions, the process of rendering a schema is a functor/homomorphism, meaning that we can either call the functions on the schema and then render it, or immediately render the figure and then call the functions, and the result will be the same (provided no user interaction happens in the meantime). The one exception to this rule are state-querying functions such as `selected_cases()`, `assigned_cases()`, and `get_scale()`. These functions send a request to retrieve the rendered figure's state and so it makes little sense to call them on the schema^[Of course, we *could* technically parse the list of messages to retrieve the figure's state as it will be when the figure gets rendered. For instance with `create_schema(...) |> assign_cases(1:10, 2) |> assign_cases(5:10, 3)` we could parse the first five indices belonging to group 2 and the second belonging to group 3. However, since the user has to write the code to modify the figure's state in the first place, the utility of this parsing is not clear.].
+As noted earlier, most `plotscaper` functions are polymorphic `S3` methods which can accept either a schema or a scene as the first argument. When called with schema as the first argument, they append a message to the schema, whereas when called with scene as the first argument (and while inside an interactive R session), they send a WebSockets request through the `httpuv` server, causing a live-update the figure or the server to respond back with data. In more abstract terms, with respect to these functions, the process of rendering a schema is a functor/homomorphism, meaning that we can either call the functions on the schema and then render it, or immediately render the figure and then call the functions, and the result will be the same (provided no user interaction happens in the meantime). The exception to this rule are state-querying functions such as `selected_cases`, `assigned_cases`, and `get_scale`. These functions send a request to retrieve the rendered figure's state and so it makes little sense to call them on the schema^[Of course, we *could* technically parse the list of messages to retrieve the figure's state as it will be when the figure gets rendered. For instance with `create_schema(...) |> assign_cases(1:10, 2) |> assign_cases(5:10, 3)` we could parse the first five indices belonging to group 2 and the second belonging to group 3. However, since the user has to write the code to modify the figure's state in the first place, the utility of this parsing is not clear.].
 
 ### HTML embedding
 
@@ -369,7 +385,7 @@ stream
   );
 ```
 
-As you can see, the event producer (stream) is defined separately from the event processing logic, which is constructed by piping the result of one operation into the next. Because of the associativity of function composition, the stream actually exhibits properties of a functor, meaning that the order of composition - either through direct function composition or `.pipe()` chaining - does not affect the result. Additionally, while the stream transformations themselves are (generally) stateless, they can still produce useful side-effects (as can be seen on the example of the `console.log` call above). Further, because of this fact, they also lend themselves well to modeling asynchronous or even infinite data sequences [@abelson2022; @fogus2013].
+As you can see, the event producer (stream) is defined separately from the event processing logic, which is constructed by piping the result of one operation into the next. Because of the associativity of function composition, the stream actually exhibits properties of a functor, meaning that the order of composition - either through direct function composition or `.pipe` chaining - does not affect the result. Additionally, while the stream transformations themselves are (generally) stateless, they can still produce useful side-effects (as can be seen on the example of the `console.log` call above). Further, because of this fact, they also lend themselves well to modeling asynchronous or even infinite data sequences [@abelson2022; @fogus2013].
 
 While streams can be extremely useful in specific circumstances, their utility as a general model for complex UIs (beyond asynchronous operations) is debatable. Specifically, the inherent statefulness of UIs conflicts with the stateless nature of streams: stateless computations inside the stream have to leak into the rest of the application *somewhere*. Delineating which parts of the logic should go into streams versus which should be bound to UI components adds unnecessary complexity for little real benefit. Consequently, streams are likely not the optimal choice for interactive data visualization, where some state is unavoidable. 
 
@@ -443,7 +459,7 @@ setPrice(200);
 setTax(0.12);
 ```
 
-The key detail to notice is the presence of the global stack of effects. Whenever an effect is called, it first pushes itself onto the stack. It then executes, accessing any signals it needs along the way. These signals in turn register the effect as a listener, by accessing it as the top-most element of the effect stack. When the effect is done executing, it pops itself off the stack. Now, whenever one of the accessed signals changes, the effect re-runs again. Crucially, making a derived reactive value is as simple as writing a callback: if an effect calls a function using a signal, it also automatically subscribes to that signal (see the example of `priceWithTax()` above). Importantly, the effect subscribes *only* to this signal and not the derived value itself. In other words, effects only ever subscribe to the leaf nodes of the reactive graph (signals). Derived values computed on the fly (and, if necessary, can be easily memoized^[Memoizing a derived value can be done by creating a new signal and an effect that runs when the original value gets updated.]), and event ordering is simply managed via the runtime call stack.
+The key detail to notice is the presence of the global stack of effects. Whenever an effect is called, it first pushes itself onto the stack. It then executes, accessing any signals it needs along the way. These signals in turn register the effect as a listener, by accessing it as the top-most element of the effect stack. When the effect is done executing, it pops itself off the stack. Now, whenever one of the accessed signals changes, the effect re-runs again. Crucially, making a derived reactive value is as simple as writing a callback: if an effect calls a function using a signal, it also automatically subscribes to that signal (see the example of `priceWithTax` above). Importantly, the effect subscribes *only* to this signal and not the derived value itself. In other words, effects only ever subscribe to the leaf nodes of the reactive graph (signals). Derived values computed on the fly (and, if necessary, can be easily memoized^[Memoizing a derived value can be done by creating a new signal and an effect that runs when the original value gets updated.]), and event ordering is simply managed via the runtime call stack.
 
 Signals provide an elegant solution to many problems with reactivity. They automate subscription to events, prevent unnecessary updates, ensure correct update order, and, due to their fine-grained nature, are generally highly performant compared to more cumbersome methods like the virtual DOM. However, again, signals do also introduce their own set of trade-offs. Chief among these, signal's reliance on the call stack for event ordering necessitates their implementation as functions (getter-setter pairs), rather than plain data values. While techniques like object getters/setters or templating [as seen in SolidJS, @solid2024] can be used to hide this fact, it does nevertheless add an extra layer of complexity. Similarly, many features important for performance, like memoization and batching, also require treating signals as distinct from plain data. Having code consist of two sets of entities - plain data and signals - ultimately impacts developer ergonomics.
 
@@ -508,7 +524,7 @@ console.log(getter2(0));
 console.log(getter3(0));
 ```
 
-Note that, by definition, every `Getter<T>` is also automatically an `Indexable<T>` (since it is a function of the form `(index: number) => T`). This means that we can use `Getter`s to create new `Getter`s. There are also several utility functions for working with `Getter`s. The first is `Getter.constant()` which takes in a value `T` and returns a thunk returning `T` (i.e. `() => T`). This is useful, for example, when `T` is an array and we always want to return the whole array (not just a single element):
+Note that, by definition, every `Getter<T>` is also automatically an `Indexable<T>` (since it is a function of the form `(index: number) => T`). This means that we can use `Getter`s to create new `Getter`s. There are also several utility functions for working with `Getter`s. The first is `Getter.constant` which takes in a value `T` and returns a thunk returning `T` (i.e. `() => T`). This is useful, for example, when `T` is an array and we always want to return the whole array (not just a single element):
 
 ```{ts}
 #| echo: false
@@ -544,7 +560,7 @@ console.log(getter4(0))
 console.log(getter4(1))
 ```
 
-Another useful utility function is `Getter.proxy()`, which takes a `Getter` and an array of indices as input and returns a new `Getter` which routes the access to the original values through the indices:
+Another useful utility function is `Getter.proxy`, which takes a `Getter` and an array of indices as input and returns a new `Getter` which routes the access to the original values through the indices:
 
 ```{ts}
 import { Getter } from "./Getter"
@@ -576,7 +592,7 @@ const data = {
 };
 ```
 
-Most functions in `plotscape` operate column-wise, however, here's how the dataframe above would look like as a list of rows if we materialized using a hypothetical `Dataframe.rows()` function:
+Most functions in `plotscape` operate column-wise, however, here's how the dataframe above would look like as a list of rows if we materialized using a `Dataframe.rows` function^[Not actually exported by `plotscape` but easily implemented.]:
 
 ```{ts}
 #| echo: false
@@ -636,9 +652,9 @@ const data = {
 console.log(Dataframe.rows(data))
 ```
 
-One important thing to mention is that, since a `Dataframe` can contain different `Indexable` subtypes as columns, we need to make sure that information about the number of rows is present and non-conflicting. That is, all fixed-length arrays in the data must have the same length, and, if there are non-fixed length variables (constants, derived variables/functions) present, we need to make sure that either at least one fixed-length array is included in the data or the non-fixed length arrays carry appropriate metadata.
+One important thing to mention is that, since the `Dataframe` columns can be different `Indexable` subtypes, we need to make sure that information about the number of rows is present and non-conflicting. That is, all fixed-length columns must have the same length, and, if there are variable-length columns (constants, derived variables/functions) present, we need to make sure that at least one fixed-length column is present in the data (or that the variable-length columns carry appropriate metadata).
 
-While in a traditional OOP style, these length constraints might be enforced as a class invariant during instantiation and within methods, my system adopts a more dynamic approach. Since a `Dataframe` is a simple dictionary, the length constraints are checked dynamically (via a `Dataframe.checkLength()` utility function). This occurs whenever the integrity of a `Dataframe` becomes a key concern, such as when initializing a [`Scene`](#Scene) or when rendering. This style is more in line with JavaScript's dynamic nature: in JavaScript, class instances are just objects, and there is nothing preventing the users from adding or removing properties at runtime. Further, dataframes with typical dimensionality (fewer columns than rows, $p << n$), the performance cost of checking column's length is negligible when compared to row-wise operations, such as rendering or summary statistics calculations. If performance were to become an issue for high-dimensional datasets ($p >> n$), the system could always be enhanced with memoization or caching.    
+While in a traditional OOP style, these length constraints might be enforced by a class invariant, checked during instantiation and maintained inside method bodies, `plotscape` adopts a more loose approach by checking the length constraints dynamically, at runtime. This is done whenever the integrity of a `Dataframe` becomes a key concern, such as when initializing a [`Scene`](#Scene) or when rendering. The approach is more in line with JavaScript's dynamic nature: in JavaScript, all variables (except for primitives) are objects, and there is nothing preventing the users from adding or removing properties at runtime, even to class instances. Further, with `Dataframe`s of typical dimensionality (fewer columns than rows, $p << n$), the performance cost of checking column's length is usually negligible when compared to row-wise operations, such as computing summary statistics or rendering. If performance were to become an issue for high-dimensional datasets ($p >> n$), the approach could always be enhanced with memoization or caching.    
 
 #### Factors
 
@@ -1186,33 +1202,26 @@ With this detailed explanation, the behavior of `Scale.pushforward` should be cl
 
 #### Expanses
 
-As discussed in the previous section, each `Scale` consists of two properties of type `Expanse`, which represent the space the values are mapped *from* - the `domain` - and the space the values are mapped *to* - the `codomain`. Thus, a `Scale` mainly acts as a sort of a connector between the `domain` and `codomain`, with most of the real work being done by these two properties.
-
-
-
-
-
-Here, the `value` and `normalized` properties are opaque types (used on type-level only), which simply indicate the domain type `T` and the dimensionality of the normalized values (`number | number[]`). 
-
-Each namespace corresponding to a subtype of `Expanse<T>` exports two important functions:
-
-- A *normalize* function $n: T \to [0, 1]^n$, mapping values from $T$ to $[0, 1]^n$
-- An *unnormalize* function $u: [0, 1]^n \to T$, mapping values from $[0, 1]^n$ to $T$
-
-There are two other important methods that each `Expanse` subtype must export: `train` and `breaks`. The `train` function allows the expanse to train on new data (for example, after a histogram binwidth has been changed). The `breaks` function simply returns an array of breaks of type `T`. Thus, each subtype of `Expanse` implements the following polymorphic methods:
+As discussed in the previous section, a `Scale` maps values between two spaces, defined by the `domain` and `codomain` properties, both of type `Expanse`. In other words, a `Scale` primarily acts as a sort of a connector, while the `Expanse` properties handle the core underlying transformations. Specifically, `Expanse<T>` is a generic type designed to convert values of type `T` to and from numerical representations, a process facilitated by the previously mentioned `normalize` and `unnormalize` functions. Beyond these core functions, it may be also beneficial to have additional generic functionality on each `Expanse<T>` subtype, namely the ability to "train" the expanse on new values and return a list of potential axis breaks. This leads to the following interface: 
 
 ```{ts}
-interface ExpanseMethods<T> {
-  normalize(expanse: Expanse<T>, value: T): number | number[];
-  unnormalize(expanse: Expanse<T>, value: number | number[]): T;
-  train(expanse: Expanse<T>, values: T[], options?: Record<string, any>): void;
-  breaks(expanse: Expanse<T>, zero?: number, one?: number): T[] | number[];
+#| echo: false
+export interface Expanse<T> {
+  normalize<T>(expanse: Expanse<T>, x: T): number
+  unnormalize<T>(expanse: Expanse<T>, x: number): T
+  
+  train(x: T[]): void
+  breaks(): T[]
 }
 ```
 
+Note that, up until this point, `interface`s have been used to define components as a plain data containers, however, with `Expanse<T>`, it is now used differently: to define abstract functionality. The reason for this is that `Expanse<T>` is the first component of the system which absolutely requires runtime polymorphism. Specifically, the implementation of `normalize` and `unnormalize` has to vary significantly across different `Expanse<T>` subtypes, by necessity. For instance, converting numbers to numbers is a fundamentally different task than converting strings to numbers. Further, even when the same generic type `T` is used, there may be use cases for different implementations of the conversion process (as we will explore later). This makes polymorphism necessary. In current version of `plotscape`, I maintain the data-oriented approach of separate data-behaviour containers and hand-roll the polymorphism by dispatching on a type property, however, a case could be made for adopting object-oriented principles here and writing expanse subtypes as classes which implement the `Expanse<T>` interface (or even implementing `Expanse<T>` as an abstract class).
+
+This is really all there is to say about the `Expanse<T>` interface. The real functionality lies within its subtypes, which we will now explore.
+
 #### Continuous expanses
 
-A continuous expanse is a generalization of the linear mapping discussed in Section \@ref(two-component-scales). That is, it translates values to and from a continuous interval given (roughly) by $[\text{min}, \text{max}]$. Here is a simplified interface:
+The most straightforward type of expanse is `ExpanseContinuous`, implementing an interface of `Expanse<number>`. It generalizes the linear mapping discussed in Section \@ref(scales-as-functions), values to and from a range given by `[min, max]`. Typically (but not always), this amounts to mapping a data value equal to `min` to zero and data value equal to `max` to 1, with intermediate values interpolated to `(0, 1)`. Here is a simplified interface for the `ExpanseContinuous` data container:
 
 ```{ts}
 interface ExpanseContinuous {
@@ -1225,45 +1234,52 @@ interface ExpanseContinuous {
 }
 ```
 
-The `min` and `max` properties are fairly self-explanatory - they denote the minimum and maximum of the data. The `offset` property allows us to move values by some constant, either before they have been normalized or after they have been unnormalized. This is useful, for example, when we want to ensure that the width of a spineplot bar is exactly 1 pixel less than the available space. The `trans` and `inv` properties allow us to perform non-linear transformations (they should, intuitively, be inverses of each other). By default, they are both set to the identity function (`(x) => x`). Finally, the `ratio` property is a simple boolean flag which indicates whether the expanse is part of a ratio scale. If this flag is set to `true`, then the `min` value of the expanse must always be zero and we cannot change it by, for example, training on new data.
+As mentioned above, the `min` and `max` denote the lower and upper bound of the data range, respectively. The `offset` property allows us to shift the data values by some pre-specified constant. This is useful, for example, when we want to ensure that the width of a spineplot bar is exactly 1 pixel less than the available space. The `trans` and `inv` properties allow us to apply non-linear transformations; they should, intuitively, be inverses of each other, and by default, they are set to the identity function (`(x) => x`). Finally, the `ratio` property, a boolean flag, indicates if the expanse is part of a ratio scale (see Section \@ref(scales-measurement)). If `ratio` is `true`, the `min` value is fixed at zero and cannot be modified, even by training on new data.
 
-The normalize and unnormalize functions in the `ExpanseContinuous` namespace are generalizations of the linear map:
+The `normalize` and `unnormalize` functions in the `ExpanseContinuous` namespace are generalizations of the linear map:
 
 ```{ts}
 // ExpanseContinuous.ts
 export namespace ExpanseContinuous {
-    export function normalize(expanse: ExpanseContinuous, value: number) {
+    export function normalize(expanse: ExpanseContinuous, x: number) {
     const { min, max, offset, trans } = expanse;
-    return (trans(value - offset) - trans(min)) / (trans(max) - trans(min));
+    return (trans(x - offset) - trans(min)) / (trans(max) - trans(min));
   }
 
-  export function unnormalize(expanse: ExpanseContinuous, value: number) {
+  export function unnormalize(expanse: ExpanseContinuous, value: x) {
     const { min, max, offset, trans, inv } = expanse;
-    return inv(trans(min) + value * (trans(max) - trans(min))) + offset;
+    return inv(trans(min) + x * (trans(max) - trans(min))) + offset;
   }
 }
 ```
 
-And these work as we would expect:
+Note that these functions take into account the non-linear transformations (`trans`, `inv`) and the `offset`. First, `offset` is applied to the value immediately, before normalization (or after, in the case of `unnormalize`). Second, the non-linear transformations are applied to the expanse's limits as well as to the value, i.e. the value is `normalize`d within the transformed space. The `unnormalize` function reverses this process, and also has to apply the inverse function. In mathematical notation:
+
+\begin{align}
+p = n(x) &= [f(x - \text{offset}) - f(\min)] / [f(\max) - f(\min)] \\
+x = u(p) &= f^{-1} \big[ f(\min) + x \cdot (f(\max) - f(\min)) \big] + \text{offset}
+\end{align}
+
+One can easily check that $n$ and $u$ are inverses of each other by taking one equation and solving for $x$ or $p$, respectively (assuming that $f^{-1}$ exists).
+
+Back to code. The `ExpanseContinuous.normalize` and `ExpanseContinuous.unnormalize` work as expected:
 
 ```{ts}
 import { ExpanseContinuous } from "./ExpanseContinuous"
 
 const identity = (x) => x;
-// I could have defined a proper constructor above but opted not to to save lines
-const exp = { min: 1, max: 16, offset: 0, trans: identity, inv: identity };
+const expanse = { min: 1, max: 16, offset: 0, trans: identity, inv: identity };
 
-console.log(ExpanseContinuous.normalize(exp, 4));
+console.log(ExpanseContinuous.normalize(expanse, 4));
 exp.trans = Math.sqrt; // Technically, we should also set inverse to square
-console.log(ExpanseContinuous.normalize(exp, 4));
-
+console.log(ExpanseContinuous.normalize(expanse, 4));
 ```
 
-Finally, the `ExpanseContinuous` namespace also export a `train` function, which goes through an array values and updates the min and max properties (max only if `ratio` is set to `true`), and a `breaks` function which returns a list of breaks, using an algorithm inspired by base R's `pretty` function.
+Finally, the `ExpanseContinuous` namespace also exports a `train` and `breaks` functions. The train functions simply finds a minimum and maximum value of an array of numbers and sets these as the new `min` and `max` (or just sets the `max`, if `ratio` is `true`). Breaks returns a list of "nice" axis breaks which are by computed via an algorithm inspired by base R's `pretty` function [@r2024].
 
 #### Point expanses
 
-A point expanse is the simplest type of discrete expanse. It simply places values at equidistant points along the $[0, 1]$ interval, based on an ordered array of labels. Here is a simplified interface:
+`ExpansePoint` is the simpler of two types of discrete expanses, implementing an interface of `Expanse<string>`. It maps string values to equidistant positions within the $[0,1]$ interval, based on an ordered array of labels. Here is a simplified interface for its data container:
 
 ```{ts}
 interface ExpansePoint {
@@ -1272,52 +1288,64 @@ interface ExpansePoint {
 }
 ```
 
-The `labels` array contains the all of the unique values that data take (strings). The `order` array is a simple array of indices which represent the order in which the labels get assigned to points in the $[0, 1]$ interval.
+The `labels` array stores the unique string values present in the data, sorted alphabetically. The `order` array is a simple array of indices of equal length as `labels` representing the order in which the labels get assigned to points in the $[0, 1]$ interval. By default, it is simply the increasing sequence `0 ... labels.length - 1`.
 
-The normalize and unnormalize functions in the `ExpansePoint` namespace simply use a label to find the corresponding point in $[0, 1]$ or the use a point to find the closest label, while respecting the `order`:
-
+The `normalize` and `unnormalize` functions the `ExpansePoint` namespace exports simply map labels to equidistant point in the `[0, 1]` interval or vice versa, while respecting the `order`:
 
 ```{ts}
 // ExpansePoint.ts
 export namespace ExpansePoint {
-  export function normalize(expanse: ExpansePoint, value: string) {
+  export function normalize(expanse: ExpansePoint, x: string) {
     const { labels, order } = expanse;
-    const index = order[labels.indexOf(value)];
+    const index = order[labels.indexOf(x)];
     if (index === -1) return index;
     return index / (labels.length - 1);
   }
 
-  export function unnormalize(expanse: ExpansePoint, index: number) {
+  export function unnormalize(expanse: ExpansePoint, x: number) {
     const { labels, order } = expanse;
-    index = Math.round(index * (labels.length - 1));
+    index = Math.round(x * (labels.length - 1));
     return labels[order[index]];
   }
 }
 ```
 
-Again, these functions work as we would expect:
+The `normalize` function maps a label to `[0, 1]` based on its position within the `labels` array (which may be shuffled by `order`), whereas the `unnormalize` function finds the closest label corresponding to numeric position by reversing the process. This works largely as we would expect:
 
 ```{ts}
 import { ExpansePoint } from "./ExpansePoint"
 
 const cities = ["Berlin", "Prague", "Vienna"]
+const expanse = { labels: cities, order: [0, 1, 2] };
 
-const exp = {
-  labels: cities,
-  order: [0, 1, 2],
-};
-
-console.log(cities.map(city => ExpansePoint.normalize(exp, city)));
+console.log(cities.map(city => ExpansePoint.normalize(expanse, city)));
 exp.order[0] = 1; // Swap the order of the first two values
 exp.order[1] = 0;
-console.log(cities.map(city => ExpansePoint.normalize(exp, city)));
+console.log(cities.map(city => ExpansePoint.normalize(expanse, city)));
 ```
 
-Like `ExpanseContinuous`, the `ExpansePoint` namespace also contains a `train` function, which loops through an array of labels and finds all of the unique values, as well as a `breaks` function, which simply returns ordered `labels`. Further, the namespace also contains a `reorder` function which mutates the `order` property based on an array of indices. 
+However, it is important to note that, due to the fact that there is a finite number of `labels`, the `unnormalize` function is *not* a full, two-sided inverse of `normalize`, merely a one-sided inverse or retraction [see e.g. @lawvere2009]. That is, while composing `unnormalize` with `normalize` results in the identity function, the converse is not true. For instance:
+
+```{ts}
+import { ExpansePoint } from "./ExpansePoint"
+
+const cities = ["Berlin", "Prague", "Vienna"]
+const expanse = { labels: cities, order: [0, 1, 2] };
+
+// Unnormalize works as an inverse one way
+console.log(cities.map(x => {
+  return ExpansePoint.unnormalize(ExpansePoint.noralize(expanse, x))
+}))
+
+// But not the other way around
+console.log(ExpansePoint.normalize(ExpansePoint.unnormalize(expanse, 0.6)))
+```
+
+Finally, like `ExpanseContinuous`, the `ExpansePoint` namespace also contains a `train` function, which loops through a string array, finds all unique values, and assigns these to labels, as well as a `breaks` function, which simply returns the array of `labels` (ordered by `order`). Further, the namespace also contains a `reorder` function which modifies the `order` property based on a new array indices, allowing the labels to be shuffled. 
 
 #### Band expanses
 
-While `ExpansePoint` places values at equidistant points along $[0, 1]$, `ExpanseBand` places values at the midpoints of corresponding bins or bands. These bands can have variable widths, which is useful, for example, when specifying the x-axis position in a barplot. The simplified interface of `ExpanseBand` is the following:
+While `ExpansePoint` places values at equidistant points along $[0, 1]$, `ExpanseBand` places values at the midpoints of bands of which may be assigned variable widths or "weights". The simplified interface of `ExpanseBand` is the following:
 
 ```{ts}
 export interface ExpanseBand {
@@ -1328,32 +1356,18 @@ export interface ExpanseBand {
 }
 ```
 
-Like `ExpansePoint`, `ExpanseBand` has the `labels` and `order` properties, which work exactly the same way as before. However, additionally, it also has the `weights` and `cumulativeWeights` properties, which are numeric arrays that define the width of each band. `weights` record the width of each band, and `cumulativeWeights` record the cumulative sums of the weights, which are used in the `normalize` and `unnormalize` functions. Thus, each time we update `weights`, we need to also update `cumulativeWeights` as well.  
+The `labels` and `order` properties match those of `ExpansePoint`. The additional `weights` and `cumulativeWeights` are numeric arrays which record the width of each band. `weights` store the individual band widths, whereas `cumulativeWeights` stores their cumulative sums. The reason why `cumulativeWeights` are stored is that, by having the bands have variable widths, we can no longer rely on the label index to correctly identify position. To give an example, with weights `1`, `1`, and `2`, the second band takes up quarter of the available space and the correct normalized value should be 0.375 (halfway between 0.25 and 0.5). However, to compute this value, the cumulative sum of the preceding weights as well as the total sum of all weights are required. While we could compute cumulative sum of weights on each `normalize` or `unnormalize` call, this would introduce performance overhead. As such, it is better to store `cumulativeWeights` and only recompute them each time `weights` or `order` changes. 
 
-The normalize and unnormalize functions in the `ExpanseBand` namespace map labels to and from the midpoint of their corresponding bands:
+The `normalize` and `unnormalize` functions in the `ExpanseBand` namespace map labels to and from the midpoint of their corresponding bands:
 
 ```{ts}
 export namespace ExpanseBand {
-  export function normalize(expanse: ExpanseBand, value: string) {
+  export function normalize(expanse: ExpanseBand, x: string) {
     const { labels } = expanse;
-    const index = labels.indexOf(value);
+    const index = labels.indexOf(x);
     return getMidpoint(expanse, index);
   }
-
-  export function unnormalize(expanse: ExpanseBand, value: number) {
-    const { labels, order, cumulativeWeights } = expanse;
-
-    const weight = value * last(cumulativeWeights);
-    let index = 0;
-
-    while (index < cumulativeWeights.length - 1) {
-      if (cumulativeWeights[index] >= weight) break;
-      index++;
-    }
-
-    return labels[order[index]];
-  }
-
+  
   function getMidpoint(expanse: ExpanseBand, index: number) {
     const { order, cumulativeWeights } = expanse.props;
     index = order[index];
@@ -1364,12 +1378,31 @@ export namespace ExpanseBand {
 
     return (lower + upper) / 2 / max;
   }
+
+  export function unnormalize(expanse: ExpanseBand, x: number) {
+    const { labels, order, cumulativeWeights } = expanse;
+
+    const weight = x * last(cumulativeWeights);
+    let index = 0;
+
+    while (index < cumulativeWeights.length - 1) {
+      if (cumulativeWeights[index] >= weight) break;
+      index++;
+    }
+
+    return labels[order[index]];
+  }
+
 }
 ```
 
-Notice that, because of the cumulative nature of the bands, the logic in the functions' bodies is a bit more complicated. First, to `normalize` a label, we need to first find the index of the label and then return the corresponding midpoint of the band, taking `weights` and `order` into account. Second, to `unnormalize`, we actually have to loop through the array of `cumulativeWeights` - there is no way to determine which bin a normalized value belongs to in $O(1)$ time (as far as I am aware). This is not much of a problem since the `ExpanseBand.unnormalize` is not used anywhere in the system (all scales implemented thus far use only `ExpanseBand.normalize`), however, it is important to be mindful of this.
+Compared to `ExpansePoint`, the logic of `normalize` and `unnormalize` is a bit more complicated. To `normalize` a label, we need to first find the index of the label and then return the corresponding midpoint of the band, taking `weights` and `order` into account. To `unnormalize`, we actually have to loop through the array of `cumulativeWeights` to find the first weight that is smaller than the position: as far as I know, there is no way to determine which bin a normalized value belongs to in $O(1)$ time^[This is not much of a problem since, right now, `ExpanseBand.unnormalize` is not actually used anywhere in the system (all scales implemented thus far only use only `ExpanseBand.normalize`). However, it is important to be mindful of this.]. 
 
-```{r}
-#| eval: true
-knitr::opts_chunk$set(eval = TRUE)
-```
+##### Compound and split expanses
+
+The final two `Expanse` subtypes, `ExpanseCompound` and `ExpanseSplit`, represent a significant departure from the scalar-valued `Expanse` subtypes discussed earlier. Unlike the others, these subtypes are designed to handle array-valued data. While their implementation logic is relatively straightforward, a detailed discussion would significantly complicate the general explanation of `Expanse` type and behavior. Additionally, their current use-case in `plotscape` is fairly limited (albeit important) - they are used for parallel coordinate plots only. Therefore, I will only provide a brief, conceptual explanation. Interested readers are encouraged to explore the `plotscape` codebase for a deeper understanding.
+
+`ExpanseCompound` is designed to handle heterogeneous arrays (tuples) of values by applying `normalize` and `unnormalize` functions in parallel, using an internal array of `Expanse`s. That is, to construct `ExpanseCompound`, we need to provide an array of `Expanse`s, and when calling `normalize`, we need to make sure that we call it with an array of values which match the underlying `Expanse` types. `ExpanseSplit` instead uses a single `Expanse` to `normalize`/`unnormalize` a homogeneous array of values. Finally, when either `ExpanseCompound` or `ExpanseSplit` is used as `domain` and `codomain` of a `Scale`, the arrity of the other `Expanse` must match.
+
+As was briefly mentioned above, `ExpanseCompound` and `ExpanseSplit` are used in parallel coordinate plots. Specifically, `ExpanseCompound` is used as the `domain` of the y-axis scale, such that values of several different variables can be normalized in parallel. Further, because of the genericity `Expanse` interface, it is easy to mix continuous and discrete expanse subtypes. Additionally, when all expanses constituting the `ExpanseCompound` are continuous, it is also possible to set them to the same limits (by finding the minimum and maximum values across all expanses, respectively). Finally,`ExpanseSplit` is used as the `codomain`, mapping the array of normalized values produced by the `domain` to the plot's y-axis coordinates.
+

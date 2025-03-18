@@ -930,7 +930,7 @@ knitr::include_graphics("./figures/ggplot2-linecounts.png")
 
 For the reasons outlined above, I believe it is important to discuss the issue of applied scaling in more depth. The information here is based largely on how scales have been implemented in existing data visualization codebases, such as the `ggplot2`package [@wickham2016] or `d3-scale` module of D3 [@d3-scale2024; used also by e.g. Vega @satyanarayan2015], as well as on personal insights gained while implementing my package.
 
-#### Scales as functions
+#### Scales as functions {#scales-as-functions}
 
 From a high-level perspective, a scale is just a function $s: D \to V$ which maps data values $d \in D$ to values of some visual attribute $v \in V$, such as the x- and y-position, length, area, radius, or color [@wilkinson2012; @petricek2020]. This function may or may not be invertible, such that, at times, each value of the visual attribute may be uniquely identifiable with a single data value, or not.
 

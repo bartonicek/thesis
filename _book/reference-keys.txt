@@ -292,3 +292,7 @@ isomorphism
 algebraic-as-categories
 functors
 references
+transforming-summaries
+scaling-intermediate
+scales
+scale-properties
