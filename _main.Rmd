@@ -382,9 +382,9 @@ knitr::include_graphics("./figures/ggplot-histogram-aes2.png")
 
 Now it is easier to see that what gets mapped to the x-axis is *not* the `mpg` variable. Instead, it is the variable representing the histogram breaks. The `mpg` variable gets mapped to the plot only implicitly, as counts within the bins (the y-axis variable). Thus, in `ggplot` call, the semantics of `aes(x = mpg, ...)` are fundamentally different in `geom_histogram` as compared to, for example, `geom_scatter`.
 
-Arguing over the mapping between data variables andd aesthetics may seem like a minor nitpick, however, it is in fact a fundamental gap in the design. As discussed in Section \@ref(problems), `ggplot2` is based on the Grammar of Graphics model [@wilkinson2012], which centers around the idea of composing plots out of independent, modular components. The fact that the semantics of `aes` are tied to the `geom`s (and `stat`s) means that the `ggplot2` utility functions are not really modular, in the sense of being truly independent.
+Arguing over the mapping between data variables andd aesthetics may seem like a minor nitpick, however, it is in fact a fundamental gap in the design. As discussed in Section \@ref(problems), `ggplot2` is based on the Grammar of Graphics model [@wilkinson2012], which centers around the idea of composing plots out of independent, modular components. The fact that the semantics of `aes` are tied to the `geom`s (and `stat`s) means that these `ggplot2` functions are not truly modular or independent.
 
-So what to do? To be perfectly frank, I have not found a perfect solution. In Section \@ref(problems), I demonstrated that, in the general case involving transformations like stacking, `stats` and `geoms` *cannot* be truly independent. Ignoring that, the problem with aesthetics in plots like histograms is that, in some sense, we are putting the cart before the horse: ultimately, we want to plot derived variables, so we should specify these in the call to `aes`, however, we do not know what they will be before we add `geom_histogram` to the `ggplot` schema. So the schema creation process should perhaps be organized in a different way. As per Section \@ref(problems), we could mirror the data visualization pipeline by doing something like:    
+So what to do? To be perfectly frank, I have not found a perfect solution. In Section \@ref(problems), I proved that, in the general case involving transformations like stacking, `stats` and `geoms` *cannot* be truly independent. Barring that, the problem with specifying aesthetics in plots like histograms is that, in some sense, we are putting the cart before the horse: ultimately, we want to plot derived variables, so we should specify these in the call to `aes`, however, we do not know what the derived variables will be before we add `stats` and `geoms` (like `geom_histogram`) to the `ggplot` schema. So perhaps the schema creation process should organized in a different way. As per Section \@ref(problems), we could mirror the data visualization pipeline by doing something like:    
 
 ```{r}
 #| eval: false
@@ -393,15 +393,17 @@ data |> partition(...) |> aggregate(...) |> encode(...) |> render(...)
 
 In fact, in broad strokes, this is how the data visualization pipeline is implemented in `plotscape` (see Section \@ref(low-level-implementation)). 
 
-However, this model does seem to have one significant downside: it does not lend itself easily to a simple declarative schema like that of `ggplot2`. Specifically, I have tried to coming up with such a schema, however, my efforts were largely unsuccessful^[Part of the reason for this failure may have also been that, since `plotscaper` is an *interactive* data visualization system, integrating reactivity further complicates the process.]. This is why I opted in for the more traditional, nominal style of specifying plots in `plotscaper`, relying on the various `add_*` functions. While this style may seem less flexible, I hope I have made the case here that the underlying limitations are *not* an exclusive to `plotscape`/`plotscaper`, but extend to `ggplot2` and all other GoG-based data visualization systems. I have simply chosen make these limitations explicit. If a better solution is found, it may be integrated into future releases of the package.
+However, this model does seem to have one significant downside: it does not lend itself easily to a simple declarative schema like that of `ggplot2`. Despite my attempts, creating such a schema has proven largely unsuccessful. This likely stems from the hierarchical dependencies between the various pipeline stages, as well as the added complexity of integrating reactivity into the pipeline.
 
-A final point to mention is that, it could be argued that one benefit of the `ggplot2` model where partitioning and aggregation logic is implicitly tied to `geom`s is that it makes it easier to mix different kinds of geoms. For instance, `geom_histogram` can be combined with `geom_rug`.    
+Be it as it may, this difficulty with declarative schemas is why I opted for the more traditional, nominal style of specifying plots in `plotscaper`(i.e. using functions like `add_scatterplot` or `add_barplot`). While this approach may seem less flexible, I hope I have demonstrated that the underlying limitations are *not* an exclusive to `plotscape`/`plotscaper`, but extend to `ggplot2` and all other GoG-based data visualization systems. I have simply chosen make these limitations more explicit. If a better solution is found, it may be integrated into future releases of the package.
+
+A final point to mention is that, it could be argued that one benefit of the `ggplot2` model where partitioning and aggregation logic (`stat`s) is implicitly tied to `geom`s is that it makes it easier to combine several kinds of `geom`s in one plot. For instance, `geom_histogram` can be combined with `geom_rug`, while single-case `geom_points` can be combined with aggregated summaries computed via `stat_summary`.    
 
 ### The scene and the schema {#scene-and-schema}
 
 A key part of the `plotscaper` API is the distinction between two classes of objects representing figures: schemas and scenes. Put simply, a schema is an immutable ledger or blueprint, while a scene is a live, rendered version of the figure. Both can be manipulated using (largely) the same set of functions/methods, however, what these functions actually do changes based on their target. 
 
-As shown before, schema can be created with the `create_schema()` function: 
+As shown before, schema can be created with the `create_schema` function: 
 
 ```{r}
 #| echo: false
@@ -417,15 +419,15 @@ schema
 str(schema$queue)
 ```
 
-As you can see, the object created with `create_schema()` is essentially just a `list()` of messages. Modifying the schema by calling functions such as `add_scatterplot()` or `set_scale()` simply appends a new message to the list, similar to how objects of class `ggplot` are modified by the corresponding functions and the `+` operator in `ggplot2` [@wickham2016]. This design makes the schema easy to transport (e.g. as JSON) and modify programmatically. Finally, rendering the schema into a figure requires an explicit call to `render()`. Note that this approach is different from the popular style of implicit rendering (used in e.g. `ggplot2`), where an object is rendered via an overloaded `print()` method; however, there is a good reason for this which will be discussed later. 
+As you can see, the object created with `create_schema` is essentially just a `list` of messages. Modifying the schema by calling functions such as `add_scatterplot` or `set_scale` simply appends a new message to the list, similar to how objects of class `ggplot` are modified by the corresponding functions and the `+` operator in `ggplot2` [@wickham2016]. This design makes the schema easy to transport (e.g. as JSON) and modify programmatically. Finally, rendering the schema into a figure requires an explicit call to `render`. Note that this approach is different from the popular style of implicit rendering (used in e.g. `ggplot2`), where an object is rendered via an overloaded `print` method; however, there is a good reason for this which will be discussed later. 
 
-The call to `render()` turns the schema gets turned into a live, interactive figure by constructing an `htmlwidgets` widget [@htmlwidgets2021]. This bundles up the underlying data and `plotscape` code (JavaScript, HTML, CSS) into a standalone widget which may get rendered inside, for example, RStudio viewer or RMarkdown document. All of the schema messages also get forwarded to the widget and applied sequentially, creating the figure.
+The call to `render` turns the schema gets turned into a live, interactive figure by constructing an `htmlwidgets` widget [@htmlwidgets2021]. This bundles up the underlying data and `plotscape` code (JavaScript, HTML, CSS) into a standalone widget which may get rendered inside, for example, RStudio viewer or RMarkdown document. All of the schema messages also get forwarded to the widget and applied sequentially, creating the figure.
 
 Note that, under this model, the schema merely records state-generating steps, not the state itself, and all of the actual state lives on the scene. This design avoids state duplication between the R session (server) and web-browser-based figure (client), eliminating the need for synchronization. While this client-heavy approach deviates from typical client-server architectures, where state predominantly resides on the server, it is essential for achieving responsive interactive visualizations. By keeping most of the state and computation on the client and avoiding round-trips to the server, we can achieve fast updates in response to user interaction [such as mouse movement during linked selection\; this is also why features like linked selection tend to have poor performance in server-centric frameworks like Shiny, @shiny2024]. Conversely, as will be discussed below, while the R session (server) may occasionally send and receive messages, these are by comparison much less latency-sensitive, making a "thin" server perfectly viable.
 
 ### Client-server communication {#communication}
 
-While inside an interactive R session (e.g., in RStudio IDE [@rstudio2024]), creating a `plotscaper` figure via calling `render()` also automatically launches a WebSockets server [using the `httpuv` package, @cheng2024]. This server allows for live, two-way communication between the R session (server) and the figure (client). By assigning the output of `render()` to a variable, users can save a handle to this server, and call functions which query the figure's state or cause mutable, live updates. For instance:
+While inside an interactive R session (e.g., in RStudio IDE [@rstudio2024]), creating a `plotscaper` figure via calling `render` also automatically launches a WebSockets server [using the `httpuv` package, @cheng2024]. This server allows for live, two-way communication between the R session (server) and the figure (client). By assigning the output of `render` to a variable, users can save a handle to this server, and call functions which query the figure's state or cause mutable, live updates. For instance:
 
 ```{r}
 #| eval: false
@@ -457,7 +459,7 @@ scene |> selected_cases() # [1] 1 2 3 4 5 6 7 8 9 10
 
 ```
 
-As noted earlier, most `plotscaper` functions are polymorphic `S3` methods which can accept either a schema or a scene as the first argument. When called with schema as the first argument, they append a message to the schema, whereas when called with scene as the first argument (and while inside an interactive R session), they send a WebSockets request through the `httpuv` server, causing a live-update the figure or the server to respond back with data. In more abstract terms, with respect to these functions, the process of rendering a schema is a functor/homomorphism, meaning that we can either call the functions on the schema and then render it, or immediately render the figure and then call the functions, and the result will be the same (provided no user interaction happens in the meantime). The one exception to this rule are state-querying functions such as `selected_cases()`, `assigned_cases()`, and `get_scale()`. These functions send a request to retrieve the rendered figure's state and so it makes little sense to call them on the schema^[Of course, we *could* technically parse the list of messages to retrieve the figure's state as it will be when the figure gets rendered. For instance with `create_schema(...) |> assign_cases(1:10, 2) |> assign_cases(5:10, 3)` we could parse the first five indices belonging to group 2 and the second belonging to group 3. However, since the user has to write the code to modify the figure's state in the first place, the utility of this parsing is not clear.].
+As noted earlier, most `plotscaper` functions are polymorphic `S3` methods which can accept either a schema or a scene as the first argument. When called with schema as the first argument, they append a message to the schema, whereas when called with scene as the first argument (and while inside an interactive R session), they send a WebSockets request through the `httpuv` server, causing a live-update the figure or the server to respond back with data. In more abstract terms, with respect to these functions, the process of rendering a schema is a functor/homomorphism, meaning that we can either call the functions on the schema and then render it, or immediately render the figure and then call the functions, and the result will be the same (provided no user interaction happens in the meantime). The exception to this rule are state-querying functions such as `selected_cases`, `assigned_cases`, and `get_scale`. These functions send a request to retrieve the rendered figure's state and so it makes little sense to call them on the schema^[Of course, we *could* technically parse the list of messages to retrieve the figure's state as it will be when the figure gets rendered. For instance with `create_schema(...) |> assign_cases(1:10, 2) |> assign_cases(5:10, 3)` we could parse the first five indices belonging to group 2 and the second belonging to group 3. However, since the user has to write the code to modify the figure's state in the first place, the utility of this parsing is not clear.].
 
 ### HTML embedding
 
@@ -584,7 +586,7 @@ stream
   );
 ```
 
-As you can see, the event producer (stream) is defined separately from the event processing logic, which is constructed by piping the result of one operation into the next. Because of the associativity of function composition, the stream actually exhibits properties of a functor, meaning that the order of composition - either through direct function composition or `.pipe()` chaining - does not affect the result. Additionally, while the stream transformations themselves are (generally) stateless, they can still produce useful side-effects (as can be seen on the example of the `console.log` call above). Further, because of this fact, they also lend themselves well to modeling asynchronous or even infinite data sequences [@abelson2022; @fogus2013].
+As you can see, the event producer (stream) is defined separately from the event processing logic, which is constructed by piping the result of one operation into the next. Because of the associativity of function composition, the stream actually exhibits properties of a functor, meaning that the order of composition - either through direct function composition or `.pipe` chaining - does not affect the result. Additionally, while the stream transformations themselves are (generally) stateless, they can still produce useful side-effects (as can be seen on the example of the `console.log` call above). Further, because of this fact, they also lend themselves well to modeling asynchronous or even infinite data sequences [@abelson2022; @fogus2013].
 
 While streams can be extremely useful in specific circumstances, their utility as a general model for complex UIs (beyond asynchronous operations) is debatable. Specifically, the inherent statefulness of UIs conflicts with the stateless nature of streams: stateless computations inside the stream have to leak into the rest of the application *somewhere*. Delineating which parts of the logic should go into streams versus which should be bound to UI components adds unnecessary complexity for little real benefit. Consequently, streams are likely not the optimal choice for interactive data visualization, where some state is unavoidable. 
 
@@ -658,7 +660,7 @@ setPrice(200);
 setTax(0.12);
 ```
 
-The key detail to notice is the presence of the global stack of effects. Whenever an effect is called, it first pushes itself onto the stack. It then executes, accessing any signals it needs along the way. These signals in turn register the effect as a listener, by accessing it as the top-most element of the effect stack. When the effect is done executing, it pops itself off the stack. Now, whenever one of the accessed signals changes, the effect re-runs again. Crucially, making a derived reactive value is as simple as writing a callback: if an effect calls a function using a signal, it also automatically subscribes to that signal (see the example of `priceWithTax()` above). Importantly, the effect subscribes *only* to this signal and not the derived value itself. In other words, effects only ever subscribe to the leaf nodes of the reactive graph (signals). Derived values computed on the fly (and, if necessary, can be easily memoized^[Memoizing a derived value can be done by creating a new signal and an effect that runs when the original value gets updated.]), and event ordering is simply managed via the runtime call stack.
+The key detail to notice is the presence of the global stack of effects. Whenever an effect is called, it first pushes itself onto the stack. It then executes, accessing any signals it needs along the way. These signals in turn register the effect as a listener, by accessing it as the top-most element of the effect stack. When the effect is done executing, it pops itself off the stack. Now, whenever one of the accessed signals changes, the effect re-runs again. Crucially, making a derived reactive value is as simple as writing a callback: if an effect calls a function using a signal, it also automatically subscribes to that signal (see the example of `priceWithTax` above). Importantly, the effect subscribes *only* to this signal and not the derived value itself. In other words, effects only ever subscribe to the leaf nodes of the reactive graph (signals). Derived values computed on the fly (and, if necessary, can be easily memoized^[Memoizing a derived value can be done by creating a new signal and an effect that runs when the original value gets updated.]), and event ordering is simply managed via the runtime call stack.
 
 Signals provide an elegant solution to many problems with reactivity. They automate subscription to events, prevent unnecessary updates, ensure correct update order, and, due to their fine-grained nature, are generally highly performant compared to more cumbersome methods like the virtual DOM. However, again, signals do also introduce their own set of trade-offs. Chief among these, signal's reliance on the call stack for event ordering necessitates their implementation as functions (getter-setter pairs), rather than plain data values. While techniques like object getters/setters or templating [as seen in SolidJS, @solid2024] can be used to hide this fact, it does nevertheless add an extra layer of complexity. Similarly, many features important for performance, like memoization and batching, also require treating signals as distinct from plain data. Having code consist of two sets of entities - plain data and signals - ultimately impacts developer ergonomics.
 
@@ -723,7 +725,7 @@ console.log(getter2(0));
 console.log(getter3(0));
 ```
 
-Note that, by definition, every `Getter<T>` is also automatically an `Indexable<T>` (since it is a function of the form `(index: number) => T`). This means that we can use `Getter`s to create new `Getter`s. There are also several utility functions for working with `Getter`s. The first is `Getter.constant()` which takes in a value `T` and returns a thunk returning `T` (i.e. `() => T`). This is useful, for example, when `T` is an array and we always want to return the whole array (not just a single element):
+Note that, by definition, every `Getter<T>` is also automatically an `Indexable<T>` (since it is a function of the form `(index: number) => T`). This means that we can use `Getter`s to create new `Getter`s. There are also several utility functions for working with `Getter`s. The first is `Getter.constant` which takes in a value `T` and returns a thunk returning `T` (i.e. `() => T`). This is useful, for example, when `T` is an array and we always want to return the whole array (not just a single element):
 
 ```{ts}
 #| echo: false
@@ -759,7 +761,7 @@ console.log(getter4(0))
 console.log(getter4(1))
 ```
 
-Another useful utility function is `Getter.proxy()`, which takes a `Getter` and an array of indices as input and returns a new `Getter` which routes the access to the original values through the indices:
+Another useful utility function is `Getter.proxy`, which takes a `Getter` and an array of indices as input and returns a new `Getter` which routes the access to the original values through the indices:
 
 ```{ts}
 import { Getter } from "./Getter"
@@ -791,7 +793,7 @@ const data = {
 };
 ```
 
-Most functions in `plotscape` operate column-wise, however, here's how the dataframe above would look like as a list of rows if we materialized using a hypothetical `Dataframe.rows()` function:
+Most functions in `plotscape` operate column-wise, however, here's how the dataframe above would look like as a list of rows if we materialized using a `Dataframe.rows` function^[Not actually exported by `plotscape` but easily implemented.]:
 
 ```{ts}
 #| echo: false
@@ -851,9 +853,9 @@ const data = {
 console.log(Dataframe.rows(data))
 ```
 
-One important thing to mention is that, since a `Dataframe` can contain different `Indexable` subtypes as columns, we need to make sure that information about the number of rows is present and non-conflicting. That is, all fixed-length arrays in the data must have the same length, and, if there are non-fixed length variables (constants, derived variables/functions) present, we need to make sure that either at least one fixed-length array is included in the data or the non-fixed length arrays carry appropriate metadata.
+One important thing to mention is that, since the `Dataframe` columns can be different `Indexable` subtypes, we need to make sure that information about the number of rows is present and non-conflicting. That is, all fixed-length columns must have the same length, and, if there are variable-length columns (constants, derived variables/functions) present, we need to make sure that at least one fixed-length column is present in the data (or that the variable-length columns carry appropriate metadata).
 
-While in a traditional OOP style, these length constraints might be enforced as a class invariant during instantiation and within methods, my system adopts a more dynamic approach. Since a `Dataframe` is a simple dictionary, the length constraints are checked dynamically (via a `Dataframe.checkLength()` utility function). This occurs whenever the integrity of a `Dataframe` becomes a key concern, such as when initializing a [`Scene`](#Scene) or when rendering. This style is more in line with JavaScript's dynamic nature: in JavaScript, class instances are just objects, and there is nothing preventing the users from adding or removing properties at runtime. Further, dataframes with typical dimensionality (fewer columns than rows, $p << n$), the performance cost of checking column's length is negligible when compared to row-wise operations, such as rendering or summary statistics calculations. If performance were to become an issue for high-dimensional datasets ($p >> n$), the system could always be enhanced with memoization or caching.    
+While in a traditional OOP style, these length constraints might be enforced by a class invariant, checked during instantiation and maintained inside method bodies, `plotscape` adopts a more loose approach by checking the length constraints dynamically, at runtime. This is done whenever the integrity of a `Dataframe` becomes a key concern, such as when initializing a [`Scene`](#Scene) or when rendering. The approach is more in line with JavaScript's dynamic nature: in JavaScript, all variables (except for primitives) are objects, and there is nothing preventing the users from adding or removing properties at runtime, even to class instances. Further, with `Dataframe`s of typical dimensionality (fewer columns than rows, $p << n$), the performance cost of checking column's length is usually negligible when compared to row-wise operations, such as computing summary statistics or rendering. If performance were to become an issue for high-dimensional datasets ($p >> n$), the approach could always be enhanced with memoization or caching.    
 
 #### Factors
 
@@ -1068,7 +1070,7 @@ namespace Marker {
 
 Finally, the `Marker.update` is the key function for `Marker`. It changes behavior based on the `group` argument. When `group` is one of the persistent groups, it simply iterates through `selectedIndices`, setting each corresponding index in the marker's `indices` array to the `group`'s value. When `group` has a special transient selection value, it instead adds the transient selection status to each marker index via the bitwise operation described in Section \@ref(group-indices). Finally, it should be mentioned that, since any selection group assignment removes transient selection, `Marker.update` always first calls `Marker.clearTransient`.   
 
-#### Aggregation: Reducers, reduceds, and summaries
+#### Aggregation: Reducers, reduceds, and summaries {#aggregation-summaries}
 
 As discussed in Section \@ref(aggregation), a key challenge when computing statistical summaries in interactive data visualization systems is doing so in a way that preserves the inherent hierarchy in the data. For instance, when stacking bar segments in a barplot that has been partitioned via linked selection, we want the stacking operation to respect the inherent hierarchical relationships between the segments and the bars. Further, as also demonstrated in Section \@ref(aggregation), this setup suggests particular algebraic structures: groups and monoids.
 
@@ -1544,7 +1546,7 @@ Finally, like `ExpanseContinuous`, the `ExpansePoint` namespace also contains a 
 
 #### Band expanses
 
-While `ExpansePoint` places values at equidistant points along $[0, 1]$, `ExpanseBand` places values at the midpoints of corresponding to bins or bands of variable widths. The simplified interface of `ExpanseBand` is the following:
+While `ExpansePoint` places values at equidistant points along $[0, 1]$, `ExpanseBand` places values at the midpoints of bands of which may be assigned variable widths or "weights". The simplified interface of `ExpanseBand` is the following:
 
 ```{ts}
 export interface ExpanseBand {
@@ -1555,32 +1557,18 @@ export interface ExpanseBand {
 }
 ```
 
-Like `ExpansePoint`, `ExpanseBand` has the `labels` and `order` properties, which work exactly the same way as before. However, additionally, it also has the `weights` and `cumulativeWeights` properties, which are numeric arrays that define the width of each band. `weights` record the width of each band, and `cumulativeWeights` record the cumulative sums of the weights, which are used in the `normalize` and `unnormalize` functions. Thus, each time we update `weights`, we need to also update `cumulativeWeights` as well.  
+The `labels` and `order` properties match those of `ExpansePoint`. The additional `weights` and `cumulativeWeights` are numeric arrays which record the width of each band. `weights` store the individual band widths, whereas `cumulativeWeights` stores their cumulative sums. The reason why `cumulativeWeights` are stored is that, by having the bands have variable widths, we can no longer rely on the label index to correctly identify position. To give an example, with weights `1`, `1`, and `2`, the second band takes up quarter of the available space and the correct normalized value should be 0.375 (halfway between 0.25 and 0.5). However, to compute this value, the cumulative sum of the preceding weights as well as the total sum of all weights are required. While we could compute cumulative sum of weights on each `normalize` or `unnormalize` call, this would introduce performance overhead. As such, it is better to store `cumulativeWeights` and only recompute them each time `weights` or `order` changes. 
 
-The normalize and unnormalize functions in the `ExpanseBand` namespace map labels to and from the midpoint of their corresponding bands:
+The `normalize` and `unnormalize` functions in the `ExpanseBand` namespace map labels to and from the midpoint of their corresponding bands:
 
 ```{ts}
 export namespace ExpanseBand {
-  export function normalize(expanse: ExpanseBand, value: string) {
+  export function normalize(expanse: ExpanseBand, x: string) {
     const { labels } = expanse;
-    const index = labels.indexOf(value);
+    const index = labels.indexOf(x);
     return getMidpoint(expanse, index);
   }
-
-  export function unnormalize(expanse: ExpanseBand, value: number) {
-    const { labels, order, cumulativeWeights } = expanse;
-
-    const weight = value * last(cumulativeWeights);
-    let index = 0;
-
-    while (index < cumulativeWeights.length - 1) {
-      if (cumulativeWeights[index] >= weight) break;
-      index++;
-    }
-
-    return labels[order[index]];
-  }
-
+  
   function getMidpoint(expanse: ExpanseBand, index: number) {
     const { order, cumulativeWeights } = expanse.props;
     index = order[index];
@@ -1591,15 +1579,74 @@ export namespace ExpanseBand {
 
     return (lower + upper) / 2 / max;
   }
+
+  export function unnormalize(expanse: ExpanseBand, x: number) {
+    const { labels, order, cumulativeWeights } = expanse;
+
+    const weight = x * last(cumulativeWeights);
+    let index = 0;
+
+    while (index < cumulativeWeights.length - 1) {
+      if (cumulativeWeights[index] >= weight) break;
+      index++;
+    }
+
+    return labels[order[index]];
+  }
+
 }
 ```
 
-Notice that, because of the cumulative nature of the bands, the logic in the functions' bodies is a bit more complicated. First, to `normalize` a label, we need to first find the index of the label and then return the corresponding midpoint of the band, taking `weights` and `order` into account. Second, to `unnormalize`, we actually have to loop through the array of `cumulativeWeights` - there is no way to determine which bin a normalized value belongs to in $O(1)$ time (as far as I am aware). This is not much of a problem since the `ExpanseBand.unnormalize` is not used anywhere in the system (all scales implemented thus far use only `ExpanseBand.normalize`), however, it is important to be mindful of this.
+Compared to `ExpansePoint`, the logic of `normalize` and `unnormalize` is a bit more complicated. To `normalize` a label, we need to first find the index of the label and then return the corresponding midpoint of the band, taking `weights` and `order` into account. To `unnormalize`, we actually have to loop through the array of `cumulativeWeights` to find the first weight that is smaller than the position: as far as I know, there is no way to determine which bin a normalized value belongs to in $O(1)$ time^[This is not much of a problem since, right now, `ExpanseBand.unnormalize` is not actually used anywhere in the system (all scales implemented thus far only use only `ExpanseBand.normalize`). However, it is important to be mindful of this.]. 
 
-```{r}
-#| eval: true
-knitr::opts_chunk$set(eval = TRUE)
+##### Compound and split expanses
+
+The final two `Expanse` subtypes, `ExpanseCompound` and `ExpanseSplit`, represent a significant departure from the scalar-valued `Expanse` subtypes discussed earlier. Unlike the others, these subtypes are designed to handle array-valued data. While their implementation logic is relatively straightforward, a detailed discussion would significantly complicate the general explanation of `Expanse` type and behavior. Additionally, their current use-case in `plotscape` is fairly limited (albeit important) - they are used for parallel coordinate plots only. Therefore, I will only provide a brief, conceptual explanation. Interested readers are encouraged to explore the `plotscape` codebase for a deeper understanding.
+
+`ExpanseCompound` is designed to handle heterogeneous arrays (tuples) of values by applying `normalize` and `unnormalize` functions in parallel, using an internal array of `Expanse`s. That is, to construct `ExpanseCompound`, we need to provide an array of `Expanse`s, and when calling `normalize`, we need to make sure that we call it with an array of values which match the underlying `Expanse` types. `ExpanseSplit` instead uses a single `Expanse` to `normalize`/`unnormalize` a homogeneous array of values. Finally, when either `ExpanseCompound` or `ExpanseSplit` is used as `domain` and `codomain` of a `Scale`, the arrity of the other `Expanse` must match.
+
+As was briefly mentioned above, `ExpanseCompound` and `ExpanseSplit` are used in parallel coordinate plots. Specifically, `ExpanseCompound` is used as the `domain` of the y-axis scale, such that values of several different variables can be normalized in parallel. Further, because of the genericity `Expanse` interface, it is easy to mix continuous and discrete expanse subtypes. Additionally, when all expanses constituting the `ExpanseCompound` are continuous, it is also possible to set them to the same limits (by finding the minimum and maximum values across all `Expanse` objects). Finally,`ExpanseSplit` is used as the `codomain`, mapping the array of normalized values produced by the `domain` to the plot's y-axis coordinates.
+
+#### Plot
+
+Another key component of `plotscape` is, of course, the `Plot`. `Plot`s are responsible for rendering data and handling user-initiated interactive events. The logic for dealing with these responsibilities is, while not overly complex, fairly substantial, making the `Plot` a relatively large component (over 700 lines of code, at the time of writing). Further, much of the code consists of somewhat arbitrary implementation details and design choices which are likely not as interesting as the previously discussed parts of the system. For these reasons, I decided to keep the discussion of `Plot` fairly brief and conceptual. Interested readers are encouraged to explore `Plot`'s definition in the `plotscape` codebase.
+
+Here's a very rough sketch of the interface of the `Plot` data container:
+
+```{ts}
+#| eval: false
+
+interface Plot {
+  container: HTMLElement;
+  data: Dataframe[];
+  scales: Record<string, Scale>;
+  renderer: Renderer;
+  parameters: Record<string, unknown>;
+}
 ```
+
+As a final general note, `Plot` is also a component where an object-oriented programming (OOP) approach might be useful. Unlike with `Expanse`, this is not primarily due to polymorphism (though some subcomponents of `Plot` could benefit from polymorphism, as we will discuss later), but because `Plot` is tightly coupled to the user interface (UI). Representing `Plot` as a class instance that encapsulates state rather than plain data container decoupled from functionality might represent a more ergonomic design decision within the context of the UI. For consistency reasons, I have maintained the decoupled data-oriented approach here, but I may reconsider this in future iterations of the package.
+
+##### Data
+
+The primary responsibility of each `Plot` is to render data. As discussed in Section \@ref(aggregation-summaries), before being assigned to the `Plot`, this data is pre-aggregated and mapped to aesthetic coordinates. Thus, `Plot` is only responsible for actions involving the data, such as rendering and selection, but not the data itself. 
+
+Importantly, `data` is not a single `Dataframe`, but instead an array of `Dataframes`, each representing a different level of partitioning. This allows `Plot` to leverage varying data granularities for tasks like selection and rendering. For instance, when rendering, we typically want to use the finest data partition (e.g. bar segments, partitioned by selection status). On the other hand, linked selection can be implemented more efficiently by relying on the coarser data set representing whole objects (e.g. bars), reducing the number of objects that need to be iterated through.
+
+##### Scales
+
+To actually render data, data values need to be mapped to `Plot` coordinates via scales. The `Scale` type and functionality has already been introduced in Section \@ref(scales): here, `scales` are just a dictionary with aesthetic mappings as keys and `Scale`s as values.
+
+Currently, each `Plot` in `plotscape` uses the following list of aesthetic mappings and corresponding `Scale`s:
+
+- x
+- y
+- size
+- width
+- height
+- area
+- areaPct
+
 
 <!--chapter:end:system.Rmd-->
 

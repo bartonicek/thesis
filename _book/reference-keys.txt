@@ -296,3 +296,8 @@ transforming-summaries
 scaling-intermediate
 scales
 scale-properties
+aggregation-summaries
+compound-and-split-expanses
+plot
+data
+scales-1

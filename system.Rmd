@@ -869,7 +869,7 @@ namespace Marker {
 
 Finally, the `Marker.update` is the key function for `Marker`. It changes behavior based on the `group` argument. When `group` is one of the persistent groups, it simply iterates through `selectedIndices`, setting each corresponding index in the marker's `indices` array to the `group`'s value. When `group` has a special transient selection value, it instead adds the transient selection status to each marker index via the bitwise operation described in Section \@ref(group-indices). Finally, it should be mentioned that, since any selection group assignment removes transient selection, `Marker.update` always first calls `Marker.clearTransient`.   
 
-#### Aggregation: Reducers, reduceds, and summaries
+#### Aggregation: Reducers, reduceds, and summaries {#aggregation-summaries}
 
 As discussed in Section \@ref(aggregation), a key challenge when computing statistical summaries in interactive data visualization systems is doing so in a way that preserves the inherent hierarchy in the data. For instance, when stacking bar segments in a barplot that has been partitioned via linked selection, we want the stacking operation to respect the inherent hierarchical relationships between the segments and the bars. Further, as also demonstrated in Section \@ref(aggregation), this setup suggests particular algebraic structures: groups and monoids.
 
@@ -1404,5 +1404,66 @@ The final two `Expanse` subtypes, `ExpanseCompound` and `ExpanseSplit`, represen
 
 `ExpanseCompound` is designed to handle heterogeneous arrays (tuples) of values by applying `normalize` and `unnormalize` functions in parallel, using an internal array of `Expanse`s. That is, to construct `ExpanseCompound`, we need to provide an array of `Expanse`s, and when calling `normalize`, we need to make sure that we call it with an array of values which match the underlying `Expanse` types. `ExpanseSplit` instead uses a single `Expanse` to `normalize`/`unnormalize` a homogeneous array of values. Finally, when either `ExpanseCompound` or `ExpanseSplit` is used as `domain` and `codomain` of a `Scale`, the arrity of the other `Expanse` must match.
 
-As was briefly mentioned above, `ExpanseCompound` and `ExpanseSplit` are used in parallel coordinate plots. Specifically, `ExpanseCompound` is used as the `domain` of the y-axis scale, such that values of several different variables can be normalized in parallel. Further, because of the genericity `Expanse` interface, it is easy to mix continuous and discrete expanse subtypes. Additionally, when all expanses constituting the `ExpanseCompound` are continuous, it is also possible to set them to the same limits (by finding the minimum and maximum values across all expanses, respectively). Finally,`ExpanseSplit` is used as the `codomain`, mapping the array of normalized values produced by the `domain` to the plot's y-axis coordinates.
+As was briefly mentioned above, `ExpanseCompound` and `ExpanseSplit` are used in parallel coordinate plots. Specifically, `ExpanseCompound` is used as the `domain` of the y-axis scale, such that values of several different variables can be normalized in parallel. Further, because of the genericity `Expanse` interface, it is easy to mix continuous and discrete expanse subtypes. Additionally, when all expanses constituting the `ExpanseCompound` are continuous, it is also possible to set them to the same limits (by finding the minimum and maximum values across all `Expanse` objects). Finally,`ExpanseSplit` is used as the `codomain`, mapping the array of normalized values produced by the `domain` to the plot's y-axis coordinates.
 
+#### Plot
+
+Another key component of `plotscape` is, of course, the `Plot`. `Plot`s are responsible for rendering data and handling user-initiated interactive events. The logic for dealing with these responsibilities is, while not overly complex, fairly substantial, making the `Plot` a relatively large component (over 700 lines of code, at the time of writing). Further, much of the code consists of somewhat arbitrary implementation details and design choices which are likely not as interesting as the previously discussed parts of the system. For these reasons, I decided to keep the discussion of `Plot` fairly brief and conceptual. Interested readers are encouraged to explore `Plot`'s definition in the `plotscape` codebase.
+
+As a final general note, `Plot` is also a component where an object-oriented programming (OOP) approach might be useful. Unlike with `Expanse`, this is not primarily due to polymorphism (though some subcomponents of `Plot` could benefit from polymorphism, as we will discuss later), but because `Plot` is tightly coupled to the user interface (UI). Representing `Plot` as a class instance that encapsulates state rather than plain data container decoupled from functionality might represent a more ergonomic design decision within the context of the UI. For consistency reasons, I have maintained the decoupled data-oriented approach here, but I may reconsider this in future versions of the package.
+
+##### Data {#plot-data}
+
+The primary responsibility of each `Plot` is to render data. As discussed in Section \@ref(aggregation-summaries), before being assigned to the `Plot`, this data is pre-aggregated and mapped to aesthetic coordinates. Thus, `Plot` is only responsible for actions involving the data, such as rendering and selection, but not the data itself. 
+
+Importantly, data is not a single `Dataframe`, but instead an array of `Dataframes`, each representing a different level of partitioning. This allows `Plot` to leverage varying data granularities for tasks like selection and rendering. For instance, when rendering, we typically want to use the finest data partition (e.g. bar segments, partitioned by selection status). On the other hand, linked selection can be implemented more efficiently by relying on the coarser data set representing whole objects (e.g. bars), reducing the number of objects that need to be iterated through.
+
+##### Scaling
+
+To actually render data, data values need to be mapped to `Plot` coordinates via scales. The `Scale` type and functionality has already been introduced in Section \@ref(scales): here, `scales` are just a dictionary with aesthetic mappings as keys and `Scale`s as values.
+
+Currently, each `Plot` in `plotscape` uses the following list of aesthetic mappings and corresponding `Scale`s:
+
+- x
+- y
+- size
+- width
+- height
+- area
+- area percentage (`areaPct`)
+
+Most of these are fairly self-explanatory. Tmap data to the plot's x and y coordinates, respectively. Their `codomain` maxima correspond to the plot's width and height (ignoring margins). The `size` scale maps to glyph sizes, like scatterplot points. By default, it is a ratio scale (minimum is fixed at zero, for both `domain` and `codomain`), uses a square-root transformation, and has a fixed maximum^[With respect to the dimensions of the plot; it can still be modified by interaction.]. The `width` and `height` scales correspond to the plot's dimensions, similar to `x` and `y`, however, with the minimum value fixed at zero and both margins subtracted from the maximum. They are used, for instance, to scale the width and height of barplot bars, semi-independently^[`width` and `height` are not truly independent of `x` and `y` due to e.g. zooming having to affect both] of position. The `area` scale is based on the minimum of `width` and `height` and also has a square-root transformation applied to it. Finally, the `areaPct` scale is a scale used for scaling fixed-coordinate objects (e.g. for growing/shrinking rectangles in a 2D histogram). 
+
+Most of the scales (excluding `size` and `areaPct`) are automatically adjusted when the plot is resized. They may be also modified by user events such as zooming, panning, or shrinking/growing the size of objects. Finally, all scales have default values which are reverted to when the reset event is triggered. This is all orchestrated by `Plot`.
+
+##### Rendering
+
+Intuitively, every `Plot` needs a dedicated space for rendering data and auxiliary graphical elements such as axis labels and titles. This requires the ability to render basic geometric objects, such as points, lines, rectangles, and text. Furthermore, as discussed in Section \@ref(frames), rendering can be simplified and optimized by organizing objects into vertical layers (z-indices). Therefore, our `Plot` implementation should support this layering capability.
+
+Currently, `Plot` utilizes a dictionary of `Frame` subcomponents for rendering. A `Frame` is essentially a wrapper around the HTML `canvas` element, providing additional utility functions related resizing, clipping, and rendering of graphical primitives. During data rendering, the appropriate `Frame` is selected based on a provided layer value, and the data is rendered accordingly. Finally, each `Frame` can also have associated attributes, such as color (for selection groups), margins, or opacity.
+
+While the current `canvas`-based rendering approach has served well during `plotscape`'s development, it lacks genericity. Specifically, in the future, it could be interesting to explore alternative rendering strategies, such as GPU-based rendering using WebGL [@webgl2025]. Unfortunately, the current hard-wired nature of the rendering approach does not make this easy. Therefore, to allow users to define custom rendering backends, it could be highly beneficial refactor the `Plot` class to use a generic `Renderer` interface supporting runtime polymorphism (OOP-based or otherwise).
+
+#### Events and interactive features
+
+This sections details interactive events dispatched directly on `Plot`, and the interactive features associated with them.
+
+##### Activation and deactivation
+
+The simplest events on a `Plot` are activation and deactivation. A `Plot` is activated by a click, with other plots being automatically deactivated (as discussed in Section @\ref(scene)). When active, a `Plot` actively listens to and dispatches plot-specific events, such as events related to mouse movement and specific keyboard key presses. Conversely, a deactivated `Plot` ignores these plot-specific events but may still responds to other events like calls to re-render or resize, as well as global events tied to mouse-clicks or keyboard presses (e.g. the reset event).
+
+##### Growing/shrinking objects
+
+When a plot is active, it may receive grow and shrink events that trigger adjustments to the  `width`, `height`, `size`, `area`, and `areaPct` scales. The response to these events may be adjusted in specific plot types. The response to these events is customizable for specific plot types. For example, in a histogram, grow/shrink events should modify the size of rectangles by adjusting histogram bins, rather than directly altering the scales. Therefore, we override the default event handlers to achieve this specialized behavior.
+
+##### Mouse-move interaction: selection, panning, and zooming
+
+Each `Plot` supports three mouse-move interaction modes: select, pan, or query. While a plot is active, mouse-move events are dispatched appropriately based on the active mode. Briefly, select mode is the default, and selection is initiated with a left-click. Panning mode is activated by clicking and holding down the right mouse button. Querying is triggered by pressing a designated keyboard key (`Q`) and hovering over objects.
+
+####### Selection
+
+The primary interactive feature in `plotscape` is linked selection. As discussed in Section [REFERENCE], the goal of `plotscape` is to make linked selection generic, such that any plot can simultanously dispatch and display selection events. This requires that all rendered data objects can be selected.
+
+To perform selection, we have to iterate through a list of coordinates of geometric objects and identify the corresponding cases. As discussed in Section \@ref(plot-data), for aggregate plots, this process can be optimized by iterating over *whole* objects rather than their *parts*. For instance, when selecting bars in a stacked barplot, we can iterate through the coordinates of the entire bars, rather than the (more numerous) coordinates of individual bar segments, which are used for rendering. During the iteration loop, whenever we determine that an object is inside or overlaps with the selection region (using dedicated collision-detection functions), its corresponding cases (stored as part of `Factor` data) are added to a list. Finally, an update event to the `Marker` with the list of cases as data.
+
+#### Scene {#scene}
