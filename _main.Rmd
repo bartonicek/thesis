@@ -150,7 +150,7 @@ Placeholder
 ##### Scale transformations
 #### Comparison to past implementations of scales {#scales-comparison}
 ## Rendering
-### Frames
+### Frames {#frames}
 ### Graphical elements
 
 <!--chapter:end:problems.Rmd-->
@@ -972,30 +972,34 @@ There are a couple of things to note here. First, note that the cardinality of t
 
 This is all fairly intuitive, however, actually computing the indices of a product factor presents some challenges. A naive idea might be to simply sum/multiply pairs of indices element-wise, however, this approach does not work: the sum/product of two different pairs of indices might produce the same value (e.g. in a product of two factors with cardinalities of $2$ and $3$, there are two different ways to get $4$ as the sum of indices: $1 + 3$ and $2 + 2$). Further, when taking the product of two factors, we may want to preserve the factor order, in the sense that cases associated with lower values of the first factor should get assigned lower indices. Because sums and products are commutative, this does not work. 
 
-One crude solution shown in Section \@ref(products-of-partitions) is to treat the factor indices as strings and concatenate them elementwise. This works, but produces an unnecessary computational overhead. There is a better way. Assuming we have two factors with cardinalities $c_1$ and $c_2$, and two indices $i_1$ and $i_2$ corresponding to the same case, we can compute the product index $i_p$ via the following formula:
+One crude solution shown in Section \@ref(products-of-partitions) is to treat the factor indices as strings and concatenate them elementwise. This works, but produces an unnecessary computational overhead. There is a better way. Assuming we have two factors with cardinalities $c_1$ and $c_2$, and two indices $i_1$ and $i_2$ corresponding to the same case, we can compute the product index $i_{\text{product}}$ via the following formula:
 
 \begin{align}
 k &= max(c_1, c_2) \\
-i_{\text{p}} &= k \cdot i_{\text{1}} + i_{\text{2}}
+i_{\text{product}} &= k \cdot i_{\text{1}} + i_{\text{2}}
 (\#eq:product-indices)
 \end{align}
 
-This formula is similar to one discussed in  @wickham2013. Since $i_1$ and $i_2$ take values in $0 \ldots c_1 - 1$ and $0 \ldots c_2 - 1$, respectively^[Using zero-based indexing.], the product index is guaranteed to be unique: if $i_1 = 0$ then $i_p = i_2$, if $i_1 = 1$ then $i_p = k + i_2$, and so on. Further, given a product index $i_p$, we can recover the original indices:
-
-\begin{align}
-i_1 &= \lfloor i_p / k \rfloor \\
-i_2 &= i_p \mod k
-\end{align}
-
-This is useful when constructing the product factor data: we need to take all unique product indices and use them to proxy the data of the original two factors. Finally, since the the index corresponding to the first factor is multiplied by $k$, it intuitively gets assigned a greater "weight" and the relative order of the two factors is preserved. See for example the following table of product indices of two factors with cardinalities 2 and 3:
+This formula is similar to one discussed in  @wickham2013. Since $i_1$ and $i_2$ take values in $0 \ldots c_1 - 1$ and $0 \ldots c_2 - 1$, respectively^[Using zero-based indexing.], the product index is guaranteed to be unique: if $i_1 = 0$ then $i_{\text{product}} = i_2$, if $i_1 = 1$ then $i_{\text{product}} = k + i_2$, if $i_1 = 2$ then $i_{\text{product}} = 2k + i_2$, and so on. Further, since the the index corresponding to the first factor is multiplied by $k$, it intuitively gets assigned a greater "weight" and the relative order of the two factors is preserved. See for example the following table of product indices of two factors with cardinalities 2 and 3:
 
 ```{r}
 #| echo: false
 tab <- expand.grid(i_2 = 0:2, i_1 = 0:1)
 tab$i_product <- 3 * tab$i_1 + tab$i_2
+tab <- tab[, c(2, 1, 3)]
 
-knitr::kable(tab[, c(2, 1, 3)])
+colnames(tab) <- c("Index 1", "Index 2", "Product index")
+knitr::kable(tab)
 ```
+
+Finally, given a product index $i_{\text{product}}$, we can also recover the original indices (assuming $k$ is known):
+
+\begin{align}
+i_1 &= \lfloor i_{\text{product}} / k \rfloor \\
+i_2 &= i_{\text{product}}\mod k
+\end{align}
+
+This is useful when constructing the product factor data: we need to take all unique product indices and use them to proxy the data of the original two factors.
 
 It should be mentioned that, as with binning, computing product indices based on Equation \@ref(eq:product-indices) creates gaps. Again, `plotscape` solves this by keeping track of the unique product indices and looping over the indices again to "clean" them, in $O(n)$ time. Further, since we want to retain factor order, `plotscape` also sorts the unique product indices before running the second loop. Hypothetically, with $n$ data points, there can be up $n$ unique product indices (even when $c_1, c_2 < n$), and so this sorting operation makes creating and updating product indices $O(n \cdot \log n)$ worst-case time complexity. However, I contend that, most of the time, the length of the unique product indices will be a fraction of the length of the data, and, further, profiling during development did identify this operation as a computational bottleneck. If sorting did turn out to be a bottleneck, there may be sub-$O(n \cdot \log n)$ algorithms which still preserve the factor order; however, I did not spend time trying to come up with such an algorithm. 
 
@@ -1611,29 +1615,15 @@ As was briefly mentioned above, `ExpanseCompound` and `ExpanseSplit` are used in
 
 Another key component of `plotscape` is, of course, the `Plot`. `Plot`s are responsible for rendering data and handling user-initiated interactive events. The logic for dealing with these responsibilities is, while not overly complex, fairly substantial, making the `Plot` a relatively large component (over 700 lines of code, at the time of writing). Further, much of the code consists of somewhat arbitrary implementation details and design choices which are likely not as interesting as the previously discussed parts of the system. For these reasons, I decided to keep the discussion of `Plot` fairly brief and conceptual. Interested readers are encouraged to explore `Plot`'s definition in the `plotscape` codebase.
 
-Here's a very rough sketch of the interface of the `Plot` data container:
+As a final general note, `Plot` is also a component where an object-oriented programming (OOP) approach might be useful. Unlike with `Expanse`, this is not primarily due to polymorphism (though some subcomponents of `Plot` could benefit from polymorphism, as we will discuss later), but because `Plot` is tightly coupled to the user interface (UI). Representing `Plot` as a class instance that encapsulates state rather than plain data container decoupled from functionality might represent a more ergonomic design decision within the context of the UI. For consistency reasons, I have maintained the decoupled data-oriented approach here, but I may reconsider this in future versions of the package.
 
-```{ts}
-#| eval: false
-
-interface Plot {
-  container: HTMLElement;
-  data: Dataframe[];
-  scales: Record<string, Scale>;
-  renderer: Renderer;
-  parameters: Record<string, unknown>;
-}
-```
-
-As a final general note, `Plot` is also a component where an object-oriented programming (OOP) approach might be useful. Unlike with `Expanse`, this is not primarily due to polymorphism (though some subcomponents of `Plot` could benefit from polymorphism, as we will discuss later), but because `Plot` is tightly coupled to the user interface (UI). Representing `Plot` as a class instance that encapsulates state rather than plain data container decoupled from functionality might represent a more ergonomic design decision within the context of the UI. For consistency reasons, I have maintained the decoupled data-oriented approach here, but I may reconsider this in future iterations of the package.
-
-##### Data
+##### Data {#plot-data}
 
 The primary responsibility of each `Plot` is to render data. As discussed in Section \@ref(aggregation-summaries), before being assigned to the `Plot`, this data is pre-aggregated and mapped to aesthetic coordinates. Thus, `Plot` is only responsible for actions involving the data, such as rendering and selection, but not the data itself. 
 
-Importantly, `data` is not a single `Dataframe`, but instead an array of `Dataframes`, each representing a different level of partitioning. This allows `Plot` to leverage varying data granularities for tasks like selection and rendering. For instance, when rendering, we typically want to use the finest data partition (e.g. bar segments, partitioned by selection status). On the other hand, linked selection can be implemented more efficiently by relying on the coarser data set representing whole objects (e.g. bars), reducing the number of objects that need to be iterated through.
+Importantly, data is not a single `Dataframe`, but instead an array of `Dataframes`, each representing a different level of partitioning. This allows `Plot` to leverage varying data granularities for tasks like selection and rendering. For instance, when rendering, we typically want to use the finest data partition (e.g. bar segments, partitioned by selection status). On the other hand, linked selection can be implemented more efficiently by relying on the coarser data set representing whole objects (e.g. bars), reducing the number of objects that need to be iterated through.
 
-##### Scales
+##### Scales {#plot-scales}
 
 To actually render data, data values need to be mapped to `Plot` coordinates via scales. The `Scale` type and functionality has already been introduced in Section \@ref(scales): here, `scales` are just a dictionary with aesthetic mappings as keys and `Scale`s as values.
 
@@ -1645,8 +1635,65 @@ Currently, each `Plot` in `plotscape` uses the following list of aesthetic mappi
 - width
 - height
 - area
-- areaPct
+- area percentage (`areaPct`)
 
+Most of these are fairly self-explanatory. Tmap data to the plot's x and y coordinates, respectively. Their `codomain` maxima correspond to the plot's width and height (ignoring margins). The `size` scale maps to glyph sizes, like scatterplot points. By default, it is a ratio scale (minimum is fixed at zero, for both `domain` and `codomain`), uses a square-root transformation, and has a fixed maximum^[With respect to the dimensions of the plot; it can still be modified by interaction.]. The `width` and `height` scales correspond to the plot's dimensions, similar to `x` and `y`, however, with the minimum value fixed at zero and both margins subtracted from the maximum. They are used, for instance, to scale the width and height of barplot bars, semi-independently^[`width` and `height` are not truly independent of `x` and `y` due to e.g. zooming having to affect both] of position. The `area` scale is based on the minimum of `width` and `height` and also has a square-root transformation applied to it. Finally, the `areaPct` scale is a scale used for scaling fixed-coordinate objects (e.g. for growing/shrinking rectangles in a 2D histogram). 
+
+Most of the scales (excluding `size` and `areaPct`) are automatically adjusted when the plot is resized. They may be also modified by user events such as zooming, panning, or shrinking/growing the size of objects. Finally, all scales have default values which are reverted to when the reset event is triggered. This is all orchestrated by `Plot`.
+
+##### Rendering {#plot-rendering}
+
+Intuitively, every `Plot` needs a dedicated space for rendering data and auxiliary graphical elements such as axis labels and titles. This requires the ability to render basic geometric objects, such as points, lines, rectangles, and text. Furthermore, as discussed in Section \@ref(frames), rendering can be simplified and optimized by organizing objects into vertical layers (z-indices). Therefore, our `Plot` implementation should support this layering capability.
+
+Currently, `Plot` utilizes a dictionary of `Frame` subcomponents for rendering. A `Frame` is essentially a wrapper around the HTML `canvas` element, providing additional utility functions related resizing, clipping, and rendering of graphical primitives. During data rendering, the appropriate `Frame` is selected based on a provided layer value, and the data is rendered accordingly. Finally, each `Frame` can also have associated attributes, such as color (for selection groups), margins, or opacity.
+
+While the current `canvas`-based rendering approach has served well during `plotscape`'s development, it lacks genericity. Specifically, in the future, it could be interesting to explore alternative rendering strategies, such as GPU-based rendering using WebGL [@webgl2025]. Unfortunately, the current hard-wired nature of the rendering approach does not make this easy. Therefore, to allow users to define custom rendering backends, a useful approach could be to refactor the `Plot` class to use a generic `Renderer` interface supporting runtime polymorphism (OOP-based or otherwise). This could prove highly beneficial, since, based on profiling, rendering is the main computational bottleneck of the system (and thus GPU-based rendering could potentially lead to great improvements in performance). 
+
+#### Events and interactive features
+
+This sections details interactive events dispatched directly on `Plot`, and the interactive features associated with them.
+
+##### Activation and deactivation
+
+The simplest events on a `Plot` are activation and deactivation. A `Plot` is activated by a click, with other plots being automatically deactivated (as discussed in Section @\ref(scene)). When active, a `Plot` actively listens to and dispatches plot-specific events, such as events related to mouse movement and specific keyboard key presses. Conversely, a deactivated `Plot` ignores these plot-specific events but may still responds to other events like calls to re-render or resize, as well as global events tied to mouse-clicks or keyboard presses (e.g. the reset event).
+
+##### Growing/shrinking objects
+
+When a plot is active, it may receive grow and shrink events that trigger adjustments to the  `width`, `height`, `size`, `area`, and `areaPct` scales. The response to these events may be adjusted in specific plot types. The response to these events is customizable for specific plot types. For example, in a histogram, grow/shrink events should modify the size of rectangles by adjusting histogram bins, rather than directly altering the scales. Therefore, we override the default event handlers to achieve this specialized behavior.
+
+##### Mouse-move interaction: selection, panning, and zooming
+
+Each `Plot` supports three mouse-move interaction modes: select, pan, or query. While a plot is active, mouse-move events are dispatched appropriately based on the active mode. Briefly, select mode is the default, and selection is initiated with a left-click. Panning mode is activated by clicking and holding down the right mouse button. Querying is triggered by pressing a designated keyboard key (`Q`) and hovering over objects.
+
+####### Selection
+
+The primary interactive feature in `plotscape` is linked selection. As discussed in Section [REFERENCE], the goal of `plotscape` is to make linked selection generic, such that any plot can simultaneously dispatch and display selection events. This requires that all rendered data objects can be selected.
+
+To perform selection, we have to iterate through a list of coordinates of geometric objects and identify the corresponding cases. As discussed in Section \@ref(plot-data), for aggregate plots, this process can be optimized by iterating over *whole* objects rather than their *parts*. For instance, when selecting bars in a stacked barplot, we can iterate through the coordinates of the entire bars, rather than the (more numerous) coordinates of individual bar segments, which are used for rendering. During the iteration loop, whenever we determine that an object is inside the selection (or overlaps it) using dedicated collision-detection functions, we add its corresponding cases to a list (the cases are stored as part of `Factor` data). Finally, an update event to the `Marker` with the list of cases as data.
+
+Currently, `plotscape` loops through all of the rendered objects each time selection happens. This process could be made more efficient by employing dedicated data structures such as quadtrees to isolate objects which have a non-zero chance of being in the selection area. However, as mentioned in Section \@ref(plot-rendering), the main computational bottleneck seems to be rendering, and, as such, optimizing selection may yield only marginal benefits in performance.
+
+####### Panning
+
+As briefly mentioned in section \@ref(plot-scales), plot scales can be manipulated by panning. Specifically, when a user right-clicks and drags, the panning mode is engaged, resulting in the update of the x and y-axis scales. These scale updates are performed using the logic described in Section \@ref(scales), and the rest of the implementation is fairly straightforward.
+
+####### Querying
+
+Querying is the last of the three interactive mouse-move modes. It is activated via the `Q` keyboard key (by default). When a users presses and holds the `Q` key and mouses over a geometric object in the plot, a pop-up table will show up, displaying the underlying summary statistics related to the object.
+
+Similar to selection, object querying involves iterating through the list of objects to identify the one corresponding to the mouse coordinates. However, unlike selection, which must examine all candidates, querying can terminate early upon finding the first match. While overplotting (e.g., in scatterplots) could technically result in multiple matches, this poses no issue for default query statistics, as these are based on aesthetics and will be identical for all overplotted objects. The issue becomes more complicated with custom querying statistics, a feature which `plotscape` supports, as these, unlike aesthetics, may not be identical across overplotted objects. Since custom query statistics are a fairly advanced feature that may be used by only a fraction of the users, I did not spend time implementing a reconciliation mechanism which would address this, however, this could be improved in future versions of the package.   
+
+As a final note, the query results table is implemented as a separate HTML `table` element, rather than being rendered in a plot `Frame` (`canvas` element) directly. This allows us to leverage HTML and CSS for styling and formatting, simplifying implementation. Additionally, it also means that querying does not cause the data layers to re-render, improving performance.
+
+#### Zooming
+
+Another useful interactive feature is zooming. Again, this feature is implemented through functionality discussed in Section \@ref(scales), and can be triggered via the zoom action (the `Z` key, by default).
+
+Importantly, zooming in `plotscape` is intentionally integrated with selection. Specifically, after a user transiently selects objects in a (rectangular) region, they can initiate the zoom action to zoom into that region. This design is meant to take advantage of the conceptual link between selection and zooming: a selected region inherently signifies a region of interest, making it a logical zoom target. Furthermore, by zooming into a visible, highlighted region, the user can more easily maintain awareness of the change in plot coordinates. One drawback of this approach is that, compared to symmetric zoom methods like zooming onto a point, zooming into non-square selection regions necessarily distorts the plot aspect ratio. However, while this change in aspect ratios can be potentially disorienting when the difference is large, it can also be considered a useful feature when a different aspect ratio is actually desired. To provide users with greater flexibility, future versions of the package could implement symmetrical zooming as a compatible alternative to selection-region-based zooming.
+
+Additionally, every `Plot` can be zoomed into multiple levels deep. This nested zooming is implemented by maintaining a stack of zoom coordinates. At any point, the user may pop one level of zoom, reverting to the previous zoom level. Alternatively, they can trigger the plot reset event (`R` key by default), reverting back to the default zoom level. 
+
+#### Scene {#scene}
 
 <!--chapter:end:system.Rmd-->
 

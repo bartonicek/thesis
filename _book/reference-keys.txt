@@ -301,3 +301,12 @@ compound-and-split-expanses
 plot
 data
 scales-1
+plot-data
+plot-scales
+plot-rendering
+events-and-interactive-features
+activation-and-deactivation
+growingshrinking-objects
+mouse-move-interaction-selection-panning-and-zooming
+zooming-1
+scene
