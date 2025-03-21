@@ -310,3 +310,5 @@ growingshrinking-objects
 mouse-move-interaction-selection-panning-and-zooming
 zooming-1
 scene
+basic-example
+figure-plot
