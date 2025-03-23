@@ -27,7 +27,7 @@ These four steps are common to both static and interactive visualization systems
 
 This chapter attempts to clarify some of this conceptual ambiguity. Mirroring the structure of the  data visualization pipeline, it delves into each of the four steps and explores challenges related to their implementation in interactive systems. The central argument is that interaction is not just a thin veneer that can be layered on top of static graphics; instead, it fundamentally penetrates the abstract machinery of the pipeline. Moreover, for interaction to be predictable, intuitive, and efficient, the components of the pipeline must compose together in specific, well-defined ways, that may be described algebraically using the language of category theory. Mapping out this algebraic composition is crucial for building truly generic and robust interactive data visualization systems [see also @wu2024; @sievert2020].
 
-## Partitioning
+## Partitioning {#partitioning}
 
 The first step of any data visualization pipeline is to divide the data into parts or subsets. The justification for this initial step lies in our ultimate goal: to represent some aspects of our data by drawing one or (usually) more geometric objects [@wilkinson2012; also known as "marks", @satyanarayan2016; @bostock2022; and "graphic items", @wills2008]. However, before we can do anything else, we need to define the set of data points each geometric object will represent. In the typical case of two-dimensional tables or data frames, this amounts to slicing the data set into multiple smaller sets of rows or tables. 
 
@@ -44,7 +44,7 @@ While common data visualization practices provide implicit solutions to these qu
 
 > "If someone hides data from you, it’s probably because he has something to hide." [@cairo2016, pp. 47]
 
-A common recommendation that many data visualization experts provide is that faithful visual representations should show the full data and leave nothing out. The moral behind this recommendation is fairly intuitive. A visualization which hides or obscures information, be it by intent or negligence, cannot be considered a truthful representation of the underlying information [@cairo2016; @cairo2019]. 
+A common recommendation that many data visualization experts provide is that faithful visualizations should show the full data and leave nothing out. The moral behind this recommendation is fairly intuitive. A visualization which hides or obscures information, be it by intent or negligence, cannot be considered a truthful representation of the underlying information [@cairo2016; @cairo2019]. 
 
 However, data hiding can occur in many different ways. First, the data itself can be cherry-picked or massaged [see e.g. @lisnic2024]. This is arguably the most egregious case, and can in some cases amount to malicious statistical practices such as HARKing or p-hacking [see e.g. @kerr1998; @lisnic2024; @head2015]. However, even when showing the full data, some visualizations can obscure or downplay certain data features via poor design or incorrect use of visual encodings [@cairo2016; @cairo2019; @cleveland1985; @ziemkiewicz2009]. Finally, there is the issue of missing or incomplete data, where some data cannot be easily represented because it is simply not there.
 
@@ -80,17 +80,23 @@ The essence of visualization is comparison [see e.g. @tufte2001; @tukey1993]. Th
 
 An interesting yet underappreciated fact is that, in many common visualizations, geometric objects within the same graphical layer represent disjoint subsets of the data. That is, in most plots, each point, bar, line, or polygon corresponds a unique set of data points (rows of the data), with no overlap with the other objects in that layer. While different layers can represent the same data (e.g., a smooth fit may be overlaid over scatterplot points, and point clouds may be plotted over boxplot boxes), between objects within the same layer, data is rarely shared. This practice, despite being so common to border on a rule, is surprisingly seldom discussed.
 
-Counter-examples do exist, of course. For instance, certain visualizations of set-typed data "double up" the contribution of data subsets, such that the same subset of the data may appear in multiple objects [see e.g. @alsallakh2013; @alsallakh2014; @conway2017; @lex2014]. However, these types of visualizations are fairly rare, and represent the exception to the norm. When we see a barplot, we naturally expect each bar to represent a unique set of cases.   
+There are, of course, counter-examples. For instance, certain visualizations of set-typed data "double up" the contribution of data subsets, such that the same subset of the data may appear in multiple objects [see e.g. @alsallakh2013; @alsallakh2014; @conway2017; @lex2014]. Similarly, two-dimensional kernel density plots are unusual in that each line or polygon represents an isopleth over a joint probability density of all data points^[But, interestingly, one-dimensional kernel density plots are again disjoint.]. However, these visualizations represent a fairly small fraction of all plot types. Typically, when we see a plot, we expect each geometric object to represent a distinct set of cases.  
 
-But where does this tendency of visualizing disjoint objects come from? Part of it may be just established norms. However, I propose that it also stems from the nature of comparison itself. My argument is that, in general, it is far easier to compare and reason about objects which are independent or disjoint, rather than ones which overlap or share characteristics, and this informs the established data visualization practices. 
+This tendency to visualize disjoint objects may partly come from established norms, however, I contend that there is also a deeper reason: the nature of comparison itself. Specifically, my argument is that, in general, it is far easier to compare and reason about objects which are disjoint, rather than ones which are entangled. This makes disjointness a particularly nice, "natural" property. 
 
-#### The primarcy of disjointness
+#### Naturality of disjointness
 
-There is evidence from multiple fields to support the primacy of independence/disjointness. First, in computer science, disjointness is one of the fundamental properties of whole-part relationships, which are fundamental for building composable software components [@stepanov2009, pp. 214]. Similarly, in probability theory, the basic rules of probability - the sum and product rules - as well as the many theorems which follow from them, have independence as a fundamental pre-condition [@kolmogorov2018]. Finally, empirical evidence from psychology, such as the well-known "Linda experiment" [@tversky1983], shows that people generally struggle with comparing the probabilities of non-disjoint events. Thus it seems that, in many ways, independence/disjointness presents a more natural, intuitive model.
+There is evidence about the naturality of disjointness from several fields. First, as statisticians, we know that disjointness underlies one of the fundamental axioms of probability: the sum rule [@kolmogorov2018]. Specifically, when multiple events consist of disjoint subsets of the sample space, we can compute the probability of the union of these events by simply summing up their individual probabilities [see also e.g. @blitzstein2019; @bishop2006]. This fundamental axiom underlies all of statistics [@kolmogorov2018].
 
-Even more fundamentally, disjointness is related to a structure which mathematicians have long considered natural: a [bijection](#functions) or one-to-one mapping [see e.g. @fong2019; @lawvere2009]. Specifically, if we take a set $S$, split it into disjoint subsets, and then label each subset, then there is a one-to-one correspondence between these labels and the subsets (i.e. each label maps to an [equivalence class](#partition) on $S$). Practically, this means that we can go back and forth between the subsets and labels, without any information loss (and this does not hold true if the subsets are not disjoint).
+Similarly, in computer science, disjointness also plays a crucial role. Specifically, in an area known as generic programming (also known as value semantics), disjointness is one of the fundamental properties for forming software components with whole-part relationships [@stepanov2009, pp. 214]. Unlike components with reference semantics (pointers), these part-whole software components behave like "plain values" (e.g. integers), meaning that they have well defined notions of copy, assignment, equality, and destruction [@stepanov2014]. This greatly simplifies the complexity of programs and allows for equational reasoning, making value semantics a particularly appealing programming model [see also e.g. @parent2013; @parent2014; @vaneerd2023; @vaneerd2024].    
 
-The bijective property of dijsoint subsets may be particularly useful in data visualization, see Figure \@ref(fig:geoms-bijection). For instance, when drawing a barplot, if we divide our data into disjoint subsets and draw one bar corresponding to each part, then we can go back and forth between data subsets and bars (the function of identifying data subsets from bars is invertible). In plots where the objects are not disjoint, this correspondence is broken: if we select the set of cases corresponding to a bar, there may be no way to identify the original bar from the cases alone. In static visualizations, this issue impacts interpretability - for any pair of objects, the user has to remember whether they share the underlying data or not. In interactive plots, however, lack of disjointness may have even further-reaching consequences, which will be discussed in Section \@ref(disjointness-interaction). 
+Finally, there is also empirical evidence showing that people generally struggle with reasoning about non-disjoint events. One particularly famous example is the "Linda experiment" from behavioral psychology [@tversky1983]. In this experiment, participants presented with a stereotyped description of a woman (Linda) judged her as more likely to be a "bank teller and a feminist" rather than just a "bank teller", despite the former being a subset of the latter. While generality and the interpretation of the Linda experiment has been debated in the literature, the general finding seems to have been corroborated by other research [see e.g. @benjamin2019].       
+
+#### Disjointness and bijections
+
+But even more fundamentally, disjointness is related to a structure which mathematicians have long considered natural: a [bijection](#functions) or one-to-one mapping [see e.g. @fong2019; @lawvere2009]. Specifically, if we take a set $S$, divide it into disjoint subsets, and then assign each subset a label, there will be a one-to-one mapping between the labels and the subsets (i.e. each label corresponds to an [equivalence class](#partition) on $S$). Practically, this means that we can go back and forth between the subsets and labels, without losing any information, and the converse does not hold when the subsets are non-disjoint.
+
+This bijective property of dijsoint subsets may be particularly useful in data visualization, see Figure \@ref(fig:geoms-bijection). For instance, when drawing a barplot, if we divide our data into disjoint subsets and draw one bar corresponding to each part, then we can go back and forth between data subsets and bars (the function of identifying data subsets from bars is invertible). In plots where the objects are non-disjoint, this correspondence is broken: if we select the set of cases corresponding to a bar, there may be no way to identify the original bar from the cases alone.
 
 ```{r geoms-bijection}
 #| echo: false
@@ -98,11 +104,11 @@ The bijective property of dijsoint subsets may be particularly useful in data vi
 knitr::include_graphics("./figures/geoms-bijection.png")
 ```
 
-However, first, let's explore disjointness and its absence in visualizations in more depth, on a real-world example.
+In static visualizations, non-disjointness impacts interpretability: for any pair of objects, the user has to remember whether they share the underlying data or not. Further, in interactive plots, the consequences may be even more far reaching, and will be discussed in Section \@ref(disjointness-interaction). For now, however, let's first illustrate the idea of disjointness in more detail, on a real-world example.
 
-#### Disjoint visualizations: Real-world example
+#### Disjointness in visualizations: Real-world example
 
-To illustrate the idea of disjoint visualizations on concrete, real-world example, take the following barplot representing the vote share among the top three parties in the 2023 New Zealand general election [@election2023]:
+To illustrate the idea of disjointness on a real-world example, take the following barplot representing the vote share among the top three parties in the 2023 New Zealand general election [@election2023]:
 
 ```{r barplot-bijection}
 #| echo: false
@@ -110,7 +116,7 @@ To illustrate the idea of disjoint visualizations on concrete, real-world exampl
 knitr::include_graphics("./figures/barplot-bijection.png")
 ```
 
-Each bar represents a unique subset of voters and thus the bars show disjoint data. This is the type of data representation that we encounter most often, however, there are few explicit guidelines about this. Hypothetically, we could transform our data, and use the leftmost bar to show, for example, the union of the votes of National and Labour parties:
+Each bar represents a unique set of voters. Thus, the data subsets represented by the individual bars are disjoint. This is the case in almost all barplots we encounter; however, as far as I am aware, there are no explicit guidelines in the data visualization literature about this. For example, we could hypothetically transform our data to display the combined votes of the National and Labour parties in the leftmost bar, violating this disjoint property:
 
 ```{r union-geoms}
 #| echo: false
@@ -118,9 +124,9 @@ Each bar represents a unique subset of voters and thus the bars show disjoint da
 knitr::include_graphics("./figures/barplot-notbijection.png")
 ```
 
-However, this way of representing the data has several problems. First, this type of visualization is arguably not very useful for addressing our visualization goals. For example, when visualizing election data such as the one above, we typically want to compare the relative number of votes each party received. Figure \@ref(fig:union-geoms) makes this comparison needlessly difficult. Specifically, since the leftmost bar represents the union of National and Labour votes, we have to perform additional mental calculation if we want to compare the number of votes received by National and Labour directly [@cleveland1985]. Second, we have metadata knowledge [see e.g. @wilkinson2012; @velleman1993] about the data actually being disjoint. We know that, in the New Zealand parliament electoral system, each voter can only vote for a single party. Hence, it does not make sense to arbitrarily combine the data in this way. Finally, Figure \@ref(fig:union-geoms) also needlessly duplicates information: the number of votes the National party received is counted twice, once in the leftmost bar and again in the second-from-left bar. This goes against the general principle of representing our data parsimoniously [@tufte2001].
+However, this way of representing the data has several issues. First, the plot in Figure \@ref(union-geoms) is arguably not very useful for addressing typical visualization goals. For example, when visualizing election data, we care about the relative number of votes each party received. Figure \@ref(fig:union-geoms) makes complicates this comparison. Specifically, since the leftmost bar represents the union of National and Labour votes, we have to perform additional mental arithmetic if we want to compare the votes received by National and Labour directly [@cleveland1985]. Second, we have metadata knowledge [see e.g. @wilkinson2012; @velleman1993] about the underlying information actually being disjoint. Specifically, we know that, in the New Zealand electoral system, each voter can only vote for a single party. Hence, it does not make sense to arbitrarily merge the data in this way. Finally, Figure \@ref(fig:union-geoms) also needlessly duplicates information: the number of votes the National party received is rendered twice, once in the leftmost bar and again in the second-left bar. This goes against the general principle of representing our data parsimoniously [@tufte2001].
 
-Even when our goal is not to compare absolute counts, there are usually better disjoint data visualization methods available. For instance, if we were interested in visualizing the *proportion* of votes that each party received, we could instead draw the following plot: 
+Even when our goal is not to compare absolute counts, there are often better disjoint data visualization methods available. For instance, if we were interested in visualizing the *proportion* of votes that each party received, we could instead draw the following plot: 
 
 ```{r stacked-proportion}
 #| echo: false
@@ -128,7 +134,7 @@ Even when our goal is not to compare absolute counts, there are usually better d
 knitr::include_graphics("./figures/barplot-bijection-proportions.png")
 ```
 
-By stacking the bar segments on top of each other as in \@ref(fig:stacked-proportion), we can easily compare proportion of the total number of votes each party received, while retaining a disjoint representation. Each bar segment now again represents a unique subset of voters.
+By stacking the bar segments on top of each other as in Figure \@ref(fig:stacked-proportion), we can easily compare proportion of the total number of votes each party received, while retaining a disjoint representation: each bar segment represents a disjoint subset of the voters.
 
 The example above is fairly clear-cut case of where disjoint data representation is the better choice. However, there are also more ambiguous situations, such as when multiple attributes of the data are simultaneously present or absent for each case. Take, for example, the 2020 New Zealand joint referendum on the legalization of euthanasia and cannabis. In this referendum, the two issues were included on the same ballot and voters would vote on them simultaneously. The legalization of euthanasia was accepted by the voters, with 65.1% of votes supporting the decision, whereas the legalization of cannabis was rejected, with 50.7% of voters rejecting the decision [@referendum2020].
 
@@ -482,7 +488,7 @@ knitr::include_graphics("./figures/grammar-barplot-means.png")
 
 At a glance, the plot in \@ref(fig:grammar-barplot-means) looks fine. However, what do the heights of the stacked bars actually represent? Each coloured bar segment represents a mean of the `fev` variable, grouped by the levels defined by the product of the `age` and `smoke` variables. By stacking the bars on top of each other, we are essentially summing up the average FEV of smokers and non-smokers, within the given age category.
 
-#### Some statistics are stackable but others are not
+#### Some statistics are stackable but others are not {#stackable-or-not}
 
 The plot in Figure \@ref(fig:grammar-barplot-means) is a bad visualization because the bar heights lack a meaningful statistical interpretation - the sum of grouped averages is not something that most visualization consumers would know how to interpret or care about. However, contrast that with the previous example, Figure \@ref(fig:grammar-barplot-counts). There, the heights of the stacked bars represented valid overall counts - the number of smokers and non-smokers within a given age category combined. In Figure \@ref(fig:grammar-barplot-means), this is not the case - the sum of the group means is different from the mean of the combined cases.
 

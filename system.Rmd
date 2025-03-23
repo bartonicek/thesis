@@ -1419,9 +1419,9 @@ The final two `Expanse` subtypes, `ExpanseCompound` and `ExpanseSplit`, represen
 
 As was briefly mentioned above, `ExpanseCompound` and `ExpanseSplit` are used in parallel coordinate plots. Specifically, `ExpanseCompound` is used as the `domain` of the y-axis scale, such that values of several different variables can be normalized in parallel. Further, because of the genericity `Expanse` interface, it is easy to mix continuous and discrete expanse subtypes. Additionally, when all expanses constituting the `ExpanseCompound` are continuous, it is also possible to set them to the same limits (by finding the minimum and maximum values across all `Expanse` objects). Finally,`ExpanseSplit` is used as the `codomain`, mapping the array of normalized values produced by the `domain` to the plot's y-axis coordinates.
 
-#### Plot
+#### Plot {#plot}
 
-Another key component of `plotscape` is, of course, the `Plot`. `Plot`s are responsible for rendering data and handling user-initiated interactive events. The logic for dealing with these responsibilities is, while not overly complex, fairly substantial, making the `Plot` a relatively large component (over 700 lines of code, at the time of writing). Further, much of the code consists of somewhat arbitrary implementation details and design choices which are likely not as interesting as the previously discussed parts of the system. For these reasons, I decided to keep the discussion of `Plot` fairly brief and conceptual. Interested readers are encouraged to explore `Plot`'s definition in the `plotscape` codebase.
+Another key component of `plotscape` is, of course, the `Plot`. `Plot`s are responsible for rendering data and handling user-initiated interactive events. Thus, using the lense of the model-view-controller architecture [MVC, see e.g. @xie2014], `Plot` serves as a fundamental view-controller component, alongside `Scene` (see Section \@ref(scene))^[The model part is handled by components like `Summaries`]. While `Plot` logic is fairly substantial (over 700 SLOC, at the time of writing), much of it consists of somewhat arbitrary implementation details, which are likely not as interesting as those of the previously discussed parts of the system. For this reason, I decided to keep the discussion of `Plot` fairly brief and conceptual. Interested readers are encouraged to explore `Plot`'s definition in the `plotscape` codebase.
 
 As a final general note, `Plot` is also a component where an object-oriented programming (OOP) approach might be useful. Unlike with `Expanse`, this is not primarily due to polymorphism (though some subcomponents of `Plot` could benefit from polymorphism, as we will discuss later), but because `Plot` is tightly coupled to the user interface (UI). Representing `Plot` as a class instance that encapsulates state rather than plain data container decoupled from functionality might represent a more ergonomic design decision within the context of the UI. For consistency reasons, I have maintained the decoupled data-oriented approach here, but I may reconsider this in future versions of the package.
 
@@ -1502,3 +1502,38 @@ Importantly, zooming in `plotscape` is intentionally integrated with selection. 
 Additionally, every `Plot` can be zoomed into multiple levels deep. This nested zooming is implemented by maintaining a stack of zoom coordinates. At any point, the user may pop one level of zoom, reverting to the previous zoom level. Alternatively, they can trigger the plot reset event (`R` key by default), reverting back to the default zoom level. 
 
 #### Scene {#scene}
+
+As discussed in Section \@ref(api-design), a key part of an interactive system design is the ability to create and manage figures composed of multiple (connected) interactive plots. In `plotscape`, this responsibility is handled by the `Scene` component, making it a view-controller event, similar to `Plot` but more high-level (see Section \@ref(plot)). Again, as with the `Plot` component, the design involves a number of implementation details which will only be glossed over in this section; an interested reader is refered to the `plotscape` codebase. Finally, similar to `Plot`, due to its direct ties to UI, `Scene` is another component that may make sense to be implemented as an OOP class. 
+
+##### Plots
+
+The primary responsibility of `Scene` is to serve as a container for `Plot`s. These are stored in a simple dynamic array which grows as more plots are added to a `Scene`. Further, to speed up look-ups of individual plots, plot references may also be stored in a dictionary. In current version of `plotscape`, this dictionary stores plot types as keys and arrays of plot references as values, such that, e.g., all histograms are stored under the `histo` key of the dictionary. When new plots are added, they are appended to the array as well as the dictionary, and also automatically subscribed to the `Scene` events.
+
+On the DOM side, the `Scene` has a `container` property into which the containers of the individual plots are placed. This container is a simple `div` element which by default uses the CSS `grid` layout. When new plots are added, the dimensions of this layout are automatically updated to preserve a roughly square shape, using the following formulas to calculate the number of rows and columns:
+
+- $\text{# of columns} = \lceil \sqrt{ \text{# plots}}  \rceil$
+- $\text{# rows} = \lceil (\text{# plots}) / (\text{# columns}) \rceil$
+
+This results in a column-first oriented layout, with columns expanding before rows when the plot count exceeds the number of available grid cells. The users may also set the layout manually (such as via the `set_layout` `plotscaper` function).    
+
+##### Marker
+
+As mentioned before in Section \@ref(marker), the `Marker` is shared between plots and as such is stored as a property on the `Scene` object. The `Scene` manages the dispatching of `Marker`-related events and their propagation to plots.
+
+##### WebSockets client
+
+To facilitate two-way communication with an external server, the `Scene` component also maintains a WebSockets client [@mdn2024g]. This client is created during `Scene` initialization, using a URL which either has a default value or may be provided as part of the `Scene` initialization options. The `Scene` subscribes to this client and manages all incoming and outgoing messages via dedicated event handler functions. Messages sent to and from the client are encoded as JSON and contain sender, target, and event type information, along with optional data.
+
+##### Events and Keybindings
+
+`Scene` additionally manages listening and forwarding of events from multiple source. These include plots, the `Marker`, the WebSockets client, and global user inputs, particularly keyboard events. The `Scene` is responsible for propagating and synchronizing these events across its properties.
+
+The list of events managed by the `Scene` includes the following, categorized for clarity:
+
+- **Layout management**: set dimensions, set layout, clear layout, resize (scene and all plots)
+- **Selection**: clear all selection, clear transient selection, set transient indices, assign permanent indices, query transient indices, query permanent indices (both return an array)
+- **Plot management**: add/remove a plot, pop the array of plots (remove the last added plot), activate/deactivate a plot, deactivate all plots, reset all plots to default values, zoom into a specific region of a plot, normalize a plot (e.g. barplot to spineplot), query a plot's scale (returns a JSON)
+
+Further, some of these events are tied to `KeyboardEvent`s on the `window` object. While default keybindings are provided, users can interactively reassign them using a keybindings widget located in the top-right corner of the `Scene` container.
+
+

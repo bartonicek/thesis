@@ -1,0 +1,12 @@
+\documentclass[tikz]{standalone}
+\usetikzlibrary{calc}
+
+\begin{document}
+\begin{tikzpicture}
+		\node [draw=black] (2) at (0, 8.25) {Scene};
+		\node [draw=black] (4) at (0, 6.75) {Plots};
+		\node [draw=black] (6) at (-2.5, 6.75) {Marker};
+		\draw (2) to (6);
+		\draw (2) to (4);
+\end{tikzpicture}
+\end{document}

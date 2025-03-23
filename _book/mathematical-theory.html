@@ -238,7 +238,7 @@ div.csl-indent {
 <li class="chapter" data-level="7.2" data-path="system.html"><a href="system.html#high-level-api"><i class="fa fa-check"></i><b>7.2</b> High-level API (<code>plotscaper</code>)</a>
 <ul>
 <li class="chapter" data-level="7.2.1" data-path="system.html"><a href="system.html#api-design"><i class="fa fa-check"></i><b>7.2.1</b> API design</a></li>
-<li class="chapter" data-level="7.2.2" data-path="system.html"><a href="system.html#basic-example-of-plotscaper-code"><i class="fa fa-check"></i><b>7.2.2</b> Basic example of <code>plotscaper</code> code</a></li>
+<li class="chapter" data-level="7.2.2" data-path="system.html"><a href="system.html#basic-example"><i class="fa fa-check"></i><b>7.2.2</b> Basic example</a></li>
 <li class="chapter" data-level="7.2.3" data-path="system.html"><a href="system.html#scene-and-schema"><i class="fa fa-check"></i><b>7.2.3</b> The scene and the schema</a></li>
 <li class="chapter" data-level="7.2.4" data-path="system.html"><a href="system.html#communication"><i class="fa fa-check"></i><b>7.2.4</b> Client-server communication</a></li>
 <li class="chapter" data-level="7.2.5" data-path="system.html"><a href="system.html#html-embedding"><i class="fa fa-check"></i><b>7.2.5</b> HTML embedding</a></li>
@@ -247,7 +247,6 @@ div.csl-indent {
 <ul>
 <li class="chapter" data-level="7.3.1" data-path="system.html"><a href="system.html#reactivity-1"><i class="fa fa-check"></i><b>7.3.1</b> Reactivity</a></li>
 <li class="chapter" data-level="7.3.2" data-path="system.html"><a href="system.html#system-components"><i class="fa fa-check"></i><b>7.3.2</b> System components</a></li>
-<li class="chapter" data-level="7.3.3" data-path="system.html"><a href="system.html#expanses"><i class="fa fa-check"></i><b>7.3.3</b> Expanses</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="applied-example.html"><a href="applied-example.html"><i class="fa fa-check"></i><b>8</b> Applied example</a>
@@ -258,8 +257,13 @@ div.csl-indent {
 </ul></li>
 <li class="chapter" data-level="9" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>9</b> Discussion</a>
 <ul>
-<li class="chapter" data-level="9.1" data-path="discussion.html"><a href="discussion.html#limitations-of-the-theoretical-model"><i class="fa fa-check"></i><b>9.1</b> Limitations of the theoretical model</a></li>
-<li class="chapter" data-level="9.2" data-path="discussion.html"><a href="discussion.html#limitations-of-the-software-packages"><i class="fa fa-check"></i><b>9.2</b> Limitations of the software packages</a></li>
+<li class="chapter" data-level="9.1" data-path="discussion.html"><a href="discussion.html#limitations-of-the-theoretical-model"><i class="fa fa-check"></i><b>9.1</b> Limitations of the theoretical model</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="discussion.html"><a href="discussion.html#why-the-model-is-necessary"><i class="fa fa-check"></i><b>9.1.1</b> Why the model is necessary</a></li>
+<li class="chapter" data-level="9.1.2" data-path="discussion.html"><a href="discussion.html#disjointness"><i class="fa fa-check"></i><b>9.1.2</b> Disjointness</a></li>
+<li class="chapter" data-level="9.1.3" data-path="discussion.html"><a href="discussion.html#section"><i class="fa fa-check"></i><b>9.1.3</b> </a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="discussion.html"><a href="discussion.html#limitations-of-the-software"><i class="fa fa-check"></i><b>9.2</b> Limitations of the software</a></li>
 </ul></li>
 <li class="chapter" data-level="10" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>10</b> Glossary</a></li>
 <li class="chapter" data-level="11" data-path="appendix.html"><a href="appendix.html"><i class="fa fa-check"></i><b>11</b> Appendix</a>
@@ -311,7 +315,7 @@ div.csl-indent {
 <p>A relation is one of the simplest mathematical structures. Given two sets <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, a relation <span class="math inline">\(R\)</span> between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> is a subset of the Cartesian product of the two sets, <span class="math inline">\(R \subseteq X \times Y\)</span>. In other words, a relation can be thought of as the subset of pairs <span class="math inline">\((x, y) \in X \times Y\)</span> for which the condition “<span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> relate” holds. Note that <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> can be the same set, such that <span class="math inline">\(R \subseteq X \times X\)</span>.</p>
 <p>There are many different types of relations. One of the most fundamental relations is equality; in this case, “<span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> relate” means that, for our purposes, <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> are the same, i.e. <span class="math inline">\(x = y\)</span>. Other examples of relations include the usual order relations <span class="math inline">\(&lt;\)</span>, <span class="math inline">\(\leq\)</span>, <span class="math inline">\(&gt;\)</span>, or <span class="math inline">\(\geq\)</span>, and the divides operator <span class="math inline">\(\mid\)</span> (<span class="math inline">\(x \mid y\)</span> means “<span class="math inline">\(x\)</span> divides <span class="math inline">\(y\)</span> without remainder”).</p>
 <p>Since a relation is a subset of the product set <span class="math inline">\(X \times Y\)</span>, we can visualize it as a matrix, with values of <span class="math inline">\(X\)</span> as rows, values of <span class="math inline">\(Y\)</span> as columns, and the related pairs <span class="math inline">\((x, y)\)</span> marked out in some specific way. For example, here’s how we can display the order relation <span class="math inline">\(\leq\)</span> on the set <span class="math inline">\(X = \{ 1, 2, 3 \}\)</span>:</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-141"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-136"></span>
 <img src="figures/relations.png" alt="A relation is a subset of the Cartesian product of two sets. The diagram shows the usual order relation $\leq$. We can see that 1 is less than or equal to every other element, 2 is less than or equal to 2 and 3, and 3 is less than or equal to 3 only. Note the symmetry between rows and columns - this is due to the fact that the same set ($X$) is display on both dimensions." width="100%" height="100%" style="border: none;" />
 <p class="caption">
 Figure 12.1: A relation is a subset of the Cartesian product of two sets. The diagram shows the usual order relation <span class="math inline">\(\leq\)</span>. We can see that 1 is less than or equal to every other element, 2 is less than or equal to 2 and 3, and 3 is less than or equal to 3 only. Note the symmetry between rows and columns - this is due to the fact that the same set (<span class="math inline">\(X\)</span>) is display on both dimensions.
@@ -602,7 +606,7 @@ Figure 12.5: An example of a simple preorder: family tree ordered by familial re
 <li>Unitality: <span class="math inline">\(g \otimes e = e \otimes g = g\)</span>, for all <span class="math inline">\(g \in G\)</span></li>
 <li>Associativity: <span class="math inline">\(g_1 \otimes (g_2 \otimes g_3) = (g_1 \otimes g_2) \otimes g_3 = g_1 \otimes g_2 \otimes g_3\)</span>, for all <span class="math inline">\(g_1, g_2, g_3 \in G\)</span></li>
 </ol>
-<p>Additionally, the monoidal product <span class="math inline">\(\otimes\)</span> has an inverse<a href="#fn29" class="footnote-ref" id="fnref29"><sup>29</sup></a> <span class="math inline">\(\otimes^{-1}\)</span>, such that the following property holds:</p>
+<p>Additionally, the monoidal product <span class="math inline">\(\otimes\)</span> has an inverse<a href="#fn39" class="footnote-ref" id="fnref39"><sup>39</sup></a> <span class="math inline">\(\otimes^{-1}\)</span>, such that the following property holds:</p>
 <ol start="3" style="list-style-type: decimal">
 <li>Invertibility: <span class="math inline">\(g \otimes^{-1} g = g^{-1} \otimes g = e\)</span>, for all <span class="math inline">\(g \in G\)</span></li>
 </ol>
@@ -610,7 +614,7 @@ Figure 12.5: An example of a simple preorder: family tree ordered by familial re
 <p>Invertibility implies that, when we take a product of any two elements, we can always recover either element by “subtracting away” the other via the inverse product. This means that the group transformations are, in a sense, “lossless” - after we apply a transformation, we can always revert back to the original state by applying the inverse.</p>
 <div id="simple-examples-of-groups" class="section level4 hasAnchor" number="12.0.6.1">
 <h4><span class="header-section-number">12.0.6.1</span> Simple examples of groups<a href="mathematical-theory.html#simple-examples-of-groups" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>To give a concrete example, summation of integers <span class="math inline">\((\mathbb{Z}, 0, +)\)</span> is a group<a href="#fn30" class="footnote-ref" id="fnref30"><sup>30</sup></a>, since, when we sum two integers, we can always recover either summand by subtracting away the other from the result:</p>
+<p>To give a concrete example, summation of integers <span class="math inline">\((\mathbb{Z}, 0, +)\)</span> is a group<a href="#fn40" class="footnote-ref" id="fnref40"><sup>40</sup></a>, since, when we sum two integers, we can always recover either summand by subtracting away the other from the result:</p>
 <p><span class="math display">\[x + y = z \implies z - x = y \wedge z - y = x\]</span></p>
 <p>Other popular examples of groups include the groups of symmetries of geometric objects, such as a rectangle and triangle <span class="citation">(these are also called the dihedral groups of order 2 and 6 respectively, see <a href="#ref-pinter2010">Pinter 2010</a>)</span>. Other important class of groups are permutation groups, which are groups where the elements <span class="math inline">\(g \in G\)</span> are permutations of some underlying set <span class="math inline">\(X\)</span> and the group product is given by composition (in fact, as we will see below, every group is isomorphic to some permutation group).</p>
 <p>To give some examples of structures which are not groups, we could use the same counterexamples as we did with monoids, of operations which are not associative and/or do not come equipped with a neutral element. However, far more interesting are monoids which without an inverse element. One such counterexample is the maximum operator <span class="math inline">\((\mathbb{R}, -\infty, \max)\)</span>.</p>
@@ -622,7 +626,7 @@ Figure 12.5: An example of a simple preorder: family tree ordered by familial re
 <div class="definition">
 <p><span id="def:unlabeled-div-18" class="definition"><strong>Definition 12.15  (Group homomorphism) </strong></span>Group homomorphism is a <a href="mathematical-theory.html#monoid-homomorphism">monoid homomorphism</a> where the product <span class="math inline">\(\otimes\)</span> has one additional property:</p>
 <ol start="3" style="list-style-type: decimal">
-<li>Preserves inverses<a href="#fn31" class="footnote-ref" id="fnref31"><sup>31</sup></a>: <span class="math inline">\(f(e_G \otimes^{-1} g) = e_H \otimes^{-1}f(g)\)</span></li>
+<li>Preserves inverses<a href="#fn41" class="footnote-ref" id="fnref41"><sup>41</sup></a>: <span class="math inline">\(f(e_G \otimes^{-1} g) = e_H \otimes^{-1}f(g)\)</span></li>
 </ol>
 </div>
 <p>Again, like with monoids, if a group homomorphism <span class="math inline">\(f: G \to H\)</span> is a bijection, then we speak of a group isomorphism.</p>
@@ -761,10 +765,10 @@ Yorgey, Brent A. 2012. <span>“Monoids: Theme and Variations (Functional Pearl)
 </div>
 <div class="footnotes">
 <hr />
-<ol start="29">
-<li id="fn29"><p>Note, that in group theory, it is common to omit explicit references to the operator and write the group products without it, such that, e.g. <span class="math inline">\(g \otimes h\)</span> is written as <span class="math inline">\(gh\)</span>. In that case, instead of the inverse <em>operator</em>, we speak of inverse <em>elements</em>, such that, for each <span class="math inline">\(g \in G\)</span> there is an <span class="math inline">\(g^{-1}\)</span> such that <span class="math inline">\(g^{-1}g = gg^{-1} = e\)</span>. However, this really is a distinction without difference since we can easily define the inverse element using the inverse operator and the neutral element: <span class="math inline">\(g^{-1} = (e \otimes^{-1}g)\)</span>. Thus, for the sake of keeping with the notation in the previous sections, I will use the inverse operator explicitly.<a href="mathematical-theory.html#fnref29" class="footnote-back">↩︎</a></p></li>
-<li id="fn30"><p>Again, in group theory, the unit and the product are often referred to only implicitly, so we would instead just speak of the “group of integers <span class="math inline">\(\mathbb{Z}\)</span>”<a href="mathematical-theory.html#fnref30" class="footnote-back">↩︎</a></p></li>
-<li id="fn31"><p>Alternatively, we can denote the same property without reference to the unit and the group product as: <span class="math inline">\(f(g^{-1}) = f(g)^{-1}\)</span>. Arguably, here it leads to a nicer definition, however, again, I decided to use the explicit formulation for sake of consistency.<a href="mathematical-theory.html#fnref31" class="footnote-back">↩︎</a></p></li>
+<ol start="39">
+<li id="fn39"><p>Note, that in group theory, it is common to omit explicit references to the operator and write the group products without it, such that, e.g. <span class="math inline">\(g \otimes h\)</span> is written as <span class="math inline">\(gh\)</span>. In that case, instead of the inverse <em>operator</em>, we speak of inverse <em>elements</em>, such that, for each <span class="math inline">\(g \in G\)</span> there is an <span class="math inline">\(g^{-1}\)</span> such that <span class="math inline">\(g^{-1}g = gg^{-1} = e\)</span>. However, this really is a distinction without difference since we can easily define the inverse element using the inverse operator and the neutral element: <span class="math inline">\(g^{-1} = (e \otimes^{-1}g)\)</span>. Thus, for the sake of keeping with the notation in the previous sections, I will use the inverse operator explicitly.<a href="mathematical-theory.html#fnref39" class="footnote-back">↩︎</a></p></li>
+<li id="fn40"><p>Again, in group theory, the unit and the product are often referred to only implicitly, so we would instead just speak of the “group of integers <span class="math inline">\(\mathbb{Z}\)</span>”<a href="mathematical-theory.html#fnref40" class="footnote-back">↩︎</a></p></li>
+<li id="fn41"><p>Alternatively, we can denote the same property without reference to the unit and the group product as: <span class="math inline">\(f(g^{-1}) = f(g)^{-1}\)</span>. Arguably, here it leads to a nicer definition, however, again, I decided to use the explicit formulation for sake of consistency.<a href="mathematical-theory.html#fnref41" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>
