@@ -559,7 +559,15 @@ Let's briefly recap the key points so far. In section \@ref(partitioning), I adv
 
 Further, in Section \@ref(stacking-not-graphical), I demonstrated on the example \@ref(fig:grammar-barplot-maximums) that some "stackable" summary statistics have the property of preserving the part-whole relationships in the data hierarchy, whereas others do not. I have also and pointed to other researchers who have noted this problem. Additionally, I have argued that preserving these part-whole relationship in our visualizations is desirable, particularly when interaction is involved. They simplify certain interactive behaviors, make them more intuitive and "natural," and reduce the workload interactive data visualization systems need to do.
 
-Now it is finally time to discuss what makes certain statistics stackable. To do this, I will need to use some concepts from category theory. These concepts are described in greater detail in the [Appendix: Mathematical Theory](#mathematical-theory) - the reader is advised to consult this section if they are unfamiliar with the material (links to appropriate sections will also be provided throughout the text). As a final note, although category theory is a very complex field, only introductory concepts - which are sufficient for our purposes - will be used here.
+Now it will be finally time to discuss what makes certain statistics stackable. To do this, I will need to use some concepts from category theory. These concepts are described in greater detail in the [Appendix: Mathematical Theory](#mathematical-theory) - the reader is advised to consult this section if they are unfamiliar with the material (links to appropriate sections will also be provided throughout the text). However, first, a quick note on the application of category theory in the data visualization literature.
+
+#### Past applications of category theory to data visualization {#visualization-category-theory}
+
+Category theory has seen some limited application to data visualization, in two distinct areas. First, a handful of researchers have used concepts from it to establish broad theoretical frameworks. For instance, @beckmann1995, @hutchins1999, and @vickers2012 had used concepts such as categories, functors, and algebras to define the visualization process conceptually. Similarly, @kindlmann2014 used functors to define valid perceptual representations of the data, and @hibbard1994 used lattice theory to describe visualization in the presence of incomplete or approximate data (such as finite-precision floating-point numbers). 
+
+Second, other researchers have linked category theory and category theory in a more applied way, in the context of functional programming. Specifically, several functional libraries and domain-specific languages (DSLs) for data visualization have been developed over the recent years, using category theory as the foundational programming model. Examples include @yorgey2012, @petricek2021, @smeltzer2014, and @smeltzer2018. 
+
+As we will see, the way the present thesis leverages category theory is very different, occupying a middle ground. Compared to the broad theoretical models, it is significantly more applied, focusing on properties of concrete summary statistics and geometric objects, and their relation to interactive features. However, compared to the functional programming libraries, it is more abstract, being independent of any specific programming language or implementation. 
 
 #### Generalizing preorders: Categories {#preorders-categories}
 
@@ -816,7 +824,7 @@ Second, the properties of associativity and unitality should hold for *all* poss
 
 Finally, monoids also imply certain computational advantages. Specifically, because the operation of reducing a set of $n$ elements via a monoid translates into $n - 1$ binary operations, we know we can always compute the result in linear ($O(n)$) time (provided that the product $\otimes$ itself is constant). Additionally, due to associativity, monoids are easily parallelizable (embarassingly parallel), making them useful distributed computing strategies such as MapReduce [@lin2013]. Finally, when the total product consists of repeatedly combining the same element (i.e. $a \otimes a \otimes a \otimes \ldots$), the result can be computed in sub-linear $O(\log n)$ time, by applying the ancient Egyptian/Russian peasant multiplication-via-squaring algorithm [@stepanov2009; @stepanov2014]^[This method can also be extended to situations where we take the the product of a commutative series with fixed increment, see Appendix \@ref(gauss-russian-monoids)].     
 
-#### Groups and inverses
+#### Groups and inverses {#groups-inverses}
 
 Suppose we have our summary functor $F$ which summarizes a data subset $D_i$ by repeatedly applying some monoidal operation $\otimes$. As we have shown, given two data subsets $D_i$ and $D_j$, $F(D_i) \otimes F(D_j) = F(D_i \cup D_j)$. More concretely, with data subsets $D_1, D_2, D_3, \ldots$, it is the case that, for example:
 

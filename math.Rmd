@@ -20,16 +20,6 @@ This chapter provides an overview of essential concepts from category theory and
 
 The material follows primarily from @fong2019, @lawvere2009, @baez2023, @pinter2010, and @milewski2018. For an accessible introduction to the topic, interested readers are encouraged to consult these references, particularly @fong2019 and @lawvere2009.
 
-#### Note on past applications of abstract algebra and category theory to data visualization
-
-Category theory and abstract algebra have been applied to data visualization in the past. Handful of researchers have used these concepts to describe the broader philosophical aspects of data visualization. For example, @beckmann1995, @hutchins1999, and @vickers2012 had used concepts such as categories, functors, and algebras to lay down a theoretical framework for what it means to visualize. Similarly, @kindlmann2014 used functors to define valid perceptual representations of the data, and @hibbard1994 used lattice theory to describe visualization in the presence of incomplete or approximate data (such as finite-precision floating-point numbers). 
-
-Other researchers have linked category theory and data visualization in a more applied context, by way of functional programming. Specifically, there have been a handful of functional libraries and domain-specific languages (DSLs) for data visualization developed over the recent years, which have used category theory as the foundational programming model. Examples include @yorgey2012, @petricek2021, @smeltzer2014, and @smeltzer2018. 
-
-This thesis leverages category theory in a different way, by using it to shed light on certain practical problems that arise during (interactive) data visualization, without introducing a specific functional programming model or DSL. Specifically, the goal is to use concepts from category theory to reason about combinations of graphics, statistical summaries, and interactive features. Ultimately, I argue that these algebraic concepts are essential for reasoning about the coherence of interactive graphics.
-
-And now for the theory.
-
 ### Relations {#relations}
 
 A relation is one of the simplest mathematical structures. Given two sets $X$ and $Y$, a relation $R$ between $X$ and $Y$ is a subset of the Cartesian product of the two sets, $R \subseteq X \times Y$. In other words, a relation can be thought of as the subset of pairs $(x, y) \in X \times Y$ for which the condition "$x$ and $y$ relate" holds. Note that $X$ and $Y$ can be the same set, such that $R \subseteq X \times X$. 
