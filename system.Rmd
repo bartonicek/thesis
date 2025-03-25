@@ -158,7 +158,7 @@ include_figure("./figures/plotscaper-example2.html", 800)
 
 While the scatterplot matrix in Figure \@ref(plotscaper-example2) could be also recreated with quotation/NSE using functions like `substitute` from base R [@r2024] or `enquo` from `rlang` [@rlang2024], doing so requires the knowledge of quasiquotation which is part of [advanced R](https://adv-r.hadley.nz/quasiquotation.html#quasiquotation). Many R users may be familiar with calling functions using "naked" variable names, however, actual proficiency with using quotation effectively may be less common. Furthemore, R's NSE is a form of metaprogramming [@wickham2019]. While powerful, over-reliance on metaprogramming is often discouraged in modern developer circles, due to it potential to impact performance, safety, and readability [see e.g. @phung2009; the discussion at @handmadehero2025]. Thus, to promote simplicity and programmatic use, I chose simple string vectors over quoted function arguments in `plotscaper`.
 
-#### Variables and encodings
+#### Variables and encodings {#variables-encodings}
 
 Third, note that, in `plotscaper`, variable names are *not* meant to map directly to aesthetics such as x- or y-axis position or size. In other words, unlike `ggplot2`, `plotscaper` does not try to establish a direct correspondence between original data variables and the visual encodings/aesthetics. The reason for this is tha, in many common plot types, aesthetics do not actually represent variables found in the original data, but instead ones which have been derived or computed. Take, for instance, the following `ggplot` call:
 
@@ -1007,7 +1007,7 @@ export namespace Reduced {
 
 These functions all take `Reduced` as the first argument and compute transformations that make use of the `factor`, `reducer`, and `parent` properties, returning a new `Reduced`. For instance, the `stack` function uses the `factor` property and its corresponding `parent` property to create an array of indices over which to "stack" the `Reduced` values, and then does exactly this, using the `reducer`. Similarly, the `normalize` function also creates a parent-factor dependent array of indices, and applies a binary function using the values of `Reduced` and `parent`, for instance, dividing each value by its parent values (such as is the case in a spineplot or spinogram). The `shiftLeft` function simply appends the neutral element (`reducer.initialfn()`) as the first element and removes the last element of `Reduced`, essentially "shifting" the values leftwards (again, this is used in a spinogram).  
 
-##### Summaries
+##### Summaries {#summaries}
 
 With the building blocks of `Indexable`s, `Factor`s, `Reducer`s and `Reduced`s, we now have everything we need to compute the hierarchy of summaries described in Section \@ref(aggregation) and more specifically Section \@ref(aggregation-functor). This is the exact purpose of the constructor function exported from the `Summaries` namespace:^[Technically, the type signature of the real function as implemented in `plotscape` is a lot more complicated since it heavily relies on generics to correctly infer the type of the summarized data, however, the basic idea is the same.]:
 
@@ -1447,7 +1447,9 @@ Currently, each `Plot` in `plotscape` uses the following list of aesthetic mappi
 
 Most of these are fairly self-explanatory. Tmap data to the plot's x and y coordinates, respectively. Their `codomain` maxima correspond to the plot's width and height (ignoring margins). The `size` scale maps to glyph sizes, like scatterplot points. By default, it is a ratio scale (minimum is fixed at zero, for both `domain` and `codomain`), uses a square-root transformation, and has a fixed maximum^[With respect to the dimensions of the plot; it can still be modified by interaction.]. The `width` and `height` scales correspond to the plot's dimensions, similar to `x` and `y`, however, with the minimum value fixed at zero and both margins subtracted from the maximum. They are used, for instance, to scale the width and height of barplot bars, semi-independently^[`width` and `height` are not truly independent of `x` and `y` due to e.g. zooming having to affect both] of position. The `area` scale is based on the minimum of `width` and `height` and also has a square-root transformation applied to it. Finally, the `areaPct` scale is a scale used for scaling fixed-coordinate objects (e.g. for growing/shrinking rectangles in a 2D histogram). 
 
-Most of the scales (excluding `size` and `areaPct`) are automatically adjusted when the plot is resized. They may be also modified by user events such as zooming, panning, or shrinking/growing the size of objects. Finally, all scales have default values which are reverted to when the reset event is triggered. This is all orchestrated by `Plot`.
+Most of the scales (excluding `size` and `areaPct`) are automatically adjusted when the plot is resized. They may be also modified by user events such as zooming, panning, or shrinking/growing the size of objects. All scales are also provided default values which are reverted to when the reset event is triggered. This is all orchestrated by `Plot`.
+
+Finally, it is crucial to note that in many concrete plot types, scales are trained on data computed at a coarser partition level (representing whole objects), rather than the finest partition level (representing object segments). For example, in histograms, scales for the x- and y-axes are trained on data corresponding to whole bins, not the product of bins and `Marker` status. This approach significantly enhances rendering efficiency, as scale and axis updates are only required when, for instance, bin widths change, rather than each time selection occurs. As discussed in Section \@ref(aggregation-category-theory), this requires making certain algebraic assumptions, namely that the computed summaries are monoidal and monotonic. While this is currently a hard-coded requirement, a potential future direction would be to provide a fallback mechanism such that the scale updates would be based on the finest partition when the summaries are not monoidal monotones.
 
 ##### Rendering {#plot-rendering}
 
@@ -1469,7 +1471,7 @@ The simplest events on a `Plot` are activation and deactivation. A `Plot` is act
 
 When a plot is active, it may receive grow and shrink events that trigger adjustments to the  `width`, `height`, `size`, `area`, and `areaPct` scales. The response to these events may be adjusted in specific plot types. The response to these events is customizable for specific plot types. For example, in a histogram, grow/shrink events should modify the size of rectangles by adjusting histogram bins, rather than directly altering the scales. Therefore, we override the default event handlers to achieve this specialized behavior.
 
-##### Mouse-move interaction: selection, panning, and zooming
+##### Mouse-move interaction: selection, panning, and zooming {#plot-mousemove}
 
 Each `Plot` supports three mouse-move interaction modes: select, pan, or query. While a plot is active, mouse-move events are dispatched appropriately based on the active mode. Briefly, select mode is the default, and selection is initiated with a left-click. Panning mode is activated by clicking and holding down the right mouse button. Querying is triggered by pressing a designated keyboard key (`Q`) and hovering over objects.
 
