@@ -404,7 +404,7 @@ Within the web ecosystem, a common way of handling reactivity involves something
 
 The VDOM provides a simple and convenient solution to reactive graph challenges such as the diamond problem described in Section \@ref(observer), as evidenced by the massive popularity of web frameworks such as React or Vue. However, compared to alternatives, it also presents some significant performance trade-offs. Specifically, events near the root component trigger a cascade of updates which propagates throughout a large portion of the tree, even when there is no direct dependence between these events and the child components. Moreover, since the only way for two components to share a piece of state is through their parent, the model naturally encourages a top-heavy hierarchy, further compounding the issue. Finally, depending on the nature and implementation of the UI, the diffing process may be more trouble than its worth: while in a webpage, updating a button or two is a fast operation, in a data visualization system, it may be more efficient to re-render an entire scatterplot from scratch rather than trying to update select few points.
 
-#### Signals
+#### Signals {#signals}
 
 Another approach to reactivity that has been steadily gaining traction over the recent years, particularly within the web ecosystem, are signals (also known as fine-grained reactivity). Popularized by frameworks such Knockout [@knockout2019] and more recently Solid JS [@solid2024], this approach has recently seen a wave adoptions by many other frameworks including Svelte [@svelte2024] and Angular [@angular2025], and has even seen adoption outside of the JavaScript ecosystem, such as in the Rust-based framework Leptos [@leptos2025].
 
