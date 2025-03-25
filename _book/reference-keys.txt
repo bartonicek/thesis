@@ -223,3 +223,4 @@ algebraic-as-categories
 functors
 references
 declarative-schemas
+scope-and-features
