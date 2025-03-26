@@ -312,16 +312,15 @@ We then compute whatever summary we want (`sum`). Finally, when a `fill` or `col
 
 #### Limits of flat product partitions
 
-For many common plot types, a single "flat" product of all factors/partitions works reasonably well. However, for other types of plots, this simple model is not enough. Specifically, certain types of plots exhibit hierarchical relationships between the partitions which cannot be represented under this flat model [see also @slingsby2009; @wu2022].
+For many common plot types, a single "flat" (not hierarchical) product of all factors/partitions works reasonably well. However, for other types of plots, this simple model is not enough. Specifically, certain types of plots exhibit hierarchical relationships between the partitions which cannot be represented under this flat model [see also @slingsby2009; @wu2022].
 
-To give a concrete example, let's turn back to the barplot from the section above (\@ref(plots-as-partitions)). To draw the barplot, we first split our data into smaller tables, summarized each table by summing the values, stacked the summaries by taking their cumulative sum, and finally used the resulting data frame to render bar segments. This gave us a stacked barplot, which is a good visualization for comparing absolute counts across categories. 
+To give a concrete example, let's turn back to the barplot from the previous section (Section \@ref(plots-as-partitions)). To draw the barplot, we first split our data into smaller tables, summarize each table by summing the values, stack the summaries by taking their cumulative sum, and finally use the result to render bar segments. This gave us a stacked barplot, which is a good visualization for comparing absolute counts across categories. 
 
 However, what if, instead of comparing absolute counts, we wanted to compare proportions? It turns out there is another type of visualization, called the spineplot, which can be used to represent the same underlying data as a barplot, however, is much better suited for comparing proportions: 
 
 ```{r barplot-spineplot}
 #| echo: false
 #| fig-cap: "The same underlying data represented as a barplot (left) and a spineplot (right)."
-
 knitr::include_graphics("./figures/barplot-spineplot.png")
 ```
 
@@ -679,20 +678,20 @@ knitr::include_graphics("./figures/barplot-preorder4.png")
 
 As before, each $\otimes$ in the diagram above corresponds to the operation of combining a summary with the other sibling summaries, such that, for example, the label for the arrow $S_{S_1} \to S_{B_1}$ should be $- \otimes S_{S_1} \otimes S_{S_2}$. In words, "a segment summary combines into a bar summary".
 
-Now comes the key point. Suppose that we have some summary function $F: D \to S$ which maps data subsets to summaries. To preserve the structure of $\mathcal{D}$, the operation should be a functor $F: \mathcal{D} \to \mathcal{S}$, which maps data subsets in $D$ to summaries in $S$ and set unions $D_i \cup D_j$ to combinations of summaries $S_i \otimes S_j$, such that composition and identities are preserved. Specifically, by substituting our morphisms into the composition-preserving property of functors:
+Now comes the key point. Suppose that we have some summary operation $F: D \to S$ which maps data subsets to summaries. To preserve the structure of $\mathcal{D}$, $F$ has to be a functor $F: \mathcal{D} \to \mathcal{S}$, mapping data subsets in $D$ to summaries in $S$ and set unions $D_i \cup D_j$ to combinations of summaries $S_i \otimes S_j$, such that composition and identities are preserved. Specifically, by substituting our morphisms into the composition-preserving property of functors:
 
 $$F(- \cup D_{i} \thena - \cup D_{j}) = F(- \cup D_i) \thena F(- \cup D_j)$$
 
-The expression above appears somewhat awkward due to the mixing of function expressions with the binary operator $\cup$ and the composition operator $\thena$ (i.e. if instead of $- \cup D_i$ and $- \cup D_j$ we had $f$ and $g$, the expression $F(f \thena g) = F(f) \thena F(g)$ would look much cleaner, even though it expresses the same concept). However, it can be greatly simplified by noting two facts:
+The expression above appears somewhat unwieldy due to the mixing of function expressions with the binary operator $\cup$ and the composition operator $\thena$. However, $- \cup D_i$ and $- \cup D_j$ are just morphisms, so if we had instead labeled these as $f$ and $g$, we could rewrite the same expression as $F(f \thena g) = F(f) \thena F(g)$ and it would still express the same idea. Even better however, we can greatly simplify the expression by noting two facts:
 
-- $F(- \cup D_i ) = - \otimes F(D_i)$. This follows from the definition of our functor: the union operator is mapped to combining summaries in the summary category.
-- We can omit the composition operator $\thena$. This is due to the fact that $\cup$ and $\otimes$ are associative binary operators (associativity follows from the definition of composition in categories). As an example, if $f(x) = - \otimes 2 = x + 2$, then we can write $[f \thena f](x) = f(f(x)) = ((x + 2) + 2) = x + 2 + 2$)
+- $F(- \cup D_i ) = - \otimes F(D_i)$. This follows from the definition of our functor: the union operator in the data category is mapped to combining summaries in the summary category.
+- We can omit the composition operator $\thena$. This is due to the fact that $\cup$ and $\otimes$ are associative binary operators (associativity follows from the definition of composition in categories). As an example, if $f(x) = - \otimes 2 = x + 2$, then we can write $[f \thena f](x) = f(f(x)) = ((x + 2) + 2) = x + 2 + 2$.
 
 This leads to the following simplification:
 
 $$F(- \cup D_i \cup D_j) = - \otimes F(D_i) \otimes F(D_j)$$
 
-Finally, without loss of generality, we can choose the empty set $\varnothing$ as the subset being operated on ($-$), and then the equation reduces to:
+Finally, without loss of generality, we can choose the empty set $\varnothing$ as the operand ($-$), and then the equation reduces to:
 
 \begin{equation}
 F(D_i \cup D_j) = F(D_i) \otimes F(D_j)
@@ -719,21 +718,32 @@ F(\text{id}_{D_i}) &= F(D_i \cup \varnothing) \\
                    &= F(D_i) = \text{id}_{F(D_i)}
 \end{align}
 
-This means that the summary operation $F$ must be defined for the empty set, and should return some "neutral" element $e = F(\varnothing) \in S$, which, when combined with any other summary, just returns the same summary back. 
+This means that the summary operation $F$ must be defined for the empty set, and should return some "neutral" element $F(\varnothing) = e \in S$, which, when combined with any other summary, just returns the same summary back. 
 
-Second, as per Equation \@ref(eq:summary-functor-composition), the summary should distribute across set union via the combination operator $\otimes$:
+Second, as per Equation \@ref(eq:summary-functor-composition), the summary operation should distribute across set union via the combination operator $\otimes$:
 
 $$F(D_i \cup D_j) = F(D_i) \otimes F(D_j)$$
 
-This distributive property should hold over *all* disjoint subsets of the data as these correspond to all possible arrows we can draw in the set union diagram of the data subset preorder (Figure \@ref(fig:barplot-preorder2)). Further, given any set $D_i \in D$, the smallest possible (non-empty) disjoint subset is a single data point (row) $d_j \in D_i$. Thus, the summary operation should distribute over individual data points:
+This distributive property needs to hold over *all* disjoint subsets of the data as these correspond to all possible arrows we can draw in the set union diagram of the data subset preorder (Figure \@ref(fig:barplot-preorder2)). Further, given any set $D_i \in D$, the smallest possible (non-empty) disjoint subset is a single data point (row) $d_j \in D_i$. Thus, the summary operation should distribute over individual data points:
 
 $$F(d_1 \cup d_2 \cup \ldots \cup d_n) = F(d_1) \otimes F(d_2) \otimes \ldots \otimes F(d_n)$$
 
-Thus, from a certain point of view, $F$ *is* the binary combination operator $\otimes$^[Technically, if $d_i$ represents a single data row, with multiple named data values corresponding to columns, the summary operation $F$ should also select the appropriate value(s) while remaining closed under repeated applications. For instance, if we are summarizing a variable named `x`, the following R function fullfills these criteria: `pick_sum <- function(s, d) ifelse(is.numeric(d), s + d, s + d$x); Reduce(pick_sum, lapply(1:3, \(n) list(x = n)), 0)`.]. With a bit of handwaving, we can write:
+Thus, from a certain point of view, $F$ *is* the binary combination operator $\otimes$. For instance, if we take $D$ to be a subset of real numbers, $D \subseteq \mathbb{R}$, and the operation $\otimes$ to be addition, then we can simply write:
 
-$$F(d_1 \cup d_2 \cup \ldots d_k) = d_1 \otimes d_2 \otimes \ldots d_n$$
+$$F(d_1 \cup d_2 \cup \ldots d_k) = d_1 + d_2 + \ldots d_n$$
 
-Just to drive the point home, we can also follow the equality the other way, starting with combining the summaries of two data subsets $F(D_i)$ and $F(D_j)$. Then:
+Things become slightly more complicated when $D$ represents more generic, heterogeneous data, i.e. when $d_i \in D$ are tuples (rows). Then, the summary functor $F$ may also "lift" values out of the tuple, and so the $\otimes$ operator would need to perform this lifting while remaining closed under repeated application. For illustration, in code, if we wanted to summarize a data frame by iterating over rows and summing a single numeric variable named `x`, we would need to write something like the following: 
+
+```{r}
+df <- data.frame(x = 1:3, y = letters[1:3])
+rows <- split(df, 1:3) # Want to iterate the data row-wise
+
+                                     # Either sum, or sum + lift
+pick_sum <- function(s, d) ifelse(is.numeric(d), s + d, s + d$x)
+Reduce(pick_sum, rows, 0)
+```
+
+However, this is more of a technical detail. The key point is that we can encode everything we need about the summarizing function $F$ into the binary operator $\otimes$. To further illustrate this, we can also follow the equality the other way, starting with combining the summaries of two data subsets $F(D_i)$ and $F(D_j)$. Then:
 
 \begin{align}
 F(D_i) \otimes F(D_j) &= (d_{i1} \otimes d_{i2} \otimes \ldots d_{in}) \otimes (d_{j1} \otimes d_{j1} \otimes \ldots d_{jk}) \\
@@ -770,7 +780,7 @@ While most summary statistics we care about in data visualization are quantitati
 
 Further, even the set union $\cup$ operation itself forms a monoid, with the empty set $\varnothing$ as the neutral/identity element. Thus, in a certain way, the mapping of data subsets to summaries $F$ can be seen as a mapping between two monoids: a *monoid homomorphism* (which is just an abstract algebra term for a functor between monoids). However, $F$ is more than just a monoid homomorphism; monoids alone do not capture the hierarchical structure of $\mathcal{D}$ and $\mathcal{P}$. Instead, $F$ is a mapping between two categories that have the features of both a monoid *and* preorder. As a sidenote, a monoid that is also a preorder is called, unsurprisingly, a *monoidal preorder* [@nlab2024e]. Thus, $F$ could technically be called a *"monoidal preorder homomorphism"*, however, I believe it is far easier and clearer to simply refer to $F$ as a functor.
 
-As a final note, a key consequence of the associativity of monoids is linerizability. Specifically, an arbitrary expression built with an associative binary function $f$, e.g. $f(f(x, y), f(z, f(u, w)))$ can always be rewritten as a linear sequence of steps (e.g. $f(x, f(y, f(z, f(u, w))))$). This effectively flattens the expression tree into a linear chain [@adam2017].
+As a final note, a key consequence of the associativity of monoids is linearizability. Specifically, an arbitrary expression tree built with an associative binary function $f$, e.g. $f(f(x, y), f(z, f(u, w)))$ can always be rewritten as a linear sequence of steps (e.g. $f(x, f(y, f(z, f(u, w))))$). This effectively flattens the expression tree into a linear chain [@adam2017].
 
 #### Programming with monoids {#programming-with-monoids}
 
@@ -1048,7 +1058,7 @@ That is, the linear mapping can be interpreted as a composition of three simpler
 - $\color{seagreen}{r(p) = 0.1 + p \cdot (0.9 - 0.1)}$ takes a value in $[0, 1]$ and maps it elsewhere in $[0, 1]$
 - $\color{steelblue}{u_V(p) = v_{min} + p \cdot (v_{max} - v_{min})}$ takes a value in $[0, 1]$ and maps it to a visual attribute value $v \in V$ 
 
-In other words, instead of thinking of scale as direct mapping from $D$ to $V$ directly, we can break the transformation into three distinct stages. This leads us to the following definition of a scale:
+In other words, instead of thinking of scale as direct mapping from $D$ to $V$ directly, we can break the transformation into three distinct steps. This leads us to the following definition of a scale:
 
 ::: {.definition #scale name="Scale as function composition"}
 

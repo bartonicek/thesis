@@ -229,7 +229,6 @@ p_3(a) = \begin{cases}
 (b, t) & \text{if } x = 3
 \end{cases}
 $$
-
 ### Preorders {#preorders}
 
 Another important class of relations are ones that have to do with order. Among these, one of the simplest constructions is a preorder:
@@ -265,7 +264,7 @@ If a preorder conforms to property 3, we speak of a partially ordered set or *po
 
 #### Structure preserving maps: Monotone maps
 
-Preorders are interesting because they give us a first taste of something will be discussed a lot throughout this thesis: structure-preserving maps. Specifically, if we have two preorders $(X, \leq_X)$ and $(Y, \leq_Y)$, and a function $f: X \to Y$, we can classify this function based on whether it preserves the order in $(X, \leq_X)$ or not. That is, we call a function $f$ order-preserving or a "monotone map", if:
+Preorders are interesting because they give us a first taste of something will be discussed over and over again: structure-preserving maps. Specifically, given two preorders $(X, \leq_X)$ and $(Y, \leq_Y)$, and a function $f: X \to Y$, we can classify this function based on whether it preserves the order in $(X, \leq_X)$ or not. That is, we call a function $f$ order-preserving or a "monotone map", if:
 
 ::: {.definition name="Monotone map"}
 A monotone map $f: X \to Y$ is a function between two preorders $(X, \leq_X)$ and $(Y, \leq_Y)$, such that, for all $x_1, x_2 \in X$:
