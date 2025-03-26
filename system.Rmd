@@ -888,7 +888,7 @@ As discussed in Section \@ref(aggregation), a key challenge when computing stati
 
 `Reducer`s and associated data structures and procedures provide a way of addressing this challenge. 
 
-##### Reducers
+##### Reducers {#reducers}
 
 A `Reducer<T>` is simply a data container that stores functionality and metadata associated with a monoid on type `T`. It has the following interface:
 
