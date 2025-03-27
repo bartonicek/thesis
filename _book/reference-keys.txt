@@ -276,3 +276,5 @@ eq:margins
 eq:scale-composition
 def:scale
 monoids-1
+model-constraints
+fig:plotscaper-design
