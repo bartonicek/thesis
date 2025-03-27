@@ -275,3 +275,4 @@ def:linear-mapping
 eq:margins
 eq:scale-composition
 def:scale
+monoids-1
