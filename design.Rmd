@@ -47,7 +47,7 @@ Most programming languages are geared towards one specific programming paradigm,
 
 The flexibility of JavaScript and R had allowed me to experiment with different programming paradigms while developing my interactive data visualization package. I have rewritten the JavaScript side of the package multiple times from scratch, testing out several different programming paradigms and styles in the process. Below, I provide a rough sketch of the paradigms I have sampled, as well as an account of my experience of using each paradigm and some thoughts on its suitability for designing interactive data visualization systems.
 
-### Imperative programming
+### Procedural programming
 
 Imperative programming is one of the oldest and most classical programming paradigms. It conceptualizes the program as a sequence of discrete steps that manipulate some mutable state [@frame2014]. In this way, it closely resembles the way computer programs get executed on the underlying hardware [barring some advanced techniques such as branch prediction and speculative execution, the CPU executes instructions sequentially, see e.g. @parihar2015; @raghavan1998].
 

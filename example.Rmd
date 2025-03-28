@@ -1,11 +1,6 @@
 
 ```{r}
 #| echo: false
-knitr::opts_chunk$set(
-  out.width = "100%",
-  out.height = "100%"
-)
-
 include_figure <- function(path) {
   if (knitr::is_html_output()) knitr::include_url(path)
   else knitr::include_graphics(gsub(".html", ".png", path))
@@ -13,6 +8,8 @@ include_figure <- function(path) {
 
 if (knitr::is_html_output()) {
   knitr::opts_chunk$set(
+    out.width = "100%",
+    out.height = "100%",
     out.extra = 'style="border: none;"' # Get rid of iframe borders
   )
 }

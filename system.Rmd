@@ -7,11 +7,6 @@ alway_allow_html: true
 
 ```{r}
 #| echo: false
-knitr::opts_chunk$set(
-  out.width = "100%",
-  out.height = "100%"
-)
-
 include_figure <- function(path, height = 400) {
   if (knitr::is_html_output()) knitr::include_url(path, height)
   else knitr::include_graphics(gsub(".html", ".png", path))
@@ -19,6 +14,8 @@ include_figure <- function(path, height = 400) {
 
 if (knitr::is_html_output()) {
   knitr::opts_chunk$set(
+    out.width = "100%",
+    out.height = "100%",
     out.extra = 'style="border: none;"' # Get rid of iframe borders
   )
 }
@@ -76,20 +73,19 @@ As mentioned in Section \@ref(goals), a primary inspiration for `plotscaper`'s A
 #| fig-show: "hide"
 library(ggplot2)
 
-# In ggplot, plots are created by chaining a series of function calls
+# Plots are created by chaining a series of function calls
 ggplot(mtcars, aes(wt, mpg)) +
-  geom_point() + # The overloaded `+` operator serves to compose these calls
+  geom_point() +   # The overloaded `+` serves as pipe operator
   scale_x_continuous(limits = c(0, 10))
 ```
 
 ```{r}
-# The call to ggplot() creates an immutable plot schema object
-
+# The ggplot() call creates an immutable plot schema
 plot1 <- ggplot(mtcars, aes(wt, mpg))
 names(plot1)
 length(plot1$layers)
 
-# Adding components such as geoms returns a new schema object
+# Adding components such as geoms or scales returns a new schema
 plot2 <- ggplot(mtcars, aes(wt, mpg)) + geom_point()
 names(plot2)
 length(plot2$layers)
@@ -192,14 +188,18 @@ Now it is easier to see that what gets mapped to the x-axis is *not* the `mpg` v
 
 While this lack of a direct correspondence between data and aesthetics may seem like a minor detail, it is in fact a fundamental design gap. As discussed in Section \@ref(problems), `ggplot2` is based on the Grammar of Graphics model [@wilkinson2012], which centers around the idea of composing plots out of independent, modular components. The fact that the semantics of `aes` are tied to `geom`s (and `stat`s) means that these classes of `ggplot2` functions are not truly independent. This issue is even further amplified in interactive graphics. For instance, when switching the representation of histogram to spinogram, we use the same underlying data but the aesthetic mappings are completely different. The expression `aes(x = mpg)` would be meaningless in a spinogram, since both the x- and y-axes display binned counts - `mpg` only facilitates binning and is not displayed anywhere in the plot directly. 
 
-So what to do? To be perfectly frank, I have not found a perfect solution. In Section \@ref(problems), I proved that, in the general case involving transformations like stacking, `stats` and `geoms` *cannot* be truly independent. Barring that, the problem with specifying aesthetics in plots like histograms is that, in some sense, we are putting the cart before the horse: ultimately, we want to plot derived variables, so we should specify these in the call to `aes`, however, we do not know what the derived variables will be before we compute them (requiring the knowledge of `stat`s and `geom`s). So perhaps the schema creation process should organized in a different way. As per Section \@ref(problems), we could mirror the data visualization pipeline by doing something like:    
+So what to do? To be perfectly frank, I have not found a perfect solution. In Section \@ref(problems), I proved that, in the general case involving transformations like stacking, `stats` and `geoms` *cannot* be truly independent. Barring that, the problem with specifying aesthetics in plots like histograms is that, in some sense, we are putting the cart before the horse: ultimately, we want to plot derived variables, so we should specify these in the call to `aes`, however, we do not know what the derived variables will be before we compute them (requiring the knowledge of `stat`s and `geom`s). So perhaps the schema creation process should organized in a different way. As per Section \@ref(problems), we could mirror the data visualization pipeline by structuring the code like:    
 
 ```{r}
 #| eval: false
-data |> partition(...) |> aggregate(...) |> encode(...) |> render(...)
+data |> 
+  partition(...) |> 
+  aggregate(...) |> 
+  encode(...) |> 
+  render(...)
 ```
 
-In fact, in broad strokes, this is how the data visualization pipeline is implemented in `plotscape` (see Section \@ref(low-level-implementation)). However, this model does seem to have one significant downside: it does not lend itself easily to a simple declarative schema like that of `ggplot2`. Despite several attempts, I have been largely unsuccessful in formalizing such a schema. The difficulties stem from the hierarchical dependencies between the various pipeline stages, as well as the added complexity of integrating reactivity into the pipeline.
+In broad strokes, this is how the data visualization pipeline is implemented in `plotscape` (see Section \@ref(low-level-implementation)). However, this model does have one important downside: it does not lend itself easily to a simple declarative schema like that of `ggplot2`. Despite several attempts, I have been largely unsuccessful in formalizing such a schema. The difficulties stem from the hierarchical dependencies between the various pipeline stages, as well as the added complexity of integrating reactivity into the pipeline.
 
 Be it as it may, this difficulty with declarative schemas is why I opted for the more traditional, nominal style of specifying plots in `plotscaper`(i.e. using functions like `add_scatterplot` or `add_barplot`). While this approach may seem less flexible, I hope I have demonstrated that the underlying limitations are *not* an exclusive to `plotscape`/`plotscaper`, but extend to `ggplot2` and all other GoG-based data visualization systems. I have simply chosen make these limitations more explicit. If a better solution is found, it may be integrated into future releases of the package.
 
@@ -277,9 +277,35 @@ As mentioned above, since client-server communication requires a running server,
 
 ## Low-level implementation (`plotscape`) {#low-level-implementation}
 
-This section describes the actual platform used to produce and manipulate interactive figures, as implemented in `plotscape`. I first discuss some key implementation details, including reactivity and rendering. Then I provide a detailed listing of the system's components and their functionality.
+This section describes the actual platform used to produce and manipulate interactive figures, as implemented in `plotscape`. I begin by discussing some broader concerns, specifically the choice of programming paradigm, data representation, and the implementation of reactivity. Then, I provide a detailed list of the system's components and their functionality.
 
-Key concepts are explained via example code chunks. All of these represent valid TypeScript code, and selected examples are even evaluated, using the [Bun](https://bun.sh/) runtime [@bun2025]. The reason why TypeScript was chosen over R is that many of the examples are much clearer with explicit type signatures. Further, since `plotscape` is written in TypeScript, many of the examples are taken directly from the codebase, albeit sometimes modified for consistency or conciseness.
+Key concepts are explained via example code chunks. All of these represent valid TypeScript code, and selected examples are even evaluated, using the [Bun](https://bun.sh/) TypeScript/JavaScript runtime [@bun2025]. The reason why TypeScript was chosen over R for the examples is that explicit type signatures make many of the concepts much easier to explain. Further, since `plotscape` is written in TypeScript, many of the examples are taken directly from the codebase, albeit sometimes modified for consistency or conciseness.
+
+### Programming paradigm
+
+The first broad issue worth briefly discussing is the choice of programming paradigm for `plotscape`. A programming paradigm is a set of rules for thinking about and structuring computer programs. Each paradigm offers guidelines and conventions regarding common programming concerns, including data representation, code organization, and control flow. 
+
+While most programming languages tend to be geared towards one specific programming paradigm [see e.g. @van2009], the languages I chose for my implementation - JavaScript/TypeScript and R - are both multi-paradigm languages [@chambers2014; @mdn2024c]. As C-based languages, both support classical procedural programming. However, both languages also have first-class function support, allowing for a functional programming style [@chambers2014; @mdn2024e], and also support object-oriented programming, via prototype inheritance in the case of JavaScript [@mdn2024d] and the S3, S4, and R6 object systems in the case of R [@wickham2019]. This made it possible for me to try out several different programming paradigms while developing `plotscape`/`plotscaper`. 
+
+I did not find it necessary to discuss the choice of programming paradigm in Section \@ref(high-level-api), since I did not delve into any specific implementation details there. However, I believe it is important to discuss it now, as I will be going into implementation details in the following sections. Therefore, in the following subsections, I will briefly outline four programming paradigms - object-oriented, functional, and data-oriented programming - discussing their key features, trade-offs, and suitability for interactive data visualization. I will then provide a rationale for my choice of programming paradigm and discuss my specific use of it in `plotscape`.
+
+#### Procedural programming
+
+### Procedural programming
+
+Procedural programming, also known as imperative programming^[Technically, some authors consider procedural programming a subset of imperative programming, such that procedural programming is imperative programming with functions (procedures) and scopes, however, the terms are often used interchangeably.], is perhaps the oldest and most well-known programming paradigm. It conceptualizes programs as sequences of discrete steps that manipulate some mutable state [@frame2014]. These steps can be bundled together into functions or procedures, however, ultimately, the whole program is still thought of as a linear sequence of operations. In this way, it actually closely maps onto how computer programs get executed on the underlying hardware [beyond some advanced techniques such as branch prediction and speculative execution, the CPU executes instructions sequentially, see e.g. @parihar2015; @raghavan1998].
+
+Compared to the other three programming paradigms which will be discussed below, procedural programming is generally a lot less opinionated. It primarily serves as a conceptual container for a set of programming concepts (variables, functions, loops, etc.), and provides few recommendations or prescriptions as to what techniques should be used or how programs should be structured.
+
+### Functional programming
+
+### Object-oriented programming
+
+### Data-oriented programming
+
+### Programming paradigm used in `plotscaper`
+
+### Programming style in `plotscaper`
 
 A note on the coding style used in the examples. Many of the code examples use TypeScript's `namespace` feature to bundle related functionality together, similar to how a class bundles data and behaviour together in object-orient programming (OOP), however, unlike in OOP, the namespace serves purely as a static container unlike a class which has to be instantiated^[That is, I use `namespace`s like a class with all static methods and properties.]. Further, alongside a given namespace, many examples also include a type (`interface`) of the same name. TypeScript allows type and value overloading, such that a type (e.g. `interface Foo {}`) and a runtime variable (`const Foo = 123`) with the same name can exist simultaneously, within the same scope. Namespaces are runtime variables and so they do not clash with types names. 
 
@@ -304,9 +330,9 @@ export namespace Observer {
     return { ...x, listeners: {} };
   }
 
-  export function listen(x: Observer, event: string, callback: () => void) {
+  export function listen(x: Observer, event: string, cb: () => void) {
     if (!x.listeners[event]) x.listeners[event] = [];
-    x.listeners[event].push(callback);
+    x.listeners[event].push(cb);
   }
 
   export function dispatch(x: Observer, event: string) {
@@ -331,7 +357,8 @@ The `Observer` pattern easy to implement and understand, and, compared to altern
 ```{ts}
 import { Observer } from "./Observer"
 
-function update(x: { name: string; value: number } & Observer, value: number) {
+function update(x: { name: string; value: number } & Observer, 
+                value: number) {
   x.value = value;
   console.log(`${x.name} updated to`, x.value);
   Observer.dispatch(x, `updated`);
@@ -348,7 +375,7 @@ Observer.listen(B, `updated`, () => update(C, A.value + B.value));
 update(A, 2); // C will get updated twice
 ```
 
-The example above shows what is in reactive programming known as the diamond problem. We have three reactive variables `A`, `B`, and `C`, such that `B` depends on `A`, and `C` depends simultaneously on `A` and `B`. Since `C` depends on `A` and `B`, it has to subscribe to both. However, `C` is not aware of the global context of the reactive graph: it does not know that `B` will update any time `A` does. As such, an update to `A` will trigger *two* updates to `C` despite the fact that, intuitively, it should only cause one. 
+The example above shows the so-called diamond problem in reactive programming^[Not to be confused with the diamond problem in OOP, which relates to multiple inheritance.]. We have three reactive variables `A`, `B`, and `C`, such that `B` depends on `A`, and `C` depends simultaneously on `A` and `B`. Since `C` depends on `A` and `B`, it has to subscribe to both. However, `C` is not aware of the global context of the reactive graph: it does not know that `B` will update any time `A` does. As such, an update to `A` will trigger *two* updates to `C` despite the fact that, intuitively, it should only cause one. 
 
 Without careful management of dependencies, this reactive graph myopia that the `Observer` pattern exhibits can create computational bottlenecks, particularly in high-throughput UIs such as interactive data visualizations. Consider an interactive histogram where users can either modify binwidth or directly set breaks. If both are implemented as reactive parameters, a poorly managed dependency graph (e.g., breaks dependent on binwidth, and rendering dependent on both) will result in unnecessary re-renders, impacting performance at high data volumes.
 
@@ -389,20 +416,21 @@ stream
   .pipe((x) => [x, Math.round((x / 7) * 100) / 100])
   .pipe((x) =>
     console.log(
-      `${x[0]} milliseconds has elapsed (${x[1]} milliseconds in dog years)`
+      `${x[0]} milliseconds has elapsed`
+      + `(${x[1]} milliseconds in dog years)`
     )
   );
 ```
 
 As you can see, the event producer (stream) is defined separately from the event processing logic, which is constructed by piping the result of one operation into the next. Because of the associativity of function composition, the stream actually exhibits properties of a functor, meaning that the order of composition - either through direct function composition or `.pipe` chaining - does not affect the result. Additionally, while the stream transformations themselves are (generally) stateless, they can still produce useful side-effects (as can be seen on the example of the `console.log` call above). Further, because of this fact, they also lend themselves well to modeling asynchronous or even infinite data sequences [@abelson2022; @fogus2013].
 
-While streams can be extremely useful in specific circumstances, their utility as a general model for complex UIs (beyond asynchronous operations) is debatable. Specifically, the inherent statefulness of UIs conflicts with the stateless nature of streams: stateless computations inside the stream have to leak into the rest of the application *somewhere*. Delineating which parts of the logic should go into streams versus which should be bound to UI components adds unnecessary complexity for little real benefit. Consequently, streams are likely not the optimal choice for interactive data visualization, where some state is unavoidable. 
+While streams can be extremely useful in specific circumstances, their utility as a general model for complex UIs (beyond asynchronous operations) is debatable. Specifically, the inherent statefulness of UIs conflicts with the stateless nature of streams: stateless computations inside the stream have to leak into the rest of the application *somewhere*. Delineating which parts of the logic should go into streams versus which should be bound to UI components adds unnecessary complexity for little real benefit. Consequently, streams are likely not the optimal choice for interactive data visualization, where some mutable state is unavoidable. 
 
 #### Virtual DOM
 
-Within the web ecosystem, a common way of handling reactivity involves something called the virtual DOM (VDOM). This approach, popularized by web frameworks such as React [@react2024] and Vue [@vue2024], involves constructing an independent in-memory tree structure which provides a virtual representation of the UI. Reactive events are bound to nodes or "components" of this tree. Whenever an event occurs, changes cascade throughout the VDOM, starting with the associated component and propagating down through its children. Finally, the VDOM is compared or "diffed" against the actual UI, and only the necessary updates are applied. Note that, despite being named after the web's DOM, the VDOM is a general concept, not tied to any specific programming environment.
+Within the web ecosystem, a popular way of handling reactivity involves something called the virtual DOM (VDOM). This approach, popularized by web frameworks such as React [@react2024] and Vue [@vue2024], involves constructing an independent, in-memory data structure which provides a virtual representation of the UI in the form of a tree. Reactive events are bound to nodes or "components" of this tree, and, whenever an event occurs, changes cascade throughout the VDOM, starting with the associated component and propagating down through its children. Finally, the VDOM is compared or "diffed" against the actual UI, and only the necessary updates are applied. Note that, despite being named after the web's DOM, the VDOM represents a general concept, not tied to any specific programming environment.
 
-The VDOM provides a simple and convenient solution to reactive graph challenges such as the diamond problem described in Section \@ref(observer), as evidenced by the massive popularity of web frameworks such as React or Vue. However, compared to alternatives, it also presents some significant performance trade-offs. Specifically, events near the root component trigger a cascade of updates which propagates throughout a large portion of the tree, even when there is no direct dependence between these events and the child components. Moreover, since the only way for two components to share a piece of state is through their parent, the model naturally encourages a top-heavy hierarchy, further compounding the issue. Finally, depending on the nature and implementation of the UI, the diffing process may be more trouble than its worth: while in a webpage, updating a button or two is a fast operation, in a data visualization system, it may be more efficient to re-render an entire scatterplot from scratch rather than trying to update select few points.
+The VDOM provides a straightforward solution to reactive graph challenges such as the diamond problem described in Section \@ref(observer). It can work very well in specific circumstances, as evidenced by the massive popularity of web frameworks such as React or Vue. However, compared to alternatives, it also comes with some significant performance trade-offs. Specifically, events near the root component trigger a cascade of updates which propagates throughout a large portion of the tree, even when there is no direct dependence between these events and the child components. Moreover, since the only way for two components to share a piece of state is through their parent, the model naturally encourages a top-heavy hierarchy, further compounding the issue. Finally, depending on the nature and implementation of the UI, the diffing process may be more trouble than its worth: while in a webpage, updating a single button or a div element is a relatively fast operation, in a data visualization system, it may be more efficient to re-render an entire plot from scratch rather than trying to selectively update it.
 
 #### Signals {#signals}
 
@@ -453,7 +481,10 @@ export namespace Effect {
 
 const [price, setPrice] = Signal.create(100);
 const [tax, setTax] = Signal.create(0.15);
-const priceWithTax = () => Math.round(price() * (1 + tax()) * 100) / 100;
+
+// Round to two decimal places
+const round = (x: number) => Math.round(x * 100) / 100
+const priceWithTax = () => round(price() * (1 + tax()));
 // ^ Derived values automatically become signals as well
 
 Effect.create(() =>
@@ -476,7 +507,7 @@ Signals provide an elegant solution to many problems with reactivity. They autom
 
 At the start of the project, I had used the `Observer` pattern for modeling reactivity. However, I had the idea of letting the users to define reactive parameters that could be used at arbitrary points in the data visualization pipeline. This had led me to explore the various models of reactivity described above, and even do a full rewrite of `plotscape` with signals at one point.
 
-However, eventually, I ended up reverting back to the `Observer` pattern. The primary reason was developer ergonomics. While many properties of signals like automatic subscription were appealing, the need to manage both data and signals as distinct entities proved cumbersome. Deciding which components of my system and their properties should be plain data versus signals added an additional overhead and made refactoring more complex. Furthemore, I also found that, in the interactive data visualization pipeline, reactivity could be aligned with the four discrete stages: partitioning, aggregation, scaling, and rendering. Specifically, reactive values could be introduced in batch right at the start of each of these four steps, simplifying the reactive graph as well as the overall mental model. Introducing reactivity at other points seem to offer limited practical benefit. Thus, despite the limitations of the `Observer` pattern, the structured nature of the problem (interactive data visualization pipelines) ultimately makes it a good solution in my eyes.
+However, eventually, I ended up reverting back to the `Observer` pattern. The primary reason was developer ergonomics. While many properties of signals like the automatic event subscription were appealing, the need to manage both data and signals as distinct entities proved cumbersome. Specifically, deciding which components of my system and their properties should be plain data versus signals added an additional overhead and complicated refactoring. With bit of practice and careful design, I found that I was able to use the `Observer` pattern without introducing unnecessary re-renders. Moreover, I also found that, in the interactive data visualization pipeline, reactivity can be aligned with the four discrete stages: partitioning, aggregation, scaling, and rendering. Specifically, reactive values can be introduced in batch right at the start of each of these four steps, greatly simplifying the reactive graph. Introducing reactivity at other points seem to offer limited practical benefit. Thus, despite the limitations of the `Observer` pattern, the structured nature of the problem (interactive data visualization pipelines) ultimately makes it a decent solution in my eyes.
 
 ### System components
 
@@ -711,17 +742,20 @@ While all `Factor`s share the same fundamental structure - a data partition with
 
 `Factor.bijection` and `Factor.constant` are two fairly trival factor constructor. `Factor.bijection` creates the finest possible data partition by assigning every case to its own part, whereas `Factor.constant` does the opposite and assigns all cases to a single part. The names of the reflect the mathematical index mapping functions: the bijective function $f(i) = i$ for `Factor.bijection` and the constant function $f(i) = 0$ for `Factor.constant`. Consequently, the cardinality of `Factor.bijection` is equal to the length of the data, while the cardinality of `Factor.constant` is always one. Both can be assigned arbitrary metadata, which must have length equal to the cardinality.
 
-Both functions have essentially the same signature:
+Both functions have the same signature:
 
 ```{ts}
 #| eval: false
-function bijection<T extends Dataframe>(n: number, data?: T): Factor<T> 
-function constant<T extends Dataframe>(n: number, data?: T): Factor<T> 
+function bijection<T extends Dataframe>(n: number, data?: T): 
+  Factor<T>
+  
+function constant<T extends Dataframe>(n: number, data?: T): 
+  Factor<T> 
 ```
 
-In both cases, `n` represents the length of the data (the number of cases) and data represents arbitrary metadata. The variable `n` is used to construct an array of `indices`, which in the case of `Factor.bijection` is an increasing sequence starting at zero (`[0, 1, 2, 3, ..., n - 1]`) whereas in the case of `Factor.constant` it is simply an array of zeroes (`[0, 0, 0, 0, ..., 0]`). Technically, in this case, having an explicit array of indices is not necessary, and we could implement much of the same functionality via a callback (i.e. `(index: number) => index` for `Factor.bijection` and `(index: number) => 0` for `Factor.constant`). However, for many operations involving factors, it is necessary to store the length of the data (`n`), and while it would be possible to define a separate `n`/`length` property on `Factor`, in the context of other factor types, I found it simpler to allocate the corresponding array. While this does have some small memory cost, there is no computational cost involved, since, by definition, the partition represented by a bijection or constant factor does not change^[Unless the length of the data changes. I have not implemented data streaming for `plotscape` yet, however, it would be easy to extend bijection factor for streaming by simply pushing/popping the array of indices.]. 
+In either case, `n` represents the length of the data (the number of cases), and `data` represents some arbitrary metadata, of equal length as `n`. The variable `n` is used to construct an array of `indices`, which in the case of `Factor.bijection` is an increasing sequence starting at zero (`[0, 1, 2, 3, ..., n - 1]`) whereas in the case of `Factor.constant` it is simply an array of zeroes (`[0, 0, 0, 0, ..., 0]`). Technically, in this case, having an explicit array of indices is not necessary, and we could implement much of the same functionality via a callback (i.e. `(index: number) => index` for `Factor.bijection` and `(index: number) => 0` for `Factor.constant`). However, for many operations involving factors, it is necessary to store the length of the data (`n`), and while it would be possible to define a separate `n`/`length` property on `Factor`, in the context of other factor types, I found it simpler to allocate the corresponding array. While this does have some small memory cost, there is no computational cost involved, since, by definition, the partition represented by a bijection or constant factor does not change^[Unless the length of the data changes. I have not implemented data streaming for `plotscape` yet, however, it would be easy to extend bijection factor for streaming by simply pushing/popping the array of indices.]. 
 
-`Factor.bijection` and `Factor.constant` their own specific use cases. `Factor.bijection` represents a one-to-one mapping and this makes it suitable for scatterplots and parallel coordinate plots. In contrast, `Factor.constant` is useful when we want to compute summaries across the entirety of the data, such as is the case for spinogram^[Other use-cases may be plots involving a single geometric object such as density plots and radar plots, however, these are currently not implemented in `plotscape`.].
+`Factor.bijection` and `Factor.constant` their own specific use cases. `Factor.bijection` represents a one-to-one mapping such as that seen in scatterplots and parallel coordinate plots. In contrast, `Factor.constant` represent a constant mapping which assigns all cases to a single part. This is useful for computing summaries across the entirety of the data, such as is required for spinogram^[Other use-cases may be plots involving a single geometric object such as density plots and radar plots, however, these are currently not implemented in `plotscape`.].
 
 As a final interesting side-note, both `Factor.bijection` and `Factor.constant` can be interpreted through the lense of category theory, as terminal and initial objects within the category of data partitions, with morphisms representing products between partitions. That is, the product of any factor with a `Factor.bijection` always yields another `Factor.bijection` (making this a terminal object), whereas the product of any factor with `Factor.constant` will simply yield that factor (making this an initial object).   
 
@@ -732,7 +766,8 @@ Another fairly intuitive factor constructor is `Factor.from`. It simply takes an
 ```{ts}
 #| eval: false
 type Stringable = { toString(): string };
-function from(x: Stringable[], options?: { labels: string[] }): Factor<{ label: string[] }> 
+function from(x: Stringable[], options?: { labels: string[] }): 
+  Factor<{ label: string[] }> 
 ```
 
 When creating a discrete factor with `Factor.from`, the resulting factor's length matches the input array `x`. To compute the factor `indices`, the constructor needs to be either provided with an array of `labels` or these will be computed from `x` directly (by calling the `.toString()` method and finding all unique values). Assigning indices requires looping through the $n$ values `x` and further looping through $k$ `labels`, resulting in $O(n)$ time complexity (assuming $k$ is constant with respect to the size of the data). The factor metadata simply contains this array of `label`s (singular form `label` is used since it is the name of a dataframe column). Each index in `indices` then simply maps to one `label`. Finally, for easier inspection, `label`s may be sorted alphanumerically, though this does not affect computation in any way.
@@ -744,14 +779,20 @@ The typical use case for `Factor.from` is the barplot. Here, we take an array of
 Arrays of continuous values can be turned into factors by binning. `Factor.bin` is the constructor function used to perform this binning. It has the following signature:
 
 ```{ts}
-type BinOptions = { breaks?: number[]; nBins?: number; width?: number; anchor?: number; }
-function bin(x: number[], options?: BinOptions): Factor<{ binMin: number[]; binMax: number[] }>;
+type BinOptions = { 
+  breaks?: number[]; 
+  nBins?: number; 
+  width?: number; 
+  anchor?: number; 
+}
+
+function bin(x: number[], options?: BinOptions): 
+  Factor<{ binMin: number[]; binMax: number[] }>;
 ```
 
 Again, as in the case of `Factor.from`, the length of the factor created with `Factor.bin` will match the length of `x`. To compute the factor `indices`, the values in `x` need to be assigned to histogram bins delimited by breaks. The breaks are computed based on either default values or the optional list of parameters (`options`) provided to the construct function. Note that the parameters are not orthogonal: for instance, histogram with a given number of bins (`nBins`) cannot have an arbitrary binwidth (`width`) and vice versa. Thus, if a user provides multiple conflicting parameters, they are resolved in the following order: `breaks` > `nBins` > `width`. Finally, the metadata stored on the `Factor.bin` output includes the limits of each bin `binMin` and `binMax`, giving the lower and upper bound of each bin, respectively.
 
 Indices are assigned to bins using a half-open intervals on breaks of the form `(l, u]`, such that a value `v` is assigned to to a bin given by `(l, u]` if it is the case that `l < v <= u`. Assigning indices to bins requires looping through the $n$ values of `x`, and further looping through $k$ `breaks`^[In the general case where the histogram bins are not necessarily all of equal with; if all bins are known to have the same width, we can compute the bin index in constant $O(1)$ time], resulting in $O(n)$ time complexity (assuming $k$ is fixed with respect to the size of the data). 
-
 An important point to mention is that a naive approach of assigning bins to cases may lead to some bins being left empty, resulting in `cardinality` which is less than the number of bins and "sparse" `indices` (gaps in index values). For instance, binning the values `[1, 2, 6, 1, 5]` with breaks `[0, 2, 4, 6]` leaves the second bin (`(2, 4]`) empty, and hence the corresponding index value (`1`) will be absent from `indices`. To address this, `plotscape` performs an additional $O(n)$ computation to "clean" the indices and ensure that the array is dense (i.e. `indices` take on values in `0 ... cardinality - 1`, and each value appears at least once). While this additional computation may not be strictly necessary (i.e. some other systems may use "sparse" factor representation), I found the dense arrays of indices much easier to work with, particularly when it comes to operations like combining factors via products and subsetting the corresponding data. Further, even though this approach necessitates looping over `indices` twice, the combined operation still maintains an $O(n)$ complexity.    
 
 ##### Product factors
@@ -863,7 +904,7 @@ As you can see from the table above, selection groups are mapped to indices in r
 
 With four persistent groups (including base), many operations involving transient selection can be efficiently implemented using the third bit of the index. Specifically, as can be seen in table [REFERENCE], persistent indices range from 0 to 3 and transient indices range from 4 to 7. Thus, to determine whether a case is selected, we can do a simple bitwise check of the third bit. Likewise, to add or remove transient selection, we can set the third bit appropriately. 
 
-It is important to mention that, while not a necessity, having four persistent groups works well when for the main purpose of `Marker`s: taking products with other factors. With four groups, the number of unique group assignments is eight and the maximum index values is `2^3 - 1 = 7`, resulting in dense `Marker` indices (i.e. all index values from 0 to `cardinality - 1` are valid). If we wanted to implement more persistent selection groups, we could do so by setting a higher bit (e.g. the fourth bit for up to eight persistent groups), however, we may break the correspondence between cardinality and the number of unique indices. Practically, this may not cause any issues, however, as long as we ensure that the `Marker` cardinality is set to $2^{\text{index of the transient bit}}$ which may be different from the number of unique indices. However, I argue that, for most intents and purposes, four persistent selection groups are plenty. It is well-known that human visual capacity is limited, and having more than $4 \times 2 = 8$ different group assignments represented by different colors may overtax the visual system. Beyond that, the ability to have arbitrary number of persistent groups may be implemented in future versions in `plotscape` but has not been a priority up to this point.
+It is important to mention that, while not a necessity, having four persistent groups works well when for the main purpose of `Marker`s: taking products with other factors. With four groups, the number of unique group assignments is eight and the maximum index values is `2^3 - 1 = 7`, resulting in dense `Marker` indices (i.e. all index values from 0 to `cardinality - 1` are valid). If we wanted to implement more persistent selection groups, we could do so by setting a higher bit (e.g. the fourth bit for up to eight persistent groups and sixteen unique indices in total), however, we may break the correspondence between cardinality and the number of unique indices. Practically, this may not cause any issues, as long as we ensure that the `Marker` cardinality is set to $2^{\text{index of the transient bit}}$ which may be different from the number of unique indices. However, I argue that, in most circumstances, four persistent selection groups are enough. It is well-known that human visual capacity is limited, and having more than $4 \times 2 = 8$ different group assignments represented by different colors within the same figure may overtax the visual system. Still, the ability to have arbitrary number of persistent groups may be implemented in future versions in `plotscape`, but it has not been a priority up to this point.
 
 ##### Updating group assignment indices
 
@@ -874,13 +915,14 @@ As may be already apparent, a key operations that marker has to support have to 
 namespace Marker {
   export function clearAll(marker: Marker): void {}
   export function clearTransient(marker: Marker): void {}
-  export function update(marker: Marker, group: number, selectedIndices: number[]): void {}
+  export function update(marker: Marker, group: number, 
+                         selectedIndices: number[]): void {}
 }
 ```
 
-`Marker.clearAll` clears all group assignments by setting them all indices to the base value (`7`). `Marker.clearTransient` clears transient indices only. This is also where the `transientIndices` property on the `Marker` interface comes handy. Since transient selection is removed by *any* selection group assignment, we know that the indices that were assigned to transient selection last are *all* the transient indices there are. As such, we can optimize the removal of transient selection removal by simply keeping track of which indices were assigned to transient selection last, and once `Marker.clearTransient` is called, simply iterating through these indices (instead of the whole array of indices). 
+`Marker.clearAll` clears all group assignments by setting them all indices to the base value (`7`). `Marker.clearTransient` clears transient indices only. This is also where the `transientIndices` property on the `Marker` interface becomes useful. Since transient selection is removed by *any* selection group assignment, we know that the indices that were last assigned to transient selection are *all* the transient indices there are. As such, we can optimize the removal of transient selection by simply keeping track of which indices were assigned to transient selection last, and once `Marker.clearTransient` is called, simply iterating through these indices (instead of the whole array of indices). 
 
-Finally, the `Marker.update` is the key function for `Marker`. It changes behavior based on the `group` argument. When `group` is one of the persistent groups, it simply iterates through `selectedIndices`, setting each corresponding index in the marker's `indices` array to the `group`'s value. When `group` has a special transient selection value, it instead adds the transient selection status to each marker index via the bitwise operation described in Section \@ref(group-indices). Finally, it should be mentioned that, since any selection group assignment removes transient selection, `Marker.update` always first calls `Marker.clearTransient`.   
+Finally, the `Marker.update` is the key function for `Marker`. It changes behavior based on the `group` argument. When `group` is one of the persistent groups, it simply iterates through `selectedIndices`, setting each corresponding index in the marker's `indices` array to the `group`'s value. When `group` has the special transient selection value, it instead adds the transient selection status to each marker index, using the bitwise operation described in Section \@ref(group-indices). Finally, it should be mentioned that, since any new selection automatically removes transient selection, `Marker.update` always first calls `Marker.clearTransient`.   
 
 #### Aggregation: Reducers, reduceds, and summaries {#aggregation-summaries}
 
@@ -941,7 +983,7 @@ reducefn(reducefn(a, b), c) === reducefn(a, reducefn(b, c))
 reducefn(a, initialfn()) === reducefn(initialfn(), a) === a
 ```
 
-These constraints are not actually enforced by the system: as discussed in Section \@ref(programming-with-monoids), they would need to be checked with *all possible inputs*, which is not practical for large input domains such as floating point numbers or strings. However, the `Reducer` interface should hopefully be evocative of monoids, to users familiar with functional programming. 
+These constraints are not actually enforced by the system: as discussed in Section \@ref(programming-with-monoids), they would need to be checked with *all possible inputs*, which is not practical for large input domains such as floating point numbers or strings. However, to users familiar with functional programming, the `Reducer` interface should hopefully be evocative of monoids. 
 
 ##### Reduced
 
@@ -949,7 +991,8 @@ We can use a `Reducer<T>` to aggregate or fold an array of values of type `T` (`
 
 ```{ts}
 #| eval: false
-function reduce<T>(x: T[], factor: Factor, reducer: Reducer<T>): T[] {
+function reduce<T>(x: T[], factor: Factor, 
+                   reducer: Reducer<T>): T[] {
   const result = Array<T>(factor.cardinality);
   
   // Initialize values
@@ -967,7 +1010,7 @@ function reduce<T>(x: T[], factor: Factor, reducer: Reducer<T>): T[] {
 }
 ```
 
-After we apply this operation, we could just return the result array `T[]` as in the example above, however, this is limited. Specifically, as discussed in Section \@ref(aggregation), in a data visualization system, we rarely want to treat summaries as a simple "flat" array of values. Instead, in order to correctly apply operations like stacking and normalizing, it is necessary for the summaries to "remember" *how* they have been summarized, over *what* partition, and *which* other summaries they relate to, within the hierarchy of summaries. This is what the `Reduced` data type is for^[Note that, in the example below, we assign string key properties to an array. This would be prohibited in many languages but is perfectly valid in JavaScript/TypeScript due to its highly dynamic nature.]:
+After we apply this operation, we could just return the result array `T[]` as in the example above, however, in the general case, this approach would discard important information. Specifically, as discussed in Section \@ref(aggregation), in a data visualization system, we rarely want to treat summaries as a simple "flat" array of values; instead, to be able to apply transformation such as stacking or normalization, we need to retain the information about *how* these values have been produced (`Reducer`), over which partition (`Factor`), and *which* other arrays of summaries they relate to. This is what the `Reduced` data type is for^[Note that, in the example below, we assign string key properties to an array. This would be prohibited in many languages but is perfectly valid in JavaScript/TypeScript due to its highly dynamic nature.]:
 
 ```{ts}
 interface Reduced<T = unknown> extends Array<T> {
@@ -981,7 +1024,8 @@ interface Reduced<T = unknown> extends Array<T> {
 The way we use `Reduced` is that we replace the return type of the `reduce` function, and then, inside the function's body, we simply assign the `Factor` and `Reducer<T>` arguments as the `factor` and `reducer` properties to the `result`, after it's been computed:
 
 ```{ts}
-function reduce<T>(x: T[], factor: Factor, reducer: Reducer<T>): Reduced<T> {
+function reduce<T>(x: T[], factor: Factor, 
+                   reducer: Reducer<T>): Reduced<T> {
   
   ...
   
@@ -1000,12 +1044,13 @@ Speaking of stacking and normalization, the `Reduced` namespace also exposes the
 #| eval: false
 export namespace Reduced {
   export function stack<T>(reduced: Reduced<T>): Reduced<T> {}
-  export function normalize<T>(reduced: Reduced<T>, normalizefn: (x: T, y: T) => T): Reduced<T> {}
+  export function normalize<T>(reduced: Reduced<T>, 
+                               normalizefn: (x: T, y: T) => T): Reduced<T> {}
   export function shiftLeft<T>(reduced: Reduced<T>): Reduced<T> {}
 }
 ```
 
-These functions all take `Reduced` as the first argument and compute transformations that make use of the `factor`, `reducer`, and `parent` properties, returning a new `Reduced`. For instance, the `stack` function uses the `factor` property and its corresponding `parent` property to create an array of indices over which to "stack" the `Reduced` values, and then does exactly this, using the `reducer`. Similarly, the `normalize` function also creates a parent-factor dependent array of indices, and applies a binary function using the values of `Reduced` and `parent`, for instance, dividing each value by its parent values (such as is the case in a spineplot or spinogram). The `shiftLeft` function simply appends the neutral element (`reducer.initialfn()`) as the first element and removes the last element of `Reduced`, essentially "shifting" the values leftwards (again, this is used in a spinogram).  
+These functions all take `Reduced` as the first argument and compute transformations that make use of the `factor`, `reducer`, and `parent` properties, returning a new `Reduced`. For instance, the `stack` function computes a new array of stacked values, using the `factor`, `parent`, and `reduced` properties. Similarly, the `normalize` also creates and populates it with normalized values which are created by dividing the values in the original array by their corresponding `parent` values^[Technically, with the way `normalize` is implemented, the normalizing function can be any arbitrary binary function, not just division. This could be used, for example, in weighted normalization: instead of using standard division `(x, y) => x / y`, we could add a transformation e.g. `(x, y) => Math.sqrt(x) / Math.sqrt(y)`.]. The `shiftLeft` function creates a new array where the values are shifted by one, such that the first element is the monoidal unit (`reducer.initialfn()`), and the last element is the second to last element of the original array (the primary use-case of this is the spineplot).  
 
 ##### Summaries {#summaries}
 
@@ -1014,7 +1059,8 @@ With the building blocks of `Indexable`s, `Factor`s, `Reducer`s and `Reduced`s, 
 ```{ts}
 #| eval: false
 type ReducerTuple<T = unknown> = [Indexable<T>, Reducer<T>];
-function create(summaries: Record<string, ReducerTuple>, factors: Factor[]): Dataframe[]
+function create(summaries: Record<string, ReducerTuple>, 
+                factors: Factor[]): Dataframe[]
 ```
 
 The `Summaries.create` function takes in a dictionary of `Indexable-Reducer` pairs with matching generic and an array of `Factor`s. It then repeatedly combines the factors pair-wise using `Factor.product` and then computes summaries for each new product factor using the `Indexable-Reducer` pairs in `summaries`. This results in an array of `Dataframe`s with equal length as `factors`, holding the combined data. For example:
@@ -1026,8 +1072,15 @@ const factor2 = Factor.product(factor1, Factor.from([0, 0, 0, 1, 1, 1]))
 const summaries = { stat: [[10, 12, 9, 15, 11, 10], Reducer.sum] }
 
 const summarized = Summaries.create(summaries, [factor1, factor2])
-Dataframe.rows(summarized[0]) // [ { label: `a`, stat: 37 }, { label: `b`, stat: 20 }, { label: `c`, stat: 10 } ]
-Dataframe.rows(summarized[1]) // [ { label: `a`, label$: `0`, stat: 22 }, { label: `a`, label$: `1`, stat: 15 }, ... ]
+Dataframe.rows(summarized[0]) 
+// [ { label: `a`, stat: 37 }, 
+//   { label: `b`, stat: 20 }, 
+//   { label: `c`, stat: 10 } ]
+
+Dataframe.rows(summarized[1]) 
+// [ { label: `a`, label$: `0`, stat: 22 }, 
+//   { label: `a`, label$: `1`, stat: 15 }, 
+//   ... ]
 ```
 
 Thus, the overt behavior of the `Summaries.create()` is to compute summaries using `Reducer`s and combine the resulting data with the corresponding `Factor` data. However, under the hood, the function also does a couple more things. First, it links all reduced variables created from `summaries` with their parent-data counterpart (by assigning the `parent` property on the `Reduced`s). It also sets up a reactive graph, such that when a factor is updated, its corresponding data is updated, and so are its child factors and their corresponding data.
@@ -1089,8 +1142,11 @@ In Section \@ref(scaling), I mentioned that a key idea for creating a generic mo
 interface Expanse<T = unknown> {}
 
 export namespace Expanse {
-  export function normalize<T>(expanse: Expanse<T>, x: T): number {}
-  export function unnormalize<T>(expanse: Expanse<T>, x: number): T {}
+  export function normalize<T>(expanse: Expanse<T>, 
+                               x: T): number {}
+  
+  export function unnormalize<T>(expanse: Expanse<T>, 
+                                 x: number): T {}
 }
 ```
 
@@ -1117,12 +1173,14 @@ The two primary properties of `Scale` are `domain` and `codomain`, both of type 
 namespace Scale {
   export function pushforward<T, V>(scale: Scale<T, V>, x: T): V {
     const { domain, codomain } = scale;
-    return Expanse.unnormalize(codomain, Expanse.normalize(domain, x));
+    const normalized = Expanse.normalize(domain, x)
+    return Expanse.unnormalize(codomain, normalized);
   }
 
   export function pullback<T, V>(scale: Scale<T, V>, x: V): T {
     const { domain, codomain } = scale;
-    return Expanse.unnormalize(domain, Expanse.normalize(codomain, value))
+    const normalized = Expanse.normalize(codomain, x)
+    return Expanse.unnormalize(domain, normalized)
   }
 }
 ```
@@ -1140,10 +1198,14 @@ Besides `domain` and `codomain`, scale also has five numeric properties: `zero`,
 export function pushforward<T, U>(scale: Scale<T, U>, x: T): U {
   const { domain, codomain, zero, one, direction, scale, mult } = scale
   
-  let normalized = Expanse.normalize(domain, x);  // Normalize to [0, 1]
-  normalized = normalized * scale * mult;         // Grow/shrink
-  normalized = zero + normalized * (one - zero);  // Apply margins
-  normalized = 0.5 * (1 - direction) + direction * normalized;  // Apply direction
+  // Normalize to [0, 1]
+  let normalized = Expanse.normalize(domain, x);  
+  // Grow/shrink
+  normalized = normalized * scale * mult;         
+  // Apply margins
+  normalized = zero + normalized * (one - zero);  
+  // Apply direction
+  normalized = 0.5 * (1 - direction) + direction * normalized;  
   
   return codomain.unnormalize(normalized);
 }
@@ -1168,6 +1230,7 @@ normalized = zero + normalized * (one - zero);
 For instance, assuming that  by `Expanse.normalize` maps the "minimum" and "maximum" values of the domain to 0 and 1, respectively, setting `zero` to 0.1 and `one` to 0.9 expands the scale and applies a symmetric 10% margin on both ends. Importantly, this expansion is consistent across all concrete `Expanse` subtypes used for the `domain` and `codomain`. Further, as also discussed in Section \@ref(scaling-intermediate), incrementing both values by the same amount effectively shifts the scale. Consequently, the implementation of panning is as simple as:
 
 ```{ts}
+#| eval: false
 export function move(scale: Scale, amount: number): void {
   scale.zero += amount;
   scale.one += amount;
@@ -1177,20 +1240,23 @@ export function move(scale: Scale, amount: number): void {
 Again, this implementation of panning is also domain-and-codomain-agnostic. Further, it can result in `zero` and `one` values outside of $[0, 1]$, which is fine since, as mentioned in Section \@ref(scaling-intermediate), at times we may want to map points outside of the codomain (e.g. scatterplot points with x- and y- coordinates outside of the plot but with plot-overlapping radius). Finally, we can also use the `zero` and `one` properties to zoom into a specific region of the scale, using the `Scale.expand` function. The logic of this function is a bit more complicated, but can be understood with careful application of (highschool) algebra:
 
 ```{ts}
+#| eval: false
 function invertRange(min: number, max: number): number {
   const rangeInverse = 1 / (max - min);
     return [-min * rangeInverse, (1 - min) * rangeInverse];
 }
 
-export function expand(scale: Scale, zero: number, one: number): void {
+export function expand(scale: Scale, 
+                       zero: number, one: number): void {
   const { zero: currentZero, one: currentOne, direction } = scale;
   const currentRange = currentOne - currentZero;
 
   // Reflect if direction is backwards
   if (direction === -1) [zero, one] = [1 - zero, 1 - one];
 
+  const normalizeCurr = (x) => (x - currentZero) / currentRange;
   // Normalize the zoom values within the current range
-  [zero, one] = [zero, one].map((x) => (x - currentZero) / currentRange);
+  [zero, one] = [zero, one].map(normalizeCurr);
   [zero, one] = invertRange(zero, one);
 
   // Reflect back
@@ -1206,6 +1272,7 @@ The `Scale.expand` function zooms into a proportional region of the scale, using
 Third and finally, the `direction` property gets applied to the normalized values in the following way:
 
 ```{ts}
+#| eval: false
 normalized = 0.5 * (1 - direction) + direction * normalized;
 ```
 
@@ -1254,14 +1321,18 @@ The `normalize` and `unnormalize` functions in the `ExpanseContinuous` namespace
 ```{ts}
 // ExpanseContinuous.ts
 export namespace ExpanseContinuous {
-    export function normalize(expanse: ExpanseContinuous, x: number) {
-    const { min, max, offset, trans } = expanse;
-    return (trans(x - offset) - trans(min)) / (trans(max) - trans(min));
+    export function normalize(expanse: ExpanseContinuous, 
+                              x: number) {
+      const { min, max, offset, trans } = expanse;
+      return (trans(x - offset) - trans(min)) / 
+        (trans(max) - trans(min));
   }
 
-  export function unnormalize(expanse: ExpanseContinuous, value: x) {
-    const { min, max, offset, trans, inv } = expanse;
-    return inv(trans(min) + x * (trans(max) - trans(min))) + offset;
+  export function unnormalize(expanse: ExpanseContinuous, 
+                              value: x) {
+      const { min, max, offset, trans, inv } = expanse;
+      return inv(trans(min) + x * (trans(max) - trans(min))) + 
+        offset;
   }
 }
 ```
@@ -1281,10 +1352,14 @@ Back to code. The `ExpanseContinuous.normalize` and `ExpanseContinuous.unnormali
 import { ExpanseContinuous } from "./ExpanseContinuous"
 
 const identity = (x) => x;
-const expanse = { min: 1, max: 16, offset: 0, trans: identity, inv: identity };
+const expanse = { 
+  min: 1, max: 16, offset: 0, 
+  trans: identity, inv: identity 
+};
 
 console.log(ExpanseContinuous.normalize(expanse, 4));
-exp.trans = Math.sqrt; // Technically, we should also set inverse to square
+// Technically, we should now also set inverse to square
+exp.trans = Math.sqrt; 
 console.log(ExpanseContinuous.normalize(expanse, 4));
 ```
 
@@ -1331,10 +1406,16 @@ import { ExpansePoint } from "./ExpansePoint"
 const cities = ["Berlin", "Prague", "Vienna"]
 const expanse = { labels: cities, order: [0, 1, 2] };
 
-console.log(cities.map(city => ExpansePoint.normalize(expanse, city)));
+console.log(cities.map((city) => {
+  return ExpansePoint.normalize(expanse, city)
+}));
+
 exp.order[0] = 1; // Swap the order of the first two values
 exp.order[1] = 0;
-console.log(cities.map(city => ExpansePoint.normalize(expanse, city)));
+
+console.log(cities.map((city) => {
+  return ExpansePoint.normalize(expanse, city)
+}));
 ```
 
 However, it is important to note that, due to the fact that there is a finite number of `labels`, the `unnormalize` function is *not* a full, two-sided inverse of `normalize`, merely a one-sided inverse or retraction [see e.g. @lawvere2009]. That is, while composing `unnormalize` with `normalize` results in the identity function, the converse is not true. For instance:
@@ -1345,13 +1426,16 @@ import { ExpansePoint } from "./ExpansePoint"
 const cities = ["Berlin", "Prague", "Vienna"]
 const expanse = { labels: cities, order: [0, 1, 2] };
 
-// Unnormalize works as an inverse one way
+// Unnormalize works as a one-way inverse (retraction)
 console.log(cities.map(x => {
-  return ExpansePoint.unnormalize(ExpansePoint.noralize(expanse, x))
+  return ExpansePoint.unnormalize(
+    ExpansePoint.normalize(expanse, x))
 }))
 
 // But not the other way around
-console.log(ExpansePoint.normalize(ExpansePoint.unnormalize(expanse, 0.6)))
+console.log(ExpansePoint.normalize(
+  ExpansePoint.unnormalize(expanse, 0.6)
+  ))
 ```
 
 Finally, like `ExpanseContinuous`, the `ExpansePoint` namespace also contains a `train` function, which loops through a string array, finds all unique values, and assigns these to labels, as well as a `breaks` function, which simply returns the array of `labels` (ordered by `order`). Further, the namespace also contains a `reorder` function which modifies the `order` property based on a new array indices, allowing the labels to be shuffled. 
