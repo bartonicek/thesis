@@ -3,7 +3,7 @@ rmd_files: [
             "introduction.Rmd",
             "litreview.Rmd",
             "problems.Rmd",
-            "goals.Rmd", "design.Rmd",
+            "goals.Rmd",
             "system.Rmd", "example.Rmd", "discussion.Rmd",
             "glossary.Rmd", "appendix.Rmd", "math.Rmd", "references.Rmd"
             ]
