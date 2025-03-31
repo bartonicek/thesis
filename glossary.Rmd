@@ -44,7 +44,7 @@ A possible objection to worrying about data layout in high-level interpreted lan
 
 #### JSON {#JSON}
 
-Short for "JavaScript Object Notation", JSON is a flexible data format based on the JavaScript object type [@ecma2024; see also e.g. @bourhis2017; @pezoa2016]. On the top level, a JSON is a key-value store (also known as dictionary, object, struct, hash-table, or list in other languages) with string keys and values of any of the following types: string, number, boolean, null (an undefined/missing value), an array (which can contain any other valid JSON values), or another JSON object. 
+Short for "JavaScript Object Notation", JSON is a flexible data format based on the JavaScript object type [also known as the "plain old JavaScript object", POJO, see @ecma2024; see also e.g. @bourhis2017; @pezoa2016]. On the top level, a JSON is a key-value store with string keys and values of any of the following types: string, number, boolean, null (an undefined/missing value), an array (which can contain any other valid JSON values), or another JSON object. 
 
 For example, the following is a valid JSON:
 

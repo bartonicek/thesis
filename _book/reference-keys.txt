@@ -298,3 +298,7 @@ isomorphism
 algebraic-as-categories
 functors
 references
+preorders
+programming-paradigm-used-in-plotscape
+programming-style-in-plotscape
+expanse
