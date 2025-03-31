@@ -302,3 +302,9 @@ preorders
 programming-paradigm-used-in-plotscape
 programming-style-in-plotscape
 expanse
+functional
+oop
+dop
+final-choice-of-programming-paradigm-and-rationale
+style-used-in-code-examples
+data-representation
