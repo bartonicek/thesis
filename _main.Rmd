@@ -321,7 +321,7 @@ schema |> render()
 
 ```{r plotscaper-example2}
 #| echo: false
-#| fig-cap: "An example of a programmatically-created figure (a scatterplot matrix)."
+#| fig-cap: "An example of a programmatically-created scatterplot matrix (SPLOM)."
 include_figure("./figures/plotscaper-example2.html", 800)
 ```
 
@@ -372,9 +372,9 @@ data |>
   render(...)
 ```
 
-In broad strokes, this is how the data visualization pipeline is implemented in `plotscape` (see Section \@ref(low-level-implementation)). However, this model does have one important downside: it does not lend itself easily to a simple declarative schema like that of `ggplot2`. Despite several attempts, I have been largely unsuccessful in formalizing such a schema. The difficulties stem from the hierarchical dependencies between the various pipeline stages, as well as the added complexity of integrating reactivity into the pipeline.
+In broad strokes, this is how the data visualization pipeline is implemented in `plotscape` (see Section \@ref(low-level-implementation)). However, this model does have one important downside: it does not lend itself easily to a simple declarative schema like that of `ggplot2`. Despite several attempts, and some partial successes (see Section \@ref(summaries)), on the whole, I have been unsuccessful in developing a comprehensive way to specify such a schema. The difficulties stem from the hierarchical dependencies between the various pipeline stages, as well as the added complexity of integrating reactivity into the pipeline (see also Section \ref(declarative-schemas)).
 
-Be it as it may, this difficulty with declarative schemas is why I opted for the more traditional, nominal style of specifying plots in `plotscaper`(i.e. using functions like `add_scatterplot` or `add_barplot`). While this approach may seem less flexible, I hope I have demonstrated that the underlying limitations are *not* an exclusive to `plotscape`/`plotscaper`, but extend to `ggplot2` and all other GoG-based data visualization systems. I have simply chosen make these limitations more explicit. If a better solution is found, it may be integrated into future releases of the package.
+This difficulty with declarative schemas is why I opted for the more traditional, nominal style of specifying plots in `plotscaper`(i.e. using functions like `add_scatterplot` or `add_barplot`). While this approach may seem less flexible, I hope I have demonstrated that the underlying limitations are *not* an exclusive to `plotscape`/`plotscaper`, but extend to `ggplot2` and all other GoG-based data visualization systems. I have simply chosen make these limitations more explicit. If a better solution is found, it may be integrated into future releases of the package.
 
 A final point to mention is that it could be argued that one benefit of the `ggplot2` model where partitioning and aggregation logic (`stat`s) is implicitly tied to `geom`s is that it makes it easier to combine several kinds of `geom`s in one plot. For instance, `geom_histogram` can be combined with `geom_rug`, while single-case `geom_points` can be combined with aggregate summaries computed via `stat_summary`. Ignoring the conceptual problem of non-independence discussed above, this approach works fine for static graphics, where performance is not a key concern. However, in interactive graphics, computing a separate set of summaries for each `geom` layer may create unnecessary computational bottlenecks. Therefore, interactive graphics can benefit from sharing aggregated data whenever possible, and this is only possible if the partitioning and aggregation steps of the data visualization pipeline are lifted out of `geom`s. 
 
@@ -454,7 +454,7 @@ This section describes the actual platform used to produce and manipulate intera
 
 Key concepts are explained via example code chunks. All of these represent valid TypeScript code, and selected examples are even evaluated, using the [Bun](https://bun.sh/) TypeScript/JavaScript runtime [@bun2025]. The reason why TypeScript was chosen over R for the examples is that explicit type signatures make many of the concepts much easier to explain. Further, since `plotscape` is written in TypeScript, many of the examples are taken directly from the codebase, albeit sometimes modified for consistency or conciseness.
 
-### Programming paradigm
+### Programming paradigm {#programming-paradigm}
 
 The first broad issue worth briefly discussing is the choice of programming paradigm for `plotscape`. A programming paradigm is a set of rules for thinking about and structuring computer programs. Each paradigm offers guidelines and conventions regarding common programming concerns, including data representation, code organization, and control flow. 
 
@@ -518,13 +518,33 @@ Another part of the reason why I spent time discussing the choice of the program
 
 In some ways, this interface-namespace style might seem like object-oriented programming (OOP) with extra steps, i.e. where someone might write `const foo = new Foo(); const bar = foo.bar()`, I write `const foo = Foo.create(); const bar = Foo.bar(foo)`, however, there are a couple of important differences. First, unlike a class that tightly couples data and behavior, the interface-defined type is solely a data container, and the namespace is merely a container for free functions. As such, both can be reasoned about in isolation. Second, TypeScript's structural typing enables calling the namespace functions with *any* variable matching the type signature, not just class instances, significantly improving code reusability. Finally, unlike classes, the interface-defined types are simple data containers without polymorphism, and this eliminates the need for dynamic dispatch (in the general case), potentially improving performance. Overall, the style aligns with the data-oriented programming principles discussed in Section \@ref(dop).
 
-### Data representation: Row-based or column-based {#data-representation}
+### Data representation: Row-oriented vs. column-oriented {#row-column}
 
-Data visualization is fundamentally about the data; however, the same data can often be represented in multiple different ways. This is important for programs handling data, as different data representations have distinct characteristics that can impact various aspects of the system. In most data analytic applications, the fundamental model is a two-dimensional table or dataframe. However, because computer memory is inherently one-dimensional, a choice must be made: should these tables be stored as an arrays of heterogeneous records (rows) or as a dictionaries of homogeneous arrays (columns)? Each approach comes with its own set of trade-offs, affecting ease of use, maintainability, and performance.
+Data visualization is fundamentally about the data; however, the same data can often be represented in multiple ways. This is important as different data representations have can offer different trade-offs, including ease of use and performance. In most data analytic applications, the fundamental data model is that of a two-dimensional table or dataframe. However, because computer memory is inherently one-dimensional, a choice must be made: should these tables be stored as an arrays of heterogeneous records (rows) or as a dictionaries of homogeneous arrays (columns)?
 
-In most popular in-memory data analytics applications, the column-store model seems to dominate. This model organizes tables as dictionaries of columns, such that each column is a homogeneous array containing values of the same type. Unlike a matrix, however, different columns can store values of different types (e.g. floats, integers, or strings). Dataframe objects may also store optional metadata, such as row names, column labels, or grouping structures [@r2024; @bouchet-valat2023]. Popular examples of this design include the S3 `data.frame` class in base R [@r2024], the `tbl_df` S3 class in the `tibble` package [@muller2023], the `DataFrame` class in the Python `pandas` [@pandas2024], the `DataFrame` class in the `polars` [@polars2024], or the `DataFrame` type in the Julia `DataFrame.jl` package [@bouchet-valat2023].
+In popular, in-memory data analytics applications, the column-store seems to be the prevaling model. This model organizes tables as dictionaries of columns, such that each column is a homogeneous array containing values of the same type. Unlike a matrix, however, different columns can store values of different types (e.g. floats, integers, or strings). Dataframe objects may also store optional metadata, such as row names, column labels, or grouping structures [@r2024; @bouchet-valat2023]. Popular examples of this design include the S3 `data.frame` class in base R [@r2024], the `tbl_df` S3 class in the `tibble` package [@muller2023], the `DataFrame` class in the Python `pandas` [@pandas2024], the `DataFrame` class in the `polars` [@polars2024], or the `DataFrame` type in the Julia `DataFrame.jl` package [@bouchet-valat2023].
 
-However, there are also some fairly well-known examples of row-based systems. Particularly, the popular JavaScript data visualization and transformation library D3 [@bostock2022] models data frames as arrays of rows, with each row being a JavaScript object. Likewise, row-stores are also highly popular in data bases, particularly in online transaction processing (OLTP) systems such as PostgreSQL, SQLite, or MySQL, where tables are generally stored as arrays of records, both in memory and on disk [see e.g. @petrov2019; @abadi2013]. 
+However, there are also some fairly well-known examples of row-oriented systems. Particularly, the popular JavaScript data visualization and transformation library D3 [@bostock2022] models data frames as arrays of rows, with each row being a JavaScript object. Likewise, row-stores are also highly popular in databases, particularly in online transaction processing (OLTP) systems such as PostgreSQL, SQLite, or MySQL, where tables are generally stored as arrays of records, both in memory and on disk [see e.g. @petrov2019; @abadi2013; @pavlo2024].
+
+Finally, within the broader programming context, the two data models are also known as the struct-of-arrays (SoA) and array-of-structs (AoS) layouts, corresponding roughly to the column- and row-store, respectively [see e.g. @acton2014; @kelley2023]. Here, the distinction is a bit more nuanced, since the stored data may be interpreted as more than just plain values, making either representation more or less natural in certain programming paradigms (see Section \@ref(paradigms)). For example, in object-oriented programming (OOP), the fundamental unit of code is an object (see Section \@ref(oop)). Since objects are meant to encapsulate their properties - both data and behaviour (via a pointer to a virtual method table) - the AoS layout, which keeps object properties adjacent in memory, is the more natural choice in OOP [see e.g. @bayliss2022].
+
+#### Ease of use
+
+When it comes to user experience, the row-oriented (AoS) model may be slightly easier for novice users; however, this difference is probably fairly minor. While many data analysis workflows involve row-oriented operations, which, in the row-oriented model, can be performed by indexing the array of rows once (rather than requiring indexing across multiple columns), many column-oriented applications also provide support for row operations, either through library functionality [e.g., pandas, @pandas2024], or directly at the language level [e.g., R, @r2024]. Furthermore, the prevalence of column-oriented workflows within the data science ecosystem means that many users will be already familiar with this layout. Therefore, on balance, I believe that, in terms of user experience, there is little difference between the two data layouts.
+ 
+#### Performance {#row-column-performance}
+
+A key factor determining the performance of row-oriented vs. column-oriented storage is the intended use. Specifically, depending on how the store is intended to be used, one layout may provide better performance characteristics than the other.
+
+The column-oriented (SoA) layout tends to be the more performant option for storage and operations across multiple rows, particularly aggregation [see e.g. @acton2014; @kelley2023; @pavlo2024]. This is due to the fact that it benefits from better memory alignment and, as a result, improved cache locality. Because all values within a column share the same size, this eliminates the need for padding, often resulting in a significantly smaller memory footprint [see e.g. @rentzsch2005; @kelley2023; @pavlo2024]. Furthermore, this uniform sizing also facilitates easier pre-fetching of values during column-wise operations. Specifically, the CPU can cache contiguous chunks of values, often leading to greatly improved performance for operations such as summing a long list of values [@abadi2013; @acton2014; @kelley2023; @pavlo2024]. This has made the column-oriented layout the preferred solution in online analytical processing (OLAP) databases [@abadi2013; @pavlo2024].
+
+In contrast, the row-oriented (AoS) layout performs better at single-row read and write operations. Because all values for a record are stored contiguously, they can be retrieved without needing to be fetched and assembled from disparate memory locations. Similarly, writes are faster as only a single memory location needs to be modified. These characteristics have made the row-oriented layout the traditional choice in OLTP databases [@abadi2013; @pavlo2024].
+
+An important point to mention is that, in high-level languages like JavaScript, the underlying memory representation may differ significantly from the apparent structure. For instance, to optimize key access, the V8 engine stores JavaScript objects (dictionaries) as hidden classes: essentially a pointer to the object's shape and an array of values [@veight2024]. Nevertheless, objects are still allocated on the heap, unlike packed arrays of small integers (SMIs) or floats, which consequently offer much better performance [@veight2017].     
+
+#### Final choice of data representation and rationale
+
+As an interactive data visualization system, plotscape needed to support fast data transformations. Particularly, for linked selection, efficient aggregations were key. As such, the column-oriented data layout was chosen. While this approach differs from that of the most popular web-based data visualization framework [D3, Bostock, 2022], it aligns with the majority of other data analytic languages and libraries.
 
 ### Reactivity
 
@@ -828,7 +848,7 @@ This function becomes particularly useful when implementing other data structure
 
 #### Dataframe {#dataframe}
 
-In many data analytic workflows, a fundamental data structure is that of a two-dimensional table or dataframe. As mentioned in Section [REFERENCE], we can represent this data structure as either a dictionary of columns or a list of rows, with the column-wise representation having some advantages for analytical workflows. Thus, in `plotscape`, a `Dataframe` is a dictionary columns, with the extra twist that the columns don't have to be fixed-length arrays but instead [`Indexable`](#Indexable)s:
+In many data analytic workflows, a fundamental data structure is that of a two-dimensional table or dataframe. As discussed in Section \ref(row-column), we can represent this data structure as either a dictionary of columns or a list of rows, with the column-wise representation having some advantages for analytical workflows. As such, in `plotscape`, I chose to represent `Dataframe` as a dictionary columns. Furthermore, in `plotscape`, a key difference is that all columns are not required to be fixed-length arrays; instead, they can be any [`Indexable`](#indexable)s:
 
 ```{ts}
 interface Dataframe {
@@ -1039,7 +1059,7 @@ This is all fairly intuitive, however, actually computing the indices of a produ
 One crude solution shown in Section \@ref(products-of-partitions) is to treat the factor indices as strings and concatenate them elementwise. This works, but produces an unnecessary computational overhead. There is a better way. Assuming we have two factors with cardinalities $c_1$ and $c_2$, and two indices $i_1$ and $i_2$ corresponding to the same case, we can compute the product index $i_{\text{product}}$ via the following formula:
 
 \begin{align}
-k &= max(c_1, c_2) \\
+k &= \max(c_1, c_2) \\
 i_{\text{product}} &= k \cdot i_{\text{1}} + i_{\text{2}}
 (\#eq:product-indices)
 \end{align}

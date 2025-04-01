@@ -308,3 +308,7 @@ dop
 final-choice-of-programming-paradigm-and-rationale
 style-used-in-code-examples
 data-representation
+row-column
+ease-of-use
+row-column-performance
+final-choice-of-data-representation-and-rationale
