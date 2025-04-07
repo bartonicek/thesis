@@ -1,39 +1,39 @@
 \contentsline {chapter}{\numberline {1}Abstract}{5}{chapter.1}%
 \contentsline {chapter}{\numberline {2}Introduction}{7}{chapter.2}%
-\contentsline {subsubsection}{\numberline {2.0.0.1}Thesis Overview}{8}{subsubsection.2.0.0.1}%
-\contentsline {chapter}{\numberline {3}Background}{9}{chapter.3}%
-\contentsline {section}{\numberline {3.1}Brief history of interactive data visualization}{9}{section.3.1}%
-\contentsline {subsection}{\numberline {3.1.1}Static data visualization: From ancient times to the space age}{9}{subsection.3.1.1}%
-\contentsline {subsection}{\numberline {3.1.2}Early interactive data visualization: By statisticians for statisticians}{12}{subsection.3.1.2}%
-\contentsline {subsubsection}{\numberline {3.1.2.1}Open-source Statistical Computing}{13}{subsubsection.3.1.2.1}%
-\contentsline {subsubsection}{\numberline {3.1.2.2}Common features and limitations of early interactive systems}{15}{subsubsection.3.1.2.2}%
-\contentsline {subsection}{\numberline {3.1.3}Interactive data visualization and the internet: Web-based interactivity}{15}{subsection.3.1.3}%
-\contentsline {subsubsection}{\numberline {3.1.3.1}D3}{15}{subsubsection.3.1.3.1}%
-\contentsline {subsubsection}{\numberline {3.1.3.2}Plotly and Highcharts}{18}{subsubsection.3.1.3.2}%
-\contentsline {subsubsection}{\numberline {3.1.3.3}Vega and Vega-Lite}{19}{subsubsection.3.1.3.3}%
-\contentsline {subsubsection}{\numberline {3.1.3.4}Common features and limitations of web-based interactive systems}{21}{subsubsection.3.1.3.4}%
-\contentsline {section}{\numberline {3.2}What even is interactive data visualization?}{22}{section.3.2}%
-\contentsline {subsection}{\numberline {3.2.1}Interactive vs.~interacting with}{23}{subsection.3.2.1}%
-\contentsline {subsection}{\numberline {3.2.2}Interactive \emph {enough}?}{24}{subsection.3.2.2}%
-\contentsline {subsection}{\numberline {3.2.3}Complexity of interactive features}{25}{subsection.3.2.3}%
-\contentsline {subsection}{\numberline {3.2.4}Working definition}{26}{subsection.3.2.4}%
-\contentsline {subsection}{\numberline {3.2.5}Common interactive features}{27}{subsection.3.2.5}%
-\contentsline {subsubsection}{\numberline {3.2.5.1}Changing size and opacity}{27}{subsubsection.3.2.5.1}%
-\contentsline {subsubsection}{\numberline {3.2.5.2}Zooming and panning}{28}{subsubsection.3.2.5.2}%
-\contentsline {subsubsection}{\numberline {3.2.5.3}Querying}{29}{subsubsection.3.2.5.3}%
-\contentsline {subsubsection}{\numberline {3.2.5.4}Sorting and reordering}{32}{subsubsection.3.2.5.4}%
-\contentsline {subsubsection}{\numberline {3.2.5.5}Parametric interaction}{33}{subsubsection.3.2.5.5}%
-\contentsline {subsubsection}{\numberline {3.2.5.6}Animation and projection}{34}{subsubsection.3.2.5.6}%
-\contentsline {subsubsection}{\numberline {3.2.5.7}Representation switching}{35}{subsubsection.3.2.5.7}%
-\contentsline {subsubsection}{\numberline {3.2.5.8}Linked selection}{37}{subsubsection.3.2.5.8}%
-\contentsline {section}{\numberline {3.3}General data visualization theory}{39}{section.3.3}%
-\contentsline {subsection}{\numberline {3.3.1}Visualization goals}{41}{subsection.3.3.1}%
-\contentsline {subsection}{\numberline {3.3.2}Visual perception}{42}{subsection.3.3.2}%
-\contentsline {subsection}{\numberline {3.3.3}Scales and measurement}{42}{subsection.3.3.3}%
-\contentsline {subsection}{\numberline {3.3.4}Graphics formats}{45}{subsection.3.3.4}%
-\contentsline {subsubsection}{\numberline {3.3.4.1}Raster graphics}{45}{subsubsection.3.3.4.1}%
-\contentsline {subsubsection}{\numberline {3.3.4.2}Vector graphics}{46}{subsubsection.3.3.4.2}%
-\contentsline {section}{\numberline {3.4}Summary}{46}{section.3.4}%
+\contentsline {subsubsection}{\numberline {2.0.0.1}Thesis Overview}{9}{subsubsection.2.0.0.1}%
+\contentsline {chapter}{\numberline {3}Background}{11}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Brief history of interactive data visualization}{11}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}Static data visualization: From ancient times to the space age}{11}{subsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.1.2}Early interactive data visualization: By statisticians for statisticians}{14}{subsection.3.1.2}%
+\contentsline {subsubsection}{\numberline {3.1.2.1}Open-source Statistical Computing}{15}{subsubsection.3.1.2.1}%
+\contentsline {subsubsection}{\numberline {3.1.2.2}Common features and limitations of early interactive systems}{17}{subsubsection.3.1.2.2}%
+\contentsline {subsection}{\numberline {3.1.3}Interactive data visualization and the internet: Web-based interactivity}{17}{subsection.3.1.3}%
+\contentsline {subsubsection}{\numberline {3.1.3.1}D3}{17}{subsubsection.3.1.3.1}%
+\contentsline {subsubsection}{\numberline {3.1.3.2}Plotly and Highcharts}{20}{subsubsection.3.1.3.2}%
+\contentsline {subsubsection}{\numberline {3.1.3.3}Vega and Vega-Lite}{21}{subsubsection.3.1.3.3}%
+\contentsline {subsubsection}{\numberline {3.1.3.4}Common features and limitations of web-based interactive systems}{23}{subsubsection.3.1.3.4}%
+\contentsline {section}{\numberline {3.2}What even is interactive data visualization?}{24}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Interactive vs.~interacting with}{25}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}Interactive \emph {enough}?}{26}{subsection.3.2.2}%
+\contentsline {subsection}{\numberline {3.2.3}Complexity of interactive features}{27}{subsection.3.2.3}%
+\contentsline {subsection}{\numberline {3.2.4}Working definition}{28}{subsection.3.2.4}%
+\contentsline {subsection}{\numberline {3.2.5}Common interactive features}{29}{subsection.3.2.5}%
+\contentsline {subsubsection}{\numberline {3.2.5.1}Changing size and opacity}{29}{subsubsection.3.2.5.1}%
+\contentsline {subsubsection}{\numberline {3.2.5.2}Zooming and panning}{30}{subsubsection.3.2.5.2}%
+\contentsline {subsubsection}{\numberline {3.2.5.3}Querying}{31}{subsubsection.3.2.5.3}%
+\contentsline {subsubsection}{\numberline {3.2.5.4}Sorting and reordering}{34}{subsubsection.3.2.5.4}%
+\contentsline {subsubsection}{\numberline {3.2.5.5}Parametric interaction}{35}{subsubsection.3.2.5.5}%
+\contentsline {subsubsection}{\numberline {3.2.5.6}Animation and projection}{36}{subsubsection.3.2.5.6}%
+\contentsline {subsubsection}{\numberline {3.2.5.7}Representation switching}{37}{subsubsection.3.2.5.7}%
+\contentsline {subsubsection}{\numberline {3.2.5.8}Linked selection}{38}{subsubsection.3.2.5.8}%
+\contentsline {section}{\numberline {3.3}General data visualization theory}{42}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}Visualization goals}{42}{subsection.3.3.1}%
+\contentsline {subsection}{\numberline {3.3.2}Visual perception}{43}{subsection.3.3.2}%
+\contentsline {subsection}{\numberline {3.3.3}Scales and measurement}{44}{subsection.3.3.3}%
+\contentsline {subsection}{\numberline {3.3.4}Graphics formats}{46}{subsection.3.3.4}%
+\contentsline {subsubsection}{\numberline {3.3.4.1}Raster graphics}{46}{subsubsection.3.3.4.1}%
+\contentsline {subsubsection}{\numberline {3.3.4.2}Vector graphics}{47}{subsubsection.3.3.4.2}%
+\contentsline {section}{\numberline {3.4}Summary}{48}{section.3.4}%
 \contentsline {chapter}{\numberline {4}Challenges}{49}{chapter.4}%
 \contentsline {section}{\numberline {4.1}The structure of this chapter: Data visualization pipeline}{49}{section.4.1}%
 \contentsline {section}{\numberline {4.2}Partitioning}{50}{section.4.2}%
@@ -60,7 +60,7 @@
 \contentsline {subsubsection}{\numberline {4.3.2.1}Past applications of category theory to data visualization}{84}{subsubsection.4.3.2.1}%
 \contentsline {subsubsection}{\numberline {4.3.2.2}Generalizing preorders: Categories}{85}{subsubsection.4.3.2.2}%
 \contentsline {subsubsection}{\numberline {4.3.2.3}Structure preserving maps: Functors}{88}{subsubsection.4.3.2.3}%
-\contentsline {subsubsection}{\numberline {4.3.2.4}Aggregation: A functor from the preorder of data subsets to the preorder of summary statistics}{90}{subsubsection.4.3.2.4}%
+\contentsline {subsubsection}{\numberline {4.3.2.4}Aggregation: A functor from data subsets to summary statistics}{90}{subsubsection.4.3.2.4}%
 \contentsline {subsubsection}{\numberline {4.3.2.5}Functorial summaries and set union}{92}{subsubsection.4.3.2.5}%
 \contentsline {subsubsection}{\numberline {4.3.2.6}Whole equal to the sum of its parts: Monoids}{94}{subsubsection.4.3.2.6}%
 \contentsline {subsubsection}{\numberline {4.3.2.7}Programming with monoids}{95}{subsubsection.4.3.2.7}%
@@ -88,11 +88,13 @@
 \contentsline {section}{\numberline {4.5}Rendering}{115}{section.4.5}%
 \contentsline {subsection}{\numberline {4.5.1}Frames}{116}{subsection.4.5.1}%
 \contentsline {subsection}{\numberline {4.5.2}Graphical elements}{117}{subsection.4.5.2}%
+\contentsline {subsubsection}{\numberline {4.5.2.1}Rendering: A functor from summary statistics to graphics}{118}{subsubsection.4.5.2.1}%
 \contentsline {chapter}{\numberline {5}Goals}{119}{chapter.5}%
 \contentsline {section}{\numberline {5.1}User profile}{119}{section.5.1}%
 \contentsline {section}{\numberline {5.2}Programming interface}{120}{section.5.2}%
 \contentsline {section}{\numberline {5.3}User interface}{120}{section.5.3}%
 \contentsline {section}{\numberline {5.4}Interactive features}{121}{section.5.4}%
+\contentsline {section}{\numberline {5.5}Summary}{124}{section.5.5}%
 \contentsline {chapter}{\numberline {6}System description}{125}{chapter.6}%
 \contentsline {section}{\numberline {6.1}Core requirements}{126}{section.6.1}%
 \contentsline {section}{\numberline {6.2}High-level API (\texttt {plotscaper})}{127}{section.6.2}%
@@ -107,7 +109,7 @@
 \contentsline {section}{\numberline {6.3}Low-level implementation (\texttt {plotscape})}{138}{section.6.3}%
 \contentsline {subsection}{\numberline {6.3.1}Programming paradigm}{138}{subsection.6.3.1}%
 \contentsline {subsubsection}{\numberline {6.3.1.1}Procedural programming}{139}{subsubsection.6.3.1.1}%
-\contentsline {subsubsection}{\numberline {6.3.1.2}Functional programming}{140}{subsubsection.6.3.1.2}%
+\contentsline {subsubsection}{\numberline {6.3.1.2}Functional programming}{139}{subsubsection.6.3.1.2}%
 \contentsline {subsubsection}{\numberline {6.3.1.3}Object-oriented programming}{141}{subsubsection.6.3.1.3}%
 \contentsline {subsubsection}{\numberline {6.3.1.4}Data-oriented programming}{142}{subsubsection.6.3.1.4}%
 \contentsline {subsubsection}{\numberline {6.3.1.5}Final choice of programming paradigm and rationale}{143}{subsubsection.6.3.1.5}%
@@ -180,34 +182,31 @@
 \contentsline {subsection}{\numberline {8.2.1}Scope and features}{227}{subsection.8.2.1}%
 \contentsline {subsection}{\numberline {8.2.2}Declarative schemas and extensibility}{229}{subsection.8.2.2}%
 \contentsline {subsection}{\numberline {8.2.3}Performance}{232}{subsection.8.2.3}%
-\contentsline {chapter}{\numberline {9}Glossary}{235}{chapter.9}%
+\contentsline {chapter}{\numberline {9}Appendix: Glossary}{235}{chapter.9}%
 \contentsline {subsubsection}{\numberline {9.0.0.1}API}{235}{subsubsection.9.0.0.1}%
 \contentsline {subsubsection}{\numberline {9.0.0.2}Array of Structs (AoS) vs.~Struct of Arrays (SoA)}{235}{subsubsection.9.0.0.2}%
 \contentsline {subsubsection}{\numberline {9.0.0.3}JSON}{237}{subsubsection.9.0.0.3}%
 \contentsline {subsubsection}{\numberline {9.0.0.4}IDE}{237}{subsubsection.9.0.0.4}%
 \contentsline {subsubsection}{\numberline {9.0.0.5}SVG}{238}{subsubsection.9.0.0.5}%
-\contentsline {chapter}{\numberline {10}Appendix}{239}{chapter.10}%
-\contentsline {subsubsection}{\numberline {10.0.0.1}Encapsulation in DOP}{239}{subsubsection.10.0.0.1}%
-\contentsline {section}{\numberline {10.1}Gauss method and the russian peasant algorithm for monoids}{240}{section.10.1}%
-\contentsline {chapter}{\numberline {11}Mathematical theory}{243}{chapter.11}%
-\contentsline {subsection}{\numberline {11.0.1}Relations}{243}{subsection.11.0.1}%
-\contentsline {subsection}{\numberline {11.0.2}Functions}{245}{subsection.11.0.2}%
-\contentsline {subsubsection}{\numberline {11.0.2.1}More on bijections}{247}{subsubsection.11.0.2.1}%
-\contentsline {subsubsection}{\numberline {11.0.2.2}Composition}{248}{subsubsection.11.0.2.2}%
-\contentsline {subsubsection}{\numberline {11.0.2.3}The image and the pre-image}{249}{subsubsection.11.0.2.3}%
-\contentsline {subsection}{\numberline {11.0.3}Partitions}{250}{subsection.11.0.3}%
-\contentsline {subsubsection}{\numberline {11.0.3.1}Specializing preorders}{253}{subsubsection.11.0.3.1}%
-\contentsline {subsubsection}{\numberline {11.0.3.2}Structure preserving maps: Monotone maps}{253}{subsubsection.11.0.3.2}%
-\contentsline {subsection}{\numberline {11.0.4}Monoids}{254}{subsection.11.0.4}%
-\contentsline {subsubsection}{\numberline {11.0.4.1}Simple examples of monoids}{254}{subsubsection.11.0.4.1}%
-\contentsline {subsubsection}{\numberline {11.0.4.2}Beyond numbers}{255}{subsubsection.11.0.4.2}%
-\contentsline {subsubsection}{\numberline {11.0.4.3}Specializing monoids}{256}{subsubsection.11.0.4.3}%
-\contentsline {subsubsection}{\numberline {11.0.4.4}Structure preserving maps: Monoid homomorphisms}{257}{subsubsection.11.0.4.4}%
-\contentsline {subsection}{\numberline {11.0.5}Groups}{258}{subsection.11.0.5}%
-\contentsline {subsubsection}{\numberline {11.0.5.1}Simple examples of groups}{259}{subsubsection.11.0.5.1}%
-\contentsline {subsubsection}{\numberline {11.0.5.2}Structure preserving maps: Group homomorphisms}{259}{subsubsection.11.0.5.2}%
-\contentsline {subsection}{\numberline {11.0.6}Categories}{260}{subsection.11.0.6}%
-\contentsline {subsubsection}{\numberline {11.0.6.1}Isomorphisms within categories}{261}{subsubsection.11.0.6.1}%
-\contentsline {subsubsection}{\numberline {11.0.6.2}Algebraic structures as categories}{262}{subsubsection.11.0.6.2}%
-\contentsline {subsection}{\numberline {11.0.7}Functors}{265}{subsection.11.0.7}%
-\contentsline {chapter}{\numberline {12}References}{267}{chapter.12}%
+\contentsline {chapter}{\numberline {10}Appendix: Mathematical theory}{239}{chapter.10}%
+\contentsline {subsection}{\numberline {10.0.1}Relations}{239}{subsection.10.0.1}%
+\contentsline {subsection}{\numberline {10.0.2}Functions}{241}{subsection.10.0.2}%
+\contentsline {subsubsection}{\numberline {10.0.2.1}More on bijections}{243}{subsubsection.10.0.2.1}%
+\contentsline {subsubsection}{\numberline {10.0.2.2}Composition}{244}{subsubsection.10.0.2.2}%
+\contentsline {subsubsection}{\numberline {10.0.2.3}The image and the pre-image}{245}{subsubsection.10.0.2.3}%
+\contentsline {subsection}{\numberline {10.0.3}Partitions}{246}{subsection.10.0.3}%
+\contentsline {subsubsection}{\numberline {10.0.3.1}Specializing preorders}{249}{subsubsection.10.0.3.1}%
+\contentsline {subsubsection}{\numberline {10.0.3.2}Structure preserving maps: Monotone maps}{249}{subsubsection.10.0.3.2}%
+\contentsline {subsection}{\numberline {10.0.4}Monoids}{250}{subsection.10.0.4}%
+\contentsline {subsubsection}{\numberline {10.0.4.1}Simple examples of monoids}{250}{subsubsection.10.0.4.1}%
+\contentsline {subsubsection}{\numberline {10.0.4.2}Beyond numbers}{251}{subsubsection.10.0.4.2}%
+\contentsline {subsubsection}{\numberline {10.0.4.3}Specializing monoids}{252}{subsubsection.10.0.4.3}%
+\contentsline {subsubsection}{\numberline {10.0.4.4}Structure preserving maps: Monoid homomorphisms}{253}{subsubsection.10.0.4.4}%
+\contentsline {subsection}{\numberline {10.0.5}Groups}{254}{subsection.10.0.5}%
+\contentsline {subsubsection}{\numberline {10.0.5.1}Simple examples of groups}{255}{subsubsection.10.0.5.1}%
+\contentsline {subsubsection}{\numberline {10.0.5.2}Structure preserving maps: Group homomorphisms}{255}{subsubsection.10.0.5.2}%
+\contentsline {subsection}{\numberline {10.0.6}Categories}{256}{subsection.10.0.6}%
+\contentsline {subsubsection}{\numberline {10.0.6.1}Isomorphisms within categories}{257}{subsubsection.10.0.6.1}%
+\contentsline {subsubsection}{\numberline {10.0.6.2}Algebraic structures as categories}{258}{subsubsection.10.0.6.2}%
+\contentsline {subsection}{\numberline {10.0.7}Functors}{261}{subsection.10.0.7}%
+\contentsline {chapter}{\numberline {11}References}{263}{chapter.11}%

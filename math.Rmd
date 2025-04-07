@@ -9,7 +9,7 @@ knitr::opts_chunk$set(
 
 \newcommand\thenb{⨾}
 
-# Mathematical theory
+# Appendix: Mathematical theory
 
 This chapter provides an overview of essential concepts from category theory and abstract algebra, as well as more general mathematics. Starting with some foundational topics, such as functions, relations, and orders, it slowly builds up to more advanced concepts such as categories, monoids, and functors. Readers familiar these concepts may feel free to skip ahead. However, even the fundamental concepts will be used throughout the thesis, so a refresher might be beneficial. 
 

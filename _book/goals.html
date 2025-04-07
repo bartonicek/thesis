@@ -51,76 +51,8 @@
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
-<script src="libs/kePrint-0.0.1/kePrint.js"></script>
-<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
-<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
-<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
 
 
-<style type="text/css">
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-</style>
 
 <style type="text/css">
   
@@ -218,6 +150,7 @@ div.csl-indent {
 <li class="chapter" data-level="5.2" data-path="goals.html"><a href="goals.html#programming-interface"><i class="fa fa-check"></i><b>5.2</b> Programming interface</a></li>
 <li class="chapter" data-level="5.3" data-path="goals.html"><a href="goals.html#user-interface"><i class="fa fa-check"></i><b>5.3</b> User interface</a></li>
 <li class="chapter" data-level="5.4" data-path="goals.html"><a href="goals.html#interactive-features"><i class="fa fa-check"></i><b>5.4</b> Interactive features</a></li>
+<li class="chapter" data-level="5.5" data-path="goals.html"><a href="goals.html#summary-1"><i class="fa fa-check"></i><b>5.5</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="system.html"><a href="system.html"><i class="fa fa-check"></i><b>6</b> System description</a>
 <ul>
@@ -233,21 +166,16 @@ div.csl-indent {
 <li class="chapter" data-level="6.3" data-path="system.html"><a href="system.html#low-level-implementation"><i class="fa fa-check"></i><b>6.3</b> Low-level implementation (<code>plotscape</code>)</a>
 <ul>
 <li class="chapter" data-level="6.3.1" data-path="system.html"><a href="system.html#programming-paradigm"><i class="fa fa-check"></i><b>6.3.1</b> Programming paradigm</a></li>
-<li class="chapter" data-level="6.3.2" data-path="system.html"><a href="system.html#procedural-programming"><i class="fa fa-check"></i><b>6.3.2</b> Procedural programming</a></li>
-<li class="chapter" data-level="6.3.3" data-path="system.html"><a href="system.html#functional-programming"><i class="fa fa-check"></i><b>6.3.3</b> Functional programming</a></li>
-<li class="chapter" data-level="6.3.4" data-path="system.html"><a href="system.html#object-oriented-programming"><i class="fa fa-check"></i><b>6.3.4</b> Object-oriented programming</a></li>
-<li class="chapter" data-level="6.3.5" data-path="system.html"><a href="system.html#data-oriented-programming"><i class="fa fa-check"></i><b>6.3.5</b> Data-oriented programming</a></li>
-<li class="chapter" data-level="6.3.6" data-path="system.html"><a href="system.html#programming-paradigm-used-in-plotscaper"><i class="fa fa-check"></i><b>6.3.6</b> Programming paradigm used in <code>plotscaper</code></a></li>
-<li class="chapter" data-level="6.3.7" data-path="system.html"><a href="system.html#programming-style-in-plotscaper"><i class="fa fa-check"></i><b>6.3.7</b> Programming style in <code>plotscaper</code></a></li>
-<li class="chapter" data-level="6.3.8" data-path="system.html"><a href="system.html#reactivity"><i class="fa fa-check"></i><b>6.3.8</b> Reactivity</a></li>
-<li class="chapter" data-level="6.3.9" data-path="system.html"><a href="system.html#system-components"><i class="fa fa-check"></i><b>6.3.9</b> System components</a></li>
+<li class="chapter" data-level="6.3.2" data-path="system.html"><a href="system.html#row-column"><i class="fa fa-check"></i><b>6.3.2</b> Data representation: Row-oriented vs. column-oriented</a></li>
+<li class="chapter" data-level="6.3.3" data-path="system.html"><a href="system.html#reactivity"><i class="fa fa-check"></i><b>6.3.3</b> Reactivity</a></li>
+<li class="chapter" data-level="6.3.4" data-path="system.html"><a href="system.html#system-components"><i class="fa fa-check"></i><b>6.3.4</b> System components</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="applied-example.html"><a href="applied-example.html"><i class="fa fa-check"></i><b>7</b> Applied example</a>
 <ul>
 <li class="chapter" data-level="7.0.1" data-path="applied-example.html"><a href="applied-example.html#about-the-data-set"><i class="fa fa-check"></i><b>7.0.1</b> About the data set</a></li>
 <li class="chapter" data-level="7.0.2" data-path="applied-example.html"><a href="applied-example.html#interactive-exploration"><i class="fa fa-check"></i><b>7.0.2</b> Interactive exploration</a></li>
-<li class="chapter" data-level="7.1" data-path="applied-example.html"><a href="applied-example.html#summary-1"><i class="fa fa-check"></i><b>7.1</b> Summary</a></li>
+<li class="chapter" data-level="7.1" data-path="applied-example.html"><a href="applied-example.html#summary-2"><i class="fa fa-check"></i><b>7.1</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>8</b> Discussion</a>
 <ul>
@@ -261,7 +189,7 @@ div.csl-indent {
 <li class="chapter" data-level="8.2" data-path="discussion.html"><a href="discussion.html#limitations-of-the-software"><i class="fa fa-check"></i><b>8.2</b> Limitations of the software</a>
 <ul>
 <li class="chapter" data-level="8.2.1" data-path="discussion.html"><a href="discussion.html#scope-and-features"><i class="fa fa-check"></i><b>8.2.1</b> Scope and features</a></li>
-<li class="chapter" data-level="8.2.2" data-path="discussion.html"><a href="discussion.html#declarative-schemas"><i class="fa fa-check"></i><b>8.2.2</b> Declarative schemas</a></li>
+<li class="chapter" data-level="8.2.2" data-path="discussion.html"><a href="discussion.html#declarative-schemas"><i class="fa fa-check"></i><b>8.2.2</b> Declarative schemas and extensibility</a></li>
 <li class="chapter" data-level="8.2.3" data-path="discussion.html"><a href="discussion.html#performance"><i class="fa fa-check"></i><b>8.2.3</b> Performance</a></li>
 </ul></li>
 </ul></li>
@@ -275,10 +203,11 @@ div.csl-indent {
 <li class="chapter" data-level="11.0.1" data-path="mathematical-theory.html"><a href="mathematical-theory.html#relations"><i class="fa fa-check"></i><b>11.0.1</b> Relations</a></li>
 <li class="chapter" data-level="11.0.2" data-path="mathematical-theory.html"><a href="mathematical-theory.html#functions"><i class="fa fa-check"></i><b>11.0.2</b> Functions</a></li>
 <li class="chapter" data-level="11.0.3" data-path="mathematical-theory.html"><a href="mathematical-theory.html#partitions"><i class="fa fa-check"></i><b>11.0.3</b> Partitions</a></li>
-<li class="chapter" data-level="11.0.4" data-path="mathematical-theory.html"><a href="mathematical-theory.html#monoids-1"><i class="fa fa-check"></i><b>11.0.4</b> Monoids</a></li>
-<li class="chapter" data-level="11.0.5" data-path="mathematical-theory.html"><a href="mathematical-theory.html#groups"><i class="fa fa-check"></i><b>11.0.5</b> Groups</a></li>
-<li class="chapter" data-level="11.0.6" data-path="mathematical-theory.html"><a href="mathematical-theory.html#categories"><i class="fa fa-check"></i><b>11.0.6</b> Categories</a></li>
-<li class="chapter" data-level="11.0.7" data-path="mathematical-theory.html"><a href="mathematical-theory.html#functors"><i class="fa fa-check"></i><b>11.0.7</b> Functors</a></li>
+<li class="chapter" data-level="11.0.4" data-path="mathematical-theory.html"><a href="mathematical-theory.html#preorders"><i class="fa fa-check"></i><b>11.0.4</b> Preorders</a></li>
+<li class="chapter" data-level="11.0.5" data-path="mathematical-theory.html"><a href="mathematical-theory.html#monoids-1"><i class="fa fa-check"></i><b>11.0.5</b> Monoids</a></li>
+<li class="chapter" data-level="11.0.6" data-path="mathematical-theory.html"><a href="mathematical-theory.html#groups"><i class="fa fa-check"></i><b>11.0.6</b> Groups</a></li>
+<li class="chapter" data-level="11.0.7" data-path="mathematical-theory.html"><a href="mathematical-theory.html#categories"><i class="fa fa-check"></i><b>11.0.7</b> Categories</a></li>
+<li class="chapter" data-level="11.0.8" data-path="mathematical-theory.html"><a href="mathematical-theory.html#functors"><i class="fa fa-check"></i><b>11.0.8</b> Functors</a></li>
 </ul></li>
 <li class="chapter" data-level="12" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>12</b> References</a></li>
 </ul>
@@ -314,7 +243,7 @@ div.csl-indent {
 <div id="user-interface" class="section level2 hasAnchor" number="5.3">
 <h2><span class="header-section-number">5.3</span> User interface<a href="goals.html#user-interface" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>While ease of writing user code was a key consideration, equally important was the ease of interpreting and interacting with the resulting visualizations. The visual design of the figures needed to facilitate acquisition of statistical insights, and the figures’ behavior had to be clear and intuitive. As was discussed in Section <a href="background.html#background">3</a>, effective visual design is crucial, as poor design can make figures less legible or even misleading <span class="citation">(see e.g. <a href="#ref-tufte2001">Tufte 2001</a>; <a href="#ref-cairo2014">Cairo 2014</a>, <a href="#ref-cairo2019">2019</a>; <a href="#ref-franconeri2021">Franconeri et al. 2021</a>)</span>. Similarly, the design of interactions can either enhance or hinder the acquisition of insights.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:plotscaper-design"></span>
+<div class="figure"><span style="display:block;" id="fig:plotscaper-design"></span>
 <iframe src="figures/plotscaper_example1.html" width="100%" height="400px" data-external="1" style="border: none;">
 </iframe>
 <p class="caption">
@@ -325,19 +254,24 @@ Figure 5.1: A simple example of a default <code>plotscaper</code> figure. Note t
 </div>
 <div id="interactive-features" class="section level2 hasAnchor" number="5.4">
 <h2><span class="header-section-number">5.4</span> Interactive features<a href="goals.html#interactive-features" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>The next important question was which interactive features to support. As was discussed in Section <a href="background.html#background">3</a>, there are many interactive data visualization features, and some are more useful than others (for data exploration, anyway). Furthermore, the amount of time and effort required to implement these features also varies considerably. Therefore, choosing the right set of features to prioritize was a key design consideration.</p>
-<p>As was hinted at throughout Section <a href="background.html#background">3</a>, the core feature to implement was generalized linked selection or brushing. Specifically, every plot in <code>plotscaper</code> needed to support both dispatching and displaying selection events. This feature is highly desirable because it allows users to quickly explore trends across dynamically-generated subsets of their data, making it one of the most useful tools in the interactive data visualization arsenal <span class="citation">(<a href="#ref-buja1996">Buja, Cook, and Swayne 1996</a>; <a href="#ref-heer2012">Heer and Shneiderman 2012</a>; <a href="#ref-wilhelm2003">Wilhelm 2003</a>, <a href="#ref-wilhelm2008">2008</a>; <a href="#ref-wills2008">Wills 2008</a>; <a href="#ref-ware2019">Ware 2019</a>; <a href="#ref-ward2015">Ward, Grinstein, and Keim 2015</a>)</span>. However, it also requires a significant amount of careful planning and programming effort. Simply adding this functionality on top of an existing static data visualization system does not work. Naive solutions, like replacing the entire plot upon selection, produce unsatisfactory behavior, see for example the following quote by Adalbert Wilhelm from chapter II.9 of the Data Visualization Handbook:</p>
+<p>The next important question was which interactive features to support. As was discussed in Section <a href="background.html#background">3</a>, there are many interactive data visualization features, and some are more useful than others. Furthermore, the amount of time and effort required to implement these features also varies considerably. Therefore, choosing the right set of features to prioritize was a key design consideration.</p>
+<p>As was hinted at throughout Section <a href="background.html#background">3</a>, and particularly in Section <a href="background.html#linked-selection">3.2.5.8</a>, the key feature to implement was generalized linked selection or brushing. Linked selection is highly desirable because it allows users to quickly explore trends across dynamically-generated subsets of their data, making it one of the most useful tools in interactive data visualization <span class="citation">(<a href="#ref-buja1996">Buja, Cook, and Swayne 1996</a>; <a href="#ref-heer2012">Heer and Shneiderman 2012</a>; <a href="#ref-wilhelm2003">Wilhelm 2003</a>, <a href="#ref-wilhelm2008">2008</a>; <a href="#ref-wills2008">Wills 2008</a>; <a href="#ref-ware2019">Ware 2019</a>; <a href="#ref-ward2015">Ward, Grinstein, and Keim 2015</a>)</span>. However, making a generalized version of linked selection is not trivial. First, all plots need to be able react to user interaction - such as clicking-and-dragging - by detecting which objects are inside the selection region, accumulating the corresponding cases, and dispatching this information as a selection event. Second, the system needs to keep track of which cases are currently selected and react to selection events from the plots by updating and dispatching its own events. Finally, the plots must also react to the events from the system by recomputing all of the necessary summary statistics and re-rendering. Doing this in an a way that is efficient and which generalizes well requires some care.</p>
+<p>Further, as also discussed in Sections <a href="background.html#linked-selection">3.2.5.8</a> and <a href="problems.html#stacking-part-whole">4.3.1.4</a>, linked selection also presents some challenges for <em>displaying</em> the corresponding information. Naive solutions, like re-rendering the entire plot upon selection, produce unsatisfactory visual behavior, see for example the following quote by Wilhelm:</p>
 <blockquote>
-<p>“[Replacing the entire plot] only works ﬁne when we have individual plot symbols for each observation, as in scatterplots for example, where some attributes are changed by the user interaction. But even when replacing plot parameters the user loses the possibility to compare the current plot with previous versions. The
-user can only compare the current image with a mental copy of the previous image and hence the comparison might get distorted.”</p>
-<p><span class="citation">(<a href="#ref-wilhelm2008">Wilhelm 2008, 210</a>)</span></p>
+<p>“[Re-rendering the entire plot] only works ﬁne when we have individual plot symbols for each observation, as in scatterplots for example, where some attributes are changed by the user interaction. But even when replacing plot parameters the user loses the possibility to compare the current plot with previous versions. The user can only compare the current image with a mental copy of the previous image and hence the comparison might get distorted.”</p>
+<p>Adalbert <span class="citation">Wilhelm (<a href="#ref-wilhelm2008">2008</a>)</span>, Chapter II.9 of the Data Visualization Handbook, pp. 210</p>
 </blockquote>
-<p>Thus, linked selection had to be directly integrated into the data visualization pipeline, or rather, the data visualization pipeline had to be built around this feature. This was a significant programming challenge. Crucially also, I aimed for a consistent linked selection behavior across <em>all</em> implemented plot types. This necessitated careful consideration of the issues discussed in Section <a href="problems.html#problems">4</a>.</p>
-<p>Other important features which also had to be directly integrated into the data visualization pipeline were parameter manipulation and representation switching. These features give the user the ability to quickly see alternative views of their data and discover trends that they may otherwise miss (see Sections <a href="background.html#representation-switching">3.2.5.7</a>). This makes them highly desirable.</p>
-<p>Another interesting challenge was querying. Upon seeing an interesting visual trend in their data, users may often be interested in the precise data values that produced that visual impression. Thus, being able to interactively query geometric objects is very useful. This feature is arguably simpler to implement than the previously mentioned features, however, it should be noted that what complicates its implementation is that, often, the user does not directly care about the visual attributes of the queried geometric objects, but the instead the statistics underlying those visual attributes. For instance, when querying a stacked barplot, we do not care about the stacked values, but instead about the values corresponding to individual segments. Thus, querying provided an intermediate level of challenge.</p>
-<p>Other interesting feature was bi-directional communication. The ability to call functions in an interactive session and have the figure respond directly can be invaluable in data exploration. However, compared to a static data visualization, this requires a specialized setup, such as having live server respond to messages from the client. Thus, developing a system for communicating between the R client and the JavaScript “backend” (the figure) was necessary.</p>
-<p>Finally, there were some useful features which were relatively simple to implement. These included changing size and alpha, zooming, and panning. These features could be implemented by manipulating scales and/or the visual attributes of geometric objects, without modifying earlier stages of the data visualization pipeline. Nevertheless, desppite their simplicity, these features could still be highly useful. For example, zooming and panning can help to reveal trends within narrow data ranges, while adjustments to size and alpha can mitigate overplotting. Therefore, implementing these features was an easy choice.</p>
-<p>There were other interactive features mentioned in Section <a href="background.html#common-features">3.2.5</a> which I choose not to implement, including selection operators, semantic zooming, and grand tours (and animation in general). The primary reason for this was that these features are quite advanced and require substantial programming effort, making them better suited to specialized packages rather than general interactive data visualization frameworks. There were also some more feature-specific reasons. For instance, while selection operators (ability to combine selections with logical operators such as AND, OR, or XOR, and chain sequences of these operations) can be a powerful tool for more advanced users, its utility for novices is debatable. Specifically, in line with <span class="citation">Wills (<a href="#ref-wills2000">2000</a>)</span>, who argued that selection systems should be simple, powerful, and forgiving, I opted for a simple transient/persistent selection model. Similarly, semantic zooming, while also powerful in specific contexts, did not seem worth the effort since it is limited to only a certain number of plot types such as maps. Finally, grand tours and animation also seemed to be beyond the scope of the package.</p>
+<p>Combined, these issues make linked selection a feature that is difficult to simply add on top of an existing static data visualization system. Instead, the feature has to be directly integrated into the data visualization pipeline, or rather, the data visualization pipeline has to be built <em>around it</em>. Therefore, during <code>plotscaper</code>’s development, developing an efficient and consistent model for linked selection took a significant amount of programming time and effort.</p>
+<p>Two other more advanced features I wanted to support were parameter manipulation and representation switching. These features give the user the ability to quickly see alternative views of their data and discover trends that they may otherwise miss (see Sections <a href="background.html#representation-switching">3.2.5.7</a>). This makes them highly desirable. Similar to linked selection, these features affect more than just the surface-level graphical attributes of plots, requiring a direct integration in the data visualization pipeline.</p>
+<p>Querying was another feature which I deemed desirable. Querying can be highly useful in interactive workflows: upon seeing an interesting visual trend in their data, a user may often be interested in the precise data values that produced that graphic. While this feature is arguably simpler to implement than features like linked selection or parameter manipulation discussed above, there are still some important nuances. For instance, it is important to note that the information the user is interested in are <em>not</em> the values of the visual attributes per se, but instead the underlying summary statistics, and these can at times differ. For instance, when querying a stacked barplot, we do not care about the stacked (cumulated) values, but instead about the values corresponding to individual segments. Further, at times, users may find it useful to query statistics which are not directly represented in the graphic (but still relate to the underlying data subset). As such, querying is not a purely graphical operation either, and does require some careful thought.</p>
+<p>Another major development goal was communication between the figure (client) and an R session (server). The ability to call functions in an interactive R session to manipulate or query the figure directly can be invaluable in data exploration. However, clearly, compared to static data visualization, this feature requires a live connection for exchanging messages between the server and the client. Further, if we want the figure to not only react to messages, but also be able to send information back, the connection needs to be bi-directional <span class="citation">(making the fundamental model that of sockets rather than some unidirectional architecture such as REST, see <a href="#ref-fielding2002">Fielding and Taylor 2002</a>)</span>.</p>
+<p>There were also several beneficial features which were relatively straightforward to implement: changing size and alpha, zooming, and panning. What made these features easier to implement is that they directly manipulate more surface-level attributes of the plot (i.e. scales), without altering earlier stages of the visualization pipeline. Despite their simplicity, these features can still be highly useful in interactive workflows. For example, zooming and panning can help to reveal trends within narrow ranges of the data, while adjustments to size and alpha can mitigate overplotting. Therefore, implementing these features was an easy choice.</p>
+<p>Finally, there were also several interactive features discussed in Section <a href="background.html#common-features">3.2.5</a> which I choose not to implement, including selection operators, semantic zooming, and grand tours (and animation in general). The primary reason for this was that these features are quite advanced and specialized, making them better suited to dedicated packages rather than general interactive data visualization frameworks. There were also some more feature-specific reasons. For instance, while selection operators (ability to combine selections with logical operators such as AND, OR, or XOR, and chain sequences of these operations) can be a powerful tool for more advanced users, its utility for novices is debatable. Specifically, in line with <span class="citation">Wills (<a href="#ref-wills2000">2000</a>)</span>, who argued that selection systems should be simple, powerful, and forgiving, I opted for a simple transient/persistent selection model. Similarly, semantic zooming, while also powerful in specific contexts, did not seem worth the effort since it is limited to only a certain number of plot types such as maps. Finally, grand tours and animation also seemed to be beyond the scope of the package.</p>
+</div>
+<div id="summary-1" class="section level2 hasAnchor" number="5.5">
+<h2><span class="header-section-number">5.5</span> Summary<a href="goals.html#summary-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The practical part of this project had two primary objectives: to create a versatile package for interactive data exploration and to explore the challenges discussed in Section <a href="problems.html#problems">4</a>. The aim was to provide a tool which would be accessible to wide range of users, while also allowing some more advanced customization options. Achieving this required a simple API and an intuitive graphical interface. To support complex interactive workflows, I chose to implement a comprehensive suite of interactive features, including generalized linked selection, parameter manipulation, representation switching, querying, client-server communication, zooming, panning, and size/alpha adjustments.</p>
+<p>In the next section, I will discuss concrete details regarding the implementation of the package, regarding both its high-level API (<code>plotscaper</code>) as well as the more low-level platform (<code>plotscape</code>).</p>
 
 </div>
 </div>
@@ -354,6 +288,9 @@ Cairo, Alberto. 2014. <span>“Graphics Lies, Misleading Visuals: Reflections on
 </div>
 <div id="ref-dimara2019" class="csl-entry">
 Dimara, Evanthia, and Charles Perin. 2019. <span>“What Is Interaction for Data Visualization?”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em> 26 (1): 119–29.
+</div>
+<div id="ref-fielding2002" class="csl-entry">
+Fielding, Roy T, and Richard N Taylor. 2002. <span>“Principled Design of the Modern Web Architecture.”</span> <em>ACM Transactions on Internet Technology (TOIT)</em> 2 (2): 115–50.
 </div>
 <div id="ref-franconeri2021" class="csl-entry">
 Franconeri, Steven L, Lace M Padilla, Priti Shah, Jeffrey M Zacks, and Jessica Hullman. 2021. <span>“The Science of Visual Data Communication: What Works.”</span> <em>Psychological Science in the Public Interest</em> 22 (3): 110–61.
@@ -374,7 +311,7 @@ Satyanarayan, Arvind, Ryan Russell, Jane Hoffswell, and Jeffrey Heer. 2015. <spa
 Tufte, Edward R. 2001. <em>The Visual Display of Quantitative Information</em>. Cheshire, Connecticut: Graphics Press LLC.
 </div>
 <div id="ref-urbanek2011" class="csl-entry">
-———. 2011. <span>“iPlots eXtreme: Next-Generation Interactive Graphics Design and Implementation of Modern Interactive Graphics.”</span> <em>Computational Statistics</em> 26 (3): 381–93.
+Urbanek, Simon. 2011. <span>“iPlots eXtreme: Next-Generation Interactive Graphics Design and Implementation of Modern Interactive Graphics.”</span> <em>Computational Statistics</em> 26 (3): 381–93.
 </div>
 <div id="ref-urbanek2003" class="csl-entry">
 Urbanek, Simon, and Martin Theus. 2003. <span>“iPlots: High Interaction Graphics for r.”</span> In <em>Proceedings of the 3rd International Workshop on Distributed Statistical Computing</em>. Citeseer.
@@ -464,20 +401,6 @@ gitbook.start({
 });
 </script>
 
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
-  (function () {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    var src = "true";
-    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:")
-      if (/^https?:/.test(src))
-        src = src.replace(/^https?:/, '');
-    script.src = src;
-    document.getElementsByTagName("head")[0].appendChild(script);
-  })();
-</script>
 </body>
 
 </html>

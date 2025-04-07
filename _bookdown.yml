@@ -5,7 +5,9 @@ rmd_files: [
             "problems.Rmd",
             "goals.Rmd",
             "system.Rmd", "example.Rmd", "discussion.Rmd",
-            "glossary.Rmd", "appendix.Rmd", "math.Rmd", "references.Rmd"
+            "glossary.Rmd",
+            # "appendix.Rmd",
+            "math.Rmd", "references.Rmd"
             ]
 delete_merged_file: false
 
