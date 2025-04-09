@@ -120,11 +120,11 @@ Each bar represents a unique set of voters. Thus, the data subsets represented b
 
 ```{r union-geoms}
 #| echo: false
-#| fig-cap: "Barplot showing non-disjoint subsets of the data. Most of the bars show the same data as in Figure \\@ref(fig:geoms-bijection), however, the leftmost bar representing a union of National and Labour voters. The two leftmost bars are thus not disjoint. For a more realistic example, see Figure \\@ref(fig:union-geoms2)."
+#| fig-cap: "Barplot showing non-disjoint subsets of the data: the leftmost bar represents the union of National and Labour voters."
 knitr::include_graphics("./figures/barplot-notbijection.png")
 ```
 
-However, this way of representing the data has several issues. First, the plot in Figure \@ref(union-geoms) is arguably not very useful for addressing typical visualization goals. For example, when visualizing election data, we care about the relative number of votes each party received. Figure \@ref(fig:union-geoms) makes complicates this comparison. Specifically, since the leftmost bar represents the union of National and Labour votes, we have to perform additional mental arithmetic if we want to compare the votes received by National and Labour directly [@cleveland1985]. Second, we have metadata knowledge [see e.g. @wilkinson2012; @velleman1993] about the underlying information actually being disjoint. Specifically, we know that, in the New Zealand electoral system, each voter can only vote for a single party. Hence, it does not make sense to arbitrarily merge the data in this way. Finally, Figure \@ref(fig:union-geoms) also needlessly duplicates information: the number of votes the National party received is rendered twice, once in the leftmost bar and again in the second-left bar. This goes against the general principle of representing our data parsimoniously [@tufte2001].
+However, this way of representing the data has several issues. First, the plot in Figure \@ref(fig:union-geoms) is arguably not very useful for addressing typical visualization goals. For example, when visualizing election data, we care about the relative number of votes each party received. Figure \@ref(fig:union-geoms) makes complicates this comparison. Specifically, since the leftmost bar represents the union of National and Labour votes, we have to perform additional mental arithmetic if we want to compare the votes received by National and Labour directly [@cleveland1985]. Second, we have metadata knowledge [see e.g. @wilkinson2012; @velleman1993] about the underlying information actually being disjoint. Specifically, we know that, in the New Zealand electoral system, each voter can only vote for a single party. Hence, it does not make sense to arbitrarily merge the data in this way. Finally, Figure \@ref(fig:union-geoms) also needlessly duplicates information: the number of votes the National party received is rendered twice, once in the leftmost bar and again in the second-left bar. This goes against the general principle of representing our data parsimoniously [@tufte2001].
 
 Even when our goal is not to compare absolute counts, there are often better disjoint data visualization methods available. For instance, if we were interested in visualizing the *proportion* of votes that each party received, we could instead draw the following plot: 
 
@@ -143,7 +143,7 @@ We could visualize the referendum data in the following way:
 ```{r union-geoms2}
 #| echo: false
 #| fig-height: 3
-#| fig-cap: "Barplot showing a more realistic example of non-disjoint data representation. The bars show the vote share cast by New Zealand voters in the joint 2020 referendum on euthanasia and cannabis. The two bars show (mostly) the same set of ballots, with each single ballot contributing to the height of one segment in each bar."
+#| fig-cap: "Barplot showing a more realistic example of non-disjoint data representation. The bars show the vote share cast by New Zealand voters in the joint 2020 referendum on euthanasia and cannabis. The two bars show (mostly) the same set of ballots, with each ballot contributing to the height of one segment in each bar."
 knitr::include_graphics("./figures/referendum-notbijection.png")
 ```
 
@@ -198,121 +198,59 @@ However, I propose a different perspective: if we instead model plots as a bijec
 
 #### Products of partitions {#products-of-partitions}
 
-Many types of plots involve data that has partitioned or split across multiple dimensions. This is especially true in interactive data visualization, where features such as linking automatically induce another level of partitioning [@wilhelm2008]. This necessitates a general mechanism for combining partitions into products.
+While all plots inherently involve at least one partition which defines the mapping between the underlying data and the geometric objects, many plot types partition the underlying data across multiple dimensions. Specifically, multiple variables may be used to partition the data, such that each data point is mapped to the unique combination of these variables. This multidimensional partitioning is particularly prevalent in interactive data visualization, where features such as linking automatically introduce an additional partitioning variable [@wilhelm2008]. Consequently, a generalized mechanism for deriving Cartesian products of partitioning variables is required.
 
-The concept of "product of partitions" may be best illustrated with code examples. Suppose we want to draw the following barplot:
-
-```{r}
-#| echo: false
-#| message: false
-
-df <- data.frame(group = factor(c("A", "A", "A", "B", "B", "C", "C", "C")),
-                 status = factor(c(1, 1, 2, 1, 2, 1, 2, 2)),
-                 value = c(12, 21, 10, 9, 15, 15, 12, 13))
-df2 <- aggregate(value ~ group + status, FUN = sum, data = df)
-
-knitr::include_graphics("./figures/barplot-partitions-products.png")
-```
-
-We start with the following data, which includes a categorical variable (`group`, plotted along the x-axis), a variable representing selection status (`status`, used to colour the bar segments), and a continuous variable that we want to summarize (`value`):
+The idea of partition products may be best illustrated on concrete code examples. In R, the canonical data structure for creating a grouping structure (partition) is the S3 `factor` class. We can use `factor`s to partition our data and compute various aggregate summaries over the parts: 
 
 ```{r}
-#| echo: false
+group <- factor(c("A", "A", "A", "B", "B", "C", "C", "C"))
+income <- c(170, 150, 200, 300, 150, 100, 220, 140)
+age <- c(20, 32, 45, 19, 67, 42, 35, 32)
 
-library(kableExtra)
-
-render_table <- function(x, ...) {
-  kableExtra::kbl(x, ..., row.names = FALSE, booktabs = TRUE) |>
-    kableExtra::kable_styling(latex_options = c("hold_position"))
-} 
-
-render_tables <- function(x, ...) {
-  kableExtra::kbl(x, ..., row.names = FALSE, booktabs = TRUE) |>  
-    kableExtra::kable_styling(latex_options = c("scale_down", "hold_position"))
-}
-
-render_table(df)
+split(data.frame(income, age), group)
+aggregate(cbind(income, age) ~ group, FUN = mean)
+aggregate(cbind(income, age) ~ group, FUN = sum)
 ```
 
-To draw individual bar segments, we summarize `value` across the cases corresponding to each segment. To do this, we first need to partition our data by the product of `group` and `status` variables. In R, partitions are typically represented `factor` S3 class, which is essentially just an integer vector with an associated vector of character labels. Unfortunately, there is no built-in function for creating a Cartesian product of two factors in R, however, we can easily emulate it using `paste0` function to combine `group` and `status` strings element-wise:
+With multiple partitioning variables, we can compute summary statistics on finer segments of our data. While base R does not have a standalone data structure for products of multiple `factor`s^[It is not too difficult to create this data structure: see Section \@ref(product-factors).], many built-in functions create this data structure implicitly, when supplied with `list()` or formula arguments (using the `+` operator on the right-hand side of the formula to define the product): 
 
 ```{r}
-#| results: "hold"
-product_factor <- factor(paste0(df$group, df$status))
-product_factor
-
-split_dfs <- split(df, product_factor)
-render_tables(split_dfs[0:2 * 2 + 1])
-render_tables(split_dfs[1:3 * 2])
+gender <- factor(c("M", "F", "F", "M", "F", "M", "F", "F"))
+split(data.frame(income, age), list(group, gender))
+aggregate(cbind(income, age) ~ group + gender, FUN = mean)
+aggregate(cbind(income, age) ~ group + gender, FUN = sum)
 ```
 
-We can then summarize each small data set by summing `value`:
+Now, clearly, products of partitions are useful because they allow us to compute summary statistics at greater level of granularity, and this is particularly useful in data visualization. For instance, here's how we could use `ggplot2` [@wickham2016] to display the aggregated data above via a stacked barplot:
 
 ```{r}
-#| results: "hold"
-summarized_dfs <- lapply(split_dfs, function(x) {
-  aggregate(value ~ ., data = x, sum)
-})
-
-render_tables(summarized_dfs[0:2 * 2 + 1])
-render_tables(summarized_dfs[1:3 * 2])
+library(ggplot2)
+df <- aggregate(income ~ group + gender, FUN = sum)
+ggplot(df, aes(group, income, fill = gender)) +
+  geom_col() +
+  scale_fill_manual(values = c("#1F78B4", "#E31A1C")) +
+  labs(x = "Group", y = "Income", fill = "Gender")
 ```
 
-Finally, to "stack" the segments on top of each other, we need to combine the summaries back together, within the levels of `group` variable. We can do this by grouping the data sets by the `group` variable and taking their cumulative sum:
+In fact, these partition products are so useful that many data visualization systems [particularly ones based on the Grammar of Graphics, @wilkinson2012], construct them automatically, based on plot specification. For instance, we could produce the same plot without having to explicitly aggregate the data ourselves by running the following `ggplot` call:
 
 ```{r}
-#| results: "hold"
-grouped_dfs <- split(summarized_dfs, sapply(summarized_dfs, function(x) x$group))
-stacked_dfs <- lapply(grouped_dfs, function(x) {
-  x <- do.call(rbind, x)
-  x$value <- cumsum(x$value)
-  rownames(x) <- NULL # Remove rownames for nicer formatting
-  x
-})
-
-render_tables(stacked_dfs)
+df <- data.frame(group, gender, income)
+ggplot(df, aes(group, income, fill = gender)) +
+  geom_bar(stat = "summary", fun = "sum") +
+  scale_fill_manual(values = c("#1F78B4", "#E31A1C")) +
+  labs(x = "Group", y = "Income", fill = "Gender")
 ```
 
-Now, we can combine these tables into one `data.frame` and render:
+It is useful to pause and analyze what is happening here. The `ggplot` function takes the variables specified inside the `aes` call and uses these to construct a grouping structure (partition), by taking their product. Importantly, it also automatically infers which variables are meant to form the grouping structure, and which are meant to be aggregated over this structure. For instance, in the example above, the `income` variable is *not* included in the partition product, since it is a continuous variable mapped to the y-axis, and this, in combination with the geometric object (`geom_bar`), marks it as the variable to be aggregated. See also the following code comment:
 
-```{r}
-#| eval: false
-combined_df <- do.call(rbind, stacked_dfs)
-# Need to reverse factor and row order for ggplot2 to layer segments correctly
-combined_df$status <- factor(combined_df$status, levels = c(2, 1))
-combined_df <- combined_df[6:1, ] 
-
-ggplot(combined_df, aes(x = group, y = value, fill = status)) +
-  geom_col(position = position_identity())
-```
-
-```{r}
-#| echo: false
-#| message: false
-knitr::include_graphics("./figures/barplot-partitions-products.png")
-```
-
-What we have just shown is an example of a simple split-apply-combine pipeline [@wickham2011]. This type of a pipeline is necessary in most types of plots and data visualization systems. For instance, the following `ggplot2` call produces a similar data visualization pipeline like the one we described above:
-
-```{r}
-#| eval: false
-ggplot(data, aes(x, y, fill = fill)) +
-  geom_bar(stat = "summary", fun = "sum")
-```
-
-To be more explicit, in the `ggplot2` call above, we specify that we want to partition the data set by the Cartesian product of the `x`, `y`, and `fill` variables. See the following comment from the [`ggplot2` documentation](https://github.com/tidyverse/ggplot2/blob/f46805349d6ca8ca7a99f8966cfa0f29279c2f6c/R/grouping.R#L7) [@wickham2016]:
-
-```{r}
-# If the `group` variable is not present, then a new group
-# variable is generated from the interaction of all discrete (factor or
-# character) vectors, excluding `label`.
-```
-
-We then compute whatever summary we want (`sum`). Finally, when a `fill` or `col` aesthetic is used with `geom_bar`, `ggplot2` also automatically stack the bars on top of each other by summing their heights. Similar strategy is employed for many other types of stacked plots, including pie charts, histograms, or density plots [@wickham2016]. 
+> If the `group` variable is not present, then a new group variable is generated from the interaction of all discrete (factor or character) vectors, excluding `label`.
+>
+> [`grouping.R` file, `ggplot2` codebase](https://github.com/tidyverse/ggplot2/blob/f46805349d6ca8ca7a99f8966cfa0f29279c2f6c/R/grouping.R#L7) [@wickham2016]
 
 #### Limits of flat product partitions
 
-For many common plot types, a single "flat" (not hierarchical) product of all factors/partitions works reasonably well. However, for other types of plots, this simple model is not enough. Specifically, certain types of plots exhibit hierarchical relationships between the partitions which cannot be represented under this flat model [see also @slingsby2009; @wu2022].
+For a fair number of common plots, a single "flat" (not hierarchical) product of all factors/partitions works reasonably well. However, for other types of plots, this simple model is not enough. Specifically, certain types of plots exhibit hierarchical relationships between the partitions which cannot be represented under this flat model [see also @slingsby2009; @wu2022].
 
 To give a concrete example, let's turn back to the barplot from the previous section (Section \@ref(plots-as-partitions)). To draw the barplot, we first split our data into smaller tables, summarize each table by summing the values, stack the summaries by taking their cumulative sum, and finally use the result to render bar segments. This gave us a stacked barplot, which is a good visualization for comparing absolute counts across categories.
 
@@ -326,11 +264,11 @@ knitr::include_graphics("./figures/barplot-spineplot.png")
 
 Like barplots, spineplots represent some summary statistic (usually counts), aggregated within the levels of a product of two categorical variables. However, unlike barplots, spineplots map the underlying statistics to both the y-axis position (height) and the bar width. Furthermore, the y-axis position is normalized, such that the heights of the different segments within the same category add up to one. This normalization makes it possible to compare the relative frequencies within categories directly (notice how the right panel in Figure \@ref(fig:barplot-spineplot) makes it obvious that the proportion of red cases within the B and C categories is the same). Thus, like the barplot, the spineplot is a valuable tool for visualizing categorical data, especially when we can use interactive features to switch from one type of representation to the other. 
 
-Although barplot and spineplot represent the same underlying data, turning one into the other is not always easy. Specifically, while many grammar-based visualization systems offer a simple declarative syntax for defining barplots, they lack such simple syntax for spineplots. For instance, to draw a spineplot in `ggplot2`, we first need to do a substantial amount of data wrangling (creating the plot in the right panel of Figure \@ref(fig:barplot-spineplot) took over 10 lines of code, using standard `dplyr` syntax). This same hierarchical dependence applies to other "normalized" types of plots, such as spinograms, as well as innately hierarchical displays such as treemaps and mosaic plots [see e.g. @theus2002; slingsby2009].
+Although barplot and spineplot represent the same underlying data, turning one into the other is not always easy. Specifically, while many grammar-based visualization systems offer a simple declarative syntax for defining barplots, they lack such simple syntax for spineplots. For instance, to draw a spineplot in `ggplot2`, we first need to do a substantial amount of data wrangling (creating the plot in the right panel of Figure \@ref(fig:barplot-spineplot) took over 10 lines of data wrangling code, using standard `dplyr` syntax). This same hierarchical dependence applies to other "normalized" types of plots, such as spinograms, as well as innately hierarchical displays such as treemaps and mosaic plots [see e.g. @theus2002; slingsby2009].
 
 ### Partitions, hierarchy, and preorders {#hierarchy}
 
-Why are spineplots so tricky? The reason is that they force us to confront the hierarchical nature of (interactive) graphics [@mcdonald1990; @keller2024]. Specifically, while in a barplot, we can get by with a single flat partition of the data, in a spineplot, the data is summarized and stacked *along and across* different levels of aggregation [@wu2024]:
+Why are spineplots so challenging? The primary reason is that they force us to confront the hierarchical nature of (interactive) graphics [@mcdonald1990; @keller2024]. Specifically, while in a barplot, we can get by with a single flat partition of the data, in a spineplot, the data is summarized and stacked *along and across* different levels of aggregation [@wu2024]:
 
 - Along the x-axis, we stack the summaries *across the levels of the top-level factor/category*
 - Along the y-axis, we stack the summaries *across the levels of a product of two factors* and normalize them by the values *within the levels of the top-level factor*.
@@ -879,7 +817,7 @@ Thus, monoids and groups present two fundamentally different models for linked s
 
 This distinction even has interesting implications for data interpretation. For instance, the reason why the maximum operator works well in Figure \ref(fig:barplot-maximums) is because we are comparing a "special subset" of the study participants ("smokers") against that of all participants ("smokers *and* non-smokers"). In other words, with the smoking status variable, it makes sense to compare one category against the union of both categories. This is not the case for all categorical variables, however. For instance, with a gender variable, it would rarely make sense to think of "men" as a special subset of "men and women", or vice versa; the vast majority of time, we are interested in comparing men and women directly, as disjoint subsets. Conversely, this is also the case why monoids work with single-group linked selection: the selected points really are a "special" subset, and the subset representing the "rest" of the data is only interesting in that it is part of "all" of the data points to compare against. However, with multiple selection groups, disjoint comparisons become essential.     
 
-#### Other properties: monotonicity and commutativity
+#### Other properties: Monotonicity and commutativity {#monotonicity-commutativity}
 
 There are other algebraic properties of set union we may wish to preserve in our visualizations. The two most important ones are monotonicity and commutativity.
 
