@@ -270,3 +270,8 @@ monotonicity-commutativity
 monotonicity-and-commutativity
 groups-and-inverses
 other-properties-monotonicity-commutativity-idempotence
+discussion-groups-inverses
+other-properties-monotonicity-commutativity-idempotence-terminal-elements-and-distributivity
+features-and-limitations-of-the-theoretical-model
+features-and-limitations-of-the-delivered-software
+summary-3
