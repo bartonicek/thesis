@@ -4,10 +4,13 @@ rmd_files: [
             "litreview.Rmd",
             "problems.Rmd",
             "goals.Rmd",
-            "system.Rmd", "example.Rmd", "discussion.Rmd",
+            "system.Rmd",
+            "example.Rmd",
+            "discussion.Rmd",
+            "conclusion.Rmd",
             "glossary.Rmd",
-            # "appendix.Rmd",
-            "math.Rmd", "references.Rmd"
+            "math.Rmd",
+            "references.Rmd"
             ]
 delete_merged_file: false
 

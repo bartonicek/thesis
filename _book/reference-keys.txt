@@ -275,3 +275,6 @@ other-properties-monotonicity-commutativity-idempotence-terminal-elements-and-di
 features-and-limitations-of-the-theoretical-model
 features-and-limitations-of-the-delivered-software
 summary-3
+conclusion
+fig:plotscaper-downloads
+potential-future-directions

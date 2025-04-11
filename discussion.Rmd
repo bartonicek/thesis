@@ -13,9 +13,27 @@ Importantly, to maintain consistency during interactions like linked selection, 
 
 To test the proposed model, I developed `plotscaper`, an R package for interactive data exploration (along with `plotscape`, its TypeScript-based backend). Together, the theoretical model and the software formed a crucial feedback loop, allowing me to refine important concepts. Specifically, many of the model's key concepts emerged from practical challenges I encoutered during the packages' development, and, by translating theory into code, I was able to empirically test and refine assumptions about the structure and behavior of interactive data visualizations. 
 
-However, `plotscaper` was also developed to provide a practical tool for data exploration, not just theory testing. As outlined in Section \@ref(background), within the R ecosystem, there is currently no shortage of interactive data visualization packages and frameworks; however, many offer only fairly basic interactive features out of the box. Implementing complex features such as linked selection, representation switching, or parametric interaction (see section \@ref(common-features)) often requires substantial programming expertise and time-investment, creating a barrier to entry for casual users [see e.g. @batch2017]. Thus, a secondary goal of this project was to try to address this perceived gap, and this goal seems to have been met with moderate success. Despite its experimental status and the fact that it is competing with a number of far larger and better-established interactive data visualization frameworks, `plotscaper` has been downloaded over `r cranlogs::cran_downloads("plotscaper", from = "2024-10-01", to = Sys.Date())$count |> sum()` times^[The number only includes downloads from the RStudio CRAN mirror.], in the `r as.numeric(Sys.Date() - as.Date("2024-10-19"))` days since its initial release.
+However, `plotscaper` was also developed to provide a practical tool for data exploration, not just theory testing. As outlined in Section \@ref(background), within the R ecosystem, there is currently no shortage of interactive data visualization packages and frameworks; however, many offer only fairly basic interactive features out of the box. Implementing complex features such as linked selection, representation switching, or parametric interaction (see section \@ref(common-features)) often requires substantial programming expertise and time-investment, creating a barrier to entry for casual users [see e.g. @batch2017]. Thus, a secondary goal of this project was to try to address this perceived gap, and this goal seems to have been met with moderate success. Despite its experimental status and the fact that it is competing with a number of far larger and better-established interactive data visualization frameworks, `plotscaper` has been downloaded over^[The number only includes downloads from the RStudio CRAN mirror.] `r cranlogs::cran_downloads("plotscaper", from = "2024-10-01", to = Sys.Date())$count |> sum()` times in the `r as.numeric(Sys.Date() - as.Date("2024-10-18"))` days since its initial release, see Figure \@ref(fig:plotscaper-downloads):
 
-Despite all of these relative successes, both the theoretical model and its practical implementation in `plotscaper` have, of course, their limitations. These will be the subject of the next few sections.
+```{r plotscaper-downloads}
+#| echo: false
+#| fig-cap: "The cumulative number of downloads of the `plotscaper` package, starting at the date of its initial release (18th of October 2024)."
+library(ggplot2)
+
+df <- cranlogs::cran_downloads("plotscaper", from = "2024-10-18", to = Sys.Date() - 2)
+df$cum_count <- cumsum(df$count)
+
+theme_set(theme_bw(base_size = 12) +
+          theme(axis.ticks = element_blank(),
+                panel.grid = element_blank()))
+
+ggplot(df, aes(date, cum_count)) +
+  geom_line(col = "#1F78B4") +
+  scale_x_date(date_labels = "%b %Y") +
+  labs(x = "Date", y = "Cumulative downloads")
+```
+
+Despite all of these relative successes, both the theoretical model and its practical implementation in `plotscaper` have, of course, their limitations and opportunities for future improvement. These will be the subject of the next few sections.
  
 ## Features and limitations of the theoretical model
 
@@ -75,11 +93,19 @@ Finally, there are few other properties of set union which, in my view, are less
 
 A potential point of contention is that the constraints the model imposes are too rigid. Specifically, requiring all plots to be groups or monoids would exclude a significant fraction of popular visualization types and styles. Conversely, many non-monoidal plot types, such as boxplots, have been successfully implemented alongside linked selection in the past [see e.g. @theus2002; @urbanek2011]. Thus, a valid question one might have is whether the limitations imposed by the model are justified by its practical utility.
 
-I contend that this is the wrong perspective, since the model is not meant to be prescriptive. Instead, it simply provides a framework for identifying visualizations which are "naturally" compatible with features like linked selection. We are free to violate this naturality whenever we see fit, however, we should also be aware of the fact that doing this may require some ad hoc design choices. For instance, since a boxplot box is not a monoid, there is no such thing as highlighting a "part of a boxplot box". We can solve this issue by e.g. plotting the highlighted cases as a second box next to the original one [see e.g. @theus2002; @urbanek2011], however, we may lose some of the nice properties of part-whole relations in monoidal plots (see Section \@ref(stacking-part-whole)). Thus, the real strength of the model lies in its ability to identify inherent trade-offs in the design and implementation of interactive graphics.    
+I contend that this is the wrong perspective, since the model is not meant to be prescriptive. Instead, it simply provides a framework for identifying visualizations which are "naturally" compatible with features like linked selection. We are free to violate this naturality whenever we see fit, however, we should also be aware of the fact that doing this may require some ad hoc design choices. For instance, since a boxplot box is not a monoid, there is no such thing as highlighting a "part of a boxplot box". We can solve this issue by e.g. plotting the highlighted cases as a second box next to the original one [see e.g. @theus2002; @urbanek2011], however, we may lose some of the nice properties of part-whole relations in monoidal plots (see Section \@ref(stacking-part-whole)). Thus, the real strength of the model lies in its ability to identify inherent trade-offs in the design and implementation of interactive graphics.  
+
+### Potential future directions
+
+The model described in Section \@ref(problems) is, in its current state, far from exhaustive. Ultimately, it amounts to conceptualizing the data visualization pipeline as a functor, from the category of data subsets to the category of geometric objects (with category of summary statistics being the intermediate domain). While I believe this arguably simple model allow us to capture and reason about a fairly large number of common graphics, .
+
+One already discussed feature of the model which may be further refined is the set of algebraic properties of set union that we wish the model (functor) to preserve. Specifically, I identified associativity and unitality as the two key properties which it is necessary to preserve if we wish to render meaningful part-whole relationships. I also discussed inverses, monotonicity, and commutativity as other potentially desirable properties. However, a deeper analysis of the properties of graphics might reveal some of these additional properties to be essential, or even identify other relevant properties that should be incorporated into the model. Furthermore, while I identified the fundamental operation as set union, a case could perhaps be made that perhaps, given that real-world data is often ordered and contains duplicates, the fundamental operation may be better identified as the union of bags or concatenation of tuples (ordered collections). Exploring the implications of this alternative perspective could yield valuable insights.
+
+More fundamentally, beyond the simple category-theoretic concepts used throughout this thesis, there may be other, more advanced concepts which may be useful for describing the behaviour of graphics. For instance, since we describe plots as functors, a preliminary idea I have considered is to model interactive representation switching as natural transformation [transformation of one functor into another which respects composition of morphisms, see @fong2019]. Moreover, just as we can conceptualize a visualization as a functor from data to geometric objects, we could perhaps conceptualize the process of reasoning about a plot as the opposite functor, with the two functors forming an adjunction [@fong2019]. These are both just tentative ideas, and there are many other concepts in applied category theory that could be hypothetically useful for advancing theory of (interactive) graphics.   
 
 ## Features and limitations of the delivered software
 
-During this project, I had time to think through and test out different implementations of the various features of the interactive data visualization system. While I succeeded in some areas, there were also areas which could still use further improvement. 
+During this project, I had time to think through and test out different implementations of the various features of the interactive data visualization system. While I succeeded in some areas, there were also others which could still use further improvement. 
 
 ### Scope and features
 
@@ -133,8 +159,3 @@ Despite not being the sole focus, I am happy to report that `plotscaper` achieve
 Profiling of the package revealed that the primary performance bottleneck was rendering. This manifests quite clearly even on the macro level: figures composed entirely of aggregate plots tend remain responsive even with fairly large data sets, whereas figures with multiple bijective plots (such as scatterplots or parallel coordinate plots) can start to become sluggish even with moderately-sized data sets (thousands or tens-of-thousands of data points). Therefore, alternative rendering strategies may offer significant performance gains. Currently, `plotscaper` relies on the default HTML5 `canvas` rendering context, which provides a simple interface for rendering 2D graphics. GPU-based rendering, particularly WebGL [@webgl2025], could lead to significant performance improvements.
 
 Beyond rendering, there are other parts of the system that may provide opportunities for easy performance wins. For instance, currently, as mentioned in Section \@ref(plot-mousemove), querying and selection both rely on a naive collision-detection loop, such that all objects are looped through until matches are found. An approach using spatial data structures, for example quadtrees [@samet1988], could significantly accelerate these searches. Another area which may be open to performance improvements is reactivity. While reactivity is implemented using the - fairly performant - observer pattern, and event callbacks throttled on hot paths (such as mousemove events), further optimization of the reactive system may be possible. Finally, though less performance critical, client-server communication could also be made more performant. Currently, it is implemented with WebSockets [@cheng2024; @mdn2024g] and JSON-based payloads, which incurs serialization/deserialization overhead on each message. An alternative protocol like TCP could mitigate this.
-
-## Summary
-
-Throughout this thesis, the same theme has been croppping up over and over again: the algebraic properties of the components of our visualizations *matter*. They matter when we try to combine statistical summaries and geometric objects, and integrate them with interaction. They matter for the computational efficiency of our programs. 
-

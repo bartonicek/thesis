@@ -1,6 +1,6 @@
 ---
-title: "The Algebra of Graphics, Statistics, and Interaction"
-subtitle: "Towards Fluent Data Visualization Pipelines"
+title: "Coherent Interactive Visualization"
+subtitle: "Exploring the Algebra of Graphics, Statistics, and Interaction"
 author: "Adam Bartonicek"
 site: bookdown::bookdown_site
 documentclass: book
