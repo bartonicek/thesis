@@ -1,10 +1,7 @@
 
 ```{r}
 #| echo: false
-knitr::opts_chunk$set(
-  out.width = "100%",
-  out.height = "100%"
-) # For LaTeX output to render correctly
+
 ```
 
 \newcommand\thenb{⨾}
@@ -15,7 +12,7 @@ This chapter provides an overview of essential concepts from category theory and
 
 The material follows primarily from @fong2019, @lawvere2009, @baez2023, @pinter2010, and @milewski2018. For an accessible introduction to the topic, interested readers are encouraged to consult these references, particularly @fong2019 and @lawvere2009.
 
-### Relations {#relations}
+#### Relations {#relations}
 
 A relation is one of the simplest mathematical structures. Given two sets $X$ and $Y$, a relation $R$ between $X$ and $Y$ is a subset of the Cartesian product of the two sets, $R \subseteq X \times Y$. In other words, a relation can be thought of as the subset of pairs $(x, y) \in X \times Y$ for which the condition "$x$ and $y$ relate" holds. Note that $X$ and $Y$ can be the same set, such that $R \subseteq X \times X$. 
 
@@ -57,7 +54,7 @@ $$[a] = \{ x \in X : x \sim a \}$$
 
 While relations might seem like very simple constructions, they are incredibly versatile. The next few sections will discuss three important examples of relations: functions, partitions, and preorders. 
 
-### Functions {#functions}
+#### Functions {#functions}
 
 A function is a special kind of relation which encodes a mapping between two sets. More specifically, let $S$ be the set of sources (also called the *domain*) and $T$ be the set of possible targets (also called the *codomain*). Then, we can think of a function as a relation $F \subseteq S \times T$ of valid source-target pairs $(s, t)$, such that for every $s \in S$ in there exists a unique $t \in T$ with $(s, t) \in F$ (see Figure \@ref(fig:function-subset)). In other words, every source relates to exactly one target:
 
@@ -108,7 +105,7 @@ A function is a bijection and only if it is both surjective and injective, which
 knitr::include_graphics("./figures/functions-types.png") 
 ```
 
-#### More on bijections {#bijections}
+##### More on bijections {#bijections}
 
 Bijections are special since they encode the idea of reversible transformations. Any bijective function $f$ has an associated inverse $f^{-1}$ such that $f^{-1}(f(x)) = x$ and $f(f^{-1}(y)) = y$ for all $x$ and $y$ in the function's domain and codomain, respectively. In other words, we can keep translating the value from the domain to codomain and back without losing any information. Later we will see that, when the elements $x$ and $y$ possess additional structure, we call a bijection that preserves this structure an [*isomorphism*](#isomorphism).
 
@@ -116,7 +113,7 @@ To give an example of a bijection, suppose I have a group of friends $x \in X$ t
 
 In the context of this example, a bijection means that we can just as well use the names of cities $y \in Y$ when we speak of friends $x \in X$. If Sam went to Rome, and he is the only person who went to Rome, I can say "the person who went to Rome" and it will be clear who I am talking about. Thus, bijections apply interchangeability and reversibility. Conversely, a lack of bijection implies that a transformation may lead to information loss. If two people went to Rome and I say "the person who went to Rome", I am inevitably discarding the information about the identity of that person.
 
-#### Composition
+##### Composition
 
 An important property of functions is that they can be composed. Specifically, if the domain of one function matches the codomain of another, the functions can be composed by piping the output of the first function as the input of the second. We then end up with a new, composite function: 
 
@@ -145,7 +142,7 @@ knitr::include_graphics("./figures/bijection-composition.png")
 
 For other interesting examples of inverse function composition problems, see @lawvere2009.
 
-#### The image and the pre-image
+##### The image and the pre-image
 
 There are other things we can do with functions. For example, given a subset of sources, we can ask about the *image* - the set of targets we can reach from those sources:
 
@@ -180,7 +177,7 @@ $$f_!(f^*(\{Paris, Rome \})) = f_!(\{ Sam, Dominic \}) = \{ Rome \}$$
 
 This odd relationship between the the image and the pre-image is due to the fact that the image is actually something called *left adjoint* [@baez2023; @fong2019]. Adjoints can be thought of as the "best approximate answer to a problem that has no solution" [no inverse, @baez2023], and they come in pairs - a left and a right adjoint - with the left adjoint being more permissive or "liberal" and the right adjoint being more strict or "conservative" [@baez2023]. Proper treatment of adjoints is beyond the scope of this thesis, however.
 
-### Partitions {#partitions}
+#### Partitions {#partitions}
 
 Another interesting simple mathematical constructions are partitions. Like functions, partitions are a type of relation, and can in fact be constructed using functions. That is, if we have a "labeling" function $f$, we can construct a partition as follows:
 
@@ -224,7 +221,7 @@ p_3(a) = \begin{cases}
 (b, t) & \text{if } x = 3
 \end{cases}
 $$
-### Preorders {#preorders}
+#### Preorders {#preorders}
 
 Another important class of relations are ones that have to do with order. Among these, one of the simplest constructions is a preorder:
 
@@ -248,7 +245,7 @@ knitr::include_graphics("./figures/family-tree.png")
 
 Another common example of a preorder is the set of natural numbers $\mathbb{N}$, ordered by the usual order relation, or by the division relation: $x \leq y$ iff $x \mid y$ ($x$ divides $y$ without remainder).
 
-#### Specializing preorders
+##### Specializing preorders
 
 We can specialize preorders by imposing additional properties, such as:
 
@@ -257,7 +254,7 @@ We can specialize preorders by imposing additional properties, such as:
 
 If a preorder conforms to property 3, we speak of a partially ordered set or *poset*. If it conforms to both 3 and 4, then it is called a *total order*. 
 
-#### Structure preserving maps: Monotone maps
+##### Structure preserving maps: Monotone maps
 
 Preorders are interesting because they give us a first taste of something will be discussed over and over again: structure-preserving maps. Specifically, given two preorders $(X, \leq_X)$ and $(Y, \leq_Y)$, and a function $f: X \to Y$, we can classify this function based on whether it preserves the order in $(X, \leq_X)$ or not. That is, we call a function $f$ order-preserving or a "monotone map", if:
 
@@ -275,7 +272,7 @@ Other examples of monotone maps $\mathbb{R} \to \mathbb{R}$ include linear funct
 
 Monotone maps compose: if $f: X \to Y$ is a monotone map, and $g: Y \to Z$ is a monotone map, then their composite $h: X \to Z$ is also a monotone map. Further, if there are two monotone maps $f: X \to Y$ and $g: Y \to X$ which are inverses to each other, then we speak of a order isomorphism. That is, if an bijective function $f: X \to Y$ not only preserves the identity of the elements, but also the fundamental structure (order), then $(X, \leq)$ and $(Y, \leq)$ are in some sense interchangeable.  
 
-### Monoids
+#### Monoids
 
 In the previous subsection, we discussed one example of taking a set and imposing some kind of structure on it: namely, we took a set and imposed an order relation on it and called the result a preorder. However, we can impose many other kinds of structure on collections of objects (sets). One such type of a structure is a monoid.  
 
@@ -343,7 +340,7 @@ $$\not\exists c \; \text{s.t.} \; \frac{x + c}{2} = x$$
 
 Therefore, the average operator is not a monoid either.
 
-#### Beyond numbers
+##### Beyond numbers
 
 However, the definition of a monoid is broader than just simple operations on numbers, and can extend to far more exotic structures. For example, multiplication of $n \times n$ square matrices $(\mathbf{M}_{n \in \mathbb{Z}}, \mathbf{I}, \cdot)$, is a monoid. Also, the operation of appending a value to a vector and taking the Euclidean norm can too be recast as a monoid [@stepanov2009]:
 
@@ -376,7 +373,7 @@ This means that when we combine two things, we get back something that's at leas
 
 Mathematicians tend to give these structures with different sets of properties different names. For example, the tuple $(M, \leq, e, \otimes)$, where the monoidal product $\otimes$ has the properties of unitality, associativity, commutativity, and monotonicity is called a symmetric monoidal preorder [@fong2019]. For our purposes here, I will not dive too deep into this taxonomy, however, interested reader should consult @fong2019 or [nLab](https://ncatlab.org/nlab/show/HomePage).   
 
-#### Structure preserving maps: Monoid homomorphisms {#monoid-homomorphism}
+##### Structure preserving maps: Monoid homomorphisms {#monoid-homomorphism}
 
 As with preorders, when we have functions which map from one monoid to another, we can ask whether they preserve properties we care about. Before, this was order; now, we want the operations to preserve the fundamental properties of the monoidal product, unitality and associativity:
 
@@ -409,7 +406,7 @@ $$(f \thenb g)(e_X) = g(f(e_X)) = g(e_Y) = e_Z$$
 
 And again, as with monotone maps, if we have two monoid homomorphisms which form a bijection, we can speak of a monoid isomorphism. A famous example is the bijection between multiplication of real numbers $(\mathbb{R}, 1, \cdot)$ and the summation of real numbers $(\mathbb{R}, 0, +)$, where the monoid homomorphisms are $f(x) = \log(x)$ and $g(y) = e^y$.
 
-### Groups
+#### Groups
 
 Another well-known example of algebraic structures are groups. Groups are studied in group theory, and encode the idea of reversible transformations and symmetry. Despite the difference in term, groups are really just a monoid with one additional property:
 
@@ -426,7 +423,7 @@ Additionally, the monoidal product $\otimes$ has an inverse^[Note, that in group
 
 Invertibility implies that, when we take a product of any two elements, we can always recover either element by "subtracting away" the other via the inverse product. This means that the group transformations are, in a sense, "lossless" - after we apply a transformation, we can always revert back to the original state by applying the inverse.
 
-#### Simple examples of groups
+##### Simple examples of groups
 
 To give a concrete example, summation of integers $(\mathbb{Z}, 0, +)$ is a group^[Again, in group theory, the unit and the product are often referred to only implicitly, so we would instead just speak of the "group of integers $\mathbb{Z}$"], since, when we sum two integers, we can always recover either summand by subtracting away the other from the result:
 
@@ -438,7 +435,7 @@ To give some examples of structures which are not groups, we could use the same 
 
 Suppose $\max(x, y) = x$. Is there any way to recover $y$ from this formula, if we know $x$? No. The monoidal product "collapses" the information contained in either element, and there is no way to revert this transformation.
 
-#### Structure preserving maps: Group homomorphisms {#group-homomorphism}
+##### Structure preserving maps: Group homomorphisms {#group-homomorphism}
 
 Like with monoids, groups can be transformed in ways that respect the group structure. Most of the setup is the same as it was for monoids, in Section \@ref(monoid-homomorphism), however, there is one more requirement on the function $f: G \to H$:
 
@@ -450,7 +447,7 @@ Group homomorphism is a [monoid homomorphism](#monoid-homomorphism) where the pr
 
 Again, like with monoids, if a group homomorphism $f: G \to H$ is a bijection, then we speak of a group isomorphism.
 
-### Categories {#categories}
+#### Categories {#categories}
 
 While discussing mathematical structures like preorders, monoids, and groups, some common have been cropping up: namely, structure, equality, and structure-preserving maps. Now it is time to shift gears and define these common themes more generally. To do this, we can make use of one powerful concept: categories [@fong2019; @lawvere2009].
 
@@ -487,7 +484,7 @@ The power of categories is their flexibility. This lies in the definitions of "o
 
 However, there is nothing stopping us from defining categories with more complex objects and relations. For example, as we will see, it is possible to define categories where the objects themselves are other categories, and the morphisms are [transformations between categories](#functors).
 
-#### Isomorphisms within categories {#isomorphism}
+##### Isomorphisms within categories {#isomorphism}
 
 Before we go on to discuss specific examples of categories, there is one more important concept we need to mention. So far, we have been speaking of isomorphisms in fairly vague terms, as bijections which "preserve structure". Now it is time to define what this structure-preserving bijection means, and categories provide one way of doing just this:
 
@@ -504,7 +501,7 @@ Notice that the definition above is similar to that of a bijection, however, we 
 
 Note that I have mentioned that the definition above is *one* way of defining isomorphisms, *within a category*. Without getting ahead of ourselves too much, it turns out there is another way of defining isomorphisms, *between categories*. This duality of definition of isomorphism does not cause problems, since, as was mentioned above, the definition of a category is broad enough such that the objects in a category can be other categories, and the morphisms can be transformations between categories. More on this later.   
 
-#### Algebraic structures as categories {#algebraic-as-categories}
+##### Algebraic structures described as categories {#algebraic-as-categories}
 
 It might not seem that the broad, abstract definition of a category can buy us much. However, as we will see, it allows us to reason about all of the algebraic structures we have discussed so far. To start off:
 
@@ -525,23 +522,32 @@ The example above of casting a preorder as a category was fairly intuitive, sinc
 A monoid is a category with a single object.
 :::
 
-Here, we need to break away from the intuitive way of thinking of objects as elements in a set and morphisms as functions, and instead take a more creative approach. Specifically, we can take a monoid $(M, e, \otimes)$ and define it as a category with a single "dummy" object and morphisms to and from this object. For example, here's how we can define summation of natural numbers $(\mathbb{N}, 0, +)$ as a category:
+Here, we need to break away from the intuitive way of thinking of objects as elements in a set and morphisms as functions, and instead take a more creative approach. Specifically, we can take a monoid $(M, e, \otimes)$ and define it as a category with a single "dummy" object and morphisms to and from this object. For example, here's how we can define summation of natural numbers $(\mathbb{N}, 0, +)$ categorically:
 
 ```{r monoid-category}
 #| echo: false
 knitr::include_graphics("./figures/monoid-category.png")
 ```
 
-Here, the object in the category does not really represent anything, and all of the information is encoded in morphisms and their composition. Specifically, the identity morphism is equal to the monoidal unit zero, and the only other morphism, $1$, represents the number one. Composition of morphisms represents addition. Then, any natural number $n \in \mathbb{N}$ can be represented as a composition of arrows, $1 = 1$, $2 = 1 \thenb 1$, $3 = 1 \thenb 1 \thenb 1$, etc... [this is in fact similar to Peano axiomatization of natural numbers, see @stepanov2014]. 
+The object in the category does not really represent anything, and all of the information is encoded in morphisms and their composition. Specifically, the identity morphism is equal to the monoidal unit zero, and the only other morphism, $+1$, represents addition by one. Composition of morphisms represents repeated addition. Then, any natural number $n \in \mathbb{N}$ can be represented as a composition of arrows, $1 = 1$, $2 = 1 \thenb 1$, $3 = 1 \thenb 1 \thenb 1$, etc... [this is in fact similar to Peano axiomatization of natural numbers, see e.g. @stepanov2014]. 
+
+It is not too difficult to go from this categorical definition of monoids to the categorical definition of groups:
 
 ::: {.proposition}
-A group is a category with one object where every morphism is an isomorphism
+A group is a category with a single object where every morphism is an isomorphism.
 :::
 
+In other words, the only difference from a category representing a monoid is that every arrow (morphism) has to have an inverse. This is trivially satisfied for the identity morphism, since that is its own inverse: $id_{\bullet} \thenb id_{\bullet} = id_{\bullet}$. Every other morphism needs to have its mate (the inverse), such that when the two are composed, the result is the identity morphism. For instance, the addition of integers $(\mathbb{Z},0 +)$ can be represented thus:
 
-### Functors {#functors}
+```{r group-category}
+#| echo: false
+knitr::include_graphics("./figures/group-category.png")
+```
 
-Now it is time for a precise and general definition of structure preserving maps. This is what a functor is.
+
+#### Functors {#functors}
+
+Just as category theory provides a unified framework for defining common algebraic structures, it also offers a way to describe transformations between them. The fundamental class of these transformations is the functor, which generalizes the notion of structure-preserving maps:
 
 :::{.definition name="Functor"}
 
@@ -550,11 +556,17 @@ Given two categories $\mathcal{C}$ and $\mathcal{D}$, to specify a functor $F: \
 - For every object $c \in \text{Ob}(\mathcal{C})$, an object $F(c) \in \text{Ob}(\mathcal{D})$
 - For every morphism $f: c_1 \to c_2$ in $\mathcal{C}(c_1, c_2)$, a morphism $F(f): F(c_1) \to F(c_2)$
 
-Such the action of the functor $F$ on the morphisms in $\mathcal{C}$:
+Such that the action of the functor $F$ on the morphisms in $\mathcal{C}$:
 
 1. Preserves identities: for every object $c \in \text{Ob}(\mathcal{C})$, $F(\text{id}_c) = \text{id}_{F(c)}$
 2. Preserves composition: for every three objects $c_1, c_2, c_3 \in \text{Ob}(\mathcal{C})$ and two morphisms $f: c_1 \to c_2$ and $g: c_2 \to c_3$, $F(f \thenb g) = F(f) \thenb F(g)$
-
 :::
 
+Functors allow us to generalize the notion of structure-preserving maps, such as monotone maps and monoid and group homomorphisms. For instance, if $(C, \leq_C)$ and $(D, \leq_D)$ are preorders and $\mathcal{C}$ and $\mathcal{D}$ are the corresponding categories, then a functor $F: \mathcal{C} \to \mathcal{D}$ sends every $c \in C$ ($\text{Ob}(\mathcal{C})$) to a $d \in D$ ($\text{Ob}(\mathcal{D})$), such that if $c_1 \leq_{C} c_2$ (there exists morphism $c_1 \to c_2$) then $F(c_1) \leq_{D} F(c_2)$ (there exists morphism $F(c_1) \to F(c_2)$).
 
+Further, just as we can compose arrows (functions), we can also compose functors. Specifically, let $F: \mathcal{C} \to \mathcal{D}$ and $G: \mathcal{D} \to \mathcal{E}$ be functors and define $F \thenb G$ as first applying $F$ and then $G$. Then:
+
+$$(F \thenb G)(\text{id}_c) = G(F(\text{id}_c)) = G(\text{id}_{F(c)}) = \text{id}_{G(F(c))}$$
+$$(F \thenb G)(f \thenb g) = G(F(f \then g)) = G(F(f) \then F(g)) = F(G(f)) \then F(G(g))$$
+
+Thus, clearly, $F \thenb G$ is a functor.

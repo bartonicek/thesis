@@ -42,14 +42,12 @@ To re-iterate, from Section \@ref(goals), the core requirements for the high-lev
 - Be accessible to a wide range of users with varying levels of experience
 - Integrate well with popular tools within the R ecosystem
 
-These overarching goals, which will be explored further in Section \@ref(high-level-api), translated into more specific feature requirements:
+These overarching goals, explored further in Section \@ref(high-level-api), translated into more requirements:
 
-- Simple creation of multi-panel figures
-- Built-in linked selection across all plot types
-- Standard interactive features like zooming, panning, and querying
-- Support for parameter manipulation and representation switching in e.g. barplots and histograms
-- Two-way communication between figures and interactive R sessions
-- Static embedding capabilities for R Markdown/Quarto documents
+- Simple and intuitive API for creating and manipulating multi-panel interactive figures (see e.g. Sections \@ref(figure-plot), \@ref(variables-encodings), and \@ref(scene-and-schema))
+- Support for interactive features such as generalized linked selection, parameter manipulation and representation switching, and other standard features like zooming, panning, and querying (discussed throughout)
+- Two-way communication between figures and interactive R sessions (see Section \@ref(client-server))
+- Static embedding capabilities for R Markdown/Quarto documents (see Section \@ref(html-embedding))
 
 To realize these goals, it was necessary to design the low-level platform (`plotscape`) which could support them. The primary purpose of `plotscape` was to provide utilities for the interactive data visualization pipeline:
 
@@ -59,7 +57,14 @@ To realize these goals, it was necessary to design the low-level platform (`plot
 - Rendering geometric objects and auxiliary graphical elements
 - Responding to user input and server requests, propagating any required updates throughout the pipeline (reactivity)
 
-Section \@ref(low-level-implementation) will discuss the above-mentioned tasks, and the data structures and algorithms used to support them.
+Section \@ref(low-level-implementation) focuses on the concerns surrounding these more fine-grained implementation details. Specifically, it discusses:
+
+- The programming paradigm used in `plotscape` (Section \@ref(programming-paradigm))
+- Row vs. column based data representation (Section \@ref(row-column))
+- Reactivity (Section \@ref(reactivity))
+- Specific components of the system and their relations (Section \@ref(components))
+
+Note that the most granular implementation details of `plotscape` are discussed in Section \@ref(components) (along with concrete code examples), so some readers may find it easier to start with this section.
 
 ## High-level API (`plotscaper`) {#high-level-api}
 
@@ -152,7 +157,7 @@ schema |> render()
 include_figure("./figures/plotscaper-example2.html", 800)
 ```
 
-While the scatterplot matrix in Figure \@ref(plotscaper-example2) could be also recreated with quotation/NSE using functions like `substitute` from base R [@r2024] or `enquo` from `rlang` [@rlang2024], doing so requires the knowledge of quasiquotation which is part of [advanced R](https://adv-r.hadley.nz/quasiquotation.html#quasiquotation). Many R users may be familiar with calling functions using "naked" variable names, however, actual proficiency with using quotation effectively may be less common. Furthemore, R's NSE is a form of metaprogramming [@wickham2019]. While powerful, over-reliance on metaprogramming is often discouraged in modern developer circles, due to it potential to impact performance, safety, and readability [see e.g. @phung2009; the discussion at @handmadehero2025]. Thus, to promote simplicity and programmatic use, I chose simple string vectors over quoted function arguments in `plotscaper`.
+While this scatterplot matrix could be also recreated with quotation/NSE using functions like `substitute` from base R [@r2024] or `enquo` from `rlang` [@rlang2024], doing so requires the knowledge of quasiquotation which is part of [advanced R](https://adv-r.hadley.nz/quasiquotation.html#quasiquotation). Many R users may be familiar with calling functions using "naked" variable names, however, actual proficiency with using quotation effectively may be less common. Furthemore, R's NSE is a form of metaprogramming [@wickham2019]. While powerful, over-reliance on metaprogramming is often discouraged in modern developer circles, due to it potential to impact performance, safety, and readability [see e.g. @phung2009; the discussion at @handmadehero2025]. Thus, to promote simplicity and programmatic use, I chose simple string vectors over quoted function arguments in `plotscaper`.
 
 #### Variables and encodings {#variables-encodings}
 
@@ -199,7 +204,7 @@ data |>
   render(...)
 ```
 
-In broad strokes, this is how the data visualization pipeline is implemented in `plotscape` (see Section \@ref(low-level-implementation)). However, this model does have one important downside: it does not lend itself easily to a simple declarative schema like that of `ggplot2`. Despite several attempts, and some partial successes (see Section \@ref(summaries)), on the whole, I have been unsuccessful in developing a comprehensive way to specify such a schema. The difficulties stem from the hierarchical dependencies between the various pipeline stages, as well as the added complexity of integrating reactivity into the pipeline (see also Section \ref(declarative-schemas)).
+In broad strokes, this is how the data visualization pipeline is implemented in `plotscape` (see Section \@ref(low-level-implementation)). However, this model does have one important downside: it does not lend itself easily to a simple declarative schema like that of `ggplot2`. Despite several attempts, and some partial successes (see Section \@ref(summaries)), on the whole, I have been unsuccessful in developing a comprehensive way to specify such a schema. The difficulties stem from the hierarchical dependencies between the various pipeline stages, as well as the added complexity of integrating reactivity into the pipeline (see also Section \@ref(declarative-schemas)).
 
 This difficulty with declarative schemas is why I opted for the more traditional, nominal style of specifying plots in `plotscaper`(i.e. using functions like `add_scatterplot` or `add_barplot`). While this approach may seem less flexible, I hope I have demonstrated that the underlying limitations are *not* an exclusive to `plotscape`/`plotscaper`, but extend to `ggplot2` and all other GoG-based data visualization systems. I have simply chosen make these limitations more explicit. If a better solution is found, it may be integrated into future releases of the package.
 
@@ -233,7 +238,7 @@ Note that, under this model, the schema merely records state-generating steps, n
 
 While this client-heavy approach deviates from the typical client-server architecture, where most of state resides on the server, it is essential for achieving highly-responsive interactive visualizations. By keeping most of the state on the client, we avoid round-trips to the server, resulting in fast updates in response to user interaction. For instance, linked selection updates, triggered by mousemove events, can be computed directly on the client and instantly rendered. Conversely, this is also why server-centric frameworks like Shiny [@shiny2024] struggle with latency-sensitive interactive features like linked selection. Finally, as will be discussed below, while the R session (server) may occasionally send and receive messages, their latency requirements are significantly less stringent, making a "thin" server perfectly viable.
 
-### Client-server communication {#communication}
+### Client-server communication {#client-server}
 
 When inside an interactive R session (e.g., in RStudio IDE [@rstudio2024]), creating a `plotscaper` figure via calling `render` also automatically launches a WebSockets server [using the `httpuv` package, @cheng2024]. This server allows live, two-way communication between the R session (server) and the figure (client). By assigning the output of the `render` call to a variable, users can save a handle to this server, which can be then used to call functions which query the figure's state or cause mutable, live updates. For instance:
 
@@ -273,11 +278,11 @@ As noted earlier, most `plotscaper` functions are polymorphic `S3` methods which
 
 As `htmlwidgets` widgets, `plotscaper` figures are essentially static webpages. As such, they can be statically embedded in HTML documents such as those produced by RMarkdown [@rmarkdown2024] or Quarto [@allaire2024]. More specifically, when a `plotscaper` figure is rendered, `htmlwidgets` [@htmlwidgets2021] is used to bundle the underlying HTML, CSS and JavaScript. The resulting widget can then be statically embedded in any valid HTML document, or saved as a standalone HTML file using the `htlwidgets::saveWidget` function. This is in fact how `plotscaper` figures are rendered in the present thesis. 
 
-As mentioned above, since client-server communication requires a running server, statically rendered figures cannot be interacted with through code, in the way described in Section \@ref(communication). However, within-figure interactive features such as linked selection and querying are entirely client-side, and as such work perfectly fine in static environments. This makes `plotscaper` a very useful and convenient tool to use in interactive reports. 
+As mentioned above, since client-server communication requires a running server, statically rendered figures cannot be interacted with through code, in the way described in Section \@ref(client-server). However, within-figure interactive features such as linked selection and querying are entirely client-side, and as such work perfectly fine in static environments. This makes `plotscaper` a very useful and convenient tool to use in interactive reports. 
 
 ## Low-level implementation (`plotscape`) {#low-level-implementation}
 
-This section describes the actual platform used to produce and manipulate interactive figures, as implemented in `plotscape`. I begin by discussing some broader concerns, specifically the choice of programming paradigm, data representation, and the implementation of reactivity. Then, I provide a detailed list of the system's components and their functionality.
+This section describes the actual platform used to produce and manipulate interactive figures, as implemented in `plotscape`. I begin with the discussion of some broader concerns, specifically the choice of programming paradigm (Section \@ref(programming-paradigm)), data representation (Section \@ref(row-column)), and reactivity model (Section \@ref(reactivity). Finally, I provide a detailed listing of the system's components and their functionality (Section \@ref(components)). Some readers may potentially find it easier to start with Section \@ref(components), as this presents the most concrete and granular information.
 
 Key concepts are explained via example code chunks. All of these represent valid TypeScript code, and selected examples are even evaluated, using the [Bun](https://bun.sh/) TypeScript/JavaScript runtime [@bun2025]. The reason why TypeScript was chosen over R for the examples is that explicit type signatures make many of the concepts much easier to explain. Further, since `plotscape` is written in TypeScript, many of the examples are taken directly from the codebase, albeit sometimes modified for consistency or conciseness.
 
@@ -305,7 +310,7 @@ A key benefit of the functional approach is referential transparency [see e.g. @
 
 Relevant to this thesis, functional programming is also closely linked to mathematics, particularly category theory [see @milewski2018]. Many algebraic concepts discussed in Section \@ref(problems) – including preorders, functors, and monoids – have direct counterparts in many functional programming languages. These are often implemented as type classes, enabling polymorphism: for instance, in Haskell [@haskell1970], users can define an arbitrary monoid type class which then allows aggregation over a list [@haskell2019].
 
-Again, when it comes to interactive data visualization, the functional programming style presents some fundamental trade-offs. While properties like referential transparency are attractive, all data visualization systems must ultimately manage mutable state, specifically the graphical device. Further, user interaction also adds additional complexity which is challenging to model in a purely functional way (although it is certainly possible; see Section \@ref(streams)). This might explain the lack of purely functional interactive data visualization libraries, despite the existence of functional libraries for static visualization [see e.g. @petricek2021]. Nevertheless, many functional programming concepts remain valuable even in outside of purely functional systems. For example, a system may work with mutable state while remaining largely composed of pure functions [by "separating calculating from doing", see @normand2021; @vaneerd2024].
+Again, when it comes to interactive data visualization, the functional programming style presents some fundamental trade-offs. While properties like referential transparency are attractive, all data visualization systems must ultimately manage mutable state, specifically the graphical device. Further, user interaction also adds additional complexity which is challenging to model in a purely functional way (although it is certainly possible; see Section \@ref(streams)). This might explain the lack of purely functional interactive data visualization libraries, despite the existence of functional libraries for static visualization [see e.g. @petricek2021]. Nevertheless, many functional programming concepts remain valuable even outside of purely functional systems. For example, a system may work with mutable state while remaining largely composed of pure functions [by "separating calculating from doing", see @normand2021; @vaneerd2024].
 
 #### Object-oriented programming {#oop}
 
@@ -321,7 +326,7 @@ Object-oriented programming (OOP) has been widely adopted, especially for graphi
 
 Compared to the three previously discussed paradigms, data-oriented programming (DOP) is a more recent and less well-known programming paradigm. In fact, due to its novelty, the term is also used somewhat differently across different contexts, broadly in two ways. First, DOP sometimes refers to a more abstract programming paradigm, concerned with structure and organization of code and inspired by the Clojure style of programming [@hickey2011; @hickey2018; @sharvit2022; @parlog2024]. In this way, it also shares many similarities with the generic programming paradigm popularized by Alexander Stepanov and the related ideas around value semantics [@stepanov2009; @stepanov2013; @parent2013; @parent2015; @parent2018; @vaneerd2023; @vaneerd2024], and there are even some direct ties [see @vaneerd2024]. Second, DOP (or "data oriented design", DOD) also sometimes refers to a more concrete set techniques and ideas about optimization. Originating in video-game development, these primarily focus on low-level details like memory layout and CPU cache line utilization [@acton2014; @bayliss2022; @kelley2023; @nikolov2018; @fabian2018].  Interestingly, despite these two distinct meanings of the term DOP, both converge on similar ideas regarding the structure and organization of computer programs, and as such, I believe it is justified to discuss them here as a single paradigm.
 
-The core idea of DOP is a data-first perspective: programs should be viewed as transformations of data [@acton2014; @fabian2018; @sharvit2022]. This has several consequences, the most important of which is the separation of code (behavior) and data [@fabian2018; @sharvit2022; @vaneerd2024]. Data should be represented by plain data structures, composed of primitives, arrays, and dictionaries [a typical example would be [JSON](#JSON), @hickey2011; @hickey2018; @sharvit2022]. In other words, the data should be trivially copyable and behave like plain values [see @stepanov2009; @stepanov2013]. Furthermore, it should be organized in a way that is convenient and efficient; there is no obligation for it to model abstract or real-world entities [@acton2014; the fundamental blueprint is that of the relational model, @codd1970; @moseley2006; @fabian2018]. Code, on the other hand, should live inside modules composed of stateless functions [@fabian2018; @sharvit2022]. The primary benefit of this approach is that, by keeping data and code separate, we can reason about both in isolation, without entanglement [@vaneerd2024]. It also allows us to introduce abstraction gradually, by initially relying on generic data manipulation functions [@fabian2018; @sharvit2022]. Finally, it also enables good performance: by storing plain data values and organizing them in a suitable format (for example, structure of arrays, see Section \@ref(row-or-column)), we can ensure optimal cache line utilization [@acton2014; @fabian2018; @kelley2023;]. 
+The core idea of DOP is a data-first perspective: programs should be viewed as transformations of data [@acton2014; @fabian2018; @sharvit2022]. This has several consequences, the most important of which is the separation of code (behavior) and data [@fabian2018; @sharvit2022; @vaneerd2024]. Data should be represented by plain data structures, composed of primitives, arrays, and dictionaries [a typical example would be [JSON](#JSON), @hickey2011; @hickey2018; @sharvit2022]. In other words, the data should be trivially copyable and behave like plain values [see @stepanov2009; @stepanov2013]. Furthermore, it should be organized in a way that is convenient and efficient; there is no obligation for it to model abstract or real-world entities [@acton2014; the fundamental blueprint is that of the relational model, @codd1970; @moseley2006; @fabian2018]. Code, on the other hand, should live inside modules composed of stateless functions [@fabian2018; @sharvit2022]. The primary benefit of this approach is that, by keeping data and code separate, we can reason about both in isolation, without entanglement [@vaneerd2024]. It also allows us to introduce abstraction gradually, by initially relying on generic data manipulation functions [@fabian2018; @sharvit2022]. Finally, it also enables good performance: by storing plain data values and organizing them in a suitable format (for example, structure of arrays, see Section \@ref(row-column)), we can ensure optimal cache line utilization [@acton2014; @fabian2018; @kelley2023;]. 
 
 As might be apparent, data oriented programming shares some similarities with procedural and functional programming, but there are also some key differences. Compared to the lasseiz-faire approach of procedural programming, DOP tends to be a lot more opinionated about the structure of programs. Furthermore, while its focus on stateless functions might suggest a resemblance to functional programming, DOP generally does not prohibit mutation, and its emphasis on plain data over abstract behavior contrasts with the often highly abstract nature of purely functional code. As such, in my view, the ideas in DOP represent a distinct and fully-formed programming paradigm. 
 
@@ -347,13 +352,13 @@ In some ways, this interface-namespace style might seem like object-oriented pro
 
 ### Data representation: Row-oriented vs. column-oriented {#row-column}
 
-Data visualization is fundamentally about the data; however, the same data can often be represented in multiple ways. This is important as different data representations have can offer different trade-offs, including ease of use and performance. In most data analytic applications, the fundamental data model is that of a two-dimensional table or dataframe. However, because computer memory is inherently one-dimensional, a choice must be made: should these tables be stored as an arrays of heterogeneous records (rows) or as a dictionaries of homogeneous arrays (columns)?
+Data visualization is fundamentally about the data; however, the same data can often be represented in multiple ways. This is important as different data representations have can offer different trade-offs, including ease of use and performance. In most data analytic applications, the fundamental data model is that of a two-dimensional table or dataframe. However, because computer memory is inherently one-dimensional, a choice must be made: should these tables be stored as arrays of heterogeneous records (rows) or as a dictionaries of homogeneous arrays (columns)?
 
 In popular, in-memory data analytics applications, the column-store seems to be the prevaling model. This model organizes tables as dictionaries of columns, such that each column is a homogeneous array containing values of the same type. Unlike a matrix, however, different columns can store values of different types (e.g. floats, integers, or strings). Dataframe objects may also store optional metadata, such as row names, column labels, or grouping structures [@r2024; @bouchet-valat2023]. Popular examples of this design include the S3 `data.frame` class in base R [@r2024], the `tbl_df` S3 class in the `tibble` package [@muller2023], the `DataFrame` class in the Python `pandas` [@pandas2024], the `DataFrame` class in the `polars` [@polars2024], or the `DataFrame` type in the Julia `DataFrame.jl` package [@bouchet-valat2023].
 
 However, there are also some fairly well-known examples of row-oriented systems. Particularly, the popular JavaScript data visualization and transformation library D3 [@bostock2022] models data frames as arrays of rows, with each row being a JavaScript object. Likewise, row-stores are also highly popular in databases, particularly in online transaction processing (OLTP) systems such as PostgreSQL, SQLite, or MySQL, where tables are generally stored as arrays of records, both in memory and on disk [see e.g. @petrov2019; @abadi2013; @pavlo2024].
 
-Finally, within the broader programming context, the two data models are also known as the struct-of-arrays (SoA) and array-of-structs (AoS) layouts, corresponding roughly to the column- and row-store, respectively [see e.g. @acton2014; @kelley2023]. Here, the distinction is a bit more nuanced, since the stored data may be interpreted as more than just plain values, making either representation more or less natural in certain programming paradigms (see Section \@ref(paradigms)). For example, in object-oriented programming (OOP), the fundamental unit of code is an object (see Section \@ref(oop)). Since objects are meant to encapsulate their properties - both data and behaviour (via a pointer to a virtual method table) - the AoS layout, which keeps object properties adjacent in memory, is the more natural choice in OOP [see e.g. @bayliss2022].
+Finally, within the broader programming context, the two data models are also known as the struct-of-arrays (SoA) and array-of-structs (AoS) layouts, corresponding roughly to the column- and row-store, respectively [see e.g. @acton2014; @kelley2023]. Here, the distinction is a bit more nuanced, since the stored data may be interpreted as more than just plain values, making either representation more or less natural in certain programming paradigms (see Section \@ref(programming-paradigm)). For example, in object-oriented programming (OOP), the fundamental unit of code is an object (see Section \@ref(oop)). Since objects are meant to encapsulate their properties - both data and behaviour (via a pointer to a virtual method table) - the AoS layout, which keeps object properties adjacent in memory, is the more natural choice in OOP [see e.g. @bayliss2022].
 
 #### Ease of use
 
@@ -367,13 +372,13 @@ The column-oriented (SoA) layout tends to be the more performant option for stor
 
 In contrast, the row-oriented (AoS) layout performs better at single-row read and write operations. Because all values for a record are stored contiguously, they can be retrieved without needing to be fetched and assembled from disparate memory locations. Similarly, writes are faster as only a single memory location needs to be modified. These characteristics have made the row-oriented layout the traditional choice in OLTP databases [@abadi2013; @pavlo2024].
 
-An important point to mention is that, in high-level languages like JavaScript, the underlying memory representation may differ significantly from the apparent structure. For instance, to optimize key access, the V8 engine stores JavaScript objects (dictionaries) as hidden classes: essentially a pointer to the object's shape and an array of values [@veight2024]. Nevertheless, objects are still allocated on the heap, unlike packed arrays of small integers (SMIs) or floats, which consequently offer much better performance [@veight2017].     
+An important point to mention is that, in high-level languages like JavaScript, the underlying memory representation may differ significantly from the apparent structure. For instance, to optimize key access, the V8 engine stores JavaScript objects (dictionaries) as "hidden classes": essentially a pointer to the object's shape and an array of values [@bruni2017; @veight2024]. Nevertheless, objects are still allocated on the heap, unlike packed arrays of small integers (SMIs) or floats, which consequently tend to offer much better performance characteristics [see e.g. @veight2017; @bruni2017; @stange2024].     
 
 #### Final choice of data representation and rationale
 
 As an interactive data visualization system, plotscape needed to support fast data transformations. Particularly, for linked selection, efficient aggregations were key. As such, the column-oriented data layout was chosen. While this approach differs from that of the most popular web-based data visualization framework [D3, Bostock, 2022], it aligns with the majority of other data analytic languages and libraries.
 
-### Reactivity
+### Reactivity {#reactivity}
 
 A key implementation detail of all interactive applications is reactivity: how a system responds to input and propagates changes. However, despite the fact that interactive user interfaces (UIs) have been around for a long time, there still exist many different, competing approaches to handling reactivity. A particularly famous^[Or perhaps infamous.] example of this is the web ecosystem, where new UI frameworks seem to keep emerging all the time, each offering its unique spin on reactivity [see e.g. @ollila2022]. This makes choosing the right reactivity model challenging. 
 
@@ -551,8 +556,8 @@ const priceWithTax = () => round(price() * (1 + tax()));
 
 Effect.create(() =>
   console.log(
-    `The current price is` +
-      `${priceWithTax()}` +
+    `The current price is` + ` ` +
+      `${priceWithTax()}` + ` ` +
       `(${price()} before ${tax() * 100}% tax)`
   )
 );
@@ -569,9 +574,9 @@ Signals provide an elegant solution to many problems with reactivity. They autom
 
 At the start of the project, I had used the `Observer` pattern for modeling reactivity. However, I had the idea of letting the users to define reactive parameters that could be used at arbitrary points in the data visualization pipeline. This had led me to explore the various models of reactivity described above, and even do a full rewrite of `plotscape` with signals at one point.
 
-However, eventually, I ended up reverting back to the `Observer` pattern. The primary reason was developer ergonomics. While many properties of signals like the automatic event subscription were appealing, the need to manage both data and signals as distinct entities proved cumbersome. Specifically, deciding which components of my system and their properties should be plain data versus signals added an additional overhead and complicated refactoring. With bit of practice and careful design, I found that I was able to use the `Observer` pattern without introducing unnecessary re-renders. Moreover, I also found that, in the interactive data visualization pipeline, reactivity can be aligned with the four discrete stages: partitioning, aggregation, scaling, and rendering. Specifically, reactive values can be introduced in batch right at the start of each of these four steps, greatly simplifying the reactive graph. Introducing reactivity at other points seem to offer limited practical benefit. Thus, despite the limitations of the `Observer` pattern, the structured nature of the problem (interactive data visualization pipelines) ultimately makes it a decent solution in my eyes.
+However, eventually, I ended up reverting back to the `Observer` pattern. The primary reason was developer ergonomics. While many properties of signals like the automatic event subscription were appealing, the need to manage both data and signals as distinct entities proved cumbersome. Specifically, deciding which components of my system and their properties should be plain data versus signals added an additional overhead and complicated refactoring. With a bit of practice and careful design, I found that I was able to use the `Observer` pattern without introducing unnecessary re-renders. Moreover, I also found that, in the interactive data visualization pipeline, reactivity can be aligned with the four discrete stages: partitioning, aggregation, scaling, and rendering. Specifically, reactive values can be introduced in batch right at the start of each of these four steps, greatly simplifying the reactive graph. Introducing reactivity at other points seem to offer limited practical benefit. Thus, despite the limitations of the `Observer` pattern, the structured nature of the problem (interactive data visualization pipelines) ultimately makes it a decent solution in my eyes.
 
-### System components
+### System components {#components}
 
 This section discusses the core components of `plotscape`, detailing their functionality, implementation, and interconnections. The goal is to give an overview and provide a rationale for the design of key parts of the system. As before, TypeScript code examples are provided, and, in general, these map fairly closely to the real codebase.  
 
@@ -675,7 +680,7 @@ This function becomes particularly useful when implementing other data structure
 
 #### Dataframe {#dataframe}
 
-In many data analytic workflows, a fundamental data structure is that of a two-dimensional table or dataframe. As discussed in Section \ref(row-column), we can represent this data structure as either a dictionary of columns or a list of rows, with the column-wise representation having some advantages for analytical workflows. As such, in `plotscape`, I chose to represent `Dataframe` as a dictionary columns. Furthermore, in `plotscape`, a key difference is that all columns are not required to be fixed-length arrays; instead, they can be any [`Indexable`](#indexable)s:
+In many data analytic workflows, a fundamental data structure is that of a two-dimensional table or dataframe. As discussed in Section \@ref(row-column), we can represent this data structure as either a dictionary of columns or a list of rows, with the column-wise representation having some advantages for analytical workflows. As such, in `plotscape`, I chose to represent `Dataframe` as a dictionary columns. Furthermore, in `plotscape`, a key difference is that all columns are not required to be fixed-length arrays; instead, they can be any [`Indexable`](#indexable)s:
 
 ```{ts}
 interface Dataframe {
@@ -773,11 +778,28 @@ interface Factor<T extends Dataframe> {
 }
 ```
 
-Here, `cardinality` represents the number of unique parts that a partitions consists of (e.g. 2 for a binary variable, 3 for a categorical variable with 3 levels, and so on). Data points map to the parts via a "dense" array of `indices`, which take on values in `0 ... cardinality - 1` and have length equal to the length of the data^[The `indices` indices being "dense" means *all* values in the range `0 ... cardinality - 1` appear in the array at least once.]. For instance, the following array of indices - `[0, 1, 1, 0, 2, 0]` - should be interpreted as meaning that the first part is composed of cases one, four, and six, the second part is composed of cases two and three, and the third part is composed of the case five (keeping in mind JavaScript's zero-based indexing). The data associated with factor's levels is stored in the `data` property, which is composed of arrays/`Indexables` with length equal to the factor's cardinality. For instance, if a factor is created from a categorical variable with three levels - `A`, `B`, and `C`, then the rows the the `data` may look something like this: `[{ label: "A" }, { label: "B" }, { label: "C" }]`. Finally, the optional `parent` property denotes a factor representing the parent partition.  
+Here, `cardinality` represents the number of unique parts that a partitions consists of (e.g. 2 for a binary variable, 3 for a categorical variable with 3 levels, and so on). Data points or cases map to the parts via a "dense" array of `indices`, which take on values in `0 ... cardinality - 1` and have length equal to the length of the data^[The `indices` indices being "dense" means *all* values in the range `0 ... cardinality - 1` appear in the array at least once.]. Each case is identified by its position in the array. For example, take the following array of indices:
 
-There are a couple of important things to discuss. First, `cardinality` technically represents the same information as could be obtained by counting the number of unique values in `indices`, however, for many operations on `Factor`s, it is beneficial to be able to access the cardinality in constant $O(1)$ rather than linear $O(n)$ time that would result from having to loop through the `indices`. Such is the case, for example, when constructing [product factors](#Product factors) or when initializing arrays of summaries. Of course, care must be taken to ensure that `cardinality` and `indices` stay synchronized under factor transformations.
+```{ts}
+#| eval: false
+[0, 1, 1, 0, 2, 0]
+```
 
-Second, the part's metadata is stored in the `data` of type [`Dataframe`](#Dataframe). This represents a departure from e.g. base R's `factor` class, where all metadata is stored as a flat vector of levels. For instance:
+Keeping in mind JavaScript's zero-based indexing, this array identifies cases one, four, and six as belonging to the first part/level (`0`), cases two and three as belonging to the second part (`1`), and case five as belonging to the third parts (`2`).
+
+The data associated with factor's levels is stored in the `data` property, which is composed of arrays/`Indexables` of equal length as the factor's cardinality. For instance, if a factor is created from a categorical variable with three levels - `A`, `B`, and `C` - then `data` may look something like this: 
+
+```{ts}
+#| eval: false
+{ labels: ["A", "B", "C"] }
+// In row-oriented form: [{ label: "A" }, { label: "B" }, { label: "C" }]
+```
+
+Finally, the optional `parent` property is a pointer to the factor representing the parent partition.  
+
+There are a couple of important things to discuss. First, `cardinality` technically duplicates information, since it is simply the number of unique values in `indices`. However, for many operations on `Factor`s, it is beneficial to be able to access cardinality in constant $O(1)$ time. Such is the case, for example, when constructing [product factors](#Product factors) or when initializing arrays of summaries. Of course, this means that the relationship between `cardinality` and `indices` has to be invariant under any factor transformations. 
+
+Second, the metadata associated with the parts is stored in the `data` property of type [`Dataframe`](#Dataframe). This represents a departure from e.g. base R's `factor` class, where all metadata is stored as a flat vector of levels. For instance:
 
 ```{r}
 cut(1:10, breaks = c(0, 5, 10))
@@ -796,15 +818,15 @@ const factor: Factor = {
 };
 ```
 
-Storing `Factor` metadata in a `Dataframe` offers several advantages as opposed to a flat vector/array. First, when partitioning data, we often want to store several distinct pieces of metadata. For example, when we bin numeric variable, like in the example above, we want to store both the lower and upper bound of each part's bin. `cut` stores the multiple (two) pieces of metadata as a tuple, however, this approach becomes cumbersome when the dimensionality of the metadata grows. Further, metadata stored in a `Dataframe` becomes far easier to combine when taking [a product of two factors](#Product factors). Since taking products of factors is a fundamental operation, underpinning features such as linked brushing, it makes sense to use metadata representation which facilitates this operation.  
+I contend that, compared to a flat vector/array, storing `Factor` metadata in a `Dataframe` offers several distinct advantages. First, when partitioning data, we often want to store multiple metadata attributes. For example, when we bin numeric variable, like in the example above, we want to store both the lower and upper bound of each parts' bin. The approach used in `cut` is to store multiple (two) pieces of metadata as a tuple, however, this becomes cumbersome as the dimensionality of the metadata grows. Further, if metadata is stored in a `Dataframe`, it becomes far easier to combine when taking [a product of two factors](#Product factors). Since factor product is a foundational operation in `plotscape`, underpinning fundamental features such as linked brushing, I argue that it is sensible to store metadata on `Factor` in a full `Dataframe` form.
 
 While all `Factor`s share the same fundamental structure - a data partition with associated metadata - factors can be created using various constructor functions. These constructor functions differ in what data they take as input and what metadata they store on the ouput, giving rise to several distinct `Factor` subtypes. These will be the subject of the next few sections.
 
 ##### Bijection and constant factors
 
-`Factor.bijection` and `Factor.constant` are two fairly trival factor constructor. `Factor.bijection` creates the finest possible data partition by assigning every case to its own part, whereas `Factor.constant` does the opposite and assigns all cases to a single part. The names of the reflect the mathematical index mapping functions: the bijective function $f(i) = i$ for `Factor.bijection` and the constant function $f(i) = 0$ for `Factor.constant`. Consequently, the cardinality of `Factor.bijection` is equal to the length of the data, while the cardinality of `Factor.constant` is always one. Both can be assigned arbitrary metadata, which must have length equal to the cardinality.
+`Factor.bijection` and `Factor.constant` are two fairly trival factor constructor. `Factor.bijection` creates the finest possible data partition by assigning every case to its own part, whereas `Factor.constant` does the opposite and assigns all cases to a single part. The names of the reflect the mathematical index mapping functions: the bijective function $f(i) = i$ for `Factor.bijection` and the constant function $f(i) = 0$ for `Factor.constant`. Consequently, the cardinality of `Factor.bijection` is equal to the length of the data, while the cardinality of `Factor.constant` is always one. Both can be assigned arbitrary metadata (which must have length equal to the cardinality).
 
-Both functions have the same signature:
+The two factor constructor functions have the same signature:
 
 ```{ts}
 #| eval: false
@@ -815,9 +837,11 @@ function constant<T extends Dataframe>(n: number, data?: T):
   Factor<T> 
 ```
 
-In either case, `n` represents the length of the data (the number of cases), and `data` represents some arbitrary metadata, of equal length as `n`. The variable `n` is used to construct an array of `indices`, which in the case of `Factor.bijection` is an increasing sequence starting at zero (`[0, 1, 2, 3, ..., n - 1]`) whereas in the case of `Factor.constant` it is simply an array of zeroes (`[0, 0, 0, 0, ..., 0]`). Technically, in this case, having an explicit array of indices is not necessary, and we could implement much of the same functionality via a callback (i.e. `(index: number) => index` for `Factor.bijection` and `(index: number) => 0` for `Factor.constant`). However, for many operations involving factors, it is necessary to store the length of the data (`n`), and while it would be possible to define a separate `n`/`length` property on `Factor`, in the context of other factor types, I found it simpler to allocate the corresponding array. While this does have some small memory cost, there is no computational cost involved, since, by definition, the partition represented by a bijection or constant factor does not change^[Unless the length of the data changes. I have not implemented data streaming for `plotscape` yet, however, it would be easy to extend bijection factor for streaming by simply pushing/popping the array of indices.]. 
+In either case, `n` represents the length of the data (the number of cases), and `data` represents some arbitrary metadata, of equal length as `n`. The variable `n` is used to construct an array of `indices`, which in the case of `Factor.bijection` is an increasing sequence starting at zero (`[0, 1, 2, 3, ..., n - 1]`), whereas in the case of `Factor.constant` it is simply an array of zeroes (`[0, 0, 0, 0, ..., 0]`). 
 
-`Factor.bijection` and `Factor.constant` their own specific use cases. `Factor.bijection` represents a one-to-one mapping such as that seen in scatterplots and parallel coordinate plots. In contrast, `Factor.constant` represent a constant mapping which assigns all cases to a single part. This is useful for computing summaries across the entirety of the data, such as is required for spinogram^[Other use-cases may be plots involving a single geometric object such as density plots and radar plots, however, these are currently not implemented in `plotscape`.].
+Technically, in both of these cases, having an explicit array of indices is not necessary, and we could implement much of the same functionality via a callback (i.e. `(index: number) => index` for `Factor.bijection` and `(index: number) => 0` for `Factor.constant`). However, for many operations involving factors, it is necessary to store the length of the data (`n`), and while it would be possible to define a separate `n`/`length` property on `Factor`, in the context of other factor types, I found it simpler to allocate the corresponding array. While this does incur a small memory cost, there is no computational overhead, since, by definition, the partition represented by a bijection or constant factor does not change^[Unless the length of the data changes. I have not implemented data streaming for `plotscape` yet, however, it would be easy to extend bijection factor for streaming by simply pushing/popping the array of indices.]. 
+
+`Factor.bijection` and `Factor.constant` have their own specific use cases. `Factor.bijection` represents a one-to-one mapping such as that seen in scatterplots and parallel coordinate plots. In contrast, `Factor.constant` represent a constant mapping which assigns all cases to a single part. This is useful for computing summaries across the entirety of the data, such as is required for spinogram^[Other use-cases may be plots involving a single geometric object such as density plots and radar plots, however, these are currently not implemented in `plotscape`.].
 
 As a final interesting side-note, both `Factor.bijection` and `Factor.constant` can be interpreted through the lense of category theory, as terminal and initial objects within the category of data partitions, with morphisms representing products between partitions. That is, the product of any factor with a `Factor.bijection` always yields another `Factor.bijection` (making this a terminal object), whereas the product of any factor with `Factor.constant` will simply yield that factor (making this an initial object).   
 
@@ -891,16 +915,16 @@ i_{\text{product}} &= k \cdot i_{\text{1}} + i_{\text{2}}
 (\#eq:product-indices)
 \end{align}
 
-This formula is similar to one discussed in  @wickham2013. Since $i_1$ and $i_2$ take values in $0 \ldots c_1 - 1$ and $0 \ldots c_2 - 1$, respectively^[Using zero-based indexing.], the product index is guaranteed to be unique: if $i_1 = 0$ then $i_{\text{product}} = i_2$, if $i_1 = 1$ then $i_{\text{product}} = k + i_2$, if $i_1 = 2$ then $i_{\text{product}} = 2k + i_2$, and so on. Further, since the the index corresponding to the first factor is multiplied by $k$, it intuitively gets assigned a greater "weight" and the relative order of the two factors is preserved. See for example the following table of product indices of two factors with cardinalities 2 and 3:
+This formula is similar to one discussed in  @wickham2013. Since $i_1$ and $i_2$ take values in $0 \ldots c_1 - 1$ and $0 \ldots c_2 - 1$, respectively^[Using zero-based indexing.], the product index is guaranteed to be unique: if $i_1 = 0$ then $i_{\text{product}} = i_2$, if $i_1 = 1$ then $i_{\text{product}} = k + i_2$, if $i_1 = 2$ then $i_{\text{product}} = 2k + i_2$, and so on. Further, since the the index corresponding to the first factor is multiplied by $k$, it intuitively gets assigned a greater "weight" and the relative order of the two factors is preserved. See for example Table \@ref(tab:product-indices) of product indices of two factors with cardinalities 2 and 3:
 
-```{r}
+```{r product-indices}
 #| echo: false
 tab <- expand.grid(i_2 = 0:2, i_1 = 0:1)
 tab$i_product <- 3 * tab$i_1 + tab$i_2
 tab <- tab[, c(2, 1, 3)]
 
-colnames(tab) <- c("Index 1", "Index 2", "Product index")
-knitr::kable(tab)
+colnames(tab) <- c("Factor 1 index", "Factor 2 index", "Product index")
+knitr::kable(tab, caption = "An example of product indices computed across two factors.")
 ```
 
 Finally, given a product index $i_{\text{product}}$, we can also recover the original indices (assuming $k$ is known):
@@ -912,7 +936,7 @@ i_2 &= i_{\text{product}} \mod k
 
 This is useful when constructing the product factor data: we need to take all unique product indices and use them to proxy the data of the original two factors.
 
-It should be mentioned that, as with binning, computing product indices based on Equation \@ref(eq:product-indices) creates gaps. Again, `plotscape` solves this by keeping track of the unique product indices and looping over the indices again to "clean" them, in $O(n)$ time. Further, since we want to retain factor order, `plotscape` also sorts the unique product indices before running the second loop. Hypothetically, with $n$ data points, there can be up $n$ unique product indices (even when $c_1, c_2 < n$), and so this sorting operation makes creating and updating product indices $O(n \cdot \log n)$ worst-case time complexity. However, I contend that, most of the time, the length of the unique product indices will be a fraction of the length of the data, and, further, profiling during development did identify this operation as a computational bottleneck. If sorting did turn out to be a bottleneck, there may be sub-$O(n \cdot \log n)$ algorithms which still preserve the factor order; however, I did not spend time trying to come up with such an algorithm. 
+It should be mentioned that, as with binning, computing product indices based on Equation \@ref(eq:product-indices) creates gaps. Again, `plotscape` solves this by keeping track of the unique product indices and looping over the indices again to "clean" them, in $O(n)$ time. Further, since we want to retain factor order, `plotscape` also sorts the unique product indices before running the second loop. Hypothetically, with $n$ data points, there can be up $n$ unique product indices (even when $c_1, c_2 < n$ both), and therefore this sorting operation makes creating and updating product indices have $O(n \cdot \log n)$ worst-case time complexity. However, I contend that, in the average case, the length of the unique product indices will be some smaller fraction of the length of the data. Further, profiling during development did not identify this operation as a performance bottleneck. However, if this sorting procedure did turn out to be a bottleneck at some point, there may be other more performant algorithms/data structures available^[For instance, one hypothetical option would be to store the computed product indices in a min-heap [see e.g. @cormen2022]. Min-heaps have a $O(\log n)$ time complexity for deleting the lowest element, which may seem like an improvement, however, to clean all indices, we would still need to delete all $n$ nodes, which would again result in $O(n \cdot \log n)$ time complexity, and therefore there would be little real advantage over sorting. Another option would be to simply trade time complexity for space complexity and maintain a "holey" array of all possible product indices with length $c_1 \cdot c_2$, which would only need to be compacted once all indices are computed.].
 
 Finally, `Factor.product` is the only factor constructor which actually assigns to the `parent` property of the output `Factor`. Specifically, the first factor always gets assigned as the parent of the product, creating a hierarchical structure. Technically, there are situations where a product of two factors is simply a "flat" product and not a hierarchy. This is the case, for example, when taking the product of two binned variables in a 2D histogram - the two factors are conceptually equal. However, in practice, this distinction rarely matters. Any computation involving a flat product can simply ignore the `parent` property, and the data is for all other intents and purposes equivalent. This similarity of flat and hierarchical products was also noted by Wilkinson, who used the terminology of cross and nest operators [@wilkinson2012, pp. 61]. 
 
@@ -951,7 +975,7 @@ Final thing to note is that, during rendering, transient selection status is rep
 
 The key responsibility of `Marker` is to manage linked selection status (the transient-persistent model discussed in Section \@ref(transient-persistent) above). It does this very similarly to a `Factor`, by maintaining an array of group assignment `indices`. In `plotscape`, each data point can be assigned one of four primary (persistent) groups based on linked selection: base (no selection), persistent selection group one, persistent selection group two, and persistent selection group three. Further, as also discusssed above, each of those groups can be further split in two based on transient selection state (selected or unselected), resulting in $4 \times 2 = 8$ distinct group assignments (such that the `cardinality` of `Marker` is always 8). These group assignments are coded into indices as follows:  
 
-```{r}
+```{r index-table}
 #| echo: false
 tab <- data.frame(
   group = c("Base", "Group one", "Group two", "Group three", 
@@ -959,18 +983,18 @@ tab <- data.frame(
   index = c(7, 6, 5, 4, 3, 2, 1, 0)
   )
 
-knitr::kable(tab)
+knitr::kable(tab, caption = "Mappings between groups assignment and `Marker` indices.")
 ```
 
-As you can see from the table above, selection groups are mapped to indices in reverse order. Transient group indices have lower values than persistent ones, and persistent groups are sorted in descending order. This reverse ordering is designed to simplify stacking operations. Group assignment inherently implies importance or salience, and, and during stacking, we often want the more "important" selected groups have to higher precedence than less significant, unselected ones [see also @urbanek2011]. For instance, in stacked barplots, the visually salient highlighted bar segments are generally placed at the base (y-axis intercept), and likewise, in dotplots, the highlighted circles are placed at the center, meaning that both have to come first in the aggregation order. Having the group indices coded in reverse order eliminates the need for sorting during later stages of the data visualization pipeline.  
+As you can see from Table \@ref(tab:index-table), selection groups are mapped to indices in reverse order. Transient group indices have lower values than persistent ones, and persistent groups are sorted in descending order. This reverse ordering is designed to simplify stacking operations. Group assignment inherently implies importance or salience, and, and during stacking, we often want the more "important" selected groups have to higher precedence than less significant, unselected ones [see also @urbanek2011]. For instance, in stacked barplots, the visually salient highlighted bar segments are generally placed at the base (y-axis intercept), and likewise, in dotplots, the highlighted circles are placed at the center, meaning that both have to come first in the aggregation order. Having the group indices coded in reverse order eliminates the need for sorting during later stages of the data visualization pipeline.  
 
-With four persistent groups (including base), many operations involving transient selection can be efficiently implemented using the third bit of the index. Specifically, as can be seen in table [REFERENCE], persistent indices range from 0 to 3 and transient indices range from 4 to 7. Thus, to determine whether a case is selected, we can do a simple bitwise check of the third bit. Likewise, to add or remove transient selection, we can set the third bit appropriately. 
+With four persistent groups (including base), many operations involving transient selection can be efficiently implemented using the third bit of the index. Specifically, as can be seen in Table \@ref(tab:index-table), persistent indices range from 0 to 3 and transient indices range from 4 to 7. Thus, to determine whether a case is selected, we can do a simple bitwise check of the third bit. Likewise, to add or remove transient selection, we can set the third bit appropriately. 
 
 It is important to mention that, while not a necessity, having four persistent groups works well when for the main purpose of `Marker`s: taking products with other factors. With four groups, the number of unique group assignments is eight and the maximum index values is `2^3 - 1 = 7`, resulting in dense `Marker` indices (i.e. all index values from 0 to `cardinality - 1` are valid). If we wanted to implement more persistent selection groups, we could do so by setting a higher bit (e.g. the fourth bit for up to eight persistent groups and sixteen unique indices in total), however, we may break the correspondence between cardinality and the number of unique indices. Practically, this may not cause any issues, as long as we ensure that the `Marker` cardinality is set to $2^{\text{index of the transient bit}}$ which may be different from the number of unique indices. However, I argue that, in most circumstances, four persistent selection groups are enough. It is well-known that human visual capacity is limited, and having more than $4 \times 2 = 8$ different group assignments represented by different colors within the same figure may overtax the visual system. Still, the ability to have arbitrary number of persistent groups may be implemented in future versions in `plotscape`, but it has not been a priority up to this point.
 
 ##### Updating group assignment indices
 
-As may be already apparent, a key operations that marker has to support have to do with updating the group assignment indices. The `Marker` namespace exports the following three functions for this very purpose:
+As may be already apparent, key operations that marker has to support have to do with updating the group assignment indices. The `Marker` namespace exports the following three functions for this very purpose:
 
 ```{ts}
 #| eval: false
@@ -1169,7 +1193,7 @@ const coordinates = Summaries.translate(summarized, [
 ]);
 ```
 
-Notice that the translating function actually maps three data sets. The first, representing a summary on the whole data set, is not used directly in histograms but it utility will be explained below. The second, representing summaries across histogram bins (whole bars), is used for axis limits and collision detection during selection. The third, representing summaries across the product of histogram bins and `Marker` status (bar segments), is used for rendering. Notice that, in the case of the `y1` variable in the third data set, we use the `Reduced.stack()` function to stack the bar segments on top of each other, within the appropriate factor level and using the associated `Reducer`.
+Notice that the translating function actually maps three data sets. The first, representing a summary on the whole data set, is not used directly in histograms but its utility will be explained below. The second, representing summaries across histogram bins (whole bars), is used for axis limits and collision detection during selection. The third, representing summaries across the product of histogram bins and `Marker` status (bar segments), is used for rendering. Notice that, in the case of the `y1` variable in the third data set, we use the `Reduced.stack()` function to stack the bar segments on top of each other, within the appropriate factor level and using the associated `Reducer`.
 
 The reason why the histogram data is summarized across three partitions - constant, bins, bins and marker - is to facilitate seamless transition between histograms and spinograms. Histograms and spinograms represent largely the same underlying data (summaries computed across bins), however, spinograms additionally require a whole-dataset summary to establish the upper (right) x-axis limit. By pre-computing summaries on the constant partition, we enable switching between histograms and spinograms without having to re-calculate the summaries, requiring only change in translation/aesthetic mapping. For illustration, here's how the translation of the same underlying data into a spinogram looks like in `plotscape`: 
 
@@ -1342,7 +1366,7 @@ The line of code above is essentially a branchless conditional. When `direction`
 
 With this detailed explanation, the behavior of `Scale.pushforward` should be clear. The `Scale.pullback` function follows a similar pattern, but with inverse transformations applied in reverse order (i.e. `direction` first, then `zero` and `one`, and finally `scale` and `mult`). This concludes our examination of the `Scale` class. We will now proceed to discuss the type and behavior of its `domain` and `codomain` components: `Expanse`s.
 
-#### Expanses {#expanse}
+#### Expanses {#expanses}
 
 As discussed in the previous section, a `Scale` maps values between two spaces, defined by the `domain` and `codomain` properties, both of type `Expanse`. In other words, a `Scale` primarily acts as a sort of a connector, while the `Expanse` properties handle the core underlying transformations. Specifically, `Expanse<T>` is a generic type designed to convert values of type `T` to and from numerical representations, a process facilitated by the previously mentioned `normalize` and `unnormalize` functions. Beyond these core functions, it may be also beneficial to have additional generic functionality on each `Expanse<T>` subtype, namely the ability to "train" the expanse on new values and return a list of potential axis breaks. This leads to the following interface: 
 
@@ -1611,7 +1635,7 @@ This sections details interactive events dispatched directly on `Plot`, and the 
 
 ##### Activation and deactivation
 
-The simplest events on a `Plot` are activation and deactivation. A `Plot` is activated by a click, with other plots being automatically deactivated (as discussed in Section @\ref(scene)). When active, a `Plot` actively listens to and dispatches plot-specific events, such as events related to mouse movement and specific keyboard key presses. Conversely, a deactivated `Plot` ignores these plot-specific events but may still responds to other events like calls to re-render or resize, as well as global events tied to mouse-clicks or keyboard presses (e.g. the reset event).
+The simplest events on a `Plot` are activation and deactivation. A `Plot` is activated by a click, with other plots being automatically deactivated (as discussed in Section \@ref(scene)). When active, a `Plot` actively listens to and dispatches plot-specific events, such as events related to mouse movement and specific keyboard key presses. Conversely, a deactivated `Plot` ignores these plot-specific events but may still responds to other events like calls to re-render or resize, as well as global events tied to mouse-clicks or keyboard presses (e.g. the reset event).
 
 ##### Growing/shrinking objects
 
@@ -1623,11 +1647,11 @@ Each `Plot` supports three mouse-move interaction modes: select, pan, or query. 
 
 ####### Selection
 
-The primary interactive feature in `plotscape` is linked selection. As discussed in Section [REFERENCE], the goal of `plotscape` is to make linked selection generic, such that any plot can simultaneously dispatch and display selection events. This requires that all rendered data objects can be selected.
+The primary interactive feature in `plotscape` is linked selection. As discussed in Section \@ref(goals), one of the primary goals of `plotscape` was to implement generic linked selection, such that any plot can simultaneously dispatch and display selection events. This requires that all rendered data objects can be selected.
 
 To perform selection, we have to iterate through a list of coordinates of geometric objects and identify the corresponding cases. As discussed in Section \@ref(plot-data), for aggregate plots, this process can be optimized by iterating over *whole* objects rather than their *parts*. For instance, when selecting bars in a stacked barplot, we can iterate through the coordinates of the entire bars, rather than the (more numerous) coordinates of individual bar segments, which are used for rendering. During the iteration loop, whenever we determine that an object is inside the selection (or overlaps it) using dedicated collision-detection functions, we add its corresponding cases to a list (the cases are stored as part of `Factor` data). Finally, an update event to the `Marker` with the list of cases as data.
 
-Currently, `plotscape` loops through all of the rendered objects each time selection happens. This process could be made more efficient by employing dedicated data structures such as quadtrees to isolate objects which have a non-zero chance of being in the selection area. However, as mentioned in Section \@ref(plot-rendering), the main computational bottleneck seems to be rendering, and, as such, optimizing selection may yield only marginal benefits in performance.
+Currently, `plotscape` loops through all of the rendered objects each time selection happens. This process could be made more efficient by employing dedicated data structures such as quadtrees to quickly isolate objects with non-zero chance of being in the selection region. However, as mentioned in Section \@ref(plot-rendering), the main computational bottleneck seems to be rendering, and, as such, currently, optimizing selection may yield only marginal benefits.
 
 ####### Panning
 

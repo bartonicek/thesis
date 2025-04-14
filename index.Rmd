@@ -80,7 +80,6 @@ clean_theme <- theme_bw() +
 )
 
 theme_set(clean_theme)
-
 options(width = 60)
 ```
 

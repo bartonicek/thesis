@@ -10,38 +10,6 @@ editor_options:
 
 The term "API" (application programming interface) is used in many different ways in many different contexts. However, in general, it tends to describe a bounded surface area that a program or service provides for interaction with other programs or services [see e.g. @bloch2006; @ofoeda2019]. For instance, the set of objects that a package or library exports, and the way these exported objects are structured and organized, can be considered an API.  However, the term API can also describe a protocol or a data format. The term is also sometimes used interchangeably with "Web API," which refers to a set of rules for communicating with specific web servers, typically using the HTTP protocol.
 
-#### Array of Structs (AoS) vs. Struct of Arrays (SoA) {#SoA}
-
-Two-dimensional, tabular data is ubiquitous in data analytic workflows. However, since computer memory is fundamentally one-dimensional. Thus, when representing two-dimensional tables, we need to pick one of the dimensions as "primary" (and the other as "secondary"). This leads to two fundamentally different data representations.  
-
-First, we can represent our data as an array of rows, also known as Array of Structs (AoS). In this representation, the rows of the data set are represented as heterogeneous key-value stores (structs/maps/dictionaries) and the entire data set is simply an array of these rows. For example, suppose we are storing a data set of users, such that, for each user, we record their name, age, and gender. Then the AoS way of representing this data (in TypeScript) would be:
-
-```{ts}
-interface User {
-  name: string;
-  age: number;
-  gender: string;
-}
-
-type Users = User[];
-```
-
-Second, we can represent our data as a dictionary of columns, known also as the Struct of Arrays (SoA). In this representation, columns are stored as homogeneous arrays in a single key-value store, and rows are represented implicitly. For example, the way to represent the same data in the SoA format would be:  
-
-```{ts}
-interface Users {
-  name: string[];
-  age: number[];
-  gender: string[];
-}
-```
-
-The way how we choose to represent the data has an impact on various performance characteristics, primarily compute time and memory. The mechanisms underlying these differences are quite general and apply to both in-memory and on-disk data; hence why the topic is also studied in database design [see e.g. @abadi2013]. The SoA layout has (typically) smaller memory footprint and better performance in tight loops that operate on individual columns, thanks to cache locality [@abadi2013; @acton2014; @kelley2023]. The AoS layout has arguably better developer ergonomics and can perform better when retrieving individual records [hence why it is more common in traditional Online Transaction Processing databases, @abadi2013].    
-
-Generally, for data analytic workflows where we need to summarize values across many rows of data, the column-based SoA representation has the better performance characteristics, and hence why it is typically preferred in data analytic libraries, for example in base R's `data.frame` class or in the `pandas` `DataFrame` class [@r2024; @pandas2024]. However, this is not always the case: for example, in the popular JavaScript data visualization/transformation library D3, data sets are represented as arrays of (JSON) rows [@bostock2022]. 
-
-A possible objection to worrying about data layout in high-level interpreted languages like JavaScript and R is that these languages may represent data completely differently under the hood anyway. For example, JavaScript engines such as V8 utilize hidden classes to lay out data in memory more efficiently [@bruni2017; @veight2024], such that even AoS data structures are backed by underlying arrays. However, despite this, there is still good evidence that packed arrays of plain values (such as integers and float), such as used in SoA, present better performance characteristics [@bruni2017; @stange2024].
-
 #### JSON {#JSON}
 
 Short for "JavaScript Object Notation", JSON is a flexible data format based on the JavaScript object type [also known as the "plain old JavaScript object", POJO, see @ecma2024; see also e.g. @bourhis2017; @pezoa2016]. On the top level, a JSON is a key-value store with string keys and values of any of the following types: string, number, boolean, null (an undefined/missing value), an array (which can contain any other valid JSON values), or another JSON object. 
@@ -63,9 +31,13 @@ The JSON specification is more restrictive compared to the full JavaScript objec
 
 The main advantages of JSON are that it is a simple, flexible, and human-readable format. Also, due to its recursive nature (JSON arrays and objects can contain other JSON arrays and objects), it can be used to express a wide variety of hierarchical data structures which would not be efficient to express in "flat" data formats such as CSV. However, this flexibility also comes with some disadvantages. The recursive nature of the format makes parsing JSON files inherently more time- and compute-intensive, and, since the values in a JSON can be of any type (as long as it is a valid JSON type), it is often necessary to validate JSON inputs [@pezoa2016].      
 
+#### GoG
+
+An acronym of the popular Grammar of Graphics model described by @wilkinson2012. Essentially, this model treats data visualizations as composed of semi-independent, modular components, which include variables, statistics, scales, coordinate systems, aesthetics, and geometries. This model has seen implementations in numerous data visualization systems, such as `ggplot2` [@wickham2016], Vega and Vegalite [@satyanarayan2016], or Tableau [@tableau2023]. 
+
 #### IDE
 
-An Integrated Development Environment (IDE) is a software application that streamlines software development by providing utilities and automation tools for various stages of the workflow, such as coding, testing, debugging, building, and version control. A core component is a text editor, which may be enhanced by various features such as syntax highlighting and code completion. IDEs may also include integrated debuggers, version control systems, and other tools. Some IDEs primarily focus on a single programming language [such as @rstudio2024], whereas others offer full multi-language support [e.g. Visual Studio Code, @microsoft2025].    
+An Integrated Development Environment (IDE) is a software application that streamlines software development by providing utilities and automation tools for various stages of the workflow, such as writing code, testing, debugging, building, and version control. A core component is a text editor, which may be enhanced by various features such as syntax highlighting and code completion. IDEs may also include integrated debuggers, version control systems, and other tools. Some IDEs primarily focus on a single programming language [such as @rstudio2024], whereas others offer full multi-language support [e.g. Visual Studio Code, @microsoft2025].    
 
 #### SVG
 

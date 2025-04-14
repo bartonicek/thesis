@@ -387,7 +387,7 @@ Overall, over time, the proportion of both cases and days in treatment the vario
 
 Of the rarer disorders, the one in which there seemed to be a significant relative rise in both the proportion of cases and days in treatment were mental and behavioral disorders associated with physiological disturbances and physical factors (F50-F59). This category includes disorders such as anorexia, bulimia, sleep disorders, and sexual dysfunction disorders. Given that this category was more prevalent in women and young people (as can be seen by interrogating Figure \@ref(fig:example-cases-diagnosis)), the likely explanation for this trend is rise in the number of cases of anorexia and bulimia. There also seemed to be slight of a decrease in the number of days spent in treatment by patients with stress-related disorders (F40-F49 without F42) and depression disorders (F32 and F33).
 
-We can quickly verify these findings by fitting simple linear regressions for each diagnosis. First, we can model the number of cases by year:
+We can quickly verify these findings by fitting simple linear regressions for each diagnosis. First, we can model the number of cases by year (see Table \@ref(tab:cases-by-year)). For most diagnoses, there seemed to be a decreasing trend, such that there were fewer cases with that particular diagnosis over time. The only diagnosis for which there was significant *increasing* trend was F50-F59, confirming the observations made in the interactive figure.
 
 ```{r cases-by-year}
 #| echo: false
@@ -419,9 +419,7 @@ knitr::kable(fits, align = "lllll",
   column_spec(4, color = ifelse(fits$`upper 95% CI` < 0, "red", "black"))
 ```
 
-As we can see in Table \@ref(tab:prevalence-over-time), for most diagnoses, there seemed to be a decreasing trend in the number of cases over time. The only diagnosis for which the number of cases was significantly *increasing* over time was F50-F59, confirming the observations made in the interactive figure.
-
-We can do the same for the number of days by year:
+Similarly, we can also investigated the trend in the number of days spent in care for each kind of diagnosis over time (see Table \@ref(tab:days-by-year)). For most diagnoses, the number of days spent in care seemed to increase over time, with particularly large increases observed for schizophrenia (F20-F29), Alzheimer's disease (F02 and G30), mental retardation (F70-F79), and personality disorders (F62-F69). The two diagnoses for which the number of days in treatment actually significantly decreased were, interestingly, stress-related disorders (F40-F49 without F42) and depression disorders (F32 and F33).    
 
 ```{r days-by-year}
 #| echo: false
@@ -452,8 +450,6 @@ knitr::kable(fits, align = "lllll",
   column_spec(3, color = ifelse(fits$`lower 95% CI` < 0, "red", "black")) |>
   column_spec(4, color = ifelse(fits$`upper 95% CI` < 0, "red", "black"))
 ```
-
-Here, the situation was a bit more varied. For most diagnoses, the number of days patients spent in care seemed to increase, with particularly large increases being observed for schizophrenia (F20-F29), Alzheimer's disease (F02 and G30), mental retardation (F70-F79), and personality disorders (F62-F69). The two diagnosis for which the number of days in treatment actually decreased were, interestingly, stress-related disorders (F40-F49 without F42) and depression disorders (F32 and F33).      
 
 #### Characteristics of patient cohorts over time
 
