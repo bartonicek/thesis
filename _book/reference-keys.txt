@@ -250,3 +250,5 @@ algebraic-as-categories
 functors
 references
 fig:monoids-groups-inverses
+geoms
+auxiliary-elements
