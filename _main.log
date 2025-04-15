@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999996 (TeX Live 2024) (preloaded format=xelatex 2025.2.10)  14 APR 2025 15:18
+This is XeTeX, Version 3.141592653-2.6-0.999996 (TeX Live 2024) (preloaded format=xelatex 2025.2.10)  15 APR 2025 10:08
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1589,12 +1589,12 @@ Underfull \vbox (badness 2762) has occurred while \output is active []
 
 [136]
 Overfull \hbox (43.5pt too wide) in paragraph at lines 2793--2793
-[]\TU/lmtt/m/n/10 ##   .. ..$ id       : 'scalar' chr "85cb46ab-7899-4d45-9824-cbeb6ad9dd93"[] 
+[]\TU/lmtt/m/n/10 ##   .. ..$ id       : 'scalar' chr "48948b55-3cb8-49df-b07d-3a32fecf17c8"[] 
  []
 
 
 Overfull \hbox (43.5pt too wide) in paragraph at lines 2793--2793
-[]\TU/lmtt/m/n/10 ##   .. ..$ id       : 'scalar' chr "f73b9fcd-ee06-474a-86ea-f9d5864d54af"[] 
+[]\TU/lmtt/m/n/10 ##   .. ..$ id       : 'scalar' chr "01c23cc2-71f6-459e-a9c3-47f77b3cbdb9"[] 
  []
 
 
@@ -1656,7 +1656,7 @@ Underfull \vbox (badness 4013) has occurred while \output is active []
 
 [153]
 Overfull \hbox (1.5pt too wide) in paragraph at lines 3078--3078
-[]\TU/lmtt/m/n/10 ## 1003 milliseconds has elapsed(143.29 milliseconds in dog years)[] 
+[]\TU/lmtt/m/n/10 ## 1002 milliseconds has elapsed(143.14 milliseconds in dog years)[] 
  []
 
 
@@ -1901,10 +1901,6 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 [216]
-
-LaTeX Warning: Reference `days-by-year' on page 217 undefined on input line 4947.
-
-
 
 [217]
 File: ./figures/example-cases-diagnosis-max.png Graphic file (type bmp)
@@ -2215,11 +2211,6 @@ Underfull \hbox (badness 10000) in paragraph at lines 6460--6461
 [280]
 
 [281]
-Overfull \hbox (123.45999pt too wide) in paragraph at lines 6556--6557
-[][][] [] [][][][][][][] [] [][][] [] [][][][][] [] [] [] [][][][][] [][] [] [][] [][][][][][][][] [] [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] []
- []
-
-
 
 [282]
 
@@ -2250,9 +2241,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 6901--6902
 
 [288]
 
-[289]
-
-[290] (./_main.aux)
+[289] (./_main.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
@@ -2262,12 +2251,12 @@ LaTeX Warning: There were undefined references.
 
  ) 
 Here is how much of TeX's memory you used:
- 31509 strings out of 475846
- 642495 string characters out of 5775011
+ 31508 strings out of 475846
+ 642481 string characters out of 5775011
  1160541 words of memory out of 5000000
- 53839 multiletter control sequences out of 15000+600000
+ 53838 multiletter control sequences out of 15000+600000
  565522 words of font info for 106 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  98i,12n,114p,3005b,557s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on _main.pdf (290 pages).
+Output written on _main.pdf (289 pages).
