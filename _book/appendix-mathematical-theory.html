@@ -209,8 +209,10 @@ div.csl-indent {
 <li class="chapter" data-level="4.5" data-path="problems.html"><a href="problems.html#rendering"><i class="fa fa-check"></i><b>4.5</b> Rendering</a>
 <ul>
 <li class="chapter" data-level="4.5.1" data-path="problems.html"><a href="problems.html#frames"><i class="fa fa-check"></i><b>4.5.1</b> Frames</a></li>
-<li class="chapter" data-level="4.5.2" data-path="problems.html"><a href="problems.html#graphical-elements"><i class="fa fa-check"></i><b>4.5.2</b> Graphical elements</a></li>
+<li class="chapter" data-level="4.5.2" data-path="problems.html"><a href="problems.html#geoms"><i class="fa fa-check"></i><b>4.5.2</b> Geoms</a></li>
+<li class="chapter" data-level="4.5.3" data-path="problems.html"><a href="problems.html#auxiliary-elements"><i class="fa fa-check"></i><b>4.5.3</b> Auxiliary graphical elements</a></li>
 </ul></li>
+<li class="chapter" data-level="4.6" data-path="problems.html"><a href="problems.html#summary-1"><i class="fa fa-check"></i><b>4.6</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="goals.html"><a href="goals.html"><i class="fa fa-check"></i><b>5</b> Goals</a>
 <ul>
@@ -218,7 +220,7 @@ div.csl-indent {
 <li class="chapter" data-level="5.2" data-path="goals.html"><a href="goals.html#programming-interface"><i class="fa fa-check"></i><b>5.2</b> Programming interface</a></li>
 <li class="chapter" data-level="5.3" data-path="goals.html"><a href="goals.html#user-interface"><i class="fa fa-check"></i><b>5.3</b> User interface</a></li>
 <li class="chapter" data-level="5.4" data-path="goals.html"><a href="goals.html#interactive-features"><i class="fa fa-check"></i><b>5.4</b> Interactive features</a></li>
-<li class="chapter" data-level="5.5" data-path="goals.html"><a href="goals.html#summary-1"><i class="fa fa-check"></i><b>5.5</b> Summary</a></li>
+<li class="chapter" data-level="5.5" data-path="goals.html"><a href="goals.html#summary-2"><i class="fa fa-check"></i><b>5.5</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="system.html"><a href="system.html"><i class="fa fa-check"></i><b>6</b> System description</a>
 <ul>
@@ -243,7 +245,7 @@ div.csl-indent {
 <ul>
 <li class="chapter" data-level="7.0.1" data-path="applied-example.html"><a href="applied-example.html#about-the-data-set"><i class="fa fa-check"></i><b>7.0.1</b> About the data set</a></li>
 <li class="chapter" data-level="7.0.2" data-path="applied-example.html"><a href="applied-example.html#interactive-exploration"><i class="fa fa-check"></i><b>7.0.2</b> Interactive exploration</a></li>
-<li class="chapter" data-level="7.1" data-path="applied-example.html"><a href="applied-example.html#summary-2"><i class="fa fa-check"></i><b>7.1</b> Summary</a></li>
+<li class="chapter" data-level="7.1" data-path="applied-example.html"><a href="applied-example.html#summary-3"><i class="fa fa-check"></i><b>7.1</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>8</b> Discussion</a>
 <ul>
@@ -294,7 +296,7 @@ div.csl-indent {
 <p>A relation is one of the simplest mathematical structures. Given two sets <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, a relation <span class="math inline">\(R\)</span> between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> is a subset of the Cartesian product of the two sets, <span class="math inline">\(R \subseteq X \times Y\)</span>. In other words, a relation can be thought of as the subset of pairs <span class="math inline">\((x, y) \in X \times Y\)</span> for which the condition “<span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> relate” holds. Note that <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> can be the same set, such that <span class="math inline">\(R \subseteq X \times X\)</span>.</p>
 <p>There are many different types of relations. One of the most fundamental relations is equality; in this case, “<span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> relate” means that, for our purposes, <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> are the same, i.e. <span class="math inline">\(x = y\)</span>. Other examples of relations include the usual order relations <span class="math inline">\(&lt;\)</span>, <span class="math inline">\(\leq\)</span>, <span class="math inline">\(&gt;\)</span>, or <span class="math inline">\(\geq\)</span>, and the divides operator <span class="math inline">\(\mid\)</span> (<span class="math inline">\(x \mid y\)</span> means “<span class="math inline">\(x\)</span> divides <span class="math inline">\(y\)</span> without remainder”).</p>
 <p>Since a relation is a subset of the product set <span class="math inline">\(X \times Y\)</span>, we can visualize it as a matrix, with values of <span class="math inline">\(X\)</span> as rows, values of <span class="math inline">\(Y\)</span> as columns, and the related pairs <span class="math inline">\((x, y)\)</span> marked out in some specific way. For example, here’s how we can display the order relation <span class="math inline">\(\leq\)</span> on the set <span class="math inline">\(X = \{ 1, 2, 3 \}\)</span>:</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-123"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-122"></span>
 <img src="figures/relations.png" alt="A relation is a subset of the Cartesian product of two sets. The diagram shows the usual order relation $\leq$. We can see that 1 is less than or equal to every other element, 2 is less than or equal to 2 and 3, and 3 is less than or equal to 3 only. Note the symmetry between rows and columns - this is due to the fact that the same set ($X$) is display on both dimensions." width="100%" height="100%" style="border: none;" />
 <p class="caption">
 Figure 11.1: A relation is a subset of the Cartesian product of two sets. The diagram shows the usual order relation <span class="math inline">\(\leq\)</span>. We can see that 1 is less than or equal to every other element, 2 is less than or equal to 2 and 3, and 3 is less than or equal to 3 only. Note the symmetry between rows and columns - this is due to the fact that the same set (<span class="math inline">\(X\)</span>) is display on both dimensions.

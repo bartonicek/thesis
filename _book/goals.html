@@ -209,8 +209,10 @@ div.csl-indent {
 <li class="chapter" data-level="4.5" data-path="problems.html"><a href="problems.html#rendering"><i class="fa fa-check"></i><b>4.5</b> Rendering</a>
 <ul>
 <li class="chapter" data-level="4.5.1" data-path="problems.html"><a href="problems.html#frames"><i class="fa fa-check"></i><b>4.5.1</b> Frames</a></li>
-<li class="chapter" data-level="4.5.2" data-path="problems.html"><a href="problems.html#graphical-elements"><i class="fa fa-check"></i><b>4.5.2</b> Graphical elements</a></li>
+<li class="chapter" data-level="4.5.2" data-path="problems.html"><a href="problems.html#geoms"><i class="fa fa-check"></i><b>4.5.2</b> Geoms</a></li>
+<li class="chapter" data-level="4.5.3" data-path="problems.html"><a href="problems.html#auxiliary-elements"><i class="fa fa-check"></i><b>4.5.3</b> Auxiliary graphical elements</a></li>
 </ul></li>
+<li class="chapter" data-level="4.6" data-path="problems.html"><a href="problems.html#summary-1"><i class="fa fa-check"></i><b>4.6</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="goals.html"><a href="goals.html"><i class="fa fa-check"></i><b>5</b> Goals</a>
 <ul>
@@ -218,7 +220,7 @@ div.csl-indent {
 <li class="chapter" data-level="5.2" data-path="goals.html"><a href="goals.html#programming-interface"><i class="fa fa-check"></i><b>5.2</b> Programming interface</a></li>
 <li class="chapter" data-level="5.3" data-path="goals.html"><a href="goals.html#user-interface"><i class="fa fa-check"></i><b>5.3</b> User interface</a></li>
 <li class="chapter" data-level="5.4" data-path="goals.html"><a href="goals.html#interactive-features"><i class="fa fa-check"></i><b>5.4</b> Interactive features</a></li>
-<li class="chapter" data-level="5.5" data-path="goals.html"><a href="goals.html#summary-1"><i class="fa fa-check"></i><b>5.5</b> Summary</a></li>
+<li class="chapter" data-level="5.5" data-path="goals.html"><a href="goals.html#summary-2"><i class="fa fa-check"></i><b>5.5</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="system.html"><a href="system.html"><i class="fa fa-check"></i><b>6</b> System description</a>
 <ul>
@@ -243,7 +245,7 @@ div.csl-indent {
 <ul>
 <li class="chapter" data-level="7.0.1" data-path="applied-example.html"><a href="applied-example.html#about-the-data-set"><i class="fa fa-check"></i><b>7.0.1</b> About the data set</a></li>
 <li class="chapter" data-level="7.0.2" data-path="applied-example.html"><a href="applied-example.html#interactive-exploration"><i class="fa fa-check"></i><b>7.0.2</b> Interactive exploration</a></li>
-<li class="chapter" data-level="7.1" data-path="applied-example.html"><a href="applied-example.html#summary-2"><i class="fa fa-check"></i><b>7.1</b> Summary</a></li>
+<li class="chapter" data-level="7.1" data-path="applied-example.html"><a href="applied-example.html#summary-3"><i class="fa fa-check"></i><b>7.1</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>8</b> Discussion</a>
 <ul>
@@ -326,8 +328,8 @@ Figure 5.1: A simple example of a default <code>plotscaper</code> figure. Note t
 <p>There were also several beneficial features which were relatively straightforward to implement: changing size and alpha, zooming, and panning. What made these features easier to implement is that they directly manipulate more surface-level attributes of the plot (i.e. scales), without altering earlier stages of the visualization pipeline. Despite their simplicity, these features can still be highly useful in interactive workflows. For example, zooming and panning can help to reveal trends within narrow ranges of the data, while adjustments to size and alpha can mitigate overplotting. Therefore, implementing these features was an easy choice.</p>
 <p>Finally, there were also several interactive features discussed in Section <a href="background.html#common-features">3.2.5</a> which I choose not to implement, including selection operators, semantic zooming, and grand tours (and animation in general). The primary reason for this was that these features are quite advanced and specialized, making them better suited to dedicated packages rather than general interactive data visualization frameworks. There were also some more feature-specific reasons. For instance, while selection operators (ability to combine selections with logical operators such as AND, OR, or XOR, and chain sequences of these operations) can be a powerful tool for more advanced users, its utility for novices is debatable. Specifically, in line with <span class="citation">Wills (<a href="#ref-wills2000">2000</a>)</span>, who argued that selection systems should be simple, powerful, and forgiving, I opted for a simple transient/persistent selection model. Similarly, semantic zooming, while also powerful in specific contexts, did not seem worth the effort since it is limited to only a certain number of plot types such as maps. Finally, grand tours and animation also seemed to be beyond the scope of the package.</p>
 </div>
-<div id="summary-1" class="section level2 hasAnchor" number="5.5">
-<h2><span class="header-section-number">5.5</span> Summary<a href="goals.html#summary-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="summary-2" class="section level2 hasAnchor" number="5.5">
+<h2><span class="header-section-number">5.5</span> Summary<a href="goals.html#summary-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>The practical part of this project had two primary objectives: to create a versatile package for interactive data exploration and to explore the challenges discussed in Section <a href="problems.html#problems">4</a>. The aim was to provide a tool which would be accessible to wide range of users, while also allowing some more advanced customization options. Achieving this required a simple API and an intuitive graphical interface. To support complex interactive workflows, I chose to implement a comprehensive suite of interactive features, including generalized linked selection, parameter manipulation, representation switching, querying, client-server communication, zooming, panning, and size/alpha adjustments.</p>
 <p>In the next section, I will discuss concrete details regarding the implementation of the package, regarding both its high-level API (<code>plotscaper</code>) as well as the more low-level platform (<code>plotscape</code>).</p>
 
