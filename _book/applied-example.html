@@ -209,8 +209,10 @@ div.csl-indent {
 <li class="chapter" data-level="4.5" data-path="problems.html"><a href="problems.html#rendering"><i class="fa fa-check"></i><b>4.5</b> Rendering</a>
 <ul>
 <li class="chapter" data-level="4.5.1" data-path="problems.html"><a href="problems.html#frames"><i class="fa fa-check"></i><b>4.5.1</b> Frames</a></li>
-<li class="chapter" data-level="4.5.2" data-path="problems.html"><a href="problems.html#graphical-elements"><i class="fa fa-check"></i><b>4.5.2</b> Graphical elements</a></li>
+<li class="chapter" data-level="4.5.2" data-path="problems.html"><a href="problems.html#geoms"><i class="fa fa-check"></i><b>4.5.2</b> Geoms</a></li>
+<li class="chapter" data-level="4.5.3" data-path="problems.html"><a href="problems.html#auxiliary-elements"><i class="fa fa-check"></i><b>4.5.3</b> Auxiliary graphical elements</a></li>
 </ul></li>
+<li class="chapter" data-level="4.6" data-path="problems.html"><a href="problems.html#summary-1"><i class="fa fa-check"></i><b>4.6</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="goals.html"><a href="goals.html"><i class="fa fa-check"></i><b>5</b> Goals</a>
 <ul>
@@ -218,7 +220,7 @@ div.csl-indent {
 <li class="chapter" data-level="5.2" data-path="goals.html"><a href="goals.html#programming-interface"><i class="fa fa-check"></i><b>5.2</b> Programming interface</a></li>
 <li class="chapter" data-level="5.3" data-path="goals.html"><a href="goals.html#user-interface"><i class="fa fa-check"></i><b>5.3</b> User interface</a></li>
 <li class="chapter" data-level="5.4" data-path="goals.html"><a href="goals.html#interactive-features"><i class="fa fa-check"></i><b>5.4</b> Interactive features</a></li>
-<li class="chapter" data-level="5.5" data-path="goals.html"><a href="goals.html#summary-1"><i class="fa fa-check"></i><b>5.5</b> Summary</a></li>
+<li class="chapter" data-level="5.5" data-path="goals.html"><a href="goals.html#summary-2"><i class="fa fa-check"></i><b>5.5</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="system.html"><a href="system.html"><i class="fa fa-check"></i><b>6</b> System description</a>
 <ul>
@@ -243,7 +245,7 @@ div.csl-indent {
 <ul>
 <li class="chapter" data-level="7.0.1" data-path="applied-example.html"><a href="applied-example.html#about-the-data-set"><i class="fa fa-check"></i><b>7.0.1</b> About the data set</a></li>
 <li class="chapter" data-level="7.0.2" data-path="applied-example.html"><a href="applied-example.html#interactive-exploration"><i class="fa fa-check"></i><b>7.0.2</b> Interactive exploration</a></li>
-<li class="chapter" data-level="7.1" data-path="applied-example.html"><a href="applied-example.html#summary-2"><i class="fa fa-check"></i><b>7.1</b> Summary</a></li>
+<li class="chapter" data-level="7.1" data-path="applied-example.html"><a href="applied-example.html#summary-3"><i class="fa fa-check"></i><b>7.1</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>8</b> Discussion</a>
 <ul>
@@ -302,18 +304,18 @@ div.csl-indent {
 <span id="cb1-2"><a href="applied-example.html#cb1-2" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">glimpse</span>(df)</span></code></pre></div>
 <pre><code>## Rows: 68,115
 ## Columns: 12
-## $ year                   &lt;int&gt; 2019, 2016, 2011, 2013, 201…
-## $ region_code            &lt;chr&gt; &quot;CZ071&quot;, &quot;CZ064&quot;, &quot;CZ080&quot;, …
-## $ region                 &lt;chr&gt; &quot;Olomoucký kraj&quot;, &quot;Jihomora…
-## $ sex                    &lt;chr&gt; &quot;female&quot;, &quot;male&quot;, &quot;male&quot;, &quot;…
-## $ diagnosis              &lt;chr&gt; &quot;f10&quot;, &quot;f2&quot;, &quot;f7&quot;, &quot;f4 with…
-## $ reason_for_termination &lt;chr&gt; &quot;release&quot;, &quot;early terminati…
-## $ age_category           &lt;chr&gt; &quot;40–49&quot;, &quot;30–39&quot;, &quot;30–39&quot;, …
-## $ stay_category          &lt;chr&gt; &quot;short&quot;, &quot;medium&quot;, &quot;short&quot;,…
-## $ field                  &lt;chr&gt; &quot;psychiatry&quot;, &quot;psychiatry&quot;,…
-## $ care_category          &lt;chr&gt; &quot;adult&quot;, &quot;adult&quot;, &quot;adult&quot;, …
-## $ cases                  &lt;int&gt; 13, 3, 2, 3, 1, 2, 2, 32, 2…
-## $ days                   &lt;int&gt; 196, 345, 38, 108, 1, 47, 3…</code></pre>
+## $ year                   &lt;int&gt; 2019, 2016, 2011, 2013, 2019, 2013, 2018, 2017,…
+## $ region_code            &lt;chr&gt; &quot;CZ071&quot;, &quot;CZ064&quot;, &quot;CZ080&quot;, &quot;CZ072&quot;, &quot;CZ080&quot;, &quot;C…
+## $ region                 &lt;chr&gt; &quot;Olomoucký kraj&quot;, &quot;Jihomoravský kraj&quot;, &quot;Moravsk…
+## $ sex                    &lt;chr&gt; &quot;female&quot;, &quot;male&quot;, &quot;male&quot;, &quot;female&quot;, &quot;male&quot;, &quot;fe…
+## $ diagnosis              &lt;chr&gt; &quot;f10&quot;, &quot;f2&quot;, &quot;f7&quot;, &quot;f4 without f42&quot;, &quot;f60–f61&quot;,…
+## $ reason_for_termination &lt;chr&gt; &quot;release&quot;, &quot;early termination&quot;, &quot;early terminat…
+## $ age_category           &lt;chr&gt; &quot;40–49&quot;, &quot;30–39&quot;, &quot;30–39&quot;, &quot;40–49&quot;, &quot;50–59&quot;, &quot;4…
+## $ stay_category          &lt;chr&gt; &quot;short&quot;, &quot;medium&quot;, &quot;short&quot;, &quot;short&quot;, &quot;short&quot;, &quot;…
+## $ field                  &lt;chr&gt; &quot;psychiatry&quot;, &quot;psychiatry&quot;, &quot;psychiatry&quot;, &quot;psyc…
+## $ care_category          &lt;chr&gt; &quot;adult&quot;, &quot;adult&quot;, &quot;adult&quot;, &quot;adult&quot;, &quot;adult&quot;, &quot;a…
+## $ cases                  &lt;int&gt; 13, 3, 2, 3, 1, 2, 2, 32, 2, 2, 1, 12, 1, 1, 2,…
+## $ days                   &lt;int&gt; 196, 345, 38, 108, 1, 47, 319, 3813, 120, 256, …</code></pre>
 <p>The data contains over 68,000 rows, totaling over 410,000 individual-patient hospitalizations. Each row records the number patients with a particular set of of characteristics released from a treatment facility during a given year, and the number of days the patients spent in treatment in total.</p>
 <p>In the original version of the data set, the column names as well as the labels of the categorical variables are in Czech. To make the analysis more easily accessible to non-Czech speakers, I took the liberty of translating most of these to English (excluding the <code>region</code> variable). The translation script is available in the <a href="https://github.com/bartonicek/thesis/blob/master/longterm_care_translate.R">thesis repository</a>. Additionally, the <a href="https://www.nzip.cz/data/2060-dlouhodoba-psychiatricka-pece">data set website</a> contains a JSON schema with a text description of each of the variables <span class="citation">(<a href="#ref-soukupova2023">Soukupová et al. 2023</a>)</span>. I translated these descriptions as well and provide them below, in Table <a href="applied-example.html#tab:longterm-care-schema">7.1</a>:</p>
 <table>
@@ -395,12 +397,10 @@ div.csl-indent {
 </table>
 <p>Before we go on to explore the data set with interactive figures, there are a couple of things to note about the data set. The first is that the data has been pre-aggregated, such that each row represents the combined number of releases within a given subgroup of patients. For example, the first row indicates that, in the year 2019, 13 women aged 40-49 were released from treatment facilities in Olomoucký kraj (region), after receiving short-term care for F10 ICD-10 diagnosis <span class="citation">(mental and behavioural disorders due to alcohol use, <a href="#ref-icd2024a">World Health Organization 2024a</a>)</span> for a sum total of 196 days:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="applied-example.html#cb3-1" tabindex="-1"></a>df[<span class="dv">1</span>, ]</span></code></pre></div>
-<pre><code>##   year region_code         region    sex diagnosis
-## 1 2019       CZ071 Olomoucký kraj female       f10
-##   reason_for_termination age_category stay_category
-## 1                release        40–49         short
-##        field care_category cases days
-## 1 psychiatry         adult    13  196</code></pre>
+<pre><code>##   year region_code         region    sex diagnosis reason_for_termination
+## 1 2019       CZ071 Olomoucký kraj female       f10                release
+##   age_category stay_category      field care_category cases days
+## 1        40–49         short psychiatry         adult    13  196</code></pre>
 <p>The reason for this aggregation is likely to anonymize the data and reduce the risk of identifying individual patients <span class="citation">(see e.g. <a href="#ref-pina2024">Pina et al. 2024</a>)</span>. However, when creating visualizations, we need to take the fact that each row represents a group of patients into account. For instance, when drawing a barplot, simply plotting row counts would not be appropriate, since that would ignore the size of the patient groups. Instead, to represent the data properly, we should aggregate (sum) either <code>cases</code> or <code>days</code>, depending on the question of interest. The same applies to all other aggregation plots, such as histograms <span class="citation">(i.e. weighted histograms, see e.g. <a href="#ref-unwin2008">Unwin, Theus, and Härdle 2008</a>)</span> and fluctuation diagrams.</p>
 <p>Fortunately, as we will see, <code>plotscaper</code> makes it easy to create these weighted types visualizations. And further, while the information this aggregated data provides inherently less granular information than patient-level records, we will see that it still preserves a large amount of structure.</p>
 </div>
@@ -734,7 +734,7 @@ Figure 7.4: Majority of patient load was taken up by the top five most common di
 <span id="cb16-4"><a href="applied-example.html#cb16-4" tabindex="-1"></a><span class="fu">subset</span>(df, sex <span class="sc">==</span> <span class="st">&quot;female&quot;</span> <span class="sc">&amp;</span> age_category_n <span class="sc">&lt;=</span> under_40) <span class="sc">|&gt;</span></span>
 <span id="cb16-5"><a href="applied-example.html#cb16-5" tabindex="-1"></a>  (\(x) <span class="fu">aggregate</span>(cases <span class="sc">~</span> diagnosis, sum, <span class="at">data =</span> x))() <span class="sc">|&gt;</span></span>
 <span id="cb16-6"><a href="applied-example.html#cb16-6" tabindex="-1"></a>  (\(x) x[<span class="fu">order</span>(<span class="sc">-</span>x<span class="sc">$</span>cases), ])() <span class="sc">|&gt;</span></span>
-<span id="cb16-7"><a href="applied-example.html#cb16-7" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">5</span>) <span class="sc">|&gt;</span> knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">align =</span> <span class="st">&quot;ll&quot;</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<span id="cb16-7"><a href="applied-example.html#cb16-7" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">5</span>) <span class="sc">|&gt;</span> knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">align =</span> <span class="st">&quot;ll&quot;</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>, <span class="at">booktabs =</span> <span class="cn">TRUE</span>,)</span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -1337,8 +1337,8 @@ Figure 7.5: While Alzheimer’s patients accounted for the longest hospitalized 
 <p>By investigating the diagnoses, we can discover some interesting trends in the patient cohorts. Specifically, by comparing the schizophrenia (F20-F29) and the Alzheimer’s disease diagnoses (F0 and G30), we can see that they show a complementary trend in the maximum number of days hospitalized. Specifically, whereas Alzheimer’s disease generally accounted for the longest-hospitalized patient cohorts up until 2016, schizophrenia accounted for the longest-hospitalized patient cohorts for five of the six years following 2016 (excluding 2020, where Alzheimer’s disease narrowly beat it out). This occurred despite schizophrenia patient cohorts shrinking in size over time and the fact that Alzheimer’s disease was more restricted in terms of age-range, so we would naturally expect larger cohorts (due to “lumping”). On that note, developmental disorders (F80-F99), despite the making up only a small proportion of the total number cases, made up many of the largest patients cohorts year over year. This is understandable given that these patients came almost exclusively from the youngest age group and were otherwise relatively homogeneous.</p>
 </div>
 </div>
-<div id="summary-2" class="section level2 hasAnchor" number="7.1">
-<h2><span class="header-section-number">7.1</span> Summary<a href="applied-example.html#summary-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="summary-3" class="section level2 hasAnchor" number="7.1">
+<h2><span class="header-section-number">7.1</span> Summary<a href="applied-example.html#summary-3" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>I have used the Long-term Care data set <span class="citation">(<a href="#ref-soukupova2023">Soukupová et al. 2023</a>)</span> to demonstrate the typical data analytic workflow using <code>plotscaper</code>. By creating interactive figures and leveraging a suite of interactive features such as linked selection, representation switching, querying, and zooming and panning, we were able to quickly discover many interesting features about the data set, highlighting the usefulness of the package and interactive data visualization in general.</p>
 <p>Some key take-away points were:</p>
 <ul>

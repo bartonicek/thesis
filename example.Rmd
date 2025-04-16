@@ -55,9 +55,11 @@ In the original version of the data set, the column names as well as the labels 
 ```{r longterm-care-schema}
 #| echo: false
 schema <- read.csv("./data/longterm_care_schema.csv")
-knitr::kable(schema, 
-             col.names = c("Translated name", "Original name", "Description"), 
-             caption = "Schema of the long-term care data set, including the original column names (Czech), as well as translated names and descriptions.")
+schema |>
+  knitr::kable(col.names = c("Translated name", "Original name", "Description"), 
+             caption = "Schema of the long-term care data set, including the original column names (Czech), as well as translated names and descriptions.",
+             booktabs = TRUE) |>
+  kableExtra::kable_styling(full_width = TRUE)
 ```
 
 Before we go on to explore the data set with interactive figures, there are a couple of things to note about the data set. The first is that the data has been pre-aggregated, such that each row represents the combined number of releases within a given subgroup of patients. For example, the first row indicates that, in the year 2019, 13 women aged 40-49 were released from treatment facilities in Olomoucký kraj (region), after receiving short-term care for F10 ICD-10 diagnosis [mental and behavioural disorders due to alcohol use, @icd2024a] for a sum total of 196 days:
@@ -294,10 +296,11 @@ Table \@ref(tab:icd10) lists codes used in the data, in order of their prevalenc
 #| echo: false
 icd10 <- read.csv("./data/longterm_care_icd10.csv", header = FALSE)
 
-kableExtra::kbl(icd10,
+icd10 |>
+  kableExtra::kbl(booktabs = TRUE,
                 col.names = c("Code", "Description"),
                 caption = "The data diagnosis code and ICD-10 description") |> 
-  kableExtra::kable_styling(full_width = FALSE)
+  kableExtra::kable_styling(full_width = TRUE)
 ```
 
 To explore the prevalence of the various diagnoses as well as their demographic characteristics, we create another interactive figure. For this figure, I decided to plot the following variables: `diagnosis`, `age_category`, `sex`, and `reason_for_termination`. These seemed like the most interesting demographic variables. The `region` variable could also be an interesting choice, however, initial exploration did not reveal any interesting trends so I decided to omit it. 
@@ -352,7 +355,7 @@ under_40 <- unique(df$age_category_n[df$age_category == "30–39"])
 subset(df, sex == "female" & age_category_n <= under_40) |>
   (\(x) aggregate(cases ~ diagnosis, sum, data = x))() |>
   (\(x) x[order(-x$cases), ])() |>
-  head(5) |> knitr::kable(align = "ll", row.names = FALSE)
+  head(5) |> knitr::kable(align = "ll", row.names = FALSE, booktabs = TRUE)
 ```
 
 
@@ -411,7 +414,7 @@ order_df3 <- aggregate(cases ~ diagnosis, sum, data = df)
 order_df3 <- order_df3[order(-order_df3$cases), ]
 fits <- fits[match(1:14, match(fits$diagnosis, order_df3$diagnosis)), ]
 
-knitr::kable(fits, align = "lllll",
+knitr::kable(fits, align = "lllll", booktabs = TRUE,
              caption = "Simple linear regressions of the number of cases by year for each diagnosis") |>
   kable_styling() |>
   column_spec(2, color = ifelse(fits$beta < 0, "red", "black")) |>
@@ -443,7 +446,7 @@ order_df3 <- aggregate(cases ~ diagnosis, sum, data = df)
 order_df3 <- order_df3[order(-order_df3$cases), ]
 fits <- fits[match(1:14, match(fits$diagnosis, order_df3$diagnosis)), ]
 
-knitr::kable(fits, align = "lllll",
+knitr::kable(fits, align = "lllll", booktabs = TRUE,
              caption = "Simple linear regressions of the number of days by year for each diagnosis") |>
   kable_styling() |>
   column_spec(2, color = ifelse(fits$beta < 0, "red", "black")) |>

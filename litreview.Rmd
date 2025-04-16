@@ -33,9 +33,14 @@ Data visualization has a rich and intricate history, and a comprehensive treatme
 
 The idea of graphically representing abstract information is very old. As one concrete example, a clay tablet recording a land survey during the Old Babylonian period (approximately 1900-1600 BCE) has recently been identified as the earliest visual depiction of the Pythagorean theorem [@mansfield2020]. Other examples of early abstract visualizations include maps of geographic regions and the night sky, and these were also the first to introduce the idea of a system of coordinates [@beniger1978; @friendly2021].
 
+<!-- Citations and references inside figure captions have to be provided externally -->
+(ref:mansfielda) [@mansfield2020]
+
+(ref:mansfieldb) [source: Wikimedia Commons, @mansfield2024]
+
 ```{r}
 #| echo: false
-#| fig-cap: "Photos of the tablet Si. 427 which has recently been identified as the earliest depiction of the Pythagorean theorem [@mansfield2020]. Left: the obverse of the tablet depicts a diagram of a field, inscribed with areas. Right: the reverse of the tablet contains a table of numbers, corresponding to the calculation of the areas. Source: Wikimedia Commons [@mansfield2024]."
+#| fig-cap: "Photos of the tablet Si. 427 which has recently been identified as the earliest depiction of the Pythagorean theorem (ref:mansfielda). Left: the obverse of the tablet depicts a diagram of a field, inscribed with areas. Right: the reverse of the tablet contains a table of numbers, corresponding to the calculation of the areas (ref:mansfieldb)."
 knitr::include_graphics("./figures/si427.jpg")
 ```
 
@@ -57,17 +62,23 @@ Compared to static data visualization, interactive data visualization is much mo
 
 Following the boom of static data visualization in the 1950's, interactive data visualization would not be left far behind. It started with tools designed for niche, specialized tasks. For example, @fowlkes1969 designed a system which allowed the users to view probability plots under different configurations of parameters and transformations, whereas @kruskal1964 created a tool for visualizing multidimensional scaling. 
 
+(ref:fisherkeller) [right, @fisherkeller1974]
+
+(ref:asa) [ASA Statistical Graphics Video Library](https://community.amstat.org/jointscsg-section/media/videos)
+
 ```{r}
 #| echo: false
-#| fig-cap: "John Tukey showcasing the PRIM-9 system (left), with an example of a projected scatterplot [right, @fisherkeller1974]. Screenshots were taken from a video available at: [ASA Statistical Graphics Video Library](https://community.amstat.org/jointscsg-section/media/videos))"
+#| fig-cap: "John Tukey showcasing the PRIM-9 system (left), with an example of a projected scatterplot (ref:fisherkeller). Screenshots were taken from a video available at the (ref:asa)."
 knitr::include_graphics("./figures/prim9.png")
 ```
 
 However, researchers soon recognized the potential of interactive data visualization as a general-purpose tool for exploring data. The first such general-purpose system was PRIM-9 [@fisherkeller1974]. PRIM-9 allowed for exploration of multivariate data via interactive features such as projection, rotation, masking, and filtering. Following PRIM-9, the late 1980's saw the emergence of a new generation of systems which provided an even wider range of capabilities. Tools like MacSpin [@donoho1988], Data Desk [@velleman1989], XLISP-STAT [@tierney1990], and XGobi [@swayne1998] introduced features such as interactive scaling, rotation, linked views, and grand tours (for a glimpse into these systems, excellent video-documentaries are available at [ASA Statistical Graphics Video Library](https://community.amstat.org/jointscsg-section/media/videos)).
 
+(ref:tierney) [figure reproduced from @tierney1990]
+
 ```{r xlisp-stat}
 #| echo: false
-#| fig-cap: "Example of interactive control of histogram highlighting in XLISP-STAT. Note that, unlike in many current data visualization systems, aggregation plots were sensitive to data order (not commutative). This non-commutative behavior meant that, for instance, a highlighted segment could appear in the middle of a bar (as seen in the figure above) or multiple non-adjacent highlighted cases might appear as 'stripes'. Figure reproduced from @tierney1990."
+#| fig-cap: "Example of interactive control of histogram highlighting in XLISP-STAT. Note that, unlike in many current data visualization systems, aggregation plots were sensitive to data order (not commutative). This non-commutative behavior meant that, for instance, a highlighted segment could appear in the middle of a bar (as seen in the figure above) or multiple non-adjacent highlighted cases might appear as 'stripes' (ref:tierney)."
 
 knitr::include_graphics("./figures/xlisp-stat.png")
 ```
@@ -76,10 +87,12 @@ knitr::include_graphics("./figures/xlisp-stat.png")
 
 The proliferation of open-source, general-purpose statistical computing software such as S and R further democratized the access to interactive data visualization tools [see also @leeuw2004]. Building on XGobi's foundation, GGobi [@swayne2003], expanded upon on XGobi and provided an integration layer for R. Other tools like MANET [@unwin1996] and Mondrian [@theus2002] introduced sophisticated linking techniques, with features such as selection sequences, allowing the users to combine a series of selections via logical operators [see also @unwin2006]. Further, iPlots [@urbanek2003] implemented a general framework for interactive plotting in R, allowing not only for one-shot rendering interactive figures from R but also for direct programmatic manipulation. This package was later expanded expanded for big data capabilities in iPlots eXtreme [@urbanek2011]. Finally, the `cranvas` package [@xie2014] introduced a set of reactive programming primitives that could be used for building the infrastructure underlying interactive graphics directly in R, within the model-view-controller (MVC) framework.   
 
+(ref:theus) [@theus2002]
+
 ```{r}
 #| echo: false
 #| fig-align: "center"
-#| fig-cap: "Examples of interactive features in Mondrian [@theus2002]: selection operators (left) and mosaic plot with querying (right)."
+#| fig-cap: "Examples of interactive features in Mondrian (ref:theus): selection operators (left) and mosaic plot with querying (right)."
 knitr::include_graphics("./figures/mondrian.png")
 ```
 
@@ -153,9 +166,11 @@ svg
   .attr("r", 2);
 ```
 
+(ref:holtz) [@holtz2022b]
+
 ```{r d3-scatterplot}
 #| echo: false
-#| fig-cap: "Example of a scatterplot built with D3.js. The code was taken from D3 Graph Gallery [@holtz2022b] and adjusted to use ES6 syntax and slightly more informative variable names/comments."
+#| fig-cap: "Example of a scatterplot built with D3.js. The code was taken from D3 Graph Gallery (ref:holtz) and adjusted to use ES6 syntax and slightly more informative variable names/comments."
 knitr::include_graphics("./figures/d3-scatterplot.png")
 ```
 
@@ -323,7 +338,7 @@ Some researchers ascribe to a broad definition of interactive data visualization
 
 However, for many other researchers, interactivity is a much narrower concept, hinging on high-level analytic features that enable efficient exploration of the data. These features include the ability to generate different views of the data (by e.g. zooming, panning, sorting, and filtering), and the reactive propagation of changes between connected or "linked" parts of the figure [@kehrer2012; @buja1996; @keim2002; @unwin1999; @chen2008]. Notably, these are also the features which enable the famous visual information-seeking mantra: "overview first, zoom and filter, then details-on-demand" [@shneiderman2003]. A similar idea also appears in visual analytics research, in the distinction between "surface-level" (or "low-level") and "parametric" (or "high-level") interactions, where surface-level interactions manipulate attributes of the visual domain only (e.g. zooming and panning), whereas parametric interactions manipulate parameters of some underlying mathematical model or algorithm [@leman2013; @self2018; @pike2009]. Ultimately, for researchers ascribing to this narrower view of interactivity, the presence of an interactive feature does not necessarily justify calling a figure "interactive", if it does not promote the acquisition of statistical insights above and beyond those provided by a static figure. For instance, while the ability to pick the colour of scatterplot points via an interactive palette widget may allow us to produce a more aesthetically pleasing result, it does not, generally, generate any new analytical understanding.
 
-Table \@ref(tab:definitions) provides a concise overview of the various perspectives on interactivity discussed above. It is important to note that this table is meant to server as a reference point for subsequent discussions within the text and is not intended to provide an exhaustive review. For more comprehensive taxonomies of interactive visualization systems and features, see e.g. @dimara2019, @yi2007.
+Table \@ref(tab:definitions) provides a concise overview of the various perspectives on interactivity discussed above. It is important to note that this table is meant to serve as a reference point for subsequent discussions within the text and is not intended to provide an exhaustive review. For more comprehensive taxonomies of interactive visualization systems and features, see e.g. @dimara2019, @yi2007.
 
 ```{r definitions}
 #| echo: false
@@ -336,22 +351,25 @@ tab <- data.frame(
            "Plot- and data-space manipulation",
            "Linked views",
            "Parametric updates"),
-
   details = c("The user can interactively manipulate the figure in some way",
               "The user's interactions propagate into the visualization with little to no lag",
               'The user can interactively explore different parts of the data set by doing actions which effectively amount to "subsetting" rows of the data (e.g. zooming, panning, and filtering)',
               r"(The user's interactions propagate across multiple plots (e.g. linked highlighting))",
-              "The user can manipulate the parameters of some underlying mathematical model or algorithm (e.g. histogram bins, grand tour projections, etc...)"),
-  papers = c("@brodbeck2009", 
-             "@becker1987, @buja1996, @jankun2007, and @rheingans2002", 
-             "@buja1996, @keim2002, @shneiderman2003, and @unwin1999", 
-             "@buja1996, @keim2002, @kehrer2012, @unwin1999, @theus2008, @wilhelm2008, @wills2008", 
-             "@leman2013, @pike2009")
+              "The user can manipulate the parameters of some underlying mathematical model or algorithm (e.g. histogram bins, grand tour projections, etc...)") #,
+  # papers = c("@brodbeck2009", 
+  #            "@becker1987, @buja1996, @jankun2007, and @rheingans2002", 
+  #            "@buja1996, @keim2002, @shneiderman2003, and @unwin1999", 
+  #            "@buja1996, @keim2002, @kehrer2012, @unwin1999, @theus2008, @wilhelm2008, @wills2008", 
+  #            "@leman2013, @pike2009"
+  #             )
 )
 
-colnames(tab) <- c("Name", "Details", "Selected references")
-kableExtra::kbl(tab, caption = "Summary of the perspectives on interactivity") |> 
-  kable_styling(full_width = FALSE)
+colnames(tab) <- c("Name", "Details") #, "Selected references")
+
+tab |>
+  knitr::kable(caption = "Summary of the perspectives on interactivity",
+                booktabs = TRUE, escape = FALSE) |>
+  kableExtra::kable_styling(full_width = TRUE)
 ```
 
 ### Complexity of interactive features {#complexity-of-features}
@@ -490,9 +508,11 @@ Other examples of representation switching include switching from a histogram to
 
 Linked selection, also known as linked brushing, linked highlighting, or linked views, is often considered one of the most versatile and powerful interactive data visualization features [see e.g. @becker1987; @buja1996; @wilhelm2003; @heer2012; @ward2015; @ware2019]. Fundamentally, it involves creating a figure with multiple "linked" plots. The user can then click or click-and-drag over objects in one plot, and the corresponding cases are highlighted across all the other plots, see Figure \@ref(fig:linked-selection). This makes it possible to quickly quickly explore trends across different dynamically-generated subsets of the data [@dix1998]. The ability to quickly materialize alternative views of the data makes this a particularly effective tool for data exploration [@wilhelm2008; @wills2008].
 
+(ref:henderson)
+
 ```{r linked-selection}
 #| echo: false
-#| fig-cap: "Linked selection involves highlighting the same cases across all plots. The user can select some objects in one plot, such as points in a scatterplot (top left), and the corresponding cases are higlighted in all the other plots. Source of the underlying data is the `mtcars` dataset [@henderson1981]."
+#| fig-cap: "Linked selection involves highlighting the same cases across all plots. The user can select some objects in one plot, such as points in a scatterplot (top left), and the corresponding cases are higlighted in all the other plots. Source of the underlying data is the `mtcars` dataset (ref:henderson)."
 knitr::include_graphics("./figures/linked-selection.png")
 ```
 
@@ -551,6 +571,8 @@ A particular challenge when discussing scales in data visualization is that the 
 
 Arguably, the most influential work in this field has been that of @stevens1946. In his fairly concise paper, Stevens defined a *scale* as method of assigning numbers to values, and introduced a four-fold classification classification, namely: nominal, ordinal, interval, and ratio scales (see Table \@ref(tab:stevens-scales)).
 
+(ref:eq1)$ x' = f(x)$, where $f$ is a bijection
+
 ```{r stevens-scales}
 #| echo: false
 
@@ -565,7 +587,7 @@ tab <- data.frame(
          "How far is $x$ from $y$?",
          "How many times is $x$ greater than $y$?"),
   v4 = c("$x' = f(x)$, where $f$ is a bijection", 
-         "$x' = f(x)$, where $f$ is a monotone bijection", 
+         "$x' = f(x)$, where $f$ is monotone", 
          "$x' = ax + b$, for $a, b \\in \\mathbb{R}$", 
          "$x' = ax$, for $a \\in \\mathbb{R}$")
 )
@@ -574,8 +596,12 @@ col_names <- c("Scale",
                "Structure",
                "Comparison", 
                "Valid transformations")
-knitr::kable(tab, col.names = col_names, 
-             caption = "Types of scales identified by Stevens (1946)")
+
+tab |>
+  knitr::kable(
+    caption = "Types of scales identified by Stevens (1946)",
+    col.names = col_names, booktabs = TRUE, escape = FALSE) |>
+  kableExtra::kable_styling(full_width = TRUE)
 
 ```
 

@@ -16,24 +16,24 @@
 \contentsline {subsection}{\numberline {3.2.1}Interactive vs.~interacting with}{25}{subsection.3.2.1}%
 \contentsline {subsection}{\numberline {3.2.2}Interactive \emph {enough}?}{26}{subsection.3.2.2}%
 \contentsline {subsection}{\numberline {3.2.3}Complexity of interactive features}{27}{subsection.3.2.3}%
-\contentsline {subsection}{\numberline {3.2.4}Working definition}{28}{subsection.3.2.4}%
-\contentsline {subsection}{\numberline {3.2.5}Common interactive features}{29}{subsection.3.2.5}%
+\contentsline {subsection}{\numberline {3.2.4}Working definition}{29}{subsection.3.2.4}%
+\contentsline {subsection}{\numberline {3.2.5}Common interactive features}{30}{subsection.3.2.5}%
 \contentsline {subsubsection}{\numberline {3.2.5.1}Changing size and opacity}{30}{subsubsection.3.2.5.1}%
 \contentsline {subsubsection}{\numberline {3.2.5.2}Zooming and panning}{30}{subsubsection.3.2.5.2}%
 \contentsline {subsubsection}{\numberline {3.2.5.3}Querying}{33}{subsubsection.3.2.5.3}%
 \contentsline {subsubsection}{\numberline {3.2.5.4}Sorting and reordering}{34}{subsubsection.3.2.5.4}%
 \contentsline {subsubsection}{\numberline {3.2.5.5}Parametric interaction}{35}{subsubsection.3.2.5.5}%
-\contentsline {subsubsection}{\numberline {3.2.5.6}Animation and projection}{36}{subsubsection.3.2.5.6}%
-\contentsline {subsubsection}{\numberline {3.2.5.7}Representation switching}{37}{subsubsection.3.2.5.7}%
+\contentsline {subsubsection}{\numberline {3.2.5.6}Animation and projection}{37}{subsubsection.3.2.5.6}%
+\contentsline {subsubsection}{\numberline {3.2.5.7}Representation switching}{38}{subsubsection.3.2.5.7}%
 \contentsline {subsubsection}{\numberline {3.2.5.8}Linked selection}{39}{subsubsection.3.2.5.8}%
 \contentsline {section}{\numberline {3.3}General data visualization theory}{41}{section.3.3}%
-\contentsline {subsection}{\numberline {3.3.1}Visualization goals}{41}{subsection.3.3.1}%
+\contentsline {subsection}{\numberline {3.3.1}Visualization goals}{43}{subsection.3.3.1}%
 \contentsline {subsection}{\numberline {3.3.2}Visual perception}{44}{subsection.3.3.2}%
 \contentsline {subsection}{\numberline {3.3.3}Scales and measurement}{44}{subsection.3.3.3}%
 \contentsline {subsection}{\numberline {3.3.4}Graphics formats}{47}{subsection.3.3.4}%
 \contentsline {subsubsection}{\numberline {3.3.4.1}Raster graphics}{47}{subsubsection.3.3.4.1}%
-\contentsline {subsubsection}{\numberline {3.3.4.2}Vector graphics}{47}{subsubsection.3.3.4.2}%
-\contentsline {section}{\numberline {3.4}Summary}{48}{section.3.4}%
+\contentsline {subsubsection}{\numberline {3.3.4.2}Vector graphics}{48}{subsubsection.3.3.4.2}%
+\contentsline {section}{\numberline {3.4}Summary}{49}{section.3.4}%
 \contentsline {chapter}{\numberline {4}Challenges}{51}{chapter.4}%
 \contentsline {section}{\numberline {4.1}The structure of this chapter: Data visualization pipeline}{51}{section.4.1}%
 \contentsline {section}{\numberline {4.2}Partitioning}{52}{section.4.2}%
@@ -65,152 +65,154 @@
 \contentsline {subsubsection}{\numberline {4.3.2.6}Whole equal to the sum of its parts: Monoids}{97}{subsubsection.4.3.2.6}%
 \contentsline {subsubsection}{\numberline {4.3.2.7}Programming with monoids}{98}{subsubsection.4.3.2.7}%
 \contentsline {subsubsection}{\numberline {4.3.2.8}Groups and inverses}{100}{subsubsection.4.3.2.8}%
-\contentsline {subsubsection}{\numberline {4.3.2.9}Other properties: Monotonicity and commutativity}{103}{subsubsection.4.3.2.9}%
-\contentsline {paragraph}{\numberline {4.3.2.9.1}Monotonicity}{103}{paragraph.4.3.2.9.1}%
-\contentsline {paragraph}{\numberline {4.3.2.9.2}Commutativity}{104}{paragraph.4.3.2.9.2}%
-\contentsline {subsubsection}{\numberline {4.3.2.10}Transforming summaries: Stacking, normalizing, and shifting}{104}{subsubsection.4.3.2.10}%
-\contentsline {paragraph}{\numberline {4.3.2.10.1}Stacking}{104}{paragraph.4.3.2.10.1}%
-\contentsline {paragraph}{\numberline {4.3.2.10.2}Normalizing}{105}{paragraph.4.3.2.10.2}%
-\contentsline {paragraph}{\numberline {4.3.2.10.3}Shifting}{106}{paragraph.4.3.2.10.3}%
-\contentsline {section}{\numberline {4.4}Scaling and encoding}{106}{section.4.4}%
-\contentsline {subsubsection}{\numberline {4.4.0.1}Scales as functions}{107}{subsubsection.4.4.0.1}%
-\contentsline {subsubsection}{\numberline {4.4.0.2}Limits of modeling scales with simple functions}{109}{subsubsection.4.4.0.2}%
-\contentsline {subsubsection}{\numberline {4.4.0.3}Solution: Scales as function composition}{111}{subsubsection.4.4.0.3}%
-\contentsline {paragraph}{\numberline {4.4.0.3.1}Reusability and discrete scales}{112}{paragraph.4.4.0.3.1}%
-\contentsline {paragraph}{\numberline {4.4.0.3.2}The intermediate interval}{113}{paragraph.4.4.0.3.2}%
-\contentsline {paragraph}{\numberline {4.4.0.3.3}Implementing scale features via the intermediate interval}{114}{paragraph.4.4.0.3.3}%
-\contentsline {subparagraph}{\numberline {4.4.0.3.3.1}Margins}{114}{subparagraph.4.4.0.3.3.1}%
-\contentsline {subparagraph}{\numberline {4.4.0.3.3.2}Panning}{114}{subparagraph.4.4.0.3.3.2}%
-\contentsline {subparagraph}{\numberline {4.4.0.3.3.3}Zooming}{115}{subparagraph.4.4.0.3.3.3}%
-\contentsline {paragraph}{\numberline {4.4.0.3.4}Inverses}{115}{paragraph.4.4.0.3.4}%
-\contentsline {paragraph}{\numberline {4.4.0.3.5}Scale transformations}{116}{paragraph.4.4.0.3.5}%
-\contentsline {subsubsection}{\numberline {4.4.0.4}Comparison to past implementations of scales}{116}{subsubsection.4.4.0.4}%
-\contentsline {section}{\numberline {4.5}Rendering}{118}{section.4.5}%
-\contentsline {subsection}{\numberline {4.5.1}Frames}{118}{subsection.4.5.1}%
-\contentsline {subsection}{\numberline {4.5.2}Graphical elements}{119}{subsection.4.5.2}%
-\contentsline {subsubsection}{\numberline {4.5.2.1}Rendering: A functor from summary statistics to graphics}{120}{subsubsection.4.5.2.1}%
-\contentsline {chapter}{\numberline {5}Goals}{121}{chapter.5}%
-\contentsline {section}{\numberline {5.1}User profile}{121}{section.5.1}%
-\contentsline {section}{\numberline {5.2}Programming interface}{122}{section.5.2}%
-\contentsline {section}{\numberline {5.3}User interface}{122}{section.5.3}%
-\contentsline {section}{\numberline {5.4}Interactive features}{123}{section.5.4}%
-\contentsline {section}{\numberline {5.5}Summary}{126}{section.5.5}%
-\contentsline {chapter}{\numberline {6}System description}{127}{chapter.6}%
-\contentsline {section}{\numberline {6.1}Core requirements}{128}{section.6.1}%
-\contentsline {section}{\numberline {6.2}High-level API (\texttt {plotscaper})}{129}{section.6.2}%
-\contentsline {subsection}{\numberline {6.2.1}API design}{129}{subsection.6.2.1}%
-\contentsline {subsection}{\numberline {6.2.2}Basic example}{131}{subsection.6.2.2}%
-\contentsline {subsubsection}{\numberline {6.2.2.1}Figure vs.~plot and selectors}{132}{subsubsection.6.2.2.1}%
-\contentsline {subsubsection}{\numberline {6.2.2.2}Variable names}{132}{subsubsection.6.2.2.2}%
-\contentsline {subsubsection}{\numberline {6.2.2.3}Variables and encodings}{134}{subsubsection.6.2.2.3}%
-\contentsline {subsection}{\numberline {6.2.3}The scene and the schema}{137}{subsection.6.2.3}%
-\contentsline {subsection}{\numberline {6.2.4}Client-server communication}{138}{subsection.6.2.4}%
-\contentsline {subsection}{\numberline {6.2.5}HTML embedding}{139}{subsection.6.2.5}%
-\contentsline {section}{\numberline {6.3}Low-level implementation (\texttt {plotscape})}{140}{section.6.3}%
-\contentsline {subsection}{\numberline {6.3.1}Programming paradigm}{140}{subsection.6.3.1}%
-\contentsline {subsubsection}{\numberline {6.3.1.1}Procedural programming}{141}{subsubsection.6.3.1.1}%
-\contentsline {subsubsection}{\numberline {6.3.1.2}Functional programming}{142}{subsubsection.6.3.1.2}%
-\contentsline {subsubsection}{\numberline {6.3.1.3}Object-oriented programming}{143}{subsubsection.6.3.1.3}%
-\contentsline {subsubsection}{\numberline {6.3.1.4}Data-oriented programming}{144}{subsubsection.6.3.1.4}%
-\contentsline {subsubsection}{\numberline {6.3.1.5}Final choice of programming paradigm and rationale}{145}{subsubsection.6.3.1.5}%
-\contentsline {subsubsection}{\numberline {6.3.1.6}Style used in code examples}{147}{subsubsection.6.3.1.6}%
-\contentsline {subsection}{\numberline {6.3.2}Data representation: Row-oriented vs.~column-oriented}{147}{subsection.6.3.2}%
-\contentsline {subsubsection}{\numberline {6.3.2.1}Ease of use}{148}{subsubsection.6.3.2.1}%
-\contentsline {subsubsection}{\numberline {6.3.2.2}Performance}{149}{subsubsection.6.3.2.2}%
-\contentsline {subsubsection}{\numberline {6.3.2.3}Final choice of data representation and rationale}{149}{subsubsection.6.3.2.3}%
-\contentsline {subsection}{\numberline {6.3.3}Reactivity}{150}{subsection.6.3.3}%
-\contentsline {subsubsection}{\numberline {6.3.3.1}Observer pattern}{150}{subsubsection.6.3.3.1}%
-\contentsline {subsubsection}{\numberline {6.3.3.2}Streams}{152}{subsubsection.6.3.3.2}%
-\contentsline {subsubsection}{\numberline {6.3.3.3}Virtual DOM}{154}{subsubsection.6.3.3.3}%
-\contentsline {subsubsection}{\numberline {6.3.3.4}Signals}{155}{subsubsection.6.3.3.4}%
-\contentsline {subsubsection}{\numberline {6.3.3.5}Reactivity in \texttt {plotscape} and final thoughts}{157}{subsubsection.6.3.3.5}%
-\contentsline {subsection}{\numberline {6.3.4}System components}{158}{subsection.6.3.4}%
-\contentsline {subsubsection}{\numberline {6.3.4.1}Indexable}{158}{subsubsection.6.3.4.1}%
-\contentsline {subsubsection}{\numberline {6.3.4.2}Getter}{159}{subsubsection.6.3.4.2}%
-\contentsline {subsubsection}{\numberline {6.3.4.3}Dataframe}{160}{subsubsection.6.3.4.3}%
-\contentsline {subsubsection}{\numberline {6.3.4.4}Factors}{162}{subsubsection.6.3.4.4}%
-\contentsline {paragraph}{\numberline {6.3.4.4.1}Bijection and constant factors}{164}{paragraph.6.3.4.4.1}%
-\contentsline {paragraph}{\numberline {6.3.4.4.2}Discrete factors}{165}{paragraph.6.3.4.4.2}%
-\contentsline {paragraph}{\numberline {6.3.4.4.3}Binned factors}{166}{paragraph.6.3.4.4.3}%
-\contentsline {paragraph}{\numberline {6.3.4.4.4}Product factors}{167}{paragraph.6.3.4.4.4}%
-\contentsline {subsubsection}{\numberline {6.3.4.5}Marker}{170}{subsubsection.6.3.4.5}%
-\contentsline {paragraph}{\numberline {6.3.4.5.1}Transient vs.~persistent selection}{170}{paragraph.6.3.4.5.1}%
-\contentsline {paragraph}{\numberline {6.3.4.5.2}Group assignment indices}{171}{paragraph.6.3.4.5.2}%
-\contentsline {paragraph}{\numberline {6.3.4.5.3}Updating group assignment indices}{173}{paragraph.6.3.4.5.3}%
-\contentsline {subsubsection}{\numberline {6.3.4.6}Aggregation: Reducers, reduceds, and summaries}{174}{subsubsection.6.3.4.6}%
-\contentsline {paragraph}{\numberline {6.3.4.6.1}Reducers}{174}{paragraph.6.3.4.6.1}%
-\contentsline {paragraph}{\numberline {6.3.4.6.2}Reduced}{175}{paragraph.6.3.4.6.2}%
-\contentsline {paragraph}{\numberline {6.3.4.6.3}Summaries}{177}{paragraph.6.3.4.6.3}%
-\contentsline {subsubsection}{\numberline {6.3.4.7}Scales}{179}{subsubsection.6.3.4.7}%
-\contentsline {paragraph}{\numberline {6.3.4.7.1}Scale properties}{181}{paragraph.6.3.4.7.1}%
-\contentsline {subsubsection}{\numberline {6.3.4.8}Expanses}{184}{subsubsection.6.3.4.8}%
-\contentsline {subsubsection}{\numberline {6.3.4.9}Continuous expanses}{185}{subsubsection.6.3.4.9}%
-\contentsline {subsubsection}{\numberline {6.3.4.10}Point expanses}{187}{subsubsection.6.3.4.10}%
-\contentsline {subsubsection}{\numberline {6.3.4.11}Band expanses}{189}{subsubsection.6.3.4.11}%
-\contentsline {paragraph}{\numberline {6.3.4.11.1}Compound and split expanses}{190}{paragraph.6.3.4.11.1}%
-\contentsline {subsubsection}{\numberline {6.3.4.12}Plot}{191}{subsubsection.6.3.4.12}%
-\contentsline {paragraph}{\numberline {6.3.4.12.1}Data}{192}{paragraph.6.3.4.12.1}%
-\contentsline {paragraph}{\numberline {6.3.4.12.2}Scales}{192}{paragraph.6.3.4.12.2}%
-\contentsline {paragraph}{\numberline {6.3.4.12.3}Rendering}{193}{paragraph.6.3.4.12.3}%
-\contentsline {subsubsection}{\numberline {6.3.4.13}Events and interactive features}{194}{subsubsection.6.3.4.13}%
-\contentsline {paragraph}{\numberline {6.3.4.13.1}Activation and deactivation}{194}{paragraph.6.3.4.13.1}%
-\contentsline {paragraph}{\numberline {6.3.4.13.2}Growing/shrinking objects}{194}{paragraph.6.3.4.13.2}%
-\contentsline {paragraph}{\numberline {6.3.4.13.3}Mouse-move interaction: selection, panning, and zooming}{194}{paragraph.6.3.4.13.3}%
-\contentsline {subsubsection}{\numberline {6.3.4.14}Zooming}{196}{subsubsection.6.3.4.14}%
-\contentsline {subsubsection}{\numberline {6.3.4.15}Scene}{196}{subsubsection.6.3.4.15}%
-\contentsline {paragraph}{\numberline {6.3.4.15.1}Plots}{197}{paragraph.6.3.4.15.1}%
-\contentsline {paragraph}{\numberline {6.3.4.15.2}Marker}{197}{paragraph.6.3.4.15.2}%
-\contentsline {paragraph}{\numberline {6.3.4.15.3}WebSockets client}{197}{paragraph.6.3.4.15.3}%
-\contentsline {paragraph}{\numberline {6.3.4.15.4}Events and Keybindings}{197}{paragraph.6.3.4.15.4}%
-\contentsline {chapter}{\numberline {7}Applied example}{199}{chapter.7}%
-\contentsline {subsection}{\numberline {7.0.1}About the data set}{199}{subsection.7.0.1}%
-\contentsline {subsection}{\numberline {7.0.2}Interactive exploration}{202}{subsection.7.0.2}%
-\contentsline {subsubsection}{\numberline {7.0.2.1}The relationship between cases and days}{202}{subsubsection.7.0.2.1}%
-\contentsline {subsubsection}{\numberline {7.0.2.2}Number of cases over time}{205}{subsubsection.7.0.2.2}%
-\contentsline {subsubsection}{\numberline {7.0.2.3}Age and child and adolescent mental health}{207}{subsubsection.7.0.2.3}%
-\contentsline {subsubsection}{\numberline {7.0.2.4}Prevalence of diagnoses}{211}{subsubsection.7.0.2.4}%
-\contentsline {subsubsection}{\numberline {7.0.2.5}Prevalence of diagnoses over time}{216}{subsubsection.7.0.2.5}%
-\contentsline {subsubsection}{\numberline {7.0.2.6}Characteristics of patient cohorts over time}{218}{subsubsection.7.0.2.6}%
-\contentsline {section}{\numberline {7.1}Summary}{220}{section.7.1}%
-\contentsline {chapter}{\numberline {8}Discussion}{223}{chapter.8}%
-\contentsline {section}{\numberline {8.1}Features and limitations of the theoretical model}{224}{section.8.1}%
-\contentsline {subsection}{\numberline {8.1.1}Why the model is necessary}{226}{subsection.8.1.1}%
-\contentsline {subsection}{\numberline {8.1.2}Disjointness}{227}{subsection.8.1.2}%
-\contentsline {subsection}{\numberline {8.1.3}Associativity and unitality}{228}{subsection.8.1.3}%
-\contentsline {subsection}{\numberline {8.1.4}Groups and inverses}{229}{subsection.8.1.4}%
-\contentsline {subsection}{\numberline {8.1.5}Additional properties: Monotonicity, commutativity, and others}{231}{subsection.8.1.5}%
-\contentsline {subsection}{\numberline {8.1.6}Model constraints}{232}{subsection.8.1.6}%
-\contentsline {subsection}{\numberline {8.1.7}Potential future directions}{233}{subsection.8.1.7}%
-\contentsline {section}{\numberline {8.2}Features and limitations of the delivered software}{234}{section.8.2}%
-\contentsline {subsection}{\numberline {8.2.1}Scope and features}{234}{subsection.8.2.1}%
-\contentsline {subsection}{\numberline {8.2.2}Declarative schemas and extensibility}{236}{subsection.8.2.2}%
-\contentsline {subsection}{\numberline {8.2.3}Performance}{239}{subsection.8.2.3}%
-\contentsline {chapter}{\numberline {9}Conclusion}{241}{chapter.9}%
-\contentsline {chapter}{\numberline {10}Appendix: Glossary}{243}{chapter.10}%
-\contentsline {subsubsection}{\numberline {10.0.0.1}API}{243}{subsubsection.10.0.0.1}%
-\contentsline {subsubsection}{\numberline {10.0.0.2}JSON}{243}{subsubsection.10.0.0.2}%
-\contentsline {subsubsection}{\numberline {10.0.0.3}GoG}{244}{subsubsection.10.0.0.3}%
-\contentsline {subsubsection}{\numberline {10.0.0.4}IDE}{244}{subsubsection.10.0.0.4}%
-\contentsline {subsubsection}{\numberline {10.0.0.5}SVG}{245}{subsubsection.10.0.0.5}%
-\contentsline {chapter}{\numberline {11}Appendix: Mathematical theory}{247}{chapter.11}%
-\contentsline {subsubsection}{\numberline {11.0.0.1}Relations}{247}{subsubsection.11.0.0.1}%
-\contentsline {subsubsection}{\numberline {11.0.0.2}Functions}{249}{subsubsection.11.0.0.2}%
-\contentsline {paragraph}{\numberline {11.0.0.2.1}More on bijections}{251}{paragraph.11.0.0.2.1}%
-\contentsline {paragraph}{\numberline {11.0.0.2.2}Composition}{252}{paragraph.11.0.0.2.2}%
-\contentsline {paragraph}{\numberline {11.0.0.2.3}The image and the pre-image}{253}{paragraph.11.0.0.2.3}%
-\contentsline {subsubsection}{\numberline {11.0.0.3}Partitions}{254}{subsubsection.11.0.0.3}%
-\contentsline {paragraph}{\numberline {11.0.0.3.1}Specializing preorders}{256}{paragraph.11.0.0.3.1}%
-\contentsline {paragraph}{\numberline {11.0.0.3.2}Structure preserving maps: Monotone maps}{257}{paragraph.11.0.0.3.2}%
-\contentsline {subsubsection}{\numberline {11.0.0.4}Monoids}{257}{subsubsection.11.0.0.4}%
-\contentsline {subsubsection}{\numberline {11.0.0.5}Simple examples of monoids}{258}{subsubsection.11.0.0.5}%
-\contentsline {paragraph}{\numberline {11.0.0.5.1}Beyond numbers}{259}{paragraph.11.0.0.5.1}%
-\contentsline {subsubsection}{\numberline {11.0.0.6}Specializing monoids}{260}{subsubsection.11.0.0.6}%
-\contentsline {paragraph}{\numberline {11.0.0.6.1}Structure preserving maps: Monoid homomorphisms}{261}{paragraph.11.0.0.6.1}%
-\contentsline {subsubsection}{\numberline {11.0.0.7}Groups}{262}{subsubsection.11.0.0.7}%
-\contentsline {paragraph}{\numberline {11.0.0.7.1}Simple examples of groups}{263}{paragraph.11.0.0.7.1}%
-\contentsline {paragraph}{\numberline {11.0.0.7.2}Structure preserving maps: Group homomorphisms}{263}{paragraph.11.0.0.7.2}%
-\contentsline {subsubsection}{\numberline {11.0.0.8}Categories}{263}{subsubsection.11.0.0.8}%
-\contentsline {paragraph}{\numberline {11.0.0.8.1}Isomorphisms within categories}{265}{paragraph.11.0.0.8.1}%
-\contentsline {paragraph}{\numberline {11.0.0.8.2}Algebraic structures described as categories}{266}{paragraph.11.0.0.8.2}%
-\contentsline {subsubsection}{\numberline {11.0.0.9}Functors}{269}{subsubsection.11.0.0.9}%
-\contentsline {chapter}{\numberline {12}References}{271}{chapter.12}%
+\contentsline {subsubsection}{\numberline {4.3.2.9}Other properties: Monotonicity and commutativity}{104}{subsubsection.4.3.2.9}%
+\contentsline {paragraph}{\numberline {4.3.2.9.1}Monotonicity}{104}{paragraph.4.3.2.9.1}%
+\contentsline {paragraph}{\numberline {4.3.2.9.2}Commutativity}{106}{paragraph.4.3.2.9.2}%
+\contentsline {subsubsection}{\numberline {4.3.2.10}Transforming summaries: Stacking, normalizing, and shifting}{106}{subsubsection.4.3.2.10}%
+\contentsline {paragraph}{\numberline {4.3.2.10.1}Stacking}{106}{paragraph.4.3.2.10.1}%
+\contentsline {paragraph}{\numberline {4.3.2.10.2}Normalizing}{107}{paragraph.4.3.2.10.2}%
+\contentsline {paragraph}{\numberline {4.3.2.10.3}Shifting}{107}{paragraph.4.3.2.10.3}%
+\contentsline {section}{\numberline {4.4}Scaling and encoding}{108}{section.4.4}%
+\contentsline {subsubsection}{\numberline {4.4.0.1}Scales as functions}{109}{subsubsection.4.4.0.1}%
+\contentsline {subsubsection}{\numberline {4.4.0.2}Limits of modeling scales with simple functions}{110}{subsubsection.4.4.0.2}%
+\contentsline {subsubsection}{\numberline {4.4.0.3}Solution: Scales as function composition}{113}{subsubsection.4.4.0.3}%
+\contentsline {paragraph}{\numberline {4.4.0.3.1}Reusability and discrete scales}{114}{paragraph.4.4.0.3.1}%
+\contentsline {paragraph}{\numberline {4.4.0.3.2}The intermediate interval}{114}{paragraph.4.4.0.3.2}%
+\contentsline {paragraph}{\numberline {4.4.0.3.3}Implementing scale features via the intermediate interval}{115}{paragraph.4.4.0.3.3}%
+\contentsline {subparagraph}{\numberline {4.4.0.3.3.1}Margins}{115}{subparagraph.4.4.0.3.3.1}%
+\contentsline {subparagraph}{\numberline {4.4.0.3.3.2}Panning}{116}{subparagraph.4.4.0.3.3.2}%
+\contentsline {subparagraph}{\numberline {4.4.0.3.3.3}Zooming}{116}{subparagraph.4.4.0.3.3.3}%
+\contentsline {paragraph}{\numberline {4.4.0.3.4}Inverses}{117}{paragraph.4.4.0.3.4}%
+\contentsline {paragraph}{\numberline {4.4.0.3.5}Scale transformations}{118}{paragraph.4.4.0.3.5}%
+\contentsline {subsubsection}{\numberline {4.4.0.4}Comparison to past implementations of scales}{118}{subsubsection.4.4.0.4}%
+\contentsline {section}{\numberline {4.5}Rendering}{119}{section.4.5}%
+\contentsline {subsection}{\numberline {4.5.1}Frames}{120}{subsection.4.5.1}%
+\contentsline {subsection}{\numberline {4.5.2}Geoms}{121}{subsection.4.5.2}%
+\contentsline {subsubsection}{\numberline {4.5.2.1}Rendering geoms: A functor from summary statistics to graphics}{121}{subsubsection.4.5.2.1}%
+\contentsline {subsection}{\numberline {4.5.3}Auxiliary graphical elements}{122}{subsection.4.5.3}%
+\contentsline {section}{\numberline {4.6}Summary}{123}{section.4.6}%
+\contentsline {chapter}{\numberline {5}Goals}{125}{chapter.5}%
+\contentsline {section}{\numberline {5.1}User profile}{125}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Programming interface}{126}{section.5.2}%
+\contentsline {section}{\numberline {5.3}User interface}{126}{section.5.3}%
+\contentsline {section}{\numberline {5.4}Interactive features}{127}{section.5.4}%
+\contentsline {section}{\numberline {5.5}Summary}{130}{section.5.5}%
+\contentsline {chapter}{\numberline {6}System description}{131}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Core requirements}{132}{section.6.1}%
+\contentsline {section}{\numberline {6.2}High-level API (\texttt {plotscaper})}{133}{section.6.2}%
+\contentsline {subsection}{\numberline {6.2.1}API design}{133}{subsection.6.2.1}%
+\contentsline {subsection}{\numberline {6.2.2}Basic example}{135}{subsection.6.2.2}%
+\contentsline {subsubsection}{\numberline {6.2.2.1}Figure vs.~plot and selectors}{136}{subsubsection.6.2.2.1}%
+\contentsline {subsubsection}{\numberline {6.2.2.2}Variable names}{136}{subsubsection.6.2.2.2}%
+\contentsline {subsubsection}{\numberline {6.2.2.3}Variables and encodings}{138}{subsubsection.6.2.2.3}%
+\contentsline {subsection}{\numberline {6.2.3}The scene and the schema}{141}{subsection.6.2.3}%
+\contentsline {subsection}{\numberline {6.2.4}Client-server communication}{142}{subsection.6.2.4}%
+\contentsline {subsection}{\numberline {6.2.5}HTML embedding}{143}{subsection.6.2.5}%
+\contentsline {section}{\numberline {6.3}Low-level implementation (\texttt {plotscape})}{144}{section.6.3}%
+\contentsline {subsection}{\numberline {6.3.1}Programming paradigm}{144}{subsection.6.3.1}%
+\contentsline {subsubsection}{\numberline {6.3.1.1}Procedural programming}{145}{subsubsection.6.3.1.1}%
+\contentsline {subsubsection}{\numberline {6.3.1.2}Functional programming}{146}{subsubsection.6.3.1.2}%
+\contentsline {subsubsection}{\numberline {6.3.1.3}Object-oriented programming}{147}{subsubsection.6.3.1.3}%
+\contentsline {subsubsection}{\numberline {6.3.1.4}Data-oriented programming}{148}{subsubsection.6.3.1.4}%
+\contentsline {subsubsection}{\numberline {6.3.1.5}Final choice of programming paradigm and rationale}{149}{subsubsection.6.3.1.5}%
+\contentsline {subsubsection}{\numberline {6.3.1.6}Style used in code examples}{151}{subsubsection.6.3.1.6}%
+\contentsline {subsection}{\numberline {6.3.2}Data representation: Row-oriented vs.~column-oriented}{151}{subsection.6.3.2}%
+\contentsline {subsubsection}{\numberline {6.3.2.1}Ease of use}{152}{subsubsection.6.3.2.1}%
+\contentsline {subsubsection}{\numberline {6.3.2.2}Performance}{153}{subsubsection.6.3.2.2}%
+\contentsline {subsubsection}{\numberline {6.3.2.3}Final choice of data representation and rationale}{153}{subsubsection.6.3.2.3}%
+\contentsline {subsection}{\numberline {6.3.3}Reactivity}{154}{subsection.6.3.3}%
+\contentsline {subsubsection}{\numberline {6.3.3.1}Observer pattern}{154}{subsubsection.6.3.3.1}%
+\contentsline {subsubsection}{\numberline {6.3.3.2}Streams}{156}{subsubsection.6.3.3.2}%
+\contentsline {subsubsection}{\numberline {6.3.3.3}Virtual DOM}{158}{subsubsection.6.3.3.3}%
+\contentsline {subsubsection}{\numberline {6.3.3.4}Signals}{159}{subsubsection.6.3.3.4}%
+\contentsline {subsubsection}{\numberline {6.3.3.5}Reactivity in \texttt {plotscape} and final thoughts}{161}{subsubsection.6.3.3.5}%
+\contentsline {subsection}{\numberline {6.3.4}System components}{162}{subsection.6.3.4}%
+\contentsline {subsubsection}{\numberline {6.3.4.1}Indexable}{162}{subsubsection.6.3.4.1}%
+\contentsline {subsubsection}{\numberline {6.3.4.2}Getter}{163}{subsubsection.6.3.4.2}%
+\contentsline {subsubsection}{\numberline {6.3.4.3}Dataframe}{164}{subsubsection.6.3.4.3}%
+\contentsline {subsubsection}{\numberline {6.3.4.4}Factors}{166}{subsubsection.6.3.4.4}%
+\contentsline {paragraph}{\numberline {6.3.4.4.1}Bijection and constant factors}{168}{paragraph.6.3.4.4.1}%
+\contentsline {paragraph}{\numberline {6.3.4.4.2}Discrete factors}{169}{paragraph.6.3.4.4.2}%
+\contentsline {paragraph}{\numberline {6.3.4.4.3}Binned factors}{170}{paragraph.6.3.4.4.3}%
+\contentsline {paragraph}{\numberline {6.3.4.4.4}Product factors}{171}{paragraph.6.3.4.4.4}%
+\contentsline {subsubsection}{\numberline {6.3.4.5}Marker}{174}{subsubsection.6.3.4.5}%
+\contentsline {paragraph}{\numberline {6.3.4.5.1}Transient vs.~persistent selection}{174}{paragraph.6.3.4.5.1}%
+\contentsline {paragraph}{\numberline {6.3.4.5.2}Group assignment indices}{175}{paragraph.6.3.4.5.2}%
+\contentsline {paragraph}{\numberline {6.3.4.5.3}Updating group assignment indices}{177}{paragraph.6.3.4.5.3}%
+\contentsline {subsubsection}{\numberline {6.3.4.6}Aggregation: Reducers, reduceds, and summaries}{178}{subsubsection.6.3.4.6}%
+\contentsline {paragraph}{\numberline {6.3.4.6.1}Reducers}{178}{paragraph.6.3.4.6.1}%
+\contentsline {paragraph}{\numberline {6.3.4.6.2}Reduced}{179}{paragraph.6.3.4.6.2}%
+\contentsline {paragraph}{\numberline {6.3.4.6.3}Summaries}{181}{paragraph.6.3.4.6.3}%
+\contentsline {subsubsection}{\numberline {6.3.4.7}Scales}{183}{subsubsection.6.3.4.7}%
+\contentsline {paragraph}{\numberline {6.3.4.7.1}Scale properties}{185}{paragraph.6.3.4.7.1}%
+\contentsline {subsubsection}{\numberline {6.3.4.8}Expanses}{188}{subsubsection.6.3.4.8}%
+\contentsline {subsubsection}{\numberline {6.3.4.9}Continuous expanses}{189}{subsubsection.6.3.4.9}%
+\contentsline {subsubsection}{\numberline {6.3.4.10}Point expanses}{191}{subsubsection.6.3.4.10}%
+\contentsline {subsubsection}{\numberline {6.3.4.11}Band expanses}{193}{subsubsection.6.3.4.11}%
+\contentsline {paragraph}{\numberline {6.3.4.11.1}Compound and split expanses}{194}{paragraph.6.3.4.11.1}%
+\contentsline {subsubsection}{\numberline {6.3.4.12}Plot}{195}{subsubsection.6.3.4.12}%
+\contentsline {paragraph}{\numberline {6.3.4.12.1}Data}{196}{paragraph.6.3.4.12.1}%
+\contentsline {paragraph}{\numberline {6.3.4.12.2}Scales}{196}{paragraph.6.3.4.12.2}%
+\contentsline {paragraph}{\numberline {6.3.4.12.3}Rendering}{197}{paragraph.6.3.4.12.3}%
+\contentsline {subsubsection}{\numberline {6.3.4.13}Events and interactive features}{198}{subsubsection.6.3.4.13}%
+\contentsline {paragraph}{\numberline {6.3.4.13.1}Activation and deactivation}{198}{paragraph.6.3.4.13.1}%
+\contentsline {paragraph}{\numberline {6.3.4.13.2}Growing/shrinking objects}{198}{paragraph.6.3.4.13.2}%
+\contentsline {paragraph}{\numberline {6.3.4.13.3}Mouse-move interaction: selection, panning, and zooming}{198}{paragraph.6.3.4.13.3}%
+\contentsline {subsubsection}{\numberline {6.3.4.14}Zooming}{200}{subsubsection.6.3.4.14}%
+\contentsline {subsubsection}{\numberline {6.3.4.15}Scene}{200}{subsubsection.6.3.4.15}%
+\contentsline {paragraph}{\numberline {6.3.4.15.1}Plots}{201}{paragraph.6.3.4.15.1}%
+\contentsline {paragraph}{\numberline {6.3.4.15.2}Marker}{201}{paragraph.6.3.4.15.2}%
+\contentsline {paragraph}{\numberline {6.3.4.15.3}WebSockets client}{201}{paragraph.6.3.4.15.3}%
+\contentsline {paragraph}{\numberline {6.3.4.15.4}Events and Keybindings}{201}{paragraph.6.3.4.15.4}%
+\contentsline {chapter}{\numberline {7}Applied example}{203}{chapter.7}%
+\contentsline {subsection}{\numberline {7.0.1}About the data set}{203}{subsection.7.0.1}%
+\contentsline {subsection}{\numberline {7.0.2}Interactive exploration}{206}{subsection.7.0.2}%
+\contentsline {subsubsection}{\numberline {7.0.2.1}The relationship between cases and days}{206}{subsubsection.7.0.2.1}%
+\contentsline {subsubsection}{\numberline {7.0.2.2}Number of cases over time}{210}{subsubsection.7.0.2.2}%
+\contentsline {subsubsection}{\numberline {7.0.2.3}Age and child and adolescent mental health}{212}{subsubsection.7.0.2.3}%
+\contentsline {subsubsection}{\numberline {7.0.2.4}Prevalence of diagnoses}{215}{subsubsection.7.0.2.4}%
+\contentsline {subsubsection}{\numberline {7.0.2.5}Prevalence of diagnoses over time}{221}{subsubsection.7.0.2.5}%
+\contentsline {subsubsection}{\numberline {7.0.2.6}Characteristics of patient cohorts over time}{222}{subsubsection.7.0.2.6}%
+\contentsline {section}{\numberline {7.1}Summary}{225}{section.7.1}%
+\contentsline {chapter}{\numberline {8}Discussion}{227}{chapter.8}%
+\contentsline {section}{\numberline {8.1}Features and limitations of the theoretical model}{228}{section.8.1}%
+\contentsline {subsection}{\numberline {8.1.1}Why the model is necessary}{230}{subsection.8.1.1}%
+\contentsline {subsection}{\numberline {8.1.2}Disjointness}{231}{subsection.8.1.2}%
+\contentsline {subsection}{\numberline {8.1.3}Associativity and unitality}{232}{subsection.8.1.3}%
+\contentsline {subsection}{\numberline {8.1.4}Groups and inverses}{233}{subsection.8.1.4}%
+\contentsline {subsection}{\numberline {8.1.5}Additional properties: Monotonicity, commutativity, and others}{235}{subsection.8.1.5}%
+\contentsline {subsection}{\numberline {8.1.6}Model constraints}{236}{subsection.8.1.6}%
+\contentsline {subsection}{\numberline {8.1.7}Potential future directions}{237}{subsection.8.1.7}%
+\contentsline {section}{\numberline {8.2}Features and limitations of the delivered software}{238}{section.8.2}%
+\contentsline {subsection}{\numberline {8.2.1}Scope and features}{238}{subsection.8.2.1}%
+\contentsline {subsection}{\numberline {8.2.2}Declarative schemas and extensibility}{240}{subsection.8.2.2}%
+\contentsline {subsection}{\numberline {8.2.3}Performance}{243}{subsection.8.2.3}%
+\contentsline {chapter}{\numberline {9}Conclusion}{245}{chapter.9}%
+\contentsline {chapter}{\numberline {10}Appendix: Glossary}{247}{chapter.10}%
+\contentsline {subsubsection}{\numberline {10.0.0.1}API}{247}{subsubsection.10.0.0.1}%
+\contentsline {subsubsection}{\numberline {10.0.0.2}JSON}{247}{subsubsection.10.0.0.2}%
+\contentsline {subsubsection}{\numberline {10.0.0.3}GoG}{248}{subsubsection.10.0.0.3}%
+\contentsline {subsubsection}{\numberline {10.0.0.4}IDE}{248}{subsubsection.10.0.0.4}%
+\contentsline {subsubsection}{\numberline {10.0.0.5}SVG}{249}{subsubsection.10.0.0.5}%
+\contentsline {chapter}{\numberline {11}Appendix: Mathematical theory}{251}{chapter.11}%
+\contentsline {subsubsection}{\numberline {11.0.0.1}Relations}{251}{subsubsection.11.0.0.1}%
+\contentsline {subsubsection}{\numberline {11.0.0.2}Functions}{253}{subsubsection.11.0.0.2}%
+\contentsline {paragraph}{\numberline {11.0.0.2.1}More on bijections}{255}{paragraph.11.0.0.2.1}%
+\contentsline {paragraph}{\numberline {11.0.0.2.2}Composition}{256}{paragraph.11.0.0.2.2}%
+\contentsline {paragraph}{\numberline {11.0.0.2.3}The image and the pre-image}{257}{paragraph.11.0.0.2.3}%
+\contentsline {subsubsection}{\numberline {11.0.0.3}Partitions}{258}{subsubsection.11.0.0.3}%
+\contentsline {paragraph}{\numberline {11.0.0.3.1}Specializing preorders}{260}{paragraph.11.0.0.3.1}%
+\contentsline {paragraph}{\numberline {11.0.0.3.2}Structure preserving maps: Monotone maps}{261}{paragraph.11.0.0.3.2}%
+\contentsline {subsubsection}{\numberline {11.0.0.4}Monoids}{261}{subsubsection.11.0.0.4}%
+\contentsline {subsubsection}{\numberline {11.0.0.5}Simple examples of monoids}{262}{subsubsection.11.0.0.5}%
+\contentsline {paragraph}{\numberline {11.0.0.5.1}Beyond numbers}{263}{paragraph.11.0.0.5.1}%
+\contentsline {subsubsection}{\numberline {11.0.0.6}Specializing monoids}{264}{subsubsection.11.0.0.6}%
+\contentsline {paragraph}{\numberline {11.0.0.6.1}Structure preserving maps: Monoid homomorphisms}{265}{paragraph.11.0.0.6.1}%
+\contentsline {subsubsection}{\numberline {11.0.0.7}Groups}{266}{subsubsection.11.0.0.7}%
+\contentsline {paragraph}{\numberline {11.0.0.7.1}Simple examples of groups}{267}{paragraph.11.0.0.7.1}%
+\contentsline {paragraph}{\numberline {11.0.0.7.2}Structure preserving maps: Group homomorphisms}{267}{paragraph.11.0.0.7.2}%
+\contentsline {subsubsection}{\numberline {11.0.0.8}Categories}{267}{subsubsection.11.0.0.8}%
+\contentsline {paragraph}{\numberline {11.0.0.8.1}Isomorphisms within categories}{269}{paragraph.11.0.0.8.1}%
+\contentsline {paragraph}{\numberline {11.0.0.8.2}Algebraic structures described as categories}{270}{paragraph.11.0.0.8.2}%
+\contentsline {subsubsection}{\numberline {11.0.0.9}Functors}{273}{subsubsection.11.0.0.9}%
+\contentsline {chapter}{\numberline {12}References}{275}{chapter.12}%

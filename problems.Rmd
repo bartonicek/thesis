@@ -50,9 +50,11 @@ However, data hiding can occur in many different ways. First, the data itself ca
 
 An infamous example of data hiding leading to disastrous real-world consequences was the 1986 crash of the Space Shuttle Challenger [see @dalal1989]. During a pre-launch teleconference, engineers debated the effect of temperature on the performance of O-ring gaskets, as the forecasted temperature was significantly lower than during previous launches. The plot in the left panel of Figure \@ref(fig:challenger) was used to argue that there was no correlation between temperature and O-ring failures. However, this plot had one significant flaw: it excluded launches where no failures occurred. After the disaster, when the data including the zero-failure launches was plotted, it revealed a clear trend of increasing number of failures as temperature decreased [see right panel of Figure \@ref(fig:challenger), see also @dalal1989].    
 
+(ref:dalal) [red, the source of right-panel data is @dalal1989]
+
 ```{r challenger}
 #| echo: false
-#| fig-cap: "Relationship between temperature and the number of O-ring failures within the 1986 Challenger data. Left: the original plot as presented during the pre-launch teleconference. Right: a reproduced plot of the same data, including the original data points (black), the excluded data points with zero failures (grey), and an estimated logistic regression fit (red). The source of right-panel data is @dalal1989."
+#| fig-cap: "Relationship between temperature and the number of O-ring failures within the 1986 Challenger data. Left: the original plot as presented during the pre-launch teleconference. Right: a reproduced plot of the same data, including the original data points (black), the excluded data points with zero failures (grey), and an estimated logistic regression fit (ref:dalal)."
 knitr::include_graphics("./figures/challenger.png")
 ```
 
@@ -331,9 +333,11 @@ Regular plot is a plot where the geometric objects within one layer represent a 
 
 To summarize the main point of this entire section, *graphs are graphs*. As a bit of a playful side-note, this view is not shared by everyone. Particularly, the poster of the following meme shared on the Mathematical Mathematics Memes Facebook group [@mathematicalmathematics2024] might not agree:
 
+(ref:mathematical) [@mathematicalmathematics2024]
+
 ```{r meme}
 #| echo: false
-#| fig-cap: "A joke image shared in the Mathematical Mathematics Memes Facebook group on the 28th of March, 2024 [@mathematicalmathematics2024]."
+#| fig-cap: "A joke image shared in the Mathematical Mathematics Memes Facebook group on the 28th of March, 2024 (ref:mathematical)."
 #| out-width: 75%
 knitr::include_graphics("./figures/graphs-cosplayers.jpg")
 ```
@@ -383,8 +387,6 @@ library(ggplot2)
 
 ggplot(fev, aes(smoke, fev, fill = smoke)) +
   geom_boxplot()
-# There is actually a bit more code involved in producing the plot below,
-# but it all just has to do with design/aesthetic flair
 ```
 
 ```{r}
@@ -456,8 +458,8 @@ Clearly then, we cannot stack means by summing them. Is there another way? Befor
 All in all, one might get the impression that we can only ever meaningfully "stack" or "highlight" sums and counts. However, take a look at the following plot:
 
 ```{r}
-# Code is not included because this plot cannot be recreated 
-# with a simple ggplot2 call (without data wrangling)
+# Code is not included because this plot cannot be
+# with a simple ggplot call (without data wrangling)
 ```
 
 ```{r grammar-barplot-maximums}
@@ -577,7 +579,7 @@ Figure \@ref(fig:barplot-preorder3) illustrates the simple fact that Bar 1 is fo
   
 While the benefits of reinterpreting our data hierarchy in this abstract way may still not be entirely apparent, I encourage the reader to bear with me. In the next sections, I will show the advantages of thinking about our data and visualizations categorically.
 
-#### Structure preserving maps: Functors
+#### Structure preserving maps: Functors {#structure-functors}
 
 A second fundamental concept in category theory is that of a structure-preserving map or a [functor](#functors). A functor is a mapping from one category to another which preserves the relationships within the first category [this can also be thought of as drawing a diagram of the the first category inside the second category, @fong2019]. 
 
@@ -613,9 +615,11 @@ The second property of functors states that all of the above paths must lead to 
 
 As we have established before, when visualizing data, we may start with the category/preorder of data subsets ordered by sibling subset union, as in Figure \@ref(fig:barplot-preorder2) (reproduced below for reminder). We would like to translate these data subsets into summary statistics, in a way that preserves the inherent structure in the data. As we will see, the appropriate way to do this is via a functor.
 
+(ref:repro1) Figure \@ref(fig:barplot-preorder2)
+
 ```{r barplot-preorder22}
 #| echo: false
-#| fig-cap: "Reproduction of Figure \\@ref(fig:barplot-preorder2): a diagram of a barplot/spineplot represented as a preorder/category ordered by set union."
+#| fig-cap: "Reproduction of (ref:repro1): Diagram of the barplot/spineplot preorder (category), ordered by set union."
 knitr::include_graphics("./figures/barplot-preorder2.png") 
 ```
 
@@ -727,7 +731,11 @@ These are exactly the properties we were looking for. In other words, if the sum
 Monoids are well-known in category theory and functional programming. When $M$ is the set of real numbers, a typical example is the summation $(\mathbb{R}, 0, +)$ (which we are familiar with as the "default" summary statistic in typical barplots). Other examples include the product $(\mathbb{R}, 1, \cdot)$ and maximum operators $(\mathbb{R}, \max, -\infty)$. However, the set $M$ does not have to be only numbers. For example, the set of strings with the concatenation operator $\text{++}$ and the empty string $\text{""}$ as the neutral element forms a valid monoid:
 
 $$\text{"hello" ++ ""} = \text{"" ++ "hello" } = \text{"hello"} $$
-$$\text{"quick " ++ (" brown" ++ " fox")}  \text{} = \text{("quick " ++ " brown ") ++ " fox"} = \text{"quick brown fox"}$$
+\begin{align}
+\text{"quick " ++ (" brown" ++ " fox")} &= \text{("quick " ++ " brown ") ++ " fox"} \\
+&= \text{"quick brown fox"}
+\end{align}
+
 
 While most summary statistics we care about in data visualization are quantitative, the fact that some non-numeric data summaries can behave like set union may be still interesting to ponder.
 
@@ -869,9 +877,11 @@ Finally, once we have computed our tree/category of summaries $\mathcal{S}$ via 
 
 Specifically, consider the diagram of $\mathcal{S}$ again:
 
+(ref:repro2) Figure \@ref(fig:barplot-preorder4) 
+
 ```{r}
 #| echo: false
-#| fig-cap: "Reproduction of Figure \\@ref(fig:barplot-preorder4): a diagram of barplot/spineplot summary statistic preorder/category, ordered by the combination operator $\\otimes$."
+#| fig-cap: "Reproduction of Figure (ref:repro2): Diagram of the barplot/spineplot summary statistic preorder (category), ordered by the combination operator $\\otimes$."
 knitr::include_graphics("./figures/barplot-preorder4.png")
 ```
 
@@ -1209,17 +1219,16 @@ In more practical terms, this suggests that the geoms representing our data shou
 
 ### Auxiliary graphical elements {#auxiliary-elements}
 
-Beyond geoms, plots also contain auxiliary graphical elements such as grid lines, axis labels, and ticks. In contrast to geoms, these auxiliary graphical elements are typically fewer in a number and require less frequent re-rendering. For instance, a continuous axis is typically represented by only 4-6 labels (as an example, in R, the `pretty` function uses `n = 5` as the default number of *desired* intervals used to find axis breaks). Thus, rendering two continuous axes requires drawing just 8-12 text strings, which, in many plots, is considerably fewer than the number of geoms. Furthermore, interaction does not always require re-rendering the auxiliary elements. For instance, as was mentioned in Section \@(stacking-part-whole), in monoidal plots like stacked barplots and histograms, axis limits are constant throughout linked selection, and so the axis labels do not need to be re-rendered. While other types of interactions, such as zooming and panning, do require re-rendering of axis labels, this is usually still relatively inexpensive when compared to the rendering of geoms. Finally, some auxiliary graphical elements require little to no re-rendering. For instance, the only time when axis titles need to be re-rendered is during representation switching, such as when transforming a barplot to a spineplot.
+Beyond geoms, plots also contain auxiliary graphical elements such as grid lines, axis labels, and ticks. In contrast to geoms, these auxiliary graphical elements are typically fewer in a number and require less frequent re-rendering. For instance, a continuous axis is typically represented by only 4-6 labels (as an example, in R, the `pretty` function uses `n = 5` as the default number of *desired* intervals used to find axis breaks). Thus, rendering two continuous axes requires drawing just 8-12 text strings, which, in many plots, is considerably fewer than the number of geoms. Furthermore, interaction does not always require re-rendering the auxiliary elements. For instance, as was mentioned in Section \@ref(stacking-part-whole), in monoidal plots like stacked barplots and histograms, axis limits are constant throughout linked selection, and so the axis labels do not need to be re-rendered. While other types of interactions, such as zooming and panning, do require re-rendering of axis labels, this is usually still relatively inexpensive when compared to the rendering of geoms. Finally, some auxiliary graphical elements require little to no re-rendering. For instance, the only time when axis titles need to be re-rendered is during representation switching, such as when transforming a barplot to a spineplot.
 
 For many auxiliary graphical elements derive all of the required information from the plot scales. For instance, axis labels, ticks, and grid lines can be obtained from the x- and y-scales. Axis titles are also often specified during scale construction or inferred from the data if not explicitly set. Beyond that, many data visualization systems also allow users to insert custom primitives such as text annotations, polygons, or lines. These can be used to enhance the visualization: for instance, polygons can be used as ribbons to highlight specific data ranges, and lines can be used to show trend lines computed from an arbitrary statistical model. However, it is important to note that, in interactive data visualization systems, due to being provided externally, these auxiliary graphical elements cannot be integrated with data-dependent interactions such as linked selection. 
 
 ## Summary
 
-Creating data visualizations involves a complex series of steps which together form the data visualization pipeline. This pipeline typically includes partitioning the data into subsets, computing summary statistics on these subsets, scaling these summaries and encoding them as visual attributes, and finally rendering them as geometric objects. Interactivity can affect all four stages of this process, and any resulting changes need to be propagated appropriately.
+Creating data visualizations involves a complex series of steps which together form the data visualization pipeline. This pipeline typically includes partitioning the data into subsets, computing summary statistics on these subsets, scaling the summaries and encoding them as visual attributes, and finally rendering them as geometric objects. Interactivity can affect all four stages of this process, and any resulting changes need to be propagated appropriately.
 
-Importantly, a key point I have made throughout this section is that the four steps of the data visualization are not independent, of each other or of user interaction. Specifically, the geometric objects we draw need to be congruent with the summary statistics computed on the underlying data, as well as with any interactions we may wish to incorporate. In other words, what we can *do* with our visualization is fundamentally determined by what the visualization *is*. This perspective goes against the model established in the Grammar of Graphics [@wilkinson2012], which views plots as composed out of independent, modular components. 
+Importantly, a core argument I have made throughout this section is that the four steps of the data visualization are not independent, of each other or of user interaction. Specifically, the geometric objects we draw need to be congruent with the summary statistics computed on the underlying data, as well as with any interactions we may wish to incorporate. In other words, what we can *do* with our visualization is fundamentally determined by what the visualization *is*. This perspective goes against the model established in the Grammar of Graphics [@wilkinson2012], which views plots as composed out of independent, modular components. While this independence model has many appealing properties, I argue that it is inadequate for reasoning about visualizations exhibiting hierarchical structure, such as those which naturally arise when highlighting parts of objects as a result of linked selection (see Section \@ref(stacking-not-graphical)).
 
+As an alternative, I proposed a simple algebraic model based on some fundamental concepts from category theory. Specifically, I conceptualize the whole data visualization pipeline as a functor (see Section \@ref(structure-functors)), mapping objects from a category (hierarchy) of data subsets to a category of objects. This functor is in turn composed of two other functors, the first which maps data subsets to sets of summary statistics (see Section \@ref(aggregation-functor)), and another which maps the summary statistics to geometric objects (see Section \@ref(rendering-functor)). The key point is that, for the visualization to be valid, the two mappings need to preserve the underlying structure. This naturally identifies certain algebraic structures as candidates for our statistics and geometric objects: namely, groups and monoids.
 
-
-
-
+The model allow us to identify which combinations of graphics and statistics will produce meaningful objects composed of parts, which in turn allow us to identify which visualizations will behave well under features like linked selection. Further, it also allows us to identify what kinds of linked selection will work. For instance, if our visualization (graphics and underlying statistics) is composed of monoids, we know it will behave well under single-group linked selection. However, if we want to highlight several selection groups simultaneously, then we also require the presence of inverses, necessitating groups.

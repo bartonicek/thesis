@@ -205,8 +205,10 @@ div.csl-indent {
 <li class="chapter" data-level="4.5" data-path="problems.html"><a href="problems.html#rendering"><i class="fa fa-check"></i><b>4.5</b> Rendering</a>
 <ul>
 <li class="chapter" data-level="4.5.1" data-path="problems.html"><a href="problems.html#frames"><i class="fa fa-check"></i><b>4.5.1</b> Frames</a></li>
-<li class="chapter" data-level="4.5.2" data-path="problems.html"><a href="problems.html#graphical-elements"><i class="fa fa-check"></i><b>4.5.2</b> Graphical elements</a></li>
+<li class="chapter" data-level="4.5.2" data-path="problems.html"><a href="problems.html#geoms"><i class="fa fa-check"></i><b>4.5.2</b> Geoms</a></li>
+<li class="chapter" data-level="4.5.3" data-path="problems.html"><a href="problems.html#auxiliary-elements"><i class="fa fa-check"></i><b>4.5.3</b> Auxiliary graphical elements</a></li>
 </ul></li>
+<li class="chapter" data-level="4.6" data-path="problems.html"><a href="problems.html#summary-1"><i class="fa fa-check"></i><b>4.6</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="goals.html"><a href="goals.html"><i class="fa fa-check"></i><b>5</b> Goals</a>
 <ul>
@@ -214,7 +216,7 @@ div.csl-indent {
 <li class="chapter" data-level="5.2" data-path="goals.html"><a href="goals.html#programming-interface"><i class="fa fa-check"></i><b>5.2</b> Programming interface</a></li>
 <li class="chapter" data-level="5.3" data-path="goals.html"><a href="goals.html#user-interface"><i class="fa fa-check"></i><b>5.3</b> User interface</a></li>
 <li class="chapter" data-level="5.4" data-path="goals.html"><a href="goals.html#interactive-features"><i class="fa fa-check"></i><b>5.4</b> Interactive features</a></li>
-<li class="chapter" data-level="5.5" data-path="goals.html"><a href="goals.html#summary-1"><i class="fa fa-check"></i><b>5.5</b> Summary</a></li>
+<li class="chapter" data-level="5.5" data-path="goals.html"><a href="goals.html#summary-2"><i class="fa fa-check"></i><b>5.5</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="system.html"><a href="system.html"><i class="fa fa-check"></i><b>6</b> System description</a>
 <ul>
@@ -239,7 +241,7 @@ div.csl-indent {
 <ul>
 <li class="chapter" data-level="7.0.1" data-path="applied-example.html"><a href="applied-example.html#about-the-data-set"><i class="fa fa-check"></i><b>7.0.1</b> About the data set</a></li>
 <li class="chapter" data-level="7.0.2" data-path="applied-example.html"><a href="applied-example.html#interactive-exploration"><i class="fa fa-check"></i><b>7.0.2</b> Interactive exploration</a></li>
-<li class="chapter" data-level="7.1" data-path="applied-example.html"><a href="applied-example.html#summary-2"><i class="fa fa-check"></i><b>7.1</b> Summary</a></li>
+<li class="chapter" data-level="7.1" data-path="applied-example.html"><a href="applied-example.html#summary-3"><i class="fa fa-check"></i><b>7.1</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>8</b> Discussion</a>
 <ul>
@@ -448,13 +450,13 @@ Figure 6.2: An example of a programmatically-created scatterplot matrix (SPLOM).
 ##   ..$ data:List of 3
 ##   .. ..$ type     : &#39;scalar&#39; chr &quot;scatter&quot;
 ##   .. ..$ variables: chr [1:2] &quot;wt&quot; &quot;mpg&quot;
-##   .. ..$ id       : &#39;scalar&#39; chr &quot;62cd3291-5a1f-4e50-9435-c467a2444d63&quot;
+##   .. ..$ id       : &#39;scalar&#39; chr &quot;5e5cf1bb-3b12-462e-ab80-d4f009d90782&quot;
 ##  $ :List of 2
 ##   ..$ type: chr &quot;add-plot&quot;
 ##   ..$ data:List of 3
 ##   .. ..$ type     : &#39;scalar&#39; chr &quot;bar&quot;
 ##   .. ..$ variables: chr &quot;cyl&quot;
-##   .. ..$ id       : &#39;scalar&#39; chr &quot;5cc2921f-fd26-45d4-81d4-8bb34dc23386&quot;</code></pre>
+##   .. ..$ id       : &#39;scalar&#39; chr &quot;32d8f34e-41e9-46e2-8663-560efbaadd22&quot;</code></pre>
 <p>As you can see, the object created with <code>create_schema</code> is essentially just a <code>list</code> of messages. Modifying the schema by calling functions such as <code>add_scatterplot</code> or <code>set_scale</code> simply appends a new message to the list, similar to how objects of class <code>ggplot</code> are modified by the corresponding functions and the <code>+</code> operator in <code>ggplot2</code> <span class="citation">(<a href="#ref-wickham2016">Wickham 2016</a>)</span>. This design makes it easy to transport schemas (e.g. as JSON) and modify them programmatically. Finally, rendering the schema into a figure requires an explicit call to <code>render</code>. Note that this approach is different from the popular R convention of rendering implicitly via a <code>print</code> method; however, there is a good reason for this design choice which will be discussed later.</p>
 <p>The call to <code>render</code> turns the schema gets turned into a live, interactive figure by constructing an <code>htmlwidgets</code> widget <span class="citation">(<a href="#ref-htmlwidgets2021">Vaidyanathan et al. 2021</a>)</span>. This bundles up the underlying data and <code>plotscape</code> code (JavaScript, HTML, CSS) into a standalone HTLM document, which may be served live, such as in RStudio viewer, or statically embedded in another HTML document, such as one produced with RMarkdown. All of the schema messages also get forwarded to the widget and applied sequentially, creating the figure.</p>
 <p>Note that, under this model, the schema merely records state-generating steps, not the state itself. In other words, all of the state lives on the scene (the client-side figure). This design avoids state duplication between the R session (server) and web-browser-based figure (client), eliminating the need for synchronization.</p>
@@ -1745,7 +1747,7 @@ Pandas Core Team. 2024. <span>“DataFrame <span>—</span> Pandas 2.2.3 Documen
 Parent, Sean. 2013. <span>“Inheritance Is the Base Class of Evil.”</span> <em>GoingNative</em>. Youtube. <a href="https://www.youtube.com/watch?v=2bLkxj6EVoM&amp;list=PLM5v5JsFsgP21eB4z2mIL8upkvT00Tw9B">https://www.youtube.com/watch?v=2bLkxj6EVoM&amp;list=PLM5v5JsFsgP21eB4z2mIL8upkvT00Tw9B</a>.
 </div>
 <div id="ref-parent2015" class="csl-entry">
-———. 2015. <span>“Better Code: Data Structures.”</span> <em>CppCon</em>. Youtube. <a href="https://www.youtube.com/watch?v=sWgDk-o-6ZE&amp;list=PLM5v5JsFsgP21eB4z2mIL8upkvT00Tw9B&amp;index=5">https://www.youtube.com/watch?v=sWgDk-o-6ZE&amp;list=PLM5v5JsFsgP21eB4z2mIL8upkvT00Tw9B&amp;index=5</a>.
+———. 2015. <span>“Better Code: Data Structures.”</span> <em>CppCon</em>. Youtube. <a href="https://www.youtube.com/watch?v=sWgDk-o-6ZE">https://www.youtube.com/watch?v=sWgDk-o-6ZE</a>.
 </div>
 <div id="ref-parent2018" class="csl-entry">
 ———. 2018. <span>“<span>Generic Programming</span>.”</span> Pacific++. <a href="https://www.youtube.com/watch?v=iwJpxWHuZQY">https://www.youtube.com/watch?v=iwJpxWHuZQY</a>.
