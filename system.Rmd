@@ -683,6 +683,7 @@ This function becomes particularly useful when implementing other data structure
 In many data analytic workflows, a fundamental data structure is that of a two-dimensional table or dataframe. As discussed in Section \@ref(row-column), we can represent this data structure as either a dictionary of columns or a list of rows, with the column-wise representation having some advantages for analytical workflows. As such, in `plotscape`, I chose to represent `Dataframe` as a dictionary columns. Furthermore, in `plotscape`, a key difference is that all columns are not required to be fixed-length arrays; instead, they can be any [`Indexable`](#indexable)s:
 
 ```{ts}
+#| eval: false
 interface Dataframe {
   [key: string]: Indexable
 }
@@ -691,6 +692,7 @@ interface Dataframe {
 For example, the following is a valid instance of a `Dataframe`:
 
 ```{ts}
+#| eval: false
 const data = {
   name: [`john`, `jenny`, `michael`],
   age: [17, 24, 21],
@@ -770,6 +772,7 @@ As discussed in Section \@ref(problems), when visualizing, we often need to spli
 `Factor`s provide a way to represent such data partitions and the associated metadata. They are similar to base R's `factor` S3 class, although there are some important differences which will be discussed below. `Factor` has the following interface:
 
 ```{ts}
+#| eval: false
 interface Factor<T extends Dataframe> {
   cardinality: number;
   indices: number[];
@@ -792,7 +795,7 @@ The data associated with factor's levels is stored in the `data` property, which
 ```{ts}
 #| eval: false
 { labels: ["A", "B", "C"] }
-// In row-oriented form: [{ label: "A" }, { label: "B" }, { label: "C" }]
+// In row-oriented form: [{ label: "A" }, { label: "B" }, ... ]
 ```
 
 Finally, the optional `parent` property is a pointer to the factor representing the parent partition.  
@@ -808,6 +811,7 @@ cut(1:10, breaks = c(0, 5, 10))
 With `Factor`, the same information would be represented as:
 
 ```{ts}
+#| eval: false
 const factor: Factor = {
   cardinality: 2,
   indices: [0, 0, 0, 0, 0, 1, 1, 1, 1, 1],
@@ -865,6 +869,7 @@ The typical use case for `Factor.from` is the barplot. Here, we take an array of
 Arrays of continuous values can be turned into factors by binning. `Factor.bin` is the constructor function used to perform this binning. It has the following signature:
 
 ```{ts}
+#| eval: false
 type BinOptions = { 
   breaks?: number[]; 
   nBins?: number; 
@@ -948,6 +953,7 @@ An important component which also serves the function of a `Factor` but deserves
 `Marker` has the following `Factor`-like interface which will be gradually explained below^[The actual implementation in the current version of `plotscape` differs slightly in several key aspects, however, I chose to use this simplified interface here for clarity.]:
 
 ```{ts}
+#| eval: false
 interface Marker {
   cardinality: number;
   indices: number[];
@@ -1023,7 +1029,7 @@ As discussed in Section \@ref(aggregation), a key challenge when computing stati
 A `Reducer<T>` is simply a data container that stores functionality and metadata associated with a monoid on type `T`. It has the following interface:
 
 ```{ts}
-// Reducer.ts
+#| eval: false
 interface Reducer<T> {
   name: string;
   initialfn: () => T;
@@ -1101,6 +1107,7 @@ function reduce<T>(x: T[], factor: Factor,
 After we apply this operation, we could just return the result array `T[]` as in the example above, however, in the general case, this approach would discard important information. Specifically, as discussed in Section \@ref(aggregation), in a data visualization system, we rarely want to treat summaries as a simple "flat" array of values; instead, to be able to apply transformation such as stacking or normalization, we need to retain the information about *how* these values have been produced (`Reducer`), over which partition (`Factor`), and *which* other arrays of summaries they relate to. This is what the `Reduced` data type is for^[Note that, in the example below, we assign string key properties to an array. This would be prohibited in many languages but is perfectly valid in JavaScript/TypeScript due to its highly dynamic nature.]:
 
 ```{ts}
+#| eval: false
 interface Reduced<T = unknown> extends Array<T> {
   factor: Factor<T>,
   reducer: Reducer<T>,
@@ -1112,6 +1119,7 @@ interface Reduced<T = unknown> extends Array<T> {
 The way we use `Reduced` is that we replace the return type of the `reduce` function, and then, inside the function's body, we simply assign the `Factor` and `Reducer<T>` arguments as the `factor` and `reducer` properties to the `result`, after it's been computed:
 
 ```{ts}
+#| eval: false
 function reduce<T>(x: T[], factor: Factor, 
                    reducer: Reducer<T>): Reduced<T> {
   
@@ -1133,7 +1141,8 @@ Speaking of stacking and normalization, the `Reduced` namespace also exposes the
 export namespace Reduced {
   export function stack<T>(reduced: Reduced<T>): Reduced<T> {}
   export function normalize<T>(reduced: Reduced<T>, 
-                               normalizefn: (x: T, y: T) => T): Reduced<T> {}
+                               normalizefn: (x: T, y: T) => T): 
+                                  Reduced<T> {}
   export function shiftLeft<T>(reduced: Reduced<T>): Reduced<T> {}
 }
 ```
@@ -1156,10 +1165,11 @@ The `Summaries.create` function takes in a dictionary of `Indexable-Reducer` pai
 ```{ts}
 #| eval: false
 const factor1 = Factor.from([`a`, `a`, `b`, `a`, `b`, `c`])
-const factor2 = Factor.product(factor1, Factor.from([0, 0, 0, 1, 1, 1]))
+const factor2 = Factor.from([0, 0, 0, 1, 1, 1])
+const factor3 = Factor.product(factor1, factor2)
 const summaries = { stat: [[10, 12, 9, 15, 11, 10], Reducer.sum] }
 
-const summarized = Summaries.create(summaries, [factor1, factor2])
+const summarized = Summaries.create(summaries, [factor1, factor3])
 Dataframe.rows(summarized[0]) 
 // [ { label: `a`, stat: 37 }, 
 //   { label: `b`, stat: 20 }, 
@@ -1392,6 +1402,7 @@ This is really all there is to say about the `Expanse<T>` interface. The real fu
 The most straightforward type of expanse is `ExpanseContinuous`, implementing an interface of `Expanse<number>`. It generalizes the linear mapping discussed in Section \@ref(scales-as-functions), values to and from a range given by `[min, max]`. Typically (but not always), this amounts to mapping a data value equal to `min` to zero and data value equal to `max` to 1, with intermediate values interpolated to `(0, 1)`. Here is a simplified interface for the `ExpanseContinuous` data container:
 
 ```{ts}
+#| eval: false
 interface ExpanseContinuous {
   min: number;
   max: number;
@@ -1441,13 +1452,13 @@ import { ExpanseContinuous } from "./ExpanseContinuous"
 
 const identity = (x) => x;
 const expanse = { 
-  min: 1, max: 16, offset: 0, 
+  min: 0, max: 16, offset: 0, 
   trans: identity, inv: identity 
 };
 
 console.log(ExpanseContinuous.normalize(expanse, 4));
 // Technically, we should now also set inverse to square
-exp.trans = Math.sqrt; 
+expanse.trans = Math.sqrt; 
 console.log(ExpanseContinuous.normalize(expanse, 4));
 ```
 
@@ -1458,6 +1469,7 @@ Finally, the `ExpanseContinuous` namespace also exports a `train` and `breaks` f
 `ExpansePoint` is the simpler of two types of discrete expanses, implementing an interface of `Expanse<string>`. It maps string values to equidistant positions within the $[0,1]$ interval, based on an ordered array of labels. Here is a simplified interface for its data container:
 
 ```{ts}
+#| eval: false
 interface ExpansePoint {
     labels: string[];
     order: number[];
@@ -1480,7 +1492,7 @@ export namespace ExpansePoint {
 
   export function unnormalize(expanse: ExpansePoint, x: number) {
     const { labels, order } = expanse;
-    index = Math.round(x * (labels.length - 1));
+    const index = Math.round(x * (labels.length - 1));
     return labels[order[index]];
   }
 }
@@ -1498,8 +1510,8 @@ console.log(cities.map((city) => {
   return ExpansePoint.normalize(expanse, city)
 }));
 
-exp.order[0] = 1; // Swap the order of the first two values
-exp.order[1] = 0;
+expanse.order[0] = 1; // Swap the order of the first two values
+expanse.order[1] = 0;
 
 console.log(cities.map((city) => {
   return ExpansePoint.normalize(expanse, city)
@@ -1515,15 +1527,21 @@ const cities = ["Berlin", "Prague", "Vienna"]
 const expanse = { labels: cities, order: [0, 1, 2] };
 
 // Unnormalize works as a one-way inverse (retraction)
-console.log(cities.map(x => {
-  return ExpansePoint.unnormalize(
-    ExpansePoint.normalize(expanse, x))
-}))
+console.log(
+  cities.map((x) => {
+    return ExpansePoint.unnormalize(
+      expanse,
+      ExpansePoint.normalize(expanse, x)
+    );
+  })
+);
 
 // But not the other way around
-console.log(ExpansePoint.normalize(
-  ExpansePoint.unnormalize(expanse, 0.6)
-  ))
+console.log(
+  ExpansePoint.normalize(
+    expanse, ExpansePoint.unnormalize(expanse, 0.6)
+  )
+);
 ```
 
 Finally, like `ExpanseContinuous`, the `ExpansePoint` namespace also contains a `train` function, which loops through a string array, finds all unique values, and assigns these to labels, as well as a `breaks` function, which simply returns the array of `labels` (ordered by `order`). Further, the namespace also contains a `reorder` function which modifies the `order` property based on a new array indices, allowing the labels to be shuffled. 
@@ -1533,6 +1551,7 @@ Finally, like `ExpanseContinuous`, the `ExpansePoint` namespace also contains a 
 While `ExpansePoint` places values at equidistant points along $[0, 1]$, `ExpanseBand` places values at the midpoints of bands of which may be assigned variable widths or "weights". The simplified interface of `ExpanseBand` is the following:
 
 ```{ts}
+#| eval: false
 export interface ExpanseBand {
   labels: string[];
   order: number[];

@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>6 System description | Coherent Interactive Visualization</title>
-  <meta name="description" content="6 System description | Coherent Interactive Visualization" />
+  <title>6 System description | The Fabric of Interactive Visualization</title>
+  <meta name="description" content="6 System description | The Fabric of Interactive Visualization" />
   <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="6 System description | Coherent Interactive Visualization" />
+  <meta property="og:title" content="6 System description | The Fabric of Interactive Visualization" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="6 System description | Coherent Interactive Visualization" />
+  <meta name="twitter:title" content="6 System description | The Fabric of Interactive Visualization" />
   
   
   
@@ -279,7 +279,7 @@ div.csl-indent {
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Coherent Interactive Visualization</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">The Fabric of Interactive Visualization</a>
           </h1>
         </div>
 
@@ -454,13 +454,13 @@ Figure 6.2: An example of a programmatically-created scatterplot matrix (SPLOM).
 ##   ..$ data:List of 3
 ##   .. ..$ type     : &#39;scalar&#39; chr &quot;scatter&quot;
 ##   .. ..$ variables: chr [1:2] &quot;wt&quot; &quot;mpg&quot;
-##   .. ..$ id       : &#39;scalar&#39; chr &quot;991da7c7-56a0-4bb6-a4b8-72c7b003e753&quot;
+##   .. ..$ id       : &#39;scalar&#39; chr &quot;2b8520e7-d2cd-4899-b8e6-ffee91cd39c7&quot;
 ##  $ :List of 2
 ##   ..$ type: chr &quot;add-plot&quot;
 ##   ..$ data:List of 3
 ##   .. ..$ type     : &#39;scalar&#39; chr &quot;bar&quot;
 ##   .. ..$ variables: chr &quot;cyl&quot;
-##   .. ..$ id       : &#39;scalar&#39; chr &quot;a595d7b6-8e28-4901-8664-a86f20a1180d&quot;</code></pre>
+##   .. ..$ id       : &#39;scalar&#39; chr &quot;2d727092-8241-4db6-972a-5c1abf7cb74f&quot;</code></pre>
 <p>As you can see, the object created with <code>create_schema</code> is essentially just a <code>list</code> of messages. Modifying the schema by calling functions such as <code>add_scatterplot</code> or <code>set_scale</code> simply appends a new message to the list, similar to how objects of class <code>ggplot</code> are modified by the corresponding functions and the <code>+</code> operator in <code>ggplot2</code> <span class="citation">(<a href="#ref-wickham2016">Wickham 2016</a>)</span>. This design makes it easy to transport schemas (e.g. as JSON) and modify them programmatically. Finally, rendering the schema into a figure requires an explicit call to <code>render</code>. Note that this approach is different from the popular R convention of rendering implicitly via a <code>print</code> method; however, there is a good reason for this design choice which will be discussed later.</p>
 <p>The call to <code>render</code> turns the schema gets turned into a live, interactive figure by constructing an <code>htmlwidgets</code> widget <span class="citation">(<a href="#ref-htmlwidgets2021">Vaidyanathan et al. 2021</a>)</span>. This bundles up the underlying data and <code>plotscape</code> code (JavaScript, HTML, CSS) into a standalone HTLM document, which may be served live, such as in RStudio viewer, or statically embedded in another HTML document, such as one produced with RMarkdown. All of the schema messages also get forwarded to the widget and applied sequentially, creating the figure.</p>
 <p>Note that, under this model, the schema merely records state-generating steps, not the state itself. In other words, all of the state lives on the scene (the client-side figure). This design avoids state duplication between the R session (server) and web-browser-based figure (client), eliminating the need for synchronization.</p>
@@ -675,9 +675,9 @@ Figure 6.2: An example of a programmatically-created scatterplot matrix (SPLOM).
 <span id="cb59-34"><a href="system.html#cb59-34" tabindex="-1"></a>  )<span class="op">;</span></span></code></pre></div>
 <pre><code>## 203 milliseconds has elapsed(29 milliseconds in dog years)
 ## 402 milliseconds has elapsed(57.43 milliseconds in dog years)
-## 603 milliseconds has elapsed(86.14 milliseconds in dog years)
-## 803 milliseconds has elapsed(114.71 milliseconds in dog years)
-## 1004 milliseconds has elapsed(143.43 milliseconds in dog years)</code></pre>
+## 602 milliseconds has elapsed(86 milliseconds in dog years)
+## 802 milliseconds has elapsed(114.57 milliseconds in dog years)
+## 1003 milliseconds has elapsed(143.29 milliseconds in dog years)</code></pre>
 <p>As you can see, the event producer (stream) is defined separately from the event processing logic, which is constructed by piping the result of one operation into the next. Because of the associativity of function composition, the stream actually exhibits properties of a functor, meaning that the order of composition - either through direct function composition or <code>.pipe</code> chaining - does not affect the result. Additionally, while the stream transformations themselves are (generally) stateless, they can still produce useful side-effects (as can be seen on the example of the <code>console.log</code> call above). Further, because of this fact, they also lend themselves well to modeling asynchronous or even infinite data sequences <span class="citation">(<a href="#ref-abelson2022">Abelson and Sussman 2022</a>; <a href="#ref-fogus2013">Fogus 2013</a>)</span>.</p>
 <p>While streams can be extremely useful in specific circumstances, their utility as a general model for complex UIs (beyond asynchronous operations) is debatable. Specifically, the inherent statefulness of UIs conflicts with the stateless nature of streams: stateless computations inside the stream have to leak into the rest of the application <em>somewhere</em>. Delineating which parts of the logic should go into streams versus which should be bound to UI components adds unnecessary complexity for little real benefit. Consequently, streams are likely not the optimal choice for interactive data visualization, where some mutable state is unavoidable.</p>
 </div>
@@ -878,7 +878,7 @@ Figure 6.2: An example of a programmatically-created scatterplot matrix (SPLOM).
 <p>Keeping in mind JavaScript’s zero-based indexing, this array identifies cases one, four, and six as belonging to the first part/level (<code>0</code>), cases two and three as belonging to the second part (<code>1</code>), and case five as belonging to the third parts (<code>2</code>).</p>
 <p>The data associated with factor’s levels is stored in the <code>data</code> property, which is composed of arrays/<code>Indexables</code> of equal length as the factor’s cardinality. For instance, if a factor is created from a categorical variable with three levels - <code>A</code>, <code>B</code>, and <code>C</code> - then <code>data</code> may look something like this:</p>
 <div class="sourceCode" id="cb77"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb77-1"><a href="system.html#cb77-1" tabindex="-1"></a>{ labels<span class="op">:</span> [<span class="st">&quot;A&quot;</span><span class="op">,</span> <span class="st">&quot;B&quot;</span><span class="op">,</span> <span class="st">&quot;C&quot;</span>] }</span>
-<span id="cb77-2"><a href="system.html#cb77-2" tabindex="-1"></a><span class="co">// In row-oriented form: [{ label: &quot;A&quot; }, { label: &quot;B&quot; }, { label: &quot;C&quot; }]</span></span></code></pre></div>
+<span id="cb77-2"><a href="system.html#cb77-2" tabindex="-1"></a><span class="co">// In row-oriented form: [{ label: &quot;A&quot; }, { label: &quot;B&quot; }, ... ]</span></span></code></pre></div>
 <p>Finally, the optional <code>parent</code> property is a pointer to the factor representing the parent partition.</p>
 <p>There are a couple of important things to discuss. First, <code>cardinality</code> technically duplicates information, since it is simply the number of unique values in <code>indices</code>. However, for many operations on <code>Factor</code>s, it is beneficial to be able to access cardinality in constant <span class="math inline">\(O(1)\)</span> time. Such is the case, for example, when constructing <a href="#Product%20factors">product factors</a> or when initializing arrays of summaries. Of course, this means that the relationship between <code>cardinality</code> and <code>indices</code> has to be invariant under any factor transformations.</p>
 <p>Second, the metadata associated with the parts is stored in the <code>data</code> property of type <a href="#Dataframe"><code>Dataframe</code></a>. This represents a departure from e.g. base R’s <code>factor</code> class, where all metadata is stored as a flat vector of levels. For instance:</p>
@@ -1102,12 +1102,11 @@ Figure 6.3: A screenshot of a <code>plotscaper</code> figure showing five differ
 <div id="reducers" class="section level5 hasAnchor" number="6.3.4.6.1">
 <h5><span class="header-section-number">6.3.4.6.1</span> Reducers<a href="system.html#reducers" class="anchor-section" aria-label="Anchor link to header"></a></h5>
 <p>A <code>Reducer&lt;T&gt;</code> is simply a data container that stores functionality and metadata associated with a monoid on type <code>T</code>. It has the following interface:</p>
-<div class="sourceCode" id="cb88"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb88-1"><a href="system.html#cb88-1" tabindex="-1"></a><span class="co">// Reducer.ts</span></span>
-<span id="cb88-2"><a href="system.html#cb88-2" tabindex="-1"></a><span class="kw">interface</span> Reducer<span class="op">&lt;</span>T<span class="op">&gt;</span> {</span>
-<span id="cb88-3"><a href="system.html#cb88-3" tabindex="-1"></a>  name<span class="op">:</span> <span class="dt">string</span><span class="op">;</span></span>
-<span id="cb88-4"><a href="system.html#cb88-4" tabindex="-1"></a>  initialfn<span class="op">:</span> () <span class="kw">=&gt;</span> T<span class="op">;</span></span>
-<span id="cb88-5"><a href="system.html#cb88-5" tabindex="-1"></a>  reducefn<span class="op">:</span> (prev<span class="op">:</span> T<span class="op">,</span> next<span class="op">:</span> T) <span class="kw">=&gt;</span> T<span class="op">;</span></span>
-<span id="cb88-6"><a href="system.html#cb88-6" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb88"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb88-1"><a href="system.html#cb88-1" tabindex="-1"></a><span class="kw">interface</span> Reducer<span class="op">&lt;</span>T<span class="op">&gt;</span> {</span>
+<span id="cb88-2"><a href="system.html#cb88-2" tabindex="-1"></a>  name<span class="op">:</span> <span class="dt">string</span><span class="op">;</span></span>
+<span id="cb88-3"><a href="system.html#cb88-3" tabindex="-1"></a>  initialfn<span class="op">:</span> () <span class="kw">=&gt;</span> T<span class="op">;</span></span>
+<span id="cb88-4"><a href="system.html#cb88-4" tabindex="-1"></a>  reducefn<span class="op">:</span> (prev<span class="op">:</span> T<span class="op">,</span> next<span class="op">:</span> T) <span class="kw">=&gt;</span> T<span class="op">;</span></span>
+<span id="cb88-5"><a href="system.html#cb88-5" tabindex="-1"></a>}</span></code></pre></div>
 <p>That is, a <code>Reducer&lt;T&gt;</code> has a name, a zero-argument function (or a “thunk”) producing a value of type <code>T</code>, and a binary function which takes two values of type <code>T</code> and produces another <code>T</code>. The <code>Reducer</code> namespace exports these <code>Reducer</code>s. Here are a couple of examples:</p>
 <div class="sourceCode" id="cb89"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb89-1"><a href="system.html#cb89-1" tabindex="-1"></a><span class="im">export</span> <span class="im">namespace</span> <span class="dt">Reducer</span> {</span>
 <span id="cb89-2"><a href="system.html#cb89-2" tabindex="-1"></a>  <span class="im">export</span> <span class="kw">const</span> sum<span class="op">:</span> Reducer<span class="op">&lt;</span><span class="dt">number</span><span class="op">&gt;</span> <span class="op">=</span> {</span>
@@ -1183,9 +1182,10 @@ Figure 6.3: A screenshot of a <code>plotscaper</code> figure showing five differ
 <div class="sourceCode" id="cb94"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb94-1"><a href="system.html#cb94-1" tabindex="-1"></a><span class="im">export</span> <span class="im">namespace</span> <span class="dt">Reduced</span> {</span>
 <span id="cb94-2"><a href="system.html#cb94-2" tabindex="-1"></a>  <span class="im">export</span> <span class="kw">function</span> <span class="fu">stack</span><span class="op">&lt;</span>T<span class="op">&gt;</span>(reduced<span class="op">:</span> Reduced<span class="op">&lt;</span>T<span class="op">&gt;</span>)<span class="op">:</span> Reduced<span class="op">&lt;</span>T<span class="op">&gt;</span> {}</span>
 <span id="cb94-3"><a href="system.html#cb94-3" tabindex="-1"></a>  <span class="im">export</span> <span class="kw">function</span> <span class="fu">normalize</span><span class="op">&lt;</span>T<span class="op">&gt;</span>(reduced<span class="op">:</span> Reduced<span class="op">&lt;</span>T<span class="op">&gt;,</span> </span>
-<span id="cb94-4"><a href="system.html#cb94-4" tabindex="-1"></a>                               normalizefn<span class="op">:</span> (x<span class="op">:</span> T<span class="op">,</span> y<span class="op">:</span> T) <span class="kw">=&gt;</span> T)<span class="op">:</span> Reduced<span class="op">&lt;</span>T<span class="op">&gt;</span> {}</span>
-<span id="cb94-5"><a href="system.html#cb94-5" tabindex="-1"></a>  <span class="im">export</span> <span class="kw">function</span> <span class="fu">shiftLeft</span><span class="op">&lt;</span>T<span class="op">&gt;</span>(reduced<span class="op">:</span> Reduced<span class="op">&lt;</span>T<span class="op">&gt;</span>)<span class="op">:</span> Reduced<span class="op">&lt;</span>T<span class="op">&gt;</span> {}</span>
-<span id="cb94-6"><a href="system.html#cb94-6" tabindex="-1"></a>}</span></code></pre></div>
+<span id="cb94-4"><a href="system.html#cb94-4" tabindex="-1"></a>                               normalizefn<span class="op">:</span> (x<span class="op">:</span> T<span class="op">,</span> y<span class="op">:</span> T) <span class="kw">=&gt;</span> T)<span class="op">:</span> </span>
+<span id="cb94-5"><a href="system.html#cb94-5" tabindex="-1"></a>                                  Reduced<span class="op">&lt;</span>T<span class="op">&gt;</span> {}</span>
+<span id="cb94-6"><a href="system.html#cb94-6" tabindex="-1"></a>  <span class="im">export</span> <span class="kw">function</span> <span class="fu">shiftLeft</span><span class="op">&lt;</span>T<span class="op">&gt;</span>(reduced<span class="op">:</span> Reduced<span class="op">&lt;</span>T<span class="op">&gt;</span>)<span class="op">:</span> Reduced<span class="op">&lt;</span>T<span class="op">&gt;</span> {}</span>
+<span id="cb94-7"><a href="system.html#cb94-7" tabindex="-1"></a>}</span></code></pre></div>
 <p>These functions all take <code>Reduced</code> as the first argument and compute transformations that make use of the <code>factor</code>, <code>reducer</code>, and <code>parent</code> properties, returning a new <code>Reduced</code>. For instance, the <code>stack</code> function computes a new array of stacked values, using the <code>factor</code>, <code>parent</code>, and <code>reduced</code> properties. Similarly, the <code>normalize</code> also creates and populates it with normalized values which are created by dividing the values in the original array by their corresponding <code>parent</code> values<a href="#fn33" class="footnote-ref" id="fnref33"><sup>33</sup></a>. The <code>shiftLeft</code> function creates a new array where the values are shifted by one, such that the first element is the monoidal unit (<code>reducer.initialfn()</code>), and the last element is the second to last element of the original array (the primary use-case of this is the spineplot).</p>
 </div>
 <div id="summaries" class="section level5 hasAnchor" number="6.3.4.6.3">
@@ -1196,19 +1196,20 @@ Figure 6.3: A screenshot of a <code>plotscaper</code> figure showing five differ
 <span id="cb95-3"><a href="system.html#cb95-3" tabindex="-1"></a>                factors<span class="op">:</span> Factor[])<span class="op">:</span> Dataframe[]</span></code></pre></div>
 <p>The <code>Summaries.create</code> function takes in a dictionary of <code>Indexable-Reducer</code> pairs with matching generic and an array of <code>Factor</code>s. It then repeatedly combines the factors pair-wise using <code>Factor.product</code> and then computes summaries for each new product factor using the <code>Indexable-Reducer</code> pairs in <code>summaries</code>. This results in an array of <code>Dataframe</code>s with equal length as <code>factors</code>, holding the combined data. For example:</p>
 <div class="sourceCode" id="cb96"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb96-1"><a href="system.html#cb96-1" tabindex="-1"></a><span class="kw">const</span> factor1 <span class="op">=</span> Factor<span class="op">.</span><span class="fu">from</span>([<span class="vs">`a`</span><span class="op">,</span> <span class="vs">`a`</span><span class="op">,</span> <span class="vs">`b`</span><span class="op">,</span> <span class="vs">`a`</span><span class="op">,</span> <span class="vs">`b`</span><span class="op">,</span> <span class="vs">`c`</span>])</span>
-<span id="cb96-2"><a href="system.html#cb96-2" tabindex="-1"></a><span class="kw">const</span> factor2 <span class="op">=</span> Factor<span class="op">.</span><span class="fu">product</span>(factor1<span class="op">,</span> Factor<span class="op">.</span><span class="fu">from</span>([<span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">1</span>]))</span>
-<span id="cb96-3"><a href="system.html#cb96-3" tabindex="-1"></a><span class="kw">const</span> summaries <span class="op">=</span> { stat<span class="op">:</span> [[<span class="dv">10</span><span class="op">,</span> <span class="dv">12</span><span class="op">,</span> <span class="dv">9</span><span class="op">,</span> <span class="dv">15</span><span class="op">,</span> <span class="dv">11</span><span class="op">,</span> <span class="dv">10</span>]<span class="op">,</span> Reducer<span class="op">.</span><span class="at">sum</span>] }</span>
-<span id="cb96-4"><a href="system.html#cb96-4" tabindex="-1"></a></span>
-<span id="cb96-5"><a href="system.html#cb96-5" tabindex="-1"></a><span class="kw">const</span> summarized <span class="op">=</span> Summaries<span class="op">.</span><span class="fu">create</span>(summaries<span class="op">,</span> [factor1<span class="op">,</span> factor2])</span>
-<span id="cb96-6"><a href="system.html#cb96-6" tabindex="-1"></a>Dataframe<span class="op">.</span><span class="fu">rows</span>(summarized[<span class="dv">0</span>]) </span>
-<span id="cb96-7"><a href="system.html#cb96-7" tabindex="-1"></a><span class="co">// [ { label: `a`, stat: 37 }, </span></span>
-<span id="cb96-8"><a href="system.html#cb96-8" tabindex="-1"></a><span class="co">//   { label: `b`, stat: 20 }, </span></span>
-<span id="cb96-9"><a href="system.html#cb96-9" tabindex="-1"></a><span class="co">//   { label: `c`, stat: 10 } ]</span></span>
-<span id="cb96-10"><a href="system.html#cb96-10" tabindex="-1"></a></span>
-<span id="cb96-11"><a href="system.html#cb96-11" tabindex="-1"></a>Dataframe<span class="op">.</span><span class="fu">rows</span>(summarized[<span class="dv">1</span>]) </span>
-<span id="cb96-12"><a href="system.html#cb96-12" tabindex="-1"></a><span class="co">// [ { label: `a`, label$: `0`, stat: 22 }, </span></span>
-<span id="cb96-13"><a href="system.html#cb96-13" tabindex="-1"></a><span class="co">//   { label: `a`, label$: `1`, stat: 15 }, </span></span>
-<span id="cb96-14"><a href="system.html#cb96-14" tabindex="-1"></a><span class="co">//   ... ]</span></span></code></pre></div>
+<span id="cb96-2"><a href="system.html#cb96-2" tabindex="-1"></a><span class="kw">const</span> factor2 <span class="op">=</span> Factor<span class="op">.</span><span class="fu">from</span>([<span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">1</span>])</span>
+<span id="cb96-3"><a href="system.html#cb96-3" tabindex="-1"></a><span class="kw">const</span> factor3 <span class="op">=</span> Factor<span class="op">.</span><span class="fu">product</span>(factor1<span class="op">,</span> factor2)</span>
+<span id="cb96-4"><a href="system.html#cb96-4" tabindex="-1"></a><span class="kw">const</span> summaries <span class="op">=</span> { stat<span class="op">:</span> [[<span class="dv">10</span><span class="op">,</span> <span class="dv">12</span><span class="op">,</span> <span class="dv">9</span><span class="op">,</span> <span class="dv">15</span><span class="op">,</span> <span class="dv">11</span><span class="op">,</span> <span class="dv">10</span>]<span class="op">,</span> Reducer<span class="op">.</span><span class="at">sum</span>] }</span>
+<span id="cb96-5"><a href="system.html#cb96-5" tabindex="-1"></a></span>
+<span id="cb96-6"><a href="system.html#cb96-6" tabindex="-1"></a><span class="kw">const</span> summarized <span class="op">=</span> Summaries<span class="op">.</span><span class="fu">create</span>(summaries<span class="op">,</span> [factor1<span class="op">,</span> factor3])</span>
+<span id="cb96-7"><a href="system.html#cb96-7" tabindex="-1"></a>Dataframe<span class="op">.</span><span class="fu">rows</span>(summarized[<span class="dv">0</span>]) </span>
+<span id="cb96-8"><a href="system.html#cb96-8" tabindex="-1"></a><span class="co">// [ { label: `a`, stat: 37 }, </span></span>
+<span id="cb96-9"><a href="system.html#cb96-9" tabindex="-1"></a><span class="co">//   { label: `b`, stat: 20 }, </span></span>
+<span id="cb96-10"><a href="system.html#cb96-10" tabindex="-1"></a><span class="co">//   { label: `c`, stat: 10 } ]</span></span>
+<span id="cb96-11"><a href="system.html#cb96-11" tabindex="-1"></a></span>
+<span id="cb96-12"><a href="system.html#cb96-12" tabindex="-1"></a>Dataframe<span class="op">.</span><span class="fu">rows</span>(summarized[<span class="dv">1</span>]) </span>
+<span id="cb96-13"><a href="system.html#cb96-13" tabindex="-1"></a><span class="co">// [ { label: `a`, label$: `0`, stat: 22 }, </span></span>
+<span id="cb96-14"><a href="system.html#cb96-14" tabindex="-1"></a><span class="co">//   { label: `a`, label$: `1`, stat: 15 }, </span></span>
+<span id="cb96-15"><a href="system.html#cb96-15" tabindex="-1"></a><span class="co">//   ... ]</span></span></code></pre></div>
 <p>Thus, the overt behavior of the <code>Summaries.create()</code> is to compute summaries using <code>Reducer</code>s and combine the resulting data with the corresponding <code>Factor</code> data. However, under the hood, the function also does a couple more things. First, it links all reduced variables created from <code>summaries</code> with their parent-data counterpart (by assigning the <code>parent</code> property on the <code>Reduced</code>s). It also sets up a reactive graph, such that when a factor is updated, its corresponding data is updated, and so are its child factors and their corresponding data.</p>
 <p>Finally, to actually render the summarized data, the summaries need to be translated to aesthetic mappings. This happens via the <code>Summaries.translate()</code> function. Again, overtly, this function simply maps the array of <code>Dataframe</code>s, however, under the hood it also manages reactivity. For instance, the following is a translating function in the definition of a histogram, taken almost directly from the codebase:</p>
 <div class="sourceCode" id="cb97"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb97-1"><a href="system.html#cb97-1" tabindex="-1"></a><span class="kw">const</span> zero <span class="op">=</span> () <span class="kw">=&gt;</span> <span class="dv">0</span><span class="op">;</span></span>
@@ -1391,15 +1392,16 @@ x = u(p) &amp;= f^{-1} \big[ f(\min) + x \cdot (f(\max) - f(\min)) \big] + \text
 <span id="cb110-2"><a href="system.html#cb110-2" tabindex="-1"></a></span>
 <span id="cb110-3"><a href="system.html#cb110-3" tabindex="-1"></a><span class="kw">const</span> identity <span class="op">=</span> (x) <span class="kw">=&gt;</span> x<span class="op">;</span></span>
 <span id="cb110-4"><a href="system.html#cb110-4" tabindex="-1"></a><span class="kw">const</span> expanse <span class="op">=</span> { </span>
-<span id="cb110-5"><a href="system.html#cb110-5" tabindex="-1"></a>  min<span class="op">:</span> <span class="dv">1</span><span class="op">,</span> max<span class="op">:</span> <span class="dv">16</span><span class="op">,</span> offset<span class="op">:</span> <span class="dv">0</span><span class="op">,</span> </span>
+<span id="cb110-5"><a href="system.html#cb110-5" tabindex="-1"></a>  min<span class="op">:</span> <span class="dv">0</span><span class="op">,</span> max<span class="op">:</span> <span class="dv">16</span><span class="op">,</span> offset<span class="op">:</span> <span class="dv">0</span><span class="op">,</span> </span>
 <span id="cb110-6"><a href="system.html#cb110-6" tabindex="-1"></a>  trans<span class="op">:</span> identity<span class="op">,</span> inv<span class="op">:</span> identity </span>
 <span id="cb110-7"><a href="system.html#cb110-7" tabindex="-1"></a>}<span class="op">;</span></span>
 <span id="cb110-8"><a href="system.html#cb110-8" tabindex="-1"></a></span>
 <span id="cb110-9"><a href="system.html#cb110-9" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(ExpanseContinuous<span class="op">.</span><span class="fu">normalize</span>(expanse<span class="op">,</span> <span class="dv">4</span>))<span class="op">;</span></span>
 <span id="cb110-10"><a href="system.html#cb110-10" tabindex="-1"></a><span class="co">// Technically, we should now also set inverse to square</span></span>
-<span id="cb110-11"><a href="system.html#cb110-11" tabindex="-1"></a>exp<span class="op">.</span><span class="at">trans</span> <span class="op">=</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">sqrt</span><span class="op">;</span> </span>
+<span id="cb110-11"><a href="system.html#cb110-11" tabindex="-1"></a>expanse<span class="op">.</span><span class="at">trans</span> <span class="op">=</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">sqrt</span><span class="op">;</span> </span>
 <span id="cb110-12"><a href="system.html#cb110-12" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(ExpanseContinuous<span class="op">.</span><span class="fu">normalize</span>(expanse<span class="op">,</span> <span class="dv">4</span>))<span class="op">;</span></span></code></pre></div>
-<pre><code>## 0.2</code></pre>
+<pre><code>## 0.25
+## 0.5</code></pre>
 <p>Finally, the <code>ExpanseContinuous</code> namespace also exports a <code>train</code> and <code>breaks</code> functions. The train functions simply finds a minimum and maximum value of an array of numbers and sets these as the new <code>min</code> and <code>max</code> (or just sets the <code>max</code>, if <code>ratio</code> is <code>true</code>). Breaks returns a list of “nice” axis breaks which are by computed via an algorithm inspired by base R’s <code>pretty</code> function <span class="citation">(<a href="#ref-r2024">R Core Team 2024</a>)</span>.</p>
 </div>
 <div id="point-expanses" class="section level4 hasAnchor" number="6.3.4.10">
@@ -1422,7 +1424,7 @@ x = u(p) &amp;= f^{-1} \big[ f(\min) + x \cdot (f(\max) - f(\min)) \big] + \text
 <span id="cb113-9"><a href="system.html#cb113-9" tabindex="-1"></a></span>
 <span id="cb113-10"><a href="system.html#cb113-10" tabindex="-1"></a>  <span class="im">export</span> <span class="kw">function</span> <span class="fu">unnormalize</span>(expanse<span class="op">:</span> ExpansePoint<span class="op">,</span> x<span class="op">:</span> <span class="dt">number</span>) {</span>
 <span id="cb113-11"><a href="system.html#cb113-11" tabindex="-1"></a>    <span class="kw">const</span> { labels<span class="op">,</span> order } <span class="op">=</span> expanse<span class="op">;</span></span>
-<span id="cb113-12"><a href="system.html#cb113-12" tabindex="-1"></a>    index <span class="op">=</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">round</span>(x <span class="op">*</span> (labels<span class="op">.</span><span class="at">length</span> <span class="op">-</span> <span class="dv">1</span>))<span class="op">;</span></span>
+<span id="cb113-12"><a href="system.html#cb113-12" tabindex="-1"></a>    <span class="kw">const</span> index <span class="op">=</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">round</span>(x <span class="op">*</span> (labels<span class="op">.</span><span class="at">length</span> <span class="op">-</span> <span class="dv">1</span>))<span class="op">;</span></span>
 <span id="cb113-13"><a href="system.html#cb113-13" tabindex="-1"></a>    <span class="cf">return</span> labels[order[index]]<span class="op">;</span></span>
 <span id="cb113-14"><a href="system.html#cb113-14" tabindex="-1"></a>  }</span>
 <span id="cb113-15"><a href="system.html#cb113-15" tabindex="-1"></a>}</span></code></pre></div>
@@ -1436,13 +1438,14 @@ x = u(p) &amp;= f^{-1} \big[ f(\min) + x \cdot (f(\max) - f(\min)) \big] + \text
 <span id="cb114-7"><a href="system.html#cb114-7" tabindex="-1"></a>  <span class="cf">return</span> ExpansePoint<span class="op">.</span><span class="fu">normalize</span>(expanse<span class="op">,</span> city)</span>
 <span id="cb114-8"><a href="system.html#cb114-8" tabindex="-1"></a>}))<span class="op">;</span></span>
 <span id="cb114-9"><a href="system.html#cb114-9" tabindex="-1"></a></span>
-<span id="cb114-10"><a href="system.html#cb114-10" tabindex="-1"></a>exp<span class="op">.</span><span class="at">order</span>[<span class="dv">0</span>] <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> <span class="co">// Swap the order of the first two values</span></span>
-<span id="cb114-11"><a href="system.html#cb114-11" tabindex="-1"></a>exp<span class="op">.</span><span class="at">order</span>[<span class="dv">1</span>] <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb114-10"><a href="system.html#cb114-10" tabindex="-1"></a>expanse<span class="op">.</span><span class="at">order</span>[<span class="dv">0</span>] <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> <span class="co">// Swap the order of the first two values</span></span>
+<span id="cb114-11"><a href="system.html#cb114-11" tabindex="-1"></a>expanse<span class="op">.</span><span class="at">order</span>[<span class="dv">1</span>] <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
 <span id="cb114-12"><a href="system.html#cb114-12" tabindex="-1"></a></span>
 <span id="cb114-13"><a href="system.html#cb114-13" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(cities<span class="op">.</span><span class="fu">map</span>((city) <span class="kw">=&gt;</span> {</span>
 <span id="cb114-14"><a href="system.html#cb114-14" tabindex="-1"></a>  <span class="cf">return</span> ExpansePoint<span class="op">.</span><span class="fu">normalize</span>(expanse<span class="op">,</span> city)</span>
 <span id="cb114-15"><a href="system.html#cb114-15" tabindex="-1"></a>}))<span class="op">;</span></span></code></pre></div>
-<pre><code>## [ 0, 0.5, 1 ]</code></pre>
+<pre><code>## [ 0, 0.5, 1 ]
+## [ 0.5, 0, 1 ]</code></pre>
 <p>However, it is important to note that, due to the fact that there is a finite number of <code>labels</code>, the <code>unnormalize</code> function is <em>not</em> a full, two-sided inverse of <code>normalize</code>, merely a one-sided inverse or retraction <span class="citation">(see e.g. <a href="#ref-lawvere2009">Lawvere and Schanuel 2009</a>)</span>. That is, while composing <code>unnormalize</code> with <code>normalize</code> results in the identity function, the converse is not true. For instance:</p>
 <div class="sourceCode" id="cb116"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb116-1"><a href="system.html#cb116-1" tabindex="-1"></a><span class="im">import</span> { ExpansePoint } <span class="im">from</span> <span class="st">&quot;./ExpansePoint&quot;</span></span>
 <span id="cb116-2"><a href="system.html#cb116-2" tabindex="-1"></a></span>
@@ -1450,61 +1453,69 @@ x = u(p) &amp;= f^{-1} \big[ f(\min) + x \cdot (f(\max) - f(\min)) \big] + \text
 <span id="cb116-4"><a href="system.html#cb116-4" tabindex="-1"></a><span class="kw">const</span> expanse <span class="op">=</span> { labels<span class="op">:</span> cities<span class="op">,</span> order<span class="op">:</span> [<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">2</span>] }<span class="op">;</span></span>
 <span id="cb116-5"><a href="system.html#cb116-5" tabindex="-1"></a></span>
 <span id="cb116-6"><a href="system.html#cb116-6" tabindex="-1"></a><span class="co">// Unnormalize works as a one-way inverse (retraction)</span></span>
-<span id="cb116-7"><a href="system.html#cb116-7" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(cities<span class="op">.</span><span class="fu">map</span>(x <span class="kw">=&gt;</span> {</span>
-<span id="cb116-8"><a href="system.html#cb116-8" tabindex="-1"></a>  <span class="cf">return</span> ExpansePoint<span class="op">.</span><span class="fu">unnormalize</span>(</span>
-<span id="cb116-9"><a href="system.html#cb116-9" tabindex="-1"></a>    ExpansePoint<span class="op">.</span><span class="fu">normalize</span>(expanse<span class="op">,</span> x))</span>
-<span id="cb116-10"><a href="system.html#cb116-10" tabindex="-1"></a>}))</span>
-<span id="cb116-11"><a href="system.html#cb116-11" tabindex="-1"></a></span>
-<span id="cb116-12"><a href="system.html#cb116-12" tabindex="-1"></a><span class="co">// But not the other way around</span></span>
-<span id="cb116-13"><a href="system.html#cb116-13" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(ExpansePoint<span class="op">.</span><span class="fu">normalize</span>(</span>
-<span id="cb116-14"><a href="system.html#cb116-14" tabindex="-1"></a>  ExpansePoint<span class="op">.</span><span class="fu">unnormalize</span>(expanse<span class="op">,</span> <span class="fl">0.6</span>)</span>
-<span id="cb116-15"><a href="system.html#cb116-15" tabindex="-1"></a>  ))</span></code></pre></div>
+<span id="cb116-7"><a href="system.html#cb116-7" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(</span>
+<span id="cb116-8"><a href="system.html#cb116-8" tabindex="-1"></a>  cities<span class="op">.</span><span class="fu">map</span>((x) <span class="kw">=&gt;</span> {</span>
+<span id="cb116-9"><a href="system.html#cb116-9" tabindex="-1"></a>    <span class="cf">return</span> ExpansePoint<span class="op">.</span><span class="fu">unnormalize</span>(</span>
+<span id="cb116-10"><a href="system.html#cb116-10" tabindex="-1"></a>      expanse<span class="op">,</span></span>
+<span id="cb116-11"><a href="system.html#cb116-11" tabindex="-1"></a>      ExpansePoint<span class="op">.</span><span class="fu">normalize</span>(expanse<span class="op">,</span> x)</span>
+<span id="cb116-12"><a href="system.html#cb116-12" tabindex="-1"></a>    )<span class="op">;</span></span>
+<span id="cb116-13"><a href="system.html#cb116-13" tabindex="-1"></a>  })</span>
+<span id="cb116-14"><a href="system.html#cb116-14" tabindex="-1"></a>)<span class="op">;</span></span>
+<span id="cb116-15"><a href="system.html#cb116-15" tabindex="-1"></a></span>
+<span id="cb116-16"><a href="system.html#cb116-16" tabindex="-1"></a><span class="co">// But not the other way around</span></span>
+<span id="cb116-17"><a href="system.html#cb116-17" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(</span>
+<span id="cb116-18"><a href="system.html#cb116-18" tabindex="-1"></a>  ExpansePoint<span class="op">.</span><span class="fu">normalize</span>(</span>
+<span id="cb116-19"><a href="system.html#cb116-19" tabindex="-1"></a>    expanse<span class="op">,</span> ExpansePoint<span class="op">.</span><span class="fu">unnormalize</span>(expanse<span class="op">,</span> <span class="fl">0.6</span>)</span>
+<span id="cb116-20"><a href="system.html#cb116-20" tabindex="-1"></a>  )</span>
+<span id="cb116-21"><a href="system.html#cb116-21" tabindex="-1"></a>)<span class="op">;</span></span></code></pre></div>
+<pre><code>## [ &quot;Berlin&quot;, &quot;Prague&quot;, &quot;Vienna&quot; ]
+## 0.5</code></pre>
 <p>Finally, like <code>ExpanseContinuous</code>, the <code>ExpansePoint</code> namespace also contains a <code>train</code> function, which loops through a string array, finds all unique values, and assigns these to labels, as well as a <code>breaks</code> function, which simply returns the array of <code>labels</code> (ordered by <code>order</code>). Further, the namespace also contains a <code>reorder</code> function which modifies the <code>order</code> property based on a new array indices, allowing the labels to be shuffled.</p>
 </div>
 <div id="band-expanses" class="section level4 hasAnchor" number="6.3.4.11">
 <h4><span class="header-section-number">6.3.4.11</span> Band expanses<a href="system.html#band-expanses" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>While <code>ExpansePoint</code> places values at equidistant points along <span class="math inline">\([0, 1]\)</span>, <code>ExpanseBand</code> places values at the midpoints of bands of which may be assigned variable widths or “weights”. The simplified interface of <code>ExpanseBand</code> is the following:</p>
-<div class="sourceCode" id="cb117"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb117-1"><a href="system.html#cb117-1" tabindex="-1"></a><span class="im">export</span> <span class="kw">interface</span> ExpanseBand {</span>
-<span id="cb117-2"><a href="system.html#cb117-2" tabindex="-1"></a>  labels<span class="op">:</span> <span class="dt">string</span>[]<span class="op">;</span></span>
-<span id="cb117-3"><a href="system.html#cb117-3" tabindex="-1"></a>  order<span class="op">:</span> <span class="dt">number</span>[]<span class="op">;</span></span>
-<span id="cb117-4"><a href="system.html#cb117-4" tabindex="-1"></a>  weights<span class="op">:</span> <span class="dt">number</span>[]<span class="op">;</span></span>
-<span id="cb117-5"><a href="system.html#cb117-5" tabindex="-1"></a>  cumulativeWeights<span class="op">:</span> <span class="dt">number</span>[]<span class="op">;</span></span>
-<span id="cb117-6"><a href="system.html#cb117-6" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb118"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb118-1"><a href="system.html#cb118-1" tabindex="-1"></a><span class="im">export</span> <span class="kw">interface</span> ExpanseBand {</span>
+<span id="cb118-2"><a href="system.html#cb118-2" tabindex="-1"></a>  labels<span class="op">:</span> <span class="dt">string</span>[]<span class="op">;</span></span>
+<span id="cb118-3"><a href="system.html#cb118-3" tabindex="-1"></a>  order<span class="op">:</span> <span class="dt">number</span>[]<span class="op">;</span></span>
+<span id="cb118-4"><a href="system.html#cb118-4" tabindex="-1"></a>  weights<span class="op">:</span> <span class="dt">number</span>[]<span class="op">;</span></span>
+<span id="cb118-5"><a href="system.html#cb118-5" tabindex="-1"></a>  cumulativeWeights<span class="op">:</span> <span class="dt">number</span>[]<span class="op">;</span></span>
+<span id="cb118-6"><a href="system.html#cb118-6" tabindex="-1"></a>}</span></code></pre></div>
 <p>The <code>labels</code> and <code>order</code> properties match those of <code>ExpansePoint</code>. The additional <code>weights</code> and <code>cumulativeWeights</code> are numeric arrays which record the width of each band. <code>weights</code> store the individual band widths, whereas <code>cumulativeWeights</code> stores their cumulative sums. The reason why <code>cumulativeWeights</code> are stored is that, by having the bands have variable widths, we can no longer rely on the label index to correctly identify position. To give an example, with weights <code>1</code>, <code>1</code>, and <code>2</code>, the second band takes up quarter of the available space and the correct normalized value should be 0.375 (halfway between 0.25 and 0.5). However, to compute this value, the cumulative sum of the preceding weights as well as the total sum of all weights are required. While we could compute cumulative sum of weights on each <code>normalize</code> or <code>unnormalize</code> call, this would introduce performance overhead. As such, it is better to store <code>cumulativeWeights</code> and only recompute them each time <code>weights</code> or <code>order</code> changes.</p>
 <p>The <code>normalize</code> and <code>unnormalize</code> functions in the <code>ExpanseBand</code> namespace map labels to and from the midpoint of their corresponding bands:</p>
-<div class="sourceCode" id="cb118"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb118-1"><a href="system.html#cb118-1" tabindex="-1"></a><span class="im">export</span> <span class="im">namespace</span> <span class="dt">ExpanseBand</span> {</span>
-<span id="cb118-2"><a href="system.html#cb118-2" tabindex="-1"></a>  <span class="im">export</span> <span class="kw">function</span> <span class="fu">normalize</span>(expanse<span class="op">:</span> ExpanseBand<span class="op">,</span> x<span class="op">:</span> <span class="dt">string</span>) {</span>
-<span id="cb118-3"><a href="system.html#cb118-3" tabindex="-1"></a>    <span class="kw">const</span> { labels } <span class="op">=</span> expanse<span class="op">;</span></span>
-<span id="cb118-4"><a href="system.html#cb118-4" tabindex="-1"></a>    <span class="kw">const</span> index <span class="op">=</span> labels<span class="op">.</span><span class="fu">indexOf</span>(x)<span class="op">;</span></span>
-<span id="cb118-5"><a href="system.html#cb118-5" tabindex="-1"></a>    <span class="cf">return</span> <span class="fu">getMidpoint</span>(expanse<span class="op">,</span> index)<span class="op">;</span></span>
-<span id="cb118-6"><a href="system.html#cb118-6" tabindex="-1"></a>  }</span>
-<span id="cb118-7"><a href="system.html#cb118-7" tabindex="-1"></a>  </span>
-<span id="cb118-8"><a href="system.html#cb118-8" tabindex="-1"></a>  <span class="kw">function</span> <span class="fu">getMidpoint</span>(expanse<span class="op">:</span> ExpanseBand<span class="op">,</span> index<span class="op">:</span> <span class="dt">number</span>) {</span>
-<span id="cb118-9"><a href="system.html#cb118-9" tabindex="-1"></a>    <span class="kw">const</span> { order<span class="op">,</span> cumulativeWeights } <span class="op">=</span> expanse<span class="op">.</span><span class="at">props</span><span class="op">;</span></span>
-<span id="cb118-10"><a href="system.html#cb118-10" tabindex="-1"></a>    index <span class="op">=</span> order[index]<span class="op">;</span></span>
-<span id="cb118-11"><a href="system.html#cb118-11" tabindex="-1"></a></span>
-<span id="cb118-12"><a href="system.html#cb118-12" tabindex="-1"></a>    <span class="kw">const</span> lower <span class="op">=</span> cumulativeWeights[index <span class="op">-</span> <span class="dv">1</span>] <span class="op">??</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb118-13"><a href="system.html#cb118-13" tabindex="-1"></a>    <span class="kw">const</span> upper <span class="op">=</span> cumulativeWeights[index]<span class="op">;</span></span>
-<span id="cb118-14"><a href="system.html#cb118-14" tabindex="-1"></a>    <span class="kw">const</span> max <span class="op">=</span> <span class="fu">last</span>(cumulativeWeights)<span class="op">;</span></span>
-<span id="cb118-15"><a href="system.html#cb118-15" tabindex="-1"></a></span>
-<span id="cb118-16"><a href="system.html#cb118-16" tabindex="-1"></a>    <span class="cf">return</span> (lower <span class="op">+</span> upper) <span class="op">/</span> <span class="dv">2</span> <span class="op">/</span> max<span class="op">;</span></span>
-<span id="cb118-17"><a href="system.html#cb118-17" tabindex="-1"></a>  }</span>
-<span id="cb118-18"><a href="system.html#cb118-18" tabindex="-1"></a></span>
-<span id="cb118-19"><a href="system.html#cb118-19" tabindex="-1"></a>  <span class="im">export</span> <span class="kw">function</span> <span class="fu">unnormalize</span>(expanse<span class="op">:</span> ExpanseBand<span class="op">,</span> x<span class="op">:</span> <span class="dt">number</span>) {</span>
-<span id="cb118-20"><a href="system.html#cb118-20" tabindex="-1"></a>    <span class="kw">const</span> { labels<span class="op">,</span> order<span class="op">,</span> cumulativeWeights } <span class="op">=</span> expanse<span class="op">;</span></span>
-<span id="cb118-21"><a href="system.html#cb118-21" tabindex="-1"></a></span>
-<span id="cb118-22"><a href="system.html#cb118-22" tabindex="-1"></a>    <span class="kw">const</span> weight <span class="op">=</span> x <span class="op">*</span> <span class="fu">last</span>(cumulativeWeights)<span class="op">;</span></span>
-<span id="cb118-23"><a href="system.html#cb118-23" tabindex="-1"></a>    <span class="kw">let</span> index <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb118-24"><a href="system.html#cb118-24" tabindex="-1"></a></span>
-<span id="cb118-25"><a href="system.html#cb118-25" tabindex="-1"></a>    <span class="cf">while</span> (index <span class="op">&lt;</span> cumulativeWeights<span class="op">.</span><span class="at">length</span> <span class="op">-</span> <span class="dv">1</span>) {</span>
-<span id="cb118-26"><a href="system.html#cb118-26" tabindex="-1"></a>      <span class="cf">if</span> (cumulativeWeights[index] <span class="op">&gt;=</span> weight) <span class="cf">break</span><span class="op">;</span></span>
-<span id="cb118-27"><a href="system.html#cb118-27" tabindex="-1"></a>      index<span class="op">++;</span></span>
-<span id="cb118-28"><a href="system.html#cb118-28" tabindex="-1"></a>    }</span>
-<span id="cb118-29"><a href="system.html#cb118-29" tabindex="-1"></a></span>
-<span id="cb118-30"><a href="system.html#cb118-30" tabindex="-1"></a>    <span class="cf">return</span> labels[order[index]]<span class="op">;</span></span>
-<span id="cb118-31"><a href="system.html#cb118-31" tabindex="-1"></a>  }</span>
-<span id="cb118-32"><a href="system.html#cb118-32" tabindex="-1"></a></span>
-<span id="cb118-33"><a href="system.html#cb118-33" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb119"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb119-1"><a href="system.html#cb119-1" tabindex="-1"></a><span class="im">export</span> <span class="im">namespace</span> <span class="dt">ExpanseBand</span> {</span>
+<span id="cb119-2"><a href="system.html#cb119-2" tabindex="-1"></a>  <span class="im">export</span> <span class="kw">function</span> <span class="fu">normalize</span>(expanse<span class="op">:</span> ExpanseBand<span class="op">,</span> x<span class="op">:</span> <span class="dt">string</span>) {</span>
+<span id="cb119-3"><a href="system.html#cb119-3" tabindex="-1"></a>    <span class="kw">const</span> { labels } <span class="op">=</span> expanse<span class="op">;</span></span>
+<span id="cb119-4"><a href="system.html#cb119-4" tabindex="-1"></a>    <span class="kw">const</span> index <span class="op">=</span> labels<span class="op">.</span><span class="fu">indexOf</span>(x)<span class="op">;</span></span>
+<span id="cb119-5"><a href="system.html#cb119-5" tabindex="-1"></a>    <span class="cf">return</span> <span class="fu">getMidpoint</span>(expanse<span class="op">,</span> index)<span class="op">;</span></span>
+<span id="cb119-6"><a href="system.html#cb119-6" tabindex="-1"></a>  }</span>
+<span id="cb119-7"><a href="system.html#cb119-7" tabindex="-1"></a>  </span>
+<span id="cb119-8"><a href="system.html#cb119-8" tabindex="-1"></a>  <span class="kw">function</span> <span class="fu">getMidpoint</span>(expanse<span class="op">:</span> ExpanseBand<span class="op">,</span> index<span class="op">:</span> <span class="dt">number</span>) {</span>
+<span id="cb119-9"><a href="system.html#cb119-9" tabindex="-1"></a>    <span class="kw">const</span> { order<span class="op">,</span> cumulativeWeights } <span class="op">=</span> expanse<span class="op">.</span><span class="at">props</span><span class="op">;</span></span>
+<span id="cb119-10"><a href="system.html#cb119-10" tabindex="-1"></a>    index <span class="op">=</span> order[index]<span class="op">;</span></span>
+<span id="cb119-11"><a href="system.html#cb119-11" tabindex="-1"></a></span>
+<span id="cb119-12"><a href="system.html#cb119-12" tabindex="-1"></a>    <span class="kw">const</span> lower <span class="op">=</span> cumulativeWeights[index <span class="op">-</span> <span class="dv">1</span>] <span class="op">??</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb119-13"><a href="system.html#cb119-13" tabindex="-1"></a>    <span class="kw">const</span> upper <span class="op">=</span> cumulativeWeights[index]<span class="op">;</span></span>
+<span id="cb119-14"><a href="system.html#cb119-14" tabindex="-1"></a>    <span class="kw">const</span> max <span class="op">=</span> <span class="fu">last</span>(cumulativeWeights)<span class="op">;</span></span>
+<span id="cb119-15"><a href="system.html#cb119-15" tabindex="-1"></a></span>
+<span id="cb119-16"><a href="system.html#cb119-16" tabindex="-1"></a>    <span class="cf">return</span> (lower <span class="op">+</span> upper) <span class="op">/</span> <span class="dv">2</span> <span class="op">/</span> max<span class="op">;</span></span>
+<span id="cb119-17"><a href="system.html#cb119-17" tabindex="-1"></a>  }</span>
+<span id="cb119-18"><a href="system.html#cb119-18" tabindex="-1"></a></span>
+<span id="cb119-19"><a href="system.html#cb119-19" tabindex="-1"></a>  <span class="im">export</span> <span class="kw">function</span> <span class="fu">unnormalize</span>(expanse<span class="op">:</span> ExpanseBand<span class="op">,</span> x<span class="op">:</span> <span class="dt">number</span>) {</span>
+<span id="cb119-20"><a href="system.html#cb119-20" tabindex="-1"></a>    <span class="kw">const</span> { labels<span class="op">,</span> order<span class="op">,</span> cumulativeWeights } <span class="op">=</span> expanse<span class="op">;</span></span>
+<span id="cb119-21"><a href="system.html#cb119-21" tabindex="-1"></a></span>
+<span id="cb119-22"><a href="system.html#cb119-22" tabindex="-1"></a>    <span class="kw">const</span> weight <span class="op">=</span> x <span class="op">*</span> <span class="fu">last</span>(cumulativeWeights)<span class="op">;</span></span>
+<span id="cb119-23"><a href="system.html#cb119-23" tabindex="-1"></a>    <span class="kw">let</span> index <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb119-24"><a href="system.html#cb119-24" tabindex="-1"></a></span>
+<span id="cb119-25"><a href="system.html#cb119-25" tabindex="-1"></a>    <span class="cf">while</span> (index <span class="op">&lt;</span> cumulativeWeights<span class="op">.</span><span class="at">length</span> <span class="op">-</span> <span class="dv">1</span>) {</span>
+<span id="cb119-26"><a href="system.html#cb119-26" tabindex="-1"></a>      <span class="cf">if</span> (cumulativeWeights[index] <span class="op">&gt;=</span> weight) <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb119-27"><a href="system.html#cb119-27" tabindex="-1"></a>      index<span class="op">++;</span></span>
+<span id="cb119-28"><a href="system.html#cb119-28" tabindex="-1"></a>    }</span>
+<span id="cb119-29"><a href="system.html#cb119-29" tabindex="-1"></a></span>
+<span id="cb119-30"><a href="system.html#cb119-30" tabindex="-1"></a>    <span class="cf">return</span> labels[order[index]]<span class="op">;</span></span>
+<span id="cb119-31"><a href="system.html#cb119-31" tabindex="-1"></a>  }</span>
+<span id="cb119-32"><a href="system.html#cb119-32" tabindex="-1"></a></span>
+<span id="cb119-33"><a href="system.html#cb119-33" tabindex="-1"></a>}</span></code></pre></div>
 <p>Compared to <code>ExpansePoint</code>, the logic of <code>normalize</code> and <code>unnormalize</code> is a bit more complicated. To <code>normalize</code> a label, we need to first find the index of the label and then return the corresponding midpoint of the band, taking <code>weights</code> and <code>order</code> into account. To <code>unnormalize</code>, we actually have to loop through the array of <code>cumulativeWeights</code> to find the first weight that is smaller than the position: as far as I know, there is no way to determine which bin a normalized value belongs to in <span class="math inline">\(O(1)\)</span> time<a href="#fn36" class="footnote-ref" id="fnref36"><sup>36</sup></a>.</p>
 <div id="compound-and-split-expanses" class="section level5 hasAnchor" number="6.3.4.11.1">
 <h5><span class="header-section-number">6.3.4.11.1</span> Compound and split expanses<a href="system.html#compound-and-split-expanses" class="anchor-section" aria-label="Anchor link to header"></a></h5>

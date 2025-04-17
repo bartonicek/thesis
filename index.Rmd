@@ -1,6 +1,6 @@
 ---
-title: "Coherent Interactive Visualization"
-subtitle: "Exploring the Algebra of Graphics, Statistics, and Interaction"
+title: "The Fabric of Interactive Visualization"
+subtitle: "From the Algebra of Graphics, Statistics, and Interaction to Practical Implementation"
 author: "Adam Bartonicek"
 site: bookdown::bookdown_site
 documentclass: book

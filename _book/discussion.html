@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>8 Discussion | Coherent Interactive Visualization</title>
-  <meta name="description" content="8 Discussion | Coherent Interactive Visualization" />
+  <title>8 Discussion | The Fabric of Interactive Visualization</title>
+  <meta name="description" content="8 Discussion | The Fabric of Interactive Visualization" />
   <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="8 Discussion | Coherent Interactive Visualization" />
+  <meta property="og:title" content="8 Discussion | The Fabric of Interactive Visualization" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="8 Discussion | Coherent Interactive Visualization" />
+  <meta name="twitter:title" content="8 Discussion | The Fabric of Interactive Visualization" />
   
   
   
@@ -279,7 +279,7 @@ div.csl-indent {
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Coherent Interactive Visualization</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">The Fabric of Interactive Visualization</a>
           </h1>
         </div>
 
@@ -293,7 +293,7 @@ div.csl-indent {
 <p>The essence of the proposed model is as follows. Ultimately, when we visualize, we want to represent our data with a set of geometric objects. To do this, we need to partition our data into a collection of subsets. However, often, particularly with features like linked selection, we want to further partition these subsets, to be able to display highlighted parts of objects. This naturally creates a hierarchical structure: a tree (preorder) of data subsets ordered by set union.</p>
 <p>Importantly, to maintain consistency during interactions like linked selection, the subsequent steps of the data visualization pipeline should preserve this structure. Put simply, the geometric objects in our plots and the underlying summary statistics should <em>behave like set union</em>. To describe this formally, in category theoretic terms, we can conceptualize the mapping from data subsets to summary statistics and from summary statistics to geometric objects as a functor (leading to a single, data-to-objects functor, by composition). Further, by reasoning about the properties of functors and set union, we can identify specific algebraic structures that our statistics (and geometric objects) should conform to: groups and monoids. Specifically, to behave consistently, the operations underlying our plots should be associative and unital, and potentially also invertible, monotonic, and commutative. When these algebraic constraints are satisfied, the geometric objects in our plots will compose well, meaning that their parts will add up to a meaningful whole, and this ensures that features like linked selection remain consistent.</p>
 <p>To test the proposed model, I developed <code>plotscaper</code>, an R package for interactive data exploration (along with <code>plotscape</code>, its TypeScript-based backend). Together, the theoretical model and the software formed a crucial feedback loop, allowing me to refine important concepts. Specifically, many of the model’s key concepts emerged from practical challenges I encoutered during the packages’ development, and, by translating theory into code, I was able to empirically test and refine assumptions about the structure and behavior of interactive data visualizations.</p>
-<p>However, <code>plotscaper</code> was also developed to provide a practical tool for data exploration, not just theory testing. As outlined in Section <a href="background.html#background">3</a>, within the R ecosystem, there is currently no shortage of interactive data visualization packages and frameworks; however, many offer only fairly basic interactive features out of the box. Implementing complex features such as linked selection, representation switching, or parametric interaction (see section <a href="background.html#common-features">3.2.5</a>) often requires substantial programming expertise and time-investment, creating a barrier to entry for casual users <span class="citation">(see e.g. <a href="#ref-batch2017">Batch and Elmqvist 2017</a>)</span>. Thus, a secondary goal of this project was to try to address this perceived gap, and this goal seems to have been met with moderate success. Despite its experimental status and the fact that it is competing with a number of far larger and better-established interactive data visualization frameworks, <code>plotscaper</code> has been downloaded over<a href="#fn40" class="footnote-ref" id="fnref40"><sup>40</sup></a> 2124 times in the 180 days since its initial release, see Figure <a href="discussion.html#fig:plotscaper-downloads">8.1</a>:</p>
+<p>However, <code>plotscaper</code> was also developed to provide a practical tool for data exploration, not just theory testing. As outlined in Section <a href="background.html#background">3</a>, within the R ecosystem, there is currently no shortage of interactive data visualization packages and frameworks; however, many offer only fairly basic interactive features out of the box. Implementing complex features such as linked selection, representation switching, or parametric interaction (see section <a href="background.html#common-features">3.2.5</a>) often requires substantial programming expertise and time-investment, creating a barrier to entry for casual users <span class="citation">(see e.g. <a href="#ref-batch2017">Batch and Elmqvist 2017</a>)</span>. Thus, a secondary goal of this project was to try to address this perceived gap, and this goal seems to have been met with moderate success. Despite its experimental status and the fact that it is competing with a number of far larger and better-established interactive data visualization frameworks, <code>plotscaper</code> has been downloaded over<a href="#fn40" class="footnote-ref" id="fnref40"><sup>40</sup></a> 2124 times in the 181 days since its initial release, see Figure <a href="discussion.html#fig:plotscaper-downloads">8.1</a>:</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:plotscaper-downloads"></span>
 <img src="_main_files/figure-html/plotscaper-downloads-1.png" alt="The cumulative number of downloads of the `plotscaper` package, starting at the date of its initial release (18th of October 2024)." width="100%" height="100%" style="border: none;" />
 <p class="caption">

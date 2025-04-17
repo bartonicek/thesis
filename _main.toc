@@ -29,11 +29,11 @@
 \contentsline {section}{\numberline {3.3}General data visualization theory}{41}{section.3.3}%
 \contentsline {subsection}{\numberline {3.3.1}Visualization goals}{43}{subsection.3.3.1}%
 \contentsline {subsection}{\numberline {3.3.2}Visual perception}{44}{subsection.3.3.2}%
-\contentsline {subsection}{\numberline {3.3.3}Scales and measurement}{44}{subsection.3.3.3}%
-\contentsline {subsection}{\numberline {3.3.4}Graphics formats}{47}{subsection.3.3.4}%
-\contentsline {subsubsection}{\numberline {3.3.4.1}Raster graphics}{47}{subsubsection.3.3.4.1}%
-\contentsline {subsubsection}{\numberline {3.3.4.2}Vector graphics}{48}{subsubsection.3.3.4.2}%
-\contentsline {section}{\numberline {3.4}Summary}{49}{section.3.4}%
+\contentsline {subsection}{\numberline {3.3.3}Scales and measurement}{45}{subsection.3.3.3}%
+\contentsline {subsection}{\numberline {3.3.4}Graphics formats}{48}{subsection.3.3.4}%
+\contentsline {subsubsection}{\numberline {3.3.4.1}Raster graphics}{48}{subsubsection.3.3.4.1}%
+\contentsline {subsubsection}{\numberline {3.3.4.2}Vector graphics}{49}{subsubsection.3.3.4.2}%
+\contentsline {section}{\numberline {3.4}Summary}{50}{section.3.4}%
 \contentsline {chapter}{\numberline {4}Challenges}{51}{chapter.4}%
 \contentsline {section}{\numberline {4.1}The structure of this chapter: Data visualization pipeline}{51}{section.4.1}%
 \contentsline {section}{\numberline {4.2}Partitioning}{52}{section.4.2}%
@@ -64,12 +64,12 @@
 \contentsline {subsubsection}{\numberline {4.3.2.5}Functorial summaries and set union}{95}{subsubsection.4.3.2.5}%
 \contentsline {subsubsection}{\numberline {4.3.2.6}Whole equal to the sum of its parts: Monoids}{97}{subsubsection.4.3.2.6}%
 \contentsline {subsubsection}{\numberline {4.3.2.7}Programming with monoids}{98}{subsubsection.4.3.2.7}%
-\contentsline {subsubsection}{\numberline {4.3.2.8}Groups and inverses}{100}{subsubsection.4.3.2.8}%
+\contentsline {subsubsection}{\numberline {4.3.2.8}Groups and inverses}{101}{subsubsection.4.3.2.8}%
 \contentsline {subsubsection}{\numberline {4.3.2.9}Other properties: Monotonicity and commutativity}{104}{subsubsection.4.3.2.9}%
 \contentsline {paragraph}{\numberline {4.3.2.9.1}Monotonicity}{104}{paragraph.4.3.2.9.1}%
 \contentsline {paragraph}{\numberline {4.3.2.9.2}Commutativity}{106}{paragraph.4.3.2.9.2}%
 \contentsline {subsubsection}{\numberline {4.3.2.10}Transforming summaries: Stacking, normalizing, and shifting}{106}{subsubsection.4.3.2.10}%
-\contentsline {paragraph}{\numberline {4.3.2.10.1}Stacking}{106}{paragraph.4.3.2.10.1}%
+\contentsline {paragraph}{\numberline {4.3.2.10.1}Stacking}{107}{paragraph.4.3.2.10.1}%
 \contentsline {paragraph}{\numberline {4.3.2.10.2}Normalizing}{107}{paragraph.4.3.2.10.2}%
 \contentsline {paragraph}{\numberline {4.3.2.10.3}Shifting}{107}{paragraph.4.3.2.10.3}%
 \contentsline {section}{\numberline {4.4}Scaling and encoding}{108}{section.4.4}%
@@ -77,15 +77,15 @@
 \contentsline {subsubsection}{\numberline {4.4.0.2}Limits of modeling scales with simple functions}{110}{subsubsection.4.4.0.2}%
 \contentsline {subsubsection}{\numberline {4.4.0.3}Solution: Scales as function composition}{113}{subsubsection.4.4.0.3}%
 \contentsline {paragraph}{\numberline {4.4.0.3.1}Reusability and discrete scales}{114}{paragraph.4.4.0.3.1}%
-\contentsline {paragraph}{\numberline {4.4.0.3.2}The intermediate interval}{114}{paragraph.4.4.0.3.2}%
+\contentsline {paragraph}{\numberline {4.4.0.3.2}The intermediate interval}{115}{paragraph.4.4.0.3.2}%
 \contentsline {paragraph}{\numberline {4.4.0.3.3}Implementing scale features via the intermediate interval}{115}{paragraph.4.4.0.3.3}%
-\contentsline {subparagraph}{\numberline {4.4.0.3.3.1}Margins}{115}{subparagraph.4.4.0.3.3.1}%
+\contentsline {subparagraph}{\numberline {4.4.0.3.3.1}Margins}{116}{subparagraph.4.4.0.3.3.1}%
 \contentsline {subparagraph}{\numberline {4.4.0.3.3.2}Panning}{116}{subparagraph.4.4.0.3.3.2}%
 \contentsline {subparagraph}{\numberline {4.4.0.3.3.3}Zooming}{116}{subparagraph.4.4.0.3.3.3}%
 \contentsline {paragraph}{\numberline {4.4.0.3.4}Inverses}{117}{paragraph.4.4.0.3.4}%
 \contentsline {paragraph}{\numberline {4.4.0.3.5}Scale transformations}{118}{paragraph.4.4.0.3.5}%
 \contentsline {subsubsection}{\numberline {4.4.0.4}Comparison to past implementations of scales}{118}{subsubsection.4.4.0.4}%
-\contentsline {section}{\numberline {4.5}Rendering}{119}{section.4.5}%
+\contentsline {section}{\numberline {4.5}Rendering}{120}{section.4.5}%
 \contentsline {subsection}{\numberline {4.5.1}Frames}{120}{subsection.4.5.1}%
 \contentsline {subsection}{\numberline {4.5.2}Geoms}{121}{subsection.4.5.2}%
 \contentsline {subsubsection}{\numberline {4.5.2.1}Rendering geoms: A functor from summary statistics to graphics}{121}{subsubsection.4.5.2.1}%
