@@ -311,3 +311,6 @@ isomorphism
 algebraic-as-categories
 functors
 references
+fig:unnamed-chunk-2
+fig:unnamed-chunk-3
+preorders
