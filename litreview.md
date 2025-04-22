@@ -4,7 +4,9 @@ editor_options:
   chunk_output_type: console
 ---
 
-# Background {#litreview}
+
+
+# Background {#background}
 
 ## Brief history of interactive data visualization {#brief-history}
 
@@ -12,10 +14,15 @@ Data visualization has a rich and intricate history, and a comprehensive treatme
 
 ### Static data visualization: From ancient times to the space age
 
-The idea of graphically representing abstract information is very old. As one concrete example, a clay tablet recording a land survey during the Old Babylonian period (approximately 1900-1600 BCE) has recently been identified as the earliest visual depiction of the Pythagorean theorem [@mansfield2020]. Other examples of early abstract visualizations include maps of geographic regions and the night sky, and these were also the first to introduce the idea of coordinate systems [@beniger1978; @friendly2021].
+The idea of graphically representing abstract information is very old. As one concrete example, a clay tablet recording a land survey during the Old Babylonian period (approximately 1900-1600 BCE) has recently been identified as the earliest visual depiction of the Pythagorean theorem [@mansfield2020]. Other examples of early abstract visualizations include maps of geographic regions and the night sky, and these were also the first to introduce the idea of a system of coordinates [@beniger1978; @friendly2021].
+
+<!-- Citations and references inside figure captions have to be provided externally -->
+(ref:mansfielda) [@mansfield2020]
+
+(ref:mansfieldb) [source: Wikimedia Commons, @mansfield2024]
 
 \begin{figure}
-\includegraphics[width=29in]{./figures/si427} \caption{Photos of the tablet Si. 427 which has recently been identified as the earliest depiction of the Pythagorean theorem [@mansfield2020]. Left: the obverse of the tablet depicts a diagram of a field, inscribed with areas. Right: the reverse of the tablet contains a table of numbers, corresponding to the calculation of the areas. Source: Wikimedia Commons [@mansfield2024].}(\#fig:unnamed-chunk-1)
+\includegraphics[width=1\linewidth,height=1\textheight]{./figures/si427} \caption{Photos of the tablet Si. 427 which has recently been identified as the earliest depiction of the Pythagorean theorem (ref:mansfielda). Left: the obverse of the tablet depicts a diagram of a field, inscribed with areas. Right: the reverse of the tablet contains a table of numbers, corresponding to the calculation of the areas (ref:mansfieldb).}(\#fig:unnamed-chunk-2)
 \end{figure}
 
 For a long time, coordinate systems remained tied to geography and maps. However, with the arrival of the early modern age, this was about to change. In the 16-17th century, the works of the 9th century algebraist Al-Khwarizmi percolated into Europe, and with them the idea of representing unknown quantities by variables [@kvasz2006]. This idea culminated with Descartes, who introduced the concept of visualizing algebraic relationships as objects in a 2D plane, forging a powerful link between Euclidean geometry and algebra [@friendly2021]. Coordinate systems were thus freed of their connection to geography, and the x- and y-axes could now be used to represent an arbitrary "space" spanned by two variables.
@@ -36,30 +43,42 @@ Compared to static data visualization, interactive data visualization is much mo
 
 Following the boom of static data visualization in the 1950's, interactive data visualization would not be left far behind. It started with tools designed for niche, specialized tasks. For example, @fowlkes1969 designed a system which allowed the users to view probability plots under different configurations of parameters and transformations, whereas @kruskal1964 created a tool for visualizing multidimensional scaling. 
 
+(ref:fisherkeller) [right, @fisherkeller1974]
+
+(ref:asa) [ASA Statistical Graphics Video Library](https://community.amstat.org/jointscsg-section/media/videos)
+
 \begin{figure}
-\includegraphics[width=47.12in]{./figures/prim9} \caption{John Tukey showcasing the PRIM-9 system (left), with an example of a projected scatterplot [right, @fisherkeller1974]. Screenshots were taken from a video available at: [ASA Statistical Graphics Video Library](https://community.amstat.org/jointscsg-section/media/videos))}(\#fig:unnamed-chunk-2)
+\includegraphics[width=1\linewidth,height=1\textheight]{./figures/prim9} \caption{John Tukey showcasing the PRIM-9 system (left), with an example of a projected scatterplot (ref:fisherkeller). Screenshots were taken from a video available at the (ref:asa).}(\#fig:unnamed-chunk-3)
 \end{figure}
 
 However, researchers soon recognized the potential of interactive data visualization as a general-purpose tool for exploring data. The first such general-purpose system was PRIM-9 [@fisherkeller1974]. PRIM-9 allowed for exploration of multivariate data via interactive features such as projection, rotation, masking, and filtering. Following PRIM-9, the late 1980's saw the emergence of a new generation of systems which provided an even wider range of capabilities. Tools like MacSpin [@donoho1988], Data Desk [@velleman1989], XLISP-STAT [@tierney1990], and XGobi [@swayne1998] introduced features such as interactive scaling, rotation, linked views, and grand tours (for a glimpse into these systems, excellent video-documentaries are available at [ASA Statistical Graphics Video Library](https://community.amstat.org/jointscsg-section/media/videos)).
 
+(ref:tierney) [figure reproduced from @tierney1990]
+
 \begin{figure}
-\includegraphics[width=13.29in]{./figures/xlisp-stat} \caption{Example of interactive control of histogram highlighting in XLISP-STAT. Note that, unlike in many current data visualization systems, aggregation plots were sensitive to data order (not commutative). This non-commutative behavior meant that, for instance, a highlighted segment could appear in the middle of a bar (as seen in the figure above) or multiple non-adjacent highlighted cases might appear as 'stripes'. Figure reproduced from @tierney1990.}(\#fig:xlisp-stat)
+\includegraphics[width=1\linewidth,height=1\textheight]{./figures/xlisp-stat} \caption{Example of interactive control of histogram highlighting in XLISP-STAT. Note that, unlike in many current data visualization systems, aggregation plots were sensitive to data order (not commutative). This non-commutative behavior meant that, for instance, a highlighted segment could appear in the middle of a bar (as seen in the figure above) or multiple non-adjacent highlighted cases might appear as 'stripes' (ref:tierney).}(\#fig:xlisp-stat)
 \end{figure}
 
 #### Open-source Statistical Computing
 
-The proliferation of open-source, general-purpose statistical computing software such as S and R further democratized the access to interactive data visualization tools. Building on XGobi's foundation, GGobi [@swayne2003], expanded upon on XGobi and provided an integration layer for R. Other tools like MANET [@unwin1996] and Mondrian [@theus2002] introduced sophisticated linking techniques, with features such as selection sequences, allowing the users to combine a series of selections via logical operators [see also @unwin2006]. Further, iPlots [@urbanek2003] implemented a general framework for interactive plotting in R, allowing not only for one-shot rendering interactive figures from R but also for direct programmatic manipulation. This package was later expanded expanded for big data capabilities in iPlots eXtreme [@urbanek2011]. Finally, the `cranvas` package [@xie2014] introduced a reactive programming paradigm for defining the infrastructure for interactive graphics directly in R, using the model-view-controller (MVC) architecture.         
+The proliferation of open-source, general-purpose statistical computing software such as S and R further democratized the access to interactive data visualization tools [see also @leeuw2004]. Building on XGobi's foundation, GGobi [@swayne2003], expanded upon on XGobi and provided an integration layer for R. Other tools like MANET [@unwin1996] and Mondrian [@theus2002] introduced sophisticated linking techniques, with features such as selection sequences, allowing the users to combine a series of selections via logical operators [see also @unwin2006]. Further, iPlots [@urbanek2003] implemented a general framework for interactive plotting in R, allowing not only for one-shot rendering interactive figures from R but also for direct programmatic manipulation. This package was later expanded expanded for big data capabilities in iPlots eXtreme [@urbanek2011]. Finally, the `cranvas` package [@xie2014] introduced a set of reactive programming primitives that could be used for building the infrastructure underlying interactive graphics directly in R, within the model-view-controller (MVC) framework.   
+
+(ref:theus) [@theus2002]
 
 \begin{figure}
 
-{\centering \includegraphics[width=15.83in]{./figures/mondrian} 
+{\centering \includegraphics[width=1\linewidth,height=1\textheight]{./figures/mondrian} 
 
 }
 
-\caption{Examples of interactive features in Mondrian [@theus2002]: selection operators (left) and mosaic plot with querying (right).}(\#fig:unnamed-chunk-3)
+\caption{Examples of interactive features in Mondrian (ref:theus): selection operators (left) and mosaic plot with querying (right).}(\#fig:unnamed-chunk-4)
 \end{figure}
 
-Alongside the more general interactive data visualization frameworks mentioned above, there were also more specialized packages designed for specific techniques and models. For instance, `KLIMT` was developed for interactive visualization of classification and regression trees [@urbanek2001; @urbanek2002]. Similarly, packages like `tourr` [@wickham2011], `spinifex` [@spyrison2020], `liminal` [@lee2021; @lee2022a] provided tools for exploring large multivariate data sets via grand tour projections [see @cook1995]. Generally, over time, there seems to have been a trend towards more of these specialized tools within the R community, and fewer of the general, high-level frameworks [although there were some notable exceptions, such as the `loon` package, @waddell2023]. Currently, it seems that R users typically encounter interactive visualizations as part of Shiny [@shiny2024] dashboards, or through R wrappers of interactive data visualization packages ported over from the JavaScript ecosystem (see Section \@ref(web-based)).
+Alongside the more general interactive data visualization frameworks mentioned above, there were also more specialized packages designed for specific techniques and models. For instance, `KLIMT` was developed for interactive visualization of classification and regression trees [@urbanek2001; @urbanek2002]. Similarly, packages like `tourr` [@wickham2011], `spinifex` [@spyrison2020], `liminal` [@lee2021; @lee2022a] provided tools for exploring large multivariate data sets via grand tour projections [see @cook1995]. 
+
+Another important milestone in the history of interactivity in R was the development of Shiny [@shiny2024; see also @sievert2020; @wickham2021], a general framework for developing web apps in R. Shiny uses a client-server MVC-like model, whereby the user defines an R-based server and a web-based UI/controller layer (which is scaffolded in R, but which transpiles to HTML, CSS, and JavaScript). Bi-directional communication between the client and the server is handled via WebSockets [@mdn2024g], facilitated through the `httpuv` package [@cheng2024]. The primary advantage of Shiny is that it gives less technical R users the ability to easily create rich interactive web apps, including interactive data visualizations (by re-rendering static plots). The one major downside of Shiny is that, since every interactive event has to do a round-trip from the client to the R server and back again, high-frequency interactions (such as brushing scatterplot points) can become prohibitively slow, particularly at larger data volumes [although there are ways to mitigate this, @sievert2020].   
+
+Over time, there seems to have been a trend towards more of the specialized tools within the R community, and fewer of the general, high-level frameworks [although there were some notable exceptions, such as the `loon` package, @waddell2023]. Currently, it seems that R users typically encounter interactive visualizations as part of Shiny [@shiny2024] dashboards, or through R wrappers of interactive data visualization packages ported over from the JavaScript ecosystem (see Section \@ref(web-based)).
 
 #### Common features and limitations of early interactive systems
 
@@ -101,7 +120,8 @@ const svg = d3
   .attr("width", width + margin.left + margin.right)
   .attr("height", height + margin.top + margin.bottom)
   .append("g")
-  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  .attr("transform", 
+        "translate(" + margin.left + "," + margin.top + ")");
 
 // Create x and y scales and append them to
 const scaleX = d3.scaleLinear().domain([0, 6]).range([0, width]);
@@ -124,8 +144,10 @@ svg
   .attr("r", 2);
 ```
 
+(ref:holtz) [@holtz2022b]
+
 \begin{figure}
-\includegraphics[width=11.42in]{./figures/d3-scatterplot} \caption{Example of a scatterplot in D3.js. The code was taken from D3 Graph Gallery [@holtz2022b] and adjusted to use ES6 syntax and slightly more informative variable names/comments.}(\#fig:d3-scatterplot)
+\includegraphics[width=1\linewidth,height=1\textheight]{./figures/d3-scatterplot} \caption{Example of a scatterplot built with D3.js. The code was taken from D3 Graph Gallery (ref:holtz) and adjusted to use ES6 syntax and slightly more informative variable names/comments.}(\#fig:d3-scatterplot)
 \end{figure}
 
 As you can see from Figure \@ref(fig:d3-scatterplot) and the corresponding code, D3 is a fairly low-level framework. Compared to typical high-level plotting functionalities such as those provided by base R or `ggplot2` [@r2024; @wickham2016], the user has to handle many low-level details such as scaling and appending of primitives explicitly. This is also the case with interaction. While D3 does provide some methods for handling reactive DOM events, it does not itself provide a system for dispatching and coordinating these events - instead, it delegates this responsibility to the user, and encourages the use of reactive Web frameworks such as React [@react2024], Vue [@vue2024], or Svelte [@svelte2024]. 
@@ -136,12 +158,27 @@ Finally, D3.js visualizations are rendered as Scalable Vector Graphics (SVG) by 
 
 Building upon the low-level infrastructure that D3 provides, many packages such as Plotly.js [@plotly2022] and Highcharts [@highcharts2024] provide high-level abstractions which make the process of building interactive figures easier for the average user. Unlike D3 which provides low-level utilities such as data transformations, scales, and geometric objects, these packages provide a simple declarative framework for rendering entire plots using a static [JSON] schema.
 
-Here's how to render the same scatterplot in Plotly:
+Here's how we can render the same scatterplot in Plotly, using the R `plotly` package [@sievert2020]:
+
+
+``` r
+library(plotly)
+data <- data.frame(x = 1:5, y = c(0.41, 4.62, 7.62, 6.54, 9.61))
+plot_ly(data, x = ~x, y = ~y)
+```
+
+
+
+\begin{figure}
+\includegraphics[width=1\linewidth,height=1\textheight]{./figures/plotly-scatterplot} \caption{Example of a scatterplot with `plotly`.}(\#fig:plotly-scatterplot)
+\end{figure}
+
+Here's the correponding code in JavaScript:
 
 
 ``` js
 const data = [{
-  x: [1, 2, 3, 4, 5, 6],
+  x: [1, 2, 3, 4, 5],
   y: [0.41, 4.62, 7.62, 6.54, 9.61],
   mode: 'markers',
   type: 'scatter'
@@ -149,16 +186,10 @@ const data = [{
 
 Plotly.newPlot('app', data);
 ```
-<script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
-<div id="app" style="width: 500px; height: 500px"></div>
 
-<!-- This is a dummy code chunk to provide a figure label to the JS block above -->
-\begin{figure}
-\includegraphics[width=0px,height=0px]{litreview_files/figure-latex/plotly-scatterplot-1} \caption{Example of a scatterplot in Plotly.js. The code was taken from the official Plotly documentation [@plotly2024c] and slightly simplified.}(\#fig:plotly-scatterplot)
-\end{figure}
-Clearly, compared with the D3 code used to create Figure \@ref(fig:d3-scatterplot), the code for creating Figure \@ref(fig:plotly-scatterplot) is much terser. Many details, such as the axis limits and margins, point size and colour, gridlines, and widgets, are handled implicitly, via default values and automatic inference. Also, note that the figure provides some interactive features by default, such as zooming, panning, and tooltip on hover. Reactivity is handled automatically using systems built on the native DOM Event Target interface [@mdn2024a].
+Clearly, compared to the D3 code used to create Figure \@ref(fig:d3-scatterplot), the code for creating Figure \@ref(fig:plotly-scatterplot) is much terser. Many details, such as the axis limits and margins, point size and colour, gridlines, and widgets, are handled implicitly, via default values and automatic inference. Also, note that the figure provides some interactive features by default, such as zooming, panning, and tooltip on hover. Reactivity is handled automatically using systems built on the native DOM Event Target interface [@mdn2024a].
 
-Highcharts provides a similar JSON-based interface for specifying plots. While perhaps slightly more flexible than Plotly, it also requires more verbose specifications. Because of the similarity, I will not provide a separate example here [interested reader should look up the library website, @highcharts2024].
+Highcharts provides a similar JSON-based interface for specifying plots. While perhaps slightly more flexible than Plotly, it also requires more verbose specifications. Because of the similarity, I will not provide a separate example here [interested reader should look up the package's website, @highcharts2024].
 
 Finally, like D3, both plotly.js and Highcharts also render the graphics in SVG by default. However, unlike D3, they both also provide alternative rendering engines based on WebGL [@highschartsboost2022; @plotly2024b]. This makes them more ergonomic for use with large data sets. 
 
@@ -170,18 +201,40 @@ However, this added flexibility does come at a cost. Compared to the high-level 
 
 Vega-Lite [@satyanarayan2015] attempts to remedy this complexity by providing a high-level interface to Vega. Here's how we can define a scatterplot with zooming, panning, and tooltip on hover in Vega-Lite:
 
-<script src="https://cdn.jsdelivr.net/npm/vega@5.30.0"></script>
-<script src="https://cdn.jsdelivr.net/npm/vega-lite@5.21.0"></script>
-<script src="https://cdn.jsdelivr.net/npm/vega-embed@6.26.0"></script>
 
-<div id="vegalite-plot" style="width: 500px; height: 500px"></div>
+``` r
+library(vegawidget)
+
+plot_spec <- list(
+    `$schema` = vega_schema(),
+    width = 500,
+    height = 300,
+    data = list(values = data),
+    mark = list(type = "point", tooltip = TRUE),
+    encoding = list(
+      x = list(field = "x", type = "quantitative"),
+      y = list(field = "y", type = "quantitative")
+    ),
+    params = list(list(name = "grid", 
+                       select = "interval", 
+                       bind = "scales"))
+  )
+
+plot_spec |> vegawidget()
+```
+
+\begin{figure}
+\includegraphics[width=1\linewidth,height=1\textheight]{./figures/vegalite-scatterplot} \caption{Example of a scatterplot built with `vegalite`.}(\#fig:vegalite-scatterplot)
+\end{figure}
+
+Just for clarity, the R code above corresponds to the following declarative JSON schema:
 
 
 ``` js
-const spec = {
+{
   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
   width: 500,
-  height: 500,
+  height: 300,
   data: { values: [
     { x: 1, y: 0.41 },
     { x: 2, y: 4.62 },
@@ -196,8 +249,6 @@ const spec = {
   },
   params: [{ name: "grid", select: "interval", bind: "scales" }]
 };
-
-vegaEmbed("#vegalite-plot", spec);
 ```
 
 Note that the zooming and panning capability is provided by the `params` property, which declaratively specifies a list of plot parameters that can be modified by interaction [see @vegalite2024a]. In the case above, the specification creates a two-way binding between plot scales and mouse selection events [@vegalite2024b].   
@@ -208,13 +259,13 @@ In general, these contemporary web-based interactive data visualization systems 
 
 For instance, the [R Graph Gallery entry on Interactive Charts](https://r-graph-gallery.com/interactive-charts.html) [@holtz2022] features multiple interactive figures implemented in the JavaScript libraries described above. However, all of these examples show only surface-level, single-plot interactive features such zooming, panning, hovering, 3D rotation, and node repositioning. The [Plotly Dash documentation page on Interactive Visualizations](https://dash.plotly.com/interactive-graphing) [@plotly2022] does feature two examples of simple linked cross-filtering, however, the vast majority of visualizations in the [Plotly R Open Source Graphing Library documentation page](https://plotly.com/r/) [@plotly2022] show examples only surface-level interactivity. Similarly, [VegaLite Gallery pages on Interactive Charts](https://vega.github.io/vega-lite/examples/#interactive-charts) [@vegalite2022] feature many examples, however, only a limited number of examples show linked or parametric interactivity (see e.g. [Interactive Multiview Displays](https://vega.github.io/vega-lite/examples/#interactive-multi-view-displays)). Finally, the [Highcharter Showcase Page ](https://jkunst.com/highcharter/articles/showcase.html) [@kunst2022] does not feature any examples of linking.
 
-Even when advanced features such as linking and parametric manipulation are supported, they are often limited in some way. For example, the following is a quote from the website of Crosstalk, a package designed to enable linking in R, using web-based interactive widgets created with the `htmlwidgets` package [@htmlwidgets2021] or R Shiny [@shiny2024]:
+Even when more advanced features such as linking and parametric manipulation are supported, they are often limited in some way. For instance, take the following quote from the website of Crosstalk, a package designed to enable linking between web-based interactive widgets created with the `htmlwidgets` R package [@htmlwidgets2021] or Shiny [@shiny2024]:
 
 > "Crosstalk currently only works for linked brushing and filtering of views that show individual data points, not aggregate or summary views (where “observations” is defined as a single row in a data frame). For example, histograms are not supported since each bar represents multiple data points; but scatter plot points each represent a single data point, so they are supported."
 >
->- @crosstalk2025
+> @crosstalk2025
 
-Of course, with enough effort, these web-based visualization systems can still be used to create rich figures with advanced interactive features such as linked views and parametric interaction. However, implementing these features often requires stepping down a level of abstraction and dealing with low-level language primitives. This defeats the purpose of using a high-level libraries and creates a barrier to entry for casual users [@keller2024]. It also may explain why interactive visualizations are nowadays mainly used for data presentation, not data exploration [@batch2017]. With the high upfront cost of learning these package's APIs, creating rich interactive figures may be a task best suited for dedicated developers working inside large organizations, rather than individual researchers/analysts.  
+Of course, with enough effort and programming skill, these web-based visualization systems can still be used to create rich interactive figures with arbitrarily sophisticated features. However, doing so often requires stepping down a level of abstraction and dealing with low-level language primitives, defeating the purpose of using these high-level libraries in the first place. It also creates a barrier to entry for casual users [@keller2024], which may in fact explain why interactive visualizations are nowadays primarily used for data presentation, not data exploration [@batch2017]. Within these frameworks, creating rich interactive visualizations may be a task better suited to dedicated developers working inside large organizations, rather than individual researchers or analysts.
 
 ## What even is interactive data visualization? {#what-is-interactive-visualization}
 
@@ -226,61 +277,55 @@ Of course, with enough effort, these web-based visualization systems can still b
 
 In the previous section (Section \@ref(brief-history)), I provided an overview of the history and present state of interactive data visualization, discussing a number of features and systems. However, while doing so, I avoided one crucial question: what constitutes an interactive data visualization? 
 
-Surprisingly, despite the widespread popularity of interactive visualizations, there is no universally agreed-upon definition of interactivity [@vanderplas2020]. Within the data visualization literature, the terms "interactive" and "interaction" are rarely explicitly defined. And even when they are, the definitions are often incongruent or even contradictory [see e.g. @dimara2019; @elmqvist2011; @pike2009]. Finally, similar conceptual ambiguity extends to other terms commonly used in the field, such as a "dashboard" [@sarikaya2018].     
+Surprisingly, despite the widespread popularity of interactive data visualizations, there is no universally agreed-upon definition of interactivity [@vanderplas2020]. Within the data visualization literature, the terms "interactive" and "interaction" are rarely explicitly defined. And even when they are, the definitions are often incongruent or even contradictory [see e.g. @dimara2019; @elmqvist2011; @pike2009]. Finally, similar ambiguity extends to other terms related concepts, such as the "dashboard" [@sarikaya2018].     
 
-This lack of a clear consensus makes the task of discussing interactive data visualization difficult. Ignoring the issue could lead to confusion, while a truly comprehensive dive into the terminology surrounding interactive data visualization could become excessively verbose, as evidenced by the existence of research papers dedicated to the topic [see e.g. @dimara2019; @elmqvist2011]. To address this issue, this section aims to provide a concise overview of how interactivity has been conceptualized in the literature. The goal is to establish a clear framework for understanding "interactive" and "interaction" within the context of this thesis.
+This lack of a clear consensus makes the task of discussing interactive data visualization difficult. Ignoring the issue could lead to confusion, while a truly comprehensive dive into the terminology surrounding interactive data visualization could become excessively dense, as evidenced by the existence of entire research papers dedicated to the topic [see e.g. @dimara2019; @elmqvist2011]. To address this issue, this section aims to provide a concise overview of how interactivity has been conceptualized in the literature. The goal is to establish a clear framework for understanding "interactive" and "interaction" within the context of this thesis.
 
 ### Interactive vs. interacting with {#interactive-interacting}
 
-First, the word "visualization" in "interactive data visualization" can be interpreted in two different ways:
+First, the term "visualization" in "interactive data visualization" can be interpreted in two different ways:
 
 1. As a noun: a concrete chart or figure
-2. As a nominalized verb: the process of interacting with a figure
+2. As a nominalized verb: the process or practice of interacting with such a figure
 
-In data visualization literature, both interpretations are frequently used, leading to significant ambiguity [@dimara2019; @pike2009; see also @yi2007]. On one hand, some researchers focus on the mathematical and computational aspects of visualization, discussing specific systems and implementations [see e.g. @buja1996; @kelleher2015; @leman2013; @wills2008]. Others prioritize the more cognitive or human-computer interaction (HCI) aspects of interactive data visualization, exploring what impact different kinds of visualization techniques have on the user's ability to derive insights from the data [see e.g. @brehmer2013; @dimara2019; @dix1998; @pike2009; @quadri2021; @yi2007]. 
+In the data visualization literature, both meanings are frequently employed, leading to a significant amount of conceptual ambiguity [see @dimara2019; @pike2009; @yi2007]. Some researchers concentrate on the mathematical and computational aspects of interactive data visualization, discussing specific systems and software implementations [see e.g. @buja1996; @kelleher2015; @leman2013; @wills2008]. Others focus on the cognitive or human-computer interaction (HCI) aspects, exploring the impact different interactive techniques have on the users' ability to derive insights from the data [see e.g. @brehmer2013; @dimara2019; @dix1998; @pike2009; @quadri2021; @yi2007]. The problem is further exacerbated by the highly interdisciplinary nature of the field, spanning statistics, computer science, applied mathematics, business analytics, HCI, and cognitive psychology [see @brehmer2013; @dimara2019]. Consequently, literature search of the term "interactive data visualization" can yield a broad set of results, many of which may be only tangentially related.
 
-Of course, many interactive data visualization papers discuss both implementation and user experience. However, the dual interpretation of the term "interactive data visualization" does complicate literature search. It also highlights the interdisciplinary nature of the field, showing its connections to statistics, computer science, applied mathematics, business analytics, HCI, and cognitive psychology [see @brehmer2013; @dimara2019]. While this interdisciplinary nature of interactive data visualization is certainly a strength, it can also lead to confusion. As such I think it is necessary to clearly define key terms. 
+To address this conceptual ambiguity, I believe it is necessary to clearly define key terms. Throughout thesis, the term *"interactive data visualization"* to primarily denote *concrete charts or figures*. When referring to the *process or practice*, I will attempt to employ more active phrasing, such as *"interacting with a visualization"* or *"user's interaction with a visualization"*. While there may still be a few places where the term "visualization" is used in the nominalized verb form, the intended meaning should be unambiguously inferable from the context.
 
-To ensure clarity throughout thesis, the term *"interactive data visualization"* will primarily refer to concrete charts or figures. When referring to the *practice* of interactive data visualization, I will attempt to use more active phrasing such as *"interacting with a visualization"* or *"user's interaction with a visualization"*, to indicate that what is being referred to is the activity or process of visualization, rather than any concrete figure or chart. 
+### Interactive *enough*? {#interactive-enough}
 
-### Interactive *enough*?
+However, even when we use the term "interactive data visualization" to refer to concrete charts or figures, the meaning still remains fairly ambiguous. When can we call a figure interactive? What features does it have to contain? While these questions may seem simple, it is hard to find consensus about them in the data visualization literature [@vanderplas2020]. The criteria for what makes a figure "interactive" vary a lot from researcher to researcher, such that the same figure may be considered interactive by some but not by others. 
 
-Even when we use the term "interactive data visualization" to refer to concrete charts or figures, the meaning still remains fairly ambiguous. What is the bar for calling a figure "interactive"? What features should interactive figures have? Surprisingly, it is hard to find consensus on these topics among data visualization researchers, and the criteria tend to vary a lot, such that the same figure may be considered interactive by some but not by others. 
+Some researchers ascribe to a broad definition of interactive data visualization, such that any figure which can be dynamically manipulated by the user may be considered interactive [@brodbeck2009]. For others, the important factor is the speed of the computer's responses to user input, with faster updates translating to greater interactivity [@becker1987; @buja1996; see also @wilhelm2003]. Some of these researchers also differentiate between "interactive" and "dynamic" manipulation, where interactive manipulation involves discrete actions such as pressing a button or selecting an item from a drop-down menu, whereas dynamic manipulation involves continuous actions, like moving a slider or clicking-and-dragging [@rheingans2002; @jankun2007; see also @dimara2019]. 
 
-Some researchers adopt a broad definition of interactive data visualization, considering almost any figure combined with an interactive graphical user interface (GUI) as interactive, as long as it allows for some level of user manipulation  [@brodbeck2009]. For others, the speed of the computer's responses to user input is important, with faster updates translating to greater interactivity [@becker1987; @buja1996]. Some also differentiate between "interactive" and "dynamic" manipulation, such that interactive manipulation involves discrete actions such as pressing a button or selecting an item from a drop-down menu, whereas dynamic manipulation involves continuous actions, like moving a slider or clicking-and-dragging to highlight a rectangular area [@rheingans2002; @jankun2007; see also @dimara2019]. 
+However, for many other researchers, interactivity is a much narrower concept, hinging on high-level analytic features that enable efficient exploration of the data. These features include the ability to generate different views of the data (by e.g. zooming, panning, sorting, and filtering), and the reactive propagation of changes between connected or "linked" parts of the figure [@kehrer2012; @buja1996; @keim2002; @unwin1999; @chen2008]. Notably, these are also the features which enable the famous visual information-seeking mantra: "overview first, zoom and filter, then details-on-demand" [@shneiderman2003]. A similar idea also appears in visual analytics research, in the distinction between "surface-level" (or "low-level") and "parametric" (or "high-level") interactions, where surface-level interactions manipulate attributes of the visual domain only (e.g. zooming and panning), whereas parametric interactions manipulate parameters of some underlying mathematical model or algorithm [@leman2013; @self2018; @pike2009]. Ultimately, for researchers ascribing to this narrower view of interactivity, the presence of an interactive feature does not necessarily justify calling a figure "interactive", if it does not promote the acquisition of statistical insights above and beyond those provided by a static figure. For instance, while the ability to pick the colour of scatterplot points via an interactive palette widget may allow us to produce a more aesthetically pleasing result, it does not, generally, generate any new analytical understanding.
 
-However, many other researchers ascribe to a much narrower view of interactive data visualization, which hinges on high-level analytic features that allow efficient exploration of the data. These features include the ability to generate different views of the data (by e.g. zooming, panning, sorting, and filtering), and the reactive propagation of changes between connected or "linked" parts of a figure [@kehrer2012; @buja1996; @keim2002; @unwin1999; @chen2008]. An often cited guideline is the visual information seeking mantra: overview first, zoom and filter, then details-on-demand [@shneiderman2003]. Similarly, in visual analytics research, a distinction is made between "surface-level" (or "low-level") and "parametric" (or "high-level") interactions, where surface-level interactions manipulate attributes of the visual domain only (e.g. zooming and panning), whereas parametric interactions manipulate attributes of mathematical models or algorithms underlying the visualization [@leman2013; @self2018; @pike2009]. 
-
-Table \@ref(tab:definitions) provides a concise summary of the several perspectives on interactivity discussed above. It meant to serve as a reference point for future discussions within the text, though it is important to note that this is not an exhaustive list. For a more comprehensive taxonomy of interactive visualization systems and features, see e.g. @dimara2019, @yi2007.
+Table \@ref(tab:definitions) provides a concise overview of the various perspectives on interactivity discussed above. It is important to note that this table is meant to serve as a reference point for subsequent discussions within the text and is not intended to provide an exhaustive review. For more comprehensive taxonomies of interactive visualization systems and features, see e.g. @dimara2019, @yi2007.
 
 \begin{table}
 \centering
 \caption{(\#tab:definitions)Summary of the perspectives on interactivity}
 \centering
-\begin{tabular}[t]{l|l|l}
-\hline
-Name & Details & Selected references\\
-\hline
-User interaction & The user can interactively manipulate the figure in some way & @brodbeck2009\\
-\hline
-Real-time updates & The user's interactions propagate into the visualization with little to no lag & @becker1987, @buja1996, @jankun2007, and @rheingans2002\\
-\hline
-Plot- and data-space manipulation & The user can interactively explore different parts of the data set by doing actions which effectively amount to "subsetting" rows of the data (e.g. zooming, panning, and filtering) & @buja1996, @keim2002, @shneiderman2003, and @unwin1999\\
-\hline
-Linked views & The user's interactions propagate across multiple plots (e.g. linked highlighting) & @buja1996, @keim2002, @kehrer2012, @unwin1999, @theus2008, @wilhelm2008, @wills2008\\
-\hline
-Parametric updates & The user can manipulate the parameters of some underlying mathematical model or algorithm (e.g. histogram bins, grand tour projections, etc...) & @leman2013, @pike2009\\
-\hline
-\end{tabular}
+\begin{tabu} to \linewidth {>{\raggedright}X>{\raggedright}X}
+\toprule
+Name & Details\\
+\midrule
+User interaction & The user can interactively manipulate the figure in some way\\
+Real-time updates & The user's interactions propagate into the visualization with little to no lag\\
+Plot- and data-space manipulation & The user can interactively explore different parts of the data set by doing actions which effectively amount to "subsetting" rows of the data (e.g. zooming, panning, and filtering)\\
+Linked views & The user's interactions propagate across multiple plots (e.g. linked highlighting)\\
+Parametric updates & The user can manipulate the parameters of some underlying mathematical model or algorithm (e.g. histogram bins, grand tour projections, etc...)\\
+\bottomrule
+\end{tabu}
 \end{table}
 
 ### Complexity of interactive features {#complexity-of-features}
 
 The way we define interactivity is not just a matter of taste or preference: it has a significant impact on the complexity and feasibility of our systems. As we will see in Section \@ref(common-features), some simple features are fairly easy to implement, requiring just a thin interactive layer over a static data visualization system, whereas others come with a significant overhead, requiring an entirely different framework than static visualization.
 
-To make the point with a particularly blunt example, many programming languages support a read-evaluate-print loop (REPL). This allows interactive code execution from the command line: the user inputs code, the interpreter evaluates it, outputs results, and waits for more input. If the language supports plotting, running code to generate plots could be considered an "interactive data visualization system." User interaction with the REPL modifies the visual output, and with fast-enough input, updates could appear almost instantly (thus satisfying the user interaction and real-time update definitions of interactivity, see table). This would make almost every programming language an "interactive data visualization system", requiring no additional effort.
+To illustrate the point with a particularly blunt example, many programming languages support a read-evaluate-print loop (REPL). This allows interactive code execution from the command line: the user inputs code, the interpreter evaluates it, outputs results, and waits for more input. If the language supports plotting, using the REPL to generate plots could be interpreted as an exercise in interactive data visualization, since the user can interact with the command line to modify visual output, and, if they type fast enough, updates can appear almost instantly (thus satisfying the user interaction and real-time update definitions of interactivity, see Table \@ref(tab:definitions)). This interpretation would turn many programming languages into "interactive data visualization systems".
 
-However, I would argue that, today, this view stretches the concept of interactivity. It is true that, historically, the command line was considered a highly interactive user interface [see e.g. @foley1990; @howard1995]. However, with advancements in processor speeds and the widespread adoption of graphical user interfaces (GUIs), user expectations have evolved. Nowadays, we typically associate interactivity with direct manipulation of visual elements and immediate feedback [@dimara2019; @urbanek2011]. Thus, we can see that what's considered "interactive" evolves over time. 
+However, I contend that this interpretation stretches the contemporary understanding of interactivity. While the command line was historically considered a highly interactive user interface [see e.g. @foley1990; @howard1995], advancements in processor speeds and the proliferation of highly-responsive graphical user interfaces (GUIs) have shifted user expectations. These days, interactivity tends to be associated with direct manipulation of visual elements and immediate feedback [@dimara2019; @urbanek2011; @vanderplas2020]. Consequently, a REPL is unlikely to be considered an interactive data visualization platform by most contemporary users.
 
 But even with figures that are manipulated directly, there still are considerable differences in what different features imply for implementation requirements. Some features, like changing color or opacity of points in a scatterplot affect only the visual attributes of the plot and not the underlying data representation. This makes them simple to implement as they do not require any specialized data structures or complex computations, and the primary cost lies in re-rendering the visualization.
 
@@ -321,13 +366,13 @@ Another two significantly related interactive features are zooming and panning. 
 Zooming, depicted in Figure \@ref(fig:zooming), allows the user to magnify into a specific region of a plot. A common approach involves creating a rectangular selection and the axis scales are then automatically adjusted to match this region, however, other techniques do exist, for instance a symmetric zoom centered on a point using a mouse wheel. Zooming is useful because it allows the user to get a better sense of the trend within the magnified region, and discover patterns that may be otherwise obscured due to overplotting or improper aspect ratio [see e.g. @buja1996; @dix1998; @unwin1999; @theus2008; @yi2007]. 
 
 \begin{figure}
-\includegraphics[width=20.83in]{./figures/zooming} \caption{Zooming involves shrinking the axis limits to obtain a more detailed view of the data. Typically, the user selects a rectangular region of the plot (left) and the plot scales are then adjusted so that the region fills up the entire plot area (right). Notice the change in the axis limits.}(\#fig:zooming)
+\includegraphics[width=1\linewidth,height=1\textheight]{./figures/zooming} \caption{Zooming involves shrinking the axis limits to obtain a more detailed view of the data. Typically, the user selects a rectangular region of the plot (left) and the plot scales are then adjusted so that the region fills up the entire plot area (right). Notice the change in the axis limits.}(\#fig:zooming)
 \end{figure}
 
 After zooming, it is useful to retain the ability to navigate the wider plot region while preserving the current zoom level and aspect ratio. Panning addresses this need. By performing some action, typically right-click and drag, the user can move the center of the zoomed-in region around, exploring different areas of the plot. 
 
 \begin{figure}
-\includegraphics[width=20.83in]{./figures/panning} \caption{Panning involves moving the axis limits while retaining the same zoom level and axis ratio. After zooming into a rectangular region (top row), the user can around the plot region, usually by clicking and dragging (bottom row).}(\#fig:panning)
+\includegraphics[width=1\linewidth,height=1\textheight]{./figures/panning} \caption{Panning involves moving the axis limits while retaining the same zoom level and axis ratio. After zooming into a rectangular region (top row), the user can around the plot region, usually by clicking and dragging (bottom row).}(\#fig:panning)
 \end{figure}
 
 Zooming and panning can be implemented by manipulating scales only, and this also makes them generally fairly straightforward to implement, similar to changing size and opacity. However, there are a few issues to consider. First, whereas continuous axes can be be zoomed and/or panned by simply modifying the axis limits, zooming discrete axes requires a bit more nuance [see e.g. @wilkinson2012]. Second, it is often desirable to give the user the ability to zoom-in multiple levels deep, and this makes maintaining a reversible history of previous zoom-states essential [@unwin1999]. Third, at times, it can be useful to link scale updates across multiple plots, such that, for example, zooming or panning a plot in a scatterplot matrix produces the same actions in other plots with the same variable on one of the axes. Finally, an advanced feature that can be also quite useful is semantic or logical zooming [@keim2002; @unwin1999; @yi2007]. This technique goes beyond magnifying objects; it also increases the level of detail the objects display as the user zooms in. Semantic zooming can be particularly powerful when combined with hierarchical data such as geographic information, however, it also introduces additional complexity, since the effects of the zoom action propagate beyond x- and y-axis scales. 
@@ -337,7 +382,7 @@ Zooming and panning can be implemented by manipulating scales only, and this als
 Querying is another popular interactive feature that is usually fairly straightforward to implement. As shown in Figure \@ref(fig:querying), the way querying is typically implemented is that when a user mouses over a particular geometric object, a small table of key-value pairs is displayed via a tool-tip/pop-up, showing a summary of the underlying data point(s) [@urbanek2003; @xie2014]. This makes it possible to look up precise values that would otherwise be available only approximately via the visual representation. 
 
 \begin{figure}
-\includegraphics[width=20.83in]{./figures/querying} \caption{Querying involves hovering over an object to display its associated data values in a table or pop-up. Notice that this can include both plotted values (`weight`, `mileage`) as well as values that are not directly represented in the plot (car name, `cylinders`).}(\#fig:querying)
+\includegraphics[width=1\linewidth,height=1\textheight]{./figures/querying} \caption{Querying involves hovering over an object to display its associated data values in a table or pop-up. Notice that this can include both plotted values (`weight`, `mileage`) as well as values that are not directly represented in the plot (car name, `cylinders`).}(\#fig:querying)
 \end{figure}
 
 Querying is useful because it combines the best features of graphics and tables. Specifically, it allows the user to overcome Tukey's famous prescriptions: "graphics are for the qualitative/descriptive [...] never for the carefully quantitative (tables do that better)", and: "graphics are for comparison [...] not for access to individual amounts" [@tukey1993]. By providing the option to query individual objects, the user can seamlessly transition between the high-level analytic overview of the graphic and low-level quantitative detail of a table. This facilitates high-precision analytic tasks, such as identifying specific outliers or calculating exact magnitudes of differences [@unwin2006].
@@ -351,7 +396,7 @@ Finally, while querying is also one of the more straightforward features, its im
 With plots of discrete (unordered) data, a highly useful feature can be to sort or reorder objects based on some criterion [see @unwin2000; @unwin2006]. For example, with barplots, in the absence of other ordering rules, bars are typically ordered by the lexographical order of the x-axis variable. However, sometimes, we can glean interesting patterns by sorting the bars in some other order, for example by their height, see Figure \@ref(fig:sorting).
 
 \begin{figure}
-\includegraphics[width=20.83in]{./figures/sorting} \caption{Sorting or reordering can highlight interesting trends. For instance, sorting lexicographically ordered bars (left) by bar height (right) in the figure above immediately reveals a significant gap between the five tallest bars and the rest (gray dashed line).}(\#fig:sorting)
+\includegraphics[width=1\linewidth,height=1\textheight]{./figures/sorting} \caption{Sorting or reordering can highlight interesting trends. For instance, sorting lexicographically ordered bars (left) by bar height (right) in the figure above immediately reveals a significant gap between the five tallest bars and the rest (gray dashed line).}(\#fig:sorting)
 \end{figure}
 
 There are more sophisticated ways to sort objects in a plot than just sorting bars by height, however. For instance, in plots which show multiple summary statistics, any may serve as the basis for the sorting rule; for instance a boxplot may be sorted by the median, upper and lower quartile, the maximum, and the minimum [@unwin2006]. Likewise, in the presence of selection/highlighting, objects may be sorted by the summary statistic on the highlighted parts. Alternatively, some systems allow users to permute the order of discrete scales manually by swapping the position of categories pairwise, a feature which can be particularly useful in parallel coordinate plots [@unwin2006; @urbanek2011]. Finally, in the presence of many categories, sorting may also be usefully combined with lumping categories below a certain threshold together [@unwin2000].
@@ -360,7 +405,7 @@ Like zooming and panning, basic sorting typically involves the manipulation of a
 
 #### Parametric interaction
 
-As discussed in Section \@ref(complexity-of-features), another valuable class of interactive features are those which affect the computation of the summary statistics underlying the graphic [also called "parametric interaction", @leman2013; @self2018; @urbanek2011]. These features extend beyond simple manipulation of visual attributes, requiring that user interaction penetrates much deeper into the data visualization pipeline. Fundamentally, these features involve the manipulation of the parameters of some underlying mathematical model or algorithm.    
+As discussed in Section \@ref(complexity-of-features), another valuable class of interactive features are those which affect the computation of the summary statistics underlying the graphic [also called "parametric interaction", @leman2013; @self2018; @urbanek2011, and "model-level interaction", @wilhelm2003]. These features extend beyond simple manipulation of visual attributes, requiring that user interaction penetrates much deeper into the data visualization pipeline. Fundamentally, these features involve the manipulation of the parameters of some underlying mathematical model or algorithm.    
 
 An illustrative and popular example of parameter manipulation is dynamically changing histogram binwidth or anchor. Assuming a fixed binwidth $w$ and an anchor $a$, we can describe a histogram via a function $h$ that, for each observation of a continuous variable $x_i$ returns an index $j$ of the corresponding bin, such that, for an ordered list of bins breaks $b_j$, we have $x_i \in [b_{j}, b_{j + 1})$^[Technically, if there are any values $x_i < a$, we will have negative indices ($j < 0$), and if all values are significantly larger than the anchor, such that $x_i > a + w$, the indices will not start at 1. So, to implement the histogram properly, we should shift all indices by subtracting the minimum index. Finally, if the histogram binwidth is not fixed, $h$ becomes more complex as well.]:
 
@@ -382,26 +427,28 @@ Interactive animation becomes particularly powerful when coupled with techniques
 
 The implementation complexity of interactive animation varies considerably depending on its application. While animating data subsets based on a single variable, as in the Gapminder visualization [@rosling2011], presents no greater implementation challenges than previously discussed techniques, computing the grand tour path requires specialized algorithms [see, e.g., @chen2008, for a brief description]. However, if the data subsets corresponding to each animation frame are pre-computed, the animation itself is generally fairly straightforward to implement.
 
-#### Representation switching
+#### Representation switching {#representation-switching}
 
 Another specialized kind of parametric (or semi-parametric) interaction involves changing the representation of the underlying data. It is well known that the same data can often be visualized using various sets of visual encodings [@wilkinson2012], with some being more effective for answering specific questions than others. Enabling users to switch between these various representations provides greater flexibility for data exploration [@yi2007]. However, for certain plot types, changing the representation involves more than just altering surface-level visual attributes; it also necessitates recalculating derived statistics.
 
 A typical example is switching between a barplot and a spineplot, see Figure \@ref(fig:barplot-spineplot1). Barplots are effective for comparing absolute quantities. Specifically, by encoding categories along the x-axis and continuous quantities along the y-axis (bar height), we can easily compare the quantities across categories. Color-coding parts of the bars as segments allows us to visualize a second categorical variable, enabling subgroup comparisons of absolute values. However, barplots are less well-suited for comparing the *proportions* represented by these segments, particularly when bar heights vary considerably.
 
 \begin{figure}
-\includegraphics[width=20.83in]{./figures/barplot-spineplot} \caption{Switching representation can be an effective way to derive new insights from the data. A barplot (left) represents the same underlying data as a spineplot (right), however, the former is better for comparing absolute counts whereas the latter is better for comparing proportions. Note that in the spineplot, it is much easier to see that the proportion of the red cases is the same in categories B and C.}(\#fig:barplot-spineplot1)
+\includegraphics[width=1\linewidth,height=1\textheight]{./figures/barplot-spineplot} \caption{Switching representation can be an effective way to derive new insights from the data. A barplot (left) represents the same underlying data as a spineplot (right), however, the former is better for comparing absolute counts whereas the latter is better for comparing proportions. Note that in the spineplot, it is much easier to see that the proportion of the red cases is the same in categories B and C.}(\#fig:barplot-spineplot1)
 \end{figure}
 
 Spineplots, on the other hand, present a way of visualizing the same sort of data as a barplot while making it much easier to compare proportions. Specifically, in a spineplot, the heights of the bars are all normalized to 1, such that the segments show a proportion of the total, and the original values are instead encoded as the bar width, which is stacked along the x-axis. Thus, the fixed height of bars makes it easy to compare the segments proportionally.
 
-Other examples of switching of representations include switching from a histogram to spinogram (a normalized version of the histogram) and switching between aggregate geometric objects and individual points (e.g. boxplot, parallel coordinate plots).
+Other examples of representation switching include switching from a histogram to spinogram (a normalized version of the histogram) and switching between aggregate and one-to-one geometric objects [e.g. boxplot and pointclouds, parallel coordinate plots and individual points, see @wilhelm2003].
 
 #### Linked selection {#linked-selection}
 
 Linked selection, also known as linked brushing, linked highlighting, or linked views, is often considered one of the most versatile and powerful interactive data visualization features [see e.g. @becker1987; @buja1996; @wilhelm2003; @heer2012; @ward2015; @ware2019]. Fundamentally, it involves creating a figure with multiple "linked" plots. The user can then click or click-and-drag over objects in one plot, and the corresponding cases are highlighted across all the other plots, see Figure \@ref(fig:linked-selection). This makes it possible to quickly quickly explore trends across different dynamically-generated subsets of the data [@dix1998]. The ability to quickly materialize alternative views of the data makes this a particularly effective tool for data exploration [@wilhelm2008; @wills2008].
 
+(ref:henderson)
+
 \begin{figure}
-\includegraphics[width=20.83in]{./figures/linked-selection} \caption{Linked selection involves highlighting the same cases across all plots. The user can select some objects in one plot, such as points in a scatterplot (top left), and the corresponding cases are higlighted in all the other plots. Source of the underlying data is the `mtcars` dataset [@henderson1981].}(\#fig:linked-selection)
+\includegraphics[width=1\linewidth,height=1\textheight]{./figures/linked-selection} \caption{Linked selection involves highlighting the same cases across all plots. The user can select some objects in one plot, such as points in a scatterplot (top left), and the corresponding cases are higlighted in all the other plots. Source of the underlying data is the `mtcars` dataset (ref:henderson).}(\#fig:linked-selection)
 \end{figure}
 
 Despite the fact that the user experience of linked selection is usually fairly intuitive, there are many subtle considerations that go into implementing the feature [for a good overview, see @wilhelm2008]. First, there is the issue of how the user makes the selection. Typically, clicking selects a single objects and clicking-and-dragging selects multiple objects in a rectangular region (similar to how selecting files and folders works on desktop GUIs of most operating systems). In some systems, the users may also drag the selection region around ("brushing"), form a continuous "lasso" selection, select lines in a particular angular range, or points at a particular distance from a centroid [see e.g. @hauser2002; @splechtna2018; @wills2008]. Further, when one variables is continuous and the other is derived (such as the x- and y-axes in a histogram), the interaction may also be simplified by restricting selection/brushing to the primary axis [@satyanarayan2016]. Finally, the selections can be combined by various operators such as OR, AND, NOT, and XOR, to form unions, intersections, and other types of logical subsets [@theus2002; @urbanek2003; @wills2000; @wills2008]. 
@@ -414,17 +461,19 @@ Third, there is the issue of displaying selection. This issue will be touched up
 
 A fourth and final issue in linked selection, and arguably one of the core concerns of the present thesis, is consistency. This topic will be coming up again and again, particularly in Section \@ref(problems). Consistent and predictable features are a cornerstone of good user interface design [see e.g. @ruiz2021]. However, as discussed above, the design an interactive data visualization system supporting linked selection presents many design decisions, each with its own set of implementation constraints. Achieving a consistent user interface through the right combination of these decisions is a known challenge [@urbanek2011; @pike2009]. 
 
-For example, while the approach of allowing objects to independently dispatch and display selection events offers great flexibility, it can also lead to a less intuitive user experience. Put simply, when users select objects in one linked plot by clicking them, they might reasonably expect the same functionality in other plots. If that is not the case (if, for instance, other plots support only displaying but not dispatching selection events), their expectation will be violated. Thus, it might be reasonable to require that all objects can both dispatch and display selection events. However, this places some fundamental constraints on these objects. For instance, how do we draw a lineplot line where only some of the underlying cases are selected? Do we draw a sequence of differently-coloured line segments, leading to a striped "candy cane" pattern (see Figure \@ref(fig:line-consistency))? Do we draw two separate lines? If so, how do we then dispatch selection events on these lines which are already conditional on selection? Like turning over a rock and disturbing a host of creepy-crawlies, linked selection reveals a complex web of visualization design challenges that defy a satisfying, generic solution.
+For example, while the approach of allowing objects to independently dispatch and display selection events offers great flexibility, it can also lead to a less intuitive user experience. Put simply, when users select objects in one linked plot by clicking them, they might reasonably expect the same behavior in other plots. If that is not the case (if, for instance, other plots support only displaying but not dispatching selection events), their expectations may be violated, leading to a subpar user experience. Thus, giving all plots the ability to dispatch and display selection events may be a desirable goal. However, as I will repeatedly demonstrate in this thesis, this places some fundamental very constraints on the objects in these plots, and the summary statistics they represent. 
+
+As an example of a visualization type which presents some difficulties for linked selection, consider the lineplot in Figure \@ref(fig:line-consistency). In a lineplot, lines are draw by connecting pairs of points in an ordered sequence. This presents some fundamental problems for linked selection. First, when points are selected, should we highlight the line segments *starting* at the selected points, *ending* at the selected points, or e.g., half a of a line segment on each side of the point? Either way, if we highlight the segments, we are faced with the problem that the line object (unlike e.g. a barplot bar) is not commutative with respective to the data order: segments have to be drawn in the order in which they appear in the data, and this can lead to striped "candy-cane-like" patterns which are not easy to interpret. Alternatively, we could draw the selection via two separate lines, then we are faced with the question of how we should dispatch selection events on these lines, which are already conditional on selection. Either way lie complex trade-offs and design decisions. Like turning over a rock and uncovering a bed of creepy-crawlies, linked selection exposes a web of visualization design challenges that defy a simple and generic solution.
 
 \begin{figure}
-\includegraphics[width=20.83in]{./figures/line-consistency} \caption{Displaying selection is not always trivial. A good example is a lineplot (right). Whereas a point in a scatterplot displays a single case (row) and a bar in a barplot displays a simple subset of cases, a line segment in a lineplot connects two data points. As such, it is not clear whether to highlight the segment *starting* at the selected point, *ending* at the selected point, or, e.g., half a segment on each side of the point. Further, since the geometry of a segmented line is not commutative (row order matters), we end up with a striped 'candy cane' pattern that is not easily interpretable.}(\#fig:line-consistency)
+\includegraphics[width=1\linewidth,height=1\textheight]{./figures/line-consistency} \caption{Displaying selection is not always trivial. A good example is a lineplot (right). Whereas a point in a scatterplot displays a single case (row) and a bar in a barplot displays a closed subset of cases, a line segment in a lineplot segments connects two separate data points. As such, it's not obvious how to handle the case when one point is selected and the other is not. Further, since the geometry of a segmented line is not commutative (row order matters), highlighting segments may result in a striped 'candy cane' pattern that may not be easily interpretable.}(\#fig:line-consistency)
 \end{figure}
 
-## General data visualization theory
+## Overview of broader data visualization topics
 
-The following sections briefly explore several key theoretical topics in data visualization: the goals and purpose of visualizations, the mechanisms of visual perception, and the theory of scales and measurement. While mainly discussed in the context of static visualization, these topics are equally relevant to interactive visualization and present some unique challenges. My goal is not to give an exhaustive review - each of these topics is substantial enough to serve as a thesis topic in its own right. Instead, I just want to give a brief overview of these topics, highlight some key points, and discuss how they may relate to my own work. 
+This section briefly introduces several broad topics in data visualization: the goals of visualizing data, visual perception, the theory of scales and measurement, and graphics formats. While not specific to interactive visualization, these topics are important background for later discussions. Covering each topic in depth would require a great deal of material (enough for its own thesis), and thus, rather than offering an exhaustive review, this section merely aims to highlight some key points and provide the necessary context.
 
-### Visualization goals
+### Visualization goals {#visualization-goals}
 
 An important fact about data visualization is that, fundamentally, a chart can be used by many different people for many different things [for a review, see e.g. @brehmer2013; @franconeri2021; @sarikaya2018]. For example, applied researchers may create figures as part of their workflow, aiming to better understand the data they had collected, spot errors and anomalies, and come up with new ideas and hypotheses [@brehmer2013; see also @kandel2012]. Conversely, data scientists and data analysts in the public and private sector may visualize already familiar data sets to communicate important information, drive decisions, or convince or persuade stakeholders [@sarikaya2018]. Finally, some figures may be created out of a sense of curiosity or for pure aesthetic enjoyment [@brehmer2013; @tufte2001]. Depending on the end-goals of the user and the desired target audience, certain visualization techniques, methods, or styles may become more useful than others.
 
@@ -441,11 +490,22 @@ I believe this list maps fairly well onto interactive data visualization systems
 
 ### Visual perception {#visual-perception}
 
-Another important research topic in data visualization is visual perception. Specifically, given that we use visual attributes such as position, color, length, or area to encode various aspects of our data, researchers have tried to answer the question of how to use these attributes in a way that best leverages the human visual system. Fortunately, this research has been quite fruitful, yielding precise and actionable guidelines [for a review, see @franconeri2021; @quadri2021].
+Another broad and important research topic in data visualization is visual perception. By engaging the human visual system, graphs serve as information channels, with varying throughput based on their inherent attributes. To maximize the effectiveness of visualizations, researchers have spent significant amount of effort figuring out best ways to engage the visual system. Fortunately, this has been quite fruitful, yielding many precise and actionable guidelines [for a review, see e.g. @franconeri2021; @quadri2021; @vanderplas2020].
 
-A landmark work in this area has been that of @cleveland1984. In this study, the authors conducted a series of empirical experiments in which they investigated people's ability to accurately judge quantities based on different visual encodings. They found that judgments based on position along a common scale were the most accurate, followed by length-based comparisons, and then angle-based comparisons. 
+A landmark study in this area has been that of @cleveland1984. Through a series of empirical experiments, the authors investigated the accuracy with which people judge quantities based on different visual encodings. They found that quantities encoded as position along a common scale tended to produce by far the most accurate judgements, followed by length-, and angle-based encodings [@cleveland1984]. These findings were later independently replicated on larger samples [see e.g. @heer2010], and extended to other visual encodings such as hue or density [see e.g. @demiralp2014; @saket2017; @reda2018; see also @vanderplas2020]. Ultimately, researchers have used this empirical data to create rankings of visual encodings, with widely accepted order being, roughly: position, length, area, angle, hue/intensity, and shape [see e.g. @mackinlay1986; @franconeri2021; @vanderplas2020; some authors also emphasize task-dependence, see @quadri2021].
 
-The findings were later corroborated by other authors. @heer2010 replicated the @cleveland1984 study, and included judgements of circular and rectangular areas which were found to be less accurate than position, length, or angle. Other authors have extended these experiments to other visual encodings, such as color or density [e.g. @demiralp2014; @saket2017; @reda2018]. Together, these findings have been used to create rankings of visual encodings, with researchers generally agreeing on the following ordered list: position, length, area, angle, and intensity [from most effective to least, @mackinlay1986; @franconeri2021; @quadri2021].    
+Beyond @cleveland1984, there have also been many findings from cognitive research which have been shown to enhance the effectiveness of visualizations. For instance, pre-attentive processing [@treissman1985], a phenomenon in which certain salient features of visual scenes are perceived extremely rapidly and in parallel, regardless of the number of distractors, has been successfully applied to data visualizations [see @vanderplas2020; for some applied examples, see @wilke2019, pp. 34 and 35]. Similarly, research on optical illusions and misperceptions has also been used to highlight many potential data visualization pitfalls [see @franconeri2021; @ware2019].
+
+Psychology has also yielded a more high-level, conceptual set of guidelines for creating effective visualizations: the Gestalt principles of visual perception [see e.g. @cairo2012; @vanderplas2020; @ware2019]. Remarkably, these principles developed in the early 20th century by means of self-experimentation and in the absence of sound understanding of brain physiology, have stood the test of time and have been later independently validated by findings from cognitive neuroscience [@guberman2017; @ware2019]. The key Gestalt principles for data visualization are:
+
+- *Proximity*: Objects close to each other are perceived as part of a group
+- *Similarity*: Objects with similar visual attributes are also grouped together
+- *Closure/common region*: Regions with closed contours are perceived as a single, unified object
+- *Figure and ground*: One part of a visual scene is typically perceived as the primary focus (the "figure"), and the rest is perceived as its surroundings (the "ground")
+
+The Gestalt principles can be applied to visualizations in different ways. At times, they manifest without conscious effort, such as when clouds of similarly coloured points in a scatterplot are automatically perceived as clusters [thanks to principles of proximity and similarity, @rosli2015]. Other times, visualization authors may choose to exploit the principles deliberately to make a specific point, such as by grouping certain data points together by drawing a closed shape around them, or making them stand out by leveraging hue and/or saturation constrast [@cairo2012].
+
+In summary, the intersection of data visualization and visual perception is a very rich and intricate research domain, and this section has provided only an extremely brief introduction. Despite the cursory nature of this overview, I thought it important to include it, as some of the concepts discussed here will be mentioned later on in the thesis. For a more in-depth understanding, readers are referred to @franconeri2021, @vanderplas2020, @ware2019, and @cairo2012.  
 
 ### Scales and measurement {#scales-measurement}
 
@@ -455,23 +515,22 @@ A particular challenge when discussing scales in data visualization is that the 
 
 Arguably, the most influential work in this field has been that of @stevens1946. In his fairly concise paper, Stevens defined a *scale* as method of assigning numbers to values, and introduced a four-fold classification classification, namely: nominal, ordinal, interval, and ratio scales (see Table \@ref(tab:stevens-scales)).
 
-\begin{table}
+(ref:eq1)$ x' = f(x)$, where $f$ is a bijection
 
+\begin{table}
+\centering
 \caption{(\#tab:stevens-scales)Types of scales identified by Stevens (1946)}
 \centering
-\begin{tabular}[t]{l|l|l|l}
-\hline
+\begin{tabu} to \linewidth {>{\raggedright}X>{\raggedright}X>{\raggedright}X>{\raggedright}X}
+\toprule
 Scale & Structure & Comparison & Valid transformations\\
-\hline
-Nominal & Isomorphism & Are \$x\$ and \$y\$ the same? & \$x' = f(x)\$, where \$f\$ is a bijection\\
-\hline
-Ordinal & Monotone map & Is \$x\$ is greater than \$y\$? & \$x' = f(x)\$, where \$f\$ is a monotone bijection\\
-\hline
-Interval & Affine transformation & How far is \$x\$ from \$y\$? & \$x' = ax + b\$, for \$a, b \textbackslash{}in \textbackslash{}mathbb\{R\}\$\\
-\hline
-Ratio & Linear map & How many times is \$x\$ greater than \$y\$? & \$x' = ax\$, for \$a \textbackslash{}in \textbackslash{}mathbb\{R\}\$\\
-\hline
-\end{tabular}
+\midrule
+Nominal & Isomorphism & Are $x$ and $y$ the same? & $x' = f(x)$, where $f$ is a bijection\\
+Ordinal & Monotone map & Is $x$ is greater than $y$? & $x' = f(x)$, where $f$ is monotone\\
+Interval & Affine transformation & How far is $x$ from $y$? & $x' = ax + b$, for $a, b \in \mathbb{R}$\\
+Ratio & Linear map & How many times is $x$ greater than $y$? & $x' = ax$, for $a \in \mathbb{R}$\\
+\bottomrule
+\end{tabu}
 \end{table}
 
 The Steven's [-@stevens1946] typology is based on invariance under transformation. Specifically, for each class of scales, we define a set of transformations that preserve valid comparisons. The set of valid transformations shrinks as we move from one class of scales to another.  
@@ -484,7 +543,38 @@ Interval scales need to additionally preserve equality of intervals. This means 
 
 Finally, ratio scales also need to preserve the equality of ratios. Specifically, if $a/b = b/c$ then $f(a)/f(b) = f(b) / f(c)$. As a consequence, this also means that the scale must have a well-defined zero-point. Examples of ratio scales include physical magnitudes such as height and weight, which have a well-defined zero point [@stevens1946].
 
-Steven's [-@stevens1946] typology sparked a considerable debate, on multiple fronts. First, since the original publication, many authors have sought to either expand upon or criticize Steven's typology. However, despite some monumental efforts towards a unified theory, such as that of @krantz1971, measurement has remained a hotly debated topic to this day [see e.g. @michell2021; @tal2025]. Second, more relevant to statistics, some authors such as @stevens1951 and @luce1959 used the theory to define come up with prescriptive rules for statistical transformations, suggesting that, for example, taking the mean of an ordinal variable is wrong since the meaning of the average operator is not preserved under monotone transformations. However, this issue was hotly contested by statisticians such as @lord1953, @tukey1986, and @velleman1993, who argued that many well-established statistical practices, such as rank-based tests and coefficients of variations, rely on such "impermissible" statistics but can nevertheless yield valuable insights. More broadly, these authors also argued that data is not really meaningful on its own, but instead derives its meaning from the statistical questions it is used to answer [see also @wilkinson2012].        
+Steven's [-@stevens1946] typology sparked a considerable debate, on multiple fronts. First, since the original publication, many authors have sought to either expand upon or criticize Steven's typology. However, despite some monumental efforts towards a unified theory, such as that of @krantz1971, measurement has remained a hotly debated topic to this day [see e.g. @michell2021; @tal2025]. Second, more relevant to statistics, some authors such as @stevens1951 and @luce1959 have used the theory to come up with prescriptive rules for statistical transformations, suggesting that, for example, taking the mean of an ordinal variable is wrong since the meaning of the average operator is not preserved under monotone transformations. However, this issue was hotly contested by others, such as @lord1953, @tukey1986, and @velleman1993, who argued that many well-established statistical practices, such as rank-based tests and coefficients of variations, rely on such "impermissible" statistics but can nevertheless yield valuable insights. More broadly, these authors also argued that data is not meaningful on its own, but instead derives its meaning from the statistical questions it is used to answer [see also @wilkinson2012].        
 
 At this point, the discussion around measurement has arguably become far too dense and theoretical, and most data visualization researchers seem to avoid delving into it too deeply [see e.g. @wilkinson2012]. Nevertheless, there are still some areas where the issues of measurement and Steven's typology do crop up. For instance, when scaling area based on a continuous variable, a common recommendation is to start the scale at zero to ensure accurate representations of ratios [see e.g. @wickham2024], aligning with Steven's definition of a ratio scale. Likewise, the long-standing debate around whether the base of a barplot should always start at zero [see e.g. @cleveland1985; @wilkinson2012] also carries echoes of the measurement debate. Ultimately, it may yet require long time to settle the issues around measurement, however, there are definitely some ideas within the literature that data visualization can benefit from.    
 
+### Graphics formats {#graphics-formats}
+
+In order to draw an image, be in on a computer screen or a piece of paper, we first need some way to encode it. Currently, the two most overwhelmingly popular classes of image encoding formats are raster- or bitmap-based, and vector-based. Both come with an inherent set of advantages and disadvantages, which will be discussed in the relevant subsections below.
+
+#### Raster graphics
+
+Raster (also known as bitmap) graphics represent images as two-dimensional grid of pixels [see e.g. @beatty1983; @foley1996; @shirley2009]. More specifically, images are encoded as an array of bytes, with a header of metadata (the number of rows and columns, the pixel datatype) and subsequent bytes representing individual pixels. Each pixel typically consists of three or four numerical intensities, such as the red, green, and blue color intensities, as well as opacity (alpha channel). 
+
+The raster format is fairly natural, since it maps directly on to how most computer screens (LCD/LED) and printers (laser, ink-jet) represent images [@shirley2009]. Additionally, raster graphics have the advantage of having a constant size, independent of the complexity of the encoded image (a grid of $n \times m$ pixels is always at most just a grid of $n \times m$ pixels), and can be further compressed to minimize space via either lossless (GIF, TIFF PNG) or lossy (JPEG) compression formats. 
+
+However, raster graphics also have certain disadvantages. The constant space complexity can also lead to excessive file sizes for simple yet high-resolution images, and images cannot be easily upscaled, without specialized methods [see e.g. @parsania2014; @chen2019]. Additionally, another major disadvantage is that the raster (array of pixels) represents mutable state: when we draw something on a raster graphic, we replace the corresponding pixels with new values, and there may be no way to recover the original state. As such, when working with raster graphics that change over time, such as in interactive data visualization, a common practice is to keep all of the image state separate from the graphic and do a complete re-render each time the state changes.    
+
+#### Vector graphics
+
+Vector represent a foil to raster graphics. Instead of representing a 2D images via arrays of pixels, they represent them as more abstract specifications involving collections of geometric objects. That is, instead of explicitly defining the value of each pixel on the screen, vector graphics consist of declarative "recipes", specifying *what* should be rendered, but not *how*.
+
+Vector graphics offer certain significant advantages. Notably, they are resolution-invariant, meaning that the same image can be upscaled and downscaled without any loss in quality. This is due to how vector images are rendered: prior to being sent to the output device (screen or printer), they are rasterized, and can adapt to the output device's resolution. Additionally, their declarative nature makes vector graphics stateless, such that all components of a vector graphic are always open to modification, and any modification can always be reversed. This makes vector graphics particularly simple to animate and modify interactively. 
+
+However, the declarative nature of vector graphics also has its costs. Since every geometric object needs to be represented explicitly, the size of the image grows proportional to its complexity. For instance, ignoring compression, the size of a vector image with 1,000 geometric objects should be some factor of thousand times larger than a vector image with one geometric object (i.e. the space complexity is $O(n)$, compared to $O(1)$ of raster images). The complexity-dependence also translates to slower rendering speeds, since large, complex image files require more compute to parse and rasterize. As a side-note, this also makes representing of highly detailed, realistic images, such as photos, challenging.
+
+Currently, the most popular vector graphics format is Scalable Vector Graphics [SVG, @quint2003]. Based on the XML markup language, SVG encodes an image as a tree of nodes representing (primarily) geometric objects, similar to how the browser encodes a webpage as a tree of nodes in the Document Object Model (DOM; represented in plain-text as HTML). SVG files are typically stored in plain-text format, with nodes enclosed by tags which may be given attributes.
+
+## Summary
+
+In this section, I reviewed the history, present state, and some general theory regarding interactive data visualization systems. There are a couple of key points which bear repeating. First, as discussed in Section \@ref(brief-history), there seems to have been a historical split in the interactive data visualization community. Oversimplifying somewhat, the older branch, originating in statistics, has focused primarily on applied data analysis and exploration, while the younger branch, stemming from computer science and the web ecosystem, has emphasized customizability and data presentation. Currently, this historical development has resulted in a scarcity of user-friendly interactive data visualization tools for data exploration, particularly in the R ecosystem [see e.g. @batch2017; @keller2024].
+
+Second, among the past and present interactive data visualization systems, there is an abundance of interactive features. These features range widely in terms of usefulness, complexity, and difficulty of implementation: some are purely graphical whereas others require the presence of specialized data structures. Further, as was briefly foreshadowed in, for example, Section \@ref(linked-selection), many of these features cannot be simply tacked on top of arbitrary graphics, but instead have intricate connections to the style of the visualization itself. These connections, and particularly those related to linked selection, will be the subject of large parts of Section \@ref(problems).
+
+Finally, I also briefly discussed some broader topics in data visualization, including data visualization goals, visual perception, the theory of scales and measurement, and graphics formats. While these topics are not specific to interactive data visualization, I still thought them important to touch on as they will be referred to later, in other parts of the thesis.
+
+In the next section, I will dive deeper into the challenges encountered while developing interactive data visualization systems, by discussing the four primary steps of the data visualization pipeline: partitioning, aggregation, scaling, and rendering.

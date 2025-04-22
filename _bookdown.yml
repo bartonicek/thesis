@@ -1,5 +1,6 @@
 rmd_files: [
             "index.Rmd",
+            # "acknowledgements.Rmd",
             "introduction.Rmd",
             "litreview.Rmd",
             "problems.Rmd",

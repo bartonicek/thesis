@@ -1,11 +1,17 @@
 ---
-title: "Fluent Graphics"
+title: "The Fabric of Interactive Visualization"
+subtitle: "From the Algebra of Graphics, Statistics, and Interaction to Practical Implementation"
 author: "Adam Bartonicek"
 site: bookdown::bookdown_site
 documentclass: book
+always_allow_html: true
 output:
-  #bookdown::html_document2: default
-  bookdown::gitbook: default
+  bookdown::gitbook:
+    css: styles.css
+  bookdown::pdf_document2:
+    latex_engine: xelatex
+  bookdown::pdf_book:
+    latex_engine: xelatex
 bibliography: [references.bib]
 biblio-style: "apalike"
 link-citations: true

@@ -536,9 +536,9 @@ As an example of a visualization type which presents some difficulties for linke
 knitr::include_graphics("./figures/line-consistency.png")
 ```
 
-## General data visualization theory
+## Overview of broader data visualization topics
 
-The following sections briefly overviews several key, general topics in data visualization: the goals and purpose of visualizing data, the mechanisms of visual perception, the theory of scales and measurement, and graphics formats. While mainly discussed in the context of static visualization, these topics are equally relevant to interactive visualization and present some unique challenges. My goal is not to give an exhaustive review - each of these topics is substantial enough to serve as a thesis topic in its own. Instead, I just want to give a brief overview of these topics, highlight some important points, and provide background information that may be referred to later on in the thesis. 
+This section briefly introduces several broad topics in data visualization: the goals of visualizing data, visual perception, the theory of scales and measurement, and graphics formats. While not specific to interactive visualization, these topics are important background for later discussions. Covering each topic in depth would require a great deal of material (enough for its own thesis), and thus, rather than offering an exhaustive review, this section merely aims to highlight some key points and provide the necessary context.
 
 ### Visualization goals {#visualization-goals}
 
@@ -658,6 +658,6 @@ In this section, I reviewed the history, present state, and some general theory 
 
 Second, among the past and present interactive data visualization systems, there is an abundance of interactive features. These features range widely in terms of usefulness, complexity, and difficulty of implementation: some are purely graphical whereas others require the presence of specialized data structures. Further, as was briefly foreshadowed in, for example, Section \@ref(linked-selection), many of these features cannot be simply tacked on top of arbitrary graphics, but instead have intricate connections to the style of the visualization itself. These connections, and particularly those related to linked selection, will be the subject of large parts of Section \@ref(problems).
 
-Finally, I also briefly reviewed some general theory related to visual perception and scales. These topics are not specific to interactive data visualization, however, they are important to touch on as they will be referred to in other parts of the thesis.
+Finally, I also briefly discussed some broader topics in data visualization, including data visualization goals, visual perception, the theory of scales and measurement, and graphics formats. While these topics are not specific to interactive data visualization, I still thought them important to touch on as they will be referred to later, in other parts of the thesis.
 
-Next, I will dive deeper into the challenges encountered while developing interactive data visualization systems, by discussing the four primary steps of the data visualization pipeline: partitioning, aggregation, scaling, and rendering.
+In the next section, I will dive deeper into the challenges encountered while developing interactive data visualization systems, by discussing the four primary steps of the data visualization pipeline: partitioning, aggregation, scaling, and rendering.
