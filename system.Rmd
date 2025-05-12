@@ -280,6 +280,17 @@ As `htmlwidgets` widgets, `plotscaper` figures are essentially static webpages. 
 
 As mentioned above, since client-server communication requires a running server, statically rendered figures cannot be interacted with through code, in the way described in Section \@ref(client-server). However, within-figure interactive features such as linked selection and querying are entirely client-side, and as such work perfectly fine in static environments. This makes `plotscaper` a very useful and convenient tool to use in interactive reports. 
 
+## Overview of the system model
+
+Section \@ref(problems) outlined several key concerns that complicate the process of designing generic interactive data visualization systems. Addressing these concerns requires specific architectural decisions, which will be explored in this section. 
+
+As argued in Section \@ref(hierarchy), a core problem in the design of interactive data visualization systems supporting linked selection is the hierarchical dependency between the represented data, discussed in Sections \@ref(hierarchy) and \@ref(transforming-summaries). Specifically, if we want to render geometric objects with highlighted parts representing selection requires a tree-like structure (see e.g. Figure \@ref(fig:spineplot-tree)). In other words, we need a way of representing a hierarchy of connected data tables of the following shape: 
+
+```{r}
+#| echo: false
+knitr::include_graphics("./figures/hierarchical_data.png")
+```
+
 ## Low-level implementation (`plotscape`) {#low-level-implementation}
 
 This section describes the actual platform used to produce and manipulate interactive figures, as implemented in `plotscape`. I begin with the discussion of some broader concerns, specifically the choice of programming paradigm (Section \@ref(programming-paradigm)), data representation (Section \@ref(row-column)), and reactivity model (Section \@ref(reactivity). Finally, I provide a detailed listing of the system's components and their functionality (Section \@ref(components)). Some readers may potentially find it easier to start with Section \@ref(components), as this presents the most concrete and granular information.

@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999996 (TeX Live 2024) (preloaded format=xelatex 2025.2.10)  17 APR 2025 14:07
+This is XeTeX, Version 3.141592653-2.6-0.999996 (TeX Live 2024) (preloaded format=xelatex 2025.2.10)  23 APR 2025 15:34
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1065,15 +1065,18 @@ File: ./figures/mondrian.png Graphic file (type bmp)
 
 
 [16]
-Underfull \hbox (badness 1655) in paragraph at lines 337--337
+Underfull \hbox (badness 1655) in paragraph at lines 339--339
 []\TU/lmr/bx/n/12 Interactive data visualization and the internet:
  []
+
+
+Underfull \vbox (badness 1082) has occurred while \output is active []
 
 
 
 [17]
 LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <10> not available
-(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 351.
+(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 353.
 
 
 [18]
@@ -1102,6 +1105,9 @@ File: ./figures/vegalite-scatterplot.png Graphic file (type bmp)
 [25]
 
 [26]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
 
 [27]
 
@@ -1122,23 +1128,23 @@ File: ./figures/panning.png Graphic file (type bmp)
 File: ./figures/querying.png Graphic file (type bmp)
 <./figures/querying.png>
 
+LaTeX Warning: Hyper reference `bidirectional-communication' on page 33 undefined on input line 687.
+
+
 
 [33]
-
-LaTeX Warning: Hyper reference `bidirectional-communication' on page 34 undefined on input line 685.
-
 File: ./figures/sorting.png Graphic file (type bmp)
 <./figures/sorting.png>
 
 
 [34]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
 
 [35]
 
 [36]
-Underfull \vbox (badness 3690) has occurred while \output is active []
-
-
 
 [37]
 File: ./figures/barplot-spineplot.png Graphic file (type bmp)
@@ -1146,26 +1152,22 @@ File: ./figures/barplot-spineplot.png Graphic file (type bmp)
 
 
 [38]
+
+[39]
 File: ./figures/linked-selection.png Graphic file (type bmp)
 <./figures/linked-selection.png>
 
 
-[39]
-
 [40]
+
+[41]
 File: ./figures/line-consistency.png Graphic file (type bmp)
 <./figures/line-consistency.png>
 
 
-[41]
-
 [42]
 
 [43]
-
-LaTeX Warning: Citation `ref-treissman1985' on page 44 undefined on input line 819.
-
-
 
 [44]
 
@@ -1176,12 +1178,9 @@ LaTeX Warning: Citation `ref-treissman1985' on page 44 undefined on input line 8
 [47]
 
 [48]
-Underfull \hbox (badness 1205) in paragraph at lines 895--896
+Underfull \hbox (badness 1205) in paragraph at lines 897--898
 []\TU/lmr/m/n/10 Vector graphics offer certain significant advantages. Notably, they are
  []
-
-
-Underfull \vbox (badness 1077) has occurred while \output is active []
 
 
 
@@ -1210,7 +1209,7 @@ File: ./figures/expand-scatterplot.png Graphic file (type bmp)
 
 [56]
 
-LaTeX Warning: Hyper reference `partition' on page 57 undefined on input line 1027.
+LaTeX Warning: Hyper reference `partition' on page 57 undefined on input line 1029.
 
 
 
@@ -1244,13 +1243,13 @@ File: ./figures/referendum-bijection.png Graphic file (type bmp)
 
 [63]
 
-LaTeX Warning: Hyper reference `Functions' on page 64 undefined on input line 1132.
+LaTeX Warning: Hyper reference `Functions' on page 64 undefined on input line 1134.
 
 
-LaTeX Warning: Hyper reference `Partitions' on page 64 undefined on input line 1132.
+LaTeX Warning: Hyper reference `Partitions' on page 64 undefined on input line 1134.
 
 
-LaTeX Warning: Hyper reference `Partitions' on page 64 undefined on input line 1132.
+LaTeX Warning: Hyper reference `Partitions' on page 64 undefined on input line 1134.
 
 
 
@@ -1289,7 +1288,7 @@ File: ./figures/spineplot-tree.pdf Graphic file (type pdf)
 
 [73]
 
-LaTeX Warning: Hyper reference `preorders' on page 74 undefined on input line 1385.
+LaTeX Warning: Hyper reference `preorders' on page 74 undefined on input line 1387.
 
 File: ./figures/barplot-preorder.pdf Graphic file (type pdf)
 <use ./figures/barplot-preorder.pdf>
@@ -1341,15 +1340,12 @@ File: ./figures/grammar-dodging-layering.png Graphic file (type bmp)
 File: ./figures/stacking-vs-dodging.png Graphic file (type bmp)
 <./figures/stacking-vs-dodging.png>
 
-LaTeX Warning: Reference `stacking-vs-dodging' on page 85 undefined on input line 1610.
-
-
 
 [85]
 
 [86]
 
-LaTeX Warning: Hyper reference `mathematical-theory' on page 87 undefined on input line 1626.
+LaTeX Warning: Hyper reference `mathematical-theory' on page 87 undefined on input line 1628.
 
 
 
@@ -1403,7 +1399,7 @@ File: ./figures/barplot-preorder2.pdf Graphic file (type pdf)
 File: ./figures/barplot-preorder4.pdf Graphic file (type pdf)
 <use ./figures/barplot-preorder4.pdf>
 
-Underfull \hbox (badness 3471) in paragraph at lines 1792--1792
+Underfull \hbox (badness 3471) in paragraph at lines 1794--1794
 []\TU/lmr/m/n/10 Figure 4.23: []A diagram of barplot/spineplot summary statistic pre-
  []
 
@@ -1454,12 +1450,12 @@ File: ./figures/lineplot-monotonicity.png Graphic file (type bmp)
 File: ./figures/barplot-preorder4.pdf Graphic file (type pdf)
 <use ./figures/barplot-preorder4.pdf>
 
-Underfull \hbox (badness 3503) in paragraph at lines 2089--2089
+Underfull \hbox (badness 3503) in paragraph at lines 2091--2091
 []\TU/lmr/m/n/10 Figure 4.26: []Reproduction of Figure Figure []4.23[]: Diagram of the
  []
 
 
-Underfull \hbox (badness 1442) in paragraph at lines 2094--2095
+Underfull \hbox (badness 1442) in paragraph at lines 2096--2097
  \TU/lmr/bx/n/10 4.3.2.10.1 Stacking[] \TU/lmr/m/n/10 To stack statistics, we need to apply our sum-
  []
 
@@ -1485,7 +1481,7 @@ File: _main_files/figure-latex/unnamed-chunk-29-1.pdf Graphic file (type pdf)
 File: _main_files/figure-latex/unnamed-chunk-30-1.pdf Graphic file (type pdf)
 <use _main_files/figure-latex/unnamed-chunk-30-1.pdf>
 
-Overfull \hbox (23.54958pt too wide) detected at line 2228
+Overfull \hbox (23.54958pt too wide) detected at line 2230
 [][][][][][][] [][][] [][][] [] [][] [] [][][] [] [] [] [][][] [] [][][][] [] [][][] [] [][][]
  []
 
@@ -1497,7 +1493,7 @@ Overfull \hbox (23.54958pt too wide) detected at line 2228
 Missing character: There is no ⨾ (U+2A3E) in font [latinmodern-math.otf]/OT:script=math;language=dflt;!
 Missing character: There is no ⨾ (U+2A3E) in font [latinmodern-math.otf]/OT:script=math;language=dflt;!
 
-Overfull \hbox (40.99963pt too wide) in paragraph at lines 2299--2300
+Overfull \hbox (40.99963pt too wide) in paragraph at lines 2301--2302
 []\TU/lmr/m/n/10 The function will then correctly map the discrete values in $[] [] [][][][][][][][] [][][][][][][] [][][][][][][]$
  []
 
@@ -1557,11 +1553,11 @@ Chapter 6.
 
 [132]
 LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <14.4> not available
-(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 2622.
+(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 2624.
 
 
 [133]
-Underfull \hbox (badness 10000) in paragraph at lines 2698--2700
+Underfull \hbox (badness 10000) in paragraph at lines 2700--2702
 
  []
 
@@ -1595,13 +1591,13 @@ Underfull \vbox (badness 2762) has occurred while \output is active []
 
 
 [140]
-Overfull \hbox (43.5pt too wide) in paragraph at lines 2855--2855
-[]\TU/lmtt/m/n/10 ##   .. ..$ id       : 'scalar' chr "38d5e48a-7809-4fab-8390-61839fc6c712"[] 
+Overfull \hbox (43.5pt too wide) in paragraph at lines 2857--2857
+[]\TU/lmtt/m/n/10 ##   .. ..$ id       : 'scalar' chr "3c88afbf-f0b9-4f1a-ad3f-fbc5e92cba2f"[] 
  []
 
 
-Overfull \hbox (43.5pt too wide) in paragraph at lines 2855--2855
-[]\TU/lmtt/m/n/10 ##   .. ..$ id       : 'scalar' chr "0234b433-cc1c-4723-8b10-519c1c5565bc"[] 
+Overfull \hbox (43.5pt too wide) in paragraph at lines 2857--2857
+[]\TU/lmtt/m/n/10 ##   .. ..$ id       : 'scalar' chr "9100a70e-b414-4fd9-8a97-05dc59579834"[] 
  []
 
 
@@ -1625,22 +1621,22 @@ Overfull \hbox (43.5pt too wide) in paragraph at lines 2855--2855
 [149]
 
 [150]
-Underfull \hbox (badness 1424) in paragraph at lines 2975--2976
+Underfull \hbox (badness 1424) in paragraph at lines 2977--2978
 \TU/lmr/m/n/10 programming (OOP) with extra steps, i.e. where someone might write
  []
 
 
-Underfull \hbox (badness 3449) in paragraph at lines 2975--2976
+Underfull \hbox (badness 3449) in paragraph at lines 2977--2978
 \TU/lmtt/m/n/10 const foo = new Foo(); const bar = foo.bar()\TU/lmr/m/n/10 , I write \TU/lmtt/m/n/10 const foo =
  []
 
 
-Underfull \hbox (badness 1019) in paragraph at lines 2975--2976
+Underfull \hbox (badness 1019) in paragraph at lines 2977--2978
 \TU/lmtt/m/n/10 Foo.create(); const bar = Foo.bar(foo)\TU/lmr/m/n/10 , however, there are a couple
  []
 
 
-Underfull \hbox (badness 1270) in paragraph at lines 2977--2977
+Underfull \hbox (badness 1270) in paragraph at lines 2979--2979
 []\TU/lmr/bx/n/12 Data representation: Row-oriented vs. column-
  []
 
@@ -1662,8 +1658,8 @@ Underfull \vbox (badness 4013) has occurred while \output is active []
 
 
 [157]
-Overfull \hbox (1.5pt too wide) in paragraph at lines 3140--3140
-[]\TU/lmtt/m/n/10 ## 1002 milliseconds has elapsed(143.14 milliseconds in dog years)[] 
+Overfull \hbox (1.5pt too wide) in paragraph at lines 3142--3142
+[]\TU/lmtt/m/n/10 ## 1003 milliseconds has elapsed(143.29 milliseconds in dog years)[] 
  []
 
 
@@ -1680,12 +1676,12 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 [161]
 
 [162]
-Underfull \hbox (badness 4096) in paragraph at lines 3308--3309
+Underfull \hbox (badness 4096) in paragraph at lines 3310--3311
 []\TU/lmr/m/n/10 Note that, by definition, every \TU/lmtt/m/n/10 Getter<T> \TU/lmr/m/n/10 is also automatically an
  []
 
 
-Underfull \hbox (badness 1383) in paragraph at lines 3308--3309
+Underfull \hbox (badness 1383) in paragraph at lines 3310--3311
 \TU/lmtt/m/n/10 Indexable<T> \TU/lmr/m/n/10 (since it is a function of the form \TU/lmtt/m/n/10 (index: number) =>
  []
 
@@ -1693,7 +1689,7 @@ Underfull \hbox (badness 1383) in paragraph at lines 3308--3309
 
 [163]
 
-LaTeX Warning: Hyper reference `indexable' on page 164 undefined on input line 3345.
+LaTeX Warning: Hyper reference `indexable' on page 164 undefined on input line 3347.
 
 
 
@@ -1701,25 +1697,25 @@ LaTeX Warning: Hyper reference `indexable' on page 164 undefined on input line 3
 
 [165]
 
-LaTeX Warning: Hyper reference `Scene' on page 166 undefined on input line 3408.
+LaTeX Warning: Hyper reference `Scene' on page 166 undefined on input line 3410.
 
 
 
 [166]
 
-LaTeX Warning: Hyper reference `Productux5cux2520factors' on page 167 undefined on input line 3448.
+LaTeX Warning: Hyper reference `Productux5cux2520factors' on page 167 undefined on input line 3450.
 
 
-LaTeX Warning: Hyper reference `Dataframe' on page 167 undefined on input line 3450.
+LaTeX Warning: Hyper reference `Dataframe' on page 167 undefined on input line 3452.
 
 
 
 [167]
 
-LaTeX Warning: Hyper reference `Productux5cux2520factors' on page 168 undefined on input line 3479.
+LaTeX Warning: Hyper reference `Productux5cux2520factors' on page 168 undefined on input line 3481.
 
 
-Underfull \hbox (badness 6001) in paragraph at lines 3485--3486
+Underfull \hbox (badness 6001) in paragraph at lines 3487--3488
  \TU/lmr/bx/n/10 6.3.4.4.1 Bijection and constant factors[] \TU/lmtt/m/n/10 Factor.bijection \TU/lmr/m/n/10 and
  []
 
@@ -1771,7 +1767,7 @@ File: ./figures/transient-persisent-product.png Graphic file (type bmp)
 [188]
 
 [189]
-Overfull \hbox (50.42001pt too wide) in paragraph at lines 4145--4146
+Overfull \hbox (50.42001pt too wide) in paragraph at lines 4147--4148
 []\TU/lmr/m/n/10 Back to code. The \TU/lmtt/m/n/10 ExpanseContinuous.normalize \TU/lmr/m/n/10 and \TU/lmtt/m/n/10 ExpanseContinuous.unnormalize
  []
 
@@ -1782,12 +1778,12 @@ Overfull \hbox (50.42001pt too wide) in paragraph at lines 4145--4146
 [191]
 
 [192]
-Underfull \hbox (badness 4303) in paragraph at lines 4260--4261
+Underfull \hbox (badness 4303) in paragraph at lines 4274--4275
 \TU/lmr/m/n/10 While \TU/lmtt/m/n/10 ExpansePoint \TU/lmr/m/n/10 places values at equidistant points along $[][][] [][]$,
  []
 
 
-Underfull \hbox (badness 2818) in paragraph at lines 4273--4274
+Underfull \hbox (badness 2818) in paragraph at lines 4287--4288
 \TU/lmr/m/n/10 additional \TU/lmtt/m/n/10 weights \TU/lmr/m/n/10 and \TU/lmtt/m/n/10 cumulativeWeights \TU/lmr/m/n/10 are numeric arrays which
  []
 
@@ -1798,7 +1794,7 @@ Underfull \hbox (badness 2818) in paragraph at lines 4273--4274
 [194]
 
 [195]
-Underfull \hbox (badness 1365) in paragraph at lines 4335--4336
+Underfull \hbox (badness 1365) in paragraph at lines 4349--4350
 []\TU/lmr/m/n/10 Importantly, data is not a single \TU/lmtt/m/n/10 Dataframe\TU/lmr/m/n/10 , but instead an array of
  []
 
@@ -1823,12 +1819,12 @@ Chapter 7.
 [203
 
 ]
-Overfull \hbox (2.99pt too wide) in paragraph at lines 4536--4536
+Overfull \hbox (2.99pt too wide) in paragraph at lines 4550--4550
 []\TU/lmr/m/n/10 reason_for_termination|  
  []
 
 
-Overfull \hbox (30.7pt too wide) in paragraph at lines 4536--4536
+Overfull \hbox (30.7pt too wide) in paragraph at lines 4550--4550
 []\TU/lmr/m/n/10 kategorie_delky_hospitalizace|  
  []
 
@@ -1882,7 +1878,7 @@ File: ./figures/example-cases-days-age.png Graphic file (type bmp)
 
 [215]
 
-LaTeX Warning: Float too large for page by 28.77036pt on input line 4830.
+LaTeX Warning: Float too large for page by 28.77036pt on input line 4844.
 
 
 
@@ -1914,7 +1910,7 @@ File: ./figures/example-cases-diagnosis-max.png Graphic file (type bmp)
 [224]
 
 [225]
-Underfull \hbox (badness 1132) in paragraph at lines 5047--5048
+Underfull \hbox (badness 1132) in paragraph at lines 5061--5062
 \TU/lmr/m/n/10 Alzheimer’s patients, over time, schizophrenia patients became the
  []
 
@@ -1951,7 +1947,7 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 [235]
 
 [236]
-Underfull \hbox (badness 1014) in paragraph at lines 5139--5140
+Underfull \hbox (badness 1014) in paragraph at lines 5153--5154
 []\TU/lmr/m/n/10 More fundamentally, beyond the simple category-theoretic concepts used
  []
 
@@ -1978,7 +1974,7 @@ Overfull \hbox (3.83345pt too wide) has occurred while \output is active
 [241]
 
 [242]
-Underfull \hbox (badness 2799) in paragraph at lines 5188--5190
+Underfull \hbox (badness 2799) in paragraph at lines 5202--5204
 []\TU/lmr/m/n/10 Pre-partitioning: Data streaming, partitioning parameter updates
  []
 
@@ -2008,7 +2004,7 @@ Chapter 10.
 ]
 
 [248]
-Overfull \hbox (27.75pt too wide) in paragraph at lines 5266--5266
+Overfull \hbox (27.75pt too wide) in paragraph at lines 5280--5280
 []  \TU/lmtt/m/n/10 <rect x="150" y="150" width="50" height="50" fill="firebrick"></rect>[] 
  []
 
@@ -2055,7 +2051,7 @@ Missing character: There is no ⨾ (U+2A3E) in font [latinmodern-math.otf]/OT:sc
 [258]
 
 [259]
-Overfull \hbox (14.45105pt too wide) in paragraph at lines 5518--5519
+Overfull \hbox (14.45105pt too wide) in paragraph at lines 5532--5533
 \TU/lmr/m/n/10 underlying set is the family: $[] [] [][][]$
  []
 
@@ -2071,12 +2067,12 @@ File: ./figures/family-tree.pdf Graphic file (type pdf)
 
 [263]
 
-LaTeX Warning: Hyper reference `Preorders' on page 264 undefined on input line 5664.
+LaTeX Warning: Hyper reference `Preorders' on page 264 undefined on input line 5678.
 
 
 
 [264]
-Underfull \hbox (badness 10000) in paragraph at lines 5698--5699
+Underfull \hbox (badness 10000) in paragraph at lines 5712--5713
 [][]\TU/lmr/bx/n/10 Definition 11.13 \TU/lmr/m/n/10 (Monoid homomorphism)\TU/lmr/bx/n/10 . []\TU/lmr/m/n/10 Let $[][][] [][][] [][][]$ and
  []
 
@@ -2162,7 +2158,7 @@ Missing character: There is no ⨾ (U+2A3E) in font [latinmodern-math.otf]/OT:sc
 [274]
 Chapter 12.
 
-Underfull \hbox (badness 1472) in paragraph at lines 5967--5968
+Underfull \hbox (badness 1472) in paragraph at lines 5981--5982
 \TU/lmr/m/it/10 Markdown Publishing System\TU/lmr/m/n/10 . []$[][][][][] [] [] [] [][][][] [] [] [][] [][][][][][][] [] [][][] [] [][][][][][][] []
  []
 
@@ -2177,7 +2173,7 @@ Underfull \hbox (badness 1472) in paragraph at lines 5967--5968
 [277]
 
 [278]
-Underfull \hbox (badness 3240) in paragraph at lines 6186--6187
+Underfull \hbox (badness 3240) in paragraph at lines 6200--6201
 \TU/lmr/m/it/10 ceedings of the working conference on Advanced visual interfaces\TU/lmr/m/n/10 ,
  []
 
@@ -2186,14 +2182,14 @@ Underfull \hbox (badness 3240) in paragraph at lines 6186--6187
 [279]
 
 [280]
-Underfull \hbox (badness 3954) in paragraph at lines 6285--6286
+Underfull \hbox (badness 3954) in paragraph at lines 6299--6300
 \TU/lmr/m/n/10 ming.” \TU/lmr/m/it/10 Handmade Network\TU/lmr/m/n/10 . []$[][][][][] [] [] [] [][][][][][][][] [] [][][][][][][] [] [][][][][][][][] []
  []
 
 
 
 [281]
-Underfull \hbox (badness 1769) in paragraph at lines 6312--6313
+Underfull \hbox (badness 1769) in paragraph at lines 6326--6327
 []\TU/lmr/m/n/10 Henry, Lionel, and Hadley Wickham. 2024. \TU/lmr/m/it/10 Rlang: Functions for
  []
 
@@ -2202,7 +2198,7 @@ Underfull \hbox (badness 1769) in paragraph at lines 6312--6313
 [282]
 
 [283]
-Underfull \hbox (badness 10000) in paragraph at lines 6480--6481
+Underfull \hbox (badness 10000) in paragraph at lines 6494--6495
 []$[][][][][] [] [] [] [][][] [] [][][][][][][][] [] [][][] [] [][][][][] [] [][][][][] [] [][][][][][][][][][][][][][][][][][][][] [] [] []
  []
 
@@ -2215,14 +2211,14 @@ Underfull \hbox (badness 10000) in paragraph at lines 6480--6481
 [286]
 
 [287]
-Underfull \hbox (badness 1629) in paragraph at lines 6702--6703
+Underfull \hbox (badness 1629) in paragraph at lines 6716--6717
 []\TU/lmr/m/n/10 Self, Jessica Zeitz, Michelle Dowling, John Wenskovitch, Ian Crandell,
  []
 
 
 
 [288]
-Underfull \hbox (badness 3354) in paragraph at lines 6744--6745
+Underfull \hbox (badness 3354) in paragraph at lines 6758--6759
 \TU/lmr/m/it/10 A9\TU/lmr/m/n/10 . Youtube. []$[][][][][] [] [] [] [][][] [] [][][][][][][] [] [][][] [] [][][][][][][][] [] [][][][] [] [][][][][][][][] []
  []
 
@@ -2233,7 +2229,7 @@ Underfull \hbox (badness 3354) in paragraph at lines 6744--6745
 [290]
 
 [291]
-Underfull \hbox (badness 10000) in paragraph at lines 6924--6925
+Underfull \hbox (badness 10000) in paragraph at lines 6938--6939
 []$[][][][][] [] [] [] [][][] [] [][][][][][] [] [][][] [] [] [] [][][][][][][][][][][][][][][] [] [][][][][][][][] [] [][][][][][] [] [][][][][][][] []
  []
 
@@ -2253,10 +2249,10 @@ LaTeX Warning: There were undefined references.
 
  ) 
 Here is how much of TeX's memory you used:
- 31572 strings out of 475846
- 643773 string characters out of 5775011
- 1160363 words of memory out of 5000000
- 53901 multiletter control sequences out of 15000+600000
+ 31571 strings out of 475846
+ 643723 string characters out of 5775011
+ 1160375 words of memory out of 5000000
+ 53900 multiletter control sequences out of 15000+600000
  565522 words of font info for 106 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  98i,17n,114p,3005b,750s stack positions out of 10000i,1000n,20000p,200000b,200000s
