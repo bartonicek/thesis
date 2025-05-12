@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>3 Background | The Fabric of Interactive Visualization</title>
   <meta name="description" content="3 Background | The Fabric of Interactive Visualization" />
-  <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.43 and GitBook 2.6.7" />
 
   <meta property="og:title" content="3 Background | The Fabric of Interactive Visualization" />
   <meta property="og:type" content="book" />
@@ -232,14 +232,18 @@ div.csl-indent {
 <li class="chapter" data-level="6.2.3" data-path="system.html"><a href="system.html#scene-and-schema"><i class="fa fa-check"></i><b>6.2.3</b> The scene and the schema</a></li>
 <li class="chapter" data-level="6.2.4" data-path="system.html"><a href="system.html#client-server"><i class="fa fa-check"></i><b>6.2.4</b> Client-server communication</a></li>
 <li class="chapter" data-level="6.2.5" data-path="system.html"><a href="system.html#html-embedding"><i class="fa fa-check"></i><b>6.2.5</b> HTML embedding</a></li>
-<li class="chapter" data-level="6.2.6" data-path="system.html"><a href="system.html#overview-of-the-system-model"><i class="fa fa-check"></i><b>6.2.6</b> Overview of the system model</a></li>
 </ul></li>
-<li class="chapter" data-level="6.3" data-path="system.html"><a href="system.html#low-level-implementation"><i class="fa fa-check"></i><b>6.3</b> Low-level implementation (<code>plotscape</code>)</a>
+<li class="chapter" data-level="6.3" data-path="system.html"><a href="system.html#overview-of-the-system-model"><i class="fa fa-check"></i><b>6.3</b> Overview of the system model</a>
 <ul>
-<li class="chapter" data-level="6.3.1" data-path="system.html"><a href="system.html#programming-paradigm"><i class="fa fa-check"></i><b>6.3.1</b> Programming paradigm</a></li>
-<li class="chapter" data-level="6.3.2" data-path="system.html"><a href="system.html#row-column"><i class="fa fa-check"></i><b>6.3.2</b> Data representation: Row-oriented vs. column-oriented</a></li>
-<li class="chapter" data-level="6.3.3" data-path="system.html"><a href="system.html#reactivity"><i class="fa fa-check"></i><b>6.3.3</b> Reactivity</a></li>
-<li class="chapter" data-level="6.3.4" data-path="system.html"><a href="system.html#components"><i class="fa fa-check"></i><b>6.3.4</b> System components</a></li>
+<li class="chapter" data-level="6.3.1" data-path="system.html"><a href="system.html#scene-model"><i class="fa fa-check"></i><b>6.3.1</b> Scene model</a></li>
+<li class="chapter" data-level="6.3.2" data-path="system.html"><a href="system.html#plot-model"><i class="fa fa-check"></i><b>6.3.2</b> Plot model</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="system.html"><a href="system.html#low-level-implementation"><i class="fa fa-check"></i><b>6.4</b> Low-level implementation (<code>plotscape</code>)</a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="system.html"><a href="system.html#programming-paradigm"><i class="fa fa-check"></i><b>6.4.1</b> Programming paradigm</a></li>
+<li class="chapter" data-level="6.4.2" data-path="system.html"><a href="system.html#row-column"><i class="fa fa-check"></i><b>6.4.2</b> Data representation: Row-oriented vs. column-oriented</a></li>
+<li class="chapter" data-level="6.4.3" data-path="system.html"><a href="system.html#reactivity"><i class="fa fa-check"></i><b>6.4.3</b> Reactivity</a></li>
+<li class="chapter" data-level="6.4.4" data-path="system.html"><a href="system.html#components"><i class="fa fa-check"></i><b>6.4.4</b> System components</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="applied-example.html"><a href="applied-example.html"><i class="fa fa-check"></i><b>7</b> Applied example</a>
@@ -1388,42 +1392,42 @@ Young, Forrest W, Pedro M Valero-Mora, and Michael Friendly. 2011. <em>Visual St
 <script>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
-"sharing": {
-"github": false,
-"facebook": true,
-"twitter": true,
-"linkedin": false,
-"weibo": false,
-"instapaper": false,
-"vk": false,
-"whatsapp": false,
-"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
-},
-"fontsettings": {
-"theme": "white",
-"family": "sans",
-"size": 2
-},
-"edit": {
-"link": null,
-"text": null
-},
-"history": {
-"link": null,
-"text": null
-},
-"view": {
-"link": null,
-"text": null
-},
-"download": ["_main.pdf"],
-"search": {
-"engine": "fuse",
-"options": null
-},
-"toc": {
-"collapse": "subsection"
-}
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": null,
+    "text": null
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["_main.pdf"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
 });
 });
 </script>

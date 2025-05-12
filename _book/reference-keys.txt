@@ -52,6 +52,8 @@ def:scale
 fig:plotscaper-design
 fig:plotscaper-example1
 fig:plotscaper-example2
+fig:scene-diagram
+fig:plot-diagram
 eq:product-indices
 tab:product-indices
 fig:transient-persistent-product
@@ -204,6 +206,8 @@ scene-and-schema
 client-server
 html-embedding
 overview-of-the-system-model
+scene-model
+plot-model
 low-level-implementation
 programming-paradigm
 procedural-programming
@@ -312,4 +316,3 @@ isomorphism
 algebraic-as-categories
 functors
 references
-preorders

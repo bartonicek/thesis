@@ -282,9 +282,29 @@ As mentioned above, since client-server communication requires a running server,
 
 ## Overview of the system model
 
-Section \@ref(problems) outlined several key concerns that complicate the process of designing generic interactive data visualization systems. Addressing these concerns requires specific architectural decisions, which will be explored in this section. 
+Section \@ref(problems) outlined several key concerns that arise when designing generic interactive data visualization systems. Overcoming these issues necessitated specific architectural choices, which will be detailed throughout the rest chapter. The present section provides a simplified, high-level overview, briefly introducing the system components and their relations without going into too much depth. More specific, low-level details will be discussed later, in Section \@ref(low-level-implementation) (however, links to the corresponding subsections will be provided where appropriate).
 
-As argued in Section \@ref(hierarchy), a core problem in the design of interactive data visualization systems supporting linked selection is the hierarchical dependency between the represented data, discussed in Sections \@ref(hierarchy) and \@ref(transforming-summaries). Specifically, if we want to render geometric objects with highlighted parts representing selection requires a tree-like structure (see e.g. Figure \@ref(fig:spineplot-tree)). In other words, we need a way of representing a hierarchy of connected data tables of the following shape: 
+### Scene model
+
+As discussed in Section \@ref(high-level-api), every `plotscape`/`plotscaper` figure is composed of one or more interactive plots. Thus, the central component is a [Scene] which represents the entire figure which contains the plots (see Figure \@ref(fig:scene-diagram)). To support linked selection (which affects all plots simultaneously), the scene needs to contain a specialized [Marker](marker) object. For communication with an external server (R client), a client (WebSockets) object is also included. Lastly, the Scene contains^[This could also be implemented by class inheritance, by making the Scene object extend an Observer class.] an event listener object to coordinate user input and interactions between all components. The relations between the various components are described by the following diagram:
+
+```{r scene-diagram}
+#| echo: false
+#| fig-cap: "Diagram of a scene. Solid arrows indicate composition, dashed arrows indicate other kinds of relationships (e.g. event-dispatch, argument passing in method calls)."
+knitr::include_graphics("./figures/scene_diagram.png")
+```
+
+### Plot model
+
+Further, every `plotscape`/`plotscaper` plot is also composed of several different, related components (see Figure \@ref(fig:plot-diagram)). First and foremost, the data needs to be aggregated into a hierarchy of [Summaries](summaries), which are in turn composed of special *reduced* variables or [Reduceds](aggregation-summaries). These reduced variables are not simple "flat" arrays of values, but contain metadata about the way they have been summarized ([Factors](factors) and [Reducers](reducers)), as well as pointers to the parent-level values, enabling hierarchy-aware transformations such as stacking or normalization (e.g. in spineplot). The summaries are translated into aesthetic encodings and used to train the plot [Scales](scales), which are composed of domain and codomain objects of the same type ([Expanse](expanses)). Further, the translated summaries are also linked to geometric objects or geoms, which are used in rendering and collision-detection (during linked selection). User input and scene events are handled by an event listener object, which may update interactive plot parameters and propagate these changes to the plot's scales or even the underlying summaries. Finally, the data-dependent geoms, as well as other, auxiliary kinds of graphical objects (e.g. axis labels/titles) are rendered as visual output. 
+
+```{r plot-diagram}
+#| echo: false
+#| fig-cap: "Diagram of a `plotscape` plot. Solid arrows indicate composition, dashed arrows indicate other kinds of relationships (e.g. event-dispatch, argument passing in method calls)."
+knitr::include_graphics("./figures/plot_diagram.png")
+```
+
+As argued in Section \@ref(hierarchy), a core problem in the design of interactive data visualization systems supporting linked selection is the hierarchical dependency between the represented data, discussed . Specifically, if we want to render geometric objects with highlighted parts representing selection requires a tree-like structure (see e.g. Figure \@ref(fig:spineplot-tree)). In other words, our system needs components that can represent a hierarchy of connected data tables with the following shape: 
 
 ```{r}
 #| echo: false

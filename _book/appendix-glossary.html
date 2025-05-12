@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>10 Appendix: Glossary | The Fabric of Interactive Visualization</title>
   <meta name="description" content="10 Appendix: Glossary | The Fabric of Interactive Visualization" />
-  <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.43 and GitBook 2.6.7" />
 
   <meta property="og:title" content="10 Appendix: Glossary | The Fabric of Interactive Visualization" />
   <meta property="og:type" content="book" />
@@ -232,14 +232,18 @@ div.csl-indent {
 <li class="chapter" data-level="6.2.3" data-path="system.html"><a href="system.html#scene-and-schema"><i class="fa fa-check"></i><b>6.2.3</b> The scene and the schema</a></li>
 <li class="chapter" data-level="6.2.4" data-path="system.html"><a href="system.html#client-server"><i class="fa fa-check"></i><b>6.2.4</b> Client-server communication</a></li>
 <li class="chapter" data-level="6.2.5" data-path="system.html"><a href="system.html#html-embedding"><i class="fa fa-check"></i><b>6.2.5</b> HTML embedding</a></li>
-<li class="chapter" data-level="6.2.6" data-path="system.html"><a href="system.html#overview-of-the-system-model"><i class="fa fa-check"></i><b>6.2.6</b> Overview of the system model</a></li>
 </ul></li>
-<li class="chapter" data-level="6.3" data-path="system.html"><a href="system.html#low-level-implementation"><i class="fa fa-check"></i><b>6.3</b> Low-level implementation (<code>plotscape</code>)</a>
+<li class="chapter" data-level="6.3" data-path="system.html"><a href="system.html#overview-of-the-system-model"><i class="fa fa-check"></i><b>6.3</b> Overview of the system model</a>
 <ul>
-<li class="chapter" data-level="6.3.1" data-path="system.html"><a href="system.html#programming-paradigm"><i class="fa fa-check"></i><b>6.3.1</b> Programming paradigm</a></li>
-<li class="chapter" data-level="6.3.2" data-path="system.html"><a href="system.html#row-column"><i class="fa fa-check"></i><b>6.3.2</b> Data representation: Row-oriented vs. column-oriented</a></li>
-<li class="chapter" data-level="6.3.3" data-path="system.html"><a href="system.html#reactivity"><i class="fa fa-check"></i><b>6.3.3</b> Reactivity</a></li>
-<li class="chapter" data-level="6.3.4" data-path="system.html"><a href="system.html#components"><i class="fa fa-check"></i><b>6.3.4</b> System components</a></li>
+<li class="chapter" data-level="6.3.1" data-path="system.html"><a href="system.html#scene-model"><i class="fa fa-check"></i><b>6.3.1</b> Scene model</a></li>
+<li class="chapter" data-level="6.3.2" data-path="system.html"><a href="system.html#plot-model"><i class="fa fa-check"></i><b>6.3.2</b> Plot model</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="system.html"><a href="system.html#low-level-implementation"><i class="fa fa-check"></i><b>6.4</b> Low-level implementation (<code>plotscape</code>)</a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="system.html"><a href="system.html#programming-paradigm"><i class="fa fa-check"></i><b>6.4.1</b> Programming paradigm</a></li>
+<li class="chapter" data-level="6.4.2" data-path="system.html"><a href="system.html#row-column"><i class="fa fa-check"></i><b>6.4.2</b> Data representation: Row-oriented vs. column-oriented</a></li>
+<li class="chapter" data-level="6.4.3" data-path="system.html"><a href="system.html#reactivity"><i class="fa fa-check"></i><b>6.4.3</b> Reactivity</a></li>
+<li class="chapter" data-level="6.4.4" data-path="system.html"><a href="system.html#components"><i class="fa fa-check"></i><b>6.4.4</b> System components</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="applied-example.html"><a href="applied-example.html"><i class="fa fa-check"></i><b>7</b> Applied example</a>
@@ -298,13 +302,13 @@ div.csl-indent {
 <h4><span class="header-section-number">10.0.0.2</span> JSON<a href="appendix-glossary.html#JSON" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>Short for “JavaScript Object Notation”, JSON is a flexible data format based on the JavaScript object type <span class="citation">(also known as the “plain old JavaScript object,” POJO, see <a href="#ref-ecma2024">Ecma International 2024</a>; see also e.g. <a href="#ref-bourhis2017">Bourhis et al. 2017</a>; <a href="#ref-pezoa2016">Pezoa et al. 2016</a>)</span>. On the top level, a JSON is a key-value store with string keys and values of any of the following types: string, number, boolean, null (an undefined/missing value), an array (which can contain any other valid JSON values), or another JSON object.</p>
 <p>For example, the following is a valid JSON:</p>
-<div class="sourceCode" id="cb140"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb140-1"><a href="appendix-glossary.html#cb140-1" tabindex="-1"></a>{</span>
-<span id="cb140-2"><a href="appendix-glossary.html#cb140-2" tabindex="-1"></a>  <span class="st">&quot;name&quot;</span><span class="op">:</span> <span class="st">&quot;Adam&quot;</span><span class="op">,</span></span>
-<span id="cb140-3"><a href="appendix-glossary.html#cb140-3" tabindex="-1"></a>  <span class="st">&quot;age&quot;</span><span class="op">:</span> <span class="dv">30</span><span class="op">,</span></span>
-<span id="cb140-4"><a href="appendix-glossary.html#cb140-4" tabindex="-1"></a>  <span class="st">&quot;friends&quot;</span><span class="op">:</span> [{ <span class="st">&quot;name&quot;</span><span class="op">:</span> <span class="st">&quot;Sam&quot;</span><span class="op">,</span> <span class="st">&quot;age&quot;</span><span class="op">:</span> <span class="dv">30</span> }<span class="op">,</span> { <span class="st">&quot;name&quot;</span><span class="op">:</span> <span class="st">&quot;Franta&quot;</span><span class="op">,</span> <span class="st">&quot;age&quot;</span><span class="op">:</span> <span class="dv">26</span> }]<span class="op">,</span></span>
-<span id="cb140-5"><a href="appendix-glossary.html#cb140-5" tabindex="-1"></a>  <span class="st">&quot;can drive&quot;</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span></span>
-<span id="cb140-6"><a href="appendix-glossary.html#cb140-6" tabindex="-1"></a>  <span class="st">&quot;problems&quot;</span><span class="op">:</span> <span class="dt">null</span></span>
-<span id="cb140-7"><a href="appendix-glossary.html#cb140-7" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb138"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb138-1"><a href="appendix-glossary.html#cb138-1" tabindex="-1"></a>{</span>
+<span id="cb138-2"><a href="appendix-glossary.html#cb138-2" tabindex="-1"></a>  <span class="st">&quot;name&quot;</span><span class="op">:</span> <span class="st">&quot;Adam&quot;</span><span class="op">,</span></span>
+<span id="cb138-3"><a href="appendix-glossary.html#cb138-3" tabindex="-1"></a>  <span class="st">&quot;age&quot;</span><span class="op">:</span> <span class="dv">30</span><span class="op">,</span></span>
+<span id="cb138-4"><a href="appendix-glossary.html#cb138-4" tabindex="-1"></a>  <span class="st">&quot;friends&quot;</span><span class="op">:</span> [{ <span class="st">&quot;name&quot;</span><span class="op">:</span> <span class="st">&quot;Sam&quot;</span><span class="op">,</span> <span class="st">&quot;age&quot;</span><span class="op">:</span> <span class="dv">30</span> }<span class="op">,</span> { <span class="st">&quot;name&quot;</span><span class="op">:</span> <span class="st">&quot;Franta&quot;</span><span class="op">,</span> <span class="st">&quot;age&quot;</span><span class="op">:</span> <span class="dv">26</span> }]<span class="op">,</span></span>
+<span id="cb138-5"><a href="appendix-glossary.html#cb138-5" tabindex="-1"></a>  <span class="st">&quot;can drive&quot;</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span></span>
+<span id="cb138-6"><a href="appendix-glossary.html#cb138-6" tabindex="-1"></a>  <span class="st">&quot;problems&quot;</span><span class="op">:</span> <span class="dt">null</span></span>
+<span id="cb138-7"><a href="appendix-glossary.html#cb138-7" tabindex="-1"></a>}</span></code></pre></div>
 <p>The JSON specification is more restrictive compared to the full JavaScript object type (as implemented in the browser and various JavaScript runtimes). JavaScript runtime objects are very flexible - they can contain non-string keys (numbers or symbols) and non-primitive values such as functions/methods. In contrast, JSON is a fairly “simple” format designed for declaring and transporting data. For this reason, JSON is often used as the medium for sending data to and from Web APIs <span class="citation">(<a href="#ref-bourhis2017">Bourhis et al. 2017</a>; <a href="#ref-pezoa2016">Pezoa et al. 2016</a>)</span> as well as for configuration documents.</p>
 <p>The main advantages of JSON are that it is a simple, flexible, and human-readable format. Also, due to its recursive nature (JSON arrays and objects can contain other JSON arrays and objects), it can be used to express a wide variety of hierarchical data structures which would not be efficient to express in “flat” data formats such as CSV. However, this flexibility also comes with some disadvantages. The recursive nature of the format makes parsing JSON files inherently more time- and compute-intensive, and, since the values in a JSON can be of any type (as long as it is a valid JSON type), it is often necessary to validate JSON inputs <span class="citation">(<a href="#ref-pezoa2016">Pezoa et al. 2016</a>)</span>.</p>
 </div>
@@ -393,42 +397,42 @@ Wilkinson, Leland. 2012. <em>The Grammar of Graphics</em>. Springer.
 <script>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
-"sharing": {
-"github": false,
-"facebook": true,
-"twitter": true,
-"linkedin": false,
-"weibo": false,
-"instapaper": false,
-"vk": false,
-"whatsapp": false,
-"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
-},
-"fontsettings": {
-"theme": "white",
-"family": "sans",
-"size": 2
-},
-"edit": {
-"link": null,
-"text": null
-},
-"history": {
-"link": null,
-"text": null
-},
-"view": {
-"link": null,
-"text": null
-},
-"download": ["_main.pdf"],
-"search": {
-"engine": "fuse",
-"options": null
-},
-"toc": {
-"collapse": "subsection"
-}
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": null,
+    "text": null
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["_main.pdf"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
 });
 });
 </script>
