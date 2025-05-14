@@ -1056,9 +1056,9 @@ It is worth taking a moment to analyze what is happening inside the `ggplot` cal
 >
 > [`grouping.R` file, `ggplot2` codebase](https://github.com/tidyverse/ggplot2/blob/f46805349d6ca8ca7a99f8966cfa0f29279c2f6c/R/grouping.R#L7) [@wickham2016]
 
-Thus, clearly, products of partitions are a fundamental building block of graphics. However, an important thing to discuss is that there are actually two different ways we view products [see @wilkinson2012, pp. 64]. First, there is the simple, commutative view where the order of variables in the product does not matter. In other words, these types of products form a simple, "flat" structure with no hierarchical dependencies. Second, we can also view products as nesting, which does establish a hierarchy. While flat partitions are sufficient to describe for many types of visualizations, some plot types require this hierarchical structure. This issue will be discussed in greater depth in the following section.
+Thus, clearly, products of partitions are a fundamental building block of graphics. However, an important thing to discuss is that there are actually two different ways we view products [see @wilkinson2012, pp. 64]. First, there is the simple, commutative perspective where the order of variables that form the product does not matter. In these "flat" products, the product of $x$ and $y$ is the same as the product of $y$ and $x$. Second, we can also view products as nesting, which does establish a hierarchy. While flat partitions are sufficient to describe for many types of visualizations, some plot types require this hierarchical structure. This issue will be discussed in greater depth in the following section.
 
-#### Limits of flat product partitions
+#### Limits of flat product partitions {#limits-of-flat-products}
 
 As mentioned in the previous section, a fair number of common plots can be represented via a single flat product of all of the partitioning variables. However, for other types of plots, this simple model is not sufficient. Specifically, certain types of plots exhibit hierarchical dependencies which cannot be represented under this flat model [see also @slingsby2009; @wu2022].
 
@@ -2410,7 +2410,7 @@ knitr::include_graphics("./figures/scene_diagram.png")
 
 ### Plot model
 
-Further, every `plotscape`/`plotscaper` plot is also composed of several different, related components (see Figure \@ref(fig:plot-diagram)). First and foremost, the data needs to be aggregated into a hierarchy of [Summaries](summaries), which are in turn composed of special *reduced* variables or [Reduceds](aggregation-summaries). These reduced variables are not simple "flat" arrays of values, but contain metadata about the way they have been summarized ([Factors](factors) and [Reducers](reducers)), as well as pointers to the parent-level values, enabling hierarchy-aware transformations such as stacking or normalization (e.g. in spineplot). The summaries are translated into aesthetic encodings and used to train the plot [Scales](scales), which are composed of domain and codomain objects of the same type ([Expanse](expanses)). Further, the translated summaries are also linked to geometric objects or geoms, which are used in rendering and collision-detection (during linked selection). User input and scene events are handled by an event listener object, which may update interactive plot parameters and propagate these changes to the plot's scales or even the underlying summaries. Finally, the data-dependent geoms, as well as other, auxiliary kinds of graphical objects (e.g. axis labels/titles) are rendered as visual output. 
+Further, every `plotscape`/`plotscaper` plot is also composed of several different, related components (see Figure \@ref(fig:plot-diagram)). First and foremost, the data needs to be aggregated into a hierarchy of [Summaries](summaries), which are in turn composed of special *reduced* variables or [Reduceds](aggregation-summaries). These reduced variables are not simple "flat" arrays of values, but contain metadata about the way they have been summarized ([Factors](factors) and [Reducers](reducers)), as well as pointers to the parent-level values, enabling hierarchy-aware transformations such as stacking or normalization (e.g. in spineplot). The summaries are translated into aesthetic encodings and used to train the plot [Scales](scales), which are composed of domain and codomain objects of the same type ([Expanse](expanses)). Further, the translated summaries are also mapped to geometric objects or geoms, which are used in rendering and collision-detection (used to identify selected cases during linked selection). User input and scene events are handled by an event listener object, which may update reactive plot parameters and propagate these changes to the plot's scales or even the underlying summaries. Finally, the data-dependent geoms, as well as other, auxiliary kinds of graphical objects (e.g. axis labels/titles) are rendered as visual output. 
 
 ```{r plot-diagram}
 #| echo: false
@@ -2418,12 +2418,111 @@ Further, every `plotscape`/`plotscaper` plot is also composed of several differe
 knitr::include_graphics("./figures/plot_diagram.png")
 ```
 
-As argued in Section \@ref(hierarchy), a core problem in the design of interactive data visualization systems supporting linked selection is the hierarchical dependency between the represented data, discussed . Specifically, if we want to render geometric objects with highlighted parts representing selection requires a tree-like structure (see e.g. Figure \@ref(fig:spineplot-tree)). In other words, our system needs components that can represent a hierarchy of connected data tables with the following shape: 
+### Summaries and hierarchical data
+
+As discussed in Section \@ref(hierarchy), a core problem in the design of interactive data visualization systems supporting linked selection is the presence of hierarchical dependencies within the represented data. Specifically, to draw objects composed of parts, and apply transformations such as stacking and normalization (see Section \@ref(transforming-summaries)), it is necessary to encode the hierarchical relationships in the data somehow. 
+
+Specifically, if we want to render geometric objects with highlighted parts representing selection requires a tree-like structure (see e.g. Figure \@ref(fig:spineplot-tree)). In other words, our system needs components that can represent a hierarchy of connected data tables with the following shape: 
 
 ```{r}
 #| echo: false
 knitr::include_graphics("./figures/hierarchical_data.png")
 ```
+
+To give a concrete example, to draw a spineplot, a simple table of summaries computed over a "flat" product of two variables like this is not enough:
+
+```{r}
+aggregate(mpg ~ cyl + am, FUN = sum, data = mtcars)
+```
+
+To compute the heights of the normalized bar segments, we require parent-level data. One way to add this information is via a left join:
+
+```{r}
+
+df_parent <- aggregate(mpg ~ cyl, FUN = sum, data = mtcars)
+df_child <- aggregate(mpg ~ cyl + am, FUN = sum, data = mtcars)
+
+df_child |>
+  merge(df_parent,by = "cyl", all.x = TRUE) |> # Join parent-level data
+  within({                                     # Compute transformations
+    stacked_and_normalized <- as.numeric(sapply(split(mpg.x, cyl), cumsum)) / mpg.y
+    normalized <- mpg.x / mpg.y
+    stacked <- as.numeric(sapply(split(mpg.x, cyl), cumsum)) # Ignores order
+  })
+```
+
+There are several important things to note here. First, as discussed in Section \@ref(limits-of-flat-products), the example above shows that some plots fundamentally involve multiple aggregated data sets, computed at different levels of granularity. Crucially, this means that the aggregation scheme remains consistent across these data sets, and only the partitioning (the right-hand side of the formula, i.e. `~ cyl` and `~ cyl + am`) changes. For example, normalizing spineplot segment values requires calculating the same summary (`sum`) at both parent and child levels. Further, while in the example above, we compute only a single summary statistic (`sum`), we may want to compute multiple, e.g. also `max`, `min`, and `median`. Thus, a better way to describe this operation may be to specify the summary statistics we want to compute and the partitions we want to compute them over as separate arguments to a single function, e.g. something like the following pseudocode:
+
+```{r}
+#| eval: false
+compute(
+  summaries = list(stat1 = sum(mpg), stat2 = max(hp)), 
+  partitions = c(~ cyl, ~ cyl + am),
+  data = mtcars
+  )
+```
+
+Second, it is also important to recognize that the relationship between the aggregated data sets is truly hierarchical, and attempts to flatten it may lead to complications. For instance, in the example above, we flatten the hierarchy via SQL-like left outer join [@codd1970]. However, I argue that this approach has several disadvantages. First, we have to represent the parent-child relationships by renaming columns (e.g. `mpg.x` and `mpg.y` in the example above). This is a flawed solution since the new column names could potentially conflict with existing variable names. Further, it needlessly duplicates information - the parent-level values have to be repeated for each corresponding level of the product (child) partition. Fundamentally, the parent and child level data sets contain all necessary information; thus, instead of "materializing" the relationships via joins, it may be more efficient to represent it implicitly via some kind of reference (e.g. pointers).
+
+Third, another disadvantage of the simple join model is that it discards information about the function that was used to compute the summaries. For instance, in the example above, we use the `sum` function to aggregate the `mpg` variable within the factor levels, followed by `cumsum` to stack the result, and these are treated as separate operations. However, in light of the ideas discussed throughout Section \@ref(aggregation), we may note that this is really just repeated application of the $(\mathbb{R}, 0, +)$ or the summation monoid (see Section \@ref(monoids)). In other words, the operation underlying `sum` and `cumsum` is the same, the only thing that changes is how we cumulate the result. Consequently, specifying two different functions is redundant. Instead, we could simply specify that we want to use `sum` as the summary function and later indicate that we want to stack the resulting values, and the system should be able to apply the operation correctly. This requires storing metadata about the summarizing function on the result; the aggregated variable needs to "remember" how it has been computed. As laid out in Section \@ref(stacking-not-graphical), I believe this approach is warranted and necessary, since stacking is *not* simply a graphical operation - there is no such thing as stacking *a* variable, if we do not know how it's been computed.
+
+This leads to the idea of reduced variables and reducers (which is just an alternative name for monoids). Specifically, after we aggregate a variable, we append the metadata about the reducer/monoid onto the result, like so:
+
+```{r}
+df <- aggregate(mpg ~ cyl + am, FUN = sum, data = mtcars)
+attr(df$mpg, "reducer") <- list(summaryfn = sum, initialfn = function() 0)
+```
+
+This metadata can be later used for transformations like stacking, at the point when we go on to map the aggregated variables to aesthetic encodings.
+
+```{r}
+#| eval: false
+summarized_dfs <- compute(
+  summaries = list(stat = sum(mpg)), 
+  partitions = c(~ cyl, ~ cyl + am),
+  data = mtcars
+  )
+
+# Computed over the ~ cyl + am product factor
+segment_df <- summarized_dfs[2] 
+
+encoded_segment_df <- encode(
+  list(
+    x = cyl,
+    y = stack(stat)
+  )
+)
+```
+
+
+Further, for operations like stacking, to ensure that they are applied in correct order, we also need to know the corresponding parent-level partitioning indices. To give a concrete example, here is a simplified implementation in R (see also Section \@ref(aggregation-summaries)):  
+
+```{r}
+df <- aggregate(mpg ~ cyl + am, FUN = sum, data = mtcars)
+attr(df$mpg, "reducer") <- list(summaryfn = sum, initialfn = function() 0)
+
+stack_reduced <- function(x, parent_indices) {
+  reducer <- attr(df$mpg, "reducer")
+  result <- vector(class(x))
+  stacked <- vector(class(x))
+  stacked[1:length(unique(parent_indices))] <- reducer$initialfn()
+  
+  for (i in seq_along(x)) {
+    pidx <- parent_indices[i]
+    stacked[pidx] <- reducer$summaryfn(stacked[pidx], x[i])
+    result[i] <- stacked[pidx]
+  }
+  
+  result
+}
+
+# Stacking within the levels of the cyl variable
+parent_indices <- match(df$cyl, unique(df$cyl)) 
+df$mpg_stacked <- stack_reduced(df$mpg, parent_indices)
+df
+```
+
+
 
 ## Low-level implementation (`plotscape`) {#low-level-implementation}
 

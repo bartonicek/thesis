@@ -68,7 +68,7 @@ tab:cases-by-year
 tab:days-by-year
 fig:example-cases-diagnosis-max
 fig:plotscaper-downloads
-fig:unnamed-chunk-123
+fig:unnamed-chunk-129
 def:unlabeled-div-3
 fig:function-subset
 def:unlabeled-div-4
@@ -143,7 +143,7 @@ disjointness-interaction
 plots-as-partitions
 bijection-on-cases-vs.-bijection-on-subsets
 products-of-partitions
-limits-of-flat-product-partitions
+limits-of-flat-products
 hierarchy
 plots-as-preorders
 the-graph-behind-the-graph
@@ -208,6 +208,7 @@ html-embedding
 overview-of-the-system-model
 scene-model
 plot-model
+summaries-and-hierarchical-data
 low-level-implementation
 programming-paradigm
 procedural-programming

@@ -262,9 +262,9 @@ It is worth taking a moment to analyze what is happening inside the `ggplot` cal
 >
 > [`grouping.R` file, `ggplot2` codebase](https://github.com/tidyverse/ggplot2/blob/f46805349d6ca8ca7a99f8966cfa0f29279c2f6c/R/grouping.R#L7) [@wickham2016]
 
-Thus, clearly, products of partitions are a fundamental building block of graphics. However, an important thing to discuss is that there are actually two different ways we view products [see @wilkinson2012, pp. 64]. First, there is the simple, commutative view where the order of variables in the product does not matter. In other words, these types of products form a simple, "flat" structure with no hierarchical dependencies. Second, we can also view products as nesting, which does establish a hierarchy. While flat partitions are sufficient to describe for many types of visualizations, some plot types require this hierarchical structure. This issue will be discussed in greater depth in the following section.
+Thus, clearly, products of partitions are a fundamental building block of graphics. However, an important thing to discuss is that there are actually two different ways we view products [see @wilkinson2012, pp. 64]. First, there is the simple, commutative perspective where the order of variables that form the product does not matter. In these "flat" products, the product of $x$ and $y$ is the same as the product of $y$ and $x$. Second, we can also view products as nesting, which does establish a hierarchy. While flat partitions are sufficient to describe for many types of visualizations, some plot types require this hierarchical structure. This issue will be discussed in greater depth in the following section.
 
-#### Limits of flat product partitions
+#### Limits of flat product partitions {#limits-of-flat-products}
 
 As mentioned in the previous section, a fair number of common plots can be represented via a single flat product of all of the partitioning variables. However, for other types of plots, this simple model is not sufficient. Specifically, certain types of plots exhibit hierarchical dependencies which cannot be represented under this flat model [see also @slingsby2009; @wu2022].
 
