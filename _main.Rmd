@@ -1693,7 +1693,7 @@ To normalize statistics, we can apply a binary function that takes as the second
 
 It is worth considering whether functions other than simple division could serve as "normalizing" functions. For example, weighted division (e.g. $\sqrt{S_{S_1}} / \sqrt{S_{B_1}}$) could be used to down-weigh large values. It may also possible to apply a binary function that is entirely different from division. To be fair, these alternative ways of normalizing data may result in plots which are difficult to interpret, and I have not been able to come up with a real, practical application. Nevertheless, this alternative view of normalization does present intriguing possibilities.
 
-##### Shifting
+##### Shifting {#shifting}
 
 One final point to mention is that the monoidal structure of the summary statistics presents the possibility of "shifting" values towards the neutral element. For instance, with a list of sums (e.g. $\{ 4, 2, 3, 2 \}$), we may use the neutral element (0) to "shift the values leftwards" ($\{ 0, 4, 2, 3 \}$). 
 
@@ -2139,12 +2139,12 @@ if (knitr::is_html_output()) {
 
 This section contains a detailed description of the two software packages developed as part of this doctoral project: ([plotscape](https://github.com/bartonicek/plotscape) and [plotscaper](https://github.com/bartonicek/plotscaper)):
 
-- `plotscape`: Written in TypeScript/JavaScript, provides "low-level" interactive visualization utilities
+- `plotscape`: Written in TypeScript/JavaScript, provides a "low-level" interactive visualization framework and utilities
 - `plotscaper`: Written in R, provides a "high-level" wrapper/API for R users 
 
-A couple of general notes. Firstly, the low-level platform (`plotscape`) was written with web technologies (JavaScript, HTML, and CSS). Web technologies were chosen because they provide a simple and portable way to do interactive apps in R, having become the de facto standard thanks to good integration provided by packages such as `htmlwidgets` [@htmlwidgets2021] and Shiny [@sievert2020]. Second, the functionality was split across two packages out of practical concerns; rather than relying on some JS-in-R wrapper library, `plotscape` was implemented as a standalone vanilla TypeScript/JavaScript library, to achieve optimal performance and fine-grained control. `plotscaper` was then developed to provide a user-friendly R wrapper around `plotscape`'s functionalities.  
+A couple of general notes. Firstly, the low-level platform (`plotscape`) was written with client-side web technology stack: JavaScript, HTML, and CSS. Web technologies provide a simple and portable way to do interactive apps in R and have become the de facto standard, thanks to good integration via packages such as `htmlwidgets` [@htmlwidgets2021] and Shiny [@sievert2020]. Second, functionality was split across two packages out of practical concerns. To achieve optimal performance and fine-grained control, `plotscape` was implemented from scratch in TypeScript/JavaScript rather than relying on some JS-in-R wrapper library. `plotscaper` was then developed to provide a user-friendly R wrapper around `plotscape`'s functionalities.  
 
-As of the time of writing, `plotscape` comprises of about 6,400 significant lines of code (SLOC; un-minified, primarily TypeScript but also some CSS, includes tests, etc...), and `plotscaper` contains about 500 SLOC of R code (both counted using [`cloc`](https://github.com/AlDanial/cloc)). The unpacked size of all (minified) files is about 200 kilobytes for `plotscape` and 460 kilobytes for `plotscaper`, which is fairly modest compared to other interactive data visualization alternatives for R^[For instance, the `plotly` package takes up about 7.3 megabytes, which amounts to over 15x difference.]. Both packages have fairly minimal dependencies.
+As of the time of writing, `plotscape` comprises of about 6,400 significant lines of code (SLOC; un-minified, primarily TypeScript but also some CSS, includes tests, etc...), and `plotscaper` contains about 500 SLOC of R code (both counted using [`cloc`](https://github.com/AlDanial/cloc)). The unpacked size of all (minified) files is about 200 kilobytes for `plotscape` and 460 kilobytes for `plotscaper`, which is fairly modest compared to other interactive data visualization alternatives for R^[For instance, the `plotly` package has about 7.3 megabytes, which amounts to over 15x difference.]. Both packages have fairly minimal dependencies, which should hopefully make them easy to maintain them going forward.
 
 Since the two packages address fairly well-separable concerns - high-level API design vs. low-level interactive visualization utilites - I decided to organize this section accordingly. Specifically, I first discuss general, high-level API concerns alongside `plotscaper` functionality. Then I delve into the low-level implementation details alongside `plotscape`. There are of course cross-cutting concerns and those will be addressed towards ends of the respective sections. However, first, let's briefly review the core requirement of the package(s).
 
@@ -2392,15 +2392,39 @@ As noted earlier, most `plotscaper` functions are polymorphic `S3` methods which
 
 As `htmlwidgets` widgets, `plotscaper` figures are essentially static webpages. As such, they can be statically embedded in HTML documents such as those produced by RMarkdown [@rmarkdown2024] or Quarto [@allaire2024]. More specifically, when a `plotscaper` figure is rendered, `htmlwidgets` [@htmlwidgets2021] is used to bundle the underlying HTML, CSS and JavaScript. The resulting widget can then be statically embedded in any valid HTML document, or saved as a standalone HTML file using the `htlwidgets::saveWidget` function. This is in fact how `plotscaper` figures are rendered in the present thesis. 
 
-As mentioned above, since client-server communication requires a running server, statically rendered figures cannot be interacted with through code, in the way described in Section \@ref(client-server). However, within-figure interactive features such as linked selection and querying are entirely client-side, and as such work perfectly fine in static environments. This makes `plotscaper` a very useful and convenient tool to use in interactive reports. 
+As mentioned above, since client-server communication requires a running server, statically rendered figures cannot be interacted with through code, in the way described in Section \@ref(client-server). However, within-figure interactive features such as linked selection and querying happen entirely client-side, and as such work seamlessly in static environments. This makes `plotscaper` a convenient tool for use in interactive reports, such as those created by RMarkdown [@rmarkdown2024] or Quarto [@allaire2024].
 
 ## Overview of the system model
 
-Section \@ref(problems) outlined several key concerns that arise when designing generic interactive data visualization systems. Overcoming these issues necessitated specific architectural choices, which will be detailed throughout the rest chapter. The present section provides a simplified, high-level overview, briefly introducing the system components and their relations without going into too much depth. More specific, low-level details will be discussed later, in Section \@ref(low-level-implementation) (however, links to the corresponding subsections will be provided where appropriate).
+In Section \@ref(problems), I outlined key concerns that arise when designing interactive data visualization systems, and laid out a rough sketch of the interactive data visualization pipeline and the components it must contain. Here, I will give a broad overview of the implementation of this pipeline in `plotscape`. I will also begin relating this pipeline to concrete components of `plotscape` figures and plots, which will be discussed in more depth later, in Section \@ref(components). Finally, as it is one of the core topics of the present thesis, I will end with a brief discussion on the problem of hierarchical data summaries underlying plots, in which I will re-iterate some of the points from Section \@ref(problems), discuss the constraints for the API for computing, transforming, and encoding these summaries, and link these to their implementation in `plotscape`. 
+
+### The interactive data visualization pipeline {#model-pipeline}
+
+Figure \@ref(fig:model-diagram) summarizes the interactive data visualization pipeline as implemented in `plotscape`/`plotscaper`:
+
+```{r model-diagram}
+#| echo: false
+#| fig-cap: "A diagram of the interactive data visualization pipeline."
+knitr::include_graphics("./figures/model_diagram.png")
+```
+
+This pipeline describes the data flow that takes places in a single interactive plot. The key thing to note that the core of the pipeline is the following (linear) chain of transformations: 
+
+$$\text{data} \to \text{partitions} \to \text{summaries} \to \text{encodings}$$
+
+Specifically, as discussed throughout Section \@ref(problems), data is first divided into a hierarchy of partitions, which are then aggregated and turned into sets of summaries. These summaries are then transformed and mapped to aesthetic encodings, which are finally rendered as geometric objects (and also used to train the plots' scales). 
+
+Interactivity can enter the pipeline in several places. The deepest level of interaction involves the Marker, a shared data structure that manages linked selection across multiple plots. When a user engages in linked selection, the Marker updates, triggering a recalculation of data partitions, summaries, and aesthetic encodings. This essentially means the entire pipeline needs to be recomputed. Similarly, altering partitioning parameters like histogram binwidth also leads to the same "deep" cascade of updates. A somewhat less deep interaction is representation switching. This merely updates the mapping between summaries and aesthetic encodings without needing to update data partitions or the summaries themselves. Finally, the most superficial are direct scale updates. These do not need to touch the underlying data at all.
+
+This is a simplified model, however, it does highlight some interesting features and there are a couple of important things to note. First, the model allow us to reason about the computational complexity of reactive updates. Updates tend to be the most computationally expensive in the deep sections of the pipeline and get progressively cheaper as we move towards the surface. For example, updates to the data, Marker, or the partitions require large parts of the pipeline to be recomputed, whereas direct updates to scales typically have a fairly isolated impact (only on the rendered output). Further, the model also allows us to reason about complexity of features that are not yet implemented. For instance, while, so far, I have not found a use-case for direct interactive updates of summaries (note the absence of an arrow between User Input and Summaries in Figure \@ref(fig:model-diagram)), we could imagine adding reactive parameters to this part of the pipeline as well, such that we may, for example, summarize the data by computing the sum of top $n$ values, with $n$ being a reactive parameter. Then, the complexity of the resulting updates would lie somewhere between modifying partitions and representation switching.
+
+Second, as discussed throughout Section \@ref(problems), although the different stages of the pipeline are fairly self-contained, they are not fully independent. At times, the more superficial stages may require information from the deeper levels. For instance, stacking takes place during the Aesthetic Encoding step of the pipeline, however, it is not merely a graphical operation since it requires information about how the summary statistics have been aggregated (see also Section \@ref(aggregation)). Likewise, at times, we may want to use the neutral element used during the summarization as the lower limit of the y-axis scale (see Section \@ref(shifting)). Finally, during querying, while we may superficially work with geometric objects and their underlying aesthetic encodings (i.e. just the visual output), we really want to display the untransformed summary statistics (Summaries). Therefore, throughout the pipeline, it is necessary to retain appropriate metadata and backlinks that can be used by the later stages.
+
+Now I will briefly outline the core software components of `plotscape`, in more concrete terms. First, I will describe the components the fundamental unit of the system, which is a figure made up of multiple plots: the [Scene]. Then, I will discuss the components which make up individual plots. This overview will be fairly conceptual and the individual components will be discussed in more detail in Section \@ref(components).
 
 ### Scene model
 
-As discussed in Section \@ref(high-level-api), every `plotscape`/`plotscaper` figure is composed of one or more interactive plots. Thus, the central component is a [Scene] which represents the entire figure which contains the plots (see Figure \@ref(fig:scene-diagram)). To support linked selection (which affects all plots simultaneously), the scene needs to contain a specialized [Marker](marker) object. For communication with an external server (R client), a client (WebSockets) object is also included. Lastly, the Scene contains^[This could also be implemented by class inheritance, by making the Scene object extend an Observer class.] an event listener object to coordinate user input and interactions between all components. The relations between the various components are described by the following diagram:
+As discussed in Section \@ref(high-level-api), every `plotscape`/`plotscaper` figure is composed of one or more interactive plots. Thus, the central component is the so-called [Scene] which represents the entire figure containing the plots (see Figure \@ref(fig:scene-diagram)). To support linked selection (which affects all plots simultaneously), the scene contains a specialized [Marker](marker) object. For communication with an external server (R client), a client (WebSockets) object is also included. Lastly, the Scene contains^[This could also be implemented by class inheritance, by making the Scene object extend an Observer class.] an event listener object to coordinate user input and interactions between all components. The relations between the various components are described by the following diagram:
 
 ```{r scene-diagram}
 #| echo: false
@@ -2410,7 +2434,7 @@ knitr::include_graphics("./figures/scene_diagram.png")
 
 ### Plot model
 
-Further, every `plotscape`/`plotscaper` plot is also composed of several different, related components (see Figure \@ref(fig:plot-diagram)). First and foremost, the data needs to be aggregated into a hierarchy of [Summaries](summaries), which are in turn composed of special *reduced* variables or [Reduceds](aggregation-summaries). These reduced variables are not simple "flat" arrays of values, but contain metadata about the way they have been summarized ([Factors](factors) and [Reducers](reducers)), as well as pointers to the parent-level values, enabling hierarchy-aware transformations such as stacking or normalization (e.g. in spineplot). The summaries are translated into aesthetic encodings and used to train the plot [Scales](scales), which are composed of domain and codomain objects of the same type ([Expanse](expanses)). Further, the translated summaries are also mapped to geometric objects or geoms, which are used in rendering and collision-detection (used to identify selected cases during linked selection). User input and scene events are handled by an event listener object, which may update reactive plot parameters and propagate these changes to the plot's scales or even the underlying summaries. Finally, the data-dependent geoms, as well as other, auxiliary kinds of graphical objects (e.g. axis labels/titles) are rendered as visual output. 
+Further, every `plotscape`/`plotscaper` plot is also composed of several different, related components (see Figure \@ref(fig:plot-diagram)). First, related to Section \@ref(model-pipeline), there are the components directly related to the data visualization pipeline. The data is aggregated into a hierarchy of [Summaries](summaries), which are in turn composed of special *reduced* variables or [Reduceds](aggregation-summaries). These reduced variables are not simple "flat" arrays of values, but contain aggregation metadata ([Factors](factors) and [Reducers](reducers)), as well as pointers to the parent-level values. This enables hierarchy-aware transformations such as stacking or normalization (e.g. in spineplot). The aggregated summaries are translated into aesthetic encodings and used to train the plot [Scales](scales), which are composed of domain and codomain objects of the same type ([Expanse](expanses)). Further, the translated summaries are also mapped to geometric objects or geoms, which are used in rendering and collision-detection (used to identify selected cases during linked selection). User input and scene events are handled by an event listener object, which may update reactive plot parameters and propagate these changes to the plot's scales or even the underlying summaries. Finally, the data-dependent geoms, as well as other, auxiliary kinds of graphical objects (e.g. axis labels/titles) are rendered as visual output. 
 
 ```{r plot-diagram}
 #| echo: false
@@ -2418,111 +2442,117 @@ Further, every `plotscape`/`plotscaper` plot is also composed of several differe
 knitr::include_graphics("./figures/plot_diagram.png")
 ```
 
-### Summaries and hierarchical data
+### Hierarchical data summaries: computation, transformation, and encoding
 
-As discussed in Section \@ref(hierarchy), a core problem in the design of interactive data visualization systems supporting linked selection is the presence of hierarchical dependencies within the represented data. Specifically, to draw objects composed of parts, and apply transformations such as stacking and normalization (see Section \@ref(transforming-summaries)), it is necessary to encode the hierarchical relationships in the data somehow. 
+As discussed in Section \@ref(hierarchy), a core problem in the design of interactive data visualization systems supporting linked selection is the presence of hierarchical dependencies within the represented data. Specifically, to draw objects composed of parts, and apply transformations such as stacking and normalization (see Section \@ref(transforming-summaries)), it is necessary to encode the hierarchical relationships in the data. However, coming up with a convenient API for describing these relationships is not simple, and so I would like to spend a bit more time discussing it here. 
 
-Specifically, if we want to render geometric objects with highlighted parts representing selection requires a tree-like structure (see e.g. Figure \@ref(fig:spineplot-tree)). In other words, our system needs components that can represent a hierarchy of connected data tables with the following shape: 
+As discussed in Section \@ref(hierarchy), rendering certain kinds of plots composed of geometric objects with highlighted parts representing selection requires a tree-like structure (see e.g. Figure \@ref(fig:spineplot-tree)). In other words, our system needs to be able to represent a hierarchy of connected data tables of the following shape: 
 
 ```{r}
 #| echo: false
+#| fig-cap: "A diagram of the data partition hierarchy."
 knitr::include_graphics("./figures/hierarchical_data.png")
 ```
 
-To give a concrete example, to draw a spineplot, a simple table of summaries computed over a "flat" product of two variables like this is not enough:
+To give a more concrete example, consider the summary statistics we need to compute to draw a spineplot. We may initially consider computing a simple table of summaries computed over the product of two partitioning variables:
 
 ```{r}
 aggregate(mpg ~ cyl + am, FUN = sum, data = mtcars)
 ```
 
-To compute the heights of the normalized bar segments, we require parent-level data. One way to add this information is via a left join:
+However, such a simple, "flat" table of summaries is not enough. To compute the heights of the normalized bar segments, we also require parent-level data. One way to add this information is via a join operation [specifically, a left outer join, see @codd1970]:
 
+:::{.example name="Naive aggregation for spineplot" #spineplot-code}
 ```{r}
+parent_data <- aggregate(mpg ~ cyl, FUN = sum, data = mtcars)
+child_data <- aggregate(mpg ~ cyl + am, FUN = sum, data = mtcars)
 
-df_parent <- aggregate(mpg ~ cyl, FUN = sum, data = mtcars)
-df_child <- aggregate(mpg ~ cyl + am, FUN = sum, data = mtcars)
-
-df_child |>
-  merge(df_parent,by = "cyl", all.x = TRUE) |> # Join parent-level data
-  within({                                     # Compute transformations
+child_data |>
+  merge(parent_data, by = "cyl", all.x = TRUE) |> # Join parent-level data
+  within({                                        # Compute transformations
     stacked_and_normalized <- as.numeric(sapply(split(mpg.x, cyl), cumsum)) / mpg.y
     normalized <- mpg.x / mpg.y
     stacked <- as.numeric(sapply(split(mpg.x, cyl), cumsum)) # Ignores order
   })
 ```
+:::
 
-There are several important things to note here. First, as discussed in Section \@ref(limits-of-flat-products), the example above shows that some plots fundamentally involve multiple aggregated data sets, computed at different levels of granularity. Crucially, this means that the aggregation scheme remains consistent across these data sets, and only the partitioning (the right-hand side of the formula, i.e. `~ cyl` and `~ cyl + am`) changes. For example, normalizing spineplot segment values requires calculating the same summary (`sum`) at both parent and child levels. Further, while in the example above, we compute only a single summary statistic (`sum`), we may want to compute multiple, e.g. also `max`, `min`, and `median`. Thus, a better way to describe this operation may be to specify the summary statistics we want to compute and the partitions we want to compute them over as separate arguments to a single function, e.g. something like the following pseudocode:
+#### Problems with naive joins
+
+The code in Example \@ref(exm:spineplot-code) may seem like a reasonable way to compute the summary data for a spineplot, however, it has a couple of important issues. First, the example models the hierarchical relationship inherent to spineplots (as well as other types of plots, see Section \@ref(limits-of-flat-products)) only implicitly. Specifically, there is nothing in the first two lines of Example \@ref(exm:spineplot-code) to indicate that the two aggregated data sets are related. The user may know that `parent_data` and `child_data` are hierarchically related, however, in the context of the program, these are two independent variables. This approach is suboptimal and error-prone: a better solution may be to encode the hierarchical relationship explicitly, into the data structure itself.
+
+Second, the naive join method needlessly duplicates information. We want to compute a consistent set of summaries over different levels of granularity, and, as such, most of the code in the first two lines of Example \@ref(exm:spineplot-code) is redundant. Specifically, the only thing that changes are the partitioning variables on the right hand side of the formula (i.e. `~ cyl` and `~ cyl + am`). Further, since we create the hierarchy of partitions by taking repeated products of the partitioning variables, specifying each level of partitioning explicitly is redundant: we can simply specify the partitioning variables in order and let the system take the products implicitly (i.e. instead of `~ cyl` and `~ cyl + am`, we can simply specify `cyl` and `am`). Finally, when joining the two aggregated data sets (via `merge`), we have to create new columns and rename existing ones (e.g. see the columns `mpg.x` and `mpg.y` in the output of Example \@ref(exm:spineplot-code)). This solution can lead to name clashes and also creates unnecessary memory allocations, since the parent-level data has to be repeated for each level of the child partition.
+
+Third, the naive join method does not preserve the appropriate metadata. Specifically, the output of the `aggregate` function is a simple dataframe, with the aggregated summaries being just a simple `numeric` column. However, as I argued throughout Section \@ref(problems) (in particular, Section \@ref(stacking-not-graphical)), to correctly apply operations like stacking, we need to know *how* the summaries have been computed. Therefore, it is essential to preserve metadata about the summarizing function, as well as the partition over which the result has been computed. 
+
+Fourth and final, at times, it may be useful to compute multiple different summary statistics across several different variables. This is not possible with the `aggregate` function, which takes a single `FUN` which specifies the summary function (`sum`) applied to the left-hand side of the formula (`mpg`). However, to allow for a diverse range of graphics, it may be useful to be able to compute multiple kinds of summaries across the same partitioning scheme, similar to how we can specify multiple aggregation functions within a single SQL `SELECT` statement [@codd1970]. This could be useful, for example, if we want to map one summary to a barplot bars' heights and a different summary to the bars' widths.
+
+#### Solution: Computing summaries in one go
+
+Altogether, I argue that a more effective way to describe the hierarchical summarization process underlying many types of plots is a single operation (function call). This operation takes as its inputs a set of summary statistics to compute and a list of partitions to compute them over, and returns a list of aggregated data sets. To give a simplified example, note the following pseudo-code:
 
 ```{r}
 #| eval: false
 compute(
-  summaries = list(stat1 = sum(mpg), stat2 = max(hp)), 
-  partitions = c(~ cyl, ~ cyl + am),
-  data = mtcars
+  data = mtcars,
+  partition_by = c(cyl, am),
+  summaries = list(stat1 = sum(mpg), stat2 = max(wt))
   )
 ```
 
-Second, it is also important to recognize that the relationship between the aggregated data sets is truly hierarchical, and attempts to flatten it may lead to complications. For instance, in the example above, we flatten the hierarchy via SQL-like left outer join [@codd1970]. However, I argue that this approach has several disadvantages. First, we have to represent the parent-child relationships by renaming columns (e.g. `mpg.x` and `mpg.y` in the example above). This is a flawed solution since the new column names could potentially conflict with existing variable names. Further, it needlessly duplicates information - the parent-level values have to be repeated for each corresponding level of the product (child) partition. Fundamentally, the parent and child level data sets contain all necessary information; thus, instead of "materializing" the relationships via joins, it may be more efficient to represent it implicitly via some kind of reference (e.g. pointers).
-
-Third, another disadvantage of the simple join model is that it discards information about the function that was used to compute the summaries. For instance, in the example above, we use the `sum` function to aggregate the `mpg` variable within the factor levels, followed by `cumsum` to stack the result, and these are treated as separate operations. However, in light of the ideas discussed throughout Section \@ref(aggregation), we may note that this is really just repeated application of the $(\mathbb{R}, 0, +)$ or the summation monoid (see Section \@ref(monoids)). In other words, the operation underlying `sum` and `cumsum` is the same, the only thing that changes is how we cumulate the result. Consequently, specifying two different functions is redundant. Instead, we could simply specify that we want to use `sum` as the summary function and later indicate that we want to stack the resulting values, and the system should be able to apply the operation correctly. This requires storing metadata about the summarizing function on the result; the aggregated variable needs to "remember" how it has been computed. As laid out in Section \@ref(stacking-not-graphical), I believe this approach is warranted and necessary, since stacking is *not* simply a graphical operation - there is no such thing as stacking *a* variable, if we do not know how it's been computed.
-
-This leads to the idea of reduced variables and reducers (which is just an alternative name for monoids). Specifically, after we aggregate a variable, we append the metadata about the reducer/monoid onto the result, like so:
-
-```{r}
-df <- aggregate(mpg ~ cyl + am, FUN = sum, data = mtcars)
-attr(df$mpg, "reducer") <- list(summaryfn = sum, initialfn = function() 0)
-```
-
-This metadata can be later used for transformations like stacking, at the point when we go on to map the aggregated variables to aesthetic encodings.
+This approach has several key benefits. First, it automatically and concisely encodes the hierarchical structure. By specifying a list of partitioning variables, we can let the system take the partition products and link the different levels together. Second, by specifying a list/dictionary of summaries, we can append the function that has been used to compute the summary function as metadata to the result. For instance, within the body of the `compute` function, we could append the appropriate metadata as follows:   
 
 ```{r}
 #| eval: false
-summarized_dfs <- compute(
-  summaries = list(stat = sum(mpg)), 
-  partitions = c(~ cyl, ~ cyl + am),
-  data = mtcars
+attr(result$stat1, "reducer") <- list(summaryfn = sum, initialfn = function() 0)
+attr(result$stat2, "reducer") <- list(summaryfn = max, initialfn = function() -Inf)
+```
+
+This gets to the idea of reduced variables and reducers, which will be discussed in more depth in Section \@ref(aggregation-summaries).
+
+#### Encoding summaries
+
+After we have computed a hierarchy of summaries (via some hypothetical function like `compute`), we are left with a list of data sets which represent summaries encoded at different levels of aggregation or granularity. We can then easily map these data sets to aesthetic encodings and apply transformations like stacking (since the aggregated variables contain metadata about how they have been computed). Further, an important thing to note is that the data sets computed at different levels of partitioning can be encoded in different ways and used for different purposes. For instance, for many types of aggregate plots, the most granular data set can be used to encode object segments, which will be rendered via the graphical device, whereas a less granular data set may be used to encode object boundaries, which can be used to train scales and for collision detection during linked selection. 
+
+For instance, the following code describes how we may compute and encode data for a barplot:
+
+```{r}
+#| eval: false
+summarized_data <- compute(
+  data = mtcars,
+  partition_by = c(cyl, am),
+  summaries = list(stat = sum(mpg))
   )
 
-# Computed over the ~ cyl + am product factor
-segment_df <- summarized_dfs[2] 
+# Computed over cyl
+barplot_object_data <- encode(
+  summarized_data[1],
+  encodings = list(x = cyl, y = 0, width = 1, height = stat)
+)
 
-encoded_segment_df <- encode(
-  list(
-    x = cyl,
-    y = stack(stat)
-  )
+# Computed over product of cyl and am
+barplot_segment_data <- encode(
+  summarized_data[2],
+  encodings = list(x = cyl, y = 0, width = 1, height = stack(stat))
 )
 ```
 
+The `encoded_object_data` data set represents the whole barplot bars and may be used for training scales and collision detection, while the `encoded_segment_data` data set represents the more granular bar segments, which are actually rendered. Notice how the `stack` function is only applied to the segment data, since this represents the finest level of partitioning. 
 
-Further, for operations like stacking, to ensure that they are applied in correct order, we also need to know the corresponding parent-level partitioning indices. To give a concrete example, here is a simplified implementation in R (see also Section \@ref(aggregation-summaries)):  
+Separating the summary and encoding step has the additional benefit that representation switching becomes very simple. For instance, to turn the barplot into a spineplot, we could use the same summary data and simply swap the encoding scheme:
 
 ```{r}
-df <- aggregate(mpg ~ cyl + am, FUN = sum, data = mtcars)
-attr(df$mpg, "reducer") <- list(summaryfn = sum, initialfn = function() 0)
+#| eval: false
+spineplot_object_data <- encode(
+  summarized_data[1],
+  encodings = list(x = cyl, y = 0, width = stat, height = 1)
+)
 
-stack_reduced <- function(x, parent_indices) {
-  reducer <- attr(df$mpg, "reducer")
-  result <- vector(class(x))
-  stacked <- vector(class(x))
-  stacked[1:length(unique(parent_indices))] <- reducer$initialfn()
-  
-  for (i in seq_along(x)) {
-    pidx <- parent_indices[i]
-    stacked[pidx] <- reducer$summaryfn(stacked[pidx], x[i])
-    result[i] <- stacked[pidx]
-  }
-  
-  result
-}
-
-# Stacking within the levels of the cyl variable
-parent_indices <- match(df$cyl, unique(df$cyl)) 
-df$mpg_stacked <- stack_reduced(df$mpg, parent_indices)
-df
+spineplot_segment_data <- encode(
+  summarized_data[2],
+  encodings = list(x = cyl, y = 0, width = stat, height = normalize(stack(stat)))
+)
 ```
-
-
 
 ## Low-level implementation (`plotscape`) {#low-level-implementation}
 

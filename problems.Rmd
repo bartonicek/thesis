@@ -899,7 +899,7 @@ To normalize statistics, we can apply a binary function that takes as the second
 
 It is worth considering whether functions other than simple division could serve as "normalizing" functions. For example, weighted division (e.g. $\sqrt{S_{S_1}} / \sqrt{S_{B_1}}$) could be used to down-weigh large values. It may also possible to apply a binary function that is entirely different from division. To be fair, these alternative ways of normalizing data may result in plots which are difficult to interpret, and I have not been able to come up with a real, practical application. Nevertheless, this alternative view of normalization does present intriguing possibilities.
 
-##### Shifting
+##### Shifting {#shifting}
 
 One final point to mention is that the monoidal structure of the summary statistics presents the possibility of "shifting" values towards the neutral element. For instance, with a list of sums (e.g. $\{ 4, 2, 3, 2 \}$), we may use the neutral element (0) to "shift the values leftwards" ($\{ 0, 4, 2, 3 \}$). 
 

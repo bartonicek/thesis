@@ -52,8 +52,11 @@ def:scale
 fig:plotscaper-design
 fig:plotscaper-example1
 fig:plotscaper-example2
+fig:model-diagram
 fig:scene-diagram
 fig:plot-diagram
+fig:unnamed-chunk-47
+exm:spineplot-code
 eq:product-indices
 tab:product-indices
 fig:transient-persistent-product
@@ -206,9 +209,13 @@ scene-and-schema
 client-server
 html-embedding
 overview-of-the-system-model
+model-pipeline
 scene-model
 plot-model
-summaries-and-hierarchical-data
+hierarchical-data-summaries-computation-transformation-and-encoding
+problems-with-naive-joins
+solution-computing-summaries-in-one-go
+encoding-summaries
 low-level-implementation
 programming-paradigm
 procedural-programming
