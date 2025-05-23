@@ -592,7 +592,7 @@ Figure 11.5: An example of a simple preorder: family tree ordered by familial re
 <li>Unitality: <span class="math inline">\(g \otimes e = e \otimes g = g\)</span>, for all <span class="math inline">\(g \in G\)</span></li>
 <li>Associativity: <span class="math inline">\(g_1 \otimes (g_2 \otimes g_3) = (g_1 \otimes g_2) \otimes g_3 = g_1 \otimes g_2 \otimes g_3\)</span>, for all <span class="math inline">\(g_1, g_2, g_3 \in G\)</span></li>
 </ol>
-<p>Additionally, the monoidal product <span class="math inline">\(\otimes\)</span> has an inverse<a href="#fn48" class="footnote-ref" id="fnref48"><sup>48</sup></a> <span class="math inline">\(\otimes^{-1}\)</span>, such that the following property holds:</p>
+<p>Additionally, the monoidal product <span class="math inline">\(\otimes\)</span> has an inverse<a href="#fn49" class="footnote-ref" id="fnref49"><sup>49</sup></a> <span class="math inline">\(\otimes^{-1}\)</span>, such that the following property holds:</p>
 <ol start="3" style="list-style-type: decimal">
 <li>Invertibility: <span class="math inline">\(g \otimes^{-1} g = g^{-1} \otimes g = e\)</span>, for all <span class="math inline">\(g \in G\)</span></li>
 </ol>
@@ -600,7 +600,7 @@ Figure 11.5: An example of a simple preorder: family tree ordered by familial re
 <p>Invertibility implies that, when we take a product of any two elements, we can always recover either element by “subtracting away” the other via the inverse product. This means that the group transformations are, in a sense, “lossless” - after we apply a transformation, we can always revert back to the original state by applying the inverse.</p>
 <div id="simple-examples-of-groups" class="section level5 hasAnchor" number="11.0.0.7.1">
 <h5><span class="header-section-number">11.0.0.7.1</span> Simple examples of groups<a href="appendix-mathematical-theory.html#simple-examples-of-groups" class="anchor-section" aria-label="Anchor link to header"></a></h5>
-<p>To give a concrete example, summation of integers <span class="math inline">\((\mathbb{Z}, 0, +)\)</span> is a group<a href="#fn49" class="footnote-ref" id="fnref49"><sup>49</sup></a>, since, when we sum two integers, we can always recover either summand by subtracting away the other from the result:</p>
+<p>To give a concrete example, summation of integers <span class="math inline">\((\mathbb{Z}, 0, +)\)</span> is a group<a href="#fn50" class="footnote-ref" id="fnref50"><sup>50</sup></a>, since, when we sum two integers, we can always recover either summand by subtracting away the other from the result:</p>
 <p><span class="math display">\[x + y = z \implies z - x = y \wedge z - y = x\]</span></p>
 <p>Other popular examples of groups include the groups of symmetries of geometric objects, such as a rectangle and triangle <span class="citation">(these are also called the dihedral groups of order 2 and 6 respectively, see <a href="#ref-pinter2010">Pinter 2010</a>)</span>. Other important class of groups are permutation groups, which are groups where the elements <span class="math inline">\(g \in G\)</span> are permutations of some underlying set <span class="math inline">\(X\)</span> and the group product is given by composition (in fact, as we will see below, every group is isomorphic to some permutation group).</p>
 <p>To give some examples of structures which are not groups, we could use the same counterexamples as we did with monoids, of operations which are not associative and/or do not come equipped with a neutral element. However, far more interesting are monoids which without an inverse element. One such counterexample is the maximum operator <span class="math inline">\((\mathbb{R}, -\infty, \max)\)</span>.</p>
@@ -612,7 +612,7 @@ Figure 11.5: An example of a simple preorder: family tree ordered by familial re
 <div class="definition">
 <p><span id="def:unlabeled-div-18" class="definition"><strong>Definition 11.15  (Group homomorphism) </strong></span>Group homomorphism is a <a href="appendix-mathematical-theory.html#monoid-homomorphism">monoid homomorphism</a> where the product <span class="math inline">\(\otimes\)</span> has one additional property:</p>
 <ol start="3" style="list-style-type: decimal">
-<li>Preserves inverses<a href="#fn50" class="footnote-ref" id="fnref50"><sup>50</sup></a>: <span class="math inline">\(f(e_G \otimes^{-1} g) = e_H \otimes^{-1}f(g)\)</span></li>
+<li>Preserves inverses<a href="#fn51" class="footnote-ref" id="fnref51"><sup>51</sup></a>: <span class="math inline">\(f(e_G \otimes^{-1} g) = e_H \otimes^{-1}f(g)\)</span></li>
 </ol>
 </div>
 <p>Again, like with monoids, if a group homomorphism <span class="math inline">\(f: G \to H\)</span> is a bijection, then we speak of a group isomorphism.</p>
@@ -732,10 +732,10 @@ Stepanov, Alexander A, and Daniel E Rose. 2014. <em>From Mathematics to Generic 
 </div>
 <div class="footnotes">
 <hr />
-<ol start="48">
-<li id="fn48"><p>Note, that in group theory, it is common to omit explicit references to the operator and write the group products without it, such that, e.g. <span class="math inline">\(g \otimes h\)</span> is written as <span class="math inline">\(gh\)</span>. In that case, instead of the inverse <em>operator</em>, we speak of inverse <em>elements</em>, such that, for each <span class="math inline">\(g \in G\)</span> there is an <span class="math inline">\(g^{-1}\)</span> such that <span class="math inline">\(g^{-1}g = gg^{-1} = e\)</span>. However, this really is a distinction without difference since we can easily define the inverse element using the inverse operator and the neutral element: <span class="math inline">\(g^{-1} = (e \otimes^{-1}g)\)</span>. Thus, for the sake of keeping with the notation in the previous sections, I will use the inverse operator explicitly.<a href="appendix-mathematical-theory.html#fnref48" class="footnote-back">↩︎</a></p></li>
-<li id="fn49"><p>Again, in group theory, the unit and the product are often referred to only implicitly, so we would instead just speak of the “group of integers <span class="math inline">\(\mathbb{Z}\)</span>”<a href="appendix-mathematical-theory.html#fnref49" class="footnote-back">↩︎</a></p></li>
-<li id="fn50"><p>Alternatively, we can denote the same property without reference to the unit and the group product as: <span class="math inline">\(f(g^{-1}) = f(g)^{-1}\)</span>. Arguably, here it leads to a nicer definition, however, again, I decided to use the explicit formulation for sake of consistency.<a href="appendix-mathematical-theory.html#fnref50" class="footnote-back">↩︎</a></p></li>
+<ol start="49">
+<li id="fn49"><p>Note, that in group theory, it is common to omit explicit references to the operator and write the group products without it, such that, e.g. <span class="math inline">\(g \otimes h\)</span> is written as <span class="math inline">\(gh\)</span>. In that case, instead of the inverse <em>operator</em>, we speak of inverse <em>elements</em>, such that, for each <span class="math inline">\(g \in G\)</span> there is an <span class="math inline">\(g^{-1}\)</span> such that <span class="math inline">\(g^{-1}g = gg^{-1} = e\)</span>. However, this really is a distinction without difference since we can easily define the inverse element using the inverse operator and the neutral element: <span class="math inline">\(g^{-1} = (e \otimes^{-1}g)\)</span>. Thus, for the sake of keeping with the notation in the previous sections, I will use the inverse operator explicitly.<a href="appendix-mathematical-theory.html#fnref49" class="footnote-back">↩︎</a></p></li>
+<li id="fn50"><p>Again, in group theory, the unit and the product are often referred to only implicitly, so we would instead just speak of the “group of integers <span class="math inline">\(\mathbb{Z}\)</span>”<a href="appendix-mathematical-theory.html#fnref50" class="footnote-back">↩︎</a></p></li>
+<li id="fn51"><p>Alternatively, we can denote the same property without reference to the unit and the group product as: <span class="math inline">\(f(g^{-1}) = f(g)^{-1}\)</span>. Arguably, here it leads to a nicer definition, however, again, I decided to use the explicit formulation for sake of consistency.<a href="appendix-mathematical-theory.html#fnref51" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>

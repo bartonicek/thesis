@@ -100,7 +100,7 @@ prp:unlabeled-div-23
 def:unlabeled-div-24
 abstract
 introduction
-thesis-overview
+structure-of-the-thesis
 background
 brief-history
 static-visualization
@@ -324,4 +324,3 @@ isomorphism
 algebraic-as-categories
 functors
 references
-preorders

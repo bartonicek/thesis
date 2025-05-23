@@ -461,13 +461,13 @@ Figure 6.2: An example of a programmatically-created scatterplot matrix (SPLOM).
 ##   ..$ data:List of 3
 ##   .. ..$ type     : &#39;scalar&#39; chr &quot;scatter&quot;
 ##   .. ..$ variables: chr [1:2] &quot;wt&quot; &quot;mpg&quot;
-##   .. ..$ id       : &#39;scalar&#39; chr &quot;14cca888-26fe-4378-9c2c-a6b93e776942&quot;
+##   .. ..$ id       : &#39;scalar&#39; chr &quot;bc2e3140-a55f-4b46-82dd-a0dde3b3d92d&quot;
 ##  $ :List of 2
 ##   ..$ type: chr &quot;add-plot&quot;
 ##   ..$ data:List of 3
 ##   .. ..$ type     : &#39;scalar&#39; chr &quot;bar&quot;
 ##   .. ..$ variables: chr &quot;cyl&quot;
-##   .. ..$ id       : &#39;scalar&#39; chr &quot;8034b4c4-f89e-4b15-ba93-3ea82e3080bd&quot;</code></pre>
+##   .. ..$ id       : &#39;scalar&#39; chr &quot;cf9c4f71-b86c-4d0c-8607-1bc95d20acfc&quot;</code></pre>
 <p>As you can see, the object created with <code>create_schema</code> is essentially just a <code>list</code> of messages. Modifying the schema by calling functions such as <code>add_scatterplot</code> or <code>set_scale</code> simply appends a new message to the list, similar to how objects of class <code>ggplot</code> are modified by the corresponding functions and the <code>+</code> operator in <code>ggplot2</code> <span class="citation">(<a href="#ref-wickham2016">Wickham 2016</a>)</span>. This design makes it easy to transport schemas (e.g. as JSON) and modify them programmatically. Finally, rendering the schema into a figure requires an explicit call to <code>render</code>. Note that this approach is different from the popular R convention of rendering implicitly via a <code>print</code> method; however, there is a good reason for this design choice which will be discussed later.</p>
 <p>The call to <code>render</code> turns the schema gets turned into a live, interactive figure by constructing an <code>htmlwidgets</code> widget <span class="citation">(<a href="#ref-htmlwidgets2021">Vaidyanathan et al. 2021</a>)</span>. This bundles up the underlying data and <code>plotscape</code> code (JavaScript, HTML, CSS) into a standalone HTLM document, which may be served live, such as in RStudio viewer, or statically embedded in another HTML document, such as one produced with RMarkdown. All of the schema messages also get forwarded to the widget and applied sequentially, creating the figure.</p>
 <p>Note that, under this model, the schema merely records state-generating steps, not the state itself. In other words, all of the state lives on the scene (the client-side figure). This design avoids state duplication between the R session (server) and web-browser-based figure (client), eliminating the need for synchronization.</p>
@@ -823,10 +823,10 @@ Figure 6.6: A diagram of the data partition hierarchy.
 <span id="cb67-33"><a href="system.html#cb67-33" tabindex="-1"></a>    )</span>
 <span id="cb67-34"><a href="system.html#cb67-34" tabindex="-1"></a>  )<span class="op">;</span></span></code></pre></div>
 <pre><code>## 201 milliseconds has elapsed(28.71 milliseconds in dog years)
-## 401 milliseconds has elapsed(57.29 milliseconds in dog years)
-## 602 milliseconds has elapsed(86 milliseconds in dog years)
+## 402 milliseconds has elapsed(57.43 milliseconds in dog years)
+## 603 milliseconds has elapsed(86.14 milliseconds in dog years)
 ## 804 milliseconds has elapsed(114.86 milliseconds in dog years)
-## 1004 milliseconds has elapsed(143.43 milliseconds in dog years)</code></pre>
+## 1005 milliseconds has elapsed(143.57 milliseconds in dog years)</code></pre>
 <p>As you can see, the event producer (stream) is defined separately from the event processing logic, which is constructed by piping the result of one operation into the next. Because of the associativity of function composition, the stream actually exhibits properties of a functor, meaning that the order of composition - either through direct function composition or <code>.pipe</code> chaining - does not affect the result. Additionally, while the stream transformations themselves are (generally) stateless, they can still produce useful side-effects (as can be seen on the example of the <code>console.log</code> call above). Further, because of this fact, they also lend themselves well to modeling asynchronous or even infinite data sequences <span class="citation">(<a href="#ref-abelson2022">Abelson and Sussman 2022</a>; <a href="#ref-fogus2013">Fogus 2013</a>)</span>.</p>
 <p>While streams can be extremely useful in specific circumstances, their utility as a general model for complex UIs (beyond asynchronous operations) is debatable. Specifically, the inherent statefulness of UIs conflicts with the stateless nature of streams: stateless computations inside the stream have to leak into the rest of the application <em>somewhere</em>. Delineating which parts of the logic should go into streams versus which should be bound to UI components adds unnecessary complexity for little real benefit. Consequently, streams are likely not the optimal choice for interactive data visualization, where some mutable state is unavoidable.</p>
 </div>
