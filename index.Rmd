@@ -29,7 +29,6 @@ In this thesis, I explore this inherent interconnectedness of figure components,
 
 ```{r}
 #| echo: false
-
 knitr::opts_chunk$set(
   fig.align = "center"
 )
@@ -83,7 +82,9 @@ clean_theme <- theme_bw() +
 
 theme_set(clean_theme)
 options(width = 60)
+
+knitr::opts_chunk$set(
+  fig.align = "center",
+  out.width = "100%" # For LaTeX output to render correctly
+)
 ```
-
-\newcommand\then{⨾}
-

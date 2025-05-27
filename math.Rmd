@@ -4,9 +4,9 @@
 
 ```
 
-\newcommand\thenb{⨾}
+\newcommand\thenb{;}
 
-# Appendix: Mathematical theory
+# Appendix: Mathematical theory {#math}
 
 This chapter provides an overview of essential concepts from category theory and abstract algebra, as well as more general mathematics. Starting with some foundational topics, such as functions, relations, and orders, it slowly builds up to more advanced concepts such as categories, monoids, and functors. Readers familiar these concepts may feel free to skip ahead. However, even the fundamental concepts will be used throughout the thesis, so a refresher might be beneficial. 
 
@@ -221,6 +221,7 @@ p_3(a) = \begin{cases}
 (b, t) & \text{if } x = 3
 \end{cases}
 $$
+
 #### Preorders {#preorders}
 
 Another important class of relations are ones that have to do with order. Among these, one of the simplest constructions is a preorder:
@@ -247,7 +248,7 @@ Another common example of a preorder is the set of natural numbers $\mathbb{N}$,
 
 ##### Specializing preorders
 
-We can specialize preorders by imposing additional properties, such as:
+We can specialize [preorders](#preorders) by imposing additional properties, such as:
 
 3. If $x \leq y$ and $y \leq x$, then $x = y$ (anti-symmetry)
 4. Either $x \leq y$ or $y \leq x$ (comparability)
@@ -357,7 +358,7 @@ Likewise, the concatenation of lists or arrays also forms a monoid [see @milewsk
 
 #### Specializing monoids
 
-As with [preorders](#Preorders), we can make more specialized version of monoids by imposing additional properties. One such property is commutativity:
+As with preorders, we can make more specialized version of monoids by imposing additional properties. One such property is commutativity:
 
 3. Commutativity: $m_1 \otimes m_2 = m_2 \otimes m_1$ for all $m_1, m_2 \in M$
 
@@ -475,6 +476,8 @@ To give a concrete example, here is a diagram of a simple category with two obje
 
 ```{r category-two}
 #| echo: false
+#| out-width: "75%"
+#| fig-cap: "A category with two objects"
 knitr::include_graphics("./figures/category-two.png")
 ```
 
@@ -526,6 +529,8 @@ Here, we need to break away from the intuitive way of thinking of objects as ele
 
 ```{r monoid-category}
 #| echo: false
+#| out-width: "33%"
+#| fig-cap: "Monoid as a category"
 knitr::include_graphics("./figures/monoid-category.png")
 ```
 
@@ -541,6 +546,8 @@ In other words, the only difference from a category representing a monoid is tha
 
 ```{r group-category}
 #| echo: false
+#| out-width: "50%"
+#| fig-cap: "Group as a category"
 knitr::include_graphics("./figures/group-category.png")
 ```
 
@@ -567,6 +574,6 @@ Functors allow us to generalize the notion of structure-preserving maps, such as
 Further, just as we can compose arrows (functions), we can also compose functors. Specifically, let $F: \mathcal{C} \to \mathcal{D}$ and $G: \mathcal{D} \to \mathcal{E}$ be functors and define $F \thenb G$ as first applying $F$ and then $G$. Then:
 
 $$(F \thenb G)(\text{id}_c) = G(F(\text{id}_c)) = G(\text{id}_{F(c)}) = \text{id}_{G(F(c))}$$
-$$(F \thenb G)(f \thenb g) = G(F(f \then g)) = G(F(f) \then F(g)) = F(G(f)) \then F(G(g))$$
+$$(F \thenb G)(f \thenb g) = G(F(f \thenb g)) = G(F(f) \thenb F(g)) = F(G(f)) \thenb F(G(g))$$
 
 Thus, clearly, $F \thenb G$ is a functor.

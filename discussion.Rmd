@@ -35,7 +35,7 @@ ggplot(df, aes(date, cum_count)) +
 
 Despite all of these relative successes, both the theoretical model and its practical implementation in `plotscaper` have, of course, their limitations and opportunities for future improvement. These will be the subject of the next few sections.
  
-## Features and limitations of the theoretical model
+## Theoretical model
 
 First, it is important to discuss the limitations of the theoretical model presented in this thesis. This model, described in Section \@ref(problems), conceptualizes the data visualization pipeline as a structure-preserving mapping, also known as a functor. Specifically, a key initial assumption is that, when visualizing data, we start with a hierarchy of data subsets. These subsets are disjoint (share no overlapping data) and are ordered by set inclusion/union. To produce meaningful graphics, the subsequent steps of the data visualization pipeline should preserve this inherent structure and *behave like set union*. In category theoretic terms, this means that the aggregation and rendering steps of the data visualization pipeline have to be functors. Based on the properties of set union, this naturally identifies algebraic structures as groups and monoids. 
 
@@ -105,7 +105,7 @@ More fundamentally, beyond the simple category-theoretic concepts used throughou
 
 Further, an important gap in the model concerns plots in which geometric objects do not represent distinct data entities. Two-dimensional kernel density plots offer an interesting example, as each polygon in them represents an isopleth over a joint probability density, and thus does not uniquely identify a distinct set of data points. However, my review of example galleries from popular data visualization libraries such as `ggplot2` [@wickham2016] and `matplotlib` [@matplotlib2025], revealed only few such instances. While other examples undoubtedly exist within the data visualization and scientific literature, it seems that, in the vast majority of popular plot types, individual geometric objects within the same layer represent distinct subsets of the data. Nevertheless, extending the algebraic model to include non-disjoint data representations could constitute an interesting avenue for future research.  
 
-## Features and limitations of the delivered software
+## Delivered software (`plotscaper`)
 
 During this project, I had time to think through and test out different implementations of the various features of the interactive data visualization system. While I succeeded in some areas, there were also others which could still use further improvement. 
 

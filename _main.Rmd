@@ -29,7 +29,6 @@ In this thesis, I explore this inherent interconnectedness of figure components,
 
 ```{r}
 #| echo: false
-
 knitr::opts_chunk$set(
   fig.align = "center"
 )
@@ -83,10 +82,12 @@ clean_theme <- theme_bw() +
 
 theme_set(clean_theme)
 options(width = 60)
+
+knitr::opts_chunk$set(
+  fig.align = "center",
+  out.width = "100%" # For LaTeX output to render correctly
+)
 ```
-
-\newcommand\then{⨾}
-
 
 <!--chapter:end:index.Rmd-->
 
@@ -150,10 +151,12 @@ editor_options:
 
 ```{r}
 #| echo: false
+
 knitr::opts_chunk$set(
-  out.width = "100%",
-  out.height = "100%"
-) # For LaTeX output to render correctly
+  fig.align = "center",
+  # out.width = "100%", # For LaTeX output to render correctly
+  dpi = 300
+)
 
 include_figure <- function(path) {
   if (knitr::is_html_output()) knitr::include_url(path)
@@ -590,8 +593,7 @@ knitr::include_graphics("./figures/querying.png")
 
 Querying is useful because it combines the best features of graphics and tables. Specifically, it allows the user to overcome Tukey's famous prescriptions: "graphics are for the qualitative/descriptive [...] never for the carefully quantitative (tables do that better)", and: "graphics are for comparison [...] not for access to individual amounts" [@tukey1993]. By providing the option to query individual objects, the user can seamlessly transition between the high-level analytic overview of the graphic and low-level quantitative detail of a table. This facilitates high-precision analytic tasks, such as identifying specific outliers or calculating exact magnitudes of differences [@unwin2006].
 
-Additionally, querying also allow us to show more information than is displayed via the visual encodings alone (see again Figure \@ref(fig:querying)). Specifically, whereas most plots can encode only two or three variables, we can assign an arbitrary number of key-value pairs to the rows of the query table/pop-up. However, it is crucial to balance the level of detail against visual clutter. Too many rows may overtax the attention of the user and also can lead to clipping/overplotting issues, if the query table cannot fit inside the plotting area. Further, there are [better methods](#bidirectional-communication) for retrieving very detailed information from interactive visualizations.    
-
+Additionally, querying also allow us to show more information than is displayed via the visual encodings alone (see again Figure \@ref(fig:querying)). Specifically, whereas most plots can encode only two or three variables, we can assign an arbitrary number of key-value pairs to the rows of the query table/pop-up. However, it is crucial to balance the level of detail against visual clutter. Too many rows may overtax the attention of the user and also can lead to clipping/overplotting issues, if the query table cannot fit inside the plotting area. Further, there are better methods for retrieving very detailed information from interactive visualizations, such as direct client-server communication (see Section \@ref(client-server)).    
 Finally, while querying is also one of the more straightforward features, its implementation does present certain challenges. First, a naive implementation might simply display derived data values in the state just before they are mapped to visual attributes via scales, however, these are not always the most informative. For instance, in a stacked barplot, returning the original (unstacked) values is more useful than the stacked ones. Second, aggregate plots such as barplots or histograms do generally present some design decisions [see @unwin2006]. In the case of one-to-one plots such as scatterplots, query data for an object (point) can be obtained by simply retrieving the corresponding row. However, in aggregate plots like barplots and histograms, a single object may correspond to multiple rows. This necessitates summarizing the underlying data, and often there may be no single "correct" summary. For instance, when querying a bar in a barplot, should we return the sum of the underlying continuous variable, some other numeric summary such as the mean or maximum, the set of all unique values, multiple of these summaries, or perhaps something else entirely? Similar ambiguities arise when querying objects which are partially selected or highlighted (see Section \@ref(linked-selection)): should the query return summaries corresponding to the entire object, the highlighted parts, or both?
 
 #### Sorting and reordering
@@ -814,7 +816,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-\newcommand\thena{⨾}
+\newcommand\thena{;}
 
 # Challenges {#problems}
 
@@ -906,7 +908,7 @@ Finally, there is also empirical evidence showing that people generally struggle
 
 #### Disjointness and bijections
 
-But even more fundamentally, disjointness is related to a structure which mathematicians have long considered natural: a [bijection](#functions) or one-to-one mapping [see e.g. @fong2019; @lawvere2009]. Specifically, if we take a set $S$, divide it into disjoint subsets, and then assign each subset a label, there will be a one-to-one mapping between the labels and the subsets (i.e. each label corresponds to an [equivalence class](#partition) on $S$). Practically, this means that we can go back and forth between the subsets and labels, without losing any information, and the converse does not hold when the subsets are non-disjoint.
+But even more fundamentally, disjointness is related to a structure which mathematicians have long considered natural: a [bijection](#functions) or one-to-one mapping [see e.g. @fong2019; @lawvere2009]. Specifically, if we take a set $S$, divide it into disjoint subsets, and then assign each subset a label, there will be a one-to-one mapping between the labels and the subsets (i.e. each label corresponds to an [equivalence class](#partitions) on $S$). Practically, this means that we can go back and forth between the subsets and labels, without losing any information, and the converse does not hold when the subsets are non-disjoint.
 
 This bijective property of dijsoint subsets may be particularly useful in data visualization, see Figure \@ref(fig:geoms-bijection). For instance, when drawing a barplot, if we divide our data into disjoint subsets and draw one bar corresponding to each part, then we can go back and forth between data subsets and bars (the function of identifying data subsets from bars is invertible). In plots where the objects are non-disjoint, this correspondence is broken: if we select the set of cases corresponding to a bar, there may be no way to identify the original bar from the cases alone.
 
@@ -990,7 +992,7 @@ In the two preceding sections, I have argued that it is generally desirable for 
 - Completeness: They should show the full data
 - Distinctness: Geometric objects should represent distinct subsets of data points
 
-These two features actually map onto two fundamental mathematical properties: [surjectivity](#Functions) and [disjointness](#Partitions). In turn, these two properties define a well-known mathematical structure: a [partition](#Partitions). Therefore, partitions offer a compelling model for structuring our plots. I propose the following definition of a *regular plot*:
+These two features actually map onto two fundamental mathematical properties: [surjectivity](#functions) and [disjointness](#partitions). In turn, these two properties define a well-known mathematical structure: a [partition](#partitions). Therefore, partitions offer a compelling model for structuring our plots. I propose the following definition of a *regular plot*:
 
 :::{.definition name="Regular plot"}
 Regular plot is a plot where the geometric objects within one layer represent a partition of the data, such that there is a bijection between these objects and (possibly aggregated) subsets of the original data.   
@@ -1322,7 +1324,7 @@ Let's briefly recap the key points so far. In section \@ref(partitioning), I adv
 
 Further, in Section \@ref(stacking-not-graphical), I demonstrated on the example \@ref(fig:grammar-barplot-maximums) that some "stackable" summary statistics have the property of preserving the part-whole relationships in the data hierarchy, whereas others do not. I have also and pointed to other researchers who have noted this problem. Additionally, I have argued that preserving these part-whole relationship in our visualizations is desirable, particularly when interaction is involved. They simplify certain interactive behaviors, make them more intuitive and "natural," and reduce the workload interactive data visualization systems need to do.
 
-Now it will be finally time to discuss what makes certain statistics stackable. To do this, I will need to use some concepts from category theory. These concepts are described in greater detail in the [Appendix: Mathematical Theory](#mathematical-theory) - the reader is advised to consult this section if they are unfamiliar with the material (links to appropriate sections will also be provided throughout the text). However, first, a quick note on the application of category theory in the data visualization literature.
+Now it will be finally time to discuss what makes certain statistics stackable. To do this, I will need to use some concepts from category theory. These concepts are described in greater detail in the [Appendix: Mathematical Theory](#math) - the reader is advised to consult this section if they are unfamiliar with the material (links to appropriate sections will also be provided throughout the text). However, first, a quick note on the application of category theory in the data visualization literature.
 
 #### Past applications of category theory to data visualization {#visualization-category-theory}
 
@@ -1355,6 +1357,8 @@ For example, the following is a diagram of a simple category with two objects an
 
 ```{r category-two1}
 #| echo: false
+#| out-width: "75%"
+#| fig-cap: "A category with two objects."
 knitr::include_graphics("./figures/category-two.png")
 ```
 
@@ -1382,6 +1386,7 @@ Further, this categorical definition allows us to describe the relationships in 
 ```{r barplot-preorder3}
 #| echo: false
 #| fig-cap: "A diagram of a part of the barplot/spineplot category, with all of the morphisms described explictly."
+#| out-width: "75%"
 knitr::include_graphics("./figures/barplot-preorder3.png") 
 ```
 
@@ -1410,6 +1415,7 @@ This second property of preserving composition can be described by the following
 ```{r functor}
 #| echo: false
 #| fig-cap: "A commutative diagram showing how a functor $F$ preserves associativity. $A$, $B$, $C$ are objects in category $\\mathcal{C}$, $F(A)$, $F(B)$, $F(C)$ are objects in category $\\mathcal{D}$, $f$ and $g$ are morphisms in $\\mathcal{C}$, and $F(F)$ and $F(g)$ are objects in $\\mathcal{D}$."
+#| out-width: "75%"
 knitr::include_graphics("./figures/functor.png")
 ```
 
@@ -1587,7 +1593,7 @@ is_monoid <- function(fn, e, x, y, z) {
 }
 
 string_concat <- function(x) paste0(x, collapse = "")
-l2_norm <- function(x) sqrt(sum(x^2)) # Aka euclidean norm/vector length
+l2_norm <- function(x) sqrt(sum(x^2)) # aka euclidean distance
 
 is_monoid(sum, 0, x, y, z)
 is_monoid(max, -Inf, x, y, z)
@@ -2566,7 +2572,8 @@ spineplot_object_data <- encode(
 
 spineplot_segment_data <- encode(
   summarized_data[2],
-  encodings = list(x = cyl, y = 0, width = stat, height = normalize(stack(stat)))
+  encodings = list(x = cyl, y = 0, width = stat, 
+                   height = normalize(stack(stat)))
 )
 ```
 
@@ -2687,7 +2694,8 @@ export namespace Observer {
     return { ...x, listeners: {} };
   }
 
-  export function listen(x: Observer, event: string, cb: () => void) {
+  export function listen(x: Observer, event: string, 
+                         cb: () => void) {
     if (!x.listeners[event]) x.listeners[event] = [];
     x.listeners[event].push(cb);
   }
@@ -2870,7 +2878,7 @@ However, eventually, I ended up reverting back to the `Observer` pattern. The pr
 
 This section discusses the core components of `plotscape`, detailing their functionality, implementation, and interconnections. The goal is to give an overview and provide a rationale for the design of key parts of the system. As before, TypeScript code examples are provided, and, in general, these map fairly closely to the real codebase.  
 
-#### Indexable {#Indexable}
+#### Indexable {#indexable}
 
 One of the fundamental considerations when implementing a data visualization system is how to represent a data variable: a generalized sequence of related values. Clearly, the ability to handle fixed-length arrays is essential, however, we may also want to be able to treat constants or derived values as variables. To give an example, in a typical barplot, the y-axis base is a constant, typically zero. While we could hypothetically append an array of zeroes to our data, it is much more convenient and memory efficient to simply use a constant (`0`) or a callback/thunk (`() => 0`). Similarly, at times, arrays of repeated values can be more optimally represented as two arrays: a short array of "labels" and a long array of integer indices (i.e. what base R's `factor` class does). Thus, representing data effectively calls for a generalization of a data "column" which can encompass data types beyond fixed-length arrays.
 
@@ -2887,9 +2895,9 @@ In plain words, an `Indexable<T>` can be one of the following three objects:
 - A fixed-length array of `T`'s (`T[]`)
 - A function which takes an index as an argument and returns a `T`
 
-That is, `Indexable`s generalize arrays, providing value access via an index. Arrays behave as expected, scalar values are always returned regardless of the index, and functions are invoked with the index as the first argument (this functionality is provided by [`Getter`](#Getter)s). As a final note, `Indexable`s are somewhat similar to Leland Wilkinson's idea of data functions [see @wilkinson2012, pp. 42], although there are some differences (Wilkinson's data functions are defined more broadly).
+That is, `Indexable`s generalize arrays, providing value access via an index. Arrays behave as expected, scalar values are always returned regardless of the index, and functions are invoked with the index as the first argument (this functionality is provided by [`Getter`](#getter)s). As a final note, `Indexable`s are somewhat similar to Leland Wilkinson's idea of data functions [see @wilkinson2012, pp. 42], although there are some differences (Wilkinson's data functions are defined more broadly).
 
-#### Getter {#Getter}
+#### Getter {#getter}
 
 A `Getter<T>` is used to provide a uniform interface to accessing values from an `Indexable<T>`. It is simply a function which takes an index and returns a value of type `T`. To construct a `Getter<T>`, we take an `Indexable<T>` and dispatch on the underlying subtype. For illustration purposes, here is a simplified implementation: 
 
@@ -3053,7 +3061,7 @@ console.log(Dataframe.rows(data))
 
 One important thing to mention is that, since the `Dataframe` columns can be different `Indexable` subtypes, we need to make sure that information about the number of rows is present and non-conflicting. That is, all fixed-length columns must have the same length, and, if there are variable-length columns (constants, derived variables/functions) present, we need to make sure that at least one fixed-length column is present in the data (or that the variable-length columns carry appropriate metadata).
 
-While in a traditional OOP style, these length constraints might be enforced by a class invariant, checked during instantiation and maintained inside method bodies, `plotscape` adopts a more loose approach by checking the length constraints dynamically, at runtime. This is done whenever the integrity of a `Dataframe` becomes a key concern, such as when initializing a [`Scene`](#Scene) or when rendering. The approach is more in line with JavaScript's dynamic nature: in JavaScript, all variables (except for primitives) are objects, and there is nothing preventing the users from adding or removing properties at runtime, even to class instances. Further, with `Dataframe`s of typical dimensionality (fewer columns than rows, $p << n$), the performance cost of checking column's length is usually negligible when compared to row-wise operations, such as computing summary statistics or rendering. If performance were to become an issue for high-dimensional datasets ($p >> n$), the approach could always be enhanced with memoization or caching.    
+While in a traditional OOP style, these length constraints might be enforced by a class invariant, checked during instantiation and maintained inside method bodies, `plotscape` adopts a more loose approach by checking the length constraints dynamically, at runtime. This is done whenever the integrity of a `Dataframe` becomes a key concern, such as when initializing a [`Scene`](#scene) or when rendering. The approach is more in line with JavaScript's dynamic nature: in JavaScript, all variables (except for primitives) are objects, and there is nothing preventing the users from adding or removing properties at runtime, even to class instances. Further, with `Dataframe`s of typical dimensionality (fewer columns than rows, $p << n$), the performance cost of checking column's length is usually negligible when compared to row-wise operations, such as computing summary statistics or rendering. If performance were to become an issue for high-dimensional datasets ($p >> n$), the approach could always be enhanced with memoization or caching.    
 
 #### Factors
 
@@ -3090,9 +3098,9 @@ The data associated with factor's levels is stored in the `data` property, which
 
 Finally, the optional `parent` property is a pointer to the factor representing the parent partition.  
 
-There are a couple of important things to discuss. First, `cardinality` technically duplicates information, since it is simply the number of unique values in `indices`. However, for many operations on `Factor`s, it is beneficial to be able to access cardinality in constant $O(1)$ time. Such is the case, for example, when constructing [product factors](#Product factors) or when initializing arrays of summaries. Of course, this means that the relationship between `cardinality` and `indices` has to be invariant under any factor transformations. 
+There are a couple of important things to discuss. First, `cardinality` technically duplicates information, since it is simply the number of unique values in `indices`. However, for many operations on `Factor`s, it is beneficial to be able to access cardinality in constant $O(1)$ time. Such is the case, for example, when constructing [product factors](#product-factors) or when initializing arrays of summaries. Of course, this means that the relationship between `cardinality` and `indices` has to be invariant under any factor transformations. 
 
-Second, the metadata associated with the parts is stored in the `data` property of type [`Dataframe`](#Dataframe). This represents a departure from e.g. base R's `factor` class, where all metadata is stored as a flat vector of levels. For instance:
+Second, the metadata associated with the parts is stored in the `data` property of type [`Dataframe`](#dataframe). This represents a departure from e.g. base R's `factor` class, where all metadata is stored as a flat vector of levels. For instance:
 
 ```{r}
 cut(1:10, breaks = c(0, 5, 10))
@@ -3112,7 +3120,7 @@ const factor: Factor = {
 };
 ```
 
-I contend that, compared to a flat vector/array, storing `Factor` metadata in a `Dataframe` offers several distinct advantages. First, when partitioning data, we often want to store multiple metadata attributes. For example, when we bin numeric variable, like in the example above, we want to store both the lower and upper bound of each parts' bin. The approach used in `cut` is to store multiple (two) pieces of metadata as a tuple, however, this becomes cumbersome as the dimensionality of the metadata grows. Further, if metadata is stored in a `Dataframe`, it becomes far easier to combine when taking [a product of two factors](#Product factors). Since factor product is a foundational operation in `plotscape`, underpinning fundamental features such as linked brushing, I argue that it is sensible to store metadata on `Factor` in a full `Dataframe` form.
+I contend that, compared to a flat vector/array, storing `Factor` metadata in a `Dataframe` offers several distinct advantages. First, when partitioning data, we often want to store multiple metadata attributes. For example, when we bin numeric variable, like in the example above, we want to store both the lower and upper bound of each parts' bin. The approach used in `cut` is to store multiple (two) pieces of metadata as a tuple, however, this becomes cumbersome as the dimensionality of the metadata grows. Further, if metadata is stored in a `Dataframe`, it becomes far easier to combine when taking [a product of two factors](#product-factors). Since factor product is a foundational operation in `plotscape`, underpinning fundamental features such as linked brushing, I argue that it is sensible to store metadata on `Factor` in a full `Dataframe` form.
 
 While all `Factor`s share the same fundamental structure - a data partition with associated metadata - factors can be created using various constructor functions. These constructor functions differ in what data they take as input and what metadata they store on the ouput, giving rise to several distinct `Factor` subtypes. These will be the subject of the next few sections.
 
@@ -4559,7 +4567,7 @@ ggplot(df, aes(date, cum_count)) +
 
 Despite all of these relative successes, both the theoretical model and its practical implementation in `plotscaper` have, of course, their limitations and opportunities for future improvement. These will be the subject of the next few sections.
  
-## Features and limitations of the theoretical model
+## Theoretical model
 
 First, it is important to discuss the limitations of the theoretical model presented in this thesis. This model, described in Section \@ref(problems), conceptualizes the data visualization pipeline as a structure-preserving mapping, also known as a functor. Specifically, a key initial assumption is that, when visualizing data, we start with a hierarchy of data subsets. These subsets are disjoint (share no overlapping data) and are ordered by set inclusion/union. To produce meaningful graphics, the subsequent steps of the data visualization pipeline should preserve this inherent structure and *behave like set union*. In category theoretic terms, this means that the aggregation and rendering steps of the data visualization pipeline have to be functors. Based on the properties of set union, this naturally identifies algebraic structures as groups and monoids. 
 
@@ -4629,7 +4637,7 @@ More fundamentally, beyond the simple category-theoretic concepts used throughou
 
 Further, an important gap in the model concerns plots in which geometric objects do not represent distinct data entities. Two-dimensional kernel density plots offer an interesting example, as each polygon in them represents an isopleth over a joint probability density, and thus does not uniquely identify a distinct set of data points. However, my review of example galleries from popular data visualization libraries such as `ggplot2` [@wickham2016] and `matplotlib` [@matplotlib2025], revealed only few such instances. While other examples undoubtedly exist within the data visualization and scientific literature, it seems that, in the vast majority of popular plot types, individual geometric objects within the same layer represent distinct subsets of the data. Nevertheless, extending the algebraic model to include non-disjoint data representations could constitute an interesting avenue for future research.  
 
-## Features and limitations of the delivered software
+## Delivered software (`plotscaper`)
 
 During this project, I had time to think through and test out different implementations of the various features of the interactive data visualization system. While I succeeded in some areas, there were also others which could still use further improvement. 
 
@@ -4774,9 +4782,9 @@ Compared to typical raster formats such as PNG or JPEG, in which the image is de
 
 ```
 
-\newcommand\thenb{⨾}
+\newcommand\thenb{;}
 
-# Appendix: Mathematical theory
+# Appendix: Mathematical theory {#math}
 
 This chapter provides an overview of essential concepts from category theory and abstract algebra, as well as more general mathematics. Starting with some foundational topics, such as functions, relations, and orders, it slowly builds up to more advanced concepts such as categories, monoids, and functors. Readers familiar these concepts may feel free to skip ahead. However, even the fundamental concepts will be used throughout the thesis, so a refresher might be beneficial. 
 
@@ -4991,6 +4999,7 @@ p_3(a) = \begin{cases}
 (b, t) & \text{if } x = 3
 \end{cases}
 $$
+
 #### Preorders {#preorders}
 
 Another important class of relations are ones that have to do with order. Among these, one of the simplest constructions is a preorder:
@@ -5017,7 +5026,7 @@ Another common example of a preorder is the set of natural numbers $\mathbb{N}$,
 
 ##### Specializing preorders
 
-We can specialize preorders by imposing additional properties, such as:
+We can specialize [preorders](#preorders) by imposing additional properties, such as:
 
 3. If $x \leq y$ and $y \leq x$, then $x = y$ (anti-symmetry)
 4. Either $x \leq y$ or $y \leq x$ (comparability)
@@ -5127,7 +5136,7 @@ Likewise, the concatenation of lists or arrays also forms a monoid [see @milewsk
 
 #### Specializing monoids
 
-As with [preorders](#Preorders), we can make more specialized version of monoids by imposing additional properties. One such property is commutativity:
+As with preorders, we can make more specialized version of monoids by imposing additional properties. One such property is commutativity:
 
 3. Commutativity: $m_1 \otimes m_2 = m_2 \otimes m_1$ for all $m_1, m_2 \in M$
 
@@ -5245,6 +5254,8 @@ To give a concrete example, here is a diagram of a simple category with two obje
 
 ```{r category-two}
 #| echo: false
+#| out-width: "75%"
+#| fig-cap: "A category with two objects"
 knitr::include_graphics("./figures/category-two.png")
 ```
 
@@ -5296,6 +5307,8 @@ Here, we need to break away from the intuitive way of thinking of objects as ele
 
 ```{r monoid-category}
 #| echo: false
+#| out-width: "33%"
+#| fig-cap: "Monoid as a category"
 knitr::include_graphics("./figures/monoid-category.png")
 ```
 
@@ -5311,6 +5324,8 @@ In other words, the only difference from a category representing a monoid is tha
 
 ```{r group-category}
 #| echo: false
+#| out-width: "50%"
+#| fig-cap: "Group as a category"
 knitr::include_graphics("./figures/group-category.png")
 ```
 
@@ -5337,7 +5352,7 @@ Functors allow us to generalize the notion of structure-preserving maps, such as
 Further, just as we can compose arrows (functions), we can also compose functors. Specifically, let $F: \mathcal{C} \to \mathcal{D}$ and $G: \mathcal{D} \to \mathcal{E}$ be functors and define $F \thenb G$ as first applying $F$ and then $G$. Then:
 
 $$(F \thenb G)(\text{id}_c) = G(F(\text{id}_c)) = G(\text{id}_{F(c)}) = \text{id}_{G(F(c))}$$
-$$(F \thenb G)(f \thenb g) = G(F(f \then g)) = G(F(f) \then F(g)) = F(G(f)) \then F(G(g))$$
+$$(F \thenb G)(f \thenb g) = G(F(f \thenb g)) = G(F(f) \thenb F(g)) = F(G(f)) \thenb F(G(g))$$
 
 Thus, clearly, $F \thenb G$ is a functor.
 

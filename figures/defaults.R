@@ -15,9 +15,8 @@ theme_set(theme_bw(base_size = 6) +
 
 tex_to_png <- function(filename) {
   tinytex::pdflatex(paste0("./figures/", filename,".tex"))
-  img <- magick::image_read_pdf(paste0("./figures/", filename,".pdf"), density = 300)
-  magick::image_write(img, path = paste0("./figures/", filename,".png"), density = 300)
+  img <- pdftools::pdf_render_page(paste0("./figures/", filename,".pdf"), page = 1, dpi = 300)
+  png::writePNG(img, paste0("./figures/", filename,".png"), dpi = 300)
+  # img <- magick::image_read_pdf(paste0("./figures/", filename,".pdf"), density = 300)
+  # magick::image_write(img, path = paste0("./figures/", filename,".png"), density = 300)
 }
-
-
-
