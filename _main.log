@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.5.27)  27 MAY 2025 14:18
+This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.5.27)  28 MAY 2025 15:35
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1538,12 +1538,12 @@ Underfull \vbox (badness 7540) has occurred while \output is active []
 
 [140]
 Overfull \hbox (43.5pt too wide) in paragraph at lines 2886--2886
-[]\TU/lmtt/m/n/10 ##   .. ..$ id       : 'scalar' chr "a253c894-7f3a-4403-9592-97a54e9007cd"[] 
+[]\TU/lmtt/m/n/10 ##   .. ..$ id       : 'scalar' chr "2d959757-16cd-4db9-b6de-d16990860a4f"[] 
  []
 
 
 Overfull \hbox (43.5pt too wide) in paragraph at lines 2886--2886
-[]\TU/lmtt/m/n/10 ##   .. ..$ id       : 'scalar' chr "754585fc-5581-490d-9dc8-67ab529a1983"[] 
+[]\TU/lmtt/m/n/10 ##   .. ..$ id       : 'scalar' chr "b806bd08-62f6-498b-ba95-2d196850f2e5"[] 
  []
 
 
@@ -1645,6 +1645,11 @@ Underfull \vbox (badness 2990) has occurred while \output is active []
 [164]
 
 [165]
+Overfull \hbox (1.5pt too wide) in paragraph at lines 3383--3383
+[]\TU/lmtt/m/n/10 ## 1005 milliseconds has elapsed(143.57 milliseconds in dog years)[] 
+ []
+
+
 
 [166]
 
@@ -2075,14 +2080,14 @@ Underfull \hbox (badness 3240) in paragraph at lines 6463--6464
 [285]
 
 [286]
-Underfull \hbox (badness 3954) in paragraph at lines 6562--6563
+Underfull \hbox (badness 3954) in paragraph at lines 6565--6566
 \TU/lmr/m/n/10 ming.” \TU/lmr/m/it/10 Handmade Network\TU/lmr/m/n/10 . []$[][][][][] [] [] [] [][][][][][][][] [] [][][][][][][] [] [][][][][][][][] []
  []
 
 
 
 [287]
-Underfull \hbox (badness 1769) in paragraph at lines 6589--6590
+Underfull \hbox (badness 1769) in paragraph at lines 6592--6593
 []\TU/lmr/m/n/10 Henry, Lionel, and Hadley Wickham. 2024. \TU/lmr/m/it/10 Rlang: Functions for
  []
 
@@ -2091,27 +2096,27 @@ Underfull \hbox (badness 1769) in paragraph at lines 6589--6590
 [288]
 
 [289]
-Underfull \hbox (badness 10000) in paragraph at lines 6757--6758
+
+[290]
+Underfull \hbox (badness 10000) in paragraph at lines 6760--6761
 []$[][][][][] [] [] [] [][][] [] [][][][][][][][] [] [][][] [] [][][][][] [] [][][][][] [] [][][][][][][][][][][][][][][][][][][][] [] [] []
  []
 
 
-
-[290]
 
 [291]
 
 [292]
 
 [293]
-Underfull \hbox (badness 1629) in paragraph at lines 6979--6980
+Underfull \hbox (badness 1629) in paragraph at lines 6985--6986
 []\TU/lmr/m/n/10 Self, Jessica Zeitz, Michelle Dowling, John Wenskovitch, Ian Crandell,
  []
 
 
 
 [294]
-Underfull \hbox (badness 3354) in paragraph at lines 7021--7022
+Underfull \hbox (badness 3354) in paragraph at lines 7027--7028
 \TU/lmr/m/it/10 A9\TU/lmr/m/n/10 . Youtube. []$[][][][][] [] [] [] [][][] [] [][][][][][][] [] [][][] [] [][][][][][][][] [] [][][][] [] [][][][][][][][] []
  []
 
@@ -2122,7 +2127,7 @@ Underfull \hbox (badness 3354) in paragraph at lines 7021--7022
 [296]
 
 [297]
-Underfull \hbox (badness 10000) in paragraph at lines 7201--7202
+Underfull \hbox (badness 10000) in paragraph at lines 7207--7208
 []$[][][][][] [] [] [] [][][] [] [][][][][][] [] [][][] [] [] [] [][][][][][][][][][][][][][][] [] [][][][][][][][] [] [][][][][][] [] [][][][][][][] []
  []
 
@@ -2139,10 +2144,10 @@ L3 programming layer <2025-04-29>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 31643 strings out of 472247
- 645984 string characters out of 5529522
- 1151620 words of memory out of 5000000
- 57564 multiletter control sequences out of 15000+600000
+ 31645 strings out of 472247
+ 646019 string characters out of 5529522
+ 1151695 words of memory out of 5000000
+ 57566 multiletter control sequences out of 15000+600000
  633510 words of font info for 110 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  98i,17n,114p,3512b,750s stack positions out of 10000i,1000n,20000p,200000b,200000s
