@@ -654,7 +654,7 @@ Other examples of representation switching include switching from a histogram to
 
 Linked selection, also known as linked brushing, linked highlighting, or linked views, is often considered one of the most versatile and powerful interactive data visualization features [see e.g. @becker1987; @buja1996; @wilhelm2003; @heer2012; @ward2015; @ware2019]. Fundamentally, it involves creating a figure with multiple "linked" plots. The user can then click or click-and-drag over objects in one plot, and the corresponding cases are highlighted across all the other plots, see Figure \@ref(fig:linked-selection). This makes it possible to quickly quickly explore trends across different dynamically-generated subsets of the data [@dix1998]. The ability to quickly materialize alternative views of the data makes this a particularly effective tool for data exploration [@wilhelm2008; @wills2008].
 
-(ref:henderson)
+(ref:henderson) [@henderson1981]
 
 ```{r linked-selection}
 #| echo: false
@@ -728,7 +728,7 @@ A particular challenge when discussing scales in data visualization is that the 
 
 Arguably, the most influential work in this field has been that of @stevens1946. In his fairly concise paper, Stevens defined a *scale* as method of assigning numbers to values, and introduced a four-fold classification classification, namely: nominal, ordinal, interval, and ratio scales (see Table \@ref(tab:stevens-scales)).
 
-(ref:eq1)$ x' = f(x)$, where $f$ is a bijection
+(ref:eq1) $x' = f(x)$, where $f$ is a bijection
 
 ```{r stevens-scales}
 #| echo: false
