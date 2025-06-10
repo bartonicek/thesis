@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.5.27)  5 JUN 2025 09:29
+This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.5.27)  9 JUN 2025 15:36
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1540,13 +1540,13 @@ Underfull \vbox (badness 7540) has occurred while \output is active []
 
 
 [140]
-Overfull \hbox (43.5pt too wide) in paragraph at lines 2886--2886
-[]\TU/lmtt/m/n/10 ##   .. ..$ id       : 'scalar' chr "030cc45a-f854-44ab-912a-51cda3970020"[] 
+Overfull \hbox (27.75pt too wide) in paragraph at lines 2886--2886
+[]  \TU/lmtt/m/n/10 .. ..$ id       : 'scalar' chr "59b1f095-608e-42f3-ad66-8005f2f9738b"[] 
  []
 
 
-Overfull \hbox (43.5pt too wide) in paragraph at lines 2886--2886
-[]\TU/lmtt/m/n/10 ##   .. ..$ id       : 'scalar' chr "ceee4a50-b9d6-47a0-96c6-12a38d46c0b2"[] 
+Overfull \hbox (27.75pt too wide) in paragraph at lines 2886--2886
+[]  \TU/lmtt/m/n/10 .. ..$ id       : 'scalar' chr "67a257fd-3628-4cca-b68d-aaf0a7d2b9fd"[] 
  []
 
 
@@ -1570,30 +1570,36 @@ File: ./figures/scene_diagram.png Graphic file (type bmp)
 [146]
 File: ./figures/plot_diagram.png Graphic file (type bmp)
 <./figures/plot_diagram.png>
-
-
-[147]
 File: ./figures/hierarchical_data.pdf Graphic file (type pdf)
 <use ./figures/hierarchical_data.pdf>
 
+
+[147]
 
 [148]
 
 [149]
 
 [150]
-Underfull \hbox (badness 2119) in paragraph at lines 3130--3131
+Underfull \hbox (badness 2119) in paragraph at lines 3153--3154
 []\TU/lmr/m/n/10 The \TU/lmtt/m/n/10 encoded_object_data \TU/lmr/m/n/10 data set represents the whole barplot bars
  []
 
 
-Underfull \hbox (badness 1163) in paragraph at lines 3130--3131
+Underfull \hbox (badness 1163) in paragraph at lines 3153--3154
 \TU/lmr/m/n/10 and may be used for training scales and collision detection, while the
  []
 
 
 
 [151]
+
+LaTeX Warning: Reference `foo' on page 152 undefined on input line 3155.
+
+
+Underfull \vbox (badness 3407) has occurred while \output is active []
+
+
 
 [152]
 
@@ -1608,27 +1614,28 @@ Underfull \hbox (badness 1163) in paragraph at lines 3130--3131
 [157]
 
 [158]
-Underfull \hbox (badness 1424) in paragraph at lines 3217--3218
+
+LaTeX Warning: Reference `dop' on page 159 undefined on input line 3241.
+
+
+Underfull \hbox (badness 1424) in paragraph at lines 3241--3242
 \TU/lmr/m/n/10 programming (OOP) with extra steps, i.e. where someone might write
  []
 
 
-Underfull \hbox (badness 3449) in paragraph at lines 3217--3218
+Underfull \hbox (badness 3449) in paragraph at lines 3241--3242
 \TU/lmtt/m/n/10 const foo = new Foo(); const bar = foo.bar()\TU/lmr/m/n/10 , I write \TU/lmtt/m/n/10 const foo =
  []
 
 
-Underfull \hbox (badness 1019) in paragraph at lines 3217--3218
+Underfull \hbox (badness 1019) in paragraph at lines 3241--3242
 \TU/lmtt/m/n/10 Foo.create(); const bar = Foo.bar(foo)\TU/lmr/m/n/10 , however, there are a couple
  []
 
 
-Underfull \hbox (badness 1270) in paragraph at lines 3219--3219
+Underfull \hbox (badness 1270) in paragraph at lines 3243--3243
 []\TU/lmr/bx/n/12 Data representation: Row-oriented vs. column-
  []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 
@@ -1652,7 +1659,7 @@ Underfull \vbox (badness 2990) has occurred while \output is active []
 [166]
 
 [167]
-Overfull \vbox (1.95998pt too high) detected at line 3462
+Overfull \vbox (1.95998pt too high) detected at line 3486
  []
 
 
@@ -1664,12 +1671,12 @@ Overfull \vbox (1.95998pt too high) detected at line 3462
 [170]
 
 [171]
-Underfull \hbox (badness 4096) in paragraph at lines 3551--3552
+Underfull \hbox (badness 4096) in paragraph at lines 3575--3576
 []\TU/lmr/m/n/10 Note that, by definition, every \TU/lmtt/m/n/10 Getter<T> \TU/lmr/m/n/10 is also automatically an
  []
 
 
-Underfull \hbox (badness 1383) in paragraph at lines 3551--3552
+Underfull \hbox (badness 1383) in paragraph at lines 3575--3576
 \TU/lmtt/m/n/10 Indexable<T> \TU/lmr/m/n/10 (since it is a function of the form \TU/lmtt/m/n/10 (index: number) =>
  []
 
@@ -1682,7 +1689,7 @@ Underfull \hbox (badness 1383) in paragraph at lines 3551--3552
 [174]
 
 [175]
-Underfull \hbox (badness 6001) in paragraph at lines 3728--3729
+Underfull \hbox (badness 6001) in paragraph at lines 3752--3753
  \TU/lmr/bx/n/10 6.4.4.4.1 Bijection and constant factors[] \TU/lmtt/m/n/10 Factor.bijection \TU/lmr/m/n/10 and
  []
 
@@ -1734,7 +1741,7 @@ File: ./figures/transient-persisent-product.png Graphic file (type bmp)
 [196]
 
 [197]
-Overfull \hbox (50.42001pt too wide) in paragraph at lines 4388--4389
+Overfull \hbox (50.42001pt too wide) in paragraph at lines 4412--4413
 []\TU/lmr/m/n/10 Back to code. The \TU/lmtt/m/n/10 ExpanseContinuous.normalize \TU/lmr/m/n/10 and \TU/lmtt/m/n/10 ExpanseContinuous.unnormalize
  []
 
@@ -1745,12 +1752,12 @@ Overfull \hbox (50.42001pt too wide) in paragraph at lines 4388--4389
 [199]
 
 [200]
-Underfull \hbox (badness 4303) in paragraph at lines 4515--4516
+Underfull \hbox (badness 4303) in paragraph at lines 4539--4540
 \TU/lmr/m/n/10 While \TU/lmtt/m/n/10 ExpansePoint \TU/lmr/m/n/10 places values at equidistant points along $[][][] [][]$,
  []
 
 
-Underfull \hbox (badness 2818) in paragraph at lines 4528--4529
+Underfull \hbox (badness 2818) in paragraph at lines 4552--4553
 \TU/lmr/m/n/10 additional \TU/lmtt/m/n/10 weights \TU/lmr/m/n/10 and \TU/lmtt/m/n/10 cumulativeWeights \TU/lmr/m/n/10 are numeric arrays which
  []
 
@@ -1761,7 +1768,7 @@ Underfull \hbox (badness 2818) in paragraph at lines 4528--4529
 [202]
 
 [203]
-Underfull \hbox (badness 1365) in paragraph at lines 4590--4591
+Underfull \hbox (badness 1365) in paragraph at lines 4614--4615
 []\TU/lmr/m/n/10 Importantly, data is not a single \TU/lmtt/m/n/10 Dataframe\TU/lmr/m/n/10 , but instead an array of
  []
 
@@ -1786,12 +1793,12 @@ Chapter 7.
 [211
 
 ]
-Overfull \hbox (2.99pt too wide) in paragraph at lines 4791--4791
+Overfull \hbox (2.99pt too wide) in paragraph at lines 4815--4815
 []\TU/lmr/m/n/10 reason_for_termination|  
  []
 
 
-Overfull \hbox (30.7pt too wide) in paragraph at lines 4791--4791
+Overfull \hbox (30.7pt too wide) in paragraph at lines 4815--4815
 []\TU/lmr/m/n/10 kategorie_delky_hospitalizace|  
  []
 
@@ -1845,7 +1852,7 @@ File: ./figures/example-cases-days-age.png Graphic file (type bmp)
 
 [223]
 
-LaTeX Warning: Float too large for page by 28.77036pt on input line 5085.
+LaTeX Warning: Float too large for page by 28.77036pt on input line 5109.
 
 
 
@@ -1878,7 +1885,7 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 [232]
-Underfull \hbox (badness 1132) in paragraph at lines 5302--5303
+Underfull \hbox (badness 1132) in paragraph at lines 5326--5327
 \TU/lmr/m/n/10 Alzheimer’s patients, over time, schizophrenia patients became the
  []
 
@@ -1920,7 +1927,7 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 [244]
-Underfull \hbox (badness 1014) in paragraph at lines 5394--5395
+Underfull \hbox (badness 1014) in paragraph at lines 5418--5419
 []\TU/lmr/m/n/10 More fundamentally, beyond the simple category-theoretic concepts used
  []
 
@@ -1937,7 +1944,7 @@ Underfull \hbox (badness 1014) in paragraph at lines 5394--5395
 [249]
 
 [250]
-Underfull \hbox (badness 2799) in paragraph at lines 5443--5445
+Underfull \hbox (badness 2799) in paragraph at lines 5467--5469
 []\TU/lmr/m/n/10 Pre-partitioning: Data streaming, partitioning parameter updates
  []
 
@@ -1962,7 +1969,7 @@ Chapter 10.
 ]
 
 [256]
-Overfull \hbox (27.75pt too wide) in paragraph at lines 5521--5521
+Overfull \hbox (27.75pt too wide) in paragraph at lines 5545--5545
 []  \TU/lmtt/m/n/10 <rect x="150" y="150" width="50" height="50" fill="firebrick"></rect>[] 
  []
 
@@ -2005,7 +2012,7 @@ File: ./figures/bijection-composition.png Graphic file (type bmp)
 [266]
 
 [267]
-Overfull \hbox (14.45105pt too wide) in paragraph at lines 5774--5775
+Overfull \hbox (14.45105pt too wide) in paragraph at lines 5798--5799
 \TU/lmr/m/n/10 underlying set is the family: $[] [] [][][]$
  []
 
@@ -2022,7 +2029,7 @@ File: ./figures/family-tree.pdf Graphic file (type pdf)
 [271]
 
 [272]
-Underfull \hbox (badness 10000) in paragraph at lines 5954--5955
+Underfull \hbox (badness 10000) in paragraph at lines 5978--5979
 [][]\TU/lmr/bx/n/10 Definition 11.13 \TU/lmr/m/n/10 (Monoid homomorphism)\TU/lmr/bx/n/10 . []\TU/lmr/m/n/10 Let $[][][] [][][] [][][]$ and
  []
 
@@ -2054,7 +2061,7 @@ File: ./figures/group-category.pdf Graphic file (type pdf)
 [280]
 Chapter 12.
 
-Underfull \hbox (badness 1472) in paragraph at lines 6244--6245
+Underfull \hbox (badness 1472) in paragraph at lines 6268--6269
 \TU/lmr/m/it/10 Markdown Publishing System\TU/lmr/m/n/10 . []$[][][][][] [] [] [] [][][][] [] [] [][] [][][][][][][] [] [][][] [] [][][][][][][] []
  []
 
@@ -2069,7 +2076,7 @@ Underfull \hbox (badness 1472) in paragraph at lines 6244--6245
 [283]
 
 [284]
-Underfull \hbox (badness 3240) in paragraph at lines 6463--6464
+Underfull \hbox (badness 3240) in paragraph at lines 6487--6488
 \TU/lmr/m/it/10 ceedings of the working conference on Advanced visual interfaces\TU/lmr/m/n/10 ,
  []
 
@@ -2078,14 +2085,14 @@ Underfull \hbox (badness 3240) in paragraph at lines 6463--6464
 [285]
 
 [286]
-Underfull \hbox (badness 3954) in paragraph at lines 6565--6566
+Underfull \hbox (badness 3954) in paragraph at lines 6589--6590
 \TU/lmr/m/n/10 ming.” \TU/lmr/m/it/10 Handmade Network\TU/lmr/m/n/10 . []$[][][][][] [] [] [] [][][][][][][][] [] [][][][][][][] [] [][][][][][][][] []
  []
 
 
 
 [287]
-Underfull \hbox (badness 1769) in paragraph at lines 6595--6596
+Underfull \hbox (badness 1769) in paragraph at lines 6619--6620
 []\TU/lmr/m/n/10 Henry, Lionel, and Hadley Wickham. 2024. \TU/lmr/m/it/10 Rlang: Functions for
  []
 
@@ -2096,7 +2103,7 @@ Underfull \hbox (badness 1769) in paragraph at lines 6595--6596
 [289]
 
 [290]
-Underfull \hbox (badness 10000) in paragraph at lines 6763--6764
+Underfull \hbox (badness 10000) in paragraph at lines 6793--6794
 []$[][][][][] [] [] [] [][][] [] [][][][][][][][] [] [][][] [] [][][][][] [] [][][][][] [] [][][][][][][][][][][][][][][][][][][][] [] [] []
  []
 
@@ -2107,27 +2114,27 @@ Underfull \hbox (badness 10000) in paragraph at lines 6763--6764
 [292]
 
 [293]
-Underfull \hbox (badness 1629) in paragraph at lines 6988--6989
+
+[294]
+Underfull \hbox (badness 1629) in paragraph at lines 7018--7019
 []\TU/lmr/m/n/10 Self, Jessica Zeitz, Michelle Dowling, John Wenskovitch, Ian Crandell,
  []
 
 
 
-[294]
-Underfull \hbox (badness 3354) in paragraph at lines 7030--7031
+[295]
+Underfull \hbox (badness 3354) in paragraph at lines 7060--7061
 \TU/lmr/m/it/10 A9\TU/lmr/m/n/10 . Youtube. []$[][][][][] [] [] [] [][][] [] [][][][][][][] [] [][][] [] [][][][][][][][] [] [][][][] [] [][][][][][][][] []
  []
 
 
-
-[295]
 
 [296]
 
 [297]
 
 [298]
-Underfull \hbox (badness 10000) in paragraph at lines 7210--7211
+Underfull \hbox (badness 10000) in paragraph at lines 7240--7241
 []$[][][][][] [] [] [] [][][] [] [][][][][][] [] [][][] [] [] [] [][][][][][][][][][][][][][][] [] [][][][][][][][] [] [][][][][][] [] [][][][][][][] []
  []
 
@@ -2140,12 +2147,15 @@ Underfull \hbox (badness 10000) in paragraph at lines 7210--7211
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-04-29>
  ***********
+
+LaTeX Warning: There were undefined references.
+
  ) 
 Here is how much of TeX's memory you used:
- 31646 strings out of 472247
- 646038 string characters out of 5529522
- 1152770 words of memory out of 5000000
- 57567 multiletter control sequences out of 15000+600000
+ 31649 strings out of 472247
+ 646074 string characters out of 5529522
+ 1151773 words of memory out of 5000000
+ 57570 multiletter control sequences out of 15000+600000
  633510 words of font info for 110 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  98i,17n,114p,3512b,750s stack positions out of 10000i,1000n,20000p,200000b,200000s

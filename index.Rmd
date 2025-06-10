@@ -84,6 +84,7 @@ theme_set(clean_theme)
 options(width = 60)
 
 knitr::opts_chunk$set(
+  comment = "",
   fig.align = "center",
   out.width = "100%" # For LaTeX output to render correctly
 )

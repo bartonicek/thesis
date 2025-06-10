@@ -112,18 +112,17 @@
 \contentsline {subsection}{\numberline {6.3.1}The interactive data visualization pipeline}{144}{subsection.6.3.1}%
 \contentsline {subsection}{\numberline {6.3.2}Scene model}{146}{subsection.6.3.2}%
 \contentsline {subsection}{\numberline {6.3.3}Plot model}{146}{subsection.6.3.3}%
-\contentsline {subsection}{\numberline {6.3.4}Hierarchical data summaries: computation, transformation, and encoding}{148}{subsection.6.3.4}%
+\contentsline {subsection}{\numberline {6.3.4}Hierarchical data summaries: computation, transformation, and encoding}{147}{subsection.6.3.4}%
 \contentsline {subsubsection}{\numberline {6.3.4.1}Problems with naive joins}{149}{subsubsection.6.3.4.1}%
 \contentsline {subsubsection}{\numberline {6.3.4.2}Solution: Computing summaries in one go}{150}{subsubsection.6.3.4.2}%
 \contentsline {subsubsection}{\numberline {6.3.4.3}Encoding summaries}{151}{subsubsection.6.3.4.3}%
 \contentsline {section}{\numberline {6.4}Low-level implementation (\texttt {plotscape})}{152}{section.6.4}%
-\contentsline {subsection}{\numberline {6.4.1}Programming paradigm}{152}{subsection.6.4.1}%
+\contentsline {subsection}{\numberline {6.4.1}Programming paradigm}{153}{subsection.6.4.1}%
 \contentsline {subsubsection}{\numberline {6.4.1.1}Procedural programming}{153}{subsubsection.6.4.1.1}%
 \contentsline {subsubsection}{\numberline {6.4.1.2}Functional programming}{154}{subsubsection.6.4.1.2}%
 \contentsline {subsubsection}{\numberline {6.4.1.3}Object-oriented programming}{155}{subsubsection.6.4.1.3}%
-\contentsline {subsubsection}{\numberline {6.4.1.4}Data-oriented programming}{156}{subsubsection.6.4.1.4}%
-\contentsline {subsubsection}{\numberline {6.4.1.5}Final choice of programming paradigm and rationale}{157}{subsubsection.6.4.1.5}%
-\contentsline {subsubsection}{\numberline {6.4.1.6}Style used in code examples}{159}{subsubsection.6.4.1.6}%
+\contentsline {subsubsection}{\numberline {6.4.1.4}Final choice of programming paradigm and rationale}{158}{subsubsection.6.4.1.4}%
+\contentsline {subsubsection}{\numberline {6.4.1.5}Style used in code examples}{159}{subsubsection.6.4.1.5}%
 \contentsline {subsection}{\numberline {6.4.2}Data representation: Row-oriented vs.~column-oriented}{160}{subsection.6.4.2}%
 \contentsline {subsubsection}{\numberline {6.4.2.1}Ease of use}{161}{subsubsection.6.4.2.1}%
 \contentsline {subsubsection}{\numberline {6.4.2.2}Performance}{161}{subsubsection.6.4.2.2}%

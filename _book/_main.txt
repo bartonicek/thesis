@@ -1359,12 +1359,12 @@ plots, see Figure 3.13. This makes it possible to quickly quickly explore trends
 across different dynamically-generated subsets of the data (Dix and Ellis 1998).
 The ability to quickly materialize alternative views of the data makes this a
 particularly effective tool for data exploration (Wilhelm 2008; Wills 2008).
-(ref:henderson)
 
 Figure 3.13: Linked selection involves highlighting the same cases across all
 plots. The user can select some objects in one plot, such as points in a scatterplot
 (top left), and the corresponding cases are higlighted in all the other plots.
-Source of the underlying data is the ‘mtcars‘ dataset (ref:henderson).
+Source of the underlying data is the ‘mtcars‘ dataset (Henderson and Velleman
+1981).
 Despite the fact that the user experience of linked selection is usually fairly
 intuitive, there are many subtle considerations that go into implementing the
 feature (for a good overview, see Wilhelm 2008). First, there is the issue of
@@ -1380,12 +1380,12 @@ y-axes in a histogram), the interaction may also be simplified by restricting
 selection/brushing to the primary axis (Satyanarayan et al. 2016). Finally, the
 selections can be combined by various operators such as OR, AND, NOT, and
 XOR, to form unions, intersections, and other types of logical subsets (Theus
+2002; Urbanek and Theus 2003; Wills 2000, 2008).
 
 3.2. WHAT EVEN IS INTERACTIVE DATA VISUALIZATION?
 
 41
 
-2002; Urbanek and Theus 2003; Wills 2000, 2008).
 Second, there is the issue of who should dispatch and respond to selection
 events. In presentation-focused interactive data visualization and dashboarding systems, this responsibility is kept flexible, such that some plots may only
 dispatch, only respond, do both, or neither (Satyanarayan et al. 2015, 2016).
@@ -1424,12 +1424,12 @@ not dispatching selection events), their expectations may be violated, leading
 to a subpar user experience. Thus, giving all plots the ability to dispatch and
 display selection events may be a desirable goal. However, as I will repeatedly
 demonstrate in this thesis, this places some fundamental very constraints on the
+objects in these plots, and the summary statistics they represent.
 
 42
 
 CHAPTER 3. BACKGROUND
 
-objects in these plots, and the summary statistics they represent.
 As an example of a visualization type which presents some diﬀiculties for linked
 selection, consider the lineplot in Figure 3.14. In a lineplot, lines are draw by
 connecting pairs of points in an ordered sequence. This presents some fundamental problems for linked selection. First, when points are selected, should we
@@ -1639,17 +1639,18 @@ transformations
 𝑎∈ℝ
 
 ular types of data, and vice versa. However, even when we pick an appropriate
-visual attribute to represent our data with, there are still many choices in how to
-perform the mapping. For instance, suppose we have some variable 𝑥 with values {1, 2, 3}. Should these be treated as magnitudes, a simple ordering, or even
-just category labels that may be permuted at will? In most data visualization
-systems, this metadata encoding of values into visual attributes is handled specialized components called scales or coordinate systems, and I will discuss their
-implementation in detail later, in Section 4.4.0.3. However, it is first necessary
-to discuss some theoretical issues involving scales.
+visual attribute to represent our data with, there are still many choices in how
+to perform the mapping. For instance, suppose we have some variable 𝑥 with
+values {1, 2, 3}. Should these be treated as magnitudes, a simple ordering, or
+even just category labels that may be permuted at will? In most data visualization systems, this metadata encoding of values into visual attributes is handled
+specialized components called scales or coordinate systems. I will discuss scales
+and their implementation in detail later, in Section 4.4.0.3, however, first, it is
+necessary to discuss some theoretical issues.
 A particular challenge when discussing scales in data visualization is that the
 topic unavoidably intersects with a research area that has a particularly long
 and contentious history: theory of measurement (see e.g. Hand 1996; Michell
 1986; Tal 2025). Theory of measurement (not to be confused with measure
-theory, with which it nevertheless shares some overlap) is the research area which
+theory, with which it nevertheless shares some overlap) is a research area which
 tries to answer the deceptively simple question: what does it mean to measure
 something? This seemingly trivial problem has inspired long and fiery debates
 within the fields of mathematics, philosophy, and social science. Particularly, in
@@ -1660,15 +1661,14 @@ Michell 2021).
 Arguably, the most influential work in this field has been that of Stevens (1946).
 In his fairly concise paper, Stevens defined a scale as method of assigning numbers to values, and introduced a four-fold classification classification, namely:
 nominal, ordinal, interval, and ratio scales (see Table 3.2).
-(ref:eq1)$ x’ = f(x)$, where 𝑓 is a bijection
 The Steven’s (1946) typology is based on invariance under transformation.
 Specifically, for each class of scales, we define a set of transformations that preserve valid comparisons. The set of valid transformations shrinks as we move
+from one class of scales to another.
 
 3.3. OVERVIEW OF BROADER DATA VISUALIZATION TOPICS
 
 47
 
-from one class of scales to another.
 For nominal scales, any kind of bijective transformation is valid. Intuitively,
 we can think of the scale as assigning labels to values, and any kind relabeling is valid, as long as it preserves equality of the underlying values. For
 instance, given a nominal scale with three values, we can assign the labels
@@ -1706,13 +1706,13 @@ efforts towards a unified theory, such as that of Krantz et al. (1971), measurem
 Tal 2025). Second, more relevant to statistics, some authors such as Stevens
 (1951) and Luce (1959) have used the theory to come up with prescriptive rules
 for statistical transformations, suggesting that, for example, taking the mean
+of an ordinal variable is wrong since the meaning of the average operator is
+not preserved under monotone transformations. However, this issue was hotly
 
 48
 
 CHAPTER 3. BACKGROUND
 
-of an ordinal variable is wrong since the meaning of the average operator is
-not preserved under monotone transformations. However, this issue was hotly
 contested by others, such as Lord (1953), Tukey (1986), and Velleman and
 Wilkinson (1993), who argued that many well-established statistical practices,
 such as rank-based tests and coeﬀicients of variations, rely on such “impermissible” statistics but can nevertheless yield valuable insights. More broadly, these
@@ -1741,6 +1741,7 @@ we first need some way to encode it. Currently, the two most overwhelmingly
 popular classes of image encoding formats are raster- or bitmap-based, and
 vector-based. Both come with an inherent set of advantages and disadvantages,
 which will be discussed in the relevant subsections below.
+
 3.3.4.1
 
 Raster graphics
@@ -1753,12 +1754,12 @@ and subsequent bytes representing individual pixels. Each pixel typically consis
 intensities, as well as opacity (alpha channel).
 The raster format is fairly natural, since it maps directly on to how most computer screens (LCD/LED) and printers (laser, ink-jet) represent images (Shirley,
 Ashikhmin, and Marschner 2009). Additionally, raster graphics have the advantage of having a constant size, independent of the complexity of the encoded
+image (a grid of 𝑛 × 𝑚 pixels is always at most just a grid of 𝑛 × 𝑚 pixels),
 
 3.3. OVERVIEW OF BROADER DATA VISUALIZATION TOPICS
 
 49
 
-image (a grid of 𝑛 × 𝑚 pixels is always at most just a grid of 𝑛 × 𝑚 pixels),
 and can be further compressed to minimize space via either lossless (GIF, TIFF
 PNG) or lossy (JPEG) compression formats.
 However, raster graphics also have certain disadvantages. The constant space
@@ -1801,12 +1802,12 @@ representing of highly detailed, realistic images, such as photos, challenging.
 Currently, the most popular vector graphics format is Scalable Vector Graphics
 (SVG, Quint 2003). Based on the XML markup language, SVG encodes an
 image as a tree of nodes representing (primarily) geometric objects, similar to
+how the browser encodes a webpage as a tree of nodes in the Document Object
 
 50
 
 CHAPTER 3. BACKGROUND
 
-how the browser encodes a webpage as a tree of nodes in the Document Object
 Model (DOM; represented in plain-text as HTML). SVG files are typically stored
 in plain-text format, with nodes enclosed by tags which may be given attributes.
 
@@ -5153,10 +5154,10 @@ This section contains a detailed description of the two software packages develo
 • plotscape: Written in TypeScript/JavaScript, provides a “low-level” interactive visualization framework and utilities
 • plotscaper: Written in R, provides a “high-level” wrapper/API for R
 users
-A couple of general notes. Firstly, the low-level platform (plotscape) was
+A couple of quick general notes. Firstly, the low-level platform (plotscape) was
 written with client-side web technology stack: JavaScript, HTML, and CSS.
-Web technologies provide a simple and portable way to do interactive apps
-in R and have become the de facto standard, thanks to good integration via
+Web technologies provide a simple and portable platform for making interactive
+apps in R and have become the de facto standard, thanks to good integration via
 packages such as htmlwidgets (Vaidyanathan et al. 2021) and Shiny (Sievert
 2020). Second, functionality was split across two packages out of practical
 concerns. To achieve optimal performance and fine-grained control, plotscape
@@ -5167,11 +5168,11 @@ As of the time of writing, plotscape comprises of about 6,400 significant lines
 of code (SLOC; un-minified, primarily TypeScript but also some CSS, includes
 tests, etc…), and plotscaper contains about 500 SLOC of R code (both counted
 using cloc). The unpacked size of all (minified) files is about 200 kilobytes for
-plotscape and 460 kilobytes for plotscaper, which is fairly modest compared
-to other interactive data visualization alternatives for R1 . Both packages have
-fairly minimal dependencies, which should hopefully make them easy to maintain them going forward.
-1 For instance, the plotly package has about 7.3 megabytes, which amounts to over 15x
-difference.
+plotscape and 460 kilobytes for plotscaper, a fairly modest size compared to
+other interactive data visualization options for R1 . Both packages have fairly
+minimal dependencies, which should hopefully make them easy to maintain and
+extend going forward.
+1 For instance, the plotly package takes up about 7.3 megabytes, over 15x difference.
 
 131
 
@@ -5182,9 +5183,10 @@ CHAPTER 6. SYSTEM DESCRIPTION
 Since the two packages address fairly well-separable concerns - high-level API
 design vs. low-level interactive visualization utilites - I decided to organize this
 section accordingly. Specifically, I first discuss general, high-level API concerns
-alongside plotscaper functionality. Then I delve into the low-level implementation details alongside plotscape. There are of course cross-cutting concerns
-and those will be addressed towards ends of the respective sections. However,
-first, let’s briefly review the core requirement of the package(s).
+alongside plotscaper. Then I delve into the low-level implementation details
+alongside plotscape. There are of course cross-cutting concerns and those will
+be addressed towards ends of the respective sections. However, first, let’s briefly
+review the core requirement of the package(s).
 
 6.1 Core requirements
 To re-iterate, from Section 5, the core requirements for the high-level API
@@ -5326,7 +5328,7 @@ NSE a hindrance (more on this later).
 
 135
 
-• The package was developed before widespread adoption of the pipe operator (both %*% from magrittr, Bache and Wickham 2022; and the native
+• The package was developed before widespread adoption of the pipe operator (both %>% from magrittr, Bache and Wickham 2022; and the native
 R |> pipe, R Core Team 2024) and its use of the overloaded + operator is
 a noted design flaw (see Wickham, Hadley 2014).
 
@@ -5435,9 +5437,9 @@ Variables and encodings
 Third, note that, in plotscaper, variable names are not meant to map directly
 to aesthetics such as x- or y-axis position or size. In other words, unlike ggplot2,
 plotscaper does not try to establish a direct correspondence between original
-data variables and the visual encodings/aesthetics. The reason for this is tha, in
-many common plot types, aesthetics do not actually represent variables found
-in the original data, but instead ones which have been derived or computed.
+data variables and the visual encodings/aesthetics. The reasoning behind this
+choice is that, in many common plot types, aesthetics do not actually represent
+variables found in the original data, but instead derived or computed variables.
 Take, for instance, the following ggplot call:
 ggplot(mtcars, aes(x = mpg)) +
 geom_histogram()
@@ -5527,11 +5529,10 @@ steps of the data visualization pipeline are lifted out of geoms.
 The scene and the schema
 
 A key part of the plotscaper API is the distinction between two classes of
-objects representing figures: schemas and scenes. Put simply, a schema is an
-immutable ledger or blueprint, specifying how a figure is created, while a scene
-is a live, rendered version of the figure which can be directly modified. Both
-can be manipulated using (largely) the same set of functions, implemented as
-S3 methods which dispatch on the underlying class.
+objects representing figures: schemas and scenes. Put simply, a schema is
+an immutable ledger or blueprint, specifying how a figure is created, whereas
+a scene is a live, rendered version of the figure which can be directly interacted with. Both can be manipulated using (largely) the same set of functions,
+implemented as S3 methods which dispatch on the underlying class.
 As shown before, schema can be created with the create_schema function:
 schema <- create_schema(mtcars) |>
 add_scatterplot(c("wt", "mpg")) |>
@@ -5554,7 +5555,7 @@ str(schema$queue)
 .. ..$ variables: chr [1:2] "wt" "mpg"
 ##
 .. ..$ id
-: 'scalar' chr "2d959757-16cd-4db9-b6de-d16990860a4f"
+: 'scalar' chr "5446809a-4f1a-4e5a-8613-84ba0cdfc4bb"
 ## $ :List of 2
 ##
 ..$ type: chr "add-plot"
@@ -5567,128 +5568,119 @@ str(schema$queue)
 .. ..$ variables: chr "cyl"
 ##
 .. ..$ id
-: 'scalar' chr "b806bd08-62f6-498b-ba95-2d196850f2e5"
+: 'scalar' chr "1a7583b8-ba12-45e4-8484-20f9f0da4bf4"
 As you can see, the object created with create_schema is essentially just
 a list of messages. Modifying the schema by calling functions such as
 add_scatterplot or set_scale simply appends a new message to the list,
-similar to how objects of class ggplot are modified by the corresponding
-functions and the + operator in ggplot2 (Wickham 2016). This design makes it
-easy to transport schemas (e.g. as JSON) and modify them programmatically.
-Finally, rendering the schema into a figure requires an explicit call to render.
-Note that this approach is different from the popular R convention of rendering
+similar to how objects of class ggplot are modified via the + operator
+(Wickham 2016). This makes schemas easy to transport (e.g. as JSON) and
+modify programmatically. Finally, note how rendering the schema requires an
+explicit call to render. This approach differs from the popular R convention of
 
 142
 
 CHAPTER 6. SYSTEM DESCRIPTION
 
-implicitly via a print method; however, there is a good reason for this design
-choice which will be discussed later.
-The call to render turns the schema gets turned into a live, interactive figure
-by constructing an htmlwidgets widget (Vaidyanathan et al. 2021). This bundles up the underlying data and plotscape code (JavaScript, HTML, CSS) into
-a standalone HTLM document, which may be served live, such as in RStudio
-viewer, or statically embedded in another HTML document, such as one produced with RMarkdown. All of the schema messages also get forwarded to the
-widget and applied sequentially, creating the figure.
-Note that, under this model, the schema merely records state-generating steps,
-not the state itself. In other words, all of the state lives on the scene (the clientside figure). This design avoids state duplication between the R session (server)
-and web-browser-based figure (client), eliminating the need for synchronization.
-While this client-heavy approach deviates from the typical client-server architecture, where most of state resides on the server, it is essential for achieving
-highly-responsive interactive visualizations. By keeping most of the state on the
-client, we avoid round-trips to the server, resulting in fast updates in response
-to user interaction. For instance, linked selection updates, triggered by mousemove events, can be computed directly on the client and instantly rendered.
-Conversely, this is also why server-centric frameworks like Shiny (W. Chang et
-al. 2024) struggle with latency-sensitive interactive features like linked selection.
-Finally, as will be discussed below, while the R session (server) may occasionally send and receive messages, their latency requirements are significantly less
-stringent, making a “thin” server perfectly viable.
+rendering implicitly via a print method; there is an important reason for this
+design choice which will be discussed later.
+The call to render turns the schema into a live figure that can be interacted
+with. This happens by constructing an htmlwidgets widget (Vaidyanathan
+et al. 2021), which bundles up the underlying data and plotscape code
+(JavaScript, HTML, CSS) into a standalone document, which may be served
+live, such as in RStudio viewer, or statically embedded within another HTML
+document, such as one produced with RMarkdown. The schema messages get
+forwarded to the widget and applied sequentially, creating the figure.
+Importantly, under this model, the schema merely records state-generating
+steps, not the state itself. All mutable state lives on the scene (the clientside figure). This design avoids state duplication between the R session (server)
+and browser-based figure (client), eliminating the need for synchronization.
+While this approach deviates from the typical client-server architecture, where
+most of state tends to reside on the server, it is essential for achieving highlyresponsive interactive graphics. Keeping state on the client reduces roundtrips to the server, resulting in fast updates in response to user events. For
+instance, linked selection updates, triggered by mousemove events, are initiated,
+computed, and rendered directly on the client. This avoids the issues of servercentric frameworks like Shiny (W. Chang et al. 2024), which struggle with highfrequency interactive events like linked selection. Finally, as will be discussed
+below, while the R session (server) may occasionally send and receive messages,
+these are less latency-critical, making a “thin” server perfectly viable.
 
 6.2.4
 
 Client-server communication
 
-When inside an interactive R session (e.g., in RStudio IDE (Posit 2024)), creating a plotscaper figure via calling render also automatically launches a
-WebSockets server (using the httpuv package, Cheng et al. 2024). This server
-allows live, two-way communication between the R session (server) and the figure (client). By assigning the output of the render call to a variable, users can
-save a handle to this server, which can be then used to call functions which
-query the figure’s state or cause mutable, live updates. For instance:
-# The code in this chunk is NOT EVALUATED # it only works only inside interactive R sessions,
-# not inside static RMarkdown/bookdown documents.
+When inside an interactive R session, creating a plotscaper figure via the call
+to render also automatically launches a WebSockets server (using the httpuv
+package, Cheng et al. 2024), supporting a live, two-way communication between
+the R session (server) and the figure (client). By assigning the output of the
+render to a variable, users can save a handle to the server, which can then be
+used to call methods to modify the figure or query its state. For instance:
+# The code below is used for illustration and NOT EVALUATED:
+# it can only be run in interactive R sessions,
+# not static documents such as this thesis
 scene <- create_schema(mtcars) |>
 add_scatterplot(c("wt", "mpg")) |>
-add_barplot(c("cyl")) |>
+add_barplot("cyl") |>
 render()
+# Render the scene
 
 6.2. HIGH-LEVEL API (PLOTSCAPER)
 
 143
 
-# Render the scene
 scene
 # Add a histogram, modifying the figure in-place
-scene |> add_histogram(c("disp"))
+scene |> add_histogram("disp")
 # Set the scatterplot's lower x-axis limit to 0 (also in-place)
 scene |> set_scale("plot1", "x", min = 0)
 # Select cases corresponding to rows 1 to 10
 scene |> select_cases(1:10)
-# Query selected cases - returns the corresponding
-# as a numeric vector which can be used in other
-# functions or printed to the console
+# Query selected cases retuning a numeric vector
 scene |> selected_cases() # [1] 1 2 3 4 5 6 7 8 9 10
 As noted earlier, most plotscaper functions are polymorphic S3 methods which
-can accept either a schema or a scene as the first argument. When called with
-schema as the first argument, they append a message to the schema, whereas
-when called with scene as the first argument, they send a WebSockets request, which may either cause a live-update to the figure or have the client
-respond back with data (provided we are inside an interactive R session). In
-more abstract terms, with respect to these methods, the render function is a
-functor/homomorphism, meaning that we can either call these methods on the
-schema and then render it, or immediately render the figure and then call the
-methods, and the result will be the same (provided no user interaction happens
-in the meantime). The exception to this rule are state-querying functions such
-as selected_cases, assigned_cases, and get_scale. These functions send a
-request to retrieve the rendered figure’s state and so it makes little sense to call
-them on the schema4 .
+dispatch on either a schema or a scene. When called dispatched on a schema,
+they simply append a message, whereas when dispatched on a scene, they send
+a WebSockets request, which may either cause a live-update or have the client
+respond with data (while interactive R session). More abstractly, the render
+function and other methods are a functor/homomorphism, meaning that they
+preserve composition - we can either first dispatch on a schema and then render,
+or render and then dispatch on the scene, and the result will be the same (provided no other interaction happens in the meantime). The one exception to this
+rule are state-querying functions such as selected_cases, assigned_cases,
+and get_scale. These retrieve the figure’s state and so make little sense to
+dispatch on the schema4 .
 
 6.2.5
 
 HTML embedding
 
-As htmlwidgets widgets, plotscaper figures are essentially static webpages.
-As such, they can be statically embedded in HTML documents such as those
-produced by RMarkdown (Allaire et al. 2024) or Quarto (Allaire and Dervieux
-2024). More specifically, when a plotscaper figure is rendered, htmlwidgets
-4 Of course, we could always parse the list of messages to compute the figure’s state on
-demand, as it will be when the figure gets rendered. For instance with create_schema(...)
-|> assign_cases(1:10, 2) |> assign_cases(5:10, 3) we could parse the messages to infer
-that the first five group indices will belong to group 2 and the second five will belong to group
-3. However, since the user has to explicitly write the code to modify the figure’s state, the
-utility of this hypothetical parsing mechanism is debatable.
+As htmlwidgets widgets, plotscaper figures are essentially webpages. As such,
+they can be statically embedded in HTML documents such as those produced by
+RMarkdown (Allaire et al. 2024) or Quarto (Allaire and Dervieux 2024). More
+specifically, when a plotscaper figure is rendered, htmlwidgets (Vaidyanathan
+et al. 2021) is used to bundle the underlying HTML, CSS and JavaScript. The
+resulting widget can then be embedded in any valid HTML document, or saved
+as a standalone HTML file (using the htlwidgets::saveWidget).5
+As mentioned above, since client-server communication requires an active server,
+statically rendered figures do not support code-based interaction (described in
+4 Of course, the schema could theoretically be parsed to compute the figure’s state. For instance with create_schema(...) |> assign_cases(1:10, 2) |> assign_cases(5:10, 3) we
+could infer that the first five group indices will belong to group 2 and the second five will belong to group 3. However, since the user has to write the code to modifying the figure in the
+first place, the utility of such parsing is debatable.
+5 In fact, this is how plotscaper figures are rendered in the present thesis
 
 144
 
 CHAPTER 6. SYSTEM DESCRIPTION
 
-(Vaidyanathan et al. 2021) is used to bundle the underlying HTML, CSS
-and JavaScript. The resulting widget can then be statically embedded in
-any valid HTML document, or saved as a standalone HTML file using the
-htlwidgets::saveWidget function. This is in fact how plotscaper figures are
-rendered in the present thesis.
-As mentioned above, since client-server communication requires a running
-server, statically rendered figures cannot be interacted with through code, in
-the way described in Section 6.2.4. However, within-figure interactive features
-such as linked selection and querying happen entirely client-side, and as such
-work seamlessly in static environments. This makes plotscaper a convenient
-tool for use in interactive reports, such as those created by RMarkdown (Allaire
-et al. 2024) or Quarto (Allaire and Dervieux 2024).
+Section 6.2.4). However, since within-figure interactive features such as linked
+selection and querying are entirely client-side, they are always available, even
+in static documents. This makes plotscaper a good fit for interactive reports,
+such as those created by RMarkdown (Allaire et al. 2024) or Quarto (Allaire
+and Dervieux 2024).
 
 6.3 Overview of the system model
 In Section 4, I outlined key concerns that arise when designing interactive data
 visualization systems, and laid out a rough sketch of the interactive data visualization pipeline and the components it must contain. Here, I will give a broad
 overview of the implementation of this pipeline in plotscape. I will also begin
-relating this pipeline to concrete components of plotscape figures and plots,
-which will be discussed in more depth later, in Section 6.4.4. Finally, as it is
-one of the core topics of the present thesis, I will end with a brief discussion
-on the problem of hierarchical data summaries underlying plots, in which I will
-re-iterate some of the points from Section 4, discuss the constraints for the API
-for computing, transforming, and encoding these summaries, and link these to
-their implementation in plotscape.
+relating this pipeline to core plotscape components, which will be discussed in
+more depth later, in Section 6.4.4. Finally, as it is one of the core topics of the
+present thesis, I will end with a brief discussion of the problem of hierarchical
+data summaries, in which I will re-iterate some key points from Section 4, discuss the constraints they provide for aggregation, transformation, and encoding,
+and link these to their implementation in plotscape.
 
 6.3.1
 
@@ -5696,60 +5688,55 @@ The interactive data visualization pipeline
 
 Figure 6.3 summarizes the interactive data visualization pipeline as implemented
 in plotscape/plotscaper:
+
+Figure 6.3: A diagram of the interactive data visualization pipeline.
 This pipeline describes the data flow that takes places in a single interactive
-plot. The key thing to note that the core of the pipeline is the following (linear)
-chain of transformations:
-data → partitions → summaries → encodings
-Specifically, as discussed throughout Section 4, data is first divided into a hierarchy of partitions, which are then aggregated and turned into sets of summaries.
-These summaries are then transformed and mapped to aesthetic encodings,
-which are finally rendered as geometric objects (and also used to train the plots’
-scales).
+plot. Importantly, the core part of the pipeline is the following (linear) chain of
+transformations:
 
 6.3. OVERVIEW OF THE SYSTEM MODEL
 
 145
 
-Figure 6.3: A diagram of the interactive data visualization pipeline.
-Interactivity can enter the pipeline in several places. The deepest level of interaction involves the Marker, a shared data structure that manages linked selection across multiple plots. When a user engages in linked selection, the Marker
-updates, triggering a recalculation of data partitions, summaries, and aesthetic
-encodings. This essentially means the entire pipeline needs to be recomputed.
-Similarly, altering partitioning parameters like histogram binwidth also leads to
-the same “deep” cascade of updates. A somewhat less deep interaction is representation switching. This merely updates the mapping between summaries and
-aesthetic encodings without needing to update data partitions or the summaries
-themselves. Finally, the most superficial are direct scale updates. These do not
-need to touch the underlying data at all.
-This is a simplified model, however, it does highlight some interesting features
-and there are a couple of important things to note. First, the model allow us to
-reason about the computational complexity of reactive updates. Updates tend
-to be the most computationally expensive in the deep sections of the pipeline
-and get progressively cheaper as we move towards the surface. For example,
-updates to the data, Marker, or the partitions require large parts of the pipeline
-to be recomputed, whereas direct updates to scales typically have a fairly isolated impact (only on the rendered output). Further, the model also allows
-us to reason about complexity of features that are not yet implemented. For
-instance, while, so far, I have not found a use-case for direct interactive updates
-of summaries (note the absence of an arrow between User Input and Summaries
-in Figure 6.3), we could imagine adding reactive parameters to this part of the
-pipeline as well, such that we may, for example, summarize the data by computing the sum of top 𝑛 values, with 𝑛 being a reactive parameter. Then, the
-complexity of the resulting updates would lie somewhere between modifying
-partitions and representation switching.
+data → partitions → summaries → encodings
+Specifically, as discussed throughout Section 4, data is first divided into a hierarchy of partitions, which are then aggregated and turned into sets of summaries.
+These summaries are then transformed and mapped to aesthetic encodings,
+which are finally rendered as geometric objects (and also used to train the plots’
+scales, among other things).
+Interactivity can enter the pipeline in several places. The deepest level of interaction involves the Marker, a shared data structure that manages linked
+selection across multiple plots. When a user engages in linked selection, the
+Marker updates, triggering a recalculation of data partitions, summaries, and
+aesthetic encodings. This essentially means the entire pipeline needs to be recomputed. Similarly, altering partitioning parameters like histogram binwidth
+also leads to the same “deep” cascade of updates. A somewhat less deep interaction is representation switching. This merely updates the mapping between
+summaries and aesthetic encodings without necessitating updates to data partitions or the summaries themselves. Finally, the most superficial updates are
+those involving scales. These do not affect the underlying data at all.
+This is a greatly simplified model, however, it does highlight some key features.
+First, the model allow us to reason about the computational complexity of reactive updates. Updates tend to be the most expensive when they are deep within
+the pipeline, and as they move “closer to the surface”, their cost progressively
+decreases. For instance, updates to the data, Marker, or the partitions require
+significant recomputation, whereas direct scale updates typically have a fairly
+isolated impact, affecting the rendered output only. Further, the model also allows us to reason about the complexity of yet-to-be-implemented features. For
+instance, while, right now, there are no direct interactive updates of summaries
+(note the absence of an arrow between User Input and Summaries in Figure
+6.3), we could imagine extending the system, such that, for example, we may
+summarize the data by computing the sum of top 𝑛 values, with 𝑛 being a
+reactive parameter. Then, the complexity of such updates would fall between
+modifying partitions and switching representations.
 Second, as discussed throughout Section 4, although the different stages of the
+pipeline are fairly self-contained, they are not fully independent. At times, the
+more superficial stages may require information from the deeper levels. For
+instance, while stacking takes place during the Aesthetic Encoding step of the
+pipeline, it is not just a graphical operation; it relies on the information about
+how the summary statistics have been aggregated (see also Section 4.3). Likewise, at times, we may want to use the neutral element from summarization
+as the lower limit of the y-axis scale (see Section 4.3.2.10.3). Finally, during
+querying, while we may superficially work with geometric objects and their aesthetic encodings, we actually want to display the raw, untransformed summary
+statistics (Summaries). Therefore, throughout the pipeline, it is crucial to retain
+appropriate metadata and backlinks for use in later stages.
 
 146
 
 CHAPTER 6. SYSTEM DESCRIPTION
 
-pipeline are fairly self-contained, they are not fully independent. At times,
-the more superficial stages may require information from the deeper levels. For
-instance, stacking takes place during the Aesthetic Encoding step of the pipeline,
-however, it is not merely a graphical operation since it requires information
-about how the summary statistics have been aggregated (see also Section 4.3).
-Likewise, at times, we may want to use the neutral element used during the
-summarization as the lower limit of the y-axis scale (see Section 4.3.2.10.3).
-Finally, during querying, while we may superficially work with geometric objects
-and their underlying aesthetic encodings (i.e. just the visual output), we really
-want to display the untransformed summary statistics (Summaries). Therefore,
-throughout the pipeline, it is necessary to retain appropriate metadata and
-backlinks that can be used by the later stages.
 Now I will briefly outline the core software components of plotscape, in more
 concrete terms. First, I will describe the components the fundamental unit of
 the system, which is a figure made up of multiple plots: the Scene. Then, I will
@@ -5766,44 +5753,40 @@ of one or more interactive plots. Thus, the central component is the so-called
 Scene which represents the entire figure containing the plots (see Figure 6.4).
 To support linked selection (which affects all plots simultaneously), the scene
 contains a specialized Marker object. For communication with an external server
-(R client), a client (WebSockets) object is also included. Lastly, the Scene
-contains5 an event listener object to coordinate user input and interactions
-between all components. The relations between the various components are
+(R client), a (WebSockets) client object is also included. Lastly, the Scene
+contains6 an event listener object which coordinates user input and interactions
+between other components. The relations between the various components are
 described by the following diagram:
+
+Figure 6.4: Diagram of a scene. Solid arrows indicate composition, dashed arrows indicate other kinds of relationships (e.g. event-dispatch, argument passing
+in method calls).
 
 6.3.3
 
 Plot model
 
-Further, every plotscape/plotscaper plot is also composed of several different, related components (see Figure 6.5). First, related to Section 6.3.1, there
-are the components directly related to the data visualization pipeline. The data
-is aggregated into a hierarchy of Summaries, which are in turn composed of
-special reduced variables or Reduceds. These reduced variables are not simple
-“flat” arrays of values, but contain aggregation metadata (Factors and Reducers), as well as pointers to the parent-level values. This enables hierarchy-aware
-5 This could also be implemented by class inheritance, by making the Scene object extend
+Further, every plotscape/plotscaper plot is also composed of several different,
+related components (see Figure 6.5). First, in light of Section 6.3.1, there are
+some components which are directly related to the data visualization pipeline.
+The data is aggregated into a hierarchy of Summaries, composed of special
+6 This could also be implemented by class inheritance, by making the Scene object extend
 an Observer class.
 
 6.3. OVERVIEW OF THE SYSTEM MODEL
 
 147
 
-Figure 6.4: Diagram of a scene. Solid arrows indicate composition, dashed arrows indicate other kinds of relationships (e.g. event-dispatch, argument passing
-in method calls).
-transformations such as stacking or normalization (e.g. in spineplot). The aggregated summaries are translated into aesthetic encodings and used to train
-the plot Scales, which are composed of domain and codomain objects of the
-same type (Expanse). Further, the translated summaries are also mapped to
-geometric objects or geoms, which are used in rendering and collision-detection
-(used to identify selected cases during linked selection). User input and scene
-events are handled by an event listener object, which may update reactive plot
-parameters and propagate these changes to the plot’s scales or even the underlying summaries. Finally, the data-dependent geoms, as well as other, auxiliary
-kinds of graphical objects (e.g. axis labels/titles) are rendered as visual output.
+reduced variables or Reduceds. These reduced variables are not simple “flat”
+arrays of values, but contain aggregation metadata (Factors and Reducers), as
+well as pointers to the parent-level values, enabling hierarchy-aware transformations such as stacking or normalization (e.g. in spineplot). The aggregated
+summaries are translated into aesthetic encodings and used to train the plot
+Scales, which are composed of domain and codomain objects of the type (Expanse). The translated summaries are also mapped to geometric objects or
+geoms, which are used in rendering and collision-detection (in linked selection).
+User input and scene events are again handled by an event listener object. Finally, the data-representing geoms, as well as other, auxiliary kinds of graphical
+objects (e.g. axis labels/titles) are rendered as visual output.
 
 Figure 6.5: Diagram of a ‘plotscape‘ plot. Solid arrows indicate composition,
 dashed arrows indicate other kinds of relationships (e.g. event-dispatch, argument passing in method calls).
-
-148
-
-CHAPTER 6. SYSTEM DESCRIPTION
 
 6.3.4
 
@@ -5816,6 +5799,11 @@ dependencies within the represented data. Specifically, to draw objects composed
 the data. However, coming up with a convenient API for describing these relationships is not simple, and so I would like to spend a bit more time discussing
 it here.
 As discussed in Section 4.2.4, rendering certain kinds of plots composed of geometric objects with highlighted parts representing selection requires a tree-like
+
+148
+
+CHAPTER 6. SYSTEM DESCRIPTION
+
 structure (see e.g. Figure 4.10). In other words, our system needs to be able to
 represent a hierarchy of connected data tables of the following shape:
 
@@ -5846,6 +5834,7 @@ To give a more concrete example, consider the summary statistics we need to
 compute to draw a spineplot. We may initially consider computing a simple
 table of summaries computed over the product of two partitioning variables:
 aggregate(mpg ~ cyl + am, FUN = sum, data = mtcars)
+
 ##
 cyl am
 mpg
@@ -5865,11 +5854,6 @@ However, such a simple, “flat” table of summaries is not enough. To compute
 the heights of the normalized bar segments, we also require parent-level data.
 One way to add this information is via a join operation (specifically, a left outer
 join, see Codd 1970):
-
-6.3. OVERVIEW OF THE SYSTEM MODEL
-
-149
-
 Example 6.1 (Naive aggregation for spineplot).
 parent_data <- aggregate(mpg ~ cyl, FUN = sum, data = mtcars)
 child_data <- aggregate(mpg ~ cyl + am, FUN = sum, data = mtcars)
@@ -5881,6 +5865,11 @@ stacked_and_normalized <- as.numeric(sapply(split(mpg.x, cyl), cumsum)) / mpg.y
 normalized <- mpg.x / mpg.y
 stacked <- as.numeric(sapply(split(mpg.x, cyl), cumsum)) # Ignores order
 })
+
+6.3. OVERVIEW OF THE SYSTEM MODEL
+
+149
+
 ##
 cyl am mpg.x mpg.y stacked normalized
 ## 1
@@ -5932,11 +5921,6 @@ Second, the naive join method needlessly duplicates information. We want to
 compute a consistent set of summaries over different levels of granularity, and,
 as such, most of the code in the first two lines of Example 6.1 is redundant.
 Specifically, the only thing that changes are the partitioning variables on the
-
-150
-
-CHAPTER 6. SYSTEM DESCRIPTION
-
 right hand side of the formula (i.e. ~ cyl and ~ cyl + am). Further, since we
 create the hierarchy of partitions by taking repeated products of the partitioning
 variables, specifying each level of partitioning explicitly is redundant: we can
@@ -5950,6 +5934,11 @@ data has to be repeated for each level of the child partition.
 Third, the naive join method does not preserve the appropriate metadata.
 Specifically, the output of the aggregate function is a simple dataframe, with
 the aggregated summaries being just a simple numeric column. However, as I
+
+150
+
+CHAPTER 6. SYSTEM DESCRIPTION
+
 argued throughout Section 4 (in particular, Section 4.3.1.2), to correctly apply
 operations like stacking, we need to know how the summaries have been computed. Therefore, it is essential to preserve metadata about the summarizing
 function, as well as the partition over which the result has been computed.
@@ -5958,6 +5947,7 @@ aggregate function, which takes a single FUN which specifies the summary functio
 for a diverse range of graphics, it may be useful to be able to compute multiple kinds of summaries across the same partitioning scheme, similar to how we
 can specify multiple aggregation functions within a single SQL SELECT statement (Codd 1970). This could be useful, for example, if we want to map one
 summary to a barplot bars’ heights and a different summary to the bars’ widths.
+
 6.3.4.2
 
 Solution: Computing summaries in one go
@@ -5971,23 +5961,24 @@ data = mtcars,
 partition_by = c(cyl, am),
 summaries = list(stat1 = sum(mpg), stat2 = max(wt))
 )
+
 This approach has several key benefits. First, it automatically and concisely
 encodes the hierarchical structure. By specifying a list of partitioning variables,
 we can let the system take the partition products and link the different levels
-
-6.3. OVERVIEW OF THE SYSTEM MODEL
-
-151
-
 together. Second, by specifying a list/dictionary of summaries, we can append
 the function that has been used to compute the summary function as metadata
 to the result. For instance, within the body of the compute function, we could
 append the appropriate metadata as follows:
 attr(result$stat1, "reducer") <- list(summaryfn = sum, initialfn = function() 0)
 attr(result$stat2, "reducer") <- list(summaryfn = max, initialfn = function() -Inf)
+
 This gets to the idea of reduced variables and reducers, which will be discussed
 in more depth in Section 6.4.4.6.
+
+6.3. OVERVIEW OF THE SYSTEM MODEL
 6.3.4.3
+
+151
 
 Encoding summaries
 
@@ -6019,11 +6010,6 @@ barplot_segment_data <- encode(
 summarized_data[2],
 encodings = list(x = cyl, y = 0, width = 1, height = stack(stat))
 )
-
-152
-
-CHAPTER 6. SYSTEM DESCRIPTION
-
 The encoded_object_data data set represents the whole barplot bars
 and may be used for training scales and collision detection, while the
 encoded_segment_data data set represents the more granular bar segments,
@@ -6032,6 +6018,11 @@ the segment data, since this represents the finest level of partitioning.
 Separating the summary and encoding step has the additional benefit that representation switching becomes very simple. For instance, to turn the barplot
 into a spineplot, we could use the same summary data and simply swap the
 encoding scheme:
+
+152
+
+CHAPTER 6. SYSTEM DESCRIPTION
+
 spineplot_object_data <- encode(
 summarized_data[1],
 encodings = list(x = cyl, y = 0, width = stat, height = 1)
@@ -6046,212 +6037,197 @@ height = normalize(stack(stat)))
 This section describes the actual platform used to produce and manipulate interactive figures, as implemented in plotscape. I begin with the discussion of
 some broader concerns, specifically the choice of programming paradigm (Section 6.4.1), data representation (Section 6.4.2), and reactivity model (Section
 6.4.3. Finally, I provide a detailed listing of the system’s components and their
-functionality (Section 6.4.4). Some readers may potentially find it easier to start
-with Section 6.4.4, as this presents the most concrete and granular information.
-Key concepts are explained via example code chunks. All of these represent
-valid TypeScript code, and selected examples are even evaluated, using the Bun
-TypeScript/JavaScript runtime (“Bun” 2025). The reason why TypeScript was
-chosen over R for the examples is that explicit type signatures make many of
-the concepts much easier to explain. Further, since plotscape is written in
-TypeScript, many of the examples are taken directly from the codebase, albeit
-sometimes modified for consistency or conciseness.
+functionality (Section 6.4.4). Some readers may find it easier to start with
+Section 6.4.4, as this presents the most concrete information.
+Key concepts are explained via example code chunks. All are valid TypeScript
+code, and many are even evaluated, using the Bun TypeScript/JavaScript runtime (“Bun” 2025). The reason why TypeScript was chosen over R for these
+examples is that explicit type signatures make many of the concepts much easier to explain. Further, since plotscape is written in TypeScript, many of the
+examples are taken almost directly from the codebase (with minor adjustments
+for sake of consistency and conciseness).
 
 6.4.1
 
 Programming paradigm
 
 The first broad issue worth briefly discussing is the choice of programming
-paradigm for plotscape. A programming paradigm is a set of rules for thinking about and structuring computer programs. Each paradigm offers guidelines
+paradigm for plotscape. In Section 6.2, I intentionally omitted discussions
+of this issue since the material was fairly high level. However, since I will now
+start delving into implementation details, I believe it it important to give the
+topic of programming paradigms a brief consideration.
+Broadly speaking, a programming paradigm is a set of rules for reasoning about
+the structure of computer programs, offering guidelines and conventions about
+common programming concerns, such as data representation, code organization, and control flow. Importantly, while many languages lean towards a single
+paradigm (see e.g. Van Roy et al. 2009), the languages two I chose for my implementation of plotscape/plotscaper - JavaScript/TypeScript and R - are both
+multi-paradigm (Chambers 2014; MDN 2024e). As C-inspired languages, they
 
 6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
 
 153
 
-and conventions regarding common programming concerns, including data representation, code organization, and control flow.
-While most programming languages tend to be geared towards one specific programming paradigm (see e.g. Van Roy et al. 2009), the languages I chose for
-my implementation - JavaScript/TypeScript and R - are both multi-paradigm
-languages (Chambers 2014; MDN 2024e). As C-based languages, both support
-classical procedural programming. However, both languages also have firstclass function support, allowing for a functional programming style (Chambers
-2014; MDN 2024c), and also support object-oriented programming, via prototype inheritance in the case of JavaScript (MDN 2024b) and the S3, S4, and
-R6 object systems in the case of R (Wickham 2019). This made it possible
-for me to try out several different programming paradigms while developing
-plotscape/plotscaper.
-I did not find it necessary to discuss the choice of programming paradigm in
-Section 6.2, since I did not delve into any specific implementation details there.
-However, I believe it is important to discuss it now, as I will be going into
-implementation details in the following sections. Therefore, in the following
-subsections, I will briefly outline four programming paradigms - object-oriented,
-functional, and data-oriented programming - discussing their key features, tradeoffs, and suitability for interactive data visualization. I will then provide a
-rationale for my choice of programming paradigm and discuss my specific use
-of it in plotscape.
+both support classical procedural programming. Further, thanks to first-class
+function support, they also allow for functional programming style (Chambers
+2014; MDN 2024c). Finally, they also support object-oriented programming, via
+prototype inheritance in the case of JavaScript (MDN 2024b) and the S3, S4,
+and R6 object systems in the case of R (Wickham 2019). This multiparadigm
+nature of R and JavaScript made it possible for me to experiment with several
+approaches.
+In the following subsections, I will briefly outline four programming paradigms:
+object-oriented, functional, and data-oriented programming. I will discuss their
+key features, trade-offs, and suitability for interactive data visualization systems.
+Finally, I will provide a rationale for my choice of programming paradigm and
+discuss my specific use of it in plotscape.
 6.4.1.1
 
 Procedural programming
 
-Procedural programming, also known as imperative programming6 , is perhaps
-the oldest and most well-known programming paradigm. Formalized by John
-Von Neumann in 1945 (Von Neumann 1993; for a review, see Knuth 1970; Eigenmann and Lilja 1998), it fundamentally views programs as linear sequences of
-discrete steps that modify mutable state (Frame and Coffey 2014). These steps
-can be bundled together into functions or procedures, however, ultimately, the
-whole program is still thought of as a sequence of operations. In this way, it
-actually closely maps onto how computer programs get executed on the underlying hardware (beyond some advanced techniques such as branch prediction
-and speculative execution, the CPU executes instructions sequentially, see e.g.
-Parihar 2015; Raghavan, Shachnai, and Yaniv 1998).
-Compared to the other three programming paradigms discussed below, the procedural programming paradigm is, generally, a lot less prescriptive. It essentially
-acts as a framework for classifying fundamental programming constructs (variables, functions, loops, etc.), and offers minimal guidance on best practices or
-6 Technically, some authors consider procedural programming a subset of imperative programming, such that procedural programming is imperative programming with functions (procedures) and scopes, however, the terms are often used interchangeably.
+Procedural programming, also known as imperative programming7 , is perhaps
+the oldest and most widely-known programming paradigm. Formalized by John
+Von Neumann in 1945 (Von Neumann 1993; for a review, see Knuth 1970;
+Eigenmann and Lilja 1998), it fundamentally views programs as linear sequences of discrete operations modifying some mutable state (Frame and
+Coffey 2014). While these operations can be grouped into functions or procedures to build larger programs, the core organization remains sequential.
+This approach closely mirrors how programs are executed on the underlying
+hardware (most CPUs execute instructions sequentially, beyond some advanced
+techniques such as branch prediction and speculative execution, see e.g. Parihar
+2015; Raghavan, Shachnai, and Yaniv 1998).
+Compared to the other programming paradigms discussed below, procedural
+programming is generally a lot less opinionated. It primarily serves as a framework for classifying basic programming constructs like variables, functions, and
+loops, offering little guidance on best practices or how to structure programs.
+Because most programming languages include at least some procedural constructs, many programs are, as a consequence, at least partly procedural.
+As for the suitability of procedural programming for interactive data visualization, there are some pros and cons. Since programs written in procedural style
+map fairly closely onto CPU instructions, they tend to be, in general, highly
+performant; for example, it is generally considered good practice to use procedural (imperative) code in performance-critical “hot” code paths such as large
+loops (see e.g. Acton 2014). However, a purely procedural style can introduce
+challenges when developing larger systems. Because this style imposes few restrictions on the program structure, it can, without careful management, lead
+to code complex and hard-to-extend code.
+7 Some authors consider procedural programming a subset of imperative programming,
+however, the terms are often used interchangeably.
 
 154
-
-CHAPTER 6. SYSTEM DESCRIPTION
-
-program structure. Most programming languages offer at least some procedural
-constructs, and thus many programs are at least partly procedural.
-As for the suitability of procedural programming for interactive data visualization, there are some pros and cons. The fact that programs written in procedural
-style map fairly closely onto CPU instructions means that, generally, they tend
-to be highly performant; for instance, it is generally considered good practice
-to use procedural (imperative) code in “hot” loops (see e.g. Acton 2014). However, a purely procedural style can introduce challenges when developing larger
-systems. Specifically, since the procedural style imposes few restrictions on the
-program structure, without careful management, it can lead to complex and
-hard-to-extend code.
-
 6.4.1.2
 
+CHAPTER 6. SYSTEM DESCRIPTION
 Functional programming
 
 Functional programming is another fairly well-known and mature programming
 paradigm. With roots in the lambda calculus of Alonzo Church (Church 1936,
 1940; for a brief overview, see e.g. Abelson and Sussman 2022; Lonsdorf 2025),
-functional programming centers around the idea of function composition. In this
-paradigm, programs are built from pure, side-effect-free functions which operate
-on immutable data. Further, functions are treated as first-class citizens, allowing
-functions to take other functions as arguments or return them (functions which
-do this are called “higher-order functions”). This approach ultimately leads to
-programs that resemble data pipelines, transforming input to output without
-altering mutable state.
-A key benefit of the functional approach is referential transparency (see e.g.
-Abelson and Sussman 2022; Lonsdorf 2025; Milewski 2018; Stepanov and
+the central idea of functional programming is function composition. Programs
+are built from pure functions without side-effects, which operate on immutable
+data. Further, functions are treated as first-class citizens, allowing functions
+to take other functions as arguments or return them (leading to “higher-order
+functions”). Ultimately, under this paradigm, programs are modeled as data
+pipelines, transforming input to output without altering mutable state.
+A key benefit of the functional approach is referential transparency (see
+e.g. Abelson and Sussman 2022; Lonsdorf 2025; Milewski 2018; Stepanov and
 McJones 2009). Because pure functions have no side effects, expressions can
-always be substituted with their values and vice versa. For example, the
-expression 1 + 2 can be replaced by the value 3, so if we define a function
-function add(x, y) { return x + y; }, we can always replace its call with
-the expression x + y. This property is incredibly useful as it allows us to reason
-about functions independently, without needing to consider the program’s
-state. However, referential transparency only holds if the function does not
-modify any mutable state; assigning to non-local variables or performing IO
-operations breaks this property, necessitating consideration of program state
-when the function is called.
-Relevant to this thesis, functional programming is also closely linked to mathematics, particularly category theory (see Milewski 2018). Many algebraic concepts discussed in Section 4 – including preorders, functors, and monoids – have
-direct counterparts in many functional programming languages. These are often
-implemented as type classes, enabling polymorphism: for instance, in Haskell
-(Haskell.org 1970), users can define an arbitrary monoid type class which then
-allows aggregation over a list (HaskellWiki 2019).
+always be substituted with their values and vice versa. For instance, just as
+the expression 1 + 2 can always be replaced by the value 3, so can the call to
+the function function add(x, y) { return x + y; } be replaced with the
+expression x + y. This property is incredibly useful as it allows us to reason about individual functions in isolation, without needing to consider the
+program’s state. However, referential transparency only holds as long as the
+function does not modify any mutable state; assigning to non-local variables
+or performing I/O operations breaks this property, forcing us to consider the
+program’s state.
+Relevant to this thesis, functional programming also has close ties to mathematics, particularly category theory (see Milewski 2018). Many algebraic concepts
+discussed in Section 4 – including preorders, functors, and monoids – have direct counterparts in functional programming. More specifically, these are often
+implemented as polymorphic type classes: for instance, in Haskell (Haskell.org
+1970), users can define an arbitrary monoid type class which then supports list
+aggregation (HaskellWiki 2019).
+As before, when it comes to interactive data visualization, functional programming presents some key trade-offs. While properties like referential transparency
+are attractive, all data visualization systems must ultimately manage mutable
+state, specifically the graphical device. User interaction introduces further complexity which is challenging to model in a purely functional manner (although it
+is certainly possible; see Section 6.4.3.2). This might explain why purely functional interactive data visualization libraries are scarce, despite the presence of
+functional libraries for static visualization (see e.g. Petricek 2021). Nevertheless, many functional programming concepts are valuable even outside of purely
+functional programs. For example, a system may work with mutable state while
+remaining largely composed of pure functions, by “separating calculating from
+doing” (see Normand 2021; Van Eerd 2024).
 
 6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
+6.4.1.3
 
 155
 
-Again, when it comes to interactive data visualization, the functional programming style presents some fundamental trade-offs. While properties like referential transparency are attractive, all data visualization systems must ultimately
-manage mutable state, specifically the graphical device. Further, user interaction also adds additional complexity which is challenging to model in a purely
-functional way (although it is certainly possible; see Section 6.4.3.2). This might
-explain the lack of purely functional interactive data visualization libraries, despite the existence of functional libraries for static visualization (see e.g. Petricek
-2021). Nevertheless, many functional programming concepts remain valuable
-even outside of purely functional systems. For example, a system may work with
-mutable state while remaining largely composed of pure functions (by “separating calculating from doing,” see Normand 2021; Van Eerd 2024).
-6.4.1.3
-
 Object-oriented programming
 
-Compared to the two programming paradigms discussed before, object oriented
-programming (OOP) is a more recent development, however, it is also a fairly
-mature and widely-used framework. It first appeared in the late 1950’s and
-early 1960’s, with languages like Simula and Smalltalk, growing to prominence
-in the 1980’s and 1990’s and eventually becoming an industry standard in many
-areas (Black 2013).
-The central idea of object-oriented programming is that of an objects. Objects
-are self-contained units of code which own their own, hidden, private state, and
-expose only a limited public interface. Objects interact by sending each other
-messages (Meyer 1997), a design directly inspired by communication patterns
-found in the networks of biological cells (as reported by one of the creators of
-Smalltalk and author of the term “object-oriented” Kay 1996). Beyond that,
-while concrete interpretations of object oriented programming differ, there are
-nevertheless several ideas which tend to be shared across most OOP implementations.
-These core ideas of OOP are: abstraction, encapsulation, polymorphism, and
-inheritance (Booch et al. 2008). Briefly, first, abstraction means objects should
-be usable without the knowledge of their internals. Users should rely solely on
-the public interface (behavior) of an object simplifying reasoning and reducing
-complexity (Black 2013; Meyer 1997). Second, encapsulation means that the
-surface area of an object should be kept as small as possible and the internal data
-should be kept private (Booch et al. 2008). Users should not access or depend on
-this hidden data (Meyer 1997). The primary goal of encapsulation is continuity,
-allowing developers to modify an object’s private properties without affecting
+Compared to the two previous paradigms, object oriented programming (OOP)
+is a more recent, yet also highly mature and widely-adopted, framework. Emerging in the late 1950’s and early 1960’s with languages like Simula and Smalltalk
+it grew to prominence in the 1980’s and 1990’s and eventually become an industry standard in many domains (Black 2013).
+The core OOP concept is the object. Objects are self-contained units of code
+which own hidden, private state, exposing only a limited public interface, interacting with each other via messages (Meyer 1997). This design was directly
+inspired by communication patterns found in the networks of biological cells (as
+reported by Kay 1996, one of the creators of Smalltalk). Beyond that, concrete
+interpretations of OOP often differ, however, nevertheless, there are several
+ideas which tend to be shared across most OOP implementations.
+These central ideas of OOP are: abstraction, encapsulation, polymorphism, and
+inheritance (Booch et al. 2008). First, abstraction means objects should be
+usable without the knowledge of their internals. Users should rely solely on
+the public interface (behavior) of an object, simplifying reasoning and reducing
+complexity (Black 2013; Meyer 1997). Second, encapsulation means that internal data should be kept private, and the surface area of an object should be
+as small as possible (Booch et al. 2008). Users should not access or depend on
+this hidden data (Meyer 1997). The primary goal of encapsulation is continuity, allowing developers to modify an object’s implementation without affecting
 the public interface (Booch et al. 2008; Meyer 1997). Third, polymorphism
 means that objects supporting the same operations should be interchangeable
-at runtime (Booch et al. 2008). Polymorphism is intended to facilitate extensibility, allowing users to define their objects that can be integrated into an
+at runtime (Booch et al. 2008). Polymorphism is intended to facilitate extensibility, allowing users to construct new objects which may be integrated into an
 existing system. Finally, inheritance is a mechanism used for code reuse and
+implementing polymorphism, where objects may inherit properties and behavior
+from other objects.
+Object-oriented programming (OOP) has seen widespread adoption, especially
+in graphical user interfaces (GUIs), which might suggest it as a natural fit for
+interactive data visualization systems (see also Wilkinson 2012). Furthermore,
+OOP’s claimed benefits of continuity and extensibility appear highly attractive
+for library design. However, more recently, traditional OOP style has also faced
+some criticisms. First, while encouraging extensibility and reducing complexity
+via abstraction, encapsulation, and polymorphism seems attractive, real-world
+OOP implementations do not always achieve these goals. For instance, a common OOP practice is for objects to communicate by sending pointers to each
+other. This however breaks encapsulation and causes objects to become entangled, creating “incidental data structures” (Hickey 2011; Parent 2015; Will
+2016). Further, by its nature, OOP heavily encourages abstraction. While good
+abstractions are undeniably useful, they take long time to develop. Poor abstractions tend to appear first, and, once in place, are diﬀicult to extricate (Meyer
 
 156
 
 CHAPTER 6. SYSTEM DESCRIPTION
 
-implementing polymorphism, where objects may inherit properties and behavior
-from other objects.
-Object-oriented programming (OOP) has been widely adopted, especially for
-graphical user interfaces (GUIs). Given the significant GUI component in interactive data visualization systems, OOP might seem like an obvious first choice.
-Furthermore, OOP’s claimed benefits of continuity and extensibility appear
-highly valuable for library design. However, more recently, OOP has also come
-under criticisms, for several reasons. First, while the ideas of reducing complexity via abstraction, encapsulation, and polymorphism seem attractive, applied
-implementations of OOP do not always yield these results. Specifically, a common practice in OOP is for objects to communicate by sending and receiving
-pointers to other objects; however, this breaks encapsulation, causing the objects to become entangled and creating “incidental data structures” (Hickey
-2011; Parent 2015; Will 2016). Second, by its nature, OOP strongly encourages abstraction, and while good abstractions are undeniably useful, they take
-long time to develop. Poor abstractions tend to appear first (Meyer 1997), and
-since OOP tends to introduce abstractions early, it can lead to overly complex
-and bloated systems (Van Eerd 2024). Third and final, OOP can also impact
-performance. Objects often store more data than is used by any single one of
-their methods, and further, to support runtime polymorphism, they also have to
-store pointers to a virtual method tables. Consequently, an array of objects will
-almost always take up more memory than an equal-sized array of plain values,
-resulting in increased cache misses and decreased performance (Acton 2014).
-
-6.4.1.4
-
-Data-oriented programming
-
-Compared to the three previously discussed paradigms, data-oriented programming (DOP) is a more recent and less well-known programming paradigm. In
-fact, due to its novelty, the term is also used somewhat differently across different contexts, broadly in two ways. First, DOP sometimes refers to a more
-abstract programming paradigm, concerned with structure and organization of
-code and inspired by the Clojure style of programming (Hickey 2011, 2018;
-Sharvit 2022; Parlog 2024). In this way, it also shares many similarities with
-the generic programming paradigm popularized by Alexander Stepanov and the
-related ideas around value semantics (Stepanov and McJones 2009; Stepanov
-2013; Parent 2013, 2015, 2018; Van Eerd 2023, 2024), and there are even some
-direct ties (see Van Eerd 2024). Second, DOP (or “data oriented design”, DOD)
-also sometimes refers to a more concrete set techniques and ideas about optimization. Originating in video-game development, these primarily focus on lowlevel details like memory layout and CPU cache line utilization (Acton 2014;
-Bayliss 2022; Kelley 2023; Nikolov 2018; Fabian 2018). Interestingly, despite
-these two distinct meanings of the term DOP, both converge on similar ideas
-regarding the structure and organization of computer programs, and as such, I
-believe it is justified to discuss them here as a single paradigm.
+1997). This can lead to overly complex and bloated systems (Van Eerd 2024).
+Finally, OOP can also negatively impact performance. Objects frequently hold
+more data than any single method requires, and, to support runtime polymorphism, they must store pointers to virtual method tables. Consequently, arrays
+of objects almost always take up more memory than equivalent arrays of plain
+values, resulting in more cache misses and decreased performance (Acton 2014).
+#### Data-oriented programming {#dop}
+Data-oriented programming (DOP) is a newer and less well-known programming
+paradigm. In fact, due to its recency, the term is used in multiple ways across
+different contexts, however, there are primarily two broad sets of ideas it encompasses. First, DOP sometimes refers to a more abstract paradigm, concerned
+with structure and organization of code. Inspired by the Clojure style of programming (Hickey 2011, 2018; Sharvit 2022; Parlog 2024), it also shares some
+similarities with the generic programming paradigm and value semantics popularized by Alexander Stepanov and popular the C++ community (Stepanov
+and McJones 2009; Stepanov 2013; Parent 2013, 2015, 2018; Van Eerd 2023;
+there are even some direct ties, see Van Eerd 2024). Second, DOP (or “data
+oriented design”, DOD) also sometimes refers to a more concrete set of optimization techniques and ideas. Originating in video-game development, these
+primarily tend to focus on low-level details like memory layout and CPU cache
+line utilization (Acton 2014; Bayliss 2022; Kelley 2023; Nikolov 2018; Fabian
+2018). Interestingly, despite their distinct uses, both interpretations of “dataoriented programming” converge on many similar ideas about the structure and
+organization of computer programs. As such, I believe it is justified to discuss
+them here as a single paradigm.
+The core idea of DOP is a data-first perspective: programs should be viewed as
+transformations of data, nothing more, nothing less (Acton 2014; Fabian 2018;
+Sharvit 2022). This idea has several important consequences. First, to truly
+elevate data to first-class status, it must be kept separate from code (behavior)
+(Fabian 2018; Sharvit 2022; Van Eerd 2024). It should be represented by plain
+data structures, composed of primitives, arrays, and dictionaries (a typical example would be JSON, Hickey 2011, 2018; Sharvit 2022), which can be trivially
+copied and behave like values (see Stepanov and McJones 2009; Stepanov 2013).
+Furthermore, it should be organized in a way that is convenient and eﬀicient;
+there is no obligation for it to model abstract or real-world entities (Acton 2014;
+the fundamental blueprint is that of the relational model, Codd 1970; Moseley
+and Marks 2006; Fabian 2018). Code, on the other hand, should live inside
+modules composed of stateless functions (Fabian 2018; Sharvit 2022). The primary benefit of this approach is that, by keeping data and code separate, we can
+reason about both in isolation, without entanglement (Van Eerd 2024). It also
+allows us to introduce abstraction gradually, by initially relying on generic data
+manipulation functions (Fabian 2018; Sharvit 2022). Finally, it also enables
+good performance: by storing plain data values and organizing them in a suitable format (for example, structure of arrays, see Section 6.4.2), we can ensure
+optimal cache line utilization [Acton (2014); Fabian (2018); Kelley (2023);].
 
 6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
 
 157
 
-The core idea of DOP is a data-first perspective: programs should be viewed
-as transformations of data (Acton 2014; Fabian 2018; Sharvit 2022). This has
-several consequences, the most important of which is the separation of code (behavior) and data (Fabian 2018; Sharvit 2022; Van Eerd 2024). Data should be
-represented by plain data structures, composed of primitives, arrays, and dictionaries (a typical example would be JSON, Hickey 2011, 2018; Sharvit 2022). In
-other words, the data should be trivially copyable and behave like plain values
-(see Stepanov and McJones 2009; Stepanov 2013). Furthermore, it should be
-organized in a way that is convenient and eﬀicient; there is no obligation for it to
-model abstract or real-world entities (Acton 2014; the fundamental blueprint is
-that of the relational model, Codd 1970; Moseley and Marks 2006; Fabian 2018).
-Code, on the other hand, should live inside modules composed of stateless functions (Fabian 2018; Sharvit 2022). The primary benefit of this approach is that,
-by keeping data and code separate, we can reason about both in isolation, without entanglement (Van Eerd 2024). It also allows us to introduce abstraction
-gradually, by initially relying on generic data manipulation functions (Fabian
-2018; Sharvit 2022). Finally, it also enables good performance: by storing plain
-data values and organizing them in a suitable format (for example, structure of
-arrays, see Section 6.4.2), we can ensure optimal cache line utilization [Acton
-(2014); Fabian (2018); Kelley (2023);].
 As might be apparent, data oriented programming shares some similarities with
 procedural and functional programming, but there are also some key differences.
 Compared to the lasseiz-faire approach of procedural programming, DOP tends
@@ -6267,18 +6243,13 @@ with DOP principles. While this generally tends to be a feature of the packages�
 public facing APIs, not necessarily the implementation code, the popularity of
 JSON-like schemas might suggest that this style might be useful in designing
 data visualization packages more broadly.
-6.4.1.5
+6.4.1.4
 
 Final choice of programming paradigm and rationale
 
 Thanks to TypeScript/JavaScript (and R) being a multi-paradigm programming language, I was able to experiment with several programming paradigms.
 During initial prototyping, I used primarily procedural style, but I also explored
 some functional programming concepts. Later, I completely rewrote the package using traditional OOP style, but found some aspects of it frustrating and
-
-158
-
-CHAPTER 6. SYSTEM DESCRIPTION
-
 challenging. Particularly, with multiple communicating objects, I found it diﬀicult to cleanly separate concerns and reason about complex interactive behavior.
 Eventually, I discovered DOP and ultimately settled on that style, finding that
 the plain data model greatly simplified a lot of the problems I had.
@@ -6288,9 +6259,18 @@ and scales (see Sections 6.4.4.3 and 6.4.4.7), make sense to think about as prim
 entanglement which is arguably inherent to traditional OOP objects. Specifically, plain data structures composed of primitives, arrays, and dictionaries
 naturally tend to form simple tree-like structures, rather than more complex
 graphs with potential circular references, simplifying reasoning (Parent 2013,
-2015; Van Eerd 2024)7 . Further, defining behavior in pure function modules
+2015; Van Eerd 2024)8 . Further, defining behavior in pure function modules
 made it much easier to refactor and test. I also believe it encouraged a more
 conservative coding style: the requirement to pass all data explicitly as arguments, rather than relying on implicit class properties (members), made me
+8 Technically, in JavaScript, there is no difference on the language level: all array and
+dictionary (POJO) variables are pointers to (heap-allocated) objects, so they can be referenced
+in multiple places. However, conceptually, I still found it much easier to think about data
+structures in the DOP way.
+
+158
+
+CHAPTER 6. SYSTEM DESCRIPTION
+
 more disciplined, by encouraging me to pass on only the necessary data and
 nothing more. Finally, it greatly simplified scenarios requiring double (multiple) dispatch; instead of deciding which class a method should belong to and
 which it should dispatch on, I could simply write a free function dispatching on
@@ -6312,15 +6292,6 @@ model in a purely functional style. While techniques for handling both do exist 
 programming data visualization libraries (see e.g. Petricek 2021), I personally
 question whether the increased complexity is worthwhile. Second, similar to
 OOP, a purely functional style tends to introduce a high amount of abstraction.
-7 Technically, in JavaScript, there is no difference on the language level: all array and
-dictionary (POJO) variables are pointers to (heap-allocated) objects, so they can be referenced
-in multiple places. However, conceptually, I still found it much easier to think about data
-structures in the DOP way.
-
-6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
-
-159
-
 While good abstractions are incredibly powerful, I found that, generally, refactoring poorly-organized plain data containers was much easier than refactoring
 abstract constructs, be they classes or higher-kinded types.
 Finally, while my preference for DOP might also be partly due to the fact that,
@@ -6332,14 +6303,18 @@ programming paradigm allowed me, a solo developer with limited time, to go
 further and develop more features without becoming overwhelmed by inherent
 complexity. Therefore, I felt it necessary to explain my choice of programming
 paradigm.
-
-6.4.1.6
+6.4.1.5
 
 Style used in code examples
 
 Another part of the reason why I spent time discussing the choice of the programming paradigm used in plotscape is because it is reflected in many of the
 code examples used throughout the rest of this chapter. Specifically, in these
 examples, I typically define a data container as a TypeScript interface and a
+
+6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
+
+159
+
 collection of related functions in a namespace of the same name. Since TypeScript transpiles to JavaScript, and all of the type information is compile-time
 only, type (interface) and value (namespace) overloading like this is perfectly
 valid.
@@ -6356,13 +6331,9 @@ not just class instances, significantly improving code reusability. Finally,
 unlike classes, the interface-defined types are simple data containers without
 polymorphism, and this eliminates the need for dynamic dispatch (in the
 general case), potentially improving performance. Overall, the style aligns with
-the data-oriented programming principles discussed in Section 6.4.1.4.
-
-160
+the data-oriented programming principles discussed in Section ??.
 
 6.4.2
-
-CHAPTER 6. SYSTEM DESCRIPTION
 
 Data representation:
 oriented
@@ -6389,7 +6360,13 @@ class in the tibble package (Müller and Wickham 2023), the DataFrame class
 in the Python pandas (Pandas Core Team 2024), the DataFrame class in the
 polars (Team 2024), or the DataFrame type in the Julia DataFrame.jl package
 (Bouchet-Valat and Kamiński 2023).
-However, there are also some fairly well-known examples of row-oriented systems. Particularly, the popular JavaScript data visualization and transformation library D3 (Mike Bostock 2022) models data frames as arrays of rows, with
+However, there are also some fairly well-known examples of row-oriented sys-
+
+160
+
+CHAPTER 6. SYSTEM DESCRIPTION
+
+tems. Particularly, the popular JavaScript data visualization and transformation library D3 (Mike Bostock 2022) models data frames as arrays of rows, with
 each row being a JavaScript object. Likewise, row-stores are also highly popular
 in databases, particularly in online transaction processing (OLTP) systems such
 as PostgreSQL, SQLite, or MySQL, where tables are generally stored as arrays
@@ -6402,11 +6379,7 @@ data may be interpreted as more than just plain values, making either representa
 6.4.1). For example, in object-oriented programming (OOP), the fundamental unit of code is an object (see Section 6.4.1.3). Since objects are meant to
 encapsulate their properties - both data and behaviour (via a pointer to a virtual method table) - the AoS layout, which keeps object properties adjacent in
 memory, is the more natural choice in OOP (see e.g. Bayliss 2022).
-
-6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
 6.4.2.1
-
-161
 
 Ease of use
 
@@ -6430,6 +6403,11 @@ The column-oriented (SoA) layout tends to be the more performant option for
 storage and operations across multiple rows, particularly aggregation (see e.g.
 Acton 2014; Kelley 2023; Pavlo 2024). This is due to the fact that it benefits
 from better memory alignment and, as a result, improved cache locality. Because all values within a column share the same size, this eliminates the need
+
+6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
+
+161
+
 for padding, often resulting in a significantly smaller memory footprint (see
 e.g. Rentzsch 2005; Kelley 2023; Pavlo 2024). Furthermore, this uniform sizing also facilitates easier pre-fetching of values during column-wise operations.
 Specifically, the CPU can cache contiguous chunks of values, often leading to
@@ -6446,15 +6424,9 @@ the underlying memory representation may differ significantly from the apparent
 structure. For instance, to optimize key access, the V8 engine stores JavaScript
 objects (dictionaries) as “hidden classes”: essentially a pointer to the object’s
 shape and an array of values (Bruni 2017; V8 Core Team 2024). Nevertheless,
-
-162
-
-CHAPTER 6. SYSTEM DESCRIPTION
-
 objects are still allocated on the heap, unlike packed arrays of small integers
 (SMIs) or floats, which consequently tend to offer much better performance
 characteristics (see e.g. V8 Core Team 2017; Bruni 2017; Stange 2024).
-
 6.4.2.3
 
 Final choice of data representation and rationale
@@ -6473,10 +6445,16 @@ Reactivity
 A key implementation detail of all interactive applications is reactivity: how a
 system responds to input and propagates changes. However, despite the fact
 that interactive user interfaces (UIs) have been around for a long time, there still
-exist many different, competing approaches to handling reactivity. A particularly famous8 example of this is the web ecosystem, where new UI frameworks
+exist many different, competing approaches to handling reactivity. A particularly famous9 example of this is the web ecosystem, where new UI frameworks
 seem to keep emerging all the time, each offering its unique spin on reactivity
 (see e.g. Ollila, Mäkitalo, and Mikkonen 2022). This makes choosing the right
 reactivity model challenging.
+9 Or perhaps infamous.
+
+162
+
+CHAPTER 6. SYSTEM DESCRIPTION
+
 Furthermore, reactivity is paramount in interactive data visualization systems
 due to many user interactions having cascading effects. For instance, when a
 user changes the binwidth of an interactive histogram, the counts within the bins
@@ -6494,12 +6472,7 @@ reactivity models, before finally settling on a solution. Given the time and
 effort invested in this process, I believe it is valuable to give a brief overview of
 these models and discuss their inherent advantages and disadvantages, before
 presenting my chosen approach in Section 6.4.3.5.
-8 Or perhaps infamous.
-
-6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
 6.4.3.1
-
-163
 
 Observer pattern
 
@@ -6523,30 +6496,29 @@ for (const cb of x.listeners[event]) cb();
 const person = Observer.create({ name: `Joe`, age: 25 });
 Observer.listen(person, `age-increased`, () =>
 console.log(`${person.name} is now ${person.age} years old.`)
+
+6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
+
+163
+
 );
 person.age = 26;
 Observer.dispatch(person, `age-increased`);
+
 ## Joe is now 26 years old.
 Internally, an Observer object stores a dictionary where the keys are the events
 that the object can dispatch or notify its listeners of, and values are arrays of
-callbacks9 . Listeners listen (or “subscribe”) to specific events by adding their
+callbacks10 . Listeners listen (or “subscribe”) to specific events by adding their
 callbacks to the relevant array. When an event occurs, the callbacks in the
 appropriate array are iterated through and executed in order.
 The Observer pattern easy to implement and understand, and, compared to
 alternatives, also tends to be fairly performant. However, a key downside is
 that the listeners have to subscribe to the Observer manually. In other words,
 whenever client code uses Observer values, it needs to be aware of this fact
-9 In simpler implementations, a single array can be used instead of the dictionary; the
-listeners are then notified whenever the object “updates”.
-
-164
-
-CHAPTER 6. SYSTEM DESCRIPTION
-
 and subscribe to them in order to avoid becoming stale. Further, the logic for
 synchronizing updates has to be implemented manually as well. For instance,
 by default, there is no mechanism for handling dispatch order: the listeners
-who were subscribed earlier in the code are called first10 . Moreover, shared
+who were subscribed earlier in the code are called first11 . Moreover, shared
 dependencies can cause glitches and these have to be resolved manually as well.
 See for instance the following example:
 import { Observer } from "./Observer"
@@ -6562,13 +6534,23 @@ const C = Observer.create({ name: `C`, value: A.value + B.value });
 Observer.listen(A, `updated`, () => update(B, A.value * 10));
 Observer.listen(A, `updated`, () => update(C, A.value + B.value));
 Observer.listen(B, `updated`, () => update(C, A.value + B.value));
+10 In simpler implementations, a single array can be used instead of the dictionary; the
+listeners are then notified whenever the object “updates”.
+11 This can be solved by adding a priority property to the event callbacks, and sorting the
+arrays by priority.
+
+164
+
+CHAPTER 6. SYSTEM DESCRIPTION
+
 update(A, 2); // C will get updated twice
+
 ## Joe is now 26 years old.
 ## A updated to 2
 ## B updated to 20
 ## C updated to 22
 ## C updated to 22
-The example above shows the so-called diamond problem in reactive programming11 . We have three reactive variables A, B, and C, such that B depends on
+The example above shows the so-called diamond problem in reactive programming12 . We have three reactive variables A, B, and C, such that B depends on
 A, and C depends simultaneously on A and B. Since C depends on A and B, it
 has to subscribe to both. However, C is not aware of the global context of the
 reactive graph: it does not know that B will update any time A does. As such,
@@ -6576,18 +6558,11 @@ an update to A will trigger two updates to C despite the fact that, intuitively,
 should only cause one.
 Without careful management of dependencies, this reactive graph myopia that
 the Observer pattern exhibits can create computational bottlenecks, particularly in high-throughput UIs such as interactive data visualizations. Consider
-10 This can be solved by adding a priority property to the event callbacks, and sorting the
-arrays by priority.
-11 Not to be confused with the diamond problem in OOP, which relates to multiple inheritance.
-
-6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
-
-165
-
 an interactive histogram where users can either modify binwidth or directly set
 breaks. If both are implemented as reactive parameters, a poorly managed dependency graph (e.g., breaks dependent on binwidth, and rendering dependent
 on both) will result in unnecessary re-renders, impacting performance at high
 data volumes.
+
 6.4.3.2
 
 Streams
@@ -6602,6 +6577,12 @@ such as generators/iterators as well as functional programming more broadly
 Reactive Extensions library (also known as ReactiveX, Rxteam 2024).
 Consider the following implementation of a stream which produces values at
 200-millisecond intervals and stops after 1 second:
+12 Not to be confused with the diamond problem in OOP, which relates to multiple inheritance.
+
+6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
+
+165
+
 function intervalSteam(milliseconds: number, stopTime: number) {
 let streamfn = (x: unknown) => x;
 const result = { pipe };
@@ -6620,11 +6601,6 @@ streamfn(diff);
 }, milliseconds);
 return result;
 }
-
-166
-
-CHAPTER 6. SYSTEM DESCRIPTION
-
 const stream = intervalSteam(200, 1000)
 
 stream
@@ -6635,14 +6611,19 @@ console.log(
 + `(${x[1]} milliseconds in dog years)`
 )
 );
-## 209 milliseconds has elapsed(29.86 milliseconds in dog years)
+## 201 milliseconds has elapsed(28.71 milliseconds in dog years)
 ## 402 milliseconds has elapsed(57.43 milliseconds in dog years)
-## 602 milliseconds has elapsed(86 milliseconds in dog years)
+## 603 milliseconds has elapsed(86.14 milliseconds in dog years)
 ## 804 milliseconds has elapsed(114.86 milliseconds in dog years)
 ## 1005 milliseconds has elapsed(143.57 milliseconds in dog years)
-As you can see, the event producer (stream) is defined separately from the event
+As can be seen, the event producer (stream) is defined separately from the event
 processing logic, which is constructed by piping the result of one operation into
 the next. Because of the associativity of function composition, the stream actually exhibits properties of a functor, meaning that the order of composition
+
+166
+
+CHAPTER 6. SYSTEM DESCRIPTION
+
 - either through direct function composition or .pipe chaining - does not affect the result. Additionally, while the stream transformations themselves are
 (generally) stateless, they can still produce useful side-effects (as can be seen
 on the example of the console.log call above). Further, because of this fact,
@@ -6662,11 +6643,6 @@ Virtual DOM
 
 Within the web ecosystem, a popular way of handling reactivity involves something called the virtual DOM (VDOM). This approach, popularized by web
 frameworks such as React (Meta 2024) and Vue (Evan You and the Vue Core
-
-6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
-
-167
-
 Team 2024), involves constructing an independent, in-memory data structure
 which provides a virtual representation of the UI in the form of a tree. Reactive
 events are bound to nodes or “components” of this tree, and, whenever an event
@@ -6689,7 +6665,11 @@ be more trouble than its worth: while in a webpage, updating a single button
 or a div element is a relatively fast operation, in a data visualization system, it
 may be more eﬀicient to re-render an entire plot from scratch rather than trying
 to selectively update it.
+
+6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
 6.4.3.4
+
+167
 
 Signals
 
@@ -6711,11 +6691,6 @@ updating the UI, and play a key role in the signal-based automatic subscription
 model.
 While signal-based reactivity might appear complex, its basic implementation is
 surprisingly straightforward. The following example is based on a presentation
-
-168
-
-CHAPTER 6. SYSTEM DESCRIPTION
-
 by Ryan Carniato, the creator of Solid JS (2023):
 export namespace Signal {
 export function create<T>(x: T): [() => T, (value: T) => void] {
@@ -6735,6 +6710,11 @@ return [get, set];
 }
 export namespace Effect {
 const effectStack = [] as (() => void)[]; // A stack of effects
+
+168
+
+CHAPTER 6. SYSTEM DESCRIPTION
+
 export function getCurrent(): () => void {
 return effectStack[effectStack.length - 1];
 }
@@ -6754,11 +6734,6 @@ const [tax, setTax] = Signal.create(0.15);
 // Round to two decimal places
 const round = (x: number) => Math.round(x * 100) / 100
 const priceWithTax = () => round(price() * (1 + tax()));
-
-6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
-
-169
-
 // ^ Derived values automatically become signals as well
 Effect.create(() =>
 console.log(
@@ -6779,11 +6754,16 @@ listener, by accessing it as the top-most element of the effect stack. When the
 effect is done executing, it pops itself off the stack. Now, whenever one of the
 accessed signals changes, the effect re-runs again. Crucially, making a derived
 reactive value is as simple as writing a callback: if an effect calls a function
+
+6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
+
+169
+
 using a signal, it also automatically subscribes to that signal (see the example
 of priceWithTax above). Importantly, the effect subscribes only to this signal
 and not the derived value itself. In other words, effects only ever subscribe to
 the leaf nodes of the reactive graph (signals). Derived values computed on the
-fly (and, if necessary, can be easily memoized12 ), and event ordering is simply
+fly (and, if necessary, can be easily memoized13 ), and event ordering is simply
 managed via the runtime call stack.
 Signals provide an elegant solution to many problems with reactivity. They
 automate subscription to events, prevent unnecessary updates, ensure correct
@@ -6795,13 +6775,8 @@ Core Team 2025) can be used to hide this fact, it does nevertheless add an
 extra layer of complexity. Similarly, many features important for performance,
 like memoization and batching, also require treating signals as distinct from
 plain data. Having code consist of two sets of entities - plain data and signals ultimately impacts developer ergonomics.
-12 Memoizing a derived value can be done by creating a new signal and an effect that runs
-when the original value gets updated.
-
-170
 6.4.3.5
 
-CHAPTER 6. SYSTEM DESCRIPTION
 Reactivity in plotscape and final thoughts
 
 At the start of the project, I had used the Observer pattern for modeling reactivity. However, I had the idea of letting the users to define reactive parameters
@@ -6823,8 +6798,14 @@ four steps, greatly simplifying the reactive graph. Introducing reactivity at ot
 points seem to offer limited practical benefit. Thus, despite the limitations of
 the Observer pattern, the structured nature of the problem (interactive data
 visualization pipelines) ultimately makes it a decent solution in my eyes.
+13 Memoizing a derived value can be done by creating a new signal and an effect that runs
+when the original value gets updated.
+
+170
 
 6.4.4
+
+CHAPTER 6. SYSTEM DESCRIPTION
 
 System components
 
@@ -6832,6 +6813,7 @@ This section discusses the core components of plotscape, detailing their functio
 and provide a rationale for the design of key parts of the system. As before,
 TypeScript code examples are provided, and, in general, these map fairly closely
 to the real codebase.
+
 6.4.4.1
 
 Indexable
@@ -6846,16 +6828,12 @@ it is much more convenient and memory eﬀicient to simply use a constant (0)
 or a callback/thunk (() => 0). Similarly, at times, arrays of repeated values
 can be more optimally represented as two arrays: a short array of “labels” and
 a long array of integer indices (i.e. what base R’s factor class does). Thus,
-
-6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
-
-171
-
 representing data effectively calls for a generalization of a data “column” which
 can encompass data types beyond fixed-length arrays.
 The type Indexable<T> represents such a generalization of a data column. It
 is simply a union of three simple types:
 Indexable<T> = T | T[] | ((index: number) => T)
+
 In plain words, an Indexable<T> can be one of the following three objects:
 • A simple (scalar) value T
 • A fixed-length array of T’s (T[])
@@ -6867,7 +6845,11 @@ functionality is provided by Getters). As a final note, Indexables are somewhat
 similar to Leland Wilkinson’s idea of data functions (see Wilkinson 2012, 42),
 although there are some differences (Wilkinson’s data functions are defined more
 broadly).
+
+6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
 6.4.4.2
+
+171
 
 Getter
 
@@ -6885,11 +6867,6 @@ else return () => x;
 }
 }
 we can then create and use Getters like so:
-
-172
-
-CHAPTER 6. SYSTEM DESCRIPTION
-
 import { Getter } from "./Getter"
 const getter1 = Getter.create([1, 2, 3])
 const getter2 = Getter.create(99);
@@ -6897,6 +6874,7 @@ const getter3 = Getter.create((index: number) => index - 1);
 console.log(getter1(0));
 console.log(getter2(0));
 console.log(getter3(0));
+
 ## 1
 ## 99
 ## -1
@@ -6907,10 +6885,16 @@ are also several utility functions for working with Getters. The first is
 Getter.constant which takes in a value T and returns a thunk returning T
 (i.e. () => T). This is useful, for example, when T is an array and we always
 want to return the whole array (not just a single element):
+
+172
+
+CHAPTER 6. SYSTEM DESCRIPTION
+
 import { Getter } from "./Getter"
 const getter4 = Getter.constant([`A`, `B`, `C`])
 console.log(getter4(0))
 console.log(getter4(1))
+
 ## [ "A", "B", "C" ]
 ## [ "A", "B", "C" ]
 Another useful utility function is Getter.proxy, which takes a Getter and an
@@ -6919,13 +6903,11 @@ the original values through the indices:
 import { Getter } from "./Getter"
 const getter5 = Getter.proxy([`A`, `B`, `C`], [2, 1, 1, 0, 0, 0]);
 console.log([0, 1, 2, 3, 4, 5].map(getter5))
+
 ## [ "C", "B", "B", "A", "A", "A" ]
 This function becomes particularly useful when implementing other data structures such as Factors.
 
-6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
 6.4.4.3
-
-173
 
 Dataframe
 
@@ -6939,6 +6921,11 @@ interface Dataframe {
 [key: string]: Indexable
 }
 For example, the following is a valid instance of a Dataframe:
+
+6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
+
+173
+
 const data = {
 name: [`john`, `jenny`, `michael`],
 age: [17, 24, 21],
@@ -6947,7 +6934,7 @@ canDrive: (index: number) => data.age[index] > 18,
 };
 Most functions in plotscape operate column-wise, however, here’s how the
 dataframe above would look like as a list of rows if we materialized using a
-Dataframe.rows function13 :
+Dataframe.rows function14 :
 import { Dataframe } from "./Dataframe"
 const data = {
 name: [`john`, `jenny`, `michael`],
@@ -6965,12 +6952,6 @@ name: "john",
 age: 17,
 ##
 isStudent: true,
-13 Not actually exported by plotscape but easily implemented.
-
-174
-
-CHAPTER 6. SYSTEM DESCRIPTION
-
 ##
 canDrive: false,
 ##
@@ -6998,6 +6979,12 @@ canDrive: true,
 ## ]
 One important thing to mention is that, since the Dataframe columns can be
 different Indexable subtypes, we need to make sure that information about
+14 Not actually exported by plotscape but easily implemented.
+
+174
+
+CHAPTER 6. SYSTEM DESCRIPTION
+
 the number of rows is present and non-conflicting. That is, all fixed-length
 columns must have the same length, and, if there are variable-length columns
 (constants, derived variables/functions) present, we need to make sure that at
@@ -7025,11 +7012,6 @@ into a set of disjoint subsets organized into partitions. Further, as mentioned
 in Section 4.2.4, these partitions may be organized in a hierarchy, such that
 multiple subsets in one partition may be unioned together to form another
 subset in a coarser, parent partition.
-
-6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
-
-175
-
 Factors provide a way to represent such data partitions and the associated
 metadata. They are similar to base R’s factor S3 class, although there are some
 important differences which will be discussed below. Factor has the following
@@ -7044,7 +7026,12 @@ Here, cardinality represents the number of unique parts that a partitions
 consists of (e.g. 2 for a binary variable, 3 for a categorical variable with 3
 levels, and so on). Data points or cases map to the parts via a “dense” array
 of indices, which take on values in 0 ... cardinality - 1 and have length
-equal to the length of the data14 . Each case is identified by its position in the
+
+6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
+
+175
+
+equal to the length of the data15 . Each case is identified by its position in the
 array. For example, take the following array of indices:
 [0, 1, 1, 0, 2, 0]
 Keeping in mind JavaScript’s zero-based indexing, this array identifies cases
@@ -7065,17 +7052,11 @@ able to access cardinality in constant 𝑂(1) time. Such is the case, for examp
 when constructing product factors or when initializing arrays of summaries. Of
 course, this means that the relationship between cardinality and indices has
 to be invariant under any factor transformations.
-14 The indices indices being “dense” means all values in the range 0 ... cardinality - 1
-appear in the array at least once.
-
-176
-
-CHAPTER 6. SYSTEM DESCRIPTION
-
 Second, the metadata associated with the parts is stored in the data property
 of type Dataframe. This represents a departure from e.g. base R’s factor class,
 where all metadata is stored as a flat vector of levels. For instance:
 cut(1:10, breaks = c(0, 5, 10))
+
 ## [1] (0,5] (0,5] (0,5]
 ## [9] (5,10] (5,10]
 ## Levels: (0,5] (5,10]
@@ -7087,6 +7068,13 @@ cut(1:10, breaks = c(0, 5, 10))
 (5,10] (5,10] (5,10]
 
 With Factor, the same information would be represented as:
+15 The indices indices being “dense” means all values in the range 0 ... cardinality - 1
+appear in the array at least once.
+
+176
+
+CHAPTER 6. SYSTEM DESCRIPTION
+
 const factor: Factor = {
 cardinality: 2,
 indices: [0, 0, 0, 0, 0, 1, 1, 1, 1, 1],
@@ -7116,11 +7104,6 @@ Factor.constant are two fairly trival factor constructor. Factor.bijection
 creates the finest possible data partition by assigning every case to its own
 part, whereas Factor.constant does the opposite and assigns all cases to
 a single part. The names of the reflect the mathematical index mapping
-
-6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
-
-177
-
 functions: the bijective function 𝑓(𝑖) = 𝑖 for Factor.bijection and the
 constant function 𝑓(𝑖) = 0 for Factor.constant. Consequently, the cardinality
 of Factor.bijection is equal to the length of the data, while the cardinality
@@ -7131,6 +7114,11 @@ function bijection<T extends Dataframe>(n: number, data?: T):
 Factor<T>
 function constant<T extends Dataframe>(n: number, data?: T):
 Factor<T>
+
+6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
+
+177
+
 In either case, n represents the length of the data (the number of cases), and
 data represents some arbitrary metadata, of equal length as n. The variable n is
 used to construct an array of indices, which in the case of Factor.bijection is
@@ -7146,23 +7134,14 @@ to define a separate n/length property on Factor, in the context of other
 factor types, I found it simpler to allocate the corresponding array. While this
 does incur a small memory cost, there is no computational overhead, since, by
 definition, the partition represented by a bijection or constant factor does not
-change15 .
+change16 .
 Factor.bijection and Factor.constant have their own specific use cases.
 Factor.bijection represents a one-to-one mapping such as that seen in scatterplots and parallel coordinate plots. In contrast, Factor.constant represent
 a constant mapping which assigns all cases to a single part. This is useful for
 computing summaries across the entirety of the data, such as is required for
-spinogram16 .
+spinogram17 .
 As a final interesting side-note, both Factor.bijection and Factor.constant
 can be interpreted through the lense of category theory, as terminal and initial objects within the category of data partitions, with morphisms representing products between partitions. That is, the product of any factor with a
-15 Unless the length of the data changes. I have not implemented data streaming for
-plotscape yet, however, it would be easy to extend bijection factor for streaming by simply pushing/popping the array of indices.
-16 Other use-cases may be plots involving a single geometric object such as density plots and
-radar plots, however, these are currently not implemented in plotscape.
-
-178
-
-CHAPTER 6. SYSTEM DESCRIPTION
-
 Factor.bijection always yields another Factor.bijection (making this a
 terminal object), whereas the product of any factor with Factor.constant will
 simply yield that factor (making this an initial object).
@@ -7173,6 +7152,15 @@ class does). This gives rise to the following function signature:
 type Stringable = { toString(): string };
 function from(x: Stringable[], options?: { labels: string[] }):
 Factor<{ label: string[] }>
+16 Unless the length of the data changes. I have not implemented data streaming for
+plotscape yet, however, it would be easy to extend bijection factor for streaming by simply pushing/popping the array of indices.
+17 Other use-cases may be plots involving a single geometric object such as density plots and
+radar plots, however, these are currently not implemented in plotscape.
+
+178
+
+CHAPTER 6. SYSTEM DESCRIPTION
+
 When creating a discrete factor with Factor.from, the resulting factor’s length
 matches the input array x. To compute the factor indices, the constructor
 needs to be either provided with an array of labels or these will be computed
@@ -7200,11 +7188,6 @@ anchor?: number;
 }
 function bin(x: number[], options?: BinOptions):
 Factor<{ binMin: number[]; binMax: number[] }>;
-
-6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
-
-179
-
 Again, as in the case of Factor.from, the length of the factor created with
 Factor.bin will match the length of x. To compute the factor indices, the values in x need to be assigned to histogram bins delimited by breaks. The breaks
 are computed based on either default values or the optional list of parameters
@@ -7216,8 +7199,13 @@ output includes the limits of each bin binMin and binMax, giving the lower and
 upper bound of each bin, respectively.
 Indices are assigned to bins using a half-open intervals on breaks of the form
 (l, u], such that a value v is assigned to to a bin given by (l, u] if it is
+
+6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
+
+179
+
 the case that l < v <= u. Assigning indices to bins requires looping through
-the 𝑛 values of x, and further looping through 𝑘 breaks17 , resulting in 𝑂(𝑛)
+the 𝑛 values of x, and further looping through 𝑘 breaks18 , resulting in 𝑂(𝑛)
 time complexity (assuming 𝑘 is fixed with respect to the size of the data).
 An important point to mention is that a naive approach of assigning bins to
 cases may lead to some bins being left empty, resulting in cardinality which
@@ -7233,7 +7221,6 @@ found the dense arrays of indices much easier to work with, particularly when
 it comes to operations like combining factors via products and subsetting the
 corresponding data. Further, even though this approach necessitates looping
 over indices twice, the combined operation still maintains an 𝑂(𝑛) complexity.
-
 6.4.4.4.4 Product factors As discussed in Section 4.2.3.2, a fundamental operation that underpins many popular types of visualizations, particularly
 when linked selection is involved, is the Cartesian product of two partitions.
 That is, assuming we have two Factors which partition our data into parts, we
@@ -7242,22 +7229,24 @@ To illustrate this idea better, take two factors represented by the following da
 (the data property is omitted for conciseness):
 { cardinality: 2, indices: [0, 0, 1, 0, 1, 1] };
 { cardinality: 3, indices: [0, 1, 2, 0, 1, 2] };
-17 In the general case where the histogram bins are not necessarily all of equal with; if all
-bins are known to have the same width, we can compute the bin index in constant 𝑂(1) time
-
-180
-
-CHAPTER 6. SYSTEM DESCRIPTION
-
-If we take their product, we should end up with the following factor18 :
+If we take their product, we should end up with the following factor19 :
 { cardinality: 4, indices: [0, 1, 3, 0, 2, 3] };
 There are a couple of things to note here. First, note that the cardinality of the
 product factor (4) is greater than either of the cardinalities of the constituent
 factors (2, 3), but less than the product of the cardinalities (2 ⋅ 3 = 6). This
 will generally be the case: if the first factor has cardinality 𝑎 and the second
 cardinality 𝑏, the product will have cardinality 𝑐, such that:
-• 𝑐 ≥ 𝑎 and 𝑐 ≥ 𝑎19
-• 𝑐 ≤ 𝑎 ⋅ 𝑏20
+• 𝑐 ≥ 𝑎 and 𝑐 ≥ 𝑎20
+18 In the general case where the histogram bins are not necessarily all of equal with; if all
+bins are known to have the same width, we can compute the bin index in constant 𝑂(1) time
+19 Or a factor isomorphic to that one, up to the permutation of indices.
+20 Equality only if either one or both of the factors are constant, or if there exists an isomorphism between the factors’ indices.
+
+180
+
+CHAPTER 6. SYSTEM DESCRIPTION
+
+• 𝑐 ≤ 𝑎 ⋅ 𝑏21
 This is all fairly intuitive, however, actually computing the indices of a product
 factor presents some challenges. A naive idea might be to simply sum/multiply
 pairs of indices element-wise, however, this approach does not work: the
@@ -7281,16 +7270,30 @@ formula:
 (6.2)
 
 This formula is similar to one discussed in Wickham (2013). Since 𝑖1 and 𝑖2 take
-values in 0 … 𝑐1 −1 and 0 … 𝑐2 −1, respectively21 , the product index is guaranteed
+values in 0 … 𝑐1 −1 and 0 … 𝑐2 −1, respectively22 , the product index is guaranteed
 to be unique: if 𝑖1 = 0 then 𝑖product = 𝑖2 , if 𝑖1 = 1 then 𝑖product = 𝑘+𝑖2 , if 𝑖1 = 2
 then 𝑖product = 2𝑘 + 𝑖2 , and so on. Further, since the the index corresponding to
 the first factor is multiplied by 𝑘, it intuitively gets assigned a greater “weight”
 and the relative order of the two factors is preserved. See for example Table 6.1
 of product indices of two factors with cardinalities 2 and 3:
-18 Or a factor isomorphic to that one, up to the permutation of indices.
-19 Equality only if either one or both of the factors are constant, or if there exists an isomorphism between the factors’ indices.
-20 Equality only if all element-wise combinations of indices form a bijection/are unique.
-21 Using zero-based indexing.
+Finally, given a product index 𝑖product , we can also recover the original indices
+(assuming 𝑘 is known):
+
+𝑖1 = ⌊𝑖product /𝑘⌋
+
+(6.3)
+
+𝑖2 = 𝑖product
+
+(6.4)
+
+mod 𝑘
+
+This is useful when constructing the product factor data: we need to take all
+unique product indices and use them to proxy the data of the original two
+factors.
+21 Equality only if all element-wise combinations of indices form a bijection/are unique.
+22 Using zero-based indexing.
 
 6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
 
@@ -7327,22 +7330,6 @@ Product index
 
 5
 
-Finally, given a product index 𝑖product , we can also recover the original indices
-(assuming 𝑘 is known):
-
-𝑖1 = ⌊𝑖product /𝑘⌋
-
-(6.3)
-
-𝑖2 = 𝑖product
-
-(6.4)
-
-mod 𝑘
-
-This is useful when constructing the product factor data: we need to take all
-unique product indices and use them to proxy the data of the original two
-factors.
 It should be mentioned that, as with binning, computing product indices based
 on Equation (6.2) creates gaps. Again, plotscape solves this by keeping track
 of the unique product indices and looping over the indices again to “clean” them,
@@ -7355,22 +7342,9 @@ the average case, the length of the unique product indices will be some smaller
 fraction of the length of the data. Further, profiling during development did
 not identify this operation as a performance bottleneck. However, if this sorting
 procedure did turn out to be a bottleneck at some point, there may be other
-more performant algorithms/data structures available22 .
+more performant algorithms/data structures available23 .
 Finally, Factor.product is the only factor constructor which actually assigns to
 the parent property of the output Factor. Specifically, the first factor always
-22 For instance, one hypothetical option would be to store the computed product indices
-in a min-heap (see e.g. Cormen et al. 2022). Min-heaps have a 𝑂(log 𝑛) time complexity
-for deleting the lowest element, which may seem like an improvement, however, to clean all
-indices, we would still need to delete all 𝑛 nodes, which would again result in 𝑂(𝑛 ⋅ log 𝑛) time
-complexity, and therefore there would be little real advantage over sorting. Another option
-would be to simply trade time complexity for space complexity and maintain a “holey” array
-of all possible product indices with length 𝑐1 ⋅ 𝑐2 , which would only need to be compacted
-once all indices are computed.
-
-182
-
-CHAPTER 6. SYSTEM DESCRIPTION
-
 gets assigned as the parent of the product, creating a hierarchical structure.
 Technically, there are situations where a product of two factors is simply a
 “flat” product and not a hierarchy. This is the case, for example, when taking
@@ -7380,8 +7354,19 @@ computation involving a flat product can simply ignore the parent property,
 and the data is for all other intents and purposes equivalent. This similarity
 of flat and hierarchical products was also noted by Wilkinson, who used the
 terminology of cross and nest operators (Wilkinson 2012, 61).
+23 For instance, one hypothetical option would be to store the computed product indices
+in a min-heap (see e.g. Cormen et al. 2022). Min-heaps have a 𝑂(log 𝑛) time complexity
+for deleting the lowest element, which may seem like an improvement, however, to clean all
+indices, we would still need to delete all 𝑛 nodes, which would again result in 𝑂(𝑛 ⋅ log 𝑛) time
+complexity, and therefore there would be little real advantage over sorting. Another option
+would be to simply trade time complexity for space complexity and maintain a “holey” array
+of all possible product indices with length 𝑐1 ⋅ 𝑐2 , which would only need to be compacted
+once all indices are computed.
+
+182
 6.4.4.5
 
+CHAPTER 6. SYSTEM DESCRIPTION
 Marker
 
 An important component which also serves the function of a Factor but deserves
@@ -7391,7 +7376,7 @@ while most of the components discussed so far can exist within the context of a
 single plot, Marker further differs by the fact that it is shared by all plots within
 the same figure.
 Marker has the following Factor-like interface which will be gradually explained
-below23 :
+below24 :
 interface Marker {
 cardinality: number;
 indices: number[];
@@ -7407,13 +7392,6 @@ of parameters. To make the results of selection persist across these interaction
 the user can assign cases to persistent selection groups (currently, this is down
 by holding down a numeric key and performing regular selection). Persistent
 selections are removed only by a dedicated action (double-click).
-23 The actual implementation in the current version of plotscape differs slightly in several
-key aspects, however, I chose to use this simplified interface here for clarity.
-
-6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
-
-183
-
 Importantly, a single data point can be simultaneously assigned to a persistent
 group and also be transiently selected. For example, a data point may belong to
 the base (unselected) group, transiently selected base group, persistent group
@@ -7422,6 +7400,13 @@ plotscape has a very minimal version of selection operators (see Unwin et al.
 1996; Theus 2002) baked-in: transient and persistent selection are automatically
 combined via intersection (the AND operator). While a full range of selection
 operators provides much greater flexibility, I contend that this simple transientpersistent model already provides a lot of practical utility. Specifically, it enables
+24 The actual implementation in the current version of plotscape differs slightly in several
+key aspects, however, I chose to use this simplified interface here for clarity.
+
+6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
+
+183
+
 a common action in the interactive data visualization workflow: upon identifying
 an interesting trend with selection, a user may be interested in how the trend
 changes when conditioning on another (AND) subset of the data. The transientpersistent model makes this possible, without introducing the overhead having
@@ -7435,6 +7420,14 @@ that, in the barplot (right), the transiently selected bar segments appear at th
 base of the bars.
 Final thing to note is that, during rendering, transient selection status is represented by paired colour shades, see Figure 6.7. That is, each persistent selection
 group is assigned a unique color, and transient selection is indicated by a darker
+shade of the same color. This pairing clearly visually differentiates the two
+selection modes while preserving the identity of the persistent groups.
+6.4.4.5.2 Group assignment indices The key responsibility of Marker is
+to manage linked selection status (the transient-persistent model discussed in
+Section 6.4.4.5.1 above). It does this very similarly to a Factor, by maintaining
+an array of group assignment indices. In plotscape, each data point can be
+assigned one of four primary (persistent) groups based on linked selection: base
+(no selection), persistent selection group one, persistent selection group two, and
 
 184
 
@@ -7465,14 +7458,6 @@ Transient group three
 1
 0
 
-shade of the same color. This pairing clearly visually differentiates the two
-selection modes while preserving the identity of the persistent groups.
-6.4.4.5.2 Group assignment indices The key responsibility of Marker is
-to manage linked selection status (the transient-persistent model discussed in
-Section 6.4.4.5.1 above). It does this very similarly to a Factor, by maintaining
-an array of group assignment indices. In plotscape, each data point can be
-assigned one of four primary (persistent) groups based on linked selection: base
-(no selection), persistent selection group one, persistent selection group two, and
 persistent selection group three. Further, as also discusssed above, each of those
 groups can be further split in two based on transient selection state (selected
 or unselected), resulting in 4 × 2 = 8 distinct group assignments (such that the
@@ -7491,11 +7476,6 @@ data visualization pipeline.
 With four persistent groups (including base), many operations involving transient selection can be eﬀiciently implemented using the third bit of the index.
 Specifically, as can be seen in Table 6.2, persistent indices range from 0 to 3
 and transient indices range from 4 to 7. Thus, to determine whether a case is
-
-6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
-
-185
-
 selected, we can do a simple bitwise check of the third bit. Likewise, to add or
 remove transient selection, we can set the third bit appropriately.
 It is important to mention that, while not a necessity, having four persistent
@@ -7505,6 +7485,11 @@ eight and the maximum index values is 2^3 - 1 = 7, resulting in dense Marker
 indices (i.e. all index values from 0 to cardinality - 1 are valid). If we wanted
 to implement more persistent selection groups, we could do so by setting a higher
 bit (e.g. the fourth bit for up to eight persistent groups and sixteen unique
+
+6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
+
+185
+
 indices in total), however, we may break the correspondence between cardinality
 and the number of unique indices. Practically, this may not cause any issues,
 as long as we ensure that the Marker cardinality is set to 2index of the transient bit
@@ -7515,6 +7500,7 @@ well-known that human visual capacity is limited, and having more than 4×2 =
 figure may overtax the visual system. Still, the ability to have arbitrary number
 of persistent groups may be implemented in future versions in plotscape, but
 it has not been a priority up to this point.
+
 6.4.4.5.3 Updating group assignment indices As may be already apparent, key operations that marker has to support have to do with updating the
 group assignment indices. The Marker namespace exports the following three
 functions for this very purpose:
@@ -7524,6 +7510,7 @@ export function clearTransient(marker: Marker): void {}
 export function update(marker: Marker, group: number,
 selectedIndices: number[]): void {}
 }
+
 Marker.clearAll clears all group assignments by setting them all indices to
 the base value (7). Marker.clearTransient clears transient indices only. This
 is also where the transientIndices property on the Marker interface becomes
@@ -7534,18 +7521,16 @@ through these indices (instead of the whole array of indices).
 Finally, the Marker.update is the key function for Marker. It changes behavior
 based on the group argument. When group is one of the persistent groups, it
 simply iterates through selectedIndices, setting each corresponding index in
-
-186
-
-CHAPTER 6. SYSTEM DESCRIPTION
-
 the marker’s indices array to the group’s value. When group has the special
 transient selection value, it instead adds the transient selection status to each
 marker index, using the bitwise operation described in Section 6.4.4.5.2. Finally,
 it should be mentioned that, since any new selection automatically removes
 transient selection, Marker.update always first calls Marker.clearTransient.
+
+186
 6.4.4.6
 
+CHAPTER 6. SYSTEM DESCRIPTION
 Aggregation: Reducers, reduceds, and summaries
 
 As discussed in Section 4.3, a key challenge when computing statistical summaries in interactive data visualization systems is doing so in a way that preserves the inherent hierarchy in the data. For instance, when stacking bar
@@ -7575,17 +7560,17 @@ reducefn: (x, y) => x + y,
 export const product: Reducer<number> = {
 name: `product`,
 initialfn: () => 1,
-
-6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
-
-187
-
 reducefn: (x, y) => x * y,
 };
 export const max: Reducer<number> = {
 name: `max`,
 initialfn: () => -Infinity,
 reducefn: (x, y) => Math.max(x, y),
+
+6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
+
+187
+
 };
 export const concat: Reducer<string> = {
 name: `concat`,
@@ -7614,11 +7599,6 @@ const result = Array<T>(factor.cardinality);
 for (let j = 0; j < factor.cardinality; j++) {
 result[j] = reducer.initialfn();
 }
-
-188
-
-CHAPTER 6. SYSTEM DESCRIPTION
-
 // Aggregate
 for (let i = 0; i < factor.indices.length; i++) {
 const index = factor.indices[i];
@@ -7626,12 +7606,17 @@ result[index] = reducer.reducefn(result[index], x[i]);
 }
 return result;
 }
+
+188
+
+CHAPTER 6. SYSTEM DESCRIPTION
+
 After we apply this operation, we could just return the result array T[] as in
 the example above, however, in the general case, this approach would discard
 important information. Specifically, as discussed in Section 4.3, in a data visualization system, we rarely want to treat summaries as a simple “flat” array
 of values; instead, to be able to apply transformation such as stacking or normalization, we need to retain the information about how these values have been
 produced (Reducer), over which partition (Factor), and which other arrays of
-summaries they relate to. This is what the Reduced data type is for24 :
+summaries they relate to. This is what the Reduced data type is for25 :
 interface Reduced<T = unknown> extends Array<T> {
 factor: Factor<T>,
 reducer: Reducer<T>,
@@ -7649,14 +7634,6 @@ result.factor = factor;
 result.reducer = reducer;
 return result
 }
-24 Note that, in the example below, we assign string key properties to an array. This would
-be prohibited in many languages but is perfectly valid in JavaScript/TypeScript due to its
-highly dynamic nature.
-
-6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
-
-189
-
 That is, now we have the factor and reducer stored directly alongside array of
 summaries for future use when applying later transformations like stacking and
 normalization. This is also where the optional parent and original properties
@@ -7666,6 +7643,14 @@ before any transformations like stacking/normalization have been applied (this
 is primarily useful when querying).
 Speaking of stacking and normalization, the Reduced namespace also exposes
 the stack, normalize, and shiftLeft functions with the following type signatures:
+25 Note that, in the example below, we assign string key properties to an array. This would
+be prohibited in many languages but is perfectly valid in JavaScript/TypeScript due to its
+highly dynamic nature.
+
+6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
+
+189
+
 export namespace Reduced {
 export function stack<T>(reduced: Reduced<T>): Reduced<T> {}
 export function normalize<T>(reduced: Reduced<T>,
@@ -7676,7 +7661,7 @@ export function shiftLeft<T>(reduced: Reduced<T>): Reduced<T> {}
 These functions all take Reduced as the first argument and compute transformations that make use of the factor, reducer, and parent properties, returning a new Reduced. For instance, the stack function computes a new
 array of stacked values, using the factor, parent, and reduced properties.
 Similarly, the normalize also creates and populates it with normalized values
-which are created by dividing the values in the original array by their corresponding parent values25 . The shiftLeft function creates a new array where
+which are created by dividing the values in the original array by their corresponding parent values26 . The shiftLeft function creates a new array where
 the values are shifted by one, such that the first element is the monoidal unit
 (reducer.initialfn()), and the last element is the second to last element of
 the original array (the primary use-case of this is the spineplot).
@@ -7684,20 +7669,7 @@ the original array (the primary use-case of this is the spineplot).
 6.4.4.6.3 Summaries With the building blocks of Indexables, Factors,
 Reducers and Reduceds, we now have everything we need to compute the hierarchy of summaries described in Section 4.3 and more specifically Section
 4.3.2.4. This is the exact purpose of the constructor function exported from the
-Summaries namespace:26 :
-
-25 Technically, with the way normalize is implemented, the normalizing function can be any
-
-arbitrary binary function, not just division. This could be used, for example, in weighted
-normalization: instead of using standard division (x, y) => x / y, we could add a transformation e.g. (x, y) => Math.sqrt(x) / Math.sqrt(y).
-26 Technically, the type signature of the real function as implemented in plotscape is a
-lot more complicated since it heavily relies on generics to correctly infer the type of the
-summarized data, however, the basic idea is the same.
-
-190
-
-CHAPTER 6. SYSTEM DESCRIPTION
-
+Summaries namespace:27 :
 type ReducerTuple<T = unknown> = [Indexable<T>, Reducer<T>];
 function create(summaries: Record<string, ReducerTuple>,
 factors: Factor[]): Dataframe[]
@@ -7706,6 +7678,19 @@ pairs with matching generic and an array of Factors. It then repeatedly combines
 for each new product factor using the Indexable-Reducer pairs in summaries.
 This results in an array of Dataframes with equal length as factors, holding
 the combined data. For example:
+
+26 Technically, with the way normalize is implemented, the normalizing function can be any
+
+arbitrary binary function, not just division. This could be used, for example, in weighted
+normalization: instead of using standard division (x, y) => x / y, we could add a transformation e.g. (x, y) => Math.sqrt(x) / Math.sqrt(y).
+27 Technically, the type signature of the real function as implemented in plotscape is a
+lot more complicated since it heavily relies on generics to correctly infer the type of the
+summarized data, however, the basic idea is the same.
+
+190
+
+CHAPTER 6. SYSTEM DESCRIPTION
+
 const factor1 = Factor.from([`a`, `a`, `b`, `a`, `b`, `c`])
 const factor2 = Factor.from([0, 0, 0, 1, 1, 1])
 const factor3 = Factor.product(factor1, factor2)
@@ -7737,11 +7722,6 @@ from the codebase:
 const zero = () => 0;
 const coordinates = Summaries.translate(summarized, [
 (d) => d,
-
-6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
-
-191
-
 (d) => ({
 x0: d.binMin,
 y0: zero,
@@ -7753,6 +7733,11 @@ x0: d.binMin,
 y0: zero,
 x1: d.binMax,
 y1: Reduced.stack(d.stat),
+
+6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
+
+191
+
 }),
 ]);
 Notice that the translating function actually maps three data sets. The first, representing a summary on the whole data set, is not used directly in histograms but
@@ -7780,11 +7765,6 @@ y1: one,
 }),
 (d) => ({
 x0: Reduced.shiftLeft(Reduced.stack(Reduced.parent(d.stat))),
-
-192
-
-CHAPTER 6. SYSTEM DESCRIPTION
-
 y0: zero,
 x1: Reduced.stack(Reduced.parent(d.stat)),
 y1: Reduced.normalize(Reduced.stack(d.stat), (x, y) => x / y),
@@ -7797,6 +7777,11 @@ Scales
 
 As discussed in Section 4.4, to visualize data, we need to translate values from
 the domain of the data to the domain of the graphical device (computer screen).
+
+192
+
+CHAPTER 6. SYSTEM DESCRIPTION
+
 In many data visualization packages, this work is done by specialized components called scales. The theoretical model of scales plotscape uses was already
 discussed in Section 4.4, with the key takeway being that a scales are fundamentally composed of two components: its domain and codomain. In Section
 4.4.0.4, I briefly discussed the fact that many popular data visualization systems
@@ -7822,11 +7807,6 @@ way, we can define the Scale interface as follows:
 interface Scale<T, U> {
 domain: Expanse<T>;
 codomain: Expanse<U>;
-
-6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
-
-193
-
 zero: number;
 one: number;
 direction: 1 | -1;
@@ -7838,6 +7818,11 @@ Expanse. The utility of the other properties relates to concepts discussed in
 Section 4.4.0.3.2 and will be discussed later. However, for now, we can focus
 solely on domain and codomain. These two properties are suﬀicient to implement the core functionality of Scale: the pushforward and pullback functions.
 To explain what these functions do, it may be easiest to just show the code:
+
+6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
+
+193
+
 namespace Scale {
 export function pushforward<T, V>(scale: Scale<T, V>, x: T): V {
 const { domain, codomain } = scale;
@@ -7865,19 +7850,21 @@ Thus, most of the heavy lifting related to scaling is done by the domain and
 codomain properties, both of type Expanse. However, before we go on to discuss
 Expanse, we should explore the remaining Scale properties.
 6.4.4.7.1 Scale properties Besides domain and codomain, scale also has
-five numeric properties: zero, one, direction, scale, and mult. These prop-
+five numeric properties: zero, one, direction, scale, and mult. These properties act as parameters of the (implicit) intermediate domain. They facilitate
+a range of domain-and-codomain-agnostic scale operations, including zooming, panning, growing/shrinking, and reversing, and are applied during calls
+to Scale.pushforward or Scale.pullback. For instance, here’s how a “more
+full”28 implementation of Scale.pushforward looks like:
+export function pushforward<T, U>(scale: Scale<T, U>, x: T): U {
+const { domain, codomain, zero, one, direction, scale, mult } = scale
+// Normalize to [0, 1]
+28 This is almost the exact implementation, with the only difference being that in plotscape,
+domain and codomain can additionally be array-valued, so Scale.pushforward includes logic
+for handling this.
 
 194
 
 CHAPTER 6. SYSTEM DESCRIPTION
 
-erties act as parameters of the (implicit) intermediate domain. They facilitate
-a range of domain-and-codomain-agnostic scale operations, including zooming, panning, growing/shrinking, and reversing, and are applied during calls
-to Scale.pushforward or Scale.pullback. For instance, here’s how a “more
-full”27 implementation of Scale.pushforward looks like:
-export function pushforward<T, U>(scale: Scale<T, U>, x: T): U {
-const { domain, codomain, zero, one, direction, scale, mult } = scale
-// Normalize to [0, 1]
 let normalized = Expanse.normalize(domain, x);
 // Grow/shrink
 normalized = normalized * scale * mult;
@@ -7902,14 +7889,6 @@ proportional margins to the normalized values:
 normalized = zero + normalized * (one - zero);
 For instance, assuming that by Expanse.normalize maps the “minimum” and
 “maximum” values of the domain to 0 and 1, respectively, setting zero to 0.1
-27 This is almost the exact implementation, with the only difference being that in plotscape,
-domain and codomain can additionally be array-valued, so Scale.pushforward includes logic
-for handling this.
-
-6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
-
-195
-
 and one to 0.9 expands the scale and applies a symmetric 10% margin on both
 ends. Importantly, this expansion is consistent across all concrete Expanse
 subtypes used for the domain and codomain. Further, as also discussed in
@@ -7921,6 +7900,11 @@ scale.one += amount;
 }
 Again, this implementation of panning is also domain-and-codomain-agnostic.
 Further, it can result in zero and one values outside of [0, 1], which is fine since,
+
+6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
+
+195
+
 as mentioned in Section 4.4.0.3.2, at times we may want to map points outside
 of the codomain (e.g. scatterplot points with x- and y- coordinates outside of the
 plot but with plot-overlapping radius). Finally, we can also use the zero and one
@@ -7946,13 +7930,7 @@ if (direction === -1) [zero, one] = [1 - zero, 1 - one];
 scale.zero = zero
 scale.one = one
 }
-The Scale.expand function zooms into a proportional region of the scale, us-
-
-196
-
-CHAPTER 6. SYSTEM DESCRIPTION
-
-ing the two numeric arguments as boundaries of this region. For instance,
+The Scale.expand function zooms into a proportional region of the scale, using the two numeric arguments as boundaries of this region. For instance,
 Expand.scale(scale, 0.25, 0.75) zooms into the middle 50% of the scale.
 The key part of this operation is the invertRange function. This takes a numeric interval given by [min, max] and inverts this, such that, when the simple
 linear normalizing function 𝑛(𝑥) = (𝑥 − min)/(max − min) is applied to 0 and
@@ -7961,6 +7939,11 @@ The rest of the Scale.expand function is just book-keeping, handling the case
 where zero, one, and direction have been set to non-default values.
 Third and finally, the direction property gets applied to the normalized values
 in the following way:
+
+196
+
+CHAPTER 6. SYSTEM DESCRIPTION
+
 normalized = 0.5 * (1 - direction) + direction * normalized;
 The line of code above is essentially a branchless conditional. When direction
 is 1, then the first term in the sum evaluates to zero and the result is just the
@@ -7990,11 +7973,6 @@ the ability to “train” the expanse on new values and return a list of potent
 axis breaks. This leads to the following interface:
 Note that, up until this point, interfaces have been used to define components
 as a plain data containers, however, with Expanse<T>, it is now used differently:
-
-6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
-
-197
-
 to define abstract functionality. The reason for this is that Expanse<T> is the
 first component of the system which absolutely requires runtime polymorphism.
 Specifically, the implementation of normalize and unnormalize has to vary
@@ -8005,6 +7983,11 @@ may be use cases for different implementations of the conversion process (as we
 will explore later). This makes polymorphism necessary. In current version of
 plotscape, I maintain the data-oriented approach of separate data-behaviour
 containers and hand-roll the polymorphism by dispatching on a type property,
+
+6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
+
+197
+
 however, a case could be made for adopting object-oriented principles here and
 writing expanse subtypes as classes which implement the Expanse<T> interface
 (or even implementing Expanse<T> as an abstract class).
@@ -8037,11 +8020,6 @@ by default, they are set to the identity function ((x) => x). Finally, the ratio
 property, a boolean flag, indicates if the expanse is part of a ratio scale (see
 Section 3.3.3). If ratio is true, the min value is fixed at zero and cannot be
 modified, even by training on new data.
-
-198
-
-CHAPTER 6. SYSTEM DESCRIPTION
-
 The normalize and unnormalize functions in the ExpanseContinuous namespace are generalizations of the linear map:
 // ExpanseContinuous.ts
 export namespace ExpanseContinuous {
@@ -8049,7 +8027,12 @@ export function normalize(expanse: ExpanseContinuous,
 x: number) {
 const { min, max, offset, trans } = expanse;
 return (trans(x - offset) - trans(min)) /
+
+198
+
+CHAPTER 6. SYSTEM DESCRIPTION
 (trans(max) - trans(min));
+
 }
 export function unnormalize(expanse: ExpanseContinuous,
 value: x) {
@@ -8066,11 +8049,13 @@ unnormalize function reverses this process, and also has to apply the inverse
 function. In mathematical notation:
 
 𝑝 = 𝑛(𝑥) = [𝑓(𝑥 − offset) − 𝑓(min)]/[𝑓(max) − 𝑓(min)]
+𝑥 = 𝑢(𝑝) = 𝑓
+
+−1
+
+[𝑓(min) + 𝑥 ⋅ (𝑓(max) − 𝑓(min))] + offset
 
 (6.5)
-
-𝑥 = 𝑢(𝑝) = 𝑓 −1 [𝑓(min) + 𝑥 ⋅ (𝑓(max) − 𝑓(min))] + offset
-
 (6.6)
 
 One can easily check that 𝑛 and 𝑢 are inverses of each other by taking one
@@ -8083,23 +8068,24 @@ const expanse = {
 min: 0, max: 16, offset: 0,
 trans: identity, inv: identity
 };
-
-6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
-
-199
-
 console.log(ExpanseContinuous.normalize(expanse, 4));
 // Technically, we should now also set inverse to square
 expanse.trans = Math.sqrt;
 console.log(ExpanseContinuous.normalize(expanse, 4));
 ## 0.25
 ## 0.5
+
+6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
+
+199
+
 Finally, the ExpanseContinuous namespace also exports a train and breaks
 functions. The train functions simply finds a minimum and maximum value of
 an array of numbers and sets these as the new min and max (or just sets the
 max, if ratio is true). Breaks returns a list of “nice” axis breaks which are by
 computed via an algorithm inspired by base R’s pretty function (R Core Team
 2024).
+
 6.4.4.10 Point expanses
 ExpansePoint is the simpler of two types of discrete expanses, implementing an
 interface of Expanse<string>. It maps string values to equidistant positions
@@ -8122,12 +8108,7 @@ export function normalize(expanse: ExpansePoint, x: string) {
 const { labels, order } = expanse;
 const index = order[labels.indexOf(x)];
 if (index === -1) return index;
-
-200
-
-CHAPTER 6. SYSTEM DESCRIPTION
 return index / (labels.length - 1);
-
 }
 export function unnormalize(expanse: ExpansePoint, x: number) {
 const { labels, order } = expanse;
@@ -8135,6 +8116,11 @@ const index = Math.round(x * (labels.length - 1));
 return labels[order[index]];
 }
 }
+
+200
+
+CHAPTER 6. SYSTEM DESCRIPTION
+
 The normalize function maps a label to [0, 1] based on its position within
 the labels array (which may be shuffled by order), whereas the unnormalize
 function finds the closest label corresponding to numeric position by reversing
@@ -8160,11 +8146,6 @@ in the identity function, the converse is not true. For instance:
 import { ExpansePoint } from "./ExpansePoint"
 const cities = ["Berlin", "Prague", "Vienna"]
 const expanse = { labels: cities, order: [0, 1, 2] };
-
-6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
-
-201
-
 // Unnormalize works as a one-way inverse (retraction)
 console.log(
 cities.map((x) => {
@@ -8174,6 +8155,11 @@ ExpansePoint.normalize(expanse, x)
 );
 })
 );
+
+6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
+
+201
+
 // But not the other way around
 console.log(
 ExpansePoint.normalize(
@@ -8201,11 +8187,6 @@ cumulativeWeights: number[];
 }
 The labels and order properties match those of ExpansePoint. The
 additional weights and cumulativeWeights are numeric arrays which
-
-202
-
-CHAPTER 6. SYSTEM DESCRIPTION
-
 record the width of each band. weights store the individual band widths,
 whereas cumulativeWeights stores their cumulative sums. The reason why
 cumulativeWeights are stored is that, by having the bands have variable
@@ -8216,6 +8197,11 @@ between 0.25 and 0.5). However, to compute this value, the cumulative sum
 of the preceding weights as well as the total sum of all weights are required.
 While we could compute cumulative sum of weights on each normalize or
 unnormalize call, this would introduce performance overhead. As such, it
+
+202
+
+CHAPTER 6. SYSTEM DESCRIPTION
+
 is better to store cumulativeWeights and only recompute them each time
 weights or order changes.
 The normalize and unnormalize functions in the ExpanseBand namespace map
@@ -8243,11 +8229,6 @@ if (cumulativeWeights[index] >= weight) break;
 index++;
 }
 return labels[order[index]];
-
-6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
-
-203
-
 }
 }
 Compared to ExpansePoint, the logic of normalize and unnormalize is a bit
@@ -8256,7 +8237,12 @@ label and then return the corresponding midpoint of the band, taking weights
 and order into account. To unnormalize, we actually have to loop through the
 array of cumulativeWeights to find the first weight that is smaller than the
 position: as far as I know, there is no way to determine which bin a normalized
-value belongs to in 𝑂(1) time28 .
+
+6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
+
+203
+
+value belongs to in 𝑂(1) time29 .
 6.4.4.11.1 Compound and split expanses The final two Expanse subtypes, ExpanseCompound and ExpanseSplit, represent a significant departure
 from the scalar-valued Expanse subtypes discussed earlier. Unlike the others,
 these subtypes are designed to handle array-valued data. While their implementation logic is relatively straightforward, a detailed discussion would significantly
@@ -8281,18 +8267,19 @@ to set them to the same limits (by finding the minimum and maximum values
 across all Expanse objects). Finally,ExpanseSplit is used as the codomain,
 mapping the array of normalized values produced by the domain to the plot’s
 y-axis coordinates.
-28 This is not much of a problem since, right now, ExpanseBand.unnormalize is not
+6.4.4.12 Plot
+Another key component of plotscape is, of course, the Plot. Plots are responsible for rendering data and handling user-initiated interactive events. Thus,
+using the lense of the model-view-controller architecture (MVC, see e.g. Xie,
+Hofmann, and Cheng 2014), Plot serves as a fundamental view-controller component, alongside Scene (see Section 6.4.4.15)30 . While Plot logic is fairly
+29 This is not much of a problem since, right now, ExpanseBand.unnormalize is not
 actually used anywhere in the system (all scales implemented thus far only use only
 ExpanseBand.normalize). However, it is important to be mindful of this.
+30 The model part is handled by components like Summaries
 
 204
 
 CHAPTER 6. SYSTEM DESCRIPTION
 
-6.4.4.12 Plot
-Another key component of plotscape is, of course, the Plot. Plots are responsible for rendering data and handling user-initiated interactive events. Thus,
-using the lense of the model-view-controller architecture (MVC, see e.g. Xie,
-Hofmann, and Cheng 2014), Plot serves as a fundamental view-controller component, alongside Scene (see Section 6.4.4.15)29 . While Plot logic is fairly
 substantial (over 700 SLOC, at the time of writing), much of it consists of
 somewhat arbitrary implementation details, which are likely not as interesting
 as those of the previously discussed parts of the system. For this reason, I
@@ -8326,12 +8313,6 @@ been introduced in Section 6.4.4.7: here, scales are just a dictionary with
 aesthetic mappings as keys and Scales as values.
 Currently, each Plot in plotscape uses the following list of aesthetic mappings
 and corresponding Scales:
-29 The model part is handled by components like Summaries
-
-6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
-
-205
-
 • x
 • y
 • size
@@ -8339,15 +8320,20 @@ and corresponding Scales:
 • height
 • area
 • area percentage (areaPct)
+
+6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
+
+205
+
 Most of these are fairly self-explanatory. Tmap data to the plot’s x and y
 coordinates, respectively. Their codomain maxima correspond to the plot’s
 width and height (ignoring margins). The size scale maps to glyph sizes, like
 scatterplot points. By default, it is a ratio scale (minimum is fixed at zero,
 for both domain and codomain), uses a square-root transformation, and has
-a fixed maximum30 . The width and height scales correspond to the plot’s
+a fixed maximum31 . The width and height scales correspond to the plot’s
 dimensions, similar to x and y, however, with the minimum value fixed at zero
 and both margins subtracted from the maximum. They are used, for instance,
-to scale the width and height of barplot bars, semi-independently31 of position.
+to scale the width and height of barplot bars, semi-independently32 of position.
 The area scale is based on the minimum of width and height and also has a
 square-root transformation applied to it. Finally, the areaPct scale is a scale
 used for scaling fixed-coordinate objects (e.g. for growing/shrinking rectangles
@@ -8366,16 +8352,9 @@ occurs. As discussed in Section 4.3.2, this requires making certain algebraic as
 While this is currently a hard-coded requirement, a potential future direction
 would be to provide a fallback mechanism such that the scale updates would be
 based on the finest partition when the summaries are not monoidal monotones.
+
 6.4.4.12.3 Rendering Intuitively, every Plot needs a dedicated space for
 rendering data and auxiliary graphical elements such as axis labels and titles.
-30 With respect to the dimensions of the plot; it can still be modified by interaction.
-31 width and height are not truly independent of x and y due to e.g. zooming having to
-affect both
-
-206
-
-CHAPTER 6. SYSTEM DESCRIPTION
-
 This requires the ability to render basic geometric objects, such as points, lines,
 rectangles, and text. Furthermore, as discussed in Section 4.5.1, rendering can
 be simplified and optimized by organizing objects into vertical layers (z-indices).
@@ -8383,6 +8362,14 @@ Therefore, our Plot implementation should support this layering capability.
 Currently, Plot utilizes a dictionary of Frame subcomponents for rendering. A
 Frame is essentially a wrapper around the HTML canvas element, providing
 additional utility functions related resizing, clipping, and rendering of graphical
+31 With respect to the dimensions of the plot; it can still be modified by interaction.
+32 width and height are not truly independent of x and y due to e.g. zooming having to
+affect both
+
+206
+
+CHAPTER 6. SYSTEM DESCRIPTION
+
 primitives. During data rendering, the appropriate Frame is selected based on a
 provided layer value, and the data is rendered accordingly. Finally, each Frame
 can also have associated attributes, such as color (for selection groups), margins,
@@ -8412,18 +8399,17 @@ size, area, and areaPct scales. The response to these events may be adjusted
 in specific plot types. The response to these events is customizable for specific
 plot types. For example, in a histogram, grow/shrink events should modify
 the size of rectangles by adjusting histogram bins, rather than directly altering
+the scales. Therefore, we override the default event handlers to achieve this
+specialized behavior.
+6.4.4.13.3 Mouse-move interaction: selection, panning, and zooming
+Each Plot supports three mouse-move interaction modes: select, pan, or query.
+While a plot is active, mouse-move events are dispatched appropriately based
+on the active mode. Briefly, select mode is the default, and selection is initiated
 
 6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
 
 207
 
-the scales. Therefore, we override the default event handlers to achieve this
-specialized behavior.
-
-6.4.4.13.3 Mouse-move interaction: selection, panning, and zooming
-Each Plot supports three mouse-move interaction modes: select, pan, or query.
-While a plot is active, mouse-move events are dispatched appropriately based
-on the active mode. Briefly, select mode is the default, and selection is initiated
 with a left-click. Panning mode is activated by clicking and holding down the
 right mouse button. Querying is triggered by pressing a designated keyboard
 key (Q) and hovering over objects.
@@ -8456,17 +8442,17 @@ implementation is fairly straightforward.
 Querying
 Querying is the last of the three interactive mouse-move modes. It is activated
 via the Q keyboard key (by default). When a users presses and holds the Q key
-
-208
-
-CHAPTER 6. SYSTEM DESCRIPTION
-
 and mouses over a geometric object in the plot, a pop-up table will show up,
 displaying the underlying summary statistics related to the object.
 Similar to selection, object querying involves iterating through the list of objects
 to identify the one corresponding to the mouse coordinates. However, unlike selection, which must examine all candidates, querying can terminate early upon
 finding the first match. While overplotting (e.g., in scatterplots) could technically result in multiple matches, this poses no issue for default query statistics,
 as these are based on aesthetics and will be identical for all overplotted objects.
+
+208
+
+CHAPTER 6. SYSTEM DESCRIPTION
+
 The issue becomes more complicated with custom querying statistics, a feature
 which plotscape supports, as these, unlike aesthetics, may not be identical
 across overplotted objects. Since custom query statistics are a fairly advanced
@@ -8499,22 +8485,21 @@ as a compatible alternative to selection-region-based zooming.
 Additionally, every Plot can be zoomed into multiple levels deep. This nested
 zooming is implemented by maintaining a stack of zoom coordinates. At any
 point, the user may pop one level of zoom, reverting to the previous zoom level.
-
-6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
-
-209
-
 Alternatively, they can trigger the plot reset event (R key by default), reverting
 back to the default zoom level.
 
 6.4.4.15 Scene
 As discussed in Section 6.2.1, a key part of an interactive system design is the
 ability to create and manage figures composed of multiple (connected) interactive plots. In plotscape, this responsibility is handled by the Scene component,
+
+6.4. LOW-LEVEL IMPLEMENTATION (PLOTSCAPE)
+
+209
+
 making it a view-controller event, similar to Plot but more high-level (see Section 6.4.4.12). Again, as with the Plot component, the design involves a number
 of implementation details which will only be glossed over in this section; an interested reader is refered to the plotscape codebase. Finally, similar to Plot,
 due to its direct ties to UI, Scene is another component that may make sense
 to be implemented as an OOP class.
-
 6.4.4.15.1 Plots The primary responsibility of Scene is to serve as a container for Plots. These are stored in a simple dynamic array which grows as
 more plots are added to a Scene. Further, to speed up look-ups of individual
 plots, plot references may also be stored in a dictionary. In current version of
@@ -8532,15 +8517,9 @@ This results in a column-first oriented layout, with columns expanding before
 rows when the plot count exceeds the number of available grid cells. The users
 may also set the layout manually (such as via the set_layout plotscaper
 function).
-
 6.4.4.15.2 Marker As mentioned before in Section 6.4.4.5, the Marker is
 shared between plots and as such is stored as a property on the Scene object.
 The Scene manages the dispatching of Marker-related events and their propagation to plots.
-
-210
-
-CHAPTER 6. SYSTEM DESCRIPTION
-
 6.4.4.15.3 WebSockets client To facilitate two-way communication with
 an external server, the Scene component also maintains a WebSockets client
 (MDN 2025a). This client is created during Scene initialization, using a URL
@@ -8548,6 +8527,11 @@ which either has a default value or may be provided as part of the Scene initial
 and outgoing messages via dedicated event handler functions. Messages sent to
 and from the client are encoded as JSON and contain sender, target, and event
 type information, along with optional data.
+
+210
+
+CHAPTER 6. SYSTEM DESCRIPTION
+
 6.4.4.15.4 Events and Keybindings Scene additionally manages listening and forwarding of events from multiple source. These include plots, the
 Marker, the WebSockets client, and global user inputs, particularly keyboard
 events. The Scene is responsible for propagating and synchronizing these events
@@ -9662,7 +9646,7 @@ goal of this project was to try to address this perceived gap, and this goal see
 to have been met with moderate success. Despite its experimental status and
 the fact that it is competing with a number of far larger and better-established
 interactive data visualization frameworks, plotscaper has been downloaded
-over1 2390 times in the 222 days since its initial release, see Figure 8.1:
+over1 2439 times in the 234 days since its initial release, see Figure 8.1:
 Despite all of these relative successes, both the theoretical model and its practical implementation in plotscaper have, of course, their limitations and opportunities for future improvement. These will be the subject of the next few
 sections.
 
@@ -11607,6 +11591,7 @@ of Visualizations.” Queue 10 (2): 30–55.
 Hellerstein, J. M., R. Avnur, A. Chou, C. Hidber, C. Olston, and V. Raman.
 1999. “Interactive data analysis: the Control project.” Computer 32 (8):
 51–59. https://doi.org/10.1109/2.781635.
+Henderson, Harold V, and Paul F Velleman. 1981. “Building Multiple Regression Models Interactively.” Biometrics, 391–411.
 Henry, Lionel, and Hadley Wickham.
 2024.
 Rlang: Functions for
@@ -11639,10 +11624,10 @@ Kandel, Sean, Andreas Paepcke, Joseph M Hellerstein, and Jeffrey Heer. 2012.
 Transactions on Visualization and Computer Graphics 18 (12): 2917–26.
 Kay, Alan C. 1996. “The Early History of Smalltalk.” In History of Programming Languages—II, 511–98.
 Keeley, Brian. 2021. “The State of the World’s Children 2021: On My Mind–
-Promoting, Protecting and Caring for Children’s Mental Health.” UNICEF.
-Kehrer, Johannes, Roland N Boubela, Peter Filzmoser, and Harald Piringer.
 
 289
+Promoting, Protecting and Caring for Children’s Mental Health.” UNICEF.
+Kehrer, Johannes, Roland N Boubela, Peter Filzmoser, and Harald Piringer.
 2012. “A Generic Model for the Integration of Interactive Visualization
 and Statistical Computing Using r.” In 2012 IEEE Conference on Visual
 Analytics Science and Technology (VAST), 233–34. IEEE.
@@ -11683,13 +11668,13 @@ Kunst, Joshua. 2022. Highcharter: A Wrapper for the ’Highcharts’ Library.
 Kvasz, Ladislav. 2006. “The History of Algebra and the Development of the
 Form of Its Language.” Philosophia Mathematica 14 (3): 287–317.
 Langa, Kenneth M, Eric B Larson, Eileen M Crimmins, Jessica D Faul, Deborah
-A Levine, Mohammed U Kabeto, and David R Weir. 2017. “A Comparison
-of the Prevalence of Dementia in the United States in 2000 and 2012.” JAMA
 
 290
 
 CHAPTER 12. REFERENCES
 
+A Levine, Mohammed U Kabeto, and David R Weir. 2017. “A Comparison
+of the Prevalence of Dementia in the United States in 2000 and 2012.” JAMA
 Internal Medicine 177 (1): 51–58.
 Lawvere, F William, and Stephen H Schanuel. 2009. Conceptual Mathematics:
 A First Introduction to Categories. Cambridge University Press.
@@ -11732,10 +11717,10 @@ of Relational Information.” Acm Transactions On Graphics (Tog) 5 (2):
 110–41.
 Mandler, George, and Billie J Shebo. 1982. “Subitizing: An Analysis of Its
 Component Processes.” Journal of Experimental Psychology: General 111
-(1): 1.
-Mansfield, Daniel F. 2018. Wikimedia Commons. https://commons.wikimedia.
 
 291
+(1): 1.
+Mansfield, Daniel F. 2018. Wikimedia Commons. https://commons.wikimedia.
 org/wiki/File:Si427o.jpg.
 ———. 2020. “Perpendicular Lines and Diagonal Triples in Old Babylonian
 Surveying.” Journal of Cuneiform Studies 72 (1): 87–99.
@@ -11780,13 +11765,13 @@ Milewski, Bartosz. 2018. Category Theory for Programmers. Blurb.
 Moseley, Ben, and Peter Marks. 2006. “Out of the Tar Pit.” Software Practice
 Advancement (SPA) 2006.
 Mounteney, Jane, Paul Griﬀiths, Roumen Sedefov, Andre Noor, Julián Vicente,
-and Roland Simon. 2016. “The Drug Situation in Europe: An Overview
-of Data Available on Illicit Drugs and New Psychoactive Substances from
 
 292
 
 CHAPTER 12. REFERENCES
 
+and Roland Simon. 2016. “The Drug Situation in Europe: An Overview
+of Data Available on Illicit Drugs and New Psychoactive Substances from
 European Monitoring in 2015.” Addiction 111 (1): 34–48.
 Müller, Kirill, and Hadley Wickham. 2023. Tibble: Simple Data Frames. https:
 //CRAN.R-project.org/package=tibble.
@@ -11825,10 +11810,10 @@ Baingana, Paul Bolton, Dan Chisholm, et al. 2018. “The Lancet Commission on Gl
 392 (10157): 1553–98.
 Pavlo, Andy. 2024. “CMU Intro to Database Systems.” Carnegie Melon
 University; University lecture series. https://youtu.be/otE2WvX3XdQ?si=
-L8OtgteVyH-bDb-y.
-Pedersen, Thomas Lin. 2024. Patchwork: The Composer of Plots. https:
 
 293
+L8OtgteVyH-bDb-y.
+Pedersen, Thomas Lin. 2024. Patchwork: The Composer of Plots. https:
 //CRAN.R-project.org/package=patchwork.
 Petricek, Tomas. 2020. “Designing Composable Functional Libraries.” Lambda
 Days. https://www.youtube.com/watch?v=G1Dp0NtQHeY.
@@ -11866,14 +11851,13 @@ on Modeling, Analysis and Simulation of Computer and Telecommunication Systems (
 MASCOT.1998.693711.
 Reda, Khairi, Pratik Nalawade, and Kate Ansah-Koi. 2018. “Graphical Perception of Continuous Quantitative Maps: The Effects of Spatial Frequency and
 Colormap Design.” In Proceedings of the 2018 CHI Conference on Human
-Factors in Computing Systems, 1–12.
-Reese, Hayne W. 2011. “The Learning-by-Doing Principle.” Behavioral Devel-
 
 294
 
 CHAPTER 12. REFERENCES
 
-opment Bulletin 17 (1): 1.
+Factors in Computing Systems, 1–12.
+Reese, Hayne W. 2011. “The Learning-by-Doing Principle.” Behavioral Development Bulletin 17 (1): 1.
 Rentzsch, Jonathan. 2005. “Data Alignment: Straighten up and Fly Right.”
 IBM Developer. https://developer.ibm.com/articles/pa-dalign.
 Rheingans, Penny. 2002. “Are We There yet? Exploring with Dynamic Visualization.” IEEE Computer Graphics and Applications 22 (1): 6–10.
@@ -11911,10 +11895,10 @@ Satyanarayan, Arvind, Kanit Wongsuphasawat, and Jeffrey Heer. 2014.
 “Declarative Interaction Design for Data Visualization.” In Proceedings
 of the 27th Annual ACM Symposium on User Interface Software and
 Technology, 669–78.
-Self, Jessica Zeitz, Michelle Dowling, John Wenskovitch, Ian Crandell,
-Ming Wang, Leanna House, Scotland Leman, and Chris North. 2018.
 
 295
+Self, Jessica Zeitz, Michelle Dowling, John Wenskovitch, Ian Crandell,
+Ming Wang, Leanna House, Scotland Leman, and Chris North. 2018.
 “Observation-Level and Parametric Interaction for High-Dimensional Data
 Analysis.” ACM Transactions on Interactive Intelligent Systems (TiiS) 8
 (2): 1–36.
@@ -11948,19 +11932,19 @@ Spyrison, Nicholas, and Dianne Cook. 2020. “Spinifex: An r Package for Creatin
 The R Journal 12 (1): 243–57.
 Stange, Markus. 2024. “Fast JavaScript with Data-Oriented Design.” FOSDEM. https://archive.fosdem.org/2024/schedule/event/fosdem-2024-2773fast-javascript-with-data-oriented-design.
 Stepanov, Alexander A. 2013. “Eﬀicient Programming with Components.”
-https://www.youtube.com/playlist?list=PLHxtyCq_
 A9.
 Youtube.
+https://www.youtube.com/playlist?list=PLHxtyCq_
 WDLXryyw91lahwdtpZsmo4BGD.
 Stepanov, Alexander A, and Paul McJones. 2009. Elements of Programming.
 Addison-Wesley Professional.
-Stepanov, Alexander A, and Daniel E Rose. 2014. From Mathematics to Generic
-Programming. Pearson Education.
 
 296
 
 CHAPTER 12. REFERENCES
 
+Stepanov, Alexander A, and Daniel E Rose. 2014. From Mathematics to Generic
+Programming. Pearson Education.
 Stevens, Stanley Smith. 1946. “On the Theory of Scales of Measurement.”
 Science 103 (2684): 677–80.
 ———. 1951. “Mathematics, Measurement, and Psychophysics.”
@@ -11999,11 +11983,10 @@ jss.v105.i07.
 Treisman, Anne. 1985. “Preattentive Processing in Vision.” Computer Vision,
 Graphics, and Image Processing 31 (2): 156–77.
 Tufte, Edward R. 2001. The Visual Display of Quantitative Information.
-Cheshire, Connecticut: Graphics Press LLC.
-Tukey, John W. 1962. “The Future of Data Analysis.” The Annals of Mathe-
 
 297
-matical Statistics 33 (1): 1–67.
+Cheshire, Connecticut: Graphics Press LLC.
+Tukey, John W. 1962. “The Future of Data Analysis.” The Annals of Mathematical Statistics 33 (1): 1–67.
 Tukey, John W et al. 1977. Exploratory Data Analysis. Vol. 2. Reading, MA.
 Tukey, John W. 1986. “Data Analysis and Behavioral Science or Learning to
 Bear the Quantitative Man’s Burden by Shunning Badmandments.” The
@@ -12040,13 +12023,13 @@ V8 Core Team. 2017. “Elements Kinds in V8 ⋅ V8.” https://v8.dev/blog/
 elements-kinds.
 ———. 2024. “Maps (Hidden Classes) in V8.” https://v8.dev/docs/hiddenclasses.
 Vaidyanathan, Ramnath, Yihui Xie, JJ Allaire, Joe Cheng, Carson Sievert,
-and Kenton Russell. 2021. Htmlwidgets: HTML Widgets for r. https:
-//CRAN.R-project.org/package=htmlwidgets.
 
 298
 
 CHAPTER 12. REFERENCES
 
+and Kenton Russell. 2021. Htmlwidgets: HTML Widgets for r. https:
+//CRAN.R-project.org/package=htmlwidgets.
 Van Eerd, Tony. 2023. “Value Oriented Programming Part 1: You Say You
 Want to Write a Function.” CppNow. Youtube. https://www.youtube.com/
 watch?v=b4p_tcLYDV0.
@@ -12087,10 +12070,10 @@ Kaufmann.
 Wickham, Hadley. 2010. “A Layered Grammar of Graphics.” Journal of Computational and Graphical Statistics 19 (1): 3–28.
 ———. 2011. “The Split-Apply-Combine Strategy for Data Analysis.” Journal
 of Statistical Software 40: 1–29.
-———. 2013. “Bin-Summarise-Smooth: A Framework for Visualising Large
-Data.” Had. Co. Nz, Tech. Rep.
 
 299
+———. 2013. “Bin-Summarise-Smooth: A Framework for Visualising Large
+Data.” Had. Co. Nz, Tech. Rep.
 Wickham, Hadley. 2014. “I’m Hadley Wickham, Chief Scientist at RStudio and
 creator of lots of R packages (incl. ggplot2, dplyr, and devtools). I love R,
 data analysis/science, visualisation: ask me anything! : r/dataisbeautiful.”
@@ -12131,13 +12114,13 @@ int/browse10/2019/en.
 who.int/standards/classifications/classification-of-diseases.
 Wu, Eugene. 2022. “View Composition Algebra for Ad Hoc Comparison.” IEEE
 Transactions on Visualization and Computer Graphics 28 (6): 2470–85.
-Wu, Eugene, and Remco Chang. 2024. “Design-Specific Transformations in
-Visualization.” arXiv Preprint arXiv:2407.06404.
 
 300
 
 CHAPTER 12. REFERENCES
 
+Wu, Eugene, and Remco Chang. 2024. “Design-Specific Transformations in
+Visualization.” arXiv Preprint arXiv:2407.06404.
 Xie, Yihui, Joseph J Allaire, and Garrett Grolemund. 2018. R Markdown: The
 Definitive Guide. Chapman; Hall/CRC.
 Xie, Yihui, Heike Hofmann, and Xiaoyue Cheng. 2014. “Reactive Programming

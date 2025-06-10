@@ -30,9 +30,9 @@ This section contains a detailed description of the two software packages develo
 
 A couple of quick general notes. Firstly, the low-level platform (`plotscape`) was written with client-side web technology stack: JavaScript, HTML, and CSS. Web technologies provide a simple and portable platform for making interactive apps in R and have become the de facto standard, thanks to good integration via packages such as `htmlwidgets` [@htmlwidgets2021] and Shiny [@sievert2020]. Second, functionality was split across two packages out of practical concerns. To achieve optimal performance and fine-grained control, `plotscape` was implemented from scratch in TypeScript/JavaScript rather than relying on some JS-in-R wrapper library. `plotscaper` was then developed to provide a user-friendly R wrapper around `plotscape`'s functionalities.  
 
-As of the time of writing, `plotscape` comprises of about 6,400 significant lines of code (SLOC; un-minified, primarily TypeScript but also some CSS, includes tests, etc...), and `plotscaper` contains about 500 SLOC of R code (both counted using [`cloc`](https://github.com/AlDanial/cloc)). The unpacked size of all (minified) files is about 200 kilobytes for `plotscape` and 460 kilobytes for `plotscaper`, which is fairly modest compared to other interactive data visualization alternatives for R^[For instance, the `plotly` package has about 7.3 megabytes, which amounts to over 15x difference.]. Both packages have fairly minimal dependencies, which should hopefully make them easy to maintain them going forward.
+As of the time of writing, `plotscape` comprises of about 6,400 significant lines of code (SLOC; un-minified, primarily TypeScript but also some CSS, includes tests, etc...), and `plotscaper` contains about 500 SLOC of R code (both counted using [`cloc`](https://github.com/AlDanial/cloc)). The unpacked size of all (minified) files is about 200 kilobytes for `plotscape` and 460 kilobytes for `plotscaper`, a fairly modest size compared to other interactive data visualization options for R^[For instance, the `plotly` package takes up about 7.3 megabytes, over 15x difference.]. Both packages have fairly minimal dependencies, which should hopefully make them easy to maintain and extend going forward.
 
-Since the two packages address fairly well-separable concerns - high-level API design vs. low-level interactive visualization utilites - I decided to organize this section accordingly. Specifically, I first discuss general, high-level API concerns alongside `plotscaper` functionality. Then I delve into the low-level implementation details alongside `plotscape`. There are of course cross-cutting concerns and those will be addressed towards ends of the respective sections. However, first, let's briefly review the core requirement of the package(s).
+Since the two packages address fairly well-separable concerns - high-level API design vs. low-level interactive visualization utilites - I decided to organize this section accordingly. Specifically, I first discuss general, high-level API concerns alongside `plotscaper`. Then I delve into the low-level implementation details alongside `plotscape`. There are of course cross-cutting concerns and those will be addressed towards ends of the respective sections. However, first, let's briefly review the core requirement of the package(s).
 
 ## Core requirements
 
@@ -318,7 +318,7 @@ knitr::include_graphics("./figures/scene_diagram.png")
 
 ### Plot model
 
-Further, every `plotscape`/`plotscaper` plot is also composed of several different, related components (see Figure \@ref(fig:plot-diagram)). First, in light of Section \@ref(model-pipeline), there are some components which are directly related to the data visualization pipeline. The data is aggregated into a hierarchy of [Summaries](summaries), composed of special *reduced* variables or [Reduceds](aggregation-summaries). These reduced variables are not simple "flat" arrays of values, but contain aggregation metadata ([Factors](factors) and [Reducers](reducers)), as well as pointers to the parent-level values, enabling hierarchy-aware transformations such as stacking or normalization (e.g. in spineplot). The aggregated summaries are translated into aesthetic encodings and used to train the plot [Scales](scales), which are composed of domain and codomain objects of the type ([Expanse](expanses)). The translated summaries are also mapped to geometric objects or geoms, which are used in rendering and collision-detection (in linked selection). User input and scene events are again handled by an event listener object. Finally, the data-representing geoms, as well as other, auxiliary kinds of graphical objects (e.g. axis labels/titles) are rendered as visual output. 
+Further, every `plotscape`/`plotscaper` plot is also composed of several different, related components (see Figure \@ref(fig:plot-diagram)). First, in light of Section \@ref(model-pipeline), there are some components which are directly related to the data visualization pipeline. The data is aggregated into a hierarchy of [Summaries](summaries), composed of special *reduced* variables or [Reduceds](aggregation-summaries). These reduced variables are not simple "flat" arrays of values, but contain aggregation metadata ([Factors](factors) and [Reducers](reducers)), as well as pointers to the parent-level values, enabling hierarchy-aware transformations such as stacking or normalization (e.g. in spineplot, see e.g. Section \@ref(representation-switching)). The aggregated summaries are translated into aesthetic encodings and used to train the plot [Scales](scales), which are composed of domain and codomain objects of the type ([Expanse](expanses)). The translated summaries are also mapped to geometric objects or *geoms*, which are used in rendering and collision-detection (in linked selection). User input and scene events are again handled by an event listener object. Finally, the data-representing geoms, as well as other, auxiliary kinds of graphical objects (e.g. axis labels/titles) are rendered as visual output. 
 
 ```{r plot-diagram}
 #| echo: false
@@ -338,10 +338,11 @@ As discussed in Section \@ref(hierarchy), rendering certain kinds of plots compo
 knitr::include_graphics("./figures/hierarchical_data.png")
 ```
 
-To give a more concrete example, consider the summary statistics we need to compute to draw a spineplot. We may initially consider computing a simple table of summaries computed over the product of two partitioning variables:
+To give a more concrete example, consider the summary statistics we need to compute to draw a spineplot (see e.g. Section \@ref(representation-switching)). We may initially consider computing a simple table of summaries computed over the product of two partitioning variables:
 
 ```{r}
-aggregate(mpg ~ cyl + am, FUN = sum, data = mtcars)
+aggregate(mpg ~ cyl + am, FUN = sum, data = mtcars) |>
+  knitr::kable()
 ```
 
 However, such a simple, "flat" table of summaries is not enough. To compute the heights of the normalized bar segments, we also require parent-level data. One way to add this information is via a join operation [specifically, a left outer join, see @codd1970]:
@@ -352,12 +353,19 @@ parent_data <- aggregate(mpg ~ cyl, FUN = sum, data = mtcars)
 child_data <- aggregate(mpg ~ cyl + am, FUN = sum, data = mtcars)
 
 child_data |>
-  merge(parent_data, by = "cyl", all.x = TRUE) |> # Join parent-level data
-  within({                                        # Compute transformations
-    stacked_and_normalized <- as.numeric(sapply(split(mpg.x, cyl), cumsum)) / mpg.y
+  # Join parent-level data
+  merge(parent_data, by = "cyl", all.x = TRUE) |> 
+  # Compute transformations
+  within({                 
+    # Ignores the issue of order
+    stacked <- as.numeric(sapply(split(mpg.x, cyl), cumsum)) 
     normalized <- mpg.x / mpg.y
-    stacked <- as.numeric(sapply(split(mpg.x, cyl), cumsum)) # Ignores order
-  })
+    stacked_and_normalized <- stacked / mpg.y
+  }) |>
+  # Reorder
+  subset(select = c("stacked", "normalized", 
+                    "stacked_and_normalized")) |>
+  knitr::kable()
 ```
 :::
 
@@ -388,8 +396,15 @@ This approach has several key benefits. First, it automatically and concisely en
 
 ```{r}
 #| eval: false
-attr(result$stat1, "reducer") <- list(summaryfn = sum, initialfn = function() 0)
-attr(result$stat2, "reducer") <- list(summaryfn = max, initialfn = function() -Inf)
+attr(result$stat1, "reducer") <- list(
+  summaryfn = sum, 
+  initialfn = function() 0
+  )
+
+attr(result$stat2, "reducer") <- list(
+  summaryfn = max, 
+  initialfn = function() -Inf
+  )
 ```
 
 This gets to the idea of reduced variables and reducers, which will be discussed in more depth in Section \@ref(aggregation-summaries).
@@ -417,13 +432,14 @@ barplot_object_data <- encode(
 # Computed over product of cyl and am
 barplot_segment_data <- encode(
   summarized_data[2],
-  encodings = list(x = cyl, y = 0, width = 1, height = stack(stat))
+  encodings = list(x = cyl, y = 0, width = 1, 
+                   height = stack(stat))
 )
 ```
 
-The `encoded_object_data` data set represents the whole barplot bars and may be used for training scales and collision detection, while the `encoded_segment_data` data set represents the more granular bar segments, which are actually rendered. Notice how the `stack` function is only applied to the segment data, since this represents the finest level of partitioning. 
+The `encoded_object_data` data set represents the whole barplot bars and may be used for training scales and collision detection, while the `encoded_segment_data` data set represents the more granular bar segments, which are actually rendered. Notice how the `stack` function is only applied to the segment data, since this represents the finest level of partitioning.
 
-Separating the summary and encoding step has the additional benefit that representation switching becomes very simple. For instance, to turn the barplot into a spineplot, we could use the same summary data and simply swap the encoding scheme:
+In some way, this is similar to how data variables are mapped to aesthetics in `ggplot2` using the `aes()` function [@wickham2016]. However, as discussed in Section \@ref(foo), an important difference is that in `ggplot2`, the aesthetic mapping occurs *before* the variables are summarized, making the data dependencies more explicit and also making certain interactive operations more efficient. Specifically, separating the summary and encoding step enables simple and efficient representation switching. For instance, to turn the barplot into a spineplot, we could use the same summary data and simply swap the encoding scheme:
 
 ```{r}
 #| eval: false
@@ -479,7 +495,9 @@ The core OOP concept is the **object**. Objects are self-contained units of code
 
 These central ideas of OOP are: abstraction, encapsulation, polymorphism, and inheritance [@booch2008]. First, **abstraction** means objects should be usable without the knowledge of their internals. Users should rely solely on the public interface (behavior) of an object, simplifying reasoning and reducing complexity [@black2013; @meyer1997]. Second, **encapsulation** means that internal data should be kept private, and the surface area of an object should be as small as possible [@booch2008]. Users should not access or depend on this hidden data [@meyer1997]. The primary goal of encapsulation is continuity, allowing developers to modify an object's implementation without affecting the public interface [@booch2008; @meyer1997]. Third, **polymorphism** means that objects supporting the same operations should be interchangeable at runtime [@booch2008]. Polymorphism is intended to facilitate extensibility, allowing users to construct new objects which may be integrated into an existing system. Finally, **inheritance** is a mechanism used for code reuse and implementing polymorphism, where objects may inherit properties and behavior from other objects.
 
-Object-oriented programming (OOP) has seen widespread adoption, especially in graphical user interfaces (GUIs), which might suggest it as a natural fit for interactive data visualization systems [see also @wilkinson2012]. Furthermore, OOP's claimed benefits of continuity and extensibility appear highly attractive for library design. However, more recently, traditional OOP style has also faced some criticisms. First, while encouraging extensibility and reducing complexity via abstraction, encapsulation, and polymorphism seems attractive,  real-world OOP implementations do not always achieve these goals. For instance, a common OOP practice is for objects to communicate by sending pointers to each other. This however breaks encapsulation and causes objects to become entangled, creating "incidental data structures" [@hickey2011; @parent2015; @will2016]. Further, by its nature, OOP heavily encourages abstraction. While good abstractions are undeniably useful, they take long time to develop. Poor abstractions tend to appear first, and, once in place, are difficult to extricate [@meyer1997]. This can lead to overly complex and bloated systems [@vaneerd2024]. Finally, OOP can also negatively impact performance. Objects frequently hold more data than any single method requires, and, to support runtime polymorphism, they must store pointers to virtual method tables. Consequently, arrays of objects almost always take up more memory than equivalent arrays of plain values, resulting in more cache misses and decreased performance [@acton2014].   
+It is also important to briefly mention the model-view-controller (MVC) architecture [see e.g. @krasner1988; @leff2001]. This popular OOP pattern divides the application into three parts, where the model manages the application's state, the view represents it graphically, and the controller orchestrates updates between the two as well as handles user input. The aim of this pattern is to encourage separation of concerns and reusability, such that, for example, one model may be displayed by several views [for example, the same data may be displayed as a graph and a table, see @krasner1988].   
+
+Object-oriented programming (OOP) has seen widespread adoption, especially in GUIs, which might suggest it as a natural fit for interactive data visualization systems [see also @wilkinson2012]. Furthermore, the MVC architecture has been used in interactive data visualization [see e.g. @xie2014], and OOP's claimed benefits of continuity and extensibility appear highly attractive for library design. However, more recently, traditional OOP style has also faced some criticisms. First, while encouraging extensibility and reducing complexity via abstraction, encapsulation, and polymorphism seems attractive,  real-world OOP implementations do not always achieve these goals. For instance, a common OOP practice is for objects to communicate by sending pointers to each other. This however breaks encapsulation and causes objects to become entangled, creating "incidental data structures" [@hickey2011; @parent2015; @will2016]. Further, by its nature, OOP heavily encourages abstraction. While good abstractions are undeniably useful, they take long time to develop. Poor abstractions tend to appear first, and, once in place, are difficult to extricate [@meyer1997]. This can lead to overly complex and bloated systems [@vaneerd2024]. Finally, OOP can also negatively impact performance. Objects frequently hold more data than any single method requires, and, to support runtime polymorphism, they must store pointers to virtual method tables. Consequently, arrays of objects almost always take up more memory than equivalent arrays of plain values, resulting in more cache misses and decreased performance [@acton2014].   
 #### Data-oriented programming {#dop}
 
 Data-oriented programming (DOP) is a newer and less well-known programming paradigm. In fact, due to its recency, the term is used in multiple ways across different contexts, however, there are primarily two broad sets of ideas it encompasses. First, DOP sometimes refers to a more abstract paradigm, concerned with structure and organization of code. Inspired by the Clojure style of programming [@hickey2011; @hickey2018; @sharvit2022; @parlog2024], it also shares some similarities with the generic programming paradigm and value semantics popularized by Alexander Stepanov and popular the C++ community [@stepanov2009; @stepanov2013; @parent2013; @parent2015; @parent2018; @vaneerd2023; there are even some direct ties, see @vaneerd2024]. Second, DOP (or "data oriented design", DOD) also sometimes refers to a more concrete set of optimization techniques and ideas. Originating in video-game development, these primarily tend to focus on low-level details like memory layout and CPU cache line utilization [@acton2014; @bayliss2022; @kelley2023; @nikolov2018; @fabian2018]. Interestingly, despite their distinct uses, both interpretations of "data-oriented programming" converge on many similar ideas about the structure and organization of computer programs. As such, I believe it is justified to discuss them here as a single paradigm.
@@ -848,19 +866,7 @@ interface Dataframe {
 }
 ```
 
-For example, the following is a valid instance of a `Dataframe`:
-
-```{ts}
-#| eval: false
-const data = {
-  name: [`john`, `jenny`, `michael`],
-  age: [17, 24, 21],
-  isStudent: true,
-  canDrive: (index: number) => data.age[index] > 18,
-};
-```
-
-Most functions in `plotscape` operate column-wise, however, here's how the dataframe above would look like as a list of rows if we materialized using a `Dataframe.rows` function^[Not actually exported by `plotscape` but easily implemented.]:
+For example, here's how a `plotscape` data set can look like:
 
 ```{ts}
 #| echo: false
@@ -920,36 +926,38 @@ const data = {
 console.log(Dataframe.rows(data))
 ```
 
-One important thing to mention is that, since the `Dataframe` columns can be different `Indexable` subtypes, we need to make sure that information about the number of rows is present and non-conflicting. That is, all fixed-length columns must have the same length, and, if there are variable-length columns (constants, derived variables/functions) present, we need to make sure that at least one fixed-length column is present in the data (or that the variable-length columns carry appropriate metadata).
+It is important to mention that, typically, it is not necessary to materialize individual rows like the in example above; I used `Dataframe.rows` helper function^[Not actually exported by `plotscape` but can be easily implemented] to simply better visualize the implied structure of the data.
 
-While in a traditional OOP style, these length constraints might be enforced by a class invariant, checked during instantiation and maintained inside method bodies, `plotscape` adopts a more loose approach by checking the length constraints dynamically, at runtime. This is done whenever the integrity of a `Dataframe` becomes a key concern, such as when initializing a [`Scene`](#scene) or when rendering. The approach is more in line with JavaScript's dynamic nature: in JavaScript, all variables (except for primitives) are objects, and there is nothing preventing the users from adding or removing properties at runtime, even to class instances. Further, with `Dataframe`s of typical dimensionality (fewer columns than rows, $p << n$), the performance cost of checking column's length is usually negligible when compared to row-wise operations, such as computing summary statistics or rendering. If performance were to become an issue for high-dimensional datasets ($p >> n$), the approach could always be enhanced with memoization or caching.    
+One other important thing to mention is that, since the `Dataframe` columns can be different `Indexable` subtypes, we need to make sure that we can actually find the number of rows and that these do not conflict across columns. That, at least one column needs to be a fixed-length array, and all fixed-length arrays in the data need to have the same length (or that the variable-length columns carry appropriate metadata). 
+
+In a classical OOP style, these length constraints might be enforced by a class invariant, however, `plotscape` adopts a looser approach. The length constraints are checked dynamically, at runtime, whenever the integrity of a `Dataframe` becomes a key concern, for instance, when initializing a [`Scene`](#scene) or rendering. This loose approach is more in line with JavaScript's dynamic nature: in JavaScript, everything except for primitives is a mutable object, which may be manipulated at runtime (even class instances). As such, this approach is safer. Furthermore, with `Dataframe`s of typical dimensionality (fewer columns than rows, $p << n$), the performance cost of checking column's length is usually negligible when compared to row-wise operations, such as computing summary statistics or rendering. If performance were to become an issue for high-dimensional datasets ($p >> n$), the approach could always be made more efficient, for example, with memoization.    
 
 #### Factors
 
-As discussed in Section \@ref(problems), when visualizing, we often need to split our data into a set of disjoint subsets organized into partitions. Further, as mentioned in Section \@ref(hierarchy), these partitions may be organized in a hierarchy, such that multiple subsets in one partition may be unioned together to form another subset in a coarser, parent partition. 
+As discussed in Section \@ref(problems), when visualizing, we often need to split our data into a set of disjoint subsets, representing data partitions. Further, as mentioned in Section \@ref(hierarchy), these partitions may be organized hierarchically, such that multiple subsets in one partition may be combined together to form another subset within a coarser, parent partition. 
 
-`Factor`s provide a way to represent such data partitions and the associated metadata. They are similar to base R's `factor` S3 class, although there are some important differences which will be discussed below. `Factor` has the following interface:
+`Factor`s provide a way to represent such data partitions and the associated metadata. They are similar to base R's `factor` S3 class, although there are some important differences (which will be discussed below). `Factor` has the following interface:
 
 ```{ts}
 #| eval: false
 interface Factor<T extends Dataframe> {
   cardinality: number;
   indices: number[];
-  data: T
   parent?: Factor;
+  data: T
 }
 ```
 
-Here, `cardinality` represents the number of unique parts that a partitions consists of (e.g. 2 for a binary variable, 3 for a categorical variable with 3 levels, and so on). Data points or cases map to the parts via a "dense" array of `indices`, which take on values in `0 ... cardinality - 1` and have length equal to the length of the data^[The `indices` indices being "dense" means *all* values in the range `0 ... cardinality - 1` appear in the array at least once.]. Each case is identified by its position in the array. For example, take the following array of indices:
+Here, `cardinality` represents the number of unique parts that the factor/partition represents (e.g. 2 for a binary variable, 3 for a categorical variable with 3 levels, and so on). Data points or cases map to the parts via a *dense* array of `indices`, which take on values in `0 ... cardinality - 1` and have length equal to the length of the data^[The `indices` indices being *dense* means that *each* value in `0 ... cardinality - 1` appears in the array at least once.]. Each case is identified by its position in the array. For example, take the following array of indices:
 
 ```{ts}
 #| eval: false
 [0, 1, 1, 0, 2, 0]
 ```
 
-Keeping in mind JavaScript's zero-based indexing, this array identifies cases one, four, and six as belonging to the first part/level (`0`), cases two and three as belonging to the second part (`1`), and case five as belonging to the third parts (`2`).
+Keeping in mind JavaScript's zero-based indexing, these indices identify the first part/level (`0`) as consisting of cases one, four, and six, the second part (`1`) as consisting of cases two and three, and the third part (`2`) as consisting of only a single case - five. 
 
-The data associated with factor's levels is stored in the `data` property, which is composed of arrays/`Indexables` of equal length as the factor's cardinality. For instance, if a factor is created from a categorical variable with three levels - `A`, `B`, and `C` - then `data` may look something like this: 
+The data associated with factor's levels is stored in the `data` property, which is composed of arrays/`Indexables`, with length as the factor's cardinality. For instance, if a factor is created from a categorical variable with three levels - `A`, `B`, and `C` - then `data` may look something like this: 
 
 ```{ts}
 #| eval: false
@@ -959,9 +967,9 @@ The data associated with factor's levels is stored in the `data` property, which
 
 Finally, the optional `parent` property is a pointer to the factor representing the parent partition.  
 
-There are a couple of important things to discuss. First, `cardinality` technically duplicates information, since it is simply the number of unique values in `indices`. However, for many operations on `Factor`s, it is beneficial to be able to access cardinality in constant $O(1)$ time. Such is the case, for example, when constructing [product factors](#product-factors) or when initializing arrays of summaries. Of course, this means that the relationship between `cardinality` and `indices` has to be invariant under any factor transformations. 
+There are a couple of important things to discuss. First, `cardinality` technically duplicates information, since it is simply the number of unique values in `indices`. However, for many operations on `Factor`s, it is beneficial to be able to quickly access cardinality, in constant $O(1)$ time. Such is the case, for example, when constructing [product factors](#product-factors) or when initializing arrays of summaries. Of course, this means that the relationship between `cardinality` and `indices` is an invariant that has to be maintained under any factor transformations. 
 
-Second, the metadata associated with the parts is stored in the `data` property of type [`Dataframe`](#dataframe). This represents a departure from e.g. base R's `factor` class, where all metadata is stored as a flat vector of levels. For instance:
+Second, the metadata associated with the parts is stored in the `data` property of type [`Dataframe`](#dataframe). This represents a departure from e.g. base R's `factor` class, where all metadata is stored as a flat vector of levels (which may be tuples). For instance:
 
 ```{r}
 cut(1:10, breaks = c(0, 5, 10))
@@ -981,13 +989,13 @@ const factor: Factor = {
 };
 ```
 
-I contend that, compared to a flat vector/array, storing `Factor` metadata in a `Dataframe` offers several distinct advantages. First, when partitioning data, we often want to store multiple metadata attributes. For example, when we bin numeric variable, like in the example above, we want to store both the lower and upper bound of each parts' bin. The approach used in `cut` is to store multiple (two) pieces of metadata as a tuple, however, this becomes cumbersome as the dimensionality of the metadata grows. Further, if metadata is stored in a `Dataframe`, it becomes far easier to combine when taking [a product of two factors](#product-factors). Since factor product is a foundational operation in `plotscape`, underpinning fundamental features such as linked brushing, I argue that it is sensible to store metadata on `Factor` in a full `Dataframe` form.
+I contend that, compared to a flat vector/array, storing `Factor` metadata in a `Dataframe` offers several distinct advantages. First, when partitioning data, we often want to store multiple metadata attributes. For instance, when binning numeric variable (as in the example above), we want to store the lower and upper bound of each bin. The approach used in `cut` is to store multiple (two) pieces of metadata as a tuple, however, this becomes cumbersome as the dimensionality of the metadata grows. Further, if metadata is stored in a `Dataframe`, it becomes far easier to combine when taking [a product of two factors](#product-factors). Since factor product is a fundamental operation in `plotscape`, underpinning features such as linked brushing, I argue that it is sensible to store metadata on `Factor` in a full `Dataframe` form.
 
-While all `Factor`s share the same fundamental structure - a data partition with associated metadata - factors can be created using various constructor functions. These constructor functions differ in what data they take as input and what metadata they store on the ouput, giving rise to several distinct `Factor` subtypes. These will be the subject of the next few sections.
+Finally, while all `Factor`s share the same fundamental structure - a data partition with associated metadata - factors can be created using various constructor functions. These constructor functions differ in what data they take as input and what metadata they store on the ouput, giving rise to several distinct `Factor` subtypes. These will be the subject of the next few sections.
 
 ##### Bijection and constant factors
 
-`Factor.bijection` and `Factor.constant` are two fairly trival factor constructor. `Factor.bijection` creates the finest possible data partition by assigning every case to its own part, whereas `Factor.constant` does the opposite and assigns all cases to a single part. The names of the reflect the mathematical index mapping functions: the bijective function $f(i) = i$ for `Factor.bijection` and the constant function $f(i) = 0$ for `Factor.constant`. Consequently, the cardinality of `Factor.bijection` is equal to the length of the data, while the cardinality of `Factor.constant` is always one. Both can be assigned arbitrary metadata (which must have length equal to the cardinality).
+`Factor.bijection` and `Factor.constant` are two fairly trival factor constructors. `Factor.bijection` creates the finest possible data partition by assigning every case its own part/level, whereas `Factor.constant` does the opposite by assigning all cases to a single part/level. The names reflect the mathematical index mapping functions: the bijective function $f(i) = i$ for `Factor.bijection` and the constant function $f(i) = 0$ for `Factor.constant`. Consequently, the cardinality of `Factor.bijection` is always equal to the length of the data, while the cardinality of `Factor.constant` is always one. Both can be assigned arbitrary metadata (which must have length equal to the cardinality).
 
 The two factor constructor functions have the same signature:
 
@@ -1002,15 +1010,15 @@ function constant<T extends Dataframe>(n: number, data?: T):
 
 In either case, `n` represents the length of the data (the number of cases), and `data` represents some arbitrary metadata, of equal length as `n`. The variable `n` is used to construct an array of `indices`, which in the case of `Factor.bijection` is an increasing sequence starting at zero (`[0, 1, 2, 3, ..., n - 1]`), whereas in the case of `Factor.constant` it is simply an array of zeroes (`[0, 0, 0, 0, ..., 0]`). 
 
-Technically, in both of these cases, having an explicit array of indices is not necessary, and we could implement much of the same functionality via a callback (i.e. `(index: number) => index` for `Factor.bijection` and `(index: number) => 0` for `Factor.constant`). However, for many operations involving factors, it is necessary to store the length of the data (`n`), and while it would be possible to define a separate `n`/`length` property on `Factor`, in the context of other factor types, I found it simpler to allocate the corresponding array. While this does incur a small memory cost, there is no computational overhead, since, by definition, the partition represented by a bijection or constant factor does not change^[Unless the length of the data changes. I have not implemented data streaming for `plotscape` yet, however, it would be easy to extend bijection factor for streaming by simply pushing/popping the array of indices.]. 
+Technically, storing explicit arrays of indices is not strictly necessary, and we could implement much of the same functionality via a callback (i.e. `(index: number) => index` for `Factor.bijection` and `(index: number) => 0` for `Factor.constant`). However, for many operations involving factors, the length of the data (`n`) is also important. While it would be possible to define a separate `n`/`length` property on `Factor`, I found it more straightforward to simply allocate the corresponding array. While this does incur a small memory cost, there is no computational overhead, since, by definition, partitions represented by bijective or constant factors do not change^[Unless the length of the data changes. I have not implemented data streaming for `plotscape` yet, however, it would be easy to extend bijection/constant factors in the context of streaming by simply pushing/popping the array of indices.]. 
 
-`Factor.bijection` and `Factor.constant` have their own specific use cases. `Factor.bijection` represents a one-to-one mapping such as that seen in scatterplots and parallel coordinate plots. In contrast, `Factor.constant` represent a constant mapping which assigns all cases to a single part. This is useful for computing summaries across the entirety of the data, such as is required for spinogram^[Other use-cases may be plots involving a single geometric object such as density plots and radar plots, however, these are currently not implemented in `plotscape`.].
+While fairly trivial, `Factor.bijection` and `Factor.constant` have important use cases. `Factor.bijection` represents a one-to-one mapping such as that seen in scatterplots and parallel coordinate plots. In contrast, `Factor.constant` represent a constant mapping which assigns all cases to a single part. This is useful for computing summaries across the entirety of the data, such as is required for spinogram^[Other use-cases may be plots involving a single geometric object such as density plots and radar plots, however, these are currently not implemented in `plotscape`.].
 
-As a final interesting side-note, both `Factor.bijection` and `Factor.constant` can be interpreted through the lense of category theory, as terminal and initial objects within the category of data partitions, with morphisms representing products between partitions. That is, the product of any factor with a `Factor.bijection` always yields another `Factor.bijection` (making this a terminal object), whereas the product of any factor with `Factor.constant` will simply yield that factor (making this an initial object).   
+As a brief final aside, both `Factor.bijection` and `Factor.constant` can be interpreted through the lense of category theory as terminal and initial objects within the category/preorder of data partitions, ordered by products (see Section \@ref(preorders-categories)). That is, the product of a bijective partition with any other factor is always another bijective partition, whereas the product of constant partition with any other factor is always the other factor.
 
 ##### Discrete factors
 
-Another fairly intuitive factor constructor is `Factor.from`. It simply takes an array of values which can be coerced to string labels (i.e. have the `.toString()` method) and creates a discrete factor by treating each unique label as a factor level (this is essentially what base R's `factor` class does). This gives rise to the following function signature:
+Another fairly straightforward factor constructor is `Factor.from`. It simply takes an array of values which can be coerced to strings (i.e. have the JavaScript `.toString()` method) and creates a discrete factor by treating each unique string as a part/level (similar to base R's `factor` class behavior). This gives rise to the following function signature:
 
 ```{ts}
 #| eval: false
@@ -1019,13 +1027,13 @@ function from(x: Stringable[], options?: { labels: string[] }):
   Factor<{ label: string[] }> 
 ```
 
-When creating a discrete factor with `Factor.from`, the resulting factor's length matches the input array `x`. To compute the factor `indices`, the constructor needs to be either provided with an array of `labels` or these will be computed from `x` directly (by calling the `.toString()` method and finding all unique values). Assigning indices requires looping through the $n$ values `x` and further looping through $k$ `labels`, resulting in $O(n)$ time complexity (assuming $k$ is constant with respect to the size of the data). The factor metadata simply contains this array of `label`s (singular form `label` is used since it is the name of a dataframe column). Each index in `indices` then simply maps to one `label`. Finally, for easier inspection, `label`s may be sorted alphanumerically, though this does not affect computation in any way.
+After calling `Factor.from`, the length of the resulting factor will match the length of input array `x`. To compute the factor `indices`, we need to provide an array of `labels` or these will be computed from `x` directly (by calling the `.toString()` method and finding all unique values). Assigning the indices requires looping through the $n$ values of `x` finding the index corresponding to one of the $k$ `labels`, resulting in $O(n)$ time complexity (assuming $k$ is constant with respect to the size of the data). The factor metadata simply contains the array of `label`s, such that each index in `indices` maps to one `label`.
 
-The typical use case for `Factor.from` is the barplot. Here, we take an array of values, coerce these to string labels (if the values were not strings already), find all unique values, and then create an array of indices mapping the array values to the unique labels. The indices can then be used to subset data when computing summary statistics corresponding to the barplot bars.
+The typical use case of `Factor.from` is the barplot. Here, we take an array of values, coerce these to string labels (if not in string form already), find all unique values (labels), and finally create an array of indices mapping each case to a label. The indices are then used when computing summary statistics, such as those underpinning the bars' heights.
 
 ##### Binned factors
 
-Arrays of continuous values can be turned into factors by binning. `Factor.bin` is the constructor function used to perform this binning. It has the following signature:
+Arrays of continuous values can be turned into factors by binning via `Factor.bin`, which has the following signature:
 
 ```{ts}
 #| eval: false
@@ -1040,7 +1048,7 @@ function bin(x: number[], options?: BinOptions):
   Factor<{ binMin: number[]; binMax: number[] }>;
 ```
 
-Again, as in the case of `Factor.from`, the length of the factor created with `Factor.bin` will match the length of `x`. To compute the factor `indices`, the values in `x` need to be assigned to histogram bins delimited by breaks. The breaks are computed based on either default values or the optional list of parameters (`options`) provided to the construct function. Note that the parameters are not orthogonal: for instance, histogram with a given number of bins (`nBins`) cannot have an arbitrary binwidth (`width`) and vice versa. Thus, if a user provides multiple conflicting parameters, they are resolved in the following order: `breaks` > `nBins` > `width`. Finally, the metadata stored on the `Factor.bin` output includes the limits of each bin `binMin` and `binMax`, giving the lower and upper bound of each bin, respectively.
+Again, as in the case of `Factor.from`, the length of the factor created with `Factor.bin` will match the length of `x`. To compute the factor `indices`, the values in `x` need to be assigned to histogram bins delimited by breaks. The breaks are computed based on either default values or the optional list of parameters (`options`) provided to the construct function^[Note that the parameters are *not* orthogonal: for instance, histogram with `nBins` bins cannot have arbitrary binwidth (`width`) and vice versa. If a user provides multiple parameters, they are resolved in the following order: `breaks` > `nBins` > `width`.]. The metadata stored on the `Factor.bin` output includes the limits of each bin `binMin` and `binMax`, giving the lower and upper bound of each bin, respectively.
 
 Indices are assigned to bins using a half-open intervals on breaks of the form `(l, u]`, such that a value `v` is assigned to to a bin given by `(l, u]` if it is the case that `l < v <= u`. Assigning indices to bins requires looping through the $n$ values of `x`, and further looping through $k$ `breaks`^[In the general case where the histogram bins are not necessarily all of equal with; if all bins are known to have the same width, we can compute the bin index in constant $O(1)$ time], resulting in $O(n)$ time complexity (assuming $k$ is fixed with respect to the size of the data). 
 An important point to mention is that a naive approach of assigning bins to cases may lead to some bins being left empty, resulting in `cardinality` which is less than the number of bins and "sparse" `indices` (gaps in index values). For instance, binning the values `[1, 2, 6, 1, 5]` with breaks `[0, 2, 4, 6]` leaves the second bin (`(2, 4]`) empty, and hence the corresponding index value (`1`) will be absent from `indices`. To address this, `plotscape` performs an additional $O(n)$ computation to "clean" the indices and ensure that the array is dense (i.e. `indices` take on values in `0 ... cardinality - 1`, and each value appears at least once). While this additional computation may not be strictly necessary (i.e. some other systems may use "sparse" factor representation), I found the dense arrays of indices much easier to work with, particularly when it comes to operations like combining factors via products and subsetting the corresponding data. Further, even though this approach necessitates looping over `indices` twice, the combined operation still maintains an $O(n)$ complexity.    
