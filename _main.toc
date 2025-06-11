@@ -139,38 +139,38 @@
 \contentsline {subsubsection}{\numberline {6.4.4.3}Dataframe}{173}{subsubsection.6.4.4.3}%
 \contentsline {subsubsection}{\numberline {6.4.4.4}Factors}{174}{subsubsection.6.4.4.4}%
 \contentsline {paragraph}{\numberline {6.4.4.4.1}Bijection and constant factors}{176}{paragraph.6.4.4.4.1}%
-\contentsline {paragraph}{\numberline {6.4.4.4.2}Discrete factors}{178}{paragraph.6.4.4.4.2}%
+\contentsline {paragraph}{\numberline {6.4.4.4.2}Discrete factors}{177}{paragraph.6.4.4.4.2}%
 \contentsline {paragraph}{\numberline {6.4.4.4.3}Binned factors}{178}{paragraph.6.4.4.4.3}%
 \contentsline {paragraph}{\numberline {6.4.4.4.4}Product factors}{179}{paragraph.6.4.4.4.4}%
 \contentsline {subsubsection}{\numberline {6.4.4.5}Marker}{182}{subsubsection.6.4.4.5}%
 \contentsline {paragraph}{\numberline {6.4.4.5.1}Transient vs.~persistent selection}{182}{paragraph.6.4.4.5.1}%
-\contentsline {paragraph}{\numberline {6.4.4.5.2}Group assignment indices}{184}{paragraph.6.4.4.5.2}%
+\contentsline {paragraph}{\numberline {6.4.4.5.2}Group assignment indices}{183}{paragraph.6.4.4.5.2}%
 \contentsline {paragraph}{\numberline {6.4.4.5.3}Updating group assignment indices}{185}{paragraph.6.4.4.5.3}%
 \contentsline {subsubsection}{\numberline {6.4.4.6}Aggregation: Reducers, reduceds, and summaries}{186}{subsubsection.6.4.4.6}%
 \contentsline {paragraph}{\numberline {6.4.4.6.1}Reducers}{186}{paragraph.6.4.4.6.1}%
 \contentsline {paragraph}{\numberline {6.4.4.6.2}Reduced}{187}{paragraph.6.4.4.6.2}%
 \contentsline {paragraph}{\numberline {6.4.4.6.3}Summaries}{189}{paragraph.6.4.4.6.3}%
-\contentsline {subsubsection}{\numberline {6.4.4.7}Scales}{192}{subsubsection.6.4.4.7}%
+\contentsline {subsubsection}{\numberline {6.4.4.7}Scales}{191}{subsubsection.6.4.4.7}%
 \contentsline {paragraph}{\numberline {6.4.4.7.1}Scale properties}{193}{paragraph.6.4.4.7.1}%
 \contentsline {subsubsection}{\numberline {6.4.4.8}Expanses}{196}{subsubsection.6.4.4.8}%
 \contentsline {subsubsection}{\numberline {6.4.4.9}Continuous expanses}{197}{subsubsection.6.4.4.9}%
 \contentsline {subsubsection}{\numberline {6.4.4.10}Point expanses}{199}{subsubsection.6.4.4.10}%
 \contentsline {subsubsection}{\numberline {6.4.4.11}Band expanses}{201}{subsubsection.6.4.4.11}%
 \contentsline {paragraph}{\numberline {6.4.4.11.1}Compound and split expanses}{203}{paragraph.6.4.4.11.1}%
-\contentsline {subsubsection}{\numberline {6.4.4.12}Plot}{204}{subsubsection.6.4.4.12}%
+\contentsline {subsubsection}{\numberline {6.4.4.12}Plot}{203}{subsubsection.6.4.4.12}%
 \contentsline {paragraph}{\numberline {6.4.4.12.1}Data}{204}{paragraph.6.4.4.12.1}%
 \contentsline {paragraph}{\numberline {6.4.4.12.2}Scales}{204}{paragraph.6.4.4.12.2}%
 \contentsline {paragraph}{\numberline {6.4.4.12.3}Rendering}{205}{paragraph.6.4.4.12.3}%
 \contentsline {subsubsection}{\numberline {6.4.4.13}Events and interactive features}{206}{subsubsection.6.4.4.13}%
 \contentsline {paragraph}{\numberline {6.4.4.13.1}Activation and deactivation}{206}{paragraph.6.4.4.13.1}%
 \contentsline {paragraph}{\numberline {6.4.4.13.2}Growing/shrinking objects}{206}{paragraph.6.4.4.13.2}%
-\contentsline {paragraph}{\numberline {6.4.4.13.3}Mouse-move interaction: selection, panning, and zooming}{207}{paragraph.6.4.4.13.3}%
+\contentsline {paragraph}{\numberline {6.4.4.13.3}Mouse-move interaction: selection, panning, and zooming}{206}{paragraph.6.4.4.13.3}%
 \contentsline {subsubsection}{\numberline {6.4.4.14}Zooming}{208}{subsubsection.6.4.4.14}%
-\contentsline {subsubsection}{\numberline {6.4.4.15}Scene}{209}{subsubsection.6.4.4.15}%
+\contentsline {subsubsection}{\numberline {6.4.4.15}Scene}{208}{subsubsection.6.4.4.15}%
 \contentsline {paragraph}{\numberline {6.4.4.15.1}Plots}{209}{paragraph.6.4.4.15.1}%
 \contentsline {paragraph}{\numberline {6.4.4.15.2}Marker}{209}{paragraph.6.4.4.15.2}%
-\contentsline {paragraph}{\numberline {6.4.4.15.3}WebSockets client}{210}{paragraph.6.4.4.15.3}%
-\contentsline {paragraph}{\numberline {6.4.4.15.4}Events and Keybindings}{210}{paragraph.6.4.4.15.4}%
+\contentsline {paragraph}{\numberline {6.4.4.15.3}WebSockets client}{209}{paragraph.6.4.4.15.3}%
+\contentsline {paragraph}{\numberline {6.4.4.15.4}Events and Keybindings}{209}{paragraph.6.4.4.15.4}%
 \contentsline {chapter}{\numberline {7}Applied example}{211}{chapter.7}%
 \contentsline {subsection}{\numberline {7.0.1}About the data set}{211}{subsection.7.0.1}%
 \contentsline {subsection}{\numberline {7.0.2}Interactive exploration}{214}{subsection.7.0.2}%
