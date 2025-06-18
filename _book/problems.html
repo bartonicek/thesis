@@ -51,6 +51,10 @@
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
 
 
 <style type="text/css">
@@ -326,21 +330,21 @@ div.csl-indent {
 <p>However, data hiding can occur in many different ways. First, the data itself can be cherry-picked or massaged <span class="citation">(see e.g. <a href="#ref-lisnic2024">Lisnic et al. 2024</a>)</span>. This is arguably the most egregious case, and can in some cases amount to malicious statistical practices such as HARKing or p-hacking <span class="citation">(see e.g. <a href="#ref-kerr1998">Kerr 1998</a>; <a href="#ref-lisnic2024">Lisnic et al. 2024</a>; <a href="#ref-head2015">Head et al. 2015</a>)</span>. However, even when showing the full data, some visualizations can obscure or downplay certain data features via poor design or incorrect use of visual encodings <span class="citation">(<a href="#ref-cairo2016">Cairo 2016</a>, <a href="#ref-cairo2019">2019</a>; <a href="#ref-cleveland1985">Cleveland 1985</a>; <a href="#ref-ziemkiewicz2009">Ziemkiewicz and Kosara 2009</a>)</span>. Finally, there is the issue of missing or incomplete data, where some data cannot be easily represented because it is simply not there.</p>
 <p>An infamous example of data hiding leading to disastrous real-world consequences was the 1986 crash of the Space Shuttle Challenger <span class="citation">(see <a href="#ref-dalal1989">Dalal, Fowlkes, and Hoadley 1989</a>)</span>. During a pre-launch teleconference, engineers debated the effect of temperature on the performance of O-ring gaskets, as the forecasted temperature was significantly lower than during previous launches. The plot in the left panel of Figure <a href="problems.html#fig:challenger">4.1</a> was used to argue that there was no correlation between temperature and O-ring failures. However, this plot had one significant flaw: it excluded launches where no failures occurred. After the disaster, when the data including the zero-failure launches was plotted, it revealed a clear trend of increasing number of failures as temperature decreased <span class="citation">(see right panel of Figure <a href="problems.html#fig:challenger">4.1</a>, see also <a href="#ref-dalal1989">Dalal, Fowlkes, and Hoadley 1989</a>)</span>.</p>
 
-<div class="figure"><span style="display:block;" id="fig:challenger"></span>
-<img src="figures/challenger.png" alt="Relationship between temperature and the number of O-ring failures within the 1986 Challenger data. Left: the original plot as presented during the pre-launch teleconference. Right: a reproduced plot of the same data, including the original data points (black), the excluded data points with zero failures (grey), and an estimated logistic regression fit (red, the source of right-panel data is Dalal, Fowlkes, and Hoadley 1989)." width="750" />
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:challenger"></span>
+<img src="figures/challenger.png" alt="Relationship between temperature and the number of O-ring failures within the 1986 Challenger data. Left: the original plot as presented during the pre-launch teleconference. Right: a reproduced plot of the same data, including the original data points (black), the excluded data points with zero failures (grey), and an estimated logistic regression fit (red, the source of right-panel data is Dalal, Fowlkes, and Hoadley 1989)." width="100%" style="border: none;" />
 <p class="caption">
 Figure 4.1: Relationship between temperature and the number of O-ring failures within the 1986 Challenger data. Left: the original plot as presented during the pre-launch teleconference. Right: a reproduced plot of the same data, including the original data points (black), the excluded data points with zero failures (grey), and an estimated logistic regression fit <span class="citation">(red, the source of right-panel data is <a href="#ref-dalal1989">Dalal, Fowlkes, and Hoadley 1989</a>)</span>.
 </p>
 </div>
-<p>Not all data hiding involves outright omission, however; it can also arise from subtle design choices. Take, for example, axis limits. <span class="citation">Cleveland (<a href="#ref-cleveland1985">1985</a>)</span> argues that axis limits should generally be expanded to avoid inadvertently obscuring data near the edges of the plot <span class="citation">(see also e.g. <a href="#ref-chen2008">Chen et al. 2008, 64</a>)</span>:</p>
-<div class="figure"><span style="display:block;" id="fig:expanding-axis-limits"></span>
-<img src="figures/expand-scatterplot.png" alt="Without expanding axis limits, objects near the edges of the plot become less salient. Left: axis limits match the data limits exactly, and so the points in the top-left and bottom-right corner of the plot are represented by smaller area and the overall trend is distorted. Right: by expanding axis limits, we can ensure that trend is represented faithfully." width="750" />
+<p>Not all data hiding involves outright omission, however; it can also arise from subtle design choices. Take, for example, axis limits. <span class="citation">Cleveland (<a href="#ref-cleveland1985">1985</a>)</span> argues that axis limits should generally be expanded to avoid inadvertently obscuring data near the edges of the plot <span class="citation">(see also e.g. <a href="#ref-chen2008">C. Chen et al. 2008, 64</a>)</span>:</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:expanding-axis-limits"></span>
+<img src="figures/expand-scatterplot.png" alt="Without expanding axis limits, objects near the edges of the plot become less salient. Left: axis limits match the data limits exactly, and so the points in the top-left and bottom-right corner of the plot are represented by smaller area and the overall trend is distorted. Right: by expanding axis limits, we can ensure that trend is represented faithfully." width="100%" style="border: none;" />
 <p class="caption">
 Figure 4.2: Without expanding axis limits, objects near the edges of the plot become less salient. Left: axis limits match the data limits exactly, and so the points in the top-left and bottom-right corner of the plot are represented by smaller area and the overall trend is distorted. Right: by expanding axis limits, we can ensure that trend is represented faithfully.
 </p>
 </div>
-<p>Figure <a href="problems.html#fig:expanding-axis-limits">4.2</a> illustrates the effect of (not) expanding axis limits. The axis limits of the left scatterplot match the data limits exactly, however, this results in a misrepresentation of the underlying trend, since points near the edges of the plot are represented by smaller area (compared to points in the center of the plot). For instance, the point in the bottom-right corner of the plot lies simultaneously at the x- and y-axis limits, and is thus represented by only one-quarter of the area. In contrast, in the right scatterplot, the axis limits are expanded by a small fraction <span class="citation">(5%, <code>ggplot2</code> default, <a href="#ref-wickham2016">Wickham 2016</a>)</span>, guaranteeing that all data points are represented by equal area<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>.</p>
-<p>Finally, there is the issue of data hiding due to missing or incomplete data, which is a bit more complicated. While techniques of visualizing data with missing values do exist <span class="citation">(see e.g. <a href="#ref-unwin1996">Unwin et al. 1996</a>; <a href="#ref-tierney2023">Tierney and Cook 2023</a>)</span>, they are often tied to specific visualization types and styles, and few general solutions are available. In fact, properly analyzing the patterns of missingness in the data may call for a separate, dedicated visualization workflow <span class="citation">(<a href="#ref-tierney2023">Tierney and Cook 2023</a>)</span>.</p>
+<p>Figure <a href="problems.html#fig:expanding-axis-limits">4.2</a> illustrates the effect of (not) expanding axis limits. The axis limits of the left scatterplot match the data limits exactly, however, this results in a misrepresentation of the underlying trend, since points near the edges of the plot are represented by smaller area (compared to points in the center of the plot). For instance, the point in the bottom-right corner of the plot lies simultaneously at the x- and y-axis limits, and is thus represented by only one-quarter of the area. In contrast, in the right scatterplot, the axis limits are expanded by a small fraction <span class="citation">(5%, <code>ggplot2</code> default, <a href="#ref-wickham2016">Wickham 2016</a>)</span>, guaranteeing that all data points are represented by equal area<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>.</p>
+<p>Finally, there is the issue of data hiding due to missing or incomplete data, which is a bit more complicated. While techniques of visualizing data with missing values do exist <span class="citation">(see e.g. <a href="#ref-unwin1996">Unwin et al. 1996</a>; <a href="#ref-tierney2023">N. Tierney and Cook 2023</a>)</span>, they are often tied to specific visualization types and styles, and few general solutions are available. In fact, properly analyzing the patterns of missingness in the data may call for a separate, dedicated visualization workflow <span class="citation">(<a href="#ref-tierney2023">N. Tierney and Cook 2023</a>)</span>.</p>
 <p>Either way, data hiding is something we should be mindful of. Unless there is a clear and justifiable reason, no data should be arbitrarily removed or discarded, and we should pick appropriate visual representations to display all of our data faithfully. In the ideal case, the visualization should present a clear and unambiguous mapping between the graphics and the data <span class="citation">(<a href="#ref-ziemkiewicz2009">Ziemkiewicz and Kosara 2009</a>)</span>.</p>
 </div>
 <div id="comparison-disjointness" class="section level3 hasAnchor" number="4.2.2">
@@ -353,7 +357,7 @@ Figure 4.2: Without expanding axis limits, objects near the edges of the plot be
 </blockquote>
 <p>The essence of visualization is comparison <span class="citation">(see e.g. <a href="#ref-tufte2001">Tufte 2001</a>; <a href="#ref-tukey1993">Tukey 1993</a>)</span>. That is, when we visualize, we do so with the ultimate goal of comparing our data as geometric objects mapped to a set of visual channels <span class="citation">(<a href="#ref-bertin1983">Bertin 1983</a>; <a href="#ref-wilkinson2012">Wilkinson 2012</a>; <a href="#ref-franconeri2021">Franconeri et al. 2021</a>; <a href="#ref-wilke2019">Wilke 2019</a>)</span>. However, an important question to ask is, what is the essence of the things we are comparing? And how do they relate to each other?</p>
 <p>An interesting yet underappreciated fact is that, in many common visualizations, geometric objects within the same graphical layer represent disjoint subsets of the data. That is, in most plots, each point, bar, line, or polygon corresponds a unique set of data points (rows of the data), with no overlap with the other objects in that layer. While different layers can represent the same data (e.g., a smooth fit may be overlaid over scatterplot points, and point clouds may be plotted over boxplot boxes), between objects within the same layer, data is rarely shared. This practice, despite being so common to border on a rule, is surprisingly seldom discussed.</p>
-<p>There are, of course, counter-examples. For instance, certain visualizations of set-typed data “double up” the contribution of data subsets, such that the same subset of the data may appear in multiple objects <span class="citation">(see e.g. <a href="#ref-alsallakh2013">Alsallakh et al. 2013</a>, <a href="#ref-alsallakh2014">2014</a>; <a href="#ref-conway2017">Conway, Lex, and Gehlenborg 2017</a>; <a href="#ref-lex2014">Lex et al. 2014</a>)</span>. Similarly, two-dimensional kernel density plots are unusual in that each line or polygon represents an isopleth over a joint probability density of all data points<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>. However, these visualizations represent a fairly small fraction of all plot types. Typically, when we see a plot, we expect each geometric object to represent a distinct set of cases.</p>
+<p>There are, of course, counter-examples. For instance, certain visualizations of set-typed data “double up” the contribution of data subsets, such that the same subset of the data may appear in multiple objects <span class="citation">(see e.g. <a href="#ref-alsallakh2013">Alsallakh et al. 2013</a>, <a href="#ref-alsallakh2014">2014</a>; <a href="#ref-conway2017">Conway, Lex, and Gehlenborg 2017</a>; <a href="#ref-lex2014">Lex et al. 2014</a>)</span>. Similarly, two-dimensional kernel density plots are unusual in that each line or polygon represents an isopleth over a joint probability density of all data points<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>. However, these visualizations represent a fairly small fraction of all plot types. Typically, when we see a plot, we expect each geometric object to represent a distinct set of cases.</p>
 <p>This tendency to visualize disjoint objects may partly come from established norms, however, I contend that there is also a deeper reason: the nature of comparison itself. Specifically, my argument is that, in general, it is far easier to compare and reason about objects which are disjoint, rather than ones which are entangled. This makes disjointness a particularly nice, “natural” property.</p>
 <div id="naturality-of-disjointness" class="section level4 hasAnchor" number="4.2.2.1">
 <h4><span class="header-section-number">4.2.2.1</span> Naturality of disjointness<a href="problems.html#naturality-of-disjointness" class="anchor-section" aria-label="Anchor link to header"></a></h4>
@@ -365,8 +369,8 @@ Figure 4.2: Without expanding axis limits, objects near the edges of the plot be
 <h4><span class="header-section-number">4.2.2.2</span> Disjointness and bijections<a href="problems.html#disjointness-and-bijections" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>But even more fundamentally, disjointness is related to a structure which mathematicians have long considered natural: a <a href="math.html#functions">bijection</a> or one-to-one mapping <span class="citation">(see e.g. <a href="#ref-fong2019">Fong and Spivak 2019</a>; <a href="#ref-lawvere2009">Lawvere and Schanuel 2009</a>)</span>. Specifically, if we take a set <span class="math inline">\(S\)</span>, divide it into disjoint subsets, and then assign each subset a label, there will be a one-to-one mapping between the labels and the subsets (i.e. each label corresponds to an <a href="math.html#partitions">equivalence class</a> on <span class="math inline">\(S\)</span>). Practically, this means that we can go back and forth between the subsets and labels, without losing any information, and the converse does not hold when the subsets are non-disjoint.</p>
 <p>This bijective property of dijsoint subsets may be particularly useful in data visualization, see Figure <a href="problems.html#fig:geoms-bijection">4.3</a>. For instance, when drawing a barplot, if we divide our data into disjoint subsets and draw one bar corresponding to each part, then we can go back and forth between data subsets and bars (the function of identifying data subsets from bars is invertible). In plots where the objects are non-disjoint, this correspondence is broken: if we select the set of cases corresponding to a bar, there may be no way to identify the original bar from the cases alone.</p>
-<div class="figure"><span style="display:block;" id="fig:geoms-bijection"></span>
-<img src="figures/geoms-bijection.png" alt="Disjointness induces a one-to-one mapping (bijection) between geometric objects and subsets of the data. Suppose we mark out the cases corresponding to the leftmost bar (red). Top row: when each geometric object (bar) represents unique subset of data points, we can easily go back and forth between the object and its underlying subset (middle panel), and so the function of picking cases corresponding to each object is invertible. Bottom row: if there is an overlap between the cases represented by each object, then there may be no way to identify the original object after we have picked out the corresponding cases." width="886" />
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:geoms-bijection"></span>
+<img src="figures/geoms-bijection.png" alt="Disjointness induces a one-to-one mapping (bijection) between geometric objects and subsets of the data. Suppose we mark out the cases corresponding to the leftmost bar (red). Top row: when each geometric object (bar) represents unique subset of data points, we can easily go back and forth between the object and its underlying subset (middle panel), and so the function of picking cases corresponding to each object is invertible. Bottom row: if there is an overlap between the cases represented by each object, then there may be no way to identify the original object after we have picked out the corresponding cases." width="100%" style="border: none;" />
 <p class="caption">
 Figure 4.3: Disjointness induces a one-to-one mapping (bijection) between geometric objects and subsets of the data. Suppose we mark out the cases corresponding to the leftmost bar (red). Top row: when each geometric object (bar) represents unique subset of data points, we can easily go back and forth between the object and its underlying subset (middle panel), and so the function of picking cases corresponding to each object is invertible. Bottom row: if there is an overlap between the cases represented by each object, then there may be no way to identify the original object after we have picked out the corresponding cases.
 </p>
@@ -376,23 +380,23 @@ Figure 4.3: Disjointness induces a one-to-one mapping (bijection) between geomet
 <div id="disjointness-in-visualizations-real-world-example" class="section level4 hasAnchor" number="4.2.2.3">
 <h4><span class="header-section-number">4.2.2.3</span> Disjointness in visualizations: Real-world example<a href="problems.html#disjointness-in-visualizations-real-world-example" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>To illustrate the idea of disjointness on a real-world example, take the following barplot representing the vote share among the top three parties in the 2023 New Zealand general election <span class="citation">(<a href="#ref-election2023">Electoral Commission New Zealand 2023</a>)</span>:</p>
-<div class="figure"><span style="display:block;" id="fig:barplot-bijection"></span>
-<img src="figures/barplot-bijection.png" alt="Barplot showing disjoint subsets of the data. The bars show the vote share among the top three parties in the 2023 New Zealand general election, with each bar representing a unique subset of voters." width="750" />
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:barplot-bijection"></span>
+<img src="figures/barplot-bijection.png" alt="Barplot showing disjoint subsets of the data. The bars show the vote share among the top three parties in the 2023 New Zealand general election, with each bar representing a unique subset of voters." width="100%" style="border: none;" />
 <p class="caption">
 Figure 4.4: Barplot showing disjoint subsets of the data. The bars show the vote share among the top three parties in the 2023 New Zealand general election, with each bar representing a unique subset of voters.
 </p>
 </div>
 <p>Each bar represents a unique set of voters. Thus, the data subsets represented by the individual bars are disjoint. This is the case in almost all barplots we encounter; however, as far as I am aware, there are no explicit guidelines in the data visualization literature about this. For example, we could hypothetically transform our data to display the combined votes of the National and Labour parties in the leftmost bar, violating this disjoint property:</p>
-<div class="figure"><span style="display:block;" id="fig:union-geoms"></span>
-<img src="figures/barplot-notbijection.png" alt="Barplot showing non-disjoint subsets of the data: the leftmost bar represents the union of National and Labour voters." width="750" />
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:union-geoms"></span>
+<img src="figures/barplot-notbijection.png" alt="Barplot showing non-disjoint subsets of the data: the leftmost bar represents the union of National and Labour voters." width="100%" style="border: none;" />
 <p class="caption">
 Figure 4.5: Barplot showing non-disjoint subsets of the data: the leftmost bar represents the union of National and Labour voters.
 </p>
 </div>
 <p>However, this way of representing the data has several issues. First, the plot in Figure <a href="problems.html#fig:union-geoms">4.5</a> is arguably not very useful for addressing typical visualization goals. For example, when visualizing election data, we care about the relative number of votes each party received. Figure <a href="problems.html#fig:union-geoms">4.5</a> makes complicates this comparison. Specifically, since the leftmost bar represents the union of National and Labour votes, we have to perform additional mental arithmetic if we want to compare the votes received by National and Labour directly <span class="citation">(<a href="#ref-cleveland1985">Cleveland 1985</a>)</span>. Second, we have metadata knowledge <span class="citation">(see e.g. <a href="#ref-wilkinson2012">Wilkinson 2012</a>; <a href="#ref-velleman1993">Velleman and Wilkinson 1993</a>)</span> about the underlying information actually being disjoint. Specifically, we know that, in the New Zealand electoral system, each voter can only vote for a single party. Hence, it does not make sense to arbitrarily merge the data in this way. Finally, Figure <a href="problems.html#fig:union-geoms">4.5</a> also needlessly duplicates information: the number of votes the National party received is rendered twice, once in the leftmost bar and again in the second-left bar. This goes against the general principle of representing our data parsimoniously <span class="citation">(<a href="#ref-tufte2001">Tufte 2001</a>)</span>.</p>
 <p>Even when our goal is not to compare absolute counts, there are often better disjoint data visualization methods available. For instance, if we were interested in visualizing the <em>proportion</em> of votes that each party received, we could instead draw the following plot:</p>
-<div class="figure"><span style="display:block;" id="fig:stacked-proportion"></span>
-<img src="figures/barplot-bijection-proportions.png" alt="Even when proportions are of interest, there are usually disjoint data visualization techniques available. The plot shows proportion of vote share of the top three parties in the 2023 New Zealand general election, with each bar segment again representing a unique subset of voters." width="750" />
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:stacked-proportion"></span>
+<img src="figures/barplot-bijection-proportions.png" alt="Even when proportions are of interest, there are usually disjoint data visualization techniques available. The plot shows proportion of vote share of the top three parties in the 2023 New Zealand general election, with each bar segment again representing a unique subset of voters." width="100%" style="border: none;" />
 <p class="caption">
 Figure 4.6: Even when proportions are of interest, there are usually disjoint data visualization techniques available. The plot shows proportion of vote share of the top three parties in the 2023 New Zealand general election, with each bar segment again representing a unique subset of voters.
 </p>
@@ -400,8 +404,8 @@ Figure 4.6: Even when proportions are of interest, there are usually disjoint da
 <p>By stacking the bar segments on top of each other as in Figure <a href="problems.html#fig:stacked-proportion">4.6</a>, we can easily compare proportion of the total number of votes each party received, while retaining a disjoint representation: each bar segment represents a disjoint subset of the voters.</p>
 <p>The example above is fairly clear-cut case of where disjoint data representation is the better choice. However, there are also more ambiguous situations, such as when multiple attributes of the data are simultaneously present or absent for each case. Take, for example, the 2020 New Zealand joint referendum on the legalization of euthanasia and cannabis. In this referendum, the two issues were included on the same ballot and voters would vote on them simultaneously. The legalization of euthanasia was accepted by the voters, with 65.1% of votes supporting the decision, whereas the legalization of cannabis was rejected, with 50.7% of voters rejecting the decision <span class="citation">(<a href="#ref-referendum2020">Electoral Commission New Zealand 2020</a>)</span>.</p>
 <p>We could visualize the referendum data in the following way:</p>
-<div class="figure"><span style="display:block;" id="fig:union-geoms2"></span>
-<img src="figures/referendum-notbijection.png" alt="Barplot showing a more realistic example of non-disjoint data representation. The bars show the vote share cast by New Zealand voters in the joint 2020 referendum on euthanasia and cannabis. The two bars show (mostly) the same set of ballots, with each ballot contributing to the height of one segment in each bar." width="750" />
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:union-geoms2"></span>
+<img src="figures/referendum-notbijection.png" alt="Barplot showing a more realistic example of non-disjoint data representation. The bars show the vote share cast by New Zealand voters in the joint 2020 referendum on euthanasia and cannabis. The two bars show (mostly) the same set of ballots, with each ballot contributing to the height of one segment in each bar." width="100%" style="border: none;" />
 <p class="caption">
 Figure 4.7: Barplot showing a more realistic example of non-disjoint data representation. The bars show the vote share cast by New Zealand voters in the joint 2020 referendum on euthanasia and cannabis. The two bars show (mostly) the same set of ballots, with each ballot contributing to the height of one segment in each bar.
 </p>
@@ -409,8 +413,8 @@ Figure 4.7: Barplot showing a more realistic example of non-disjoint data repres
 <p>In Figure <a href="problems.html#fig:union-geoms2">4.7</a>, both bars include votes cast by the same voter <span class="citation">(ignoring the votes where no preference was given for either issue, <a href="#ref-referendum2020">Electoral Commission New Zealand 2020</a>)</span>, making the representation non-disjoint. In
 this case, the visualization works, since the underlying data is genuinely non-independent (each person cast two votes). If we had information about individual votes, it might be interesting to see how many people voted for both euthanasia and cannabis, how many voted for euthanasia but against cannabis, and so on. As was mentioned before, these types of visualizations can be useful for set-typed data <span class="citation">(see e.g. <a href="#ref-alsallakh2014">Alsallakh et al. 2014</a>)</span>.</p>
 <p>However, even though the data here is fundamentally non-independent, there is often a way to represent it in a disjoint way that preserves most of the desirable properties. Specifically, we can split the data and draw it as separate plots or small multiples <span class="citation">(<a href="#ref-tufte2001">Tufte 2001</a>)</span>:</p>
-<div class="figure"><span style="display:block;" id="fig:small-multiples"></span>
-<img src="figures/referendum-bijection.png" alt="Small multiple figure showing the non-disjoint data represented as disjoint bars. The bars again show the vote share cast by New Zealand voters in the joint 2020 referendum on euthanasia and cannabis, however, this time, each bar within one plot represents a unique subset of the cases." width="750" />
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:small-multiples"></span>
+<img src="figures/referendum-bijection.png" alt="Small multiple figure showing the non-disjoint data represented as disjoint bars. The bars again show the vote share cast by New Zealand voters in the joint 2020 referendum on euthanasia and cannabis, however, this time, each bar within one plot represents a unique subset of the cases." width="100%" style="border: none;" />
 <p class="caption">
 Figure 4.8: Small multiple figure showing the non-disjoint data represented as disjoint bars. The bars again show the vote share cast by New Zealand voters in the joint 2020 referendum on euthanasia and cannabis, however, this time, each bar within one plot represents a unique subset of the cases.
 </p>
@@ -448,105 +452,105 @@ Figure 4.8: Small multiple figure showing the non-disjoint data represented as d
 <h4><span class="header-section-number">4.2.3.2</span> Products of partitions<a href="problems.html#products-of-partitions" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>Every plot involves at least one partition that establishes the connection between data and geometric objects. However, many plot types also divide data across multiple dimensions using several partitioning variables. Each data point is then associated with a unique combination (Cartesian product) of these variables. This multidimensional partitioning is particularly common in interactive data visualization, where features such as linking inherently add level of partitioning <span class="citation">(<a href="#ref-wilhelm2008">Wilhelm 2008</a>)</span>. Therefore, it is important to briefly discuss the idea of taking Cartesian products of partitioning variables. While the material might seem simple, I encourage the reader to bear with me as it will become important later.</p>
 <p>The idea of partition products may be best illustrated on concrete code examples. First, let’s start with an example of a simple partition. In R, the canonical data structure for creating a grouping structure (partition) is the S3 <code>factor</code> class. We can use <code>factor</code>s to partition our data and compute various aggregate summaries over the parts:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="problems.html#cb1-1" tabindex="-1"></a>group <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;A&quot;</span>, <span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;C&quot;</span>, <span class="st">&quot;C&quot;</span>, <span class="st">&quot;C&quot;</span>))</span>
-<span id="cb1-2"><a href="problems.html#cb1-2" tabindex="-1"></a>income <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">170</span>, <span class="dv">150</span>, <span class="dv">200</span>, <span class="dv">300</span>, <span class="dv">150</span>, <span class="dv">230</span>, <span class="dv">220</span>, <span class="dv">140</span>)</span>
-<span id="cb1-3"><a href="problems.html#cb1-3" tabindex="-1"></a>age <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">32</span>, <span class="dv">45</span>, <span class="dv">19</span>, <span class="dv">67</span>, <span class="dv">42</span>, <span class="dv">35</span>, <span class="dv">32</span>)</span>
-<span id="cb1-4"><a href="problems.html#cb1-4" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="problems.html#cb1-5" tabindex="-1"></a><span class="fu">split</span>(<span class="fu">data.frame</span>(income, age), group)</span></code></pre></div>
-<pre><code>## $A
-##   income age
-## 1    170  20
-## 2    150  32
-## 3    200  45
-## 
-## $B
-##   income age
-## 4    300  19
-## 5    150  67
-## 
-## $C
-##   income age
-## 6    230  42
-## 7    220  35
-## 8    140  32</code></pre>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="problems.html#cb3-1" tabindex="-1"></a><span class="fu">aggregate</span>(<span class="fu">cbind</span>(income, age) <span class="sc">~</span> group, <span class="at">FUN =</span> mean)</span></code></pre></div>
-<pre><code>##   group   income      age
-## 1     A 173.3333 32.33333
-## 2     B 225.0000 43.00000
-## 3     C 196.6667 36.33333</code></pre>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="problems.html#cb5-1" tabindex="-1"></a><span class="fu">aggregate</span>(<span class="fu">cbind</span>(income, age) <span class="sc">~</span> group, <span class="at">FUN =</span> sum)</span></code></pre></div>
-<pre><code>##   group income age
-## 1     A    520  97
-## 2     B    450  86
-## 3     C    590 109</code></pre>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="problems.html#cb6-1" tabindex="-1"></a>group <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;A&quot;</span>, <span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;C&quot;</span>, <span class="st">&quot;C&quot;</span>, <span class="st">&quot;C&quot;</span>))</span>
+<span id="cb6-2"><a href="problems.html#cb6-2" tabindex="-1"></a>income <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">170</span>, <span class="dv">150</span>, <span class="dv">200</span>, <span class="dv">300</span>, <span class="dv">150</span>, <span class="dv">230</span>, <span class="dv">220</span>, <span class="dv">140</span>)</span>
+<span id="cb6-3"><a href="problems.html#cb6-3" tabindex="-1"></a>age <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">32</span>, <span class="dv">45</span>, <span class="dv">19</span>, <span class="dv">67</span>, <span class="dv">42</span>, <span class="dv">35</span>, <span class="dv">32</span>)</span>
+<span id="cb6-4"><a href="problems.html#cb6-4" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="problems.html#cb6-5" tabindex="-1"></a><span class="fu">split</span>(<span class="fu">data.frame</span>(income, age), group)</span></code></pre></div>
+<pre><code>$A
+  income age
+1    170  20
+2    150  32
+3    200  45
+
+$B
+  income age
+4    300  19
+5    150  67
+
+$C
+  income age
+6    230  42
+7    220  35
+8    140  32</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="problems.html#cb8-1" tabindex="-1"></a><span class="fu">aggregate</span>(<span class="fu">cbind</span>(income, age) <span class="sc">~</span> group, <span class="at">FUN =</span> mean)</span></code></pre></div>
+<pre><code>  group   income      age
+1     A 173.3333 32.33333
+2     B 225.0000 43.00000
+3     C 196.6667 36.33333</code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="problems.html#cb10-1" tabindex="-1"></a><span class="fu">aggregate</span>(<span class="fu">cbind</span>(income, age) <span class="sc">~</span> group, <span class="at">FUN =</span> sum)</span></code></pre></div>
+<pre><code>  group income age
+1     A    520  97
+2     B    450  86
+3     C    590 109</code></pre>
 <p>Once we partition our data and compute the summaries, we can visualize them as geometric objects in a plot. For instance, we could render the summarized data above as a simple barplot using <code>ggplot2</code> <span class="citation">(<a href="#ref-wickham2016">Wickham 2016</a>)</span>:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="problems.html#cb7-1" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb7-2"><a href="problems.html#cb7-2" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(income <span class="sc">~</span> group, <span class="at">FUN =</span> sum)</span>
-<span id="cb7-3"><a href="problems.html#cb7-3" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="problems.html#cb7-4" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(group, income)) <span class="sc">+</span></span>
-<span id="cb7-5"><a href="problems.html#cb7-5" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">&quot;#1F78B4&quot;</span>) <span class="sc">+</span></span>
-<span id="cb7-6"><a href="problems.html#cb7-6" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Group&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Sum of income&quot;</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
-<p>However, there is only so much we can glean from our data with simple partitions like the one above. When we have multiple partitioning variables, we can investigate more granular subsets of our data by taking their product. While base R does not have a standalone data structure for products of multiple <code>factor</code>s<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>, many built-in functions create this data structure implicitly, when supplied with <code>list()</code> or formula arguments (using the <code>+</code> operator on the right-hand side of the formula to define the product):</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="problems.html#cb8-1" tabindex="-1"></a>gender <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="st">&quot;M&quot;</span>, <span class="st">&quot;F&quot;</span>, <span class="st">&quot;F&quot;</span>, <span class="st">&quot;M&quot;</span>, <span class="st">&quot;F&quot;</span>, <span class="st">&quot;M&quot;</span>, <span class="st">&quot;F&quot;</span>, <span class="st">&quot;F&quot;</span>))</span>
-<span id="cb8-2"><a href="problems.html#cb8-2" tabindex="-1"></a><span class="fu">split</span>(<span class="fu">data.frame</span>(income, age), <span class="fu">list</span>(group, gender))</span></code></pre></div>
-<pre><code>## $A.F
-##   income age
-## 2    150  32
-## 3    200  45
-## 
-## $B.F
-##   income age
-## 5    150  67
-## 
-## $C.F
-##   income age
-## 7    220  35
-## 8    140  32
-## 
-## $A.M
-##   income age
-## 1    170  20
-## 
-## $B.M
-##   income age
-## 4    300  19
-## 
-## $C.M
-##   income age
-## 6    230  42</code></pre>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="problems.html#cb10-1" tabindex="-1"></a><span class="fu">aggregate</span>(<span class="fu">cbind</span>(income, age) <span class="sc">~</span> group <span class="sc">+</span> gender, <span class="at">FUN =</span> mean)</span></code></pre></div>
-<pre><code>##   group gender income  age
-## 1     A      F    175 38.5
-## 2     B      F    150 67.0
-## 3     C      F    180 33.5
-## 4     A      M    170 20.0
-## 5     B      M    300 19.0
-## 6     C      M    230 42.0</code></pre>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="problems.html#cb12-1" tabindex="-1"></a><span class="fu">aggregate</span>(<span class="fu">cbind</span>(income, age) <span class="sc">~</span> group <span class="sc">+</span> gender, <span class="at">FUN =</span> sum)</span></code></pre></div>
-<pre><code>##   group gender income age
-## 1     A      F    350  77
-## 2     B      F    150  67
-## 3     C      F    360  67
-## 4     A      M    170  20
-## 5     B      M    300  19
-## 6     C      M    230  42</code></pre>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="problems.html#cb12-1" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb12-2"><a href="problems.html#cb12-2" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(income <span class="sc">~</span> group, <span class="at">FUN =</span> sum)</span>
+<span id="cb12-3"><a href="problems.html#cb12-3" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="problems.html#cb12-4" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(group, income)) <span class="sc">+</span></span>
+<span id="cb12-5"><a href="problems.html#cb12-5" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">&quot;#1F78B4&quot;</span>) <span class="sc">+</span></span>
+<span id="cb12-6"><a href="problems.html#cb12-6" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Group&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Sum of income&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-14-1.png" width="100%" style="border: none;" style="display: block; margin: auto;" /></p>
+<p>However, there is only so much we can glean from our data with simple partitions like the one above. When we have multiple partitioning variables, we can investigate more granular subsets of our data by taking their product. While base R does not have a standalone data structure for products of multiple <code>factor</code>s<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a>, many built-in functions create this data structure implicitly, when supplied with <code>list()</code> or formula arguments (using the <code>+</code> operator on the right-hand side of the formula to define the product):</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="problems.html#cb13-1" tabindex="-1"></a>gender <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="st">&quot;M&quot;</span>, <span class="st">&quot;F&quot;</span>, <span class="st">&quot;F&quot;</span>, <span class="st">&quot;M&quot;</span>, <span class="st">&quot;F&quot;</span>, <span class="st">&quot;M&quot;</span>, <span class="st">&quot;F&quot;</span>, <span class="st">&quot;F&quot;</span>))</span>
+<span id="cb13-2"><a href="problems.html#cb13-2" tabindex="-1"></a><span class="fu">split</span>(<span class="fu">data.frame</span>(income, age), <span class="fu">list</span>(group, gender))</span></code></pre></div>
+<pre><code>$A.F
+  income age
+2    150  32
+3    200  45
+
+$B.F
+  income age
+5    150  67
+
+$C.F
+  income age
+7    220  35
+8    140  32
+
+$A.M
+  income age
+1    170  20
+
+$B.M
+  income age
+4    300  19
+
+$C.M
+  income age
+6    230  42</code></pre>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="problems.html#cb15-1" tabindex="-1"></a><span class="fu">aggregate</span>(<span class="fu">cbind</span>(income, age) <span class="sc">~</span> group <span class="sc">+</span> gender, <span class="at">FUN =</span> mean)</span></code></pre></div>
+<pre><code>  group gender income  age
+1     A      F    175 38.5
+2     B      F    150 67.0
+3     C      F    180 33.5
+4     A      M    170 20.0
+5     B      M    300 19.0
+6     C      M    230 42.0</code></pre>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="problems.html#cb17-1" tabindex="-1"></a><span class="fu">aggregate</span>(<span class="fu">cbind</span>(income, age) <span class="sc">~</span> group <span class="sc">+</span> gender, <span class="at">FUN =</span> sum)</span></code></pre></div>
+<pre><code>  group gender income age
+1     A      F    350  77
+2     B      F    150  67
+3     C      F    360  67
+4     A      M    170  20
+5     B      M    300  19
+6     C      M    230  42</code></pre>
 <p>These product partitions can also be visualized, to display our data at a greater level of details (for instance, as a stacked barplot):</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="problems.html#cb14-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(income <span class="sc">~</span> group <span class="sc">+</span> gender, <span class="at">FUN =</span> sum)</span>
-<span id="cb14-2"><a href="problems.html#cb14-2" tabindex="-1"></a></span>
-<span id="cb14-3"><a href="problems.html#cb14-3" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(group, income, <span class="at">fill =</span> gender)) <span class="sc">+</span></span>
-<span id="cb14-4"><a href="problems.html#cb14-4" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">col =</span> <span class="st">&quot;white&quot;</span>) <span class="sc">+</span></span>
-<span id="cb14-5"><a href="problems.html#cb14-5" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;#1F78B4&quot;</span>, <span class="st">&quot;#E31A1C&quot;</span>)) <span class="sc">+</span></span>
-<span id="cb14-6"><a href="problems.html#cb14-6" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Group&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Sum of income&quot;</span>, <span class="at">fill =</span> <span class="st">&quot;Gender&quot;</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="problems.html#cb19-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(income <span class="sc">~</span> group <span class="sc">+</span> gender, <span class="at">FUN =</span> sum)</span>
+<span id="cb19-2"><a href="problems.html#cb19-2" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="problems.html#cb19-3" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(group, income, <span class="at">fill =</span> gender)) <span class="sc">+</span></span>
+<span id="cb19-4"><a href="problems.html#cb19-4" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">col =</span> <span class="st">&quot;white&quot;</span>) <span class="sc">+</span></span>
+<span id="cb19-5"><a href="problems.html#cb19-5" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;#1F78B4&quot;</span>, <span class="st">&quot;#E31A1C&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb19-6"><a href="problems.html#cb19-6" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Group&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Sum of income&quot;</span>, <span class="at">fill =</span> <span class="st">&quot;Gender&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-16-1.png" width="100%" style="border: none;" style="display: block; margin: auto;" /></p>
 <p>In fact, Cartesian products of partitions are so useful and ubiquitous in data visualization that many data visualization systems <span class="citation">(particularly ones based on the Grammar of Graphics, <a href="#ref-wilkinson2012">Wilkinson 2012</a>)</span> construct them automatically. For instance, we can produce the exact same plot without having to explicitly aggregate the data ourselves, by running the following <code>ggplot</code> call:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="problems.html#cb15-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(group, gender, income)</span>
-<span id="cb15-2"><a href="problems.html#cb15-2" tabindex="-1"></a></span>
-<span id="cb15-3"><a href="problems.html#cb15-3" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(group, income, <span class="at">fill =</span> gender)) <span class="sc">+</span></span>
-<span id="cb15-4"><a href="problems.html#cb15-4" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">&quot;summary&quot;</span>, <span class="at">fun =</span> <span class="st">&quot;sum&quot;</span>, <span class="at">col =</span> <span class="st">&quot;white&quot;</span>) <span class="sc">+</span></span>
-<span id="cb15-5"><a href="problems.html#cb15-5" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;#1F78B4&quot;</span>, <span class="st">&quot;#E31A1C&quot;</span>)) <span class="sc">+</span></span>
-<span id="cb15-6"><a href="problems.html#cb15-6" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Group&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Income&quot;</span>, <span class="at">fill =</span> <span class="st">&quot;Gender&quot;</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="problems.html#cb20-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(group, gender, income)</span>
+<span id="cb20-2"><a href="problems.html#cb20-2" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="problems.html#cb20-3" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(group, income, <span class="at">fill =</span> gender)) <span class="sc">+</span></span>
+<span id="cb20-4"><a href="problems.html#cb20-4" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">&quot;summary&quot;</span>, <span class="at">fun =</span> <span class="st">&quot;sum&quot;</span>, <span class="at">col =</span> <span class="st">&quot;white&quot;</span>) <span class="sc">+</span></span>
+<span id="cb20-5"><a href="problems.html#cb20-5" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;#1F78B4&quot;</span>, <span class="st">&quot;#E31A1C&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb20-6"><a href="problems.html#cb20-6" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Group&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Income&quot;</span>, <span class="at">fill =</span> <span class="st">&quot;Gender&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-17-1.png" width="100%" style="border: none;" style="display: block; margin: auto;" /></p>
 <p>It is worth taking a moment to analyze what is happening inside the <code>ggplot</code> call. The function takes the variables specified inside the <code>aes</code> call and constructs a Cartesian product of partitions. Importantly, it also automatically infers which variables should be used to construct the product and which should instead be aggregated over it. For instance, in the example above, the <code>income</code> variable is <em>not</em> included in the product. This is because it is a continuous variable mapped to the y-axis, and this, in combination with the geometric object (<code>geom_bar</code>), marks it as a an aggregation variable. This behavior is described in the <code>ggplot2</code> codebase in the following code comment:</p>
 <blockquote>
 <p>If the <code>group</code> variable is not present, then a new group variable is generated from the interaction of all discrete (factor or character) vectors, excluding <code>label</code>.</p>
@@ -559,8 +563,8 @@ Figure 4.8: Small multiple figure showing the non-disjoint data represented as d
 <p>As mentioned in the previous section, a fair number of common plots can be represented via a single flat product of all of the partitioning variables. However, for other types of plots, this simple model is not sufficient. Specifically, certain types of plots exhibit hierarchical dependencies which cannot be represented under this flat model <span class="citation">(see also <a href="#ref-slingsby2009">Slingsby, Dykes, and Wood 2009</a>; <a href="#ref-wu2022">Wu 2022</a>)</span>.</p>
 <p>To give a concrete example, let’s turn back to the barplot from the previous section (Section <a href="problems.html#plots-as-partitions">4.2.3</a>). To draw the barplot, we first split our data into smaller tables and summarized each table by summing the values. We then passed this data to the visualization library <span class="citation">(<code>ggplot2</code>, <a href="#ref-wickham2016">Wickham 2016</a>)</span>, and represented it as a stacked barplot. This gave us a good visualization for comparing absolute counts across categories.</p>
 <p>However, what if, instead of comparing absolute counts, we wanted to compare proportions? It turns out there is another type of visualization, called the spineplot, which can be used to represent the same underlying data as a barplot, however, is much better suited for comparing proportions:</p>
-<div class="figure"><span style="display:block;" id="fig:barplot-spineplot"></span>
-<img src="figures/barplot-spineplot.png" alt="The same underlying data represented as a barplot (left) and a spineplot (right)." width="750" />
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:barplot-spineplot"></span>
+<img src="figures/barplot-spineplot.png" alt="The same underlying data represented as a barplot (left) and a spineplot (right)." width="100%" style="border: none;" />
 <p class="caption">
 Figure 4.9: The same underlying data represented as a barplot (left) and a spineplot (right).
 </p>
@@ -577,8 +581,8 @@ Figure 4.9: The same underlying data represented as a barplot (left) and a spine
 <li>Along the y-axis, we stack the summaries <em>across the levels of a product of two partitioning variables</em> and normalize them by the values <em>within the levels of the top-level factor</em>.</li>
 </ul>
 <p>For example, assume we have a data set with two categorical variables, with <span class="math inline">\(j\)</span> and <span class="math inline">\(k\)</span> levels respectively. If we want to render a spineplot using these two variables, it is not enough to simply split our data into <span class="math inline">\(j \cdot k\)</span> tables. Instead, we need to partition our data twice: first, split it into <span class="math inline">\(j\)</span> tables, and second, split it into <span class="math inline">\(j \cdot k\)</span> tables. We also need to keep track to which of the larger <span class="math inline">\(j\)</span> tables each of the smaller <span class="math inline">\(j \cdot k\)</span> tables relates to. This inherently induces a hierarchical relationship, where the resulting data subsets form a graph - specifically, a tree - see Figure <a href="problems.html#fig:spineplot-tree">4.10</a>:</p>
-<div class="figure"><span style="display:block;" id="fig:spineplot-tree"></span>
-<img src="figures/spineplot-tree.png" alt="A diagram of the hierarchical relationship between the subsets of the data represented by a spineplot/barplot. The whole data set is partitioned into bars, which are in turn partitioned into bar segments." width="708" />
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:spineplot-tree"></span>
+<img src="figures/spineplot-tree.png" alt="A diagram of the hierarchical relationship between the subsets of the data represented by a spineplot/barplot. The whole data set is partitioned into bars, which are in turn partitioned into bar segments." width="100%" style="border: none;" />
 <p class="caption">
 Figure 4.10: A diagram of the hierarchical relationship between the subsets of the data represented by a spineplot/barplot. The whole data set is partitioned into bars, which are in turn partitioned into bar segments.
 </p>
@@ -589,16 +593,16 @@ Figure 4.10: A diagram of the hierarchical relationship between the subsets of t
 <h4><span class="header-section-number">4.2.4.1</span> Plots as preorders<a href="problems.html#plots-as-preorders" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>A <a href="math.html#preorders">preorder</a> is a binary relation on a set <span class="math inline">\(S\)</span>, generally denoted by <span class="math inline">\(\leq\)</span>, that is both reflexive and transitive. In simpler terms, given a preordered set <span class="math inline">\(S\)</span>, any two elements <span class="math inline">\(a, b \in S\)</span> either relate (<span class="math inline">\(a \leq b\)</span>, meaning <span class="math inline">\(a\)</span> is “less than” <span class="math inline">\(b\)</span>), or they do not relate at all. Further, the relation obeys some common sense properties: every element relates to itself (reflexivity), and if <span class="math inline">\(a\)</span> relates to <span class="math inline">\(b\)</span> and <span class="math inline">\(b\)</span> relates to <span class="math inline">\(c\)</span>, then <span class="math inline">\(a\)</span> relates to <span class="math inline">\(c\)</span> as well (transitivity).</p>
 <p>We can turn our hierarchy of data subsets in Figure <a href="problems.html#fig:spineplot-tree">4.10</a> into a preorder very easily, by simply being more explicit about the relations, see Figure <a href="problems.html#fig:barplot-preorder">4.11</a>. Specifically, define set <span class="math inline">\(S\)</span> as the set of data subsets <span class="math inline">\(D\)</span>, with the individual subsets indexed by identity such that e.g. <span class="math inline">\(D_D\)</span> corresponds to the whole data set, <span class="math inline">\(D_{B_1}, \ldots D_{B_n}\)</span> correspond to bar subsets, and <span class="math inline">\(D_{S_1}, \ldots D_{S_k}\)</span> correspond to segment subsets. Further, define the binary relation <span class="math inline">\(\leq\)</span> as the set inclusion relation <span class="math inline">\(\subseteq\)</span>.</p>
-<div class="figure"><span style="display:block;" id="fig:barplot-preorder"></span>
-<img src="figures/barplot-preorder.png" alt="A diagram of a barplot or spinogram, represented as a preorder ordered by set inclusion. $D_D$ represents the whole data set, $D_{B_i}$ represent bar subsets, and $D_{S_j}$ represent individual bar segment subsets. Arrows indicate set inclusion." width="717" />
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:barplot-preorder"></span>
+<img src="figures/barplot-preorder.png" alt="A diagram of a barplot or spinogram, represented as a preorder ordered by set inclusion. $D_D$ represents the whole data set, $D_{B_i}$ represent bar subsets, and $D_{S_j}$ represent individual bar segment subsets. Arrows indicate set inclusion." width="100%" style="border: none;" />
 <p class="caption">
 Figure 4.11: A diagram of a barplot or spinogram, represented as a preorder ordered by set inclusion. <span class="math inline">\(D_D\)</span> represents the whole data set, <span class="math inline">\(D_{B_i}\)</span> represent bar subsets, and <span class="math inline">\(D_{S_j}\)</span> represent individual bar segment subsets. Arrows indicate set inclusion.
 </p>
 </div>
 <p>Then, we see that the two properties of preorders do indeed hold: every data subset is included in itself (reflexivity), and if a segment subset is a part of a bar subset, and bar subset is a part of the whole data set, then the segment subset is, clearly, a part of the whole data set as well (transitivity).</p>
 <p>While set inclusion (<span class="math inline">\(\subseteq\)</span>) is a perfectly valid way to describe the relation between data subsets, a slightly different perspective using set union <span class="math inline">\((\cup)\)</span> will be more beneficial later. Specifically, instead of stating that a segment subset is included in a bar subset, we can express the relation by stating that a segment subset can be combined with another set to form the bar subset:</p>
-<div class="figure"><span style="display:block;" id="fig:barplot-preorder2"></span>
-<img src="figures/barplot-preorder2.png" alt="A more precise version of the diagram of a barplot/spinogram, with the relation identified as set union with the sibling subsets." width="717" />
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:barplot-preorder2"></span>
+<img src="figures/barplot-preorder2.png" alt="A more precise version of the diagram of a barplot/spinogram, with the relation identified as set union with the sibling subsets." width="100%" style="border: none;" />
 <p class="caption">
 Figure 4.12: A more precise version of the diagram of a barplot/spinogram, with the relation identified as set union with the sibling subsets.
 </p>
@@ -612,8 +616,8 @@ Figure 4.12: A more precise version of the diagram of a barplot/spinogram, with 
 <h4><span class="header-section-number">4.2.4.2</span> The graph behind the graph<a href="problems.html#the-graph-behind-the-graph" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>To summarize the main point of this entire section, <em>graphs are graphs</em>. As a bit of a playful side-note, this view is not shared by everyone. Particularly, the poster of the following meme shared on the Mathematical Mathematics Memes Facebook group <span class="citation">(<a href="#ref-mathematicalmathematics2024">Martínez 2024</a>)</span> might not agree:</p>
 
-<div class="figure"><span style="display:block;" id="fig:meme"></span>
-<img src="figures/graphs-cosplayers.jpg" alt="A joke image shared in the Mathematical Mathematics Memes Facebook group on the 28th of March, 2024 (Martínez 2024)." width="75%" />
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:meme"></span>
+<img src="figures/graphs-cosplayers.jpg" alt="A joke image shared in the Mathematical Mathematics Memes Facebook group on the 28th of March, 2024 (Martínez 2024)." width="75%" style="border: none;" />
 <p class="caption">
 Figure 4.13: A joke image shared in the Mathematical Mathematics Memes Facebook group on the 28th of March, 2024 <span class="citation">(<a href="#ref-mathematicalmathematics2024">Martínez 2024</a>)</span>.
 </p>
@@ -641,40 +645,40 @@ Figure 4.13: A joke image shared in the Mathematical Mathematics Memes Facebook 
 <blockquote>
 <p>“We have tried to avoid adding functions, graphs, or operators that do not work independently across the system. There are doubtless many statistical graphics the system in this book cannot completely specify. We can add many different graphs, transformations, types of axes, annotations, etc., but there are two limitations we will always face with a formal system.</p>
 </blockquote>
-<p>The grammar-based model offers many advantages, including simplicity, ease of use, and expressive power. This has contributed to its widespread adoption and implementation in many data visualization systems <span class="citation">(see e.g. <a href="#ref-mcnutt2022">McNutt 2022</a>; <a href="#ref-kim2022">Kim et al. 2022</a>; <a href="#ref-vanderplas2020">Vanderplas, Cook, and Hofmann 2020</a>; <a href="#ref-wickham2010">Wickham 2010</a>; <a href="#ref-satyanarayan2014">Satyanarayan, Wongsuphasawat, and Heer 2014</a>; <a href="#ref-satyanarayan2016">Satyanarayan et al. 2016</a>)</span>. The canonical example is the famous <code>ggplot2</code> package <span class="citation">(<a href="#ref-wickham2010">Wickham 2010</a>)</span>. In <code>ggplot2</code>, plots are built out of components such as geometric objects (called <code>geoms</code>), statistical summaries (<code>stats</code>), and scales. These components can be flexibly combined, allowing the user to express a wide range of graphics using a small set of primitives. The expressive power of <code>ggplot2</code> has made it one of the most popular R packages of all time.<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>.</p>
+<p>The grammar-based model offers many advantages, including simplicity, ease of use, and expressive power. This has contributed to its widespread adoption and implementation in many data visualization systems <span class="citation">(see e.g. <a href="#ref-mcnutt2022">McNutt 2022</a>; <a href="#ref-kim2022">Kim et al. 2022</a>; <a href="#ref-vanderplas2020">Vanderplas, Cook, and Hofmann 2020</a>; <a href="#ref-wickham2010">Wickham 2010</a>; <a href="#ref-satyanarayan2014">Satyanarayan, Wongsuphasawat, and Heer 2014</a>; <a href="#ref-satyanarayan2016">Satyanarayan et al. 2016</a>)</span>. The canonical example is the famous <code>ggplot2</code> package <span class="citation">(<a href="#ref-wickham2010">Wickham 2010</a>)</span>. In <code>ggplot2</code>, plots are built out of components such as geometric objects (called <code>geoms</code>), statistical summaries (<code>stats</code>), and scales. These components can be flexibly combined, allowing the user to express a wide range of graphics using a small set of primitives. The expressive power of <code>ggplot2</code> has made it one of the most popular R packages of all time.<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a>.</p>
 <p>However, despite its advantages, the grammar-based model has one fundamental flaw: graphics and statistics are not truly independent <span class="citation">(see also <a href="#ref-wu2024">Wu and Chang 2024</a>)</span>. Instead, any visual representation must be congruent with the mathematical properties of the underlying data. This constraint, while present even in static visualizations, becomes especially critical in interactive contexts. To clarify these ideas, the following section will develop an example that demonstrates the lack of independence between visual representations and statistical summaries.</p>
 </div>
 <div id="stacking-not-graphical" class="section level4 hasAnchor" number="4.3.1.2">
 <h4><span class="header-section-number">4.3.1.2</span> Motivating example: Limits of independence<a href="problems.html#stacking-not-graphical" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>For this example, I will use famous data set from a study on the effect of smoking on child lung capacity <span class="citation">(<a href="#ref-tager1979">Tager et al. 1979</a>; <a href="#ref-kahn2005">Kahn 2005</a>)</span>. In the study, the researchers measured children’s forced expiratory volume (FEV), and recorded it alongside age, height, sex, and smoking status.</p>
 <p>A rather surprising feature of this data set is that, at a glance, the children who smoked actually had <em>greater</em> lung capacity than non-smokers. In <code>ggplot2</code>, we can easily create a boxplot showing the relationship between smoking status and FEV using the following code snippet:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="problems.html#cb16-1" tabindex="-1"></a>fev <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;./data/fev.csv&quot;</span>)</span>
-<span id="cb16-2"><a href="problems.html#cb16-2" tabindex="-1"></a></span>
-<span id="cb16-3"><a href="problems.html#cb16-3" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb16-4"><a href="problems.html#cb16-4" tabindex="-1"></a></span>
-<span id="cb16-5"><a href="problems.html#cb16-5" tabindex="-1"></a><span class="fu">ggplot</span>(fev, <span class="fu">aes</span>(smoke, fev, <span class="at">fill =</span> smoke)) <span class="sc">+</span></span>
-<span id="cb16-6"><a href="problems.html#cb16-6" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span></code></pre></div>
-<p><img src="figures/grammar-boxplot.png" width="750" /></p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="problems.html#cb21-1" tabindex="-1"></a>fev <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;./data/fev.csv&quot;</span>)</span>
+<span id="cb21-2"><a href="problems.html#cb21-2" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="problems.html#cb21-3" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb21-4"><a href="problems.html#cb21-4" tabindex="-1"></a></span>
+<span id="cb21-5"><a href="problems.html#cb21-5" tabindex="-1"></a><span class="fu">ggplot</span>(fev, <span class="fu">aes</span>(smoke, fev, <span class="at">fill =</span> smoke)) <span class="sc">+</span></span>
+<span id="cb21-6"><a href="problems.html#cb21-6" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span></code></pre></div>
+<p><img src="figures/grammar-boxplot.png" width="100%" style="border: none;" style="display: block; margin: auto;" /></p>
 <p>Before we start extolling the benefits of smoking for juvenile lung health however, it may be a good idea to first investigate some possible confounding. Lung volume develops with age, and the researchers had collected data from children ages three and up. Clearly, there would be few smokers among three-year olds, so we should make sure age is not a confounding variable.</p>
 <p>We can verify that there indeed is a strong correlation between age and FEV like so:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="problems.html#cb17-1" tabindex="-1"></a><span class="fu">ggplot</span>(fev, <span class="fu">aes</span>(age, fev, <span class="at">fill =</span> smoke)) <span class="sc">+</span></span>
-<span id="cb17-2"><a href="problems.html#cb17-2" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
-<p><img src="figures/grammar-scatterplot.png" width="750" /></p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="problems.html#cb22-1" tabindex="-1"></a><span class="fu">ggplot</span>(fev, <span class="fu">aes</span>(age, fev, <span class="at">fill =</span> smoke)) <span class="sc">+</span></span>
+<span id="cb22-2"><a href="problems.html#cb22-2" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
+<p><img src="figures/grammar-scatterplot.png" width="100%" style="border: none;" style="display: block; margin: auto;" /></p>
 <p>From the plot above, we can see that age and FEV correlate strongly, and also that smokers tended to be quite a bit older than the non-smokers. To visualize the age-distribution of smokers and non-smokers a bit more clearly, we can draw an ordinary stacked barplot:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="problems.html#cb18-1" tabindex="-1"></a><span class="fu">ggplot</span>(fev, <span class="fu">aes</span>(age, <span class="at">fill =</span> smoke)) <span class="sc">+</span></span>
-<span id="cb18-2"><a href="problems.html#cb18-2" tabindex="-1"></a>  <span class="fu">geom_bar</span>()</span></code></pre></div>
-<div class="figure"><span style="display:block;" id="fig:grammar-barplot-counts"></span>
-<img src="figures/grammar-barplot-counts.png" alt="The number of participants by age and smoking status. Notice that the bar segments 'stack', such that the height of the whole bar accurately represents the combined number of smokers and non-smokers." width="750" />
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="problems.html#cb23-1" tabindex="-1"></a><span class="fu">ggplot</span>(fev, <span class="fu">aes</span>(age, <span class="at">fill =</span> smoke)) <span class="sc">+</span></span>
+<span id="cb23-2"><a href="problems.html#cb23-2" tabindex="-1"></a>  <span class="fu">geom_bar</span>()</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:grammar-barplot-counts"></span>
+<img src="figures/grammar-barplot-counts.png" alt="The number of participants by age and smoking status. Notice that the bar segments 'stack', such that the height of the whole bar accurately represents the combined number of smokers and non-smokers." width="100%" style="border: none;" />
 <p class="caption">
 Figure 4.14: The number of participants by age and smoking status. Notice that the bar segments ‘stack’, such that the height of the whole bar accurately represents the combined number of smokers and non-smokers.
 </p>
 </div>
 <p>The plot above clearly shows that there were more far more non-smokers than smokers, and that, on average, smokers tended to older. This provides some support for our confounding hypothesis.</p>
 <p>Now, what if we wanted to compare FEV across the different ages? A data visualization novice might do something like below, and draw a stacked barplot of the average FEV within each age group:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="problems.html#cb19-1" tabindex="-1"></a><span class="fu">ggplot</span>(fev, <span class="fu">aes</span>(age, fev, <span class="at">fill =</span> smoke)) <span class="sc">+</span></span>
-<span id="cb19-2"><a href="problems.html#cb19-2" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">&quot;summary&quot;</span>, <span class="at">fun =</span> <span class="st">&quot;mean&quot;</span>)</span></code></pre></div>
-<div class="figure"><span style="display:block;" id="fig:grammar-barplot-means"></span>
-<img src="figures/grammar-barplot-means.png" alt="A fundamentally flawed visualization of the average FEV by age and smoking status. Notice that the total height of the stacked bars is meaningless: it represents the sum of grouped averages, which is not a valid summary of the combined smoker and non-smoker data." width="750" />
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="problems.html#cb24-1" tabindex="-1"></a><span class="fu">ggplot</span>(fev, <span class="fu">aes</span>(age, fev, <span class="at">fill =</span> smoke)) <span class="sc">+</span></span>
+<span id="cb24-2"><a href="problems.html#cb24-2" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">&quot;summary&quot;</span>, <span class="at">fun =</span> <span class="st">&quot;mean&quot;</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:grammar-barplot-means"></span>
+<img src="figures/grammar-barplot-means.png" alt="A fundamentally flawed visualization of the average FEV by age and smoking status. Notice that the total height of the stacked bars is meaningless: it represents the sum of grouped averages, which is not a valid summary of the combined smoker and non-smoker data." width="100%" style="border: none;" />
 <p class="caption">
 Figure 4.15: A fundamentally flawed visualization of the average FEV by age and smoking status. Notice that the total height of the stacked bars is meaningless: it represents the sum of grouped averages, which is not a valid summary of the combined smoker and non-smoker data.
 </p>
@@ -696,10 +700,10 @@ Figure 4.15: A fundamentally flawed visualization of the average FEV by age and 
 </blockquote>
 <p>Clearly then, we cannot stack means by summing them. Is there another way? Before, with the barplot of counts, we had applied the sum operator twice - once to sum the cases in the segment, and again to sum the cases within the bar by summing the segments. Could we do something like that here and take the average of averages? Unfortunately, as <span class="citation">Wu (<a href="#ref-wu2022">2022</a>)</span> points out above, this approach also fails, since the mean of group means is different from the grand mean (unless by accident).</p>
 <p>All in all, one might get the impression that we can only ever meaningfully “stack” or “highlight” sums and counts. However, take a look at the following plot:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="problems.html#cb20-1" tabindex="-1"></a><span class="co"># Code is not included because this plot cannot be</span></span>
-<span id="cb20-2"><a href="problems.html#cb20-2" tabindex="-1"></a><span class="co"># with a simple ggplot call (without data wrangling)</span></span></code></pre></div>
-<div class="figure"><span style="display:block;" id="fig:grammar-barplot-maximums"></span>
-<img src="figures/grammar-barplot-maximums.png" alt="The maximum of maxima is a valid maximum of all cases." width="750" />
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="problems.html#cb25-1" tabindex="-1"></a><span class="co"># Code is not included because this plot cannot be</span></span>
+<span id="cb25-2"><a href="problems.html#cb25-2" tabindex="-1"></a><span class="co"># with a simple ggplot call (without data wrangling)</span></span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:grammar-barplot-maximums"></span>
+<img src="figures/grammar-barplot-maximums.png" alt="The maximum of maxima is a valid maximum of all cases." width="100%" style="border: none;" />
 <p class="caption">
 Figure 4.16: The maximum of maxima is a valid maximum of all cases.
 </p>
@@ -711,8 +715,8 @@ Figure 4.16: The maximum of maxima is a valid maximum of all cases.
 <div id="stacking-part-whole" class="section level4 hasAnchor" number="4.3.1.4">
 <h4><span class="header-section-number">4.3.1.4</span> Advantages of stacking: Part-whole relations<a href="problems.html#stacking-part-whole" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>However, before we go on to discuss what makes certain statistics stackable, we must first justify the focus on stacking. Specifically, some might argue that stacking is only one way of presenting partitioned data, and that we could equally well present “unstackable” summaries such as the averages in Figure <a href="problems.html#fig:grammar-barplot-means">4.15</a> by plotting the corresponding bars side by side (a technique know as dodging), or by plotting them on top of each other in semi-transparent layers, see Figure <a href="problems.html#fig:dodging-layering">4.17</a>:</p>
-<div class="figure"><span style="display:block;" id="fig:dodging-layering"></span>
-<img src="figures/grammar-dodging-layering.png" alt="Two alternative means of displaying partitioned data: dodging and layering." width="750" />
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:dodging-layering"></span>
+<img src="figures/grammar-dodging-layering.png" alt="Two alternative means of displaying partitioned data: dodging and layering." width="100%" style="border: none;" />
 <p class="caption">
 Figure 4.17: Two alternative means of displaying partitioned data: dodging and layering.
 </p>
@@ -720,8 +724,8 @@ Figure 4.17: Two alternative means of displaying partitioned data: dodging and l
 <p>Much has been written about the relative merits of stacking, dodging, and layering. For example, layering is only useful with few categories, as blending many colors can make it difficult to tell the categories apart <span class="citation">(<a href="#ref-franconeri2021">Franconeri et al. 2021</a>; <a href="#ref-wilke2019">Wilke 2019</a>)</span>. Further, in a landmark study, <span class="citation">Cleveland and McGill (<a href="#ref-cleveland1984">1984</a>)</span> showed that people tend to be less accurate when reading information from stacked bar charts as opposed to dodged bar charts (see also Section <a href="background.html#visual-perception">3.3.2</a>). Specifically, since the lower y-axis coordinate of a stacked segment is shifted up by the cumulative height of the segments below, it becomes difficult to accurately compare the segments’ length, both within and across bars <span class="citation">(<a href="#ref-cleveland1984">Cleveland and McGill 1984</a>)</span>. Subsequent research has independently validated these findings and expanded upon them <span class="citation">(see e.g. <a href="#ref-heer2010">Heer and Bostock 2010</a>; <a href="#ref-thudt2016">Thudt et al. 2016</a>; <a href="#ref-quadri2021">Quadri and Rosen 2021</a>)</span>. Due to this suboptimal statistical legibility, many data visualization researchers have urged caution about stacking <span class="citation">(see e.g. <a href="#ref-byron2008">Byron and Wattenberg 2008</a>; <a href="#ref-cairo2014">Cairo 2014</a>; <a href="#ref-franconeri2021">Franconeri et al. 2021</a>)</span>, and some have even discouraged its use altogether <span class="citation">(<a href="#ref-kosara2016">Kosara 2016</a>; <a href="#ref-wilke2019">Wilke 2019</a>)</span>.</p>
 <p>However, I contend that, while dodging and layering are indeed valuable techniques for static visualization, stacking offers significant advantages in interactive contexts. The issue comes down to how the three techniques represent the relatedness of data subsets and leverage the Gestalt principles of visual perception (see Section <a href="background.html#visual-perception">3.3.2</a>). Dodged and layered bars, the only indication that two bar segments represent related data subsets is their spatial proximity. In contrast, in stacked bars, related segments are both close together in space (proximity) and also combine together to form a single object bound by a closed contour <span class="citation">(common region, see e.g. <a href="#ref-vanderplas2020">Vanderplas, Cook, and Hofmann 2020</a>; see also <a href="#ref-slingsby2009">Slingsby, Dykes, and Wood 2009</a>)</span>.</p>
 <p>Thus, in a stacked barplot, we can interpret individual segments as highlighted <em>parts</em> of a bar, and this subtle property has important implications for the figure’s visual properties and interactive behavior <span class="citation">(see also <a href="#ref-roberts2000">Roberts et al. 2000</a>; <a href="#ref-wilhelm2008">Wilhelm 2008</a>)</span>. More specifically, in the stacked barplot, the heights of the stacked segments sum to the total bar height, providing a fixed upper bound and a clear visual anchor, see Figure <a href="problems.html#fig:stacking-vs-dodging">4.18</a>. These properties become particularly useful when combined with linked selection. Specifically, during selection, even when the heights of the individual segments change, the total bar height remains constant. This leads to a more predictable visual behaviour: we do not have to track the upper edge of the bars or the overall contour since both remain constant. Further, we also know that we can maintain a fixed upper y-axis limits, and this offers a computational advantage since we know we only need to recompute the axis limits <em>when the total bar heights change</em> (e.g. during streaming or when histogram binwidth is modified). Importantly, these advantages extend beyond rectangles (bars): whenever we represent selection by highlighting interior parts of geometric objects, the resulting interaction will behave in a more “consistent” or “natural” manner, and we may be able to take computational shortcuts by caching quantities associated with the whole objects.</p>
-<div class="figure"><span style="display:block;" id="fig:stacking-vs-dodging"></span>
-<img src="figures/stacking-vs-dodging.png" alt="Stacking has advantages over dodging (and layering) when it comes to displaying linked selection. Plots left to right show simulated static snapshots of more cases being selected (red). In a stacked barplot (top row), the heights of the higlighted segments are always bound by the height of the whole bar, and so the outline of the figure remains constant. In contrast, in a dodged barplot, the bar segment heights are not bounded, leading to the outline of the figure fluctuating dramatically (notice the changing upper y-axis limit)." width="750" />
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:stacking-vs-dodging"></span>
+<img src="figures/stacking-vs-dodging.png" alt="Stacking has advantages over dodging (and layering) when it comes to displaying linked selection. Plots left to right show simulated static snapshots of more cases being selected (red). In a stacked barplot (top row), the heights of the higlighted segments are always bound by the height of the whole bar, and so the outline of the figure remains constant. In contrast, in a dodged barplot, the bar segment heights are not bounded, leading to the outline of the figure fluctuating dramatically (notice the changing upper y-axis limit)." width="100%" style="border: none;" />
 <p class="caption">
 Figure 4.18: Stacking has advantages over dodging (and layering) when it comes to displaying linked selection. Plots left to right show simulated static snapshots of more cases being selected (red). In a stacked barplot (top row), the heights of the higlighted segments are always bound by the height of the whole bar, and so the outline of the figure remains constant. In contrast, in a dodged barplot, the bar segment heights are not bounded, leading to the outline of the figure fluctuating dramatically (notice the changing upper y-axis limit).
 </p>
@@ -729,7 +733,7 @@ Figure 4.18: Stacking has advantages over dodging (and layering) when it comes t
 <p>In contrast, dodging and layering lack this degree of visual consistency. In dodged or layered barplots, the individual bar segments are not bound together in a common region. As a result, the plot contour can fluctuate dramatically with selection, creating significant visual noise (see Figure <a href="problems.html#fig:stacking-vs-dodging">4.18</a>). Research shows that translating and looming stimuli capture attention <span class="citation">(<a href="#ref-franconeri2003">Franconeri and Simons 2003</a>)</span>, and, as such, I contend that the dodged or layered bars may be more visually distracting, due to the fact that less of the figure stays constant throughout interaction. Further, to accommodate the fluctuations in the height of the unbounded bar segments, we are forced to choose between making the upper y-axis limit reactive (erasing the context that the limit provides upon selection), or risking that the segments may grow outside of plotting area. This also has computational implications: if we make the upper y-axis limit reactive, we need to dynamically recompute it on each selection event.</p>
 <p>Interestingly, as far as I am aware, there has been little discussion on this topic of perceptual and computational advantages of part-whole object relations and their relationship to interactive graphics. The only two relevant references I have been able to find are Wilhelm <span class="citation">(<a href="#ref-wilhelm2008">Wilhelm 2008</a>)</span> and Sievert <span class="citation">(<a href="#ref-sievert2020">Sievert 2020</a>)</span>. Given the key importance of this topic to the main ideas of the present thesis, I will examine the content of these two references in more detail.</p>
 <p>In his chapter of the Handbook of Data Visualization, <span class="citation">Wilhelm (<a href="#ref-wilhelm2008">2008</a>)</span> discusses various aspects and challenges of implementing linked selection. Importantly for this thesis, he outlines three strategies for displaying selection: replacement, overlaying, and repetition. To relate these to the previously discussed techniques (stacking, dodging, and layering), overlaying essentially conflates stacking and layering, repetition is equivalent to dodging, and replacement involves re-rendering the entire visualization from scratch upon selection. Wilhelm notes that replacement is a flawed strategy because it discards important contextual information such as axis limits whenever selection happens. He also argues that repetition is less commonly used due to the necessity of having to re-arrange the plot upon selection. Finally, he identifies two issues with overlaying: the fact that the plot parameters are inherited from the plot representing the whole data set, and the fact that parts of the original plot may become obscured by the highlighted subset (e.g. if we overlay a boxplot box with an opaque box representing selection). Ultimately, he appears to favor repetition over the other two methods.</p>
-<p>Sievert <span class="citation">(<a href="#ref-sievert2020">Sievert 2020, chap. 17</a>)</span>, on the other hand, discusses the computational challenges related to rendering linked views with Shiny <span class="citation">(<a href="#ref-shiny2024">Chang et al. 2024</a>)</span> and <code>plotly</code> <span class="citation">(<a href="#ref-plotly2023">Plotly Inc. 2023</a>)</span>. He discusses the problem of making comparisons when plot context (provided by parameters such as axis limits) is lost during selection, and mentions how retaining the context of the “whole bars” improves computational efficiency, since the entire plot does not have to be re-rendered from scratch. To address this, Sievert provides a solution in the form of a fixed “base layer”, which he acknowledges “may seem like a hack”, but provides a better user-experience.</p>
+<p>Sievert <span class="citation">(<a href="#ref-sievert2020">Sievert 2020, chap. 17</a>)</span>, on the other hand, discusses the computational challenges related to rendering linked views with Shiny <span class="citation">(<a href="#ref-shiny2024">W. Chang et al. 2024</a>)</span> and <code>plotly</code> <span class="citation">(<a href="#ref-plotly2023">Plotly Inc. 2023</a>)</span>. He discusses the problem of making comparisons when plot context (provided by parameters such as axis limits) is lost during selection, and mentions how retaining the context of the “whole bars” improves computational efficiency, since the entire plot does not have to be re-rendered from scratch. To address this, Sievert provides a solution in the form of a fixed “base layer”, which he acknowledges “may seem like a hack”, but provides a better user-experience.</p>
 <p>My personal view diverges somewhat from that of <span class="citation">Wilhelm (<a href="#ref-wilhelm2008">2008</a>)</span>, but aligns fairly closely and extends that of <span class="citation">Sievert (<a href="#ref-sievert2020">2020</a>)</span>. Contrary to Wilhelm, I contend that, while less flexible than dodging (repetition), layering, or replacement, stacking (overlaying) is the superior method, since it ensures that the context of the whole data set is always preserved. Conversely, the method favoured by Wilhelm - dodging (repetition) - suffers, in my opinion, from the same contextual information loss as replacement. Specifically, when we draw highlighted subsets as separate side-by-side objects, then, in the general case, we have to make axis limits reactive, discarding contextual information, otherwise we risk the objects growing beyond the plotting region. What <span class="citation">Wilhelm (<a href="#ref-wilhelm2008">2008</a>)</span> sees as one of the problems with stacking (overlaying) - the fact that plot parameters are inherited from the whole data - I instead see as a fundamental strength, similar to <span class="citation">Sievert (<a href="#ref-sievert2020">2020</a>)</span>. Further, I go further than Sievert in positing that the “fixed” base layer should not just be thought of as an accidental workaround, but instead as a fundamental concept. As I argued above, part-whole relations between geometric objects and highlighted segments ensure the preservation of context and may even provide computational advantage. As such, I believe them to be central to the data visualization pipeline. To formalize this idea, it will be necessary to introduce some algebraic ideas, particularly ones from category theory.</p>
 </div>
 </div>
@@ -763,8 +767,8 @@ Figure 4.18: Stacking has advantages over dodging (and layering) when it comes t
 <li>Composition is associative: <span class="math inline">\(f ;(g ;h) = (f ;g) ;h = f ;g ;h\)</span></li>
 </ul>
 <p>For example, the following is a diagram of a simple category with two objects and a single non-identity morphism, called <span class="math inline">\(\underline{\textbf{2}}\)</span>:</p>
-<div class="figure"><span style="display:block;" id="fig:category-two1"></span>
-<img src="figures/category-two.png" alt="A category with two objects." width="75%" />
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:category-two1"></span>
+<img src="figures/category-two.png" alt="A category with two objects." width="75%" style="border: none;" />
 <p class="caption">
 Figure 4.19: A category with two objects.
 </p>
@@ -777,16 +781,16 @@ Figure 4.19: A category with two objects.
 <li>Transitivity: this is just composition of morphisms. Given <span class="math inline">\(f: c_1 \to c_2\)</span> (<span class="math inline">\(c_1 \leq c_2\)</span>) and <span class="math inline">\(g: c_2 \to c_3\)</span> (<span class="math inline">\(c_2 \leq c_3\)</span>), we can define <span class="math inline">\(h: c_1 \to c_3\)</span> as <span class="math inline">\(h = f ;g\)</span> (<span class="math inline">\(c_1 \leq c_3\)</span>)</li>
 </ul>
 <p>In our concrete case of preorder of data subsets ordered by set union, we can easily reuse the diagram from Section <a href="problems.html#plots-as-preorders">4.2.4.1</a> - Figure <a href="problems.html#fig:barplot-preorder2">4.12</a> - and re-intepret it as a category <span class="math inline">\(\mathcal{D}\)</span>:</p>
-<div class="figure"><span style="display:block;" id="fig:barplot-preorder222"></span>
-<img src="figures/barplot-preorder2.png" alt="A barplot preorder, reinterpreted as a category." width="717" />
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:barplot-preorder222"></span>
+<img src="figures/barplot-preorder2.png" alt="A barplot preorder, reinterpreted as a category." width="100%" style="border: none;" />
 <p class="caption">
 Figure 4.20: A barplot preorder, reinterpreted as a category.
 </p>
 </div>
 <p>Here, the objects are again just the data subsets, such as the whole data set <span class="math inline">\(D_D\)</span>, the bar subsets <span class="math inline">\(D_{B_i}\)</span>, and the segments <span class="math inline">\(D_{S_j}\)</span>. The morphisms are the arrows indicating set union. As before, the fact that there is an arrow between <span class="math inline">\(D_{S_1}\)</span> and <span class="math inline">\(D_{B_1}\)</span> simply means that Segment 1 can be combined with another set to form Bar 1 (and the absence of an arrow between <span class="math inline">\(D_{S_1}\)</span> and <span class="math inline">\(D_{S_2}\)</span> indicates that segments are disjoint). Identity morphisms are not explicitly shown, but they are of course present (every subset can be combined with the empty set <span class="math inline">\(\varnothing\)</span> to get back the original set). Finally, as mentioned above, reflexivity and transitivity automatically fall out of the definition of a category.</p>
 <p>Further, this categorical definition allows us to describe the relationships in the figure in more detail. Whereas in a preorder, there is only at most one relation between any two objects, and the relation is always the same (<span class="math inline">\(\leq\)</span>), in a category, there may be multiple arrows between any two objects, and each set of arrows may be completely different. In our specific case, it first of all allows us to be more explicit about the relations <span class="math inline">\(\cup\)</span>: instead of stating that<span class="math inline">\(\cup\)</span> represents union with some unspecified set, we can explicitly define it as <em>union with all other sibling sets</em> and label the corresponding arrows appropriately. Labeling the entire graph like this would create a lot of visual clutter, however, the following example demonstrates this approach for a portion of the diagram, specifically the subsets corresponding to Bar 1:</p>
-<div class="figure"><span style="display:block;" id="fig:barplot-preorder3"></span>
-<img src="figures/barplot-preorder3.png" alt="A diagram of a part of the barplot/spineplot category, with all of the morphisms described explictly." width="75%" />
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:barplot-preorder3"></span>
+<img src="figures/barplot-preorder3.png" alt="A diagram of a part of the barplot/spineplot category, with all of the morphisms described explictly." width="75%" style="border: none;" />
 <p class="caption">
 Figure 4.21: A diagram of a part of the barplot/spineplot category, with all of the morphisms described explictly.
 </p>
@@ -809,8 +813,8 @@ Figure 4.21: A diagram of a part of the barplot/spineplot category, with all of 
 </ul>
 <p>The first property is fairly intuitive and simply states that objects cannot be separated from their identities. The second property is more interesting, since it tells us that all compositions (chains of arrows) must be preserved. Other than that, we are free to map the objects and arrows as we wish. For instance, we can map multiple objects in <span class="math inline">\(\text{Ob}(\mathcal{C})\)</span> to a single object in <span class="math inline">\(\text{Ob}(\mathcal{D})\)</span>, “squish” a morphism (or a chain of morphisms) in <span class="math inline">\(\mathcal{C}\)</span> by mapping it to an identity morphism in <span class="math inline">\(\mathcal{D}\)</span>, or “stretch” a morphism in <span class="math inline">\(\mathcal{C}\)</span> by mapping it to a composite morphism in <span class="math inline">\(\mathcal{D}\)</span>. However, we cannot “rip” or “tear” any morphism or chain of morphisms in <span class="math inline">\(\mathcal{C}\)</span> into multiple morphisms or chains in <span class="math inline">\(\mathcal{D}\)</span>.</p>
 <p>This second property of preserving composition can be described by the following commutative diagram:</p>
-<div class="figure"><span style="display:block;" id="fig:functor"></span>
-<img src="figures/functor.png" alt="A commutative diagram showing how a functor $F$ preserves associativity. $A$, $B$, $C$ are objects in category $\mathcal{C}$, $F(A)$, $F(B)$, $F(C)$ are objects in category $\mathcal{D}$, $f$ and $g$ are morphisms in $\mathcal{C}$, and $F(F)$ and $F(g)$ are objects in $\mathcal{D}$." width="75%" />
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:functor"></span>
+<img src="figures/functor.png" alt="A commutative diagram showing how a functor $F$ preserves associativity. $A$, $B$, $C$ are objects in category $\mathcal{C}$, $F(A)$, $F(B)$, $F(C)$ are objects in category $\mathcal{D}$, $f$ and $g$ are morphisms in $\mathcal{C}$, and $F(F)$ and $F(g)$ are objects in $\mathcal{D}$." width="75%" style="border: none;" />
 <p class="caption">
 Figure 4.22: A commutative diagram showing how a functor <span class="math inline">\(F\)</span> preserves associativity. <span class="math inline">\(A\)</span>, <span class="math inline">\(B\)</span>, <span class="math inline">\(C\)</span> are objects in category <span class="math inline">\(\mathcal{C}\)</span>, <span class="math inline">\(F(A)\)</span>, <span class="math inline">\(F(B)\)</span>, <span class="math inline">\(F(C)\)</span> are objects in category <span class="math inline">\(\mathcal{D}\)</span>, <span class="math inline">\(f\)</span> and <span class="math inline">\(g\)</span> are morphisms in <span class="math inline">\(\mathcal{C}\)</span>, and <span class="math inline">\(F(F)\)</span> and <span class="math inline">\(F(g)\)</span> are objects in <span class="math inline">\(\mathcal{D}\)</span>.
 </p>
@@ -827,16 +831,16 @@ Figure 4.22: A commutative diagram showing how a functor <span class="math inlin
 <h4><span class="header-section-number">4.3.2.4</span> Aggregation: A functor from data subsets to summary statistics<a href="problems.html#aggregation-functor" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>As we have established before, when visualizing data, we may start with the category/preorder of data subsets ordered by sibling subset union, as in Figure <a href="problems.html#fig:barplot-preorder2">4.12</a> (reproduced below for reminder). We would like to translate these data subsets into summary statistics, in a way that preserves the inherent structure in the data. As we will see, the appropriate way to do this is via a functor.</p>
 
-<div class="figure"><span style="display:block;" id="fig:barplot-preorder22"></span>
-<img src="figures/barplot-preorder2.png" alt="Reproduction of Figure 4.12: Diagram of the barplot/spineplot preorder (category), ordered by set union." width="717" />
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:barplot-preorder22"></span>
+<img src="figures/barplot-preorder2.png" alt="Reproduction of Figure 4.12: Diagram of the barplot/spineplot preorder (category), ordered by set union." width="100%" style="border: none;" />
 <p class="caption">
 Figure 4.23: Reproduction of Figure <a href="problems.html#fig:barplot-preorder2">4.12</a>: Diagram of the barplot/spineplot preorder (category), ordered by set union.
 </p>
 </div>
 <p>But first, let’s discuss the summary statistics. Since we want to summarize each data subset, then, it is given that we should end up with an equal number of summaries. For instance, if <span class="math inline">\(D = \{ D_D, D_{B_1}, \ldots D_{B_n}, D_{S_1}, \ldots, D_{S_k} \}\)</span> is the set of data subsets corresponding to the whole data set, bars, and segments, respectively, and <span class="math inline">\(S\)</span> is the set of summaries, then <span class="math inline">\(\lvert D \lvert = \lvert S \lvert\)</span>. Further, since the elements of <span class="math inline">\(D\)</span> are actually objects in a category (<span class="math inline">\(\mathcal{D}\)</span>), then, intuitively, <span class="math inline">\(S\)</span> should be a part of a category as well, let’s call it <span class="math inline">\(\mathcal{S}\)</span>.</p>
 <p>If the elements of <span class="math inline">\(S\)</span> are objects in a category <span class="math inline">\(\mathcal{S}\)</span>, what should be the morphisms? In the category of data subsets <span class="math inline">\(\mathcal{D}\)</span>, the morphisms are given by union with the sibling subsets. In the category of summaries, we want the morphisms to reflect some operation that “behaves like set union”, such that it represents the operation of <em>combining sibling summaries</em>. We can label this operation with the symbol <span class="math inline">\(\otimes\)</span>, such that the resulting category looks as follows:</p>
-<div class="figure"><span style="display:block;" id="fig:barplot-preorder4"></span>
-<img src="figures/barplot-preorder4.png" alt="A diagram of barplot/spineplot summary statistic preorder/category, ordered by the combination operator $\otimes$." width="686" />
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:barplot-preorder4"></span>
+<img src="figures/barplot-preorder4.png" alt="A diagram of barplot/spineplot summary statistic preorder/category, ordered by the combination operator $\otimes$." width="100%" style="border: none;" />
 <p class="caption">
 Figure 4.24: A diagram of barplot/spineplot summary statistic preorder/category, ordered by the combination operator <span class="math inline">\(\otimes\)</span>.
 </p>
@@ -880,13 +884,13 @@ F(\text{id}_{D_i}) &amp;= F(D_i \cup \varnothing) \\
 <p>Thus, from a certain point of view, <span class="math inline">\(F\)</span> <em>is</em> the binary combination operator <span class="math inline">\(\otimes\)</span>. For instance, if we take <span class="math inline">\(D\)</span> to be a subset of real numbers, <span class="math inline">\(D \subseteq \mathbb{R}\)</span>, and the operation <span class="math inline">\(\otimes\)</span> to be addition, then we can simply write:</p>
 <p><span class="math display">\[F(d_1 \cup d_2 \cup \ldots d_k) = d_1 + d_2 + \ldots d_n\]</span></p>
 <p>Things become slightly more complicated when <span class="math inline">\(D\)</span> represents more generic, heterogeneous data, i.e. when <span class="math inline">\(d_i \in D\)</span> are tuples (rows). Then, the summary functor <span class="math inline">\(F\)</span> may also “lift” values out of the tuple, and so the <span class="math inline">\(\otimes\)</span> operator would need to perform this lifting while remaining closed under repeated application. For illustration, in code, if we wanted to summarize a data frame by iterating over rows and summing a single numeric variable named <code>x</code>, we would need to write something like the following:</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="problems.html#cb21-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">y =</span> letters[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>])</span>
-<span id="cb21-2"><a href="problems.html#cb21-2" tabindex="-1"></a>rows <span class="ot">&lt;-</span> <span class="fu">split</span>(df, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>) <span class="co"># Want to iterate the data row-wise</span></span>
-<span id="cb21-3"><a href="problems.html#cb21-3" tabindex="-1"></a></span>
-<span id="cb21-4"><a href="problems.html#cb21-4" tabindex="-1"></a>                                     <span class="co"># Either sum, or sum + lift</span></span>
-<span id="cb21-5"><a href="problems.html#cb21-5" tabindex="-1"></a>pick_sum <span class="ot">&lt;-</span> <span class="cf">function</span>(s, d) <span class="fu">ifelse</span>(<span class="fu">is.numeric</span>(d), s <span class="sc">+</span> d, s <span class="sc">+</span> d<span class="sc">$</span>x)</span>
-<span id="cb21-6"><a href="problems.html#cb21-6" tabindex="-1"></a><span class="fu">Reduce</span>(pick_sum, rows, <span class="dv">0</span>)</span></code></pre></div>
-<pre><code>## [1] 6</code></pre>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="problems.html#cb26-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">y =</span> letters[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>])</span>
+<span id="cb26-2"><a href="problems.html#cb26-2" tabindex="-1"></a>rows <span class="ot">&lt;-</span> <span class="fu">split</span>(df, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>) <span class="co"># Want to iterate the data row-wise</span></span>
+<span id="cb26-3"><a href="problems.html#cb26-3" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="problems.html#cb26-4" tabindex="-1"></a>                                     <span class="co"># Either sum, or sum + lift</span></span>
+<span id="cb26-5"><a href="problems.html#cb26-5" tabindex="-1"></a>pick_sum <span class="ot">&lt;-</span> <span class="cf">function</span>(s, d) <span class="fu">ifelse</span>(<span class="fu">is.numeric</span>(d), s <span class="sc">+</span> d, s <span class="sc">+</span> d<span class="sc">$</span>x)</span>
+<span id="cb26-6"><a href="problems.html#cb26-6" tabindex="-1"></a><span class="fu">Reduce</span>(pick_sum, rows, <span class="dv">0</span>)</span></code></pre></div>
+<pre><code>[1] 6</code></pre>
 <p>However, this is more of a technical detail. The key point is that we can encode everything we need about the summarizing function <span class="math inline">\(F\)</span> into the binary operator <span class="math inline">\(\otimes\)</span>. To further illustrate this, we can also follow the equality the other way, starting with combining the summaries of two data subsets <span class="math inline">\(F(D_i)\)</span> and <span class="math inline">\(F(D_j)\)</span>. Then:</p>
 <p><span class="math display">\[\begin{align}
 F(D_i) \otimes F(D_j) &amp;= (d_{i1} \otimes d_{i2} \otimes \ldots d_{in}) \otimes (d_{j1} \otimes d_{j1} \otimes \ldots d_{jk}) \\
@@ -923,50 +927,50 @@ F(D_i) \otimes F(D_j) &amp;= (d_{i1} \otimes d_{i2} \otimes \ldots d_{in}) \otim
 <div id="programming-with-monoids" class="section level4 hasAnchor" number="4.3.2.7">
 <h4><span class="header-section-number">4.3.2.7</span> Programming with monoids<a href="problems.html#programming-with-monoids" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>Monoids translate well to code and are in fact frequently used in programming, particularly functional and generic programming <span class="citation">(see e.g. <a href="#ref-milewski2018">Milewski 2018</a>; <a href="#ref-stepanov2009">Stepanov and McJones 2009</a>; <a href="#ref-stepanov2014">Stepanov and Rose 2014</a>)</span>. Further, with few assumptions, we can even directly test whether an arbitrary summary function conforms to a monoid. For instance, in R, if we replace the set union operation with vector/array concatenation (the <code>c()</code> function), and provided that we have some three representative data vectors <code>x</code>, <code>y</code>, and <code>z</code>, we can test associativity as follows:</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="problems.html#cb23-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span></span>
-<span id="cb23-2"><a href="problems.html#cb23-2" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">11</span><span class="sc">:</span><span class="dv">20</span></span>
-<span id="cb23-3"><a href="problems.html#cb23-3" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="dv">21</span><span class="sc">:</span><span class="dv">30</span></span>
-<span id="cb23-4"><a href="problems.html#cb23-4" tabindex="-1"></a></span>
-<span id="cb23-5"><a href="problems.html#cb23-5" tabindex="-1"></a><span class="co">#     F(f; g)       =     F(f);F(g)</span></span>
-<span id="cb23-6"><a href="problems.html#cb23-6" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">c</span>(<span class="fu">c</span>(x, y), z)) <span class="sc">==</span> <span class="fu">sum</span>(<span class="fu">c</span>(<span class="fu">sum</span>(<span class="fu">c</span>(x, y)), z))</span>
-<span id="cb23-7"><a href="problems.html#cb23-7" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">c</span>(<span class="fu">c</span>(x, y), z)) <span class="sc">==</span> <span class="fu">mean</span>(<span class="fu">c</span>(<span class="fu">mean</span>(<span class="fu">c</span>(x, y)), z))</span></code></pre></div>
-<pre><code>## [1] TRUE
-## [1] FALSE</code></pre>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="problems.html#cb28-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span></span>
+<span id="cb28-2"><a href="problems.html#cb28-2" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">11</span><span class="sc">:</span><span class="dv">20</span></span>
+<span id="cb28-3"><a href="problems.html#cb28-3" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="dv">21</span><span class="sc">:</span><span class="dv">30</span></span>
+<span id="cb28-4"><a href="problems.html#cb28-4" tabindex="-1"></a></span>
+<span id="cb28-5"><a href="problems.html#cb28-5" tabindex="-1"></a><span class="co">#     F(f; g)       =     F(f);F(g)</span></span>
+<span id="cb28-6"><a href="problems.html#cb28-6" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">c</span>(<span class="fu">c</span>(x, y), z)) <span class="sc">==</span> <span class="fu">sum</span>(<span class="fu">c</span>(<span class="fu">sum</span>(<span class="fu">c</span>(x, y)), z))</span>
+<span id="cb28-7"><a href="problems.html#cb28-7" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">c</span>(<span class="fu">c</span>(x, y), z)) <span class="sc">==</span> <span class="fu">mean</span>(<span class="fu">c</span>(<span class="fu">mean</span>(<span class="fu">c</span>(x, y)), z))</span></code></pre></div>
+<pre><code>[1] TRUE
+[1] FALSE</code></pre>
 <p>Likewise, we can easily test the unitality property for a given neutral element <code>e</code>. We could even create a wrapper function to test whether a given function with a neutral element forms monoid:</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="problems.html#cb25-1" tabindex="-1"></a>is_unital <span class="ot">&lt;-</span> <span class="cf">function</span>(fn, e, x) {</span>
-<span id="cb25-2"><a href="problems.html#cb25-2" tabindex="-1"></a>  <span class="co"># Test two-sided unitality</span></span>
-<span id="cb25-3"><a href="problems.html#cb25-3" tabindex="-1"></a>  (<span class="fu">fn</span>(<span class="fu">c</span>(e, x)) <span class="sc">==</span> <span class="fu">fn</span>(<span class="fu">c</span>(x, e))) <span class="sc">&amp;&amp;</span> (<span class="fu">fn</span>(<span class="fu">c</span>(e, x)) <span class="sc">==</span> <span class="fu">fn</span>(x))</span>
-<span id="cb25-4"><a href="problems.html#cb25-4" tabindex="-1"></a>}</span>
-<span id="cb25-5"><a href="problems.html#cb25-5" tabindex="-1"></a></span>
-<span id="cb25-6"><a href="problems.html#cb25-6" tabindex="-1"></a>is_associative <span class="ot">&lt;-</span> <span class="cf">function</span>(fn, x, y, z) {</span>
-<span id="cb25-7"><a href="problems.html#cb25-7" tabindex="-1"></a>  <span class="fu">fn</span>(<span class="fu">c</span>(<span class="fu">c</span>(x, y), z)) <span class="sc">==</span> <span class="fu">fn</span>(<span class="fu">c</span>(<span class="fu">fn</span>(<span class="fu">c</span>(x, y)), z))</span>
-<span id="cb25-8"><a href="problems.html#cb25-8" tabindex="-1"></a>}</span>
-<span id="cb25-9"><a href="problems.html#cb25-9" tabindex="-1"></a></span>
-<span id="cb25-10"><a href="problems.html#cb25-10" tabindex="-1"></a>is_monoid <span class="ot">&lt;-</span> <span class="cf">function</span>(fn, e, x, y, z) {</span>
-<span id="cb25-11"><a href="problems.html#cb25-11" tabindex="-1"></a>  <span class="fu">is_unital</span>(fn, e, x) <span class="sc">&amp;&amp;</span> <span class="fu">is_associative</span>(fn, x, y, z)</span>
-<span id="cb25-12"><a href="problems.html#cb25-12" tabindex="-1"></a>}</span>
-<span id="cb25-13"><a href="problems.html#cb25-13" tabindex="-1"></a></span>
-<span id="cb25-14"><a href="problems.html#cb25-14" tabindex="-1"></a>string_concat <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="fu">paste0</span>(x, <span class="at">collapse =</span> <span class="st">&quot;&quot;</span>)</span>
-<span id="cb25-15"><a href="problems.html#cb25-15" tabindex="-1"></a>l2_norm <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="fu">sqrt</span>(<span class="fu">sum</span>(x<span class="sc">^</span><span class="dv">2</span>)) <span class="co"># aka euclidean distance</span></span>
-<span id="cb25-16"><a href="problems.html#cb25-16" tabindex="-1"></a></span>
-<span id="cb25-17"><a href="problems.html#cb25-17" tabindex="-1"></a><span class="fu">is_monoid</span>(sum, <span class="dv">0</span>, x, y, z)</span>
-<span id="cb25-18"><a href="problems.html#cb25-18" tabindex="-1"></a><span class="fu">is_monoid</span>(max, <span class="sc">-</span><span class="cn">Inf</span>, x, y, z)</span>
-<span id="cb25-19"><a href="problems.html#cb25-19" tabindex="-1"></a><span class="fu">is_monoid</span>(prod, <span class="dv">1</span>, x, y, z)</span>
-<span id="cb25-20"><a href="problems.html#cb25-20" tabindex="-1"></a><span class="fu">is_monoid</span>(string_concat, <span class="st">&quot;&quot;</span>, <span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;c&quot;</span>)</span>
-<span id="cb25-21"><a href="problems.html#cb25-21" tabindex="-1"></a><span class="fu">is_monoid</span>(l2_norm, <span class="dv">0</span>, x, y, z)</span>
-<span id="cb25-22"><a href="problems.html#cb25-22" tabindex="-1"></a><span class="fu">is_monoid</span>(mean, <span class="dv">0</span>, x, y, z)</span>
-<span id="cb25-23"><a href="problems.html#cb25-23" tabindex="-1"></a><span class="fu">is_monoid</span>(median, <span class="dv">0</span>, x, y, z)</span>
-<span id="cb25-24"><a href="problems.html#cb25-24" tabindex="-1"></a><span class="fu">is_monoid</span>(sd, <span class="dv">0</span>, x, y, z)</span></code></pre></div>
-<pre><code>## [1] TRUE
-## [1] TRUE
-## [1] TRUE
-## [1] TRUE
-## [1] TRUE
-## [1] FALSE
-## [1] FALSE
-## [1] FALSE</code></pre>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="problems.html#cb30-1" tabindex="-1"></a>is_unital <span class="ot">&lt;-</span> <span class="cf">function</span>(fn, e, x) {</span>
+<span id="cb30-2"><a href="problems.html#cb30-2" tabindex="-1"></a>  <span class="co"># Test two-sided unitality</span></span>
+<span id="cb30-3"><a href="problems.html#cb30-3" tabindex="-1"></a>  (<span class="fu">fn</span>(<span class="fu">c</span>(e, x)) <span class="sc">==</span> <span class="fu">fn</span>(<span class="fu">c</span>(x, e))) <span class="sc">&amp;&amp;</span> (<span class="fu">fn</span>(<span class="fu">c</span>(e, x)) <span class="sc">==</span> <span class="fu">fn</span>(x))</span>
+<span id="cb30-4"><a href="problems.html#cb30-4" tabindex="-1"></a>}</span>
+<span id="cb30-5"><a href="problems.html#cb30-5" tabindex="-1"></a></span>
+<span id="cb30-6"><a href="problems.html#cb30-6" tabindex="-1"></a>is_associative <span class="ot">&lt;-</span> <span class="cf">function</span>(fn, x, y, z) {</span>
+<span id="cb30-7"><a href="problems.html#cb30-7" tabindex="-1"></a>  <span class="fu">fn</span>(<span class="fu">c</span>(<span class="fu">c</span>(x, y), z)) <span class="sc">==</span> <span class="fu">fn</span>(<span class="fu">c</span>(<span class="fu">fn</span>(<span class="fu">c</span>(x, y)), z))</span>
+<span id="cb30-8"><a href="problems.html#cb30-8" tabindex="-1"></a>}</span>
+<span id="cb30-9"><a href="problems.html#cb30-9" tabindex="-1"></a></span>
+<span id="cb30-10"><a href="problems.html#cb30-10" tabindex="-1"></a>is_monoid <span class="ot">&lt;-</span> <span class="cf">function</span>(fn, e, x, y, z) {</span>
+<span id="cb30-11"><a href="problems.html#cb30-11" tabindex="-1"></a>  <span class="fu">is_unital</span>(fn, e, x) <span class="sc">&amp;&amp;</span> <span class="fu">is_associative</span>(fn, x, y, z)</span>
+<span id="cb30-12"><a href="problems.html#cb30-12" tabindex="-1"></a>}</span>
+<span id="cb30-13"><a href="problems.html#cb30-13" tabindex="-1"></a></span>
+<span id="cb30-14"><a href="problems.html#cb30-14" tabindex="-1"></a>string_concat <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="fu">paste0</span>(x, <span class="at">collapse =</span> <span class="st">&quot;&quot;</span>)</span>
+<span id="cb30-15"><a href="problems.html#cb30-15" tabindex="-1"></a>l2_norm <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="fu">sqrt</span>(<span class="fu">sum</span>(x<span class="sc">^</span><span class="dv">2</span>)) <span class="co"># aka euclidean distance</span></span>
+<span id="cb30-16"><a href="problems.html#cb30-16" tabindex="-1"></a></span>
+<span id="cb30-17"><a href="problems.html#cb30-17" tabindex="-1"></a><span class="fu">is_monoid</span>(sum, <span class="dv">0</span>, x, y, z)</span>
+<span id="cb30-18"><a href="problems.html#cb30-18" tabindex="-1"></a><span class="fu">is_monoid</span>(max, <span class="sc">-</span><span class="cn">Inf</span>, x, y, z)</span>
+<span id="cb30-19"><a href="problems.html#cb30-19" tabindex="-1"></a><span class="fu">is_monoid</span>(prod, <span class="dv">1</span>, x, y, z)</span>
+<span id="cb30-20"><a href="problems.html#cb30-20" tabindex="-1"></a><span class="fu">is_monoid</span>(string_concat, <span class="st">&quot;&quot;</span>, <span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;c&quot;</span>)</span>
+<span id="cb30-21"><a href="problems.html#cb30-21" tabindex="-1"></a><span class="fu">is_monoid</span>(l2_norm, <span class="dv">0</span>, x, y, z)</span>
+<span id="cb30-22"><a href="problems.html#cb30-22" tabindex="-1"></a><span class="fu">is_monoid</span>(mean, <span class="dv">0</span>, x, y, z)</span>
+<span id="cb30-23"><a href="problems.html#cb30-23" tabindex="-1"></a><span class="fu">is_monoid</span>(median, <span class="dv">0</span>, x, y, z)</span>
+<span id="cb30-24"><a href="problems.html#cb30-24" tabindex="-1"></a><span class="fu">is_monoid</span>(sd, <span class="dv">0</span>, x, y, z)</span></code></pre></div>
+<pre><code>[1] TRUE
+[1] TRUE
+[1] TRUE
+[1] TRUE
+[1] TRUE
+[1] FALSE
+[1] FALSE
+[1] FALSE</code></pre>
 <p>A couple of points. First, based on what we have shown before, we could simplify our task by defining <code>fn</code> as a binary function which takes two (scalar) arguments instead of a vector. This binary formulation would demonstrate that, for example, <code>mean2 == median2 == function(x, y) (x + y) / 2</code> (median of even number of elements is the average of the middle two), and so if we can show that <code>(x + y) / 2</code> is not associative, we disprove both <code>mean2</code> and <code>median2</code> being monoids. More intuitively, with three or more values, applying <code>median2</code> amounts to repeatedly averaging values pairwise, and this operation is clearly different from picking the middle value. Furthermore, the binary formulation of <code>fn</code> also makes it easier to identify whether neutral element <code>e</code> exists or not. For instance, it is not difficult to see that there is no (constant) value <code>e</code> such that <code>(x + e) / 2 == x</code> for all <code>x</code>. Thus, generally, it might be more advantageous to always formulate <code>fn</code> as a binary function. However, in the code block above, I used the vector formulation to allow for comparison with R standard library functions such as <code>mean</code>, <code>median</code>, and <code>sd</code>.</p>
-<p>Second, the properties of associativity and unitality need to hold for <em>all</em> possible inputs in the function’s domain. Thus, if a function passes the <code>is_monoid</code> test for any three specific values, this is not sufficient for proving that it is monoidal. For instance, while it is the case that <code>mean(c(c(2, 4), 3)) == mean(c(mean(c(2, 4)), 3))</code>, this does not prove that <code>mean</code> is associative<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a>. However, a single counter-example does definitely prove that a summary function is <em>not</em> monoid, as is the case, for example, with <code>mean</code>, <code>median</code>, and <code>sd</code> functions above. Thus, while not a fool-proof method, functions like <code>is_monoid</code> function can serve as a valuable sanity check.</p>
+<p>Second, the properties of associativity and unitality need to hold for <em>all</em> possible inputs in the function’s domain. Thus, if a function passes the <code>is_monoid</code> test for any three specific values, this is not sufficient for proving that it is monoidal. For instance, while it is the case that <code>mean(c(c(2, 4), 3)) == mean(c(mean(c(2, 4)), 3))</code>, this does not prove that <code>mean</code> is associative<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a>. However, a single counter-example does definitely prove that a summary function is <em>not</em> monoid, as is the case, for example, with <code>mean</code>, <code>median</code>, and <code>sd</code> functions above. Thus, while not a fool-proof method, functions like <code>is_monoid</code> function can serve as a valuable sanity check.</p>
 <p>Finally, monoids also imply certain computational advantages. Specifically, because the operation of reducing a set of <span class="math inline">\(n\)</span> elements via a monoid translates into <span class="math inline">\(n - 1\)</span> binary operations, we know we can always compute the result in linear (<span class="math inline">\(O(n)\)</span>) time (provided that the product <span class="math inline">\(\otimes\)</span> itself is constant). Additionally, due to associativity, monoids are easily parallelizable (embarassingly parallel), making them useful in distributed computing strategies such as MapReduce <span class="citation">(<a href="#ref-lin2013">Lin 2013</a>)</span>. Finally, when the total product consists of repeated products of the same element (i.e. <span class="math inline">\(a \otimes a \otimes a \otimes \ldots\)</span>), the result can be computed in sub-linear <span class="math inline">\(O(\log n)\)</span> time, by applying the squaring algorithm <span class="citation">(also known as the Russian peasant or Egyptian multiplication algorithm, see <a href="#ref-stepanov2009">Stepanov and McJones 2009</a>; <a href="#ref-stepanov2014">Stepanov and Rose 2014</a>)</span>.</p>
 </div>
 <div id="groups-inverses" class="section level4 hasAnchor" number="4.3.2.8">
@@ -991,8 +995,8 @@ F(D_i) \otimes F(D_j) &amp;= (d_{i1} \otimes d_{i2} \otimes \ldots d_{in}) \otim
 <p>Thus, for example, if it is the case that:</p>
 <p><span class="math display">\[\max(x, y) = 8\]</span></p>
 <p>Then, even if we know that <span class="math inline">\(y = 8\)</span>, there is no way to recover the value of <span class="math inline">\(x\)</span>. In a certain sense, maximum irretrievably discards some of the information contained in its operands. This happens despite the combined value still being a valid summary of the underlying data: due to associativity, a maximum of maximums is always a valid maximum of all cases. However, there is no meaningful way to reverse the effect of the maximum operator: once we pick the larger of two values, the smaller is lost.</p>
-<div class="figure"><span style="display:block;" id="fig:monoids-groups-inverses"></span>
-<img src="figures/monoids-groups-inverses.png" alt="While monoids facilitate the comparison of a single selection groups against the whole data set (or of nested data subsets, more generally), groups allow the display of multiple disjoint selection groups (subsets). The top row shows bars stacked using the sum ($+$) operator, whereas the bottom row shows bars stacked using the maximum operator. The panels left to right show different permutations (orderings) of the selection groups (coloured segments). Notice that, when summing, the presence of the inverse operator guarantees that we can always visually recover all selection groups regardless of their permutation (the blue, red, and green segments are present in all three top-row pannels). Conversely, when taking the maximum, certain permutations may collapse information about the individual subsets, effectively 'hiding' segments (even though the presented information remains a valid summary of the underlying data)." width="750" />
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:monoids-groups-inverses"></span>
+<img src="figures/monoids-groups-inverses.png" alt="While monoids facilitate the comparison of a single selection groups against the whole data set (or of nested data subsets, more generally), groups allow the display of multiple disjoint selection groups (subsets). The top row shows bars stacked using the sum ($+$) operator, whereas the bottom row shows bars stacked using the maximum operator. The panels left to right show different permutations (orderings) of the selection groups (coloured segments). Notice that, when summing, the presence of the inverse operator guarantees that we can always visually recover all selection groups regardless of their permutation (the blue, red, and green segments are present in all three top-row pannels). Conversely, when taking the maximum, certain permutations may collapse information about the individual subsets, effectively 'hiding' segments (even though the presented information remains a valid summary of the underlying data)." width="100%" style="border: none;" />
 <p class="caption">
 Figure 4.25: While monoids facilitate the comparison of a single selection groups against the whole data set (or of nested data subsets, more generally), groups allow the display of multiple disjoint selection groups (subsets). The top row shows bars stacked using the sum (<span class="math inline">\(+\)</span>) operator, whereas the bottom row shows bars stacked using the maximum operator. The panels left to right show different permutations (orderings) of the selection groups (coloured segments). Notice that, when summing, the presence of the inverse operator guarantees that we can always visually recover all selection groups regardless of their permutation (the blue, red, and green segments are present in all three top-row pannels). Conversely, when taking the maximum, certain permutations may collapse information about the individual subsets, effectively ‘hiding’ segments (even though the presented information remains a valid summary of the underlying data).
 </p>
@@ -1010,8 +1014,8 @@ Figure 4.25: While monoids facilitate the comparison of a single selection group
 <p><span class="math display">\[x_1 \leq x_2 \wedge y_1 \leq y_2 \implies x_1 \otimes y_1 \leq x_2 \otimes y_2\]</span></p>
 <p>Union of disjoint sets is monotonic, in two different ways. First, if we let the comparison operator be set inclusion, <span class="math inline">\(\subseteq\)</span>, then it is the case that <span class="math inline">\(A_1 \subseteq A_2 \wedge B_1 \subseteq B_2 \implies A_1 \cup A_2 \subseteq B_1 \cup B_2\)</span>. Second, if we let the comparison operator be the comparison of set cardinalities, <span class="math inline">\(A \leq B \implies \lvert A \lvert \leq \lvert B \lvert\)</span>, then <span class="math inline">\(\lvert A_1 \lvert \leq \lvert A_2 \lvert \wedge \lvert B_1 \lvert \wedge \lvert B_2 \lvert  \implies \lvert A_1 \cup B_1 \lvert \leq \lvert A_2 \cup B_2 \lvert\)</span> (since <span class="math inline">\(\lvert A \cup B \lvert = \lvert A \lvert + \lvert B \lvert\)</span>, by disjointness).</p>
 <p>Likewise, when drawing geometric objects composed of parts, we typically consider the parts to be “less” than the whole, i.e. having a smaller area or length. As discussed in Section <a href="problems.html#stacking-part-whole">4.3.1.4</a>, this has certain advantages: we can use the fact that the quantities corresponding to the parts are bounded by the quantities corresponding to the whole to avoid unnecessary computation. However, there are also examples of geometric objects where the <em>whole is equal to the sum of its parts, but where the parts are not necessarily “less” than the whole</em>. As an example, such is the case in the following visualization of vector addition:</p>
-<div class="figure"><span style="display:block;" id="fig:lineplot-monotonicity"></span>
-<img src="figures/lineplot-monotonicity.png" alt="Some geometric representations may form a monoid without exhibiting monotonic growth. The plot shows a line (gray, dashed) formed by adding up three vector segments (red, blue, and green). The operation of concatenating vectors end-to-end is associative (order of concatenation does not change the final endpoint) and unital (zero vector forms the monoidal unit), however, it is not monotonic since the combined vector may be shorter than any of its constituent components." width="750" />
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:lineplot-monotonicity"></span>
+<img src="figures/lineplot-monotonicity.png" alt="Some geometric representations may form a monoid without exhibiting monotonic growth. The plot shows a line (gray, dashed) formed by adding up three vector segments (red, blue, and green). The operation of concatenating vectors end-to-end is associative (order of concatenation does not change the final endpoint) and unital (zero vector forms the monoidal unit), however, it is not monotonic since the combined vector may be shorter than any of its constituent components." width="100%" style="border: none;" />
 <p class="caption">
 Figure 4.26: Some geometric representations may form a monoid without exhibiting monotonic growth. The plot shows a line (gray, dashed) formed by adding up three vector segments (red, blue, and green). The operation of concatenating vectors end-to-end is associative (order of concatenation does not change the final endpoint) and unital (zero vector forms the monoidal unit), however, it is not monotonic since the combined vector may be shorter than any of its constituent components.
 </p>
@@ -1028,8 +1032,8 @@ Figure 4.26: Some geometric representations may form a monoid without exhibiting
 <p>Finally, once we have computed our tree/category of summaries <span class="math inline">\(\mathcal{S}\)</span> via the functor <span class="math inline">\(F: \mathcal{S} \to \mathcal{D}\)</span>, we may also need to transform these summaries further, while respecting the structure of the tree. Indeed, such is the precise nature of stacking, as well as normalization in plots such as spineplots and spinograms.</p>
 <p>Specifically, consider the diagram of <span class="math inline">\(\mathcal{S}\)</span> again:</p>
 
-<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-16"></span>
-<img src="figures/barplot-preorder4.png" alt="Reproduction of Figure Figure 4.24: Diagram of the barplot/spineplot summary statistic preorder (category), ordered by the combination operator $\otimes$." width="686" />
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-28"></span>
+<img src="figures/barplot-preorder4.png" alt="Reproduction of Figure Figure 4.24: Diagram of the barplot/spineplot summary statistic preorder (category), ordered by the combination operator $\otimes$." width="100%" style="border: none;" />
 <p class="caption">
 Figure 4.27: Reproduction of Figure Figure <a href="problems.html#fig:barplot-preorder4">4.24</a>: Diagram of the barplot/spineplot summary statistic preorder (category), ordered by the combination operator <span class="math inline">\(\otimes\)</span>.
 </p>
@@ -1059,8 +1063,8 @@ Figure 4.27: Reproduction of Figure Figure <a href="problems.html#fig:barplot-pr
 <p>Suppose we have partitioned our data and computed all relevant summary statistics. Now we need a way to to encode these summaries into visual attributes that we can then present on the computer screen. In most data visualization systems, this is done by specialized components called scales or coordinate systems <span class="citation">(see e.g. <a href="#ref-murrell2005">Murrell 2005</a>; <a href="#ref-wickham2016">Wickham 2016</a>; <a href="#ref-wilkinson2012">Wilkinson 2012</a>; <a href="#ref-petricek2020">Petricek 2020</a>)</span>.</p>
 <p>As discussed in Sections <a href="background.html#scales-measurement">3.3.3</a> and <a href="background.html#visual-perception">3.3.2</a>, there exists is a fair amount of literature on the theoretical properties of scales and their relationship to the mechanisms of visual perception <span class="citation">(see e.g. <a href="#ref-krzywinski2013">Krzywinski 2013</a>; <a href="#ref-michell1986">Michell 1986</a>; <a href="#ref-wilkinson2012">Wilkinson 2012</a>; <a href="#ref-stevens1946">Stevens 1946</a>)</span>. However, when it comes to applying this knowledge and implementing scales in concrete data visualization systems, few research papers are available, and most only discuss the problem in vague, abstract terms <span class="citation">(for some rare counter-examples, see e.g. <a href="#ref-murrell2005">Murrell 2005</a>; <a href="#ref-ziemkiewicz2009">Ziemkiewicz and Kosara 2009</a>)</span>. To learn about how to actually implement scales scales, one has to go digging through open-source code repositories, which are rarely the most concise educational resources.</p>
 <p>This gap between theory and practice is quite unfortunate in my opinion, since scales are an integral part of the data visualization pipeline. Further, they are the foundation of many interactive features, such as zooming, panning, and reordering. Finally, within existing data visualization systems, it is often the case that a large portion of the code is dedicated to scales. For instance, within the <code>ggplot2</code> codebase, the file containing the definition of the <code>Scale</code> class has the greatest number of lines, by quite a significant margin <span class="citation">(as of 4th of December 2024, <a href="#ref-ggplot2repo2024">Wickham 2024</a>)</span>, see Figure <a href="problems.html#fig:ggplot2-linecounts">4.28</a>:</p>
-<div class="figure"><span style="display:block;" id="fig:ggplot2-linecounts"></span>
-<img src="figures/ggplot2-linecounts.png" alt="The top 10 longest source files within the `ggplot2` codebase. Notice that `scale-.R` files contains significantly more lines than the other files." width="750" />
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:ggplot2-linecounts"></span>
+<img src="figures/ggplot2-linecounts.png" alt="The top 10 longest source files within the `ggplot2` codebase. Notice that `scale-.R` files contains significantly more lines than the other files." width="100%" style="border: none;" />
 <p class="caption">
 Figure 4.28: The top 10 longest source files within the <code>ggplot2</code> codebase. Notice that <code>scale-.R</code> files contains significantly more lines than the other files.
 </p>
@@ -1073,7 +1077,7 @@ Figure 4.28: The top 10 longest source files within the <code>ggplot2</code> cod
 <p><span class="math display">\[s: [d_{min}, d_{max}] \to [v_{min}, v_{max}] \qquad d_{min}, d_{max}, v_{min}, v_{max} \in \mathbb{R}\]</span></p>
 <p>For example, suppose our data takes values in the range from 1 to 10 and we want to plot it along the x-axis, within a 800 pixels wide plotting region. Then, our scale is simply:</p>
 <p><span class="math display">\[s_x: [1, 10] \to [0, 800]\]</span></p>
-<p>Now, there is an infinite number of functions that fit this signature. However, one particularly nice and simple candidate is the following function<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a>:</p>
+<p>Now, there is an infinite number of functions that fit this signature. However, one particularly nice and simple candidate is the following function<a href="#fn8" class="footnote-ref" id="fnref8"><sup>8</sup></a>:</p>
 <div class="definition">
 <p><span id="def:linear-mapping" class="definition"><strong>Definition 4.3  (Simple linear mapping) </strong></span><span class="math display">\[s(d) = v_{min} + \frac{d - d_{min}}{d_{max} - d_{min}} \cdot (v_{max} - v_{min})\]</span></p>
 </div>
@@ -1097,20 +1101,20 @@ Figure 4.28: The top 10 longest source files within the <code>ggplot2</code> cod
 <li>Pan, zoom, reverse, reorder, or otherwise modify the scale interactively</li>
 </ul>
 <p>While a single function could handle all these tasks, adding all of the required arguments might make it overly complex and difficult to reason about. Let’s take the first point in the list above as a motivating example. Consider what happens to data points at the limits of the data range under the simple linear mapping:</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="problems.html#cb27-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123456</span>)</span>
-<span id="cb27-2"><a href="problems.html#cb27-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span></span>
-<span id="cb27-3"><a href="problems.html#cb27-3" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">10</span>, <span class="dv">0</span>, <span class="dv">5</span>)</span>
-<span id="cb27-4"><a href="problems.html#cb27-4" tabindex="-1"></a>col <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span> <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">10</span>), <span class="st">&quot;indianred&quot;</span>, <span class="st">&quot;grey80&quot;</span>)</span>
-<span id="cb27-5"><a href="problems.html#cb27-5" tabindex="-1"></a></span>
-<span id="cb27-6"><a href="problems.html#cb27-6" tabindex="-1"></a><span class="co"># xaxs = &quot;i&quot; makes sure the x-axis limits match the data range exactly</span></span>
-<span id="cb27-7"><a href="problems.html#cb27-7" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">col =</span> col, <span class="at">cex =</span> <span class="dv">3</span>, <span class="at">xaxs =</span> <span class="st">&quot;i&quot;</span>, <span class="at">pch =</span> <span class="dv">19</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-17-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="problems.html#cb32-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123456</span>)</span>
+<span id="cb32-2"><a href="problems.html#cb32-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span></span>
+<span id="cb32-3"><a href="problems.html#cb32-3" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">10</span>, <span class="dv">0</span>, <span class="dv">5</span>)</span>
+<span id="cb32-4"><a href="problems.html#cb32-4" tabindex="-1"></a>col <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span> <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">10</span>), <span class="st">&quot;indianred&quot;</span>, <span class="st">&quot;grey80&quot;</span>)</span>
+<span id="cb32-5"><a href="problems.html#cb32-5" tabindex="-1"></a></span>
+<span id="cb32-6"><a href="problems.html#cb32-6" tabindex="-1"></a><span class="co"># xaxs = &quot;i&quot; makes sure the x-axis limits match the data range exactly</span></span>
+<span id="cb32-7"><a href="problems.html#cb32-7" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">col =</span> col, <span class="at">cex =</span> <span class="dv">3</span>, <span class="at">xaxs =</span> <span class="st">&quot;i&quot;</span>, <span class="at">pch =</span> <span class="dv">19</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-29-1.png" width="100%" style="border: none;" style="display: block; margin: auto;" /></p>
 <p>The plot above shows values scaled using the simple linear mapping along the x-axis, that is, <span class="math inline">\(s: [1, 10] \to [0, 800]\)</span> (effect of the <code>xaxs = "i"</code> argument). Notice that, since the positions of the points representing the values 1 and 10 (highlighted in red) get mapped to pixel values 0 and 800 (the left and right border of the plot), only half of each point is visible. This is problematic: as was discussed in Section <a href="problems.html#show-all-data">4.2.1</a>, a fundamental principles of graphical integrity is that our graphics should not downplay or hide certain features of the data <span class="citation">(<a href="#ref-tufte2001">Tufte 2001</a>)</span>. Since the points near the axis limits are represented by only a fraction of the area of the rest, they become less visually salient, and this is particularly problematic since these points are more likely to be outliers.</p>
 <p>To address this problem, most data visualization systems automatically expand the range of the domain by some pre-specified percentage:</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="problems.html#cb28-1" tabindex="-1"></a><span class="co"># By default, the base R plot() function automatically expands the x- and y-axis</span></span>
-<span id="cb28-2"><a href="problems.html#cb28-2" tabindex="-1"></a><span class="co"># limits by approximately 4% on each end, see `xaxs` in ?graphics::par</span></span>
-<span id="cb28-3"><a href="problems.html#cb28-3" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">col =</span> col, <span class="at">cex =</span> <span class="dv">3</span>, <span class="at">pch =</span> <span class="dv">19</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-18-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="problems.html#cb33-1" tabindex="-1"></a><span class="co"># By default, the base R plot() function automatically expands the x- and y-axis</span></span>
+<span id="cb33-2"><a href="problems.html#cb33-2" tabindex="-1"></a><span class="co"># limits by approximately 4% on each end, see `xaxs` in ?graphics::par</span></span>
+<span id="cb33-3"><a href="problems.html#cb33-3" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">col =</span> col, <span class="at">cex =</span> <span class="dv">3</span>, <span class="at">pch =</span> <span class="dv">19</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-30-1.png" width="100%" style="border: none;" style="display: block; margin: auto;" /></p>
 <p>We could achieve this by expanding our data range by some pre-specified percentage, for example, a symmetric 10% margin on each side:</p>
 <p><span class="math display" id="eq:margins">\[\begin{equation}
   s(d) = v_{min} + \bigg[ 0.1 + \frac{d - d_{min}}{d_{max} - d_{min}} \cdot (0.9 - 0.1)
@@ -1136,7 +1140,7 @@ s(d) = \color{steelblue}{v_{min} +} \bigg[ \color{seagreen}{0.1 +} \color{indian
 \end{equation}\]</span></p>
 <p>That is, the linear mapping can be interpreted as a composition of three simpler functions:</p>
 <ul>
-<li><span class="math inline">\(\color{indianred}{n_D(d) = (d - d_{min}) / (d_{max} - d_{min})}\)</span> takes a data value <span class="math inline">\(d \in D\)</span> and maps it to the interval <span class="math inline">\([0, 1]\)</span><a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a></li>
+<li><span class="math inline">\(\color{indianred}{n_D(d) = (d - d_{min}) / (d_{max} - d_{min})}\)</span> takes a data value <span class="math inline">\(d \in D\)</span> and maps it to the interval <span class="math inline">\([0, 1]\)</span><a href="#fn9" class="footnote-ref" id="fnref9"><sup>9</sup></a></li>
 <li><span class="math inline">\(\color{seagreen}{r(p) = 0.1 + p \cdot (0.9 - 0.1)}\)</span> takes a value in <span class="math inline">\([0, 1]\)</span> and maps it elsewhere in <span class="math inline">\([0, 1]\)</span></li>
 <li><span class="math inline">\(\color{steelblue}{u_V(p) = v_{min} + p \cdot (v_{max} - v_{min})}\)</span> takes a value in <span class="math inline">\([0, 1]\)</span> and maps it to a visual attribute value <span class="math inline">\(v \in V\)</span></li>
 </ul>
@@ -1226,25 +1230,25 @@ because it can substantially simplify the structure of a set of data.”</p>
 <h4><span class="header-section-number">4.4.0.4</span> Comparison to past implementations of scales<a href="problems.html#scales-comparison" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>Many popular data visualization systems implement a multi-component model of scales similar to the one outlined above, however, they typically omit the <span class="math inline">\(r\)</span> function and implement the <span class="math inline">\(n_D\)</span> and <span class="math inline">\(u_V\)</span> mappings quite differently. For example, in <code>D3</code> <span class="citation">(<a href="#ref-bostock2011">Michael Bostock, Ogievetsky, and Heer 2011</a>)</span>, scales are implemented in a functional style, such that the data domain and the visual attribute codomain are passed as tuples or arrays of values to a higher-order <code>scale*</code> function (such as <code>scaleLinear</code>, <code>scalePoint</code>, or <code>scaleBand</code>), which then returns a new function that can be used for scaling. The domain and codomain can also be modified afterwards, using the <code>scale*.domain</code> and <code>scale*.range</code> methods respectively (JavaScript functions are objects and can have other functions/methods attached to them).</p>
 <p>For illustration, here are few examples from the official documentation <span class="citation">(<a href="#ref-d3-scale2024">Observable 2024</a>)</span>:</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb29-1"><a href="problems.html#cb29-1" tabindex="-1"></a><span class="kw">const</span> x <span class="op">=</span> d3<span class="op">.</span><span class="fu">scaleLinear</span>([<span class="dv">10</span><span class="op">,</span> <span class="dv">130</span>]<span class="op">,</span> [<span class="dv">0</span><span class="op">,</span> <span class="dv">960</span>])<span class="op">;</span></span>
-<span id="cb29-2"><a href="problems.html#cb29-2" tabindex="-1"></a><span class="fu">x</span>(<span class="dv">20</span>)<span class="op">;</span> <span class="co">// 80</span></span>
-<span id="cb29-3"><a href="problems.html#cb29-3" tabindex="-1"></a><span class="kw">const</span> color <span class="op">=</span> d3<span class="op">.</span><span class="fu">scaleLinear</span>([<span class="dv">10</span><span class="op">,</span> <span class="dv">100</span>]<span class="op">,</span> [<span class="st">&quot;brown&quot;</span><span class="op">,</span> <span class="st">&quot;steelblue&quot;</span>])<span class="op">;</span></span>
-<span id="cb29-4"><a href="problems.html#cb29-4" tabindex="-1"></a><span class="fu">color</span>(<span class="dv">20</span>)<span class="op">;</span> <span class="co">// &quot;rgb(154, 52, 57)&quot;</span></span>
-<span id="cb29-5"><a href="problems.html#cb29-5" tabindex="-1"></a><span class="co">// The domain and codomain can be changed after initialization</span></span>
-<span id="cb29-6"><a href="problems.html#cb29-6" tabindex="-1"></a><span class="kw">const</span> y <span class="op">=</span> d3<span class="op">.</span><span class="fu">scaleLinear</span>()<span class="op">.</span><span class="fu">domain</span>([<span class="dv">10</span><span class="op">,</span> <span class="dv">130</span>])<span class="op">;</span> </span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb34-1"><a href="problems.html#cb34-1" tabindex="-1"></a><span class="kw">const</span> x <span class="op">=</span> d3<span class="op">.</span><span class="fu">scaleLinear</span>([<span class="dv">10</span><span class="op">,</span> <span class="dv">130</span>]<span class="op">,</span> [<span class="dv">0</span><span class="op">,</span> <span class="dv">960</span>])<span class="op">;</span></span>
+<span id="cb34-2"><a href="problems.html#cb34-2" tabindex="-1"></a><span class="fu">x</span>(<span class="dv">20</span>)<span class="op">;</span> <span class="co">// 80</span></span>
+<span id="cb34-3"><a href="problems.html#cb34-3" tabindex="-1"></a><span class="kw">const</span> color <span class="op">=</span> d3<span class="op">.</span><span class="fu">scaleLinear</span>([<span class="dv">10</span><span class="op">,</span> <span class="dv">100</span>]<span class="op">,</span> [<span class="st">&quot;brown&quot;</span><span class="op">,</span> <span class="st">&quot;steelblue&quot;</span>])<span class="op">;</span></span>
+<span id="cb34-4"><a href="problems.html#cb34-4" tabindex="-1"></a><span class="fu">color</span>(<span class="dv">20</span>)<span class="op">;</span> <span class="co">// &quot;rgb(154, 52, 57)&quot;</span></span>
+<span id="cb34-5"><a href="problems.html#cb34-5" tabindex="-1"></a><span class="co">// The domain and codomain can be changed after initialization</span></span>
+<span id="cb34-6"><a href="problems.html#cb34-6" tabindex="-1"></a><span class="kw">const</span> y <span class="op">=</span> d3<span class="op">.</span><span class="fu">scaleLinear</span>()<span class="op">.</span><span class="fu">domain</span>([<span class="dv">10</span><span class="op">,</span> <span class="dv">130</span>])<span class="op">;</span> </span></code></pre></div>
 <p>Internally, the <code>scale*</code> functions rely on other specialized functions to translate from its domain to the codomain (such as the <code>normalize()</code> and <code>scale()</code> functions for continuous and discrete/ordinal domains, respectively, and various <code>interpolate()</code> functions for codomains).</p>
 <p>Similarly, in <code>ggplot2</code> <span class="citation">(<a href="#ref-wickham2016">Wickham 2016</a>)</span>, all scales inherit from the <code>Scale</code> base class, with each subtype implementing <code>limits</code> and <code>palette</code> properties. The <code>limits</code> property is a vector which corresponds to the data domain and the <code>palette</code> property is a function which corresponds roughly to the visual codomain (the x- and y-position behave slightly differently, due to being transformed via coordinate systems). Internally, the package uses the <code>rescale</code> function from the <code>scales</code> package <span class="citation">(<a href="#ref-wickham2023">Wickham, Pedersen, and Seidel 2023</a>)</span> to map data values to <span class="math inline">\([0, 1]\)</span> and then the <code>palette</code> function is responsible for mapping these normalized values to the visual attribute. For illustration, here’s the full definition of the <code>map</code> method on the <code>ScaleContinuous</code> class (I’ve added comments for clarity):</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="problems.html#cb30-1" tabindex="-1"></a>map <span class="ot">=</span> <span class="cf">function</span>(self, x, <span class="at">limits =</span> self<span class="sc">$</span><span class="fu">get_limits</span>()) {</span>
-<span id="cb30-2"><a href="problems.html#cb30-2" tabindex="-1"></a>  <span class="co"># Limits are just a tuple, rescale maps x to [0, 1]</span></span>
-<span id="cb30-3"><a href="problems.html#cb30-3" tabindex="-1"></a>  x <span class="ot">&lt;-</span> self<span class="sc">$</span><span class="fu">rescale</span>(self<span class="sc">$</span><span class="fu">oob</span>(x, <span class="at">range =</span> limits), limits) </span>
-<span id="cb30-4"><a href="problems.html#cb30-4" tabindex="-1"></a></span>
-<span id="cb30-5"><a href="problems.html#cb30-5" tabindex="-1"></a>  uniq <span class="ot">&lt;-</span> <span class="fu">unique0</span>(x)</span>
-<span id="cb30-6"><a href="problems.html#cb30-6" tabindex="-1"></a>  <span class="co"># Palette is a function which returns a vector of attribute values</span></span>
-<span id="cb30-7"><a href="problems.html#cb30-7" tabindex="-1"></a>  pal <span class="ot">&lt;-</span> self<span class="sc">$</span><span class="fu">palette</span>(uniq) </span>
-<span id="cb30-8"><a href="problems.html#cb30-8" tabindex="-1"></a>  scaled <span class="ot">&lt;-</span> pal[<span class="fu">match</span>(x, uniq)]</span>
-<span id="cb30-9"><a href="problems.html#cb30-9" tabindex="-1"></a></span>
-<span id="cb30-10"><a href="problems.html#cb30-10" tabindex="-1"></a>  <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(scaled), scaled, self<span class="sc">$</span>na.value)</span>
-<span id="cb30-11"><a href="problems.html#cb30-11" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="problems.html#cb35-1" tabindex="-1"></a>map <span class="ot">=</span> <span class="cf">function</span>(self, x, <span class="at">limits =</span> self<span class="sc">$</span><span class="fu">get_limits</span>()) {</span>
+<span id="cb35-2"><a href="problems.html#cb35-2" tabindex="-1"></a>  <span class="co"># Limits are just a tuple, rescale maps x to [0, 1]</span></span>
+<span id="cb35-3"><a href="problems.html#cb35-3" tabindex="-1"></a>  x <span class="ot">&lt;-</span> self<span class="sc">$</span><span class="fu">rescale</span>(self<span class="sc">$</span><span class="fu">oob</span>(x, <span class="at">range =</span> limits), limits) </span>
+<span id="cb35-4"><a href="problems.html#cb35-4" tabindex="-1"></a></span>
+<span id="cb35-5"><a href="problems.html#cb35-5" tabindex="-1"></a>  uniq <span class="ot">&lt;-</span> <span class="fu">unique0</span>(x)</span>
+<span id="cb35-6"><a href="problems.html#cb35-6" tabindex="-1"></a>  <span class="co"># Palette is a function which returns a vector of attribute values</span></span>
+<span id="cb35-7"><a href="problems.html#cb35-7" tabindex="-1"></a>  pal <span class="ot">&lt;-</span> self<span class="sc">$</span><span class="fu">palette</span>(uniq) </span>
+<span id="cb35-8"><a href="problems.html#cb35-8" tabindex="-1"></a>  scaled <span class="ot">&lt;-</span> pal[<span class="fu">match</span>(x, uniq)]</span>
+<span id="cb35-9"><a href="problems.html#cb35-9" tabindex="-1"></a></span>
+<span id="cb35-10"><a href="problems.html#cb35-10" tabindex="-1"></a>  <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(scaled), scaled, self<span class="sc">$</span>na.value)</span>
+<span id="cb35-11"><a href="problems.html#cb35-11" tabindex="-1"></a>}</span></code></pre></div>
 <p>Thus, a key difference between the models of scales discussed above, and the model I propose, is that the domain and codomain are generally implemented as different types. In <code>D3</code>, internally, the functions used to translate from <span class="math inline">\(D \to \mathbb{R}\)</span> are fundamentally different from those used to translate from <span class="math inline">\(\mathbb{R} \to V\)</span>. This difference is even more pronounced in <code>ggplot2</code>, where <code>limits</code> is a simple vector/tuple whereas <code>palette</code> is a function.</p>
 <p>I contend that having different types for the domain and codomain has several disadvantages. First, it impedes code reuse, since we cannot simply use the same object in either place. Second, it complicates the mental model: the user has to hold a completely different concept for the domain and codomain in their head. Finally, the models of scales outlined above are designed to work in only one direction: from the data to the visual attribute. To go the other way around, from the visual attribute to the data, other, specialized functions have to be implemented.</p>
 <p>Instead, I propose a unified model where the data domain and visual attribute codomain differ only in the context they are used. Details will be discussed in Section <a href="system.html#scales">6.4.4.7</a>.</p>
@@ -1311,7 +1315,7 @@ Beckmann, Peter E. 1995. <span>“On the Problem of Visualizing Point Distributi
 Benjamin, Daniel J. 2019. <span>“Errors in Probabilistic Reasoning and Judgment Biases.”</span> <em>Handbook of Behavioral Economics: Applications and Foundations 1</em> 2: 69–186.
 </div>
 <div id="ref-bertin1983" class="csl-entry">
-Bertin, Jacques. 1983. <em>Semiology of Graphics</em>. University of Wisconsin press.
+———. 1983. <em>Semiology of Graphics</em>. University of Wisconsin press.
 </div>
 <div id="ref-bishop2006" class="csl-entry">
 Bishop, Christopher M, and Nasser M Nasrabadi. 2006. <em>Pattern Recognition and Machine Learning</em>. Vol. 4. 4. Springer.
@@ -1332,7 +1336,7 @@ Buja, Andreas, Dianne Cook, and Deborah F Swayne. 1996. <span>“Interactive Hig
 Byron, Lee, and Martin Wattenberg. 2008. <span>“Stacked Graphs–Geometry &amp; Aesthetics.”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em> 14 (6): 1245–52.
 </div>
 <div id="ref-cairo2014" class="csl-entry">
-Cairo, Alberto. 2014. <span>“Graphics Lies, Misleading Visuals: Reflections on the Challenges and Pitfalls of Evidence-Driven Visual Communication.”</span> In <em>New Challenges for Data Design</em>, 103–16. Springer.
+———. 2014. <span>“Graphics Lies, Misleading Visuals: Reflections on the Challenges and Pitfalls of Evidence-Driven Visual Communication.”</span> In <em>New Challenges for Data Design</em>, 103–16. Springer.
 </div>
 <div id="ref-cairo2016" class="csl-entry">
 ———. 2016. <em>The Truthful Art: Data, Charts, and Maps for Communication</em>. New Riders.
@@ -1485,7 +1489,7 @@ Petricek, Tomas. 2020. <span>“Designing Composable Functional Libraries.”</s
 Pinter, Charles C. 2010. <em>A Book of Abstract Algebra</em>. Courier Corporation.
 </div>
 <div id="ref-plotly2023" class="csl-entry">
-Plotly Inc. 2023. <span>“<span>Plotly: Low-Code Data App Development</span>.”</span> <a href="https://plotly.com">https://plotly.com</a>.
+———. 2023. <span>“<span>Plotly: Low-Code Data App Development</span>.”</span> <a href="https://plotly.com">https://plotly.com</a>.
 </div>
 <div id="ref-quadri2021" class="csl-entry">
 Quadri, Ghulam Jilani, and Paul Rosen. 2021. <span>“A Survey of Perception-Based Visualization Studies by Task.”</span> <em>IEEE Transactions on Visualization and Computer Graphics</em>.
@@ -1542,7 +1546,7 @@ Tierney, Nicholas, and Dianne Cook. 2023. <span>“<span class="nocase">Expandin
 Tufte, Edward R. 2001. <em>The Visual Display of Quantitative Information</em>. Cheshire, Connecticut: Graphics Press LLC.
 </div>
 <div id="ref-tukey1993" class="csl-entry">
-Tukey, John W. 1993. <span>“Graphic Comparisons of Several Linked Aspects: Alternatives and Suggested Principles.”</span> <em>Journal of Computational and Graphical Statistics</em> 2 (1): 1–33.
+———. 1993. <span>“Graphic Comparisons of Several Linked Aspects: Alternatives and Suggested Principles.”</span> <em>Journal of Computational and Graphical Statistics</em> 2 (1): 1–33.
 </div>
 <div id="ref-tversky1983" class="csl-entry">
 Tversky, Amos, and Daniel Kahneman. 1983. <span>“Extensional Versus Intuitive Reasoning: The Conjunction Fallacy in Probability Judgment.”</span> <em>Psychological Review</em> 90 (4): 293.
@@ -1551,7 +1555,7 @@ Tversky, Amos, and Daniel Kahneman. 1983. <span>“Extensional Versus Intuitive 
 Unwin, Antony, George Hawkins, Heike Hofmann, and Bernd Siegl. 1996. <span>“Interactive Graphics for Data Sets with Missing Values—MANET.”</span> <em>Journal of Computational and Graphical Statistics</em> 5 (2): 113–22.
 </div>
 <div id="ref-urbanek2011" class="csl-entry">
-Urbanek, Simon. 2011. <span>“iPlots eXtreme: Next-Generation Interactive Graphics Design and Implementation of Modern Interactive Graphics.”</span> <em>Computational Statistics</em> 26 (3): 381–93.
+———. 2011. <span>“iPlots eXtreme: Next-Generation Interactive Graphics Design and Implementation of Modern Interactive Graphics.”</span> <em>Computational Statistics</em> 26 (3): 381–93.
 </div>
 <div id="ref-vaneerd2023" class="csl-entry">
 Van Eerd, Tony. 2023. <span>“Value Oriented Programming Part 1: You Say You Want to Write a Function.”</span> <em>CppNow</em>. Youtube. <a href="https://www.youtube.com/watch?v=b4p_tcLYDV0">https://www.youtube.com/watch?v=b4p_tcLYDV0</a>.
@@ -1572,7 +1576,7 @@ Vickers, Paul, Joe Faith, and Nick Rossiter. 2012. <span>“Understanding Visual
 Wickham, Hadley. 2010. <span>“A Layered Grammar of Graphics.”</span> <em>Journal of Computational and Graphical Statistics</em> 19 (1): 3–28.
 </div>
 <div id="ref-wickham2016" class="csl-entry">
-———. 2016. <em>Ggplot2: Elegant Graphics for Data Analysis (2e)</em>. Springer-Verlag New York. <a href="https://ggplot2.tidyverse.org">https://ggplot2.tidyverse.org</a>.
+Wickham, Hadley. 2016. <em>Ggplot2: Elegant Graphics for Data Analysis (2e)</em>. Springer-Verlag New York. <a href="https://ggplot2.tidyverse.org">https://ggplot2.tidyverse.org</a>.
 </div>
 <div id="ref-ggplot2repo2024" class="csl-entry">
 ———. 2024. <span>“Ggplot2.”</span> <em>GitHub</em>. <a href="https://github.com/tidyverse/ggplot2">https://github.com/tidyverse/ggplot2</a>.
@@ -1596,7 +1600,7 @@ Wilke, Claus O. 2019. <em>Fundamentals of Data Visualization: A Primer on Making
 Wilkinson, Leland. 2012. <em>The Grammar of Graphics</em>. Springer.
 </div>
 <div id="ref-wills2008" class="csl-entry">
-Wills, Graham. 2008. <span>“Linked Data Views.”</span> In <em>Handbook of Data Visualization</em>, 217–41. ch. II. 9. Springer Berlin/Heidelberg, Germany.
+———. 2008. <span>“Linked Data Views.”</span> In <em>Handbook of Data Visualization</em>, 217–41. ch. II. 9. Springer Berlin/Heidelberg, Germany.
 </div>
 <div id="ref-wills2011" class="csl-entry">
 ———. 2011. <em>Visualizing Time: Designing Graphical Representations for Statistical Data</em>. Springer Science &amp; Business Media.
@@ -1616,14 +1620,14 @@ Ziemkiewicz, Caroline, and Robert Kosara. 2009. <span>“Embedding Information V
 </div>
 <div class="footnotes">
 <hr />
-<ol start="1">
-<li id="fn1"><p>Technically, this is also a function of the points’ radii, and thus to definitely guarantee that no points will overlap the plot’s edges, the axis limits would have to be expanded by a fraction that is greater than the radius of the largest point, however, this is rarely done in practice.<a href="problems.html#fnref1" class="footnote-back">↩︎</a></p></li>
-<li id="fn2"><p>But, interestingly, one-dimensional kernel density polygons are once again disjoint.<a href="problems.html#fnref2" class="footnote-back">↩︎</a></p></li>
-<li id="fn3"><p>It is not too difficult to create this data structure: see Section <a href="system.html#product-factors">6.4.4.4.4</a>.<a href="problems.html#fnref3" class="footnote-back">↩︎</a></p></li>
-<li id="fn4"><p>Being the top most downloaded CRAN package as of 4th of December 2024, <span class="citation">Data Science Meta (<a href="#ref-rmeta2024">2024</a>)</span><a href="problems.html#fnref4" class="footnote-back">↩︎</a></p></li>
-<li id="fn5"><p>In fact, with a bit of high-school algebra, it can be shown that the average function will appear associative for any triplets <span class="math inline">\(x, y, z\)</span> where <span class="math inline">\(3x + 3y + 6z = 4x + 4y + 4z\)</span> holds.<a href="problems.html#fnref5" class="footnote-back">↩︎</a></p></li>
-<li id="fn6"><p>The function signature should really include the data and visual attribute limits as well, i.e. <span class="math inline">\(s(d; d_{min}, d_{max}, v_{min}, v_{max})\)</span>, I omitted those here to prevent the signature from becoming too busy.<a href="problems.html#fnref6" class="footnote-back">↩︎</a></p></li>
-<li id="fn7"><p>More on this below.<a href="problems.html#fnref7" class="footnote-back">↩︎</a></p></li>
+<ol start="3">
+<li id="fn3"><p>Technically, this is also a function of the points’ radii, and thus to definitely guarantee that no points will overlap the plot’s edges, the axis limits would have to be expanded by a fraction that is greater than the radius of the largest point, however, this is rarely done in practice.<a href="problems.html#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn4"><p>But, interestingly, one-dimensional kernel density polygons are once again disjoint.<a href="problems.html#fnref4" class="footnote-back">↩︎</a></p></li>
+<li id="fn5"><p>It is not too difficult to create this data structure: see Section <a href="system.html#product-factors">6.4.4.4.4</a>.<a href="problems.html#fnref5" class="footnote-back">↩︎</a></p></li>
+<li id="fn6"><p>Being the top most downloaded CRAN package as of 4th of December 2024, <span class="citation">Data Science Meta (<a href="#ref-rmeta2024">2024</a>)</span><a href="problems.html#fnref6" class="footnote-back">↩︎</a></p></li>
+<li id="fn7"><p>In fact, with a bit of high-school algebra, it can be shown that the average function will appear associative for any triplets <span class="math inline">\(x, y, z\)</span> where <span class="math inline">\(3x + 3y + 6z = 4x + 4y + 4z\)</span> holds.<a href="problems.html#fnref7" class="footnote-back">↩︎</a></p></li>
+<li id="fn8"><p>The function signature should really include the data and visual attribute limits as well, i.e. <span class="math inline">\(s(d; d_{min}, d_{max}, v_{min}, v_{max})\)</span>, I omitted those here to prevent the signature from becoming too busy.<a href="problems.html#fnref8" class="footnote-back">↩︎</a></p></li>
+<li id="fn9"><p>More on this below.<a href="problems.html#fnref9" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>

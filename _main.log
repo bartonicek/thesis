@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.5.27)  11 JUN 2025 12:20
+This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.5.27)  18 JUN 2025 14:27
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1036,7 +1036,7 @@ Chapter 2.
 [8]
 
 [9]
-Underfull \hbox (badness 2521) in paragraph at lines 259--261
+Underfull \hbox (badness 2521) in paragraph at lines 261--263
 \TU/lmr/m/n/10 development of the interactive data visualization software system
  []
 
@@ -1070,7 +1070,7 @@ File: ./figures/mondrian.png Graphic file (type bmp)
 
 
 [16]
-Underfull \hbox (badness 1655) in paragraph at lines 362--362
+Underfull \hbox (badness 1655) in paragraph at lines 364--364
 []\TU/lmr/bx/n/12 Interactive data visualization and the internet:
  []
 
@@ -1078,7 +1078,7 @@ Underfull \hbox (badness 1655) in paragraph at lines 362--362
 
 [17]
 LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <10> not available
-(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 376.
+(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 378.
 
 
 [18]
@@ -1180,7 +1180,7 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 [47]
 
 [48]
-Underfull \hbox (badness 1205) in paragraph at lines 919--920
+Underfull \hbox (badness 1205) in paragraph at lines 921--922
 []\TU/lmr/m/n/10 Vector graphics offer certain significant advantages. Notably, they are
  []
 
@@ -1358,7 +1358,7 @@ File: ./figures/barplot-preorder2.pdf Graphic file (type pdf)
 File: ./figures/barplot-preorder4.pdf Graphic file (type pdf)
 <use ./figures/barplot-preorder4.pdf>
 
-Underfull \hbox (badness 3471) in paragraph at lines 1823--1823
+Underfull \hbox (badness 3471) in paragraph at lines 1825--1825
 []\TU/lmr/m/n/10 Figure 4.24: []A diagram of barplot/spineplot summary statistic pre-
  []
 
@@ -1398,12 +1398,12 @@ File: ./figures/lineplot-monotonicity.png Graphic file (type bmp)
 File: ./figures/barplot-preorder4.pdf Graphic file (type pdf)
 <use ./figures/barplot-preorder4.pdf>
 
-Underfull \hbox (badness 3503) in paragraph at lines 2120--2120
+Underfull \hbox (badness 3503) in paragraph at lines 2122--2122
 []\TU/lmr/m/n/10 Figure 4.27: []Reproduction of Figure Figure []4.24[]: Diagram of the
  []
 
 
-Underfull \hbox (badness 1442) in paragraph at lines 2125--2126
+Underfull \hbox (badness 1442) in paragraph at lines 2127--2128
  \TU/lmr/bx/n/10 4.3.2.10.1 Stacking[] \TU/lmr/m/n/10 To stack statistics, we need to apply our sum-
  []
 
@@ -1435,7 +1435,7 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 [111]
-Overfull \hbox (23.54958pt too wide) detected at line 2259
+Overfull \hbox (23.54958pt too wide) detected at line 2261
 [][][][][][][] [][][] [][][] [] [][] [] [][][] [] [] [] [][][] [] [][][][] [] [][][] [] [][][]
  []
 
@@ -1444,7 +1444,7 @@ Overfull \hbox (23.54958pt too wide) detected at line 2259
 [112]
 
 [113]
-Overfull \hbox (40.99963pt too wide) in paragraph at lines 2330--2331
+Overfull \hbox (40.99963pt too wide) in paragraph at lines 2332--2333
 []\TU/lmr/m/n/10 The function will then correctly map the discrete values in $[] [] [][][][][][][][] [][][][][][][] [][][][][][][]$
  []
 
@@ -1502,11 +1502,11 @@ Chapter 6.
 
 [132]
 LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <14.4> not available
-(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 2653.
+(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 2655.
 
 
 [133]
-Underfull \hbox (badness 10000) in paragraph at lines 2729--2731
+Underfull \hbox (badness 10000) in paragraph at lines 2731--2733
 
  []
 
@@ -1540,13 +1540,13 @@ Underfull \vbox (badness 7540) has occurred while \output is active []
 
 
 [140]
-Overfull \hbox (27.75pt too wide) in paragraph at lines 2886--2886
-[]  \TU/lmtt/m/n/10 .. ..$ id       : 'scalar' chr "dbfbedb4-9333-4e93-888f-c40975f18bf7"[] 
+Overfull \hbox (27.75pt too wide) in paragraph at lines 2888--2888
+[]  \TU/lmtt/m/n/10 .. ..$ id       : 'scalar' chr "c7278e37-8468-4c54-8428-ce11a844cce8"[] 
  []
 
 
-Overfull \hbox (27.75pt too wide) in paragraph at lines 2886--2886
-[]  \TU/lmtt/m/n/10 .. ..$ id       : 'scalar' chr "ed204306-8abb-4cf5-85e2-128159950901"[] 
+Overfull \hbox (27.75pt too wide) in paragraph at lines 2888--2888
+[]  \TU/lmtt/m/n/10 .. ..$ id       : 'scalar' chr "47f39ad0-8f19-45c5-b239-964df229a8bc"[] 
  []
 
 
@@ -1581,12 +1581,12 @@ File: ./figures/hierarchical_data.pdf Graphic file (type pdf)
 [149]
 
 [150]
-Underfull \hbox (badness 2119) in paragraph at lines 3153--3154
+Underfull \hbox (badness 2119) in paragraph at lines 3155--3156
 []\TU/lmr/m/n/10 The \TU/lmtt/m/n/10 encoded_object_data \TU/lmr/m/n/10 data set represents the whole barplot bars
  []
 
 
-Underfull \hbox (badness 1163) in paragraph at lines 3153--3154
+Underfull \hbox (badness 1163) in paragraph at lines 3155--3156
 \TU/lmr/m/n/10 and may be used for training scales and collision detection, while the
  []
 
@@ -1594,7 +1594,7 @@ Underfull \hbox (badness 1163) in paragraph at lines 3153--3154
 
 [151]
 
-LaTeX Warning: Reference `foo' on page 152 undefined on input line 3155.
+LaTeX Warning: Reference `foo' on page 152 undefined on input line 3157.
 
 
 Underfull \vbox (badness 3407) has occurred while \output is active []
@@ -1615,25 +1615,25 @@ Underfull \vbox (badness 3407) has occurred while \output is active []
 
 [158]
 
-LaTeX Warning: Reference `dop' on page 159 undefined on input line 3241.
+LaTeX Warning: Reference `dop' on page 159 undefined on input line 3243.
 
 
-Underfull \hbox (badness 1424) in paragraph at lines 3241--3242
+Underfull \hbox (badness 1424) in paragraph at lines 3243--3244
 \TU/lmr/m/n/10 programming (OOP) with extra steps, i.e. where someone might write
  []
 
 
-Underfull \hbox (badness 3449) in paragraph at lines 3241--3242
+Underfull \hbox (badness 3449) in paragraph at lines 3243--3244
 \TU/lmtt/m/n/10 const foo = new Foo(); const bar = foo.bar()\TU/lmr/m/n/10 , I write \TU/lmtt/m/n/10 const foo =
  []
 
 
-Underfull \hbox (badness 1019) in paragraph at lines 3241--3242
+Underfull \hbox (badness 1019) in paragraph at lines 3243--3244
 \TU/lmtt/m/n/10 Foo.create(); const bar = Foo.bar(foo)\TU/lmr/m/n/10 , however, there are a couple
  []
 
 
-Underfull \hbox (badness 1270) in paragraph at lines 3243--3243
+Underfull \hbox (badness 1270) in paragraph at lines 3245--3245
 []\TU/lmr/bx/n/12 Data representation: Row-oriented vs. column-
  []
 
@@ -1659,7 +1659,7 @@ Underfull \vbox (badness 2990) has occurred while \output is active []
 [166]
 
 [167]
-Overfull \vbox (1.95998pt too high) detected at line 3486
+Overfull \vbox (1.95998pt too high) detected at line 3488
  []
 
 
@@ -1671,12 +1671,12 @@ Overfull \vbox (1.95998pt too high) detected at line 3486
 [170]
 
 [171]
-Underfull \hbox (badness 4096) in paragraph at lines 3575--3576
+Underfull \hbox (badness 4096) in paragraph at lines 3577--3578
 []\TU/lmr/m/n/10 Note that, by definition, every \TU/lmtt/m/n/10 Getter<T> \TU/lmr/m/n/10 is also automatically an
  []
 
 
-Underfull \hbox (badness 1383) in paragraph at lines 3575--3576
+Underfull \hbox (badness 1383) in paragraph at lines 3577--3578
 \TU/lmtt/m/n/10 Indexable<T> \TU/lmr/m/n/10 (since it is a function of the form \TU/lmtt/m/n/10 (index: number) =>
  []
 
@@ -1689,7 +1689,7 @@ Underfull \hbox (badness 1383) in paragraph at lines 3575--3576
 [174]
 
 [175]
-Underfull \hbox (badness 6001) in paragraph at lines 3741--3742
+Underfull \hbox (badness 6001) in paragraph at lines 3743--3744
  \TU/lmr/bx/n/10 6.4.4.4.1 Bijection and constant factors[] \TU/lmtt/m/n/10 Factor.bijection \TU/lmr/m/n/10 and
  []
 
@@ -1747,7 +1747,7 @@ Underfull \vbox (badness 2213) has occurred while \output is active []
 [196]
 
 [197]
-Overfull \hbox (50.42001pt too wide) in paragraph at lines 4401--4402
+Overfull \hbox (50.42001pt too wide) in paragraph at lines 4403--4404
 []\TU/lmr/m/n/10 Back to code. The \TU/lmtt/m/n/10 ExpanseContinuous.normalize \TU/lmr/m/n/10 and \TU/lmtt/m/n/10 ExpanseContinuous.unnormalize
  []
 
@@ -1758,12 +1758,12 @@ Overfull \hbox (50.42001pt too wide) in paragraph at lines 4401--4402
 [199]
 
 [200]
-Underfull \hbox (badness 4303) in paragraph at lines 4528--4529
+Underfull \hbox (badness 4303) in paragraph at lines 4530--4531
 \TU/lmr/m/n/10 While \TU/lmtt/m/n/10 ExpansePoint \TU/lmr/m/n/10 places values at equidistant points along $[][][] [][]$,
  []
 
 
-Underfull \hbox (badness 2818) in paragraph at lines 4541--4542
+Underfull \hbox (badness 2818) in paragraph at lines 4543--4544
 \TU/lmr/m/n/10 additional \TU/lmtt/m/n/10 weights \TU/lmr/m/n/10 and \TU/lmtt/m/n/10 cumulativeWeights \TU/lmr/m/n/10 are numeric arrays which
  []
 
@@ -1774,7 +1774,7 @@ Underfull \hbox (badness 2818) in paragraph at lines 4541--4542
 [202]
 
 [203]
-Underfull \hbox (badness 1365) in paragraph at lines 4603--4604
+Underfull \hbox (badness 1365) in paragraph at lines 4605--4606
 []\TU/lmr/m/n/10 Importantly, data is not a single \TU/lmtt/m/n/10 Dataframe\TU/lmr/m/n/10 , but instead an array of
  []
 
@@ -1799,12 +1799,12 @@ Chapter 7.
 [211
 
 ]
-Overfull \hbox (2.99pt too wide) in paragraph at lines 4804--4804
+Overfull \hbox (2.99pt too wide) in paragraph at lines 4806--4806
 []\TU/lmr/m/n/10 reason_for_termination|  
  []
 
 
-Overfull \hbox (30.7pt too wide) in paragraph at lines 4804--4804
+Overfull \hbox (30.7pt too wide) in paragraph at lines 4806--4806
 []\TU/lmr/m/n/10 kategorie_delky_hospitalizace|  
  []
 
@@ -1858,7 +1858,7 @@ File: ./figures/example-cases-days-age.png Graphic file (type bmp)
 
 [223]
 
-LaTeX Warning: Float too large for page by 28.77036pt on input line 5098.
+LaTeX Warning: Float too large for page by 28.77036pt on input line 5100.
 
 
 
@@ -1891,7 +1891,7 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 [232]
-Underfull \hbox (badness 1132) in paragraph at lines 5315--5316
+Underfull \hbox (badness 1132) in paragraph at lines 5317--5318
 \TU/lmr/m/n/10 Alzheimer’s patients, over time, schizophrenia patients became the
  []
 
@@ -1927,7 +1927,7 @@ File: _main_files/figure-latex/plotscaper-downloads-1.pdf Graphic file (type pdf
 [243]
 
 [244]
-Underfull \hbox (badness 1014) in paragraph at lines 5407--5408
+Underfull \hbox (badness 1014) in paragraph at lines 5409--5410
 []\TU/lmr/m/n/10 More fundamentally, beyond the simple category-theoretic concepts used
  []
 
@@ -1944,7 +1944,7 @@ Underfull \hbox (badness 1014) in paragraph at lines 5407--5408
 [249]
 
 [250]
-Underfull \hbox (badness 2799) in paragraph at lines 5456--5458
+Underfull \hbox (badness 2799) in paragraph at lines 5458--5460
 []\TU/lmr/m/n/10 Pre-partitioning: Data streaming, partitioning parameter updates
  []
 
@@ -1969,7 +1969,7 @@ Chapter 10.
 ]
 
 [256]
-Overfull \hbox (27.75pt too wide) in paragraph at lines 5534--5534
+Overfull \hbox (27.75pt too wide) in paragraph at lines 5536--5536
 []  \TU/lmtt/m/n/10 <rect x="150" y="150" width="50" height="50" fill="firebrick"></rect>[] 
  []
 
@@ -2012,7 +2012,7 @@ File: ./figures/bijection-composition.png Graphic file (type bmp)
 [266]
 
 [267]
-Overfull \hbox (14.45105pt too wide) in paragraph at lines 5787--5788
+Overfull \hbox (14.45105pt too wide) in paragraph at lines 5789--5790
 \TU/lmr/m/n/10 underlying set is the family: $[] [] [][][]$
  []
 
@@ -2029,7 +2029,7 @@ File: ./figures/family-tree.pdf Graphic file (type pdf)
 [271]
 
 [272]
-Underfull \hbox (badness 10000) in paragraph at lines 5967--5968
+Underfull \hbox (badness 10000) in paragraph at lines 5969--5970
 [][]\TU/lmr/bx/n/10 Definition 11.13 \TU/lmr/m/n/10 (Monoid homomorphism)\TU/lmr/bx/n/10 . []\TU/lmr/m/n/10 Let $[][][] [][][] [][][]$ and
  []
 
@@ -2061,7 +2061,7 @@ File: ./figures/group-category.pdf Graphic file (type pdf)
 [280]
 Chapter 12.
 
-Underfull \hbox (badness 1472) in paragraph at lines 6257--6258
+Underfull \hbox (badness 1472) in paragraph at lines 6259--6260
 \TU/lmr/m/it/10 Markdown Publishing System\TU/lmr/m/n/10 . []$[][][][][] [] [] [] [][][][] [] [] [][] [][][][][][][] [] [][][] [] [][][][][][][] []
  []
 
@@ -2076,7 +2076,7 @@ Underfull \hbox (badness 1472) in paragraph at lines 6257--6258
 [283]
 
 [284]
-Underfull \hbox (badness 3240) in paragraph at lines 6476--6477
+Underfull \hbox (badness 3240) in paragraph at lines 6478--6479
 \TU/lmr/m/it/10 ceedings of the working conference on Advanced visual interfaces\TU/lmr/m/n/10 ,
  []
 
@@ -2085,14 +2085,14 @@ Underfull \hbox (badness 3240) in paragraph at lines 6476--6477
 [285]
 
 [286]
-Underfull \hbox (badness 3954) in paragraph at lines 6578--6579
+Underfull \hbox (badness 3954) in paragraph at lines 6580--6581
 \TU/lmr/m/n/10 ming.” \TU/lmr/m/it/10 Handmade Network\TU/lmr/m/n/10 . []$[][][][][] [] [] [] [][][][][][][][] [] [][][][][][][] [] [][][][][][][][] []
  []
 
 
 
 [287]
-Underfull \hbox (badness 1769) in paragraph at lines 6608--6609
+Underfull \hbox (badness 1769) in paragraph at lines 6610--6611
 []\TU/lmr/m/n/10 Henry, Lionel, and Hadley Wickham. 2024. \TU/lmr/m/it/10 Rlang: Functions for
  []
 
@@ -2103,7 +2103,7 @@ Underfull \hbox (badness 1769) in paragraph at lines 6608--6609
 [289]
 
 [290]
-Underfull \hbox (badness 10000) in paragraph at lines 6782--6783
+Underfull \hbox (badness 10000) in paragraph at lines 6784--6785
 []$[][][][][] [] [] [] [][][] [] [][][][][][][][] [] [][][] [] [][][][][] [] [][][][][] [] [][][][][][][][][][][][][][][][][][][][] [] [] []
  []
 
@@ -2116,14 +2116,14 @@ Underfull \hbox (badness 10000) in paragraph at lines 6782--6783
 [293]
 
 [294]
-Underfull \hbox (badness 1629) in paragraph at lines 7007--7008
+Underfull \hbox (badness 1629) in paragraph at lines 7009--7010
 []\TU/lmr/m/n/10 Self, Jessica Zeitz, Michelle Dowling, John Wenskovitch, Ian Crandell,
  []
 
 
 
 [295]
-Underfull \hbox (badness 3354) in paragraph at lines 7049--7050
+Underfull \hbox (badness 3354) in paragraph at lines 7051--7052
 \TU/lmr/m/it/10 A9\TU/lmr/m/n/10 . Youtube. []$[][][][][] [] [] [] [][][] [] [][][][][][][] [] [][][] [] [][][][][][][][] [] [][][][] [] [][][][][][][][] []
  []
 
@@ -2134,7 +2134,7 @@ Underfull \hbox (badness 3354) in paragraph at lines 7049--7050
 [297]
 
 [298]
-Underfull \hbox (badness 10000) in paragraph at lines 7229--7230
+Underfull \hbox (badness 10000) in paragraph at lines 7231--7232
 []$[][][][][] [] [] [] [][][] [] [][][][][][] [] [][][] [] [] [] [][][][][][][][][][][][][][][] [] [][][][][][][][] [] [][][][][][] [] [][][][][][][] []
  []
 

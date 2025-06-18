@@ -51,8 +51,76 @@
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
 
 
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
 
 <style type="text/css">
   
@@ -250,8 +318,8 @@ And firmly write: “In the Beginning was the Act!”</p>
 <p><span class="citation">Wilkinson (<a href="#ref-wilkinson2012">2012</a>)</span>, pp. 15 and 112</p>
 </blockquote>
 <p>What makes some combinations of graphics and statistics meaningful, while others degenerate or bizarre? I believe that answering this question is essential for building coherent data visualization systems, particularly ones involving interaction. Statistics may be a somewhat overlooked component of the GoG model<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>. Yet, I contend that, when developing interactive data visualizations, grappling with the properties of statistics underlying our plots is absolutely essential.</p>
-<p>To expand on this idea, the main thrust of my argument is that what we can <em>do</em> with a graphic is fundamentally determined what the graphics <em>is</em>. Like geometric objects and scales, summary statistics are essential components of plots, and, when considered all in context, different patterns emerge. Some types of plots exhibit a special kind of congruence between data, summary statistics, and visuals, which ensures predictable behavior under interaction. Other types of plots break this congruence, making certain interactive features brittle or difficult to implement. Exploring this congruence is one of the primary tasks of the present thesis. To describe it formally, I propose a simple model leveraging some fundamental algebraic concepts from category theory <span class="citation">(see e.g. <a href="#ref-fong2019">Fong and Spivak 2019</a>)</span>. These concepts, and my application of them, extends beyond GoG <span class="citation">(<a href="#ref-wilkinson2012">Wilkinson 2012</a>)</span>. Specifically, while GoG treats data, statistics, and graphics as entirely independent, modular components, I instead propose a compositional model which focuses on preserving key mathematical properties.</p>
-<p>Finally, since interactive data visualization is a very much an applied discipline, all this theory would be pointless if it did not lead to practical, actionable insights. Therefore, to validate and refine these theoretical findings, I also develop an original open-source interactive data visualization library, <code>plotscaper</code> (<a href="https://github.com/bartonicek/plotscaper" class="uri">https://github.com/bartonicek/plotscaper</a>). Consequently, parts of this thesis are dedicated to the design and architecture of this system, as well as its application to real-world data. Throughout these sections, I repeatedly explore and elaborate on the connections between the mathematical theory and its practical application.</p>
+<p>The main thrust of my argument is: what we can <em>do</em> with a graphic is fundamentally determined what the graphic <em>is</em>. Like geometric objects and scales, summary statistics are essential components of plots. When we consider all these together, distinct patterns emerge. Some types of plots exhibit a special kind of congruence between data, summary statistics, and visuals, which ensures predictable behavior under interaction. Other plots break this congruence, making certain interactive features brittle or difficult to implement. I explore this congruence and lack thereof throughout this thesis. Further, to describe it formally, I propose a simple model leveraging some fundamental algebraic concepts from category theory <span class="citation">(see e.g. <a href="#ref-fong2019">Fong and Spivak 2019</a>)</span>. My application of these concepts extends beyond the GoG <span class="citation">(<a href="#ref-wilkinson2012">Wilkinson 2012</a>)</span>. Specifically, in contrast to the GoG approach which treats data, statistics, and graphics as entirely independent, modular components, I propose an alternative, compositional model which focuses on preserving key mathematical properties.</p>
+<p>Finally, since interactive data visualization is first and foremost an applied discipline, all this theoretical work would be meaningless if it did not lead to practical, actionable insights. Therefore, to validate and refine these theoretical findings, I also develop an original open-source interactive data visualization library, <code>plotscaper</code> (<a href="https://github.com/bartonicek/plotscaper" class="uri">https://github.com/bartonicek/plotscaper</a>). Consequently, parts of this thesis are dedicated to the design and architecture of this system, as well as its application to real-world data. Throughout these sections, I repeatedly explore and elaborate on the links between the underlying mathematics and the practical concerns that arise when building interactive data visualization systems.</p>
 <p>Ultimately, I contend that, to build truly general and efficient interactive data visualization systems, we need to take the algebraic relationships underlying plots into account. Only by precisely describing what a plot <em>is</em> can we begin to reason about what we can <em>do</em> with it.</p>
 <div id="structure-of-the-thesis" class="section level4 hasAnchor" number="2.0.0.1">
 <h4><span class="header-section-number">2.0.0.1</span> Structure of the thesis<a href="introduction.html#structure-of-the-thesis" class="anchor-section" aria-label="Anchor link to header"></a></h4>
@@ -400,6 +468,20 @@ gitbook.start({
 });
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
 
 </html>
