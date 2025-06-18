@@ -187,8 +187,8 @@
 \contentsline {subsection}{\numberline {8.1.2}Disjointness}{239}{subsection.8.1.2}%
 \contentsline {subsection}{\numberline {8.1.3}Associativity and unitality}{240}{subsection.8.1.3}%
 \contentsline {subsection}{\numberline {8.1.4}Groups and inverses}{241}{subsection.8.1.4}%
-\contentsline {subsection}{\numberline {8.1.5}Additional properties: Monotonicity, commutativity, and others}{243}{subsection.8.1.5}%
-\contentsline {subsection}{\numberline {8.1.6}Model constraints}{245}{subsection.8.1.6}%
+\contentsline {subsection}{\numberline {8.1.5}Additional properties: Monotonicity, commutativity, and others}{242}{subsection.8.1.5}%
+\contentsline {subsection}{\numberline {8.1.6}Model constraints}{244}{subsection.8.1.6}%
 \contentsline {subsection}{\numberline {8.1.7}Potential future directions}{245}{subsection.8.1.7}%
 \contentsline {section}{\numberline {8.2}Delivered software (\texttt {plotscaper})}{246}{section.8.2}%
 \contentsline {subsection}{\numberline {8.2.1}Scope and features}{246}{subsection.8.2.1}%

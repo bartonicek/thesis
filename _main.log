@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.5.27)  11 JUN 2025 10:54
+This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.5.27)  11 JUN 2025 12:20
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1541,12 +1541,12 @@ Underfull \vbox (badness 7540) has occurred while \output is active []
 
 [140]
 Overfull \hbox (27.75pt too wide) in paragraph at lines 2886--2886
-[]  \TU/lmtt/m/n/10 .. ..$ id       : 'scalar' chr "77a4d8da-5a0b-4292-9b4c-4a493269e40e"[] 
+[]  \TU/lmtt/m/n/10 .. ..$ id       : 'scalar' chr "dbfbedb4-9333-4e93-888f-c40975f18bf7"[] 
  []
 
 
 Overfull \hbox (27.75pt too wide) in paragraph at lines 2886--2886
-[]  \TU/lmtt/m/n/10 .. ..$ id       : 'scalar' chr "b8b115bf-a3e6-401b-99b2-d8478b717572"[] 
+[]  \TU/lmtt/m/n/10 .. ..$ id       : 'scalar' chr "ed204306-8abb-4cf5-85e2-128159950901"[] 
  []
 
 
@@ -1718,7 +1718,7 @@ File: ./figures/transient-persisent-product.png Graphic file (type bmp)
 [183]
 
 [184]
-Underfull \vbox (badness 4846) has occurred while \output is active []
+Underfull \vbox (badness 2213) has occurred while \output is active []
 
 
 
@@ -1921,16 +1921,10 @@ File: _main_files/figure-latex/plotscaper-downloads-1.pdf Graphic file (type pdf
 [240]
 
 [241]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
 
 [242]
 
 [243]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
 
 [244]
 Underfull \hbox (badness 1014) in paragraph at lines 5407--5408
@@ -2164,6 +2158,6 @@ Here is how much of TeX's memory you used:
  57570 multiletter control sequences out of 15000+600000
  633510 words of font info for 110 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 98i,17n,114p,3512b,750s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 98i,17n,114p,3529b,750s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
 Output written on _main.pdf (300 pages).
