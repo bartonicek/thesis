@@ -4,6 +4,7 @@ subtitle: "From the Algebra of Graphics, Statistics, and Interaction to Practica
 author: "Adam Bartonicek"
 site: bookdown::bookdown_site
 documentclass: book
+classoption: openany
 always_allow_html: true
 output:
   bookdown::gitbook:
@@ -25,7 +26,7 @@ header-includes:
 
 Interactive data visualization has become a staple of modern data presentation. However, creating rich interactive figures still remains challenging, and widely available interactive data visualization systems often offer only limited support for many valuable interactive features. This implementation gap may stem from a subtle yet profound issue: what we can *do* with a figure is fundamentally determined by what the figure *is*. Graphs are not mere images; they are visual representations of structured information. Consequently, interactive features must align with the mathematical properties of the data they represent. Yet, this is view clashes with the dominant, independence-based approach to building data visualization systems. This approach, popularized by the Grammar of Graphics [@wilkinson2012], attempts to treat graphics, statistics, and interaction as independent, modular components.
 
-In this thesis, I argue that the independence model, despite many advantages, is fundamentally inadequate for fully understanding graphics, particularly when interaction comes into play. Visualization components are not independent, but instead deeply interconnected. Throughout this work, I explore this interconnectedness, the challenges is poses for interactive data visualization systems, and propose an alternative model based on some fundamental concepts from category theory. To put these ideas into practice, I also present `plotscaper`, an R package developed to refine these theoretical ideas and offer a practical tool for interactive data exploration. My goal is to demonstrate that, to design truly robust and consistent interactive data visualization systems, we need to ground our thinking in algebraic concepts.
+In this thesis, I argue that the independence model, despite many advantages, is fundamentally inadequate for comprehensively modeling graphics - visualization components are not independent, but instead deeply interconnected, particularly when interaction comes into play. Throughout this work, I explore this interconnectedness, the challenges is poses for interactive data visualization systems, and propose an alternative model based on some fundamental concepts from category theory. To put these ideas into practice, I also present `plotscaper`, an R package developed to refine these theoretical ideas and offer a practical tool for interactive data exploration. My goal is to demonstrate that, to build truly robust and consistent interactive data visualization systems, we may benefit from grounding our thinking in algebraic concepts.
 
 ```{r}
 #| echo: false
