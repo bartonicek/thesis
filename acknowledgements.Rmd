@@ -9,3 +9,7 @@ I also want to thank my family and friends. To my amazing partner, Nela, thank y
 Finally, I want to express gratitude to the University of Auckland, for their financial support and for giving me the opportunity to join their excellent research community for a time. A special thank you goes to the Department of Statistics, for fostering a welcoming environment and introducing me to many wonderful people, faculty and fellow students alike. I will never forget my time at UoA. Last but not least, I would also like to thank Simon's former supervisor, Antony, for making the time for me and sharing his many invaluable insights on the nature and history of interactive graphics.
 
 These individuals, and many others, have helped me become a better version of myself over the past few years, enabling me to achieve something I never could have done on my own. For that, I will always be immensely grateful.
+```{=latex}
+% Trigger ToC creation in LaTeX
+\tableofcontents
+```

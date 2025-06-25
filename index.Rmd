@@ -13,6 +13,10 @@ output:
     latex_engine: xelatex
   bookdown::pdf_book:
     latex_engine: xelatex
+    toc: false
+    includes:
+      before_body: title.tex
+toc_depth: 3
 bibliography: [references.bib]
 biblio-style: "apalike"
 link-citations: true
@@ -20,6 +24,9 @@ editor_options:
   chunk_output_type: console
 header-includes:
   - \usepackage{tikz-cd}
+  - \usepackage{changepage}
+  - \AtBeginDocument{\frontmatter}
+  - \AtBeginDocument{\let\maketitle\relax}
 ---
 
 # Abstract

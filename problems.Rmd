@@ -10,7 +10,7 @@ editor_options:
 
 Designing an interactive data visualization system presents a unique set of challenges. Some of these have been already touched on in the Section \@ref(background). This section homes in on these inherent challenges, discusses them in greater depth, and begins exploring avenues for possible solutions.
 
-## The structure of this chapter: Data visualization pipeline
+### The structure of this chapter: Data visualization pipeline
 
 When creating visualizations, be they static or interactive, our ultimate goal is to render geometric objects that will represent our data in some way. However, it is rarely the case that we can plot the raw data directly, as is. Instead, before the data can be rendered, it often has to pass through several distinct transformation steps or stages. Together, these steps form a data visualization pipeline [see e.g. @chi2000; @wickham2009; @wu2024]. Each of these steps come with its inherent set of considerations and challenges, particularly when interaction is involved. 
 
