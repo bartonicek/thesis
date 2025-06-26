@@ -62,36 +62,36 @@
 \contentsline {subsubsection}{\numberline {3.2.2.2}Generalizing preorders: Categories}{82}{subsubsection.3.2.2.2}%
 \contentsline {subsubsection}{\numberline {3.2.2.3}Structure preserving maps: Functors}{85}{subsubsection.3.2.2.3}%
 \contentsline {subsubsection}{\numberline {3.2.2.4}Aggregation: A functor from data subsets to summary statistics}{86}{subsubsection.3.2.2.4}%
-\contentsline {subsubsection}{\numberline {3.2.2.5}Functorial summaries and set union}{89}{subsubsection.3.2.2.5}%
+\contentsline {subsubsection}{\numberline {3.2.2.5}Functorial summaries and set union}{88}{subsubsection.3.2.2.5}%
 \contentsline {subsubsection}{\numberline {3.2.2.6}Whole equal to the sum of its parts: Monoids}{90}{subsubsection.3.2.2.6}%
 \contentsline {subsubsection}{\numberline {3.2.2.7}Programming with monoids}{92}{subsubsection.3.2.2.7}%
 \contentsline {subsubsection}{\numberline {3.2.2.8}Groups and inverses}{94}{subsubsection.3.2.2.8}%
-\contentsline {subsubsection}{\numberline {3.2.2.9}Other properties: Monotonicity and commutativity}{96}{subsubsection.3.2.2.9}%
-\contentsline {paragraph}{\numberline {3.2.2.9.1}Monotonicity}{98}{paragraph.3.2.2.9.1}%
-\contentsline {paragraph}{\numberline {3.2.2.9.2}Commutativity}{98}{paragraph.3.2.2.9.2}%
-\contentsline {subsubsection}{\numberline {3.2.2.10}Transforming summaries: Stacking, normalizing, and shifting}{100}{subsubsection.3.2.2.10}%
-\contentsline {paragraph}{\numberline {3.2.2.10.1}Stacking}{100}{paragraph.3.2.2.10.1}%
-\contentsline {paragraph}{\numberline {3.2.2.10.2}Normalizing}{101}{paragraph.3.2.2.10.2}%
-\contentsline {paragraph}{\numberline {3.2.2.10.3}Shifting}{101}{paragraph.3.2.2.10.3}%
-\contentsline {section}{\numberline {3.3}Scaling and encoding}{102}{section.3.3}%
+\contentsline {subsubsection}{\numberline {3.2.2.9}Other properties: Monotonicity and commutativity}{97}{subsubsection.3.2.2.9}%
+\contentsline {paragraph}{\numberline {3.2.2.9.1}Monotonicity}{97}{paragraph.3.2.2.9.1}%
+\contentsline {paragraph}{\numberline {3.2.2.9.2}Commutativity}{99}{paragraph.3.2.2.9.2}%
+\contentsline {subsubsection}{\numberline {3.2.2.10}Transforming summaries: Stacking, normalizing, and shifting}{99}{subsubsection.3.2.2.10}%
+\contentsline {paragraph}{\numberline {3.2.2.10.1}Stacking}{99}{paragraph.3.2.2.10.1}%
+\contentsline {paragraph}{\numberline {3.2.2.10.2}Normalizing}{100}{paragraph.3.2.2.10.2}%
+\contentsline {paragraph}{\numberline {3.2.2.10.3}Shifting}{100}{paragraph.3.2.2.10.3}%
+\contentsline {section}{\numberline {3.3}Scaling and encoding}{101}{section.3.3}%
 \contentsline {subsubsection}{\numberline {3.3.0.1}Scales as functions}{102}{subsubsection.3.3.0.1}%
-\contentsline {subsubsection}{\numberline {3.3.0.2}Limits of modeling scales with simple functions}{104}{subsubsection.3.3.0.2}%
-\contentsline {subsubsection}{\numberline {3.3.0.3}Solution: Scales as function composition}{107}{subsubsection.3.3.0.3}%
-\contentsline {paragraph}{\numberline {3.3.0.3.1}Reusability and discrete scales}{108}{paragraph.3.3.0.3.1}%
-\contentsline {paragraph}{\numberline {3.3.0.3.2}The intermediate interval}{108}{paragraph.3.3.0.3.2}%
-\contentsline {paragraph}{\numberline {3.3.0.3.3}Implementing scale features via the intermediate interval}{109}{paragraph.3.3.0.3.3}%
-\contentsline {subparagraph}{\numberline {3.3.0.3.3.1}Margins}{109}{subparagraph.3.3.0.3.3.1}%
-\contentsline {subparagraph}{\numberline {3.3.0.3.3.2}Panning}{110}{subparagraph.3.3.0.3.3.2}%
-\contentsline {subparagraph}{\numberline {3.3.0.3.3.3}Zooming}{110}{subparagraph.3.3.0.3.3.3}%
-\contentsline {paragraph}{\numberline {3.3.0.3.4}Inverses}{111}{paragraph.3.3.0.3.4}%
+\contentsline {subsubsection}{\numberline {3.3.0.2}Limits of modeling scales with simple functions}{103}{subsubsection.3.3.0.2}%
+\contentsline {subsubsection}{\numberline {3.3.0.3}Solution: Scales as function composition}{106}{subsubsection.3.3.0.3}%
+\contentsline {paragraph}{\numberline {3.3.0.3.1}Reusability and discrete scales}{107}{paragraph.3.3.0.3.1}%
+\contentsline {paragraph}{\numberline {3.3.0.3.2}The intermediate interval}{107}{paragraph.3.3.0.3.2}%
+\contentsline {paragraph}{\numberline {3.3.0.3.3}Implementing scale features via the intermediate interval}{108}{paragraph.3.3.0.3.3}%
+\contentsline {subparagraph}{\numberline {3.3.0.3.3.1}Margins}{108}{subparagraph.3.3.0.3.3.1}%
+\contentsline {subparagraph}{\numberline {3.3.0.3.3.2}Panning}{109}{subparagraph.3.3.0.3.3.2}%
+\contentsline {subparagraph}{\numberline {3.3.0.3.3.3}Zooming}{109}{subparagraph.3.3.0.3.3.3}%
+\contentsline {paragraph}{\numberline {3.3.0.3.4}Inverses}{110}{paragraph.3.3.0.3.4}%
 \contentsline {paragraph}{\numberline {3.3.0.3.5}Scale transformations}{111}{paragraph.3.3.0.3.5}%
-\contentsline {subsubsection}{\numberline {3.3.0.4}Comparison to past implementations of scales}{112}{subsubsection.3.3.0.4}%
-\contentsline {section}{\numberline {3.4}Rendering}{113}{section.3.4}%
+\contentsline {subsubsection}{\numberline {3.3.0.4}Comparison to past implementations of scales}{111}{subsubsection.3.3.0.4}%
+\contentsline {section}{\numberline {3.4}Rendering}{112}{section.3.4}%
 \contentsline {subsection}{\numberline {3.4.1}Frames}{113}{subsection.3.4.1}%
-\contentsline {subsection}{\numberline {3.4.2}Geoms}{115}{subsection.3.4.2}%
-\contentsline {subsubsection}{\numberline {3.4.2.1}Rendering geoms: A functor from summary statistics to graphics}{115}{subsubsection.3.4.2.1}%
-\contentsline {subsection}{\numberline {3.4.3}Auxiliary graphical elements}{116}{subsection.3.4.3}%
-\contentsline {section}{\numberline {3.5}Summary}{117}{section.3.5}%
+\contentsline {subsection}{\numberline {3.4.2}Geoms}{114}{subsection.3.4.2}%
+\contentsline {subsubsection}{\numberline {3.4.2.1}Rendering geoms: A functor from summary statistics to graphics}{114}{subsubsection.3.4.2.1}%
+\contentsline {subsection}{\numberline {3.4.3}Auxiliary graphical elements}{115}{subsection.3.4.3}%
+\contentsline {section}{\numberline {3.5}Summary}{116}{section.3.5}%
 \contentsline {chapter}{\numberline {4}Goals}{118}{chapter.4}%
 \contentsline {section}{\numberline {4.1}User profile}{118}{section.4.1}%
 \contentsline {section}{\numberline {4.2}Programming interface}{119}{section.4.2}%
@@ -199,42 +199,43 @@
 \contentsline {section}{\numberline {7.2}Delivered software}{238}{section.7.2}%
 \contentsline {subsection}{\numberline {7.2.1}Scope and features}{238}{subsection.7.2.1}%
 \contentsline {subsubsection}{\numberline {7.2.1.1}Plot types}{239}{subsubsection.7.2.1.1}%
-\contentsline {subsubsection}{\numberline {7.2.1.2}Selection model}{239}{subsubsection.7.2.1.2}%
-\contentsline {subsubsection}{\numberline {7.2.1.3}Feature depth}{240}{subsubsection.7.2.1.3}%
-\contentsline {subsubsection}{\numberline {7.2.1.4}Customization}{240}{subsubsection.7.2.1.4}%
-\contentsline {subsubsection}{\numberline {7.2.1.5}Performance}{241}{subsubsection.7.2.1.5}%
+\contentsline {subsubsection}{\numberline {7.2.1.2}Consistency}{239}{subsubsection.7.2.1.2}%
+\contentsline {subsubsection}{\numberline {7.2.1.3}Selection model}{239}{subsubsection.7.2.1.3}%
+\contentsline {subsubsection}{\numberline {7.2.1.4}Feature depth}{240}{subsubsection.7.2.1.4}%
+\contentsline {subsubsection}{\numberline {7.2.1.5}Customization}{241}{subsubsection.7.2.1.5}%
+\contentsline {subsubsection}{\numberline {7.2.1.6}Performance}{241}{subsubsection.7.2.1.6}%
 \contentsline {subsection}{\numberline {7.2.2}Declarative schemas and extensibility}{241}{subsection.7.2.2}%
 \contentsline {subsubsection}{\numberline {7.2.2.1}Data and encodings}{242}{subsubsection.7.2.2.1}%
 \contentsline {subsubsection}{\numberline {7.2.2.2}Graphs and hierarchy}{243}{subsubsection.7.2.2.2}%
-\contentsline {subsubsection}{\numberline {7.2.2.3}Reactivity}{243}{subsubsection.7.2.2.3}%
-\contentsline {subsection}{\numberline {7.2.3}Performance}{244}{subsection.7.2.3}%
-\contentsline {chapter}{\numberline {8}Conclusion}{246}{chapter.8}%
-\contentsline {chapter}{\numberline {9}Appendix: Glossary}{248}{chapter.9}%
-\contentsline {subsubsection}{\numberline {9.0.0.1}API}{248}{subsubsection.9.0.0.1}%
-\contentsline {subsubsection}{\numberline {9.0.0.2}JSON}{248}{subsubsection.9.0.0.2}%
-\contentsline {subsubsection}{\numberline {9.0.0.3}GoG}{249}{subsubsection.9.0.0.3}%
-\contentsline {subsubsection}{\numberline {9.0.0.4}IDE}{249}{subsubsection.9.0.0.4}%
-\contentsline {subsubsection}{\numberline {9.0.0.5}SVG}{250}{subsubsection.9.0.0.5}%
-\contentsline {chapter}{\numberline {10}Appendix: Mathematical theory}{251}{chapter.10}%
-\contentsline {subsubsection}{\numberline {10.0.0.1}Relations}{251}{subsubsection.10.0.0.1}%
-\contentsline {subsubsection}{\numberline {10.0.0.2}Functions}{253}{subsubsection.10.0.0.2}%
-\contentsline {paragraph}{\numberline {10.0.0.2.1}More on bijections}{255}{paragraph.10.0.0.2.1}%
-\contentsline {paragraph}{\numberline {10.0.0.2.2}Composition}{256}{paragraph.10.0.0.2.2}%
-\contentsline {paragraph}{\numberline {10.0.0.2.3}The image and the pre-image}{257}{paragraph.10.0.0.2.3}%
-\contentsline {subsubsection}{\numberline {10.0.0.3}Partitions}{258}{subsubsection.10.0.0.3}%
-\contentsline {subsubsection}{\numberline {10.0.0.4}Preorders}{259}{subsubsection.10.0.0.4}%
-\contentsline {paragraph}{\numberline {10.0.0.4.1}Specializing preorders}{260}{paragraph.10.0.0.4.1}%
-\contentsline {paragraph}{\numberline {10.0.0.4.2}Structure preserving maps: Monotone maps}{261}{paragraph.10.0.0.4.2}%
-\contentsline {subsubsection}{\numberline {10.0.0.5}Monoids}{261}{subsubsection.10.0.0.5}%
-\contentsline {subsubsection}{\numberline {10.0.0.6}Simple examples of monoids}{262}{subsubsection.10.0.0.6}%
-\contentsline {paragraph}{\numberline {10.0.0.6.1}Beyond numbers}{263}{paragraph.10.0.0.6.1}%
-\contentsline {subsubsection}{\numberline {10.0.0.7}Specializing monoids}{264}{subsubsection.10.0.0.7}%
-\contentsline {paragraph}{\numberline {10.0.0.7.1}Structure preserving maps: Monoid homomorphisms}{265}{paragraph.10.0.0.7.1}%
-\contentsline {subsubsection}{\numberline {10.0.0.8}Groups}{266}{subsubsection.10.0.0.8}%
-\contentsline {paragraph}{\numberline {10.0.0.8.1}Simple examples of groups}{267}{paragraph.10.0.0.8.1}%
-\contentsline {paragraph}{\numberline {10.0.0.8.2}Structure preserving maps: Group homomorphisms}{267}{paragraph.10.0.0.8.2}%
-\contentsline {subsubsection}{\numberline {10.0.0.9}Categories}{267}{subsubsection.10.0.0.9}%
-\contentsline {paragraph}{\numberline {10.0.0.9.1}Isomorphisms within categories}{269}{paragraph.10.0.0.9.1}%
-\contentsline {paragraph}{\numberline {10.0.0.9.2}Algebraic structures described as categories}{270}{paragraph.10.0.0.9.2}%
-\contentsline {subsubsection}{\numberline {10.0.0.10}Functors}{271}{subsubsection.10.0.0.10}%
-\contentsline {chapter}{\numberline {11}References}{273}{chapter.11}%
+\contentsline {subsubsection}{\numberline {7.2.2.3}Reactivity}{244}{subsubsection.7.2.2.3}%
+\contentsline {subsection}{\numberline {7.2.3}Performance}{245}{subsection.7.2.3}%
+\contentsline {chapter}{\numberline {8}Conclusion}{247}{chapter.8}%
+\contentsline {chapter}{\numberline {9}Appendix: Glossary}{249}{chapter.9}%
+\contentsline {subsubsection}{\numberline {9.0.0.1}API}{249}{subsubsection.9.0.0.1}%
+\contentsline {subsubsection}{\numberline {9.0.0.2}JSON}{249}{subsubsection.9.0.0.2}%
+\contentsline {subsubsection}{\numberline {9.0.0.3}GoG}{250}{subsubsection.9.0.0.3}%
+\contentsline {subsubsection}{\numberline {9.0.0.4}IDE}{250}{subsubsection.9.0.0.4}%
+\contentsline {subsubsection}{\numberline {9.0.0.5}SVG}{251}{subsubsection.9.0.0.5}%
+\contentsline {chapter}{\numberline {10}Appendix: Mathematical theory}{252}{chapter.10}%
+\contentsline {subsubsection}{\numberline {10.0.0.1}Relations}{252}{subsubsection.10.0.0.1}%
+\contentsline {subsubsection}{\numberline {10.0.0.2}Functions}{254}{subsubsection.10.0.0.2}%
+\contentsline {paragraph}{\numberline {10.0.0.2.1}More on bijections}{256}{paragraph.10.0.0.2.1}%
+\contentsline {paragraph}{\numberline {10.0.0.2.2}Composition}{257}{paragraph.10.0.0.2.2}%
+\contentsline {paragraph}{\numberline {10.0.0.2.3}The image and the pre-image}{258}{paragraph.10.0.0.2.3}%
+\contentsline {subsubsection}{\numberline {10.0.0.3}Partitions}{259}{subsubsection.10.0.0.3}%
+\contentsline {subsubsection}{\numberline {10.0.0.4}Preorders}{260}{subsubsection.10.0.0.4}%
+\contentsline {paragraph}{\numberline {10.0.0.4.1}Specializing preorders}{261}{paragraph.10.0.0.4.1}%
+\contentsline {paragraph}{\numberline {10.0.0.4.2}Structure preserving maps: Monotone maps}{262}{paragraph.10.0.0.4.2}%
+\contentsline {subsubsection}{\numberline {10.0.0.5}Monoids}{262}{subsubsection.10.0.0.5}%
+\contentsline {subsubsection}{\numberline {10.0.0.6}Simple examples of monoids}{263}{subsubsection.10.0.0.6}%
+\contentsline {paragraph}{\numberline {10.0.0.6.1}Beyond numbers}{264}{paragraph.10.0.0.6.1}%
+\contentsline {subsubsection}{\numberline {10.0.0.7}Specializing monoids}{265}{subsubsection.10.0.0.7}%
+\contentsline {paragraph}{\numberline {10.0.0.7.1}Structure preserving maps: Monoid homomorphisms}{266}{paragraph.10.0.0.7.1}%
+\contentsline {subsubsection}{\numberline {10.0.0.8}Groups}{267}{subsubsection.10.0.0.8}%
+\contentsline {paragraph}{\numberline {10.0.0.8.1}Simple examples of groups}{268}{paragraph.10.0.0.8.1}%
+\contentsline {paragraph}{\numberline {10.0.0.8.2}Structure preserving maps: Group homomorphisms}{268}{paragraph.10.0.0.8.2}%
+\contentsline {subsubsection}{\numberline {10.0.0.9}Categories}{268}{subsubsection.10.0.0.9}%
+\contentsline {paragraph}{\numberline {10.0.0.9.1}Isomorphisms within categories}{270}{paragraph.10.0.0.9.1}%
+\contentsline {paragraph}{\numberline {10.0.0.9.2}Algebraic structures described as categories}{271}{paragraph.10.0.0.9.2}%
+\contentsline {subsubsection}{\numberline {10.0.0.10}Functors}{272}{subsubsection.10.0.0.10}%
+\contentsline {chapter}{\numberline {11}References}{274}{chapter.11}%

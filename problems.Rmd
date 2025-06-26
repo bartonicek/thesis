@@ -331,7 +331,7 @@ Regular plot is a plot where the geometric objects within one layer represent a 
 
 #### The graph behind the graph
 
-To summarize the main point of this entire section, *graphs are graphs*. As a bit of a playful side-note, this view is not shared by everyone. Particularly, the poster of the following meme shared on the Mathematical Mathematics Memes Facebook group [@mathematicalmathematics2024] might not agree:
+To summarize the main point of this entire section, *graphs are graphs*. As a bit of a playful side-note, this view is not shared by everyone, as evidenced by a meme shared on the Mathematical Mathematics Memes Facebook group [@mathematicalmathematics2024], see Figure \@ref(fig:meme).
 
 (ref:mathematical) [@mathematicalmathematics2024]
 
@@ -545,7 +545,7 @@ For example, the following is a diagram of a simple category with two objects an
 
 ```{r category-two1}
 #| echo: false
-#| out-width: "75%"
+#| out-width: "60%"
 #| fig-cap: "A category with two objects."
 knitr::include_graphics("./figures/category-two.png")
 ```
@@ -603,7 +603,7 @@ This second property of preserving composition can be described by the following
 ```{r functor}
 #| echo: false
 #| fig-cap: "A commutative diagram showing how a functor $F$ preserves associativity. $A$, $B$, $C$ are objects in category $\\mathcal{C}$, $F(A)$, $F(B)$, $F(C)$ are objects in category $\\mathcal{D}$, $f$ and $g$ are morphisms in $\\mathcal{C}$, and $F(F)$ and $F(g)$ are objects in $\\mathcal{D}$."
-#| out-width: "75%"
+#| out-width: "60%"
 knitr::include_graphics("./figures/functor.png")
 ```
 

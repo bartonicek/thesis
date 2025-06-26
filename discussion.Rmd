@@ -129,7 +129,13 @@ Currently, `plotscaper` offers a robust set of features for creating and manipul
 
 In the current version, `plotscaper` offers six plot types: scatterplots, barplots, histograms, fluctuation diagrams, histograms, two-dimensional histograms, and parallel coordinate plots. Additionally, normalized representations, such as spineplots and spinograms, are available for all aggregate plots (and also parallel coordinate plots). While these six plot types can already be used to create a wide range of useful interactive figures, there are numerous other plots which could be highly useful in applied data analysis. Density plots, radar plots, mosaic plots, and maps, for example, should be compatible with the `plotscaper` model and could be potential additions in future versions of the package. Furthermore, a relatively simple addition which could be useful would be horizontal barplots. 
 
-Finally, in the current version of the system, all plots are specified nominally^[Meaning that, for instance, to add a scatterplot, we call the `add_scatterplot` function]. While a full declarative plot specification in R would be appealing, implementing such a system has presented challenges, and the issue will be discussed in more depth in Section \@ref(declarative-schemas). This somewhat limits the package's extensibility, however, users familiar with TypeScript can still create arbitrary new plot types using `plotscape` code.
+Finally, in the current version of the system, all plots are specified nominally^[Meaning that, for instance, to add a scatterplot, we call the `add_scatterplot` function.]. While a full declarative plot specification in R would be appealing, implementing such a system has presented challenges, and the issue will be discussed in more depth in Section \@ref(declarative-schemas). This somewhat limits the package's extensibility, however, users familiar with TypeScript can still create arbitrary new plot types using `plotscape` code.
+
+#### Consistency
+
+A major advantage of `plotscaper` is that all plots fully support linked selection. Specifically, in any plot, the users can click or click-and-drag to select geometric objects, and the resulting cases are then highlighted across all the other plots. Furthermore, for aggregate types of plots, users can specify their own aggregation functions (`Reducers`), will result in well-defined behavior under linked selection, provided that they fulfill the monoidal contract.
+
+This consistency is highly useful because it reduces cognitive load. The users do not have to learn which plots support selection and which only display it - instead, all plots behave in the same, predictable manner. Further, the guarantees offered by part-whole relationships (see Section \@ref(stacking-part-whole)) prevent undesirable visual behaviors, such as rapidly changing axis limits. Overall, this arguably leads to a smoother, more "natural" user experience.
 
 #### Selection model
 

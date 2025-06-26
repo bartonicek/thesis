@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.6.25)  26 JUN 2025 09:19
+This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.6.25)  26 JUN 2025 10:05
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1516,11 +1516,11 @@ Underfull \hbox (badness 3471) in paragraph at lines 1872--1872
 [93]
 
 [94]
-
-[95]
 File: ./figures/monoids-groups-inverses.png Graphic file (type bmp)
 <./figures/monoids-groups-inverses.png>
 
+
+[95]
 
 [96]
 
@@ -1530,8 +1530,6 @@ File: ./figures/lineplot-monotonicity.png Graphic file (type bmp)
 
 
 [98]
-
-[99]
 File: ./figures/barplot-preorder4.pdf Graphic file (type pdf)
 <use ./figures/barplot-preorder4.pdf>
 
@@ -1546,12 +1544,14 @@ Underfull \hbox (badness 1442) in paragraph at lines 2174--2175
 
 
 
-[100]
+[99]
 
-[101]
+[100]
 File: ./figures/ggplot2-linecounts.png Graphic file (type bmp)
 <./figures/ggplot2-linecounts.png>
 
+
+[101]
 
 [102]
 
@@ -1559,33 +1559,27 @@ File: ./figures/ggplot2-linecounts.png Graphic file (type bmp)
 File: _main_files/figure-latex/unnamed-chunk-29-1.pdf Graphic file (type pdf)
 <use _main_files/figure-latex/unnamed-chunk-29-1.pdf>
 
-Underfull \vbox (badness 4673) has occurred while \output is active []
-
-
 
 [104]
 File: _main_files/figure-latex/unnamed-chunk-30-1.pdf Graphic file (type pdf)
 <use _main_files/figure-latex/unnamed-chunk-30-1.pdf>
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
-
-[105]
 Overfull \hbox (23.54958pt too wide) detected at line 2308
 [][][][][][][] [][][] [][][] [] [][] [] [][][] [] [] [] [][][] [] [][][][] [] [][][] [] [][][]
  []
 
 
 
-[106]
+[105]
 
-[107]
+[106]
 Overfull \hbox (40.99963pt too wide) in paragraph at lines 2379--2380
 []\TU/lmr/m/n/10 The function will then correctly map the discrete values in $[] [] [][][][][][][][] [][][][][][][] [][][][][][][]$
  []
 
 
+
+[107]
 
 [108]
 
@@ -1676,12 +1670,12 @@ Underfull \vbox (badness 7540) has occurred while \output is active []
 
 [133]
 Overfull \hbox (27.75pt too wide) in paragraph at lines 2935--2935
-[]  \TU/lmtt/m/n/10 .. ..$ id       : 'scalar' chr "f71b57b5-7b64-419b-853a-6b3120f25e68"[] 
+[]  \TU/lmtt/m/n/10 .. ..$ id       : 'scalar' chr "f31fd21b-066e-4ea8-a5e4-90f4381e1008"[] 
  []
 
 
 Overfull \hbox (27.75pt too wide) in paragraph at lines 2935--2935
-[]  \TU/lmtt/m/n/10 .. ..$ id       : 'scalar' chr "f9b74928-451a-47dc-be3c-523220d57dcc"[] 
+[]  \TU/lmtt/m/n/10 .. ..$ id       : 'scalar' chr "909192c9-ff39-42a0-a9d6-01e1bb25bb9d"[] 
  []
 
 
@@ -2040,12 +2034,9 @@ File: _main_files/figure-latex/plotscaper-downloads-1.pdf Graphic file (type pdf
 [234]
 
 [235]
-Underfull \vbox (badness 1721) has occurred while \output is active []
-
-
 
 [236]
-Underfull \hbox (badness 1014) in paragraph at lines 5467--5468
+Underfull \hbox (badness 1014) in paragraph at lines 5471--5472
 []\TU/lmr/m/n/10 More fundamentally, beyond the simple category-theoretic concepts used
  []
 
@@ -2064,81 +2055,84 @@ Underfull \hbox (badness 1014) in paragraph at lines 5467--5468
 [242]
 
 [243]
-Underfull \hbox (badness 2799) in paragraph at lines 5546--5548
+Underfull \hbox (badness 2799) in paragraph at lines 5556--5558
 []\TU/lmr/m/n/10 Pre-partitioning: Data streaming, partitioning parameter updates
  []
+
+
+Underfull \vbox (badness 1286) has occurred while \output is active []
 
 
 
 [244]
 
 [245]
+
+[246]
 Chapter 8.
 
 
-[246
+[247
 
 ]
 
-[247]
+[248]
 Chapter 9.
 
 
-[248
+[249
 
 ]
 
-[249]
-Overfull \hbox (27.75pt too wide) in paragraph at lines 5626--5626
+[250]
+Overfull \hbox (27.75pt too wide) in paragraph at lines 5636--5636
 []  \TU/lmtt/m/n/10 <rect x="150" y="150" width="50" height="50" fill="firebrick"></rect>[] 
  []
 
 
 
-[250]
+[251]
 Chapter 10.
 
 
-[251
+[252
 
 ]
 File: ./figures/relations.png Graphic file (type bmp)
 <./figures/relations.png>
 
 
-[252]
+[253]
 File: ./figures/functions-subset.png Graphic file (type bmp)
 <./figures/functions-subset.png>
 
 
-[253]
-
 [254]
+
+[255]
 File: ./figures/functions-types.png Graphic file (type bmp)
 <./figures/functions-types.png>
 
 
-[255]
+[256]
 File: ./figures/bijection-composition.png Graphic file (type bmp)
 <./figures/bijection-composition.png>
 
-
-[256]
 
 [257]
 
 [258]
 
 [259]
-Overfull \hbox (14.45105pt too wide) in paragraph at lines 5879--5880
+
+[260]
+Overfull \hbox (14.45105pt too wide) in paragraph at lines 5889--5890
 \TU/lmr/m/n/10 underlying set is the family: $[] [] [][][]$
  []
 
 File: ./figures/family-tree.pdf Graphic file (type pdf)
 <use ./figures/family-tree.pdf>
 
-
-[260]
 
 [261]
 
@@ -2147,132 +2141,134 @@ File: ./figures/family-tree.pdf Graphic file (type pdf)
 [263]
 
 [264]
-Underfull \hbox (badness 10000) in paragraph at lines 6059--6060
+
+[265]
+Underfull \hbox (badness 10000) in paragraph at lines 6069--6070
 [][]\TU/lmr/bx/n/10 Definition 10.13 \TU/lmr/m/n/10 (Monoid homomorphism)\TU/lmr/bx/n/10 . []\TU/lmr/m/n/10 Let $[][][] [][][] [][][]$ and
  []
 
 
 
-[265]
-
 [266]
 
 [267]
+
+[268]
 File: ./figures/category-two.pdf Graphic file (type pdf)
 <use ./figures/category-two.pdf>
 
 
-[268]
-
 [269]
+
+[270]
 File: ./figures/monoid-category.pdf Graphic file (type pdf)
 <use ./figures/monoid-category.pdf>
 
 
-[270]
+[271]
 File: ./figures/group-category.pdf Graphic file (type pdf)
 <use ./figures/group-category.pdf>
 
 
-[271]
-
 [272]
+
+[273]
 Chapter 11.
 
-Underfull \hbox (badness 1472) in paragraph at lines 6349--6350
+Underfull \hbox (badness 1472) in paragraph at lines 6359--6360
 \TU/lmr/m/it/10 Markdown Publishing System\TU/lmr/m/n/10 . []$[][][][][] [] [] [] [][][][] [] [] [][] [][][][][][][] [] [][][] [] [][][][][][][] []
  []
 
 
 
-[273
+[274
 
 ]
-
-[274]
 
 [275]
 
 [276]
-Underfull \hbox (badness 3240) in paragraph at lines 6568--6569
+
+[277]
+Underfull \hbox (badness 3240) in paragraph at lines 6578--6579
 \TU/lmr/m/it/10 ceedings of the working conference on Advanced visual interfaces\TU/lmr/m/n/10 ,
  []
 
 
 
-[277]
-
 [278]
-Underfull \hbox (badness 3954) in paragraph at lines 6670--6671
+
+[279]
+Underfull \hbox (badness 3954) in paragraph at lines 6680--6681
 \TU/lmr/m/n/10 ming.” \TU/lmr/m/it/10 Handmade Network\TU/lmr/m/n/10 . []$[][][][][] [] [] [] [][][][][][][][] [] [][][][][][][] [] [][][][][][][][] []
  []
 
 
 
-[279]
-Underfull \hbox (badness 1769) in paragraph at lines 6700--6701
+[280]
+Underfull \hbox (badness 1769) in paragraph at lines 6710--6711
 []\TU/lmr/m/n/10 Henry, Lionel, and Hadley Wickham. 2024. \TU/lmr/m/it/10 Rlang: Functions for
  []
 
 
 
-[280]
-
 [281]
 
 [282]
-Underfull \hbox (badness 10000) in paragraph at lines 6874--6875
+
+[283]
+Underfull \hbox (badness 10000) in paragraph at lines 6884--6885
 []$[][][][][] [] [] [] [][][] [] [][][][][][][][] [] [][][] [] [][][][][] [] [][][][][] [] [][][][][][][][][][][][][][][][][][][][] [] [] []
  []
 
 
-
-[283]
 
 [284]
 
 [285]
 
 [286]
-Underfull \hbox (badness 1629) in paragraph at lines 7099--7100
+
+[287]
+Underfull \hbox (badness 1629) in paragraph at lines 7109--7110
 []\TU/lmr/m/n/10 Self, Jessica Zeitz, Michelle Dowling, John Wenskovitch, Ian Crandell,
  []
 
 
 
-[287]
-Underfull \hbox (badness 3354) in paragraph at lines 7141--7142
+[288]
+Underfull \hbox (badness 3354) in paragraph at lines 7151--7152
 \TU/lmr/m/it/10 A9\TU/lmr/m/n/10 . Youtube. []$[][][][][] [] [] [] [][][] [] [][][][][][][] [] [][][] [] [][][][][][][][] [] [][][][] [] [][][][][][][][] []
  []
 
 
 
-[288]
-
 [289]
 
 [290]
-Underfull \hbox (badness 10000) in paragraph at lines 7321--7322
+
+[291]
+Underfull \hbox (badness 10000) in paragraph at lines 7331--7332
 []$[][][][][] [] [] [] [][][] [] [][][][][][] [] [][][] [] [] [] [][][][][][][][][][][][][][][] [] [][][][][][][][] [] [][][][][][] [] [][][][][][][] []
  []
 
 
 
-[291]
+[292]
 
-[292] (./_main.aux)
+[293] (./_main.aux)
  ***********
 LaTeX2e <2025-06-01> patch level 1
 L3 programming layer <2025-05-26>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 31720 strings out of 470543
- 646333 string characters out of 5493403
- 1170020 words of memory out of 5000000
- 59349 multiletter control sequences out of 15000+600000
+ 31721 strings out of 470543
+ 646346 string characters out of 5493403
+ 1170071 words of memory out of 5000000
+ 59350 multiletter control sequences out of 15000+600000
  633510 words of font info for 110 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 98i,17n,114p,3529b,758s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 98i,17n,114p,2349b,758s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on _main.pdf (300 pages).
+Output written on _main.pdf (301 pages).
