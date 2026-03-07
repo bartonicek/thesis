@@ -38,7 +38,9 @@ In this thesis, I argue that the independence model, despite many advantages, is
 ```{r}
 #| echo: false
 knitr::opts_chunk$set(
-  fig.align = "center"
+  fig.align = "center",
+  message = FALSE,
+  warning = FALSE
 )
 
 directory <- tempdir()

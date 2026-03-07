@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.11.29)  7 MAR 2026 11:25
+This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.11.29)  7 MAR 2026 11:54
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1211,31 +1211,31 @@ File: ./figures/line-consistency.png Graphic file (type bmp)
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 [36] [37] [38] [39] [40] [41] [42]
-Underfull \hbox (badness 1205) in paragraph at lines 979--980
+Underfull \hbox (badness 1205) in paragraph at lines 967--968
 []\TU/lmr/m/n/10 Vector graphics offer certain significant advantages. Notably, they are
  []
 
-[43] [44] [45]
+[43] [44]
 Chapter 3.
-[46
+[45
 
-] [47] [48]
+] [46] [47]
 File: ./figures/challenger.png Graphic file (type bmp)
 <./figures/challenger.png>
 File: ./figures/expand-scatterplot.png Graphic file (type bmp)
 <./figures/expand-scatterplot.png>
-[49] [50] [51] [52]
+[48] [49] [50] [51]
 File: ./figures/geoms-bijection.pdf Graphic file (type pdf)
 <use ./figures/geoms-bijection.pdf>
-[53]
+[52]
 File: ./figures/barplot-bijection.png Graphic file (type bmp)
 <./figures/barplot-bijection.png>
 File: ./figures/barplot-notbijection.png Graphic file (type bmp)
 <./figures/barplot-notbijection.png>
-[54]
+[53]
 File: ./figures/barplot-bijection-proportions.png Graphic file (type bmp)
 <./figures/barplot-bijection-proportions.png>
-[55]
+[54]
 File: ./figures/referendum-notbijection.png Graphic file (type bmp)
 <./figures/referendum-notbijection.png>
 File: ./figures/referendum-bijection.png Graphic file (type bmp)
@@ -1243,492 +1243,418 @@ File: ./figures/referendum-bijection.png Graphic file (type bmp)
 
 Underfull \vbox (badness 1546) has occurred while \output is active []
 
-[56] [57] [58] [59]
+[55] [56] [57] [58]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-[60] [61]
+[59] [60]
 File: _main_files/figure-latex/unnamed-chunk-14-1.pdf Graphic file (type pdf)
 <use _main_files/figure-latex/unnamed-chunk-14-1.pdf>
-[62] [63]
+[61] [62]
 File: _main_files/figure-latex/unnamed-chunk-16-1.pdf Graphic file (type pdf)
 <use _main_files/figure-latex/unnamed-chunk-16-1.pdf>
-[64]
+[63]
 File: _main_files/figure-latex/unnamed-chunk-17-1.pdf Graphic file (type pdf)
 <use _main_files/figure-latex/unnamed-chunk-17-1.pdf>
-[65]
+[64]
 File: ./figures/barplot-spineplot.png Graphic file (type bmp)
 <./figures/barplot-spineplot.png>
-[66] [67]
+[65] [66]
 File: ./figures/spineplot-tree.pdf Graphic file (type pdf)
 <use ./figures/spineplot-tree.pdf>
-[68]
+[67]
 File: ./figures/barplot-preorder.pdf Graphic file (type pdf)
 <use ./figures/barplot-preorder.pdf>
-[69]
+[68]
 File: ./figures/barplot-preorder2.pdf Graphic file (type pdf)
 <use ./figures/barplot-preorder2.pdf>
 File: ./figures/graphs-cosplayers.jpg Graphic file (type bmp)
 <./figures/graphs-cosplayers.jpg>
-[70] [71] [72]
+[69] [70] [71]
 File: ./figures/grammar-boxplot.png Graphic file (type bmp)
 <./figures/grammar-boxplot.png>
-[73]
+[72]
 File: ./figures/grammar-scatterplot.png Graphic file (type bmp)
 <./figures/grammar-scatterplot.png>
 File: ./figures/grammar-barplot-counts.png Graphic file (type bmp)
 <./figures/grammar-barplot-counts.png>
-[74]
+[73]
 File: ./figures/grammar-barplot-means.png Graphic file (type bmp)
 <./figures/grammar-barplot-means.png>
-[75] [76]
+[74] [75]
 File: ./figures/grammar-barplot-maximums.png Graphic file (type bmp)
 <./figures/grammar-barplot-maximums.png>
-[77]
+[76]
 File: ./figures/grammar-dodging-layering.png Graphic file (type bmp)
 <./figures/grammar-dodging-layering.png>
-[78] [79]
+[77] [78]
 File: ./figures/stacking-vs-dodging.png Graphic file (type bmp)
 <./figures/stacking-vs-dodging.png>
-[80] [81] [82] [83]
+[79] [80] [81] [82]
 File: ./figures/category-two.pdf Graphic file (type pdf)
 <use ./figures/category-two.pdf>
 File: ./figures/barplot-preorder2.pdf Graphic file (type pdf)
 <use ./figures/barplot-preorder2.pdf>
-[84]
+[83]
 File: ./figures/barplot-preorder3.pdf Graphic file (type pdf)
 <use ./figures/barplot-preorder3.pdf>
-[85]
+[84]
 File: ./figures/functor.pdf Graphic file (type pdf)
 <use ./figures/functor.pdf>
-[86]
+[85]
 File: ./figures/barplot-preorder2.pdf Graphic file (type pdf)
 <use ./figures/barplot-preorder2.pdf>
-[87]
+[86]
 File: ./figures/barplot-preorder4.pdf Graphic file (type pdf)
 <use ./figures/barplot-preorder4.pdf>
 
-Underfull \hbox (badness 3471) in paragraph at lines 1883--1883
+Underfull \hbox (badness 3471) in paragraph at lines 1871--1871
 []\TU/lmr/m/n/10 Figure 3.24: []A diagram of barplot/spineplot summary statistic pre-
  []
 
-[88] [89] [90] [91] [92] [93] [94] [95]
+[87] [88] [89] [90] [91] [92] [93] [94]
 File: ./figures/monoids-groups-inverses.png Graphic file (type bmp)
 <./figures/monoids-groups-inverses.png>
-[96] [97] [98]
+[95] [96] [97]
 File: ./figures/lineplot-monotonicity.png Graphic file (type bmp)
 <./figures/lineplot-monotonicity.png>
-[99]
+[98]
 File: ./figures/barplot-preorder4.pdf Graphic file (type pdf)
 <use ./figures/barplot-preorder4.pdf>
 
-Underfull \hbox (badness 3503) in paragraph at lines 2180--2180
+Underfull \hbox (badness 3503) in paragraph at lines 2168--2168
 []\TU/lmr/m/n/10 Figure 3.27: []Reproduction of Figure Figure []3.24[]: Diagram of the
  []
 
 
-Underfull \hbox (badness 1442) in paragraph at lines 2185--2186
+Underfull \hbox (badness 1442) in paragraph at lines 2173--2174
  \TU/lmr/bx/n/10 3.2.2.10.1 Stacking[] \TU/lmr/m/n/10 To stack statistics, we need to apply our sum-
  []
 
-[100] [101]
+[99] [100]
 File: ./figures/ggplot2-linecounts.png Graphic file (type bmp)
 <./figures/ggplot2-linecounts.png>
-[102] [103] [104]
+[101] [102] [103]
 File: _main_files/figure-latex/unnamed-chunk-29-1.pdf Graphic file (type pdf)
 <use _main_files/figure-latex/unnamed-chunk-29-1.pdf>
-[105]
+[104]
 File: _main_files/figure-latex/unnamed-chunk-30-1.pdf Graphic file (type pdf)
 <use _main_files/figure-latex/unnamed-chunk-30-1.pdf>
 
-Overfull \hbox (23.54958pt too wide) detected at line 2319
+Overfull \hbox (23.54958pt too wide) detected at line 2307
 [][][][][][][] [][][] [][][] [] [][] [] [][][] [] [] [] [][][] [] [][][][] [] [][][] [] [][][]
  []
 
-[106] [107]
-Overfull \hbox (40.99963pt too wide) in paragraph at lines 2390--2391
+[105] [106]
+Overfull \hbox (40.99963pt too wide) in paragraph at lines 2378--2379
 []\TU/lmr/m/n/10 The function will then correctly map the discrete values in $[] [] [][][][][][][][] [][][][][][][] [][][][][][][]$
  []
 
-[108] [109] [110] [111] [112] [113] [114] [115] [116] [117] [118]
+[107] [108] [109] [110] [111] [112] [113] [114] [115] [116] [117]
 Chapter 4.
-[119
+[118
 
 ]
 File: figures/plotscaper_example1.png Graphic file (type bmp)
 <figures/plotscaper_example1.png>
-[120] [121] [122]
+[119] [120] [121]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-[123] [124]
+[122] [123]
 Chapter 5.
-[125
+[124
 
-] [126]
+] [125]
 LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <14.4> not available
-(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 2713.
-[127]
-Underfull \hbox (badness 10000) in paragraph at lines 2789--2791
+(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 2701.
+[126]
+Underfull \hbox (badness 10000) in paragraph at lines 2777--2779
 
  []
 
-[128]
+[127]
 File: ./figures/plotscaper_example1.png Graphic file (type bmp)
 <./figures/plotscaper_example1.png>
-[129] [130]
+[128] [129]
 File: ./figures/plotscaper-example2.png Graphic file (type bmp)
 <./figures/plotscaper-example2.png>
-[131]
+[130]
 File: ./figures/ggplot-histogram-aes.png Graphic file (type bmp)
 <./figures/ggplot-histogram-aes.png>
-[132]
+[131]
 File: ./figures/ggplot-histogram-aes2.png Graphic file (type bmp)
 <./figures/ggplot-histogram-aes2.png>
-[133]
+[132]
 Underfull \vbox (badness 7540) has occurred while \output is active []
 
-[134]
-Overfull \hbox (27.75pt too wide) in paragraph at lines 2946--2946
-[]  \TU/lmtt/m/n/10 .. ..$ id       : 'scalar' chr "feeb0830-7e58-4b19-9126-a26a9e3217d8"[] 
+[133]
+Overfull \hbox (27.75pt too wide) in paragraph at lines 2934--2934
+[]  \TU/lmtt/m/n/10 .. ..$ id       : 'scalar' chr "4df8139b-d779-4b6c-ae35-4a77df943eef"[] 
  []
 
 
-Overfull \hbox (27.75pt too wide) in paragraph at lines 2946--2946
-[]  \TU/lmtt/m/n/10 .. ..$ id       : 'scalar' chr "351b77fb-a50f-457e-9057-056908c1fe49"[] 
+Overfull \hbox (27.75pt too wide) in paragraph at lines 2934--2934
+[]  \TU/lmtt/m/n/10 .. ..$ id       : 'scalar' chr "3fbf8e67-fd4c-4261-a3ec-7de47288bebb"[] 
  []
 
-[135] [136] [137]
+[134] [135] [136]
 File: ./figures/model_diagram.png Graphic file (type bmp)
 <./figures/model_diagram.png>
-[138] [139]
+[137] [138]
 File: ./figures/scene_diagram.png Graphic file (type bmp)
 <./figures/scene_diagram.png>
-[140]
+[139]
 File: ./figures/plot_diagram.png Graphic file (type bmp)
 <./figures/plot_diagram.png>
 File: ./figures/hierarchical_data.pdf Graphic file (type pdf)
 <use ./figures/hierarchical_data.pdf>
-[141] [142] [143] [144] [145]
-Underfull \hbox (badness 2119) in paragraph at lines 3237--3238
+[140] [141] [142] [143]
+Underfull \hbox (badness 2119) in paragraph at lines 3201--3202
 []\TU/lmr/m/n/10 The \TU/lmtt/m/n/10 encoded_object_data \TU/lmr/m/n/10 data set represents the whole barplot bars
  []
 
 
-Underfull \hbox (badness 1163) in paragraph at lines 3237--3238
+Underfull \hbox (badness 1163) in paragraph at lines 3201--3202
 \TU/lmr/m/n/10 and may be used for training scales and collision detection, while the
  []
 
-[146] [147] [148] [149] [150] [151] [152] [153]
-Underfull \hbox (badness 1424) in paragraph at lines 3326--3327
+[144]
+Underfull \vbox (badness 3407) has occurred while \output is active []
+
+[145] [146] [147] [148] [149] [150] [151]
+Underfull \hbox (badness 1424) in paragraph at lines 3290--3291
 \TU/lmr/m/n/10 programming (OOP) with extra steps, i.e. where someone might write
  []
 
 
-Underfull \hbox (badness 3449) in paragraph at lines 3326--3327
+Underfull \hbox (badness 3449) in paragraph at lines 3290--3291
 \TU/lmtt/m/n/10 const foo = new Foo(); const bar = foo.bar()\TU/lmr/m/n/10 , I write \TU/lmtt/m/n/10 const foo =
  []
 
 
-Underfull \hbox (badness 1019) in paragraph at lines 3326--3327
+Underfull \hbox (badness 1019) in paragraph at lines 3290--3291
 \TU/lmtt/m/n/10 Foo.create(); const bar = Foo.bar(foo)\TU/lmr/m/n/10 , however, there are a couple
  []
 
-
-Underfull \hbox (badness 1270) in paragraph at lines 3328--3328
+[152]
+Underfull \hbox (badness 1270) in paragraph at lines 3292--3292
 []\TU/lmr/bx/n/12 Data representation: Row-oriented vs. column-
  []
 
-[154] [155] [156] [157] [158] [159] [160] [161] [162] [163] [164] [165]
-Underfull \hbox (badness 4096) in paragraph at lines 3660--3661
+[153] [154] [155] [156] [157] [158] [159] [160] [161] [162] [163] [164]
+Underfull \hbox (badness 4096) in paragraph at lines 3624--3625
 []\TU/lmr/m/n/10 Note that, by definition, every \TU/lmtt/m/n/10 Getter<T> \TU/lmr/m/n/10 is also automatically an
  []
 
 
-Underfull \hbox (badness 1383) in paragraph at lines 3660--3661
+Underfull \hbox (badness 1383) in paragraph at lines 3624--3625
 \TU/lmtt/m/n/10 Indexable<T> \TU/lmr/m/n/10 (since it is a function of the form \TU/lmtt/m/n/10 (index: number) =>
  []
 
-[166] [167] [168] [169] [170]
-Underfull \hbox (badness 6001) in paragraph at lines 3826--3827
+[165] [166] [167] [168]
+Underfull \hbox (badness 6001) in paragraph at lines 3790--3791
  \TU/lmr/bx/n/10 5.4.4.4.1 Bijection and constant factors[] \TU/lmtt/m/n/10 Factor.bijection \TU/lmr/m/n/10 and
  []
 
-[171] [172] [173] [174] [175] [176]
+[169] [170] [171] [172] [173] [174] [175]
 File: ./figures/transient-persisent-product.png Graphic file (type bmp)
 <./figures/transient-persisent-product.png>
-[177] [178] [179] [180] [181] [182] [183] [184] [185] [186] [187] [188] [189] [190] [191] [192]
-Overfull \hbox (50.42001pt too wide) in paragraph at lines 4510--4511
+[176] [177] [178] [179] [180] [181] [182] [183] [184] [185] [186] [187] [188] [189] [190]
+Overfull \hbox (50.42001pt too wide) in paragraph at lines 4450--4451
 []\TU/lmr/m/n/10 Back to code. The \TU/lmtt/m/n/10 ExpanseContinuous.normalize \TU/lmr/m/n/10 and \TU/lmtt/m/n/10 ExpanseContinuous.unnormalize
  []
 
-[193] [194] [195]
-Underfull \hbox (badness 4303) in paragraph at lines 4637--4638
+[191] [192] [193]
+Underfull \hbox (badness 4303) in paragraph at lines 4577--4578
 \TU/lmr/m/n/10 While \TU/lmtt/m/n/10 ExpansePoint \TU/lmr/m/n/10 places values at equidistant points along $[][][] [][]$,
  []
 
 
-Underfull \hbox (badness 2818) in paragraph at lines 4650--4651
+Underfull \hbox (badness 2818) in paragraph at lines 4590--4591
 \TU/lmr/m/n/10 additional \TU/lmtt/m/n/10 weights \TU/lmr/m/n/10 and \TU/lmtt/m/n/10 cumulativeWeights \TU/lmr/m/n/10 are numeric arrays which
  []
 
-[196] [197] [198]
-Underfull \hbox (badness 1365) in paragraph at lines 4712--4713
+[194] [195] [196]
+Underfull \hbox (badness 1365) in paragraph at lines 4652--4653
 []\TU/lmr/m/n/10 Importantly, data is not a single \TU/lmtt/m/n/10 Dataframe\TU/lmr/m/n/10 , but instead an array of
  []
 
-[199] [200] [201] [202] [203] [204] [205]
+[197] [198] [199] [200] [201] [202] [203]
 Chapter 6.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-[206
+[204
 
-] [207]
-Overfull \hbox (2.99pt too wide) in paragraph at lines 4927--4927
+] [205]
+Overfull \hbox (2.99pt too wide) in paragraph at lines 4855--4855
 []\TU/lmr/m/n/10 reason_for_termination|  
  []
 
 
-Overfull \hbox (30.7pt too wide) in paragraph at lines 4927--4927
+Overfull \hbox (30.7pt too wide) in paragraph at lines 4855--4855
 []\TU/lmr/m/n/10 kategorie_delky_hospitalizace|  
  []
 
-[208] [209]
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+[206] [207]
 File: ./figures/example-cases-days.png Graphic file (type bmp)
 <./figures/example-cases-days.png>
+[208]
 File: ./figures/example-cases-stay-cat.png Graphic file (type bmp)
 <./figures/example-cases-stay-cat.png>
-[210] [211]
+[209]
 File: ./figures/example-cases-avg-days.png Graphic file (type bmp)
 <./figures/example-cases-avg-days.png>
-[212]
+[210]
 File: ./figures/example-cases-days-time.png Graphic file (type bmp)
 <./figures/example-cases-days-time.png>
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-[213]
+[211]
 File: ./figures/example-cases-days-time-zoom.png Graphic file (type bmp)
 <./figures/example-cases-days-time-zoom.png>
-[214] [215]
+[212] [213]
 File: ./figures/example-cases-days-children.png Graphic file (type bmp)
 <./figures/example-cases-days-children.png>
-[216]
+[214]
 File: ./figures/example-cases-days-children-marked.png Graphic file (type bmp)
 <./figures/example-cases-days-children-marked.png>
-[217]
+[215]
 File: ./figures/example-cases-days-age.png Graphic file (type bmp)
 <./figures/example-cases-days-age.png>
+[216]
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
+LaTeX Warning: Float too large for page by 28.77036pt on input line 5149.
 
-[218] [219]
-Overfull \hbox (59.25pt too wide) in paragraph at lines 5251--5251
-[]\TU/lmtt/m/n/10 Warning in attr(.knitEnv$meta, "knit_meta_id"): 'xfun::attr()' is deprecated.[] 
- []
-
-
-Overfull \hbox (59.25pt too wide) in paragraph at lines 5251--5251
-[]\TU/lmtt/m/n/10 Warning in attr(.knitEnv$meta, "knit_meta_id"): 'xfun::attr()' is deprecated.[] 
- []
-
-
-Overfull \hbox (59.25pt too wide) in paragraph at lines 5251--5251
-[]\TU/lmtt/m/n/10 Warning in attr(.knitEnv$meta, "knit_meta_id"): 'xfun::attr()' is deprecated.[] 
- []
-
-
-Overfull \hbox (59.25pt too wide) in paragraph at lines 5251--5251
-[]\TU/lmtt/m/n/10 Warning in attr(.knitEnv$meta, "knit_meta_id"): 'xfun::attr()' is deprecated.[] 
- []
-
-
-Overfull \hbox (59.25pt too wide) in paragraph at lines 5251--5251
-[]\TU/lmtt/m/n/10 Warning in attr(.knitEnv$meta, "knit_meta_id"): 'xfun::attr()' is deprecated.[] 
- []
-
-
-Overfull \hbox (59.25pt too wide) in paragraph at lines 5251--5251
-[]\TU/lmtt/m/n/10 Warning in attr(.knitEnv$meta, "knit_meta_id"): 'xfun::attr()' is deprecated.[] 
- []
-
-
-Overfull \hbox (59.25pt too wide) in paragraph at lines 5251--5251
-[]\TU/lmtt/m/n/10 Warning in attr(.knitEnv$meta, "knit_meta_id"): 'xfun::attr()' is deprecated.[] 
- []
-
-[220]
-Overfull \hbox (59.25pt too wide) in paragraph at lines 5251--5251
-[]\TU/lmtt/m/n/10 Warning in attr(.knitEnv$meta, "knit_meta_id"): 'xfun::attr()' is deprecated.[] 
- []
-
-
-Overfull \hbox (59.25pt too wide) in paragraph at lines 5251--5251
-[]\TU/lmtt/m/n/10 Warning in attr(.knitEnv$meta, "knit_meta_id"): 'xfun::attr()' is deprecated.[] 
- []
-
-
-Overfull \hbox (59.25pt too wide) in paragraph at lines 5251--5251
-[]\TU/lmtt/m/n/10 Warning in attr(.knitEnv$meta, "knit_meta_id"): 'xfun::attr()' is deprecated.[] 
- []
-
-
-Overfull \hbox (59.25pt too wide) in paragraph at lines 5251--5251
-[]\TU/lmtt/m/n/10 Warning in attr(.knitEnv$meta, "knit_meta_id"): 'xfun::attr()' is deprecated.[] 
- []
-
-
-Overfull \hbox (59.25pt too wide) in paragraph at lines 5251--5251
-[]\TU/lmtt/m/n/10 Warning in attr(.knitEnv$meta, "knit_meta_id"): 'xfun::attr()' is deprecated.[] 
- []
-
-
-Overfull \hbox (59.25pt too wide) in paragraph at lines 5251--5251
-[]\TU/lmtt/m/n/10 Warning in attr(.knitEnv$meta, "knit_meta_id"): 'xfun::attr()' is deprecated.[] 
- []
-
-
-Overfull \hbox (59.25pt too wide) in paragraph at lines 5251--5251
-[]\TU/lmtt/m/n/10 Warning in attr(.knitEnv$meta, "knit_meta_id"): 'xfun::attr()' is deprecated.[] 
- []
-
-
-LaTeX Warning: Float too large for page by 28.77036pt on input line 5291.
-
-[221] [222]
+[217] [218]
 File: ./figures/example-cases-diagnosis.png Graphic file (type bmp)
 <./figures/example-cases-diagnosis.png>
-[223] [224] [225]
+[219] [220] [221]
 File: ./figures/example-cases-diagnosis-time.png Graphic file (type bmp)
 <./figures/example-cases-diagnosis-time.png>
-
-Underfull \vbox (badness 1308) has occurred while \output is active []
-
-[226] [227] [228]
+[222] [223]
 File: ./figures/example-cases-diagnosis-max.png Graphic file (type bmp)
 <./figures/example-cases-diagnosis-max.png>
-[229]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-[230]
-Underfull \hbox (badness 1132) in paragraph at lines 5544--5545
+[224] [225]
+Underfull \hbox (badness 1132) in paragraph at lines 5366--5367
 \TU/lmr/m/n/10 Alzheimer’s patients, over time, schizophrenia patients became the
  []
 
-[231]
+[226]
 Chapter 7.
-[232
+[227
 
 ]
 File: _main_files/figure-latex/plotscaper-downloads-1.pdf Graphic file (type pdf)
 <use _main_files/figure-latex/plotscaper-downloads-1.pdf>
-[233] [234] [235] [236] [237] [238] [239] [240] [241]
-Underfull \hbox (badness 1014) in paragraph at lines 5648--5649
+[228] [229] [230] [231] [232] [233] [234] [235] [236]
+Underfull \hbox (badness 1014) in paragraph at lines 5470--5471
 []\TU/lmr/m/n/10 More fundamentally, beyond the simple category-theoretic concepts used
  []
 
-[242] [243] [244] [245] [246] [247] [248]
-Underfull \hbox (badness 2799) in paragraph at lines 5733--5735
+[237] [238] [239] [240] [241] [242] [243]
+Underfull \hbox (badness 2799) in paragraph at lines 5555--5557
 []\TU/lmr/m/n/10 Pre-partitioning: Data streaming, partitioning parameter updates
  []
 
 
 Underfull \vbox (badness 1286) has occurred while \output is active []
 
-[249] [250] [251]
+[244] [245] [246]
 Chapter 8.
-[252
+[247
 
-] [253]
+] [248]
 Chapter 9.
-[254
+[249
 
-] [255]
-Overfull \hbox (27.75pt too wide) in paragraph at lines 5813--5813
+] [250]
+Overfull \hbox (27.75pt too wide) in paragraph at lines 5635--5635
 []  \TU/lmtt/m/n/10 <rect x="150" y="150" width="50" height="50" fill="firebrick"></rect>[] 
  []
 
-[256]
+[251]
 Chapter 10.
-[257
+[252
 
 ]
 File: ./figures/relations.png Graphic file (type bmp)
 <./figures/relations.png>
-[258]
+[253]
 File: ./figures/functions-subset.png Graphic file (type bmp)
 <./figures/functions-subset.png>
-[259] [260]
+[254] [255]
 File: ./figures/functions-types.png Graphic file (type bmp)
 <./figures/functions-types.png>
-[261]
+[256]
 File: ./figures/bijection-composition.png Graphic file (type bmp)
 <./figures/bijection-composition.png>
-[262] [263] [264] [265]
-Overfull \hbox (14.45105pt too wide) in paragraph at lines 6066--6067
+[257] [258] [259] [260]
+Overfull \hbox (14.45105pt too wide) in paragraph at lines 5888--5889
 \TU/lmr/m/n/10 underlying set is the family: $[] [] [][][]$
  []
 
 File: ./figures/family-tree.pdf Graphic file (type pdf)
 <use ./figures/family-tree.pdf>
-[266] [267] [268] [269] [270]
-Underfull \hbox (badness 10000) in paragraph at lines 6246--6247
+[261] [262] [263] [264] [265]
+Underfull \hbox (badness 10000) in paragraph at lines 6068--6069
 [][]\TU/lmr/bx/n/10 Definition 10.13 \TU/lmr/m/n/10 (Monoid homomorphism)\TU/lmr/bx/n/10 . []\TU/lmr/m/n/10 Let $[][][] [][][] [][][]$ and
  []
 
-[271] [272] [273]
+[266] [267] [268]
 File: ./figures/category-two.pdf Graphic file (type pdf)
 <use ./figures/category-two.pdf>
-[274] [275]
+[269] [270]
 File: ./figures/monoid-category.pdf Graphic file (type pdf)
 <use ./figures/monoid-category.pdf>
-[276]
+[271]
 File: ./figures/group-category.pdf Graphic file (type pdf)
 <use ./figures/group-category.pdf>
-[277] [278]
+[272] [273]
 Chapter 11.
 
-Underfull \hbox (badness 1472) in paragraph at lines 6536--6537
+Underfull \hbox (badness 1472) in paragraph at lines 6358--6359
 \TU/lmr/m/it/10 Markdown Publishing System\TU/lmr/m/n/10 . []$[][][][][] [] [] [] [][][][] [] [] [][] [][][][][][][] [] [][][] [] [][][][][][][] []
  []
 
-[279
+[274
 
-] [280] [281] [282]
-Underfull \hbox (badness 3240) in paragraph at lines 6755--6756
+] [275] [276] [277]
+Underfull \hbox (badness 3240) in paragraph at lines 6577--6578
 \TU/lmr/m/it/10 ceedings of the working conference on Advanced visual interfaces\TU/lmr/m/n/10 ,
  []
 
-[283] [284]
-Underfull \hbox (badness 3954) in paragraph at lines 6857--6858
+[278] [279]
+Underfull \hbox (badness 3954) in paragraph at lines 6679--6680
 \TU/lmr/m/n/10 ming.” \TU/lmr/m/it/10 Handmade Network\TU/lmr/m/n/10 . []$[][][][][] [] [] [] [][][][][][][][] [] [][][][][][][] [] [][][][][][][][] []
  []
 
-[285]
-Underfull \hbox (badness 1769) in paragraph at lines 6887--6888
+[280]
+Underfull \hbox (badness 1769) in paragraph at lines 6709--6710
 []\TU/lmr/m/n/10 Henry, Lionel, and Hadley Wickham. 2024. \TU/lmr/m/it/10 Rlang: Functions for
  []
 
-[286] [287] [288]
-Underfull \hbox (badness 10000) in paragraph at lines 7061--7062
+[281] [282] [283]
+Underfull \hbox (badness 10000) in paragraph at lines 6883--6884
 []$[][][][][] [] [] [] [][][] [] [][][][][][][][] [] [][][] [] [][][][][] [] [][][][][] [] [][][][][][][][][][][][][][][][][][][][] [] [] []
  []
 
-[289] [290] [291] [292]
-Underfull \hbox (badness 1629) in paragraph at lines 7286--7287
+[284] [285] [286] [287]
+Underfull \hbox (badness 1629) in paragraph at lines 7108--7109
 []\TU/lmr/m/n/10 Self, Jessica Zeitz, Michelle Dowling, John Wenskovitch, Ian Crandell,
  []
 
-[293]
-Underfull \hbox (badness 3354) in paragraph at lines 7328--7329
+[288]
+Underfull \hbox (badness 3354) in paragraph at lines 7150--7151
 \TU/lmr/m/it/10 A9\TU/lmr/m/n/10 . Youtube. []$[][][][][] [] [] [] [][][] [] [][][][][][][] [] [][][] [] [][][][][][][][] [] [][][][] [] [][][][][][][][] []
  []
 
-[294] [295] [296]
-Underfull \hbox (badness 10000) in paragraph at lines 7511--7512
+[289] [290] [291]
+Underfull \hbox (badness 10000) in paragraph at lines 7333--7334
 []$[][][][][] [] [] [] [][][] [] [][][][][][] [] [][][] [] [] [] [][][][][][][][][][][][][][][] [] [][][][][][][][] [] [][][][][][] [] [][][][][][][] []
  []
 
-[297] [298] (./_main.aux)
+[292] [293] (./_main.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2025-11-14>
@@ -1737,10 +1663,10 @@ L3 programming layer <2025-11-14>
 Here is how much of TeX's memory you used:
  31745 strings out of 470195
  647035 string characters out of 5478727
- 1178231 words of memory out of 5000000
+ 1178227 words of memory out of 5000000
  59718 multiletter control sequences out of 15000+600000
  634406 words of font info for 110 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  98i,17n,114p,2378b,762s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on _main.pdf (306 pages).
+Output written on _main.pdf (301 pages).
