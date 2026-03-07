@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>4 Background | The Fabric of Interactive Visualization</title>
   <meta name="description" content="4 Background | The Fabric of Interactive Visualization" />
-  <meta name="generator" content="bookdown 0.43 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.37 and GitBook 2.6.7" />
 
   <meta property="og:title" content="4 Background | The Fabric of Interactive Visualization" />
   <meta property="og:type" content="book" />
@@ -31,7 +31,7 @@
   
 <link rel="prev" href="introduction.html"/>
 <link rel="next" href="problems.html"/>
-<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="libs/jquery-3.6.1/jquery-3.6.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -58,8 +58,9 @@
 
 
 <style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -69,7 +70,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -539,6 +540,13 @@ Figure 4.7: Example of a scatterplot built with <code>vegalite</code>.
 <p>Some researchers ascribe to a broad definition of interactive data visualization, such that any figure which can be dynamically manipulated by the user may be considered interactive <span class="citation">(<a href="#ref-brodbeck2009">Brodbeck, Mazza, and Lalanne 2009</a>)</span>. For others, the important factor is the speed of the computer’s responses to user input, with faster updates translating to greater interactivity <span class="citation">(<a href="#ref-becker1987">Becker and Cleveland 1987</a>; <a href="#ref-buja1996">Buja, Cook, and Swayne 1996</a>; see also <a href="#ref-wilhelm2003">Wilhelm 2003</a>)</span>. Some of these researchers also differentiate between “interactive” and “dynamic” manipulation, where interactive manipulation involves discrete actions such as pressing a button or selecting an item from a drop-down menu, whereas dynamic manipulation involves continuous actions, like moving a slider or clicking-and-dragging <span class="citation">(<a href="#ref-rheingans2002">Rheingans 2002</a>; <a href="#ref-jankun2007">Jankun-Kelly, Ma, and Gertz 2007</a>; see also <a href="#ref-dimara2019">Dimara and Perin 2019</a>)</span>.</p>
 <p>However, for many other researchers, interactivity is a much narrower concept, hinging on high-level analytic features that enable efficient exploration of the data. These features include the ability to generate different views of the data (by e.g. zooming, panning, sorting, and filtering), and the reactive propagation of changes between connected or “linked” parts of the figure <span class="citation">(<a href="#ref-kehrer2012">Kehrer et al. 2012</a>; <a href="#ref-buja1996">Buja, Cook, and Swayne 1996</a>; <a href="#ref-keim2002">Keim 2002</a>; <a href="#ref-unwin1999">Unwin 1999</a>; <a href="#ref-chen2008">C. Chen et al. 2008</a>)</span>. Notably, these are also the features which enable the famous visual information-seeking mantra: “overview first, zoom and filter, then details-on-demand” <span class="citation">(<a href="#ref-shneiderman2003">Shneiderman 2003</a>)</span>. A similar idea also appears in visual analytics research, in the distinction between “surface-level” (or “low-level”) and “parametric” (or “high-level”) interactions, where surface-level interactions manipulate attributes of the visual domain only (e.g. zooming and panning), whereas parametric interactions manipulate parameters of some underlying mathematical model or algorithm <span class="citation">(<a href="#ref-leman2013">Leman et al. 2013</a>; <a href="#ref-self2018">Self et al. 2018</a>; <a href="#ref-pike2009">Pike et al. 2009</a>)</span>. Ultimately, for researchers ascribing to this narrower view of interactivity, the presence of an interactive feature does not necessarily justify calling a figure “interactive”, if it does not promote the acquisition of statistical insights above and beyond those provided by a static figure. For instance, while the ability to pick the colour of scatterplot points via an interactive palette widget may allow us to produce a more aesthetically pleasing result, it does not, generally, generate any new analytical understanding.</p>
 <p>Table <a href="background.html#tab:definitions">4.1</a> provides a concise overview of the various perspectives on interactivity discussed above. It is important to note that this table is meant to serve as a reference point for subsequent discussions within the text and is not intended to provide an exhaustive review. For more comprehensive taxonomies of interactive visualization systems and features, see e.g. <span class="citation">Dimara and Perin (<a href="#ref-dimara2019">2019</a>)</span>, <span class="citation">Yi et al. (<a href="#ref-yi2007">2007</a>)</span>.</p>
+<pre><code>Warning in attr(x, &quot;align&quot;): &#39;xfun::attr()&#39; is deprecated.
+Use &#39;xfun::attr2()&#39; instead.
+See help(&quot;Deprecated&quot;)
+
+Warning in attr(x, &quot;align&quot;): &#39;xfun::attr()&#39; is deprecated.
+Use &#39;xfun::attr2()&#39; instead.
+See help(&quot;Deprecated&quot;)</code></pre>
 <table class="table" style="color: black; margin-left: auto; margin-right: auto;">
 <caption>
 <span id="tab:definitions">Table 4.1: </span><span id="tab:definitions">Table 4.2: </span>Summary of the perspectives on interactivity
@@ -762,6 +770,13 @@ Figure 4.14: Displaying selection is not always trivial. A good example is a lin
 <p>A particular challenge when discussing scales in data visualization is that the topic unavoidably intersects with a research area that has a particularly long and contentious history: theory of measurement <span class="citation">(see e.g. <a href="#ref-hand1996">Hand 1996</a>; <a href="#ref-michell1986">Michell 1986</a>; <a href="#ref-tal2025">Tal 2025</a>)</span>. Theory of measurement (not to be confused with measure theory, with which it nevertheless shares some overlap) is a research area which tries to answer the deceptively simple question: what does it mean to measure something? This seemingly trivial problem has inspired long and fiery debates within the fields of mathematics, philosophy, and social science. Particularly, in psychology, where assigning numerical values non-physical phenomena such as moods and mental states is a central concern, the topic has garnered a significant amount of attention, creating a dense body of research <span class="citation">(see e.g. <a href="#ref-humphry2013">Humphry 2013</a>; <a href="#ref-michell2021">Michell 2021</a>)</span>.</p>
 <p>Arguably, the most influential work in this field has been that of <span class="citation">Stevens (<a href="#ref-stevens1946">1946</a>)</span>. In his fairly concise paper, Stevens defined a <em>scale</em> as method of assigning numbers to values, and introduced a four-fold classification classification, namely: nominal, ordinal, interval, and ratio scales (see Table <a href="background.html#tab:stevens-scales">4.3</a>).</p>
 
+<pre><code>Warning in attr(x, &quot;align&quot;): &#39;xfun::attr()&#39; is deprecated.
+Use &#39;xfun::attr2()&#39; instead.
+See help(&quot;Deprecated&quot;)
+
+Warning in attr(x, &quot;align&quot;): &#39;xfun::attr()&#39; is deprecated.
+Use &#39;xfun::attr2()&#39; instead.
+See help(&quot;Deprecated&quot;)</code></pre>
 <table class="table" style="color: black; margin-left: auto; margin-right: auto;">
 <caption>
 <span id="tab:stevens-scales">Table 4.3: </span><span id="tab:stevens-scales">Table 4.4: </span>Types of scales identified by Stevens (1946)

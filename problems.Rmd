@@ -58,7 +58,7 @@ An infamous example of data hiding leading to disastrous real-world consequences
 knitr::include_graphics("./figures/challenger.png")
 ```
 
-Not all data hiding involves outright omission, however; it can also arise from subtle design choices. Take, for example, axis limits. @cleveland1985 argues that axis limits should generally be expanded to avoid inadvertently obscuring data near the edges of the plot [see also e.g. @chen2008, pp. 64]:
+Not all data hiding involves outright omission, however; it can also arise from subtle design choices. Take, for example, axis limits. @cleveland1985 argues that axis limits should generally be expanded to avoid inadvertently obscuring data near the edges of the plot [see also e.g. @unwin2008b, pp. 64]:
 
 ```{r expanding-axis-limits}
 #| echo: false
