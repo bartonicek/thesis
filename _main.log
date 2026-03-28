@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.11.29)  7 MAR 2026 11:54
+This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.11.29)  21 MAR 2026 18:46
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1388,12 +1388,12 @@ Underfull \vbox (badness 7540) has occurred while \output is active []
 
 [133]
 Overfull \hbox (27.75pt too wide) in paragraph at lines 2934--2934
-[]  \TU/lmtt/m/n/10 .. ..$ id       : 'scalar' chr "4df8139b-d779-4b6c-ae35-4a77df943eef"[] 
+[]  \TU/lmtt/m/n/10 .. ..$ id       : 'scalar' chr "5c5b2885-cd11-4781-8dbd-0a533f5e409a"[] 
  []
 
 
 Overfull \hbox (27.75pt too wide) in paragraph at lines 2934--2934
-[]  \TU/lmtt/m/n/10 .. ..$ id       : 'scalar' chr "3fbf8e67-fd4c-4261-a3ec-7de47288bebb"[] 
+[]  \TU/lmtt/m/n/10 .. ..$ id       : 'scalar' chr "62fa1c75-922e-4a76-8edf-686d179ad282"[] 
  []
 
 [134] [135] [136]
@@ -1553,12 +1553,9 @@ Underfull \hbox (badness 1014) in paragraph at lines 5470--5471
  []
 
 [237] [238] [239] [240] [241] [242] [243]
-Underfull \hbox (badness 2799) in paragraph at lines 5555--5557
+Underfull \hbox (badness 2799) in paragraph at lines 5558--5560
 []\TU/lmr/m/n/10 Pre-partitioning: Data streaming, partitioning parameter updates
  []
-
-
-Underfull \vbox (badness 1286) has occurred while \output is active []
 
 [244] [245] [246]
 Chapter 8.
@@ -1569,7 +1566,7 @@ Chapter 9.
 [249
 
 ] [250]
-Overfull \hbox (27.75pt too wide) in paragraph at lines 5635--5635
+Overfull \hbox (27.75pt too wide) in paragraph at lines 5638--5638
 []  \TU/lmtt/m/n/10 <rect x="150" y="150" width="50" height="50" fill="firebrick"></rect>[] 
  []
 
@@ -1590,14 +1587,14 @@ File: ./figures/functions-types.png Graphic file (type bmp)
 File: ./figures/bijection-composition.png Graphic file (type bmp)
 <./figures/bijection-composition.png>
 [257] [258] [259] [260]
-Overfull \hbox (14.45105pt too wide) in paragraph at lines 5888--5889
+Overfull \hbox (14.45105pt too wide) in paragraph at lines 5891--5892
 \TU/lmr/m/n/10 underlying set is the family: $[] [] [][][]$
  []
 
 File: ./figures/family-tree.pdf Graphic file (type pdf)
 <use ./figures/family-tree.pdf>
 [261] [262] [263] [264] [265]
-Underfull \hbox (badness 10000) in paragraph at lines 6068--6069
+Underfull \hbox (badness 10000) in paragraph at lines 6071--6072
 [][]\TU/lmr/bx/n/10 Definition 10.13 \TU/lmr/m/n/10 (Monoid homomorphism)\TU/lmr/bx/n/10 . []\TU/lmr/m/n/10 Let $[][][] [][][] [][][]$ and
  []
 
@@ -1613,7 +1610,7 @@ File: ./figures/group-category.pdf Graphic file (type pdf)
 [272] [273]
 Chapter 11.
 
-Underfull \hbox (badness 1472) in paragraph at lines 6358--6359
+Underfull \hbox (badness 1472) in paragraph at lines 6361--6362
 \TU/lmr/m/it/10 Markdown Publishing System\TU/lmr/m/n/10 . []$[][][][][] [] [] [] [][][][] [] [] [][] [][][][][][][] [] [][][] [] [][][][][][][] []
  []
 
@@ -1640,17 +1637,17 @@ Underfull \hbox (badness 10000) in paragraph at lines 6883--6884
  []
 
 [284] [285] [286] [287]
-Underfull \hbox (badness 1629) in paragraph at lines 7108--7109
+Underfull \hbox (badness 1629) in paragraph at lines 7111--7112
 []\TU/lmr/m/n/10 Self, Jessica Zeitz, Michelle Dowling, John Wenskovitch, Ian Crandell,
  []
 
-[288]
-Underfull \hbox (badness 3354) in paragraph at lines 7150--7151
+
+Underfull \hbox (badness 3354) in paragraph at lines 7153--7154
 \TU/lmr/m/it/10 A9\TU/lmr/m/n/10 . Youtube. []$[][][][][] [] [] [] [][][] [] [][][][][][][] [] [][][] [] [][][][][][][][] [] [][][][] [] [][][][][][][][] []
  []
 
-[289] [290] [291]
-Underfull \hbox (badness 10000) in paragraph at lines 7333--7334
+[288] [289] [290] [291]
+Underfull \hbox (badness 10000) in paragraph at lines 7336--7337
 []$[][][][][] [] [] [] [][][] [] [][][][][][] [] [][][] [] [] [] [][][][][][][][][][][][][][][] [] [][][][][][][][] [] [][][][][][] [] [][][][][][][] []
  []
 
@@ -1662,8 +1659,8 @@ L3 programming layer <2025-11-14>
  ) 
 Here is how much of TeX's memory you used:
  31745 strings out of 470195
- 647035 string characters out of 5478727
- 1178227 words of memory out of 5000000
+ 647031 string characters out of 5478727
+ 1178223 words of memory out of 5000000
  59718 multiletter control sequences out of 15000+600000
  634406 words of font info for 110 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191

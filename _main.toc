@@ -205,7 +205,7 @@
 \contentsline {subsubsection}{\numberline {7.2.1.5}Customization}{241}{subsubsection.7.2.1.5}%
 \contentsline {subsubsection}{\numberline {7.2.1.6}Performance}{241}{subsubsection.7.2.1.6}%
 \contentsline {subsection}{\numberline {7.2.2}Declarative schemas and extensibility}{241}{subsection.7.2.2}%
-\contentsline {subsubsection}{\numberline {7.2.2.1}Data and encodings}{242}{subsubsection.7.2.2.1}%
+\contentsline {subsubsection}{\numberline {7.2.2.1}Data and encodings}{243}{subsubsection.7.2.2.1}%
 \contentsline {subsubsection}{\numberline {7.2.2.2}Graphs and hierarchy}{243}{subsubsection.7.2.2.2}%
 \contentsline {subsubsection}{\numberline {7.2.2.3}Reactivity}{244}{subsubsection.7.2.2.3}%
 \contentsline {subsection}{\numberline {7.2.3}Performance}{245}{subsection.7.2.3}%
