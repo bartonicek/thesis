@@ -10,6 +10,7 @@ output:
   bookdown::gitbook:
     css: styles.css
   bookdown::pdf_document2:
+    keep_text: true
     latex_engine: xelatex
   bookdown::pdf_book:
     latex_engine: xelatex
@@ -28,6 +29,8 @@ header-includes:
   - \AtBeginDocument{\frontmatter}
   - \AtBeginDocument{\let\maketitle\relax}
 ---
+
+> Note: A live version of this thesis featuring fully interactive figures is available at [https://bartonicek.github.io/thesis/](https://bartonicek.github.io/thesis/). Documentation for plotscaper, the R package developed as part of this research, can be found at [https://bartonicek.github.io/plotscaper/](https://bartonicek.github.io/plotscaper/).
 
 # Abstract
 
@@ -99,3 +102,4 @@ knitr::opts_chunk$set(
   out.width = "100%" # For LaTeX output to render correctly
 )
 ```
+
