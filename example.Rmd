@@ -315,7 +315,8 @@ From now on, I will describe interesting features of the data in text rather tha
 order_df <- aggregate(cases ~ diagnosis, sum, data = df)
 order_df <- order_df[order(order_df$cases), ]
 
-order_df2 <- aggregate(cases ~ reason_for_termination, sum, data = df)
+order_df2 <- aggregate(cases ~ reason_for_termination, 
+                       sum, data = df)
 order_df2 <- order_df2[order(order_df2$cases), ]
 
 df |>
@@ -324,9 +325,10 @@ df |>
   add_barplot(c("age_category", "cases")) |>
   add_barplot(c("sex", "cases")) |>
   add_barplot(c("reason_for_termination", "cases")) |>
-  # Sort the bars by prevalence (can also do interactively by pressing `O` key)
+  # Sort the bars by prevalence (`O` keyboard shortcut)
   set_scale("barplot1", "x", breaks = order_df$diagnosis) |> 
-  set_scale("barplot4", "x", breaks = order_df2$reason_for_termination) |> 
+  set_scale("barplot4", "x", 
+            breaks = order_df2$reason_for_termination) |> 
   render()
 ```
 
@@ -351,13 +353,15 @@ Third most prevalent disorder categories was Alzheimer's disease. The high preva
 The fourth most prevalent category of disorders were neurotic, stress-related, and somatoform disorders (excluding the obsessive-compulsive disorder, F42) which was classified as its own category in the data set. This category includes disorders such as specific phobias, generalized anxiety disorder, and the post-traumatic stress disorder [@icd2024a]. These disorders are known to be relatively common, occur roughly twice as often in women as in men, and have a generally even age distribution, with decline in prevalence in older age [@bandelow2015]. This pattern could be seen well in the data set, with women making up the majority of the cases and the age distribution being fairly uniform, until a drop-off starting at about 60-69 years of age. In fact, these disorders were the most common diagnosis for women under 40:
 
 ```{r}
-df$age_category_n <- as.numeric(factor(df$age_category, ordered = TRUE))
+df$age_category_n <- as.numeric(factor(df$age_category, 
+                                       ordered = TRUE))
 under_40 <- unique(df$age_category_n[df$age_category == "30–39"])
 
 subset(df, sex == "female" & age_category_n <= under_40) |>
   (\(x) aggregate(cases ~ diagnosis, sum, data = x))() |>
   (\(x) x[order(-x$cases), ])() |>
-  head(5) |> knitr::kable(align = "ll", row.names = FALSE, booktabs = TRUE)
+  head(5) |> knitr::kable(align = "ll", row.names = FALSE, 
+                          booktabs = TRUE)
 ```
 
 

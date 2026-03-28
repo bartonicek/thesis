@@ -182,60 +182,60 @@
 \contentsline {subsubsection}{\numberline {6.1.2.3}Age and child and adolescent mental health}{213}{subsubsection.6.1.2.3}%
 \contentsline {subsubsection}{\numberline {6.1.2.4}Prevalence of diagnoses}{216}{subsubsection.6.1.2.4}%
 \contentsline {subsubsection}{\numberline {6.1.2.5}Prevalence of diagnoses over time}{222}{subsubsection.6.1.2.5}%
-\contentsline {subsubsection}{\numberline {6.1.2.6}Characteristics of patient cohorts over time}{224}{subsubsection.6.1.2.6}%
+\contentsline {subsubsection}{\numberline {6.1.2.6}Characteristics of patient cohorts over time}{223}{subsubsection.6.1.2.6}%
 \contentsline {section}{\numberline {6.2}Summary}{226}{section.6.2}%
-\contentsline {chapter}{\numberline {7}Discussion}{227}{chapter.7}%
-\contentsline {section}{\numberline {7.1}Theoretical model}{230}{section.7.1}%
-\contentsline {subsection}{\numberline {7.1.1}Advantages of the model - what makes it useful?}{230}{subsection.7.1.1}%
-\contentsline {subsection}{\numberline {7.1.2}Disjointness}{231}{subsection.7.1.2}%
-\contentsline {subsection}{\numberline {7.1.3}Associativity and unitality}{232}{subsection.7.1.3}%
-\contentsline {subsection}{\numberline {7.1.4}Groups and inverses}{234}{subsection.7.1.4}%
-\contentsline {subsection}{\numberline {7.1.5}Additional properties: Monotonicity, commutativity, and others}{235}{subsection.7.1.5}%
-\contentsline {subsubsection}{\numberline {7.1.5.1}Monotonicity}{235}{subsubsection.7.1.5.1}%
-\contentsline {subsubsection}{\numberline {7.1.5.2}Commutativity}{236}{subsubsection.7.1.5.2}%
-\contentsline {subsubsection}{\numberline {7.1.5.3}Idempotence, unitality, and distributivity}{236}{subsubsection.7.1.5.3}%
-\contentsline {subsection}{\numberline {7.1.6}Model constraints}{237}{subsection.7.1.6}%
-\contentsline {subsection}{\numberline {7.1.7}Potential future directions}{238}{subsection.7.1.7}%
-\contentsline {section}{\numberline {7.2}Delivered software}{239}{section.7.2}%
-\contentsline {subsection}{\numberline {7.2.1}Scope and features}{239}{subsection.7.2.1}%
-\contentsline {subsubsection}{\numberline {7.2.1.1}Plot types}{239}{subsubsection.7.2.1.1}%
-\contentsline {subsubsection}{\numberline {7.2.1.2}Consistency}{240}{subsubsection.7.2.1.2}%
-\contentsline {subsubsection}{\numberline {7.2.1.3}Selection model}{240}{subsubsection.7.2.1.3}%
-\contentsline {subsubsection}{\numberline {7.2.1.4}Feature depth}{241}{subsubsection.7.2.1.4}%
-\contentsline {subsubsection}{\numberline {7.2.1.5}Customization}{242}{subsubsection.7.2.1.5}%
-\contentsline {subsubsection}{\numberline {7.2.1.6}Performance}{242}{subsubsection.7.2.1.6}%
-\contentsline {subsection}{\numberline {7.2.2}Declarative schemas and extensibility}{242}{subsection.7.2.2}%
-\contentsline {subsubsection}{\numberline {7.2.2.1}Data and encodings}{244}{subsubsection.7.2.2.1}%
-\contentsline {subsubsection}{\numberline {7.2.2.2}Graphs and hierarchy}{244}{subsubsection.7.2.2.2}%
-\contentsline {subsubsection}{\numberline {7.2.2.3}Reactivity}{245}{subsubsection.7.2.2.3}%
-\contentsline {subsection}{\numberline {7.2.3}Performance}{246}{subsection.7.2.3}%
-\contentsline {chapter}{\numberline {8}Conclusion}{248}{chapter.8}%
-\contentsline {chapter}{\numberline {9}Appendix: Glossary}{250}{chapter.9}%
-\contentsline {subsubsection}{\numberline {9.0.0.1}API}{250}{subsubsection.9.0.0.1}%
-\contentsline {subsubsection}{\numberline {9.0.0.2}JSON}{250}{subsubsection.9.0.0.2}%
-\contentsline {subsubsection}{\numberline {9.0.0.3}GoG}{251}{subsubsection.9.0.0.3}%
-\contentsline {subsubsection}{\numberline {9.0.0.4}IDE}{251}{subsubsection.9.0.0.4}%
-\contentsline {subsubsection}{\numberline {9.0.0.5}SVG}{252}{subsubsection.9.0.0.5}%
-\contentsline {chapter}{\numberline {10}Appendix: Mathematical theory}{253}{chapter.10}%
-\contentsline {subsubsection}{\numberline {10.0.0.1}Relations}{253}{subsubsection.10.0.0.1}%
-\contentsline {subsubsection}{\numberline {10.0.0.2}Functions}{255}{subsubsection.10.0.0.2}%
-\contentsline {paragraph}{\numberline {10.0.0.2.1}More on bijections}{257}{paragraph.10.0.0.2.1}%
-\contentsline {paragraph}{\numberline {10.0.0.2.2}Composition}{258}{paragraph.10.0.0.2.2}%
-\contentsline {paragraph}{\numberline {10.0.0.2.3}The image and the pre-image}{259}{paragraph.10.0.0.2.3}%
-\contentsline {subsubsection}{\numberline {10.0.0.3}Partitions}{260}{subsubsection.10.0.0.3}%
-\contentsline {subsubsection}{\numberline {10.0.0.4}Preorders}{261}{subsubsection.10.0.0.4}%
-\contentsline {paragraph}{\numberline {10.0.0.4.1}Specializing preorders}{262}{paragraph.10.0.0.4.1}%
-\contentsline {paragraph}{\numberline {10.0.0.4.2}Structure preserving maps: Monotone maps}{263}{paragraph.10.0.0.4.2}%
-\contentsline {subsubsection}{\numberline {10.0.0.5}Monoids}{263}{subsubsection.10.0.0.5}%
-\contentsline {subsubsection}{\numberline {10.0.0.6}Simple examples of monoids}{264}{subsubsection.10.0.0.6}%
-\contentsline {paragraph}{\numberline {10.0.0.6.1}Beyond numbers}{265}{paragraph.10.0.0.6.1}%
-\contentsline {subsubsection}{\numberline {10.0.0.7}Specializing monoids}{266}{subsubsection.10.0.0.7}%
-\contentsline {paragraph}{\numberline {10.0.0.7.1}Structure preserving maps: Monoid homomorphisms}{267}{paragraph.10.0.0.7.1}%
-\contentsline {subsubsection}{\numberline {10.0.0.8}Groups}{268}{subsubsection.10.0.0.8}%
-\contentsline {paragraph}{\numberline {10.0.0.8.1}Simple examples of groups}{269}{paragraph.10.0.0.8.1}%
-\contentsline {paragraph}{\numberline {10.0.0.8.2}Structure preserving maps: Group homomorphisms}{269}{paragraph.10.0.0.8.2}%
-\contentsline {subsubsection}{\numberline {10.0.0.9}Categories}{269}{subsubsection.10.0.0.9}%
-\contentsline {paragraph}{\numberline {10.0.0.9.1}Isomorphisms within categories}{271}{paragraph.10.0.0.9.1}%
-\contentsline {paragraph}{\numberline {10.0.0.9.2}Algebraic structures described as categories}{272}{paragraph.10.0.0.9.2}%
-\contentsline {subsubsection}{\numberline {10.0.0.10}Functors}{273}{subsubsection.10.0.0.10}%
-\contentsline {chapter}{\numberline {11}References}{275}{chapter.11}%
+\contentsline {chapter}{\numberline {7}Discussion}{228}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Theoretical model}{231}{section.7.1}%
+\contentsline {subsection}{\numberline {7.1.1}Advantages of the model - what makes it useful?}{231}{subsection.7.1.1}%
+\contentsline {subsection}{\numberline {7.1.2}Disjointness}{232}{subsection.7.1.2}%
+\contentsline {subsection}{\numberline {7.1.3}Associativity and unitality}{233}{subsection.7.1.3}%
+\contentsline {subsection}{\numberline {7.1.4}Groups and inverses}{235}{subsection.7.1.4}%
+\contentsline {subsection}{\numberline {7.1.5}Additional properties: Monotonicity, commutativity, and others}{236}{subsection.7.1.5}%
+\contentsline {subsubsection}{\numberline {7.1.5.1}Monotonicity}{236}{subsubsection.7.1.5.1}%
+\contentsline {subsubsection}{\numberline {7.1.5.2}Commutativity}{237}{subsubsection.7.1.5.2}%
+\contentsline {subsubsection}{\numberline {7.1.5.3}Idempotence, unitality, and distributivity}{237}{subsubsection.7.1.5.3}%
+\contentsline {subsection}{\numberline {7.1.6}Model constraints}{238}{subsection.7.1.6}%
+\contentsline {subsection}{\numberline {7.1.7}Potential future directions}{239}{subsection.7.1.7}%
+\contentsline {section}{\numberline {7.2}Delivered software}{240}{section.7.2}%
+\contentsline {subsection}{\numberline {7.2.1}Scope and features}{240}{subsection.7.2.1}%
+\contentsline {subsubsection}{\numberline {7.2.1.1}Plot types}{240}{subsubsection.7.2.1.1}%
+\contentsline {subsubsection}{\numberline {7.2.1.2}Consistency}{241}{subsubsection.7.2.1.2}%
+\contentsline {subsubsection}{\numberline {7.2.1.3}Selection model}{241}{subsubsection.7.2.1.3}%
+\contentsline {subsubsection}{\numberline {7.2.1.4}Feature depth}{242}{subsubsection.7.2.1.4}%
+\contentsline {subsubsection}{\numberline {7.2.1.5}Customization}{243}{subsubsection.7.2.1.5}%
+\contentsline {subsubsection}{\numberline {7.2.1.6}Performance}{243}{subsubsection.7.2.1.6}%
+\contentsline {subsection}{\numberline {7.2.2}Declarative schemas and extensibility}{243}{subsection.7.2.2}%
+\contentsline {subsubsection}{\numberline {7.2.2.1}Data and encodings}{245}{subsubsection.7.2.2.1}%
+\contentsline {subsubsection}{\numberline {7.2.2.2}Graphs and hierarchy}{245}{subsubsection.7.2.2.2}%
+\contentsline {subsubsection}{\numberline {7.2.2.3}Reactivity}{246}{subsubsection.7.2.2.3}%
+\contentsline {subsection}{\numberline {7.2.3}Performance}{247}{subsection.7.2.3}%
+\contentsline {chapter}{\numberline {8}Conclusion}{249}{chapter.8}%
+\contentsline {chapter}{\numberline {9}Appendix: Glossary}{251}{chapter.9}%
+\contentsline {subsubsection}{\numberline {9.0.0.1}API}{251}{subsubsection.9.0.0.1}%
+\contentsline {subsubsection}{\numberline {9.0.0.2}JSON}{251}{subsubsection.9.0.0.2}%
+\contentsline {subsubsection}{\numberline {9.0.0.3}GoG}{252}{subsubsection.9.0.0.3}%
+\contentsline {subsubsection}{\numberline {9.0.0.4}IDE}{252}{subsubsection.9.0.0.4}%
+\contentsline {subsubsection}{\numberline {9.0.0.5}SVG}{253}{subsubsection.9.0.0.5}%
+\contentsline {chapter}{\numberline {10}Appendix: Mathematical theory}{254}{chapter.10}%
+\contentsline {subsubsection}{\numberline {10.0.0.1}Relations}{254}{subsubsection.10.0.0.1}%
+\contentsline {subsubsection}{\numberline {10.0.0.2}Functions}{256}{subsubsection.10.0.0.2}%
+\contentsline {paragraph}{\numberline {10.0.0.2.1}More on bijections}{258}{paragraph.10.0.0.2.1}%
+\contentsline {paragraph}{\numberline {10.0.0.2.2}Composition}{259}{paragraph.10.0.0.2.2}%
+\contentsline {paragraph}{\numberline {10.0.0.2.3}The image and the pre-image}{260}{paragraph.10.0.0.2.3}%
+\contentsline {subsubsection}{\numberline {10.0.0.3}Partitions}{261}{subsubsection.10.0.0.3}%
+\contentsline {subsubsection}{\numberline {10.0.0.4}Preorders}{262}{subsubsection.10.0.0.4}%
+\contentsline {paragraph}{\numberline {10.0.0.4.1}Specializing preorders}{263}{paragraph.10.0.0.4.1}%
+\contentsline {paragraph}{\numberline {10.0.0.4.2}Structure preserving maps: Monotone maps}{264}{paragraph.10.0.0.4.2}%
+\contentsline {subsubsection}{\numberline {10.0.0.5}Monoids}{264}{subsubsection.10.0.0.5}%
+\contentsline {subsubsection}{\numberline {10.0.0.6}Simple examples of monoids}{265}{subsubsection.10.0.0.6}%
+\contentsline {paragraph}{\numberline {10.0.0.6.1}Beyond numbers}{266}{paragraph.10.0.0.6.1}%
+\contentsline {subsubsection}{\numberline {10.0.0.7}Specializing monoids}{267}{subsubsection.10.0.0.7}%
+\contentsline {paragraph}{\numberline {10.0.0.7.1}Structure preserving maps: Monoid homomorphisms}{268}{paragraph.10.0.0.7.1}%
+\contentsline {subsubsection}{\numberline {10.0.0.8}Groups}{269}{subsubsection.10.0.0.8}%
+\contentsline {paragraph}{\numberline {10.0.0.8.1}Simple examples of groups}{270}{paragraph.10.0.0.8.1}%
+\contentsline {paragraph}{\numberline {10.0.0.8.2}Structure preserving maps: Group homomorphisms}{270}{paragraph.10.0.0.8.2}%
+\contentsline {subsubsection}{\numberline {10.0.0.9}Categories}{270}{subsubsection.10.0.0.9}%
+\contentsline {paragraph}{\numberline {10.0.0.9.1}Isomorphisms within categories}{272}{paragraph.10.0.0.9.1}%
+\contentsline {paragraph}{\numberline {10.0.0.9.2}Algebraic structures described as categories}{273}{paragraph.10.0.0.9.2}%
+\contentsline {subsubsection}{\numberline {10.0.0.10}Functors}{274}{subsubsection.10.0.0.10}%
+\contentsline {chapter}{\numberline {11}References}{276}{chapter.11}%

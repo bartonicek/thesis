@@ -10,9 +10,10 @@ output:
   bookdown::gitbook:
     css: styles.css
   bookdown::pdf_document2:
-    keep_text: true
+    keep_tex: yes
     latex_engine: xelatex
   bookdown::pdf_book:
+    keep_tex: yes
     latex_engine: xelatex
     toc: false
     includes:
@@ -30,7 +31,7 @@ header-includes:
   - \AtBeginDocument{\let\maketitle\relax}
 ---
 
-> Note: a live version of this thesis with fully interactive figures is available at [https://bartonicek.github.io/thesis/](https://bartonicek.github.io/thesis/).
+> Note: A live version of this thesis featuring fully interactive figures is available at [https://bartonicek.github.io/thesis/](https://bartonicek.github.io/thesis/). Documentation for plotscaper, the R package developed as part of this research, can be found at [https://bartonicek.github.io/plotscaper/](https://bartonicek.github.io/plotscaper/).
 
 # Abstract
 
@@ -4390,7 +4391,8 @@ From now on, I will describe interesting features of the data in text rather tha
 order_df <- aggregate(cases ~ diagnosis, sum, data = df)
 order_df <- order_df[order(order_df$cases), ]
 
-order_df2 <- aggregate(cases ~ reason_for_termination, sum, data = df)
+order_df2 <- aggregate(cases ~ reason_for_termination, 
+                       sum, data = df)
 order_df2 <- order_df2[order(order_df2$cases), ]
 
 df |>
@@ -4399,9 +4401,10 @@ df |>
   add_barplot(c("age_category", "cases")) |>
   add_barplot(c("sex", "cases")) |>
   add_barplot(c("reason_for_termination", "cases")) |>
-  # Sort the bars by prevalence (can also do interactively by pressing `O` key)
+  # Sort the bars by prevalence (`O` keyboard shortcut)
   set_scale("barplot1", "x", breaks = order_df$diagnosis) |> 
-  set_scale("barplot4", "x", breaks = order_df2$reason_for_termination) |> 
+  set_scale("barplot4", "x", 
+            breaks = order_df2$reason_for_termination) |> 
   render()
 ```
 
@@ -4426,13 +4429,15 @@ Third most prevalent disorder categories was Alzheimer's disease. The high preva
 The fourth most prevalent category of disorders were neurotic, stress-related, and somatoform disorders (excluding the obsessive-compulsive disorder, F42) which was classified as its own category in the data set. This category includes disorders such as specific phobias, generalized anxiety disorder, and the post-traumatic stress disorder [@icd2024a]. These disorders are known to be relatively common, occur roughly twice as often in women as in men, and have a generally even age distribution, with decline in prevalence in older age [@bandelow2015]. This pattern could be seen well in the data set, with women making up the majority of the cases and the age distribution being fairly uniform, until a drop-off starting at about 60-69 years of age. In fact, these disorders were the most common diagnosis for women under 40:
 
 ```{r}
-df$age_category_n <- as.numeric(factor(df$age_category, ordered = TRUE))
+df$age_category_n <- as.numeric(factor(df$age_category, 
+                                       ordered = TRUE))
 under_40 <- unique(df$age_category_n[df$age_category == "30–39"])
 
 subset(df, sex == "female" & age_category_n <= under_40) |>
   (\(x) aggregate(cases ~ diagnosis, sum, data = x))() |>
   (\(x) x[order(-x$cases), ])() |>
-  head(5) |> knitr::kable(align = "ll", row.names = FALSE, booktabs = TRUE)
+  head(5) |> knitr::kable(align = "ll", row.names = FALSE, 
+                          booktabs = TRUE)
 ```
 
 
@@ -4635,7 +4640,7 @@ Early in the project, I encountered some ideas from functional programming, whic
 
 ### Disjointness
 
-As discussed above, a core axiom of the model is that the data is organized into a hierarchy of partitions made by combining *disjoint* subsets. While this assumption holds true for the vast majority of common visualization types, certain visualizations deviate from this model, specifically, those in which geometric objects within the same graphical layer represent overlapping data subsets. Examples include certain visualizations of set-typed data [see e.g. @alsallakh2014] as well as two-dimensional kernel density plots (aka contour plots, see Section \@ref(comparison-disjointness)). However, these non-disjoint representations tend to be fairly rare. In the vast majority of *standard* plots - including barplots, histograms, scatterplots, density plots, heatmaps, violin plots, boxplots, lineplots, radar plots, treemaps, and parallel coordinate plots - each geometric object represents a disjoint subset of the cases^[For example, I tried going through `ggplot2`'s list of [`geoms`](https://ggplot2.tidyverse.org/reference/) and identifying all non-disjoint data representations. The only examples I have been able to find have been find were `geom`s based on two-dimensional kernel density estimates, i.e. `geom_density_2d` and `geom_density_2d_filled` (each line or polygon represents densities computed across all datapoints).].
+As discussed above, a core axiom of the model is that the data is organized into a hierarchy of partitions made by combining *disjoint* subsets. While this assumption holds true for the vast majority of common visualization types, certain visualizations deviate from this model, specifically, those in which geometric objects within the same graphical layer represent overlapping data subsets. Examples include certain visualizations of set-typed data [see e.g. @alsallakh2014] as well as two-dimensional kernel density plots (aka contour plots, see Section \@ref(comparison-disjointness)). However, these non-disjoint representations tend to be fairly rare. In the vast majority of *standard* plots - including barplots, histograms, scatterplots, density plots, heatmaps, violin plots, boxplots, lineplots, radar plots, treemaps, and parallel coordinate plots - each geometric object represents a disjoint subset of the cases^[For instance, I went through `ggplot2`'s list of [`geoms`](https://ggplot2.tidyverse.org/reference/) and the only examples of non-disjoint representations I have been able to find have been find were `geom`s based on two-dimensional kernel density estimates, i.e. `geom_density_2d` and `geom_density_2d_filled` (each line or polygon represents densities computed across all datapoints).].
 
 In Section \@ref(comparison-disjointness), I argued that this ubiquity of disjointness is no accident; rather, it stems from its fundamental "naturality". Disjointness underpins core concepts in statistics, programming, and mathematics and aligns closely with our cognitive processes. As explored in Section \@ref(comparison-disjointness), it is far simpler to reason about distinct, independent objects than those that are conceptually or mathematically "entangled" [see also @hickey2011].
 

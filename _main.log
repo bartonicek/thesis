@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.11.29)  28 MAR 2026 16:06
+This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.11.29)  28 MAR 2026 16:26
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1388,12 +1388,12 @@ Underfull \vbox (badness 7540) has occurred while \output is active []
 
 [133]
 Overfull \hbox (27.75pt too wide) in paragraph at lines 2938--2938
-[]  \TU/lmtt/m/n/10 .. ..$ id       : 'scalar' chr "172f80af-14a2-410c-bdeb-f903c303a9c2"[] 
+[]  \TU/lmtt/m/n/10 .. ..$ id       : 'scalar' chr "0d8b47a1-b056-44cc-94de-5fd6c4b2390a"[] 
  []
 
 
 Overfull \hbox (27.75pt too wide) in paragraph at lines 2938--2938
-[]  \TU/lmtt/m/n/10 .. ..$ id       : 'scalar' chr "3b630f03-509e-488b-954c-b955f668b0d3"[] 
+[]  \TU/lmtt/m/n/10 .. ..$ id       : 'scalar' chr "104841b0-39d5-4a2e-94b4-e4948aadca59"[] 
  []
 
 [134] [135] [136]
@@ -1532,27 +1532,27 @@ File: ./figures/example-cases-diagnosis.png Graphic file (type bmp)
 [219] [220] [221]
 File: ./figures/example-cases-diagnosis-time.png Graphic file (type bmp)
 <./figures/example-cases-diagnosis-time.png>
-[222] [223]
+[222] [223] [224]
 File: ./figures/example-cases-diagnosis-max.png Graphic file (type bmp)
 <./figures/example-cases-diagnosis-max.png>
-[224] [225]
-Underfull \hbox (badness 1132) in paragraph at lines 5370--5371
+[225] [226]
+Underfull \hbox (badness 1132) in paragraph at lines 5374--5375
 \TU/lmr/m/n/10 Alzheimer’s patients, over time, schizophrenia patients became the
  []
 
-[226]
+[227]
 Chapter 7.
 
-Underfull \hbox (badness 1072) in paragraph at lines 5375--5376
+Underfull \hbox (badness 1072) in paragraph at lines 5379--5380
 \TU/lmr/m/n/10 for the complex, interdependent relationships that emerge in interactive
  []
 
 
-Underfull \hbox (badness 1158) in paragraph at lines 5377--5378
+Underfull \hbox (badness 1158) in paragraph at lines 5381--5382
 []\TU/lmr/m/n/10 To address these limitations, I proposed a novel alternative: a simple
  []
 
-[227
+[228
 
 ]
 File: _main_files/figure-latex/plotscaper-downloads-1.pdf Graphic file (type pdf)
@@ -1560,111 +1560,111 @@ File: _main_files/figure-latex/plotscaper-downloads-1.pdf Graphic file (type pdf
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-[228] [229] [230] [231] [232] [233] [234] [235] [236] [237]
-Underfull \hbox (badness 1014) in paragraph at lines 5486--5487
+[229] [230] [231] [232] [233] [234] [235] [236] [237] [238]
+Underfull \hbox (badness 1014) in paragraph at lines 5490--5491
 []\TU/lmr/m/n/10 More fundamentally, beyond the simple category-theoretic concepts used
  []
 
-[238] [239] [240] [241] [242] [243] [244]
-Underfull \hbox (badness 2799) in paragraph at lines 5574--5576
+[239] [240] [241] [242] [243] [244] [245]
+Underfull \hbox (badness 2799) in paragraph at lines 5578--5580
 []\TU/lmr/m/n/10 Pre-partitioning: Data streaming, partitioning parameter updates
  []
 
-[245] [246] [247]
+[246] [247] [248]
 Chapter 8.
-[248
+[249
 
-] [249]
+] [250]
 Chapter 9.
-[250
+[251
 
-] [251]
-Overfull \hbox (27.75pt too wide) in paragraph at lines 5654--5654
+] [252]
+Overfull \hbox (27.75pt too wide) in paragraph at lines 5658--5658
 []  \TU/lmtt/m/n/10 <rect x="150" y="150" width="50" height="50" fill="firebrick"></rect>[] 
  []
 
-[252]
+[253]
 Chapter 10.
-[253
+[254
 
 ]
 File: ./figures/relations.png Graphic file (type bmp)
 <./figures/relations.png>
-[254]
+[255]
 File: ./figures/functions-subset.png Graphic file (type bmp)
 <./figures/functions-subset.png>
-[255] [256]
+[256] [257]
 File: ./figures/functions-types.png Graphic file (type bmp)
 <./figures/functions-types.png>
-[257]
+[258]
 File: ./figures/bijection-composition.png Graphic file (type bmp)
 <./figures/bijection-composition.png>
-[258] [259] [260] [261]
-Overfull \hbox (14.45105pt too wide) in paragraph at lines 5907--5908
+[259] [260] [261] [262]
+Overfull \hbox (14.45105pt too wide) in paragraph at lines 5911--5912
 \TU/lmr/m/n/10 underlying set is the family: $[] [] [][][]$
  []
 
 File: ./figures/family-tree.pdf Graphic file (type pdf)
 <use ./figures/family-tree.pdf>
-[262] [263] [264] [265] [266]
-Underfull \hbox (badness 10000) in paragraph at lines 6087--6088
+[263] [264] [265] [266] [267]
+Underfull \hbox (badness 10000) in paragraph at lines 6091--6092
 [][]\TU/lmr/bx/n/10 Definition 10.13 \TU/lmr/m/n/10 (Monoid homomorphism)\TU/lmr/bx/n/10 . []\TU/lmr/m/n/10 Let $[][][] [][][] [][][]$ and
  []
 
-[267] [268] [269]
+[268] [269] [270]
 File: ./figures/category-two.pdf Graphic file (type pdf)
 <use ./figures/category-two.pdf>
-[270] [271]
+[271] [272]
 File: ./figures/monoid-category.pdf Graphic file (type pdf)
 <use ./figures/monoid-category.pdf>
-[272]
+[273]
 File: ./figures/group-category.pdf Graphic file (type pdf)
 <use ./figures/group-category.pdf>
-[273] [274]
+[274] [275]
 Chapter 11.
 
-Underfull \hbox (badness 1472) in paragraph at lines 6377--6378
+Underfull \hbox (badness 1472) in paragraph at lines 6381--6382
 \TU/lmr/m/it/10 Markdown Publishing System\TU/lmr/m/n/10 . []$[][][][][] [] [] [] [][][][] [] [] [][] [][][][][][][] [] [][][] [] [][][][][][][] []
  []
 
-[275
+[276
 
-] [276] [277] [278]
-Underfull \hbox (badness 3240) in paragraph at lines 6593--6594
+] [277] [278] [279]
+Underfull \hbox (badness 3240) in paragraph at lines 6597--6598
 \TU/lmr/m/it/10 ceedings of the working conference on Advanced visual interfaces\TU/lmr/m/n/10 ,
  []
 
-[279] [280]
-Underfull \hbox (badness 3954) in paragraph at lines 6695--6696
+[280] [281]
+Underfull \hbox (badness 3954) in paragraph at lines 6699--6700
 \TU/lmr/m/n/10 ming.” \TU/lmr/m/it/10 Handmade Network\TU/lmr/m/n/10 . []$[][][][][] [] [] [] [][][][][][][][] [] [][][][][][][] [] [][][][][][][][] []
  []
 
-[281]
-Underfull \hbox (badness 1769) in paragraph at lines 6725--6726
+[282]
+Underfull \hbox (badness 1769) in paragraph at lines 6729--6730
 []\TU/lmr/m/n/10 Henry, Lionel, and Hadley Wickham. 2024. \TU/lmr/m/it/10 Rlang: Functions for
  []
 
-[282] [283] [284]
-Underfull \hbox (badness 10000) in paragraph at lines 6899--6900
+[283] [284] [285]
+Underfull \hbox (badness 10000) in paragraph at lines 6903--6904
 []$[][][][][] [] [] [] [][][] [] [][][][][][][][] [] [][][] [] [][][][][] [] [][][][][] [] [][][][][][][][][][][][][][][][][][][][] [] [] []
  []
 
-[285] [286] [287] [288]
-Underfull \hbox (badness 1629) in paragraph at lines 7127--7128
+[286] [287] [288] [289]
+Underfull \hbox (badness 1629) in paragraph at lines 7131--7132
 []\TU/lmr/m/n/10 Self, Jessica Zeitz, Michelle Dowling, John Wenskovitch, Ian Crandell,
  []
 
 
-Underfull \hbox (badness 3354) in paragraph at lines 7169--7170
+Underfull \hbox (badness 3354) in paragraph at lines 7173--7174
 \TU/lmr/m/it/10 A9\TU/lmr/m/n/10 . Youtube. []$[][][][][] [] [] [] [][][] [] [][][][][][][] [] [][][] [] [][][][][][][][] [] [][][][] [] [][][][][][][][] []
  []
 
-[289] [290] [291] [292]
-Underfull \hbox (badness 10000) in paragraph at lines 7352--7353
+[290] [291] [292] [293]
+Underfull \hbox (badness 10000) in paragraph at lines 7356--7357
 []$[][][][][] [] [] [] [][][] [] [][][][][][] [] [][][] [] [] [] [][][][][][][][][][][][][][][] [] [][][][][][][][] [] [][][][][][] [] [][][][][][][] []
  []
 
-[293] [294] (./_main.aux)
+[294] [295] (./_main.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2025-11-14>
@@ -1679,4 +1679,4 @@ Here is how much of TeX's memory you used:
  14 hyphenation exceptions out of 8191
  98i,17n,114p,2378b,762s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on _main.pdf (302 pages).
+Output written on _main.pdf (303 pages).

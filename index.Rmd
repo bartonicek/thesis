@@ -10,9 +10,10 @@ output:
   bookdown::gitbook:
     css: styles.css
   bookdown::pdf_document2:
-    keep_text: true
+    keep_tex: yes
     latex_engine: xelatex
   bookdown::pdf_book:
+    keep_tex: yes
     latex_engine: xelatex
     toc: false
     includes:
