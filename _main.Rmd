@@ -31,13 +31,15 @@ header-includes:
   - \AtBeginDocument{\let\maketitle\relax}
 ---
 
-> Note: A live version of this thesis featuring fully interactive figures is available at [https://bartonicek.github.io/thesis/](https://bartonicek.github.io/thesis/). Documentation for plotscaper, the R package developed as part of this research, can be found at [https://bartonicek.github.io/plotscaper/](https://bartonicek.github.io/plotscaper/).
-
 # Abstract
 
 Interactive data visualization has become a staple of modern data presentation. However, creating rich interactive figures still remains challenging, and widely available interactive data visualization systems often offer only limited support for many valuable interactive features. This implementation gap may stem from a subtle yet profound issue: what we can *do* with a figure is fundamentally determined by what the figure *is*. Graphs are not mere images; they are visual representations of structured information. Consequently, interactive features must align with the mathematical properties of the data they represent. Yet, this view poses challenges for the prevailing, independence-based approach to building data visualization systems. This approach, popularized by the Grammar of Graphics [@wilkinson2012], attempts to treat graphics, statistics, and interaction as independent, modular components.
 
 In this thesis, I argue that the independence model, despite many advantages, is fundamentally inadequate for comprehensively modeling graphics - visualization components are not independent, but instead deeply interconnected, particularly when interaction comes into play. Throughout this work, I explore this interconnectedness, the challenges it poses for interactive data visualization systems, and propose an alternative model based on some fundamental concepts from category theory. To put these ideas into practice, I also present `plotscaper`, an R package developed to refine these theoretical ideas and offer a practical tool for interactive data exploration. My goal is to demonstrate that, to build truly robust and consistent interactive data visualization systems, we may benefit from grounding our thinking in algebraic concepts.
+
+> *Note: A live version of this thesis featuring fully interactive figures is available at [https://bartonicek.github.io/thesis/](https://bartonicek.github.io/thesis/).* 
+> *Documentation for `plotscaper`, the R package developed as part of this research, can be found at [https://bartonicek.github.io/plotscaper/](https://bartonicek.github.io/plotscaper/).*
+
 
 ```{r}
 #| echo: false
@@ -1066,6 +1068,8 @@ aggregate(cbind(income, age) ~ group, FUN = sum)
 Once we partition our data and compute the summaries, we can visualize them as geometric objects in a plot. For instance, we could render the summarized data above as a simple barplot using `ggplot2` [@wickham2016]:
 
 ```{r}
+#| fig-cap: "A simple barplot, based on data partitioned by a single categorical variable."
+
 library(ggplot2)
 df <- aggregate(income ~ group, FUN = sum)
 
@@ -1086,6 +1090,8 @@ aggregate(cbind(income, age) ~ group + gender, FUN = sum)
 These product partitions can also be visualized, to display our data at a greater level of details (for instance, as a stacked barplot):
 
 ```{r}
+#| fig-cap: "Stacked barplot with data partitioned by the product of two categorical variables."
+
 df <- aggregate(income ~ group + gender, FUN = sum)
 
 ggplot(df, aes(group, income, fill = gender)) +
@@ -1097,6 +1103,8 @@ ggplot(df, aes(group, income, fill = gender)) +
 In fact, Cartesian products of partitions are so useful and ubiquitous in data visualization that many data visualization systems [particularly ones based on the Grammar of Graphics, @wilkinson2012] construct them automatically. For instance, we can produce the exact same plot without having to explicitly aggregate the data ourselves, by running the following `ggplot` call:
 
 ```{r}
+#| fig-cap: "A stacked barplot, produced automatically as a `ggplot2` default."
+
 df <- data.frame(group, gender, income)
 
 ggplot(df, aes(group, income, fill = gender)) +
@@ -1229,7 +1237,7 @@ A rather surprising feature of this data set is that, at a glance, the children 
 
 ```{r}
 #| eval: false
-#| fig: "Lung FEV of smokers and non-smokers within the @tager1979 study. Surprisingly, smokers seem to have greater lung volume on average compared with non-smokers."
+#| fig-cap: "Lung FEV of smokers and non-smokers within the @tager1979 study. Surprisingly, smokers seem to have greater lung capacity, on average, when compared with non-smokers."
 fev <- read.csv("./data/fev.csv")
 
 library(ggplot2)
@@ -1249,6 +1257,7 @@ We can verify that there indeed is a strong correlation between age and FEV like
 
 ```{r}
 #| eval: false
+#| fig-cap: "A scatterplot showing the relationship between age and lung capacity (forced expiratory volume)."
 ggplot(fev, aes(age, fev, fill = smoke)) +
   geom_point()
 ```
@@ -2345,6 +2354,7 @@ ggplot(mtcars, aes(x = mpg)) +
 
 ```{r}
 #| echo: false
+#| fig-cap: "A simple `ggplot2` histogram"
 knitr::include_graphics("./figures/ggplot-histogram-aes.png")
 ```
 
@@ -2359,6 +2369,7 @@ ggplot(mtcars, aes(x = mpg)) +
 
 ```{r}
 #| echo: false
+#| fig-cap: "Histogram with custom breaks"
 knitr::include_graphics("./figures/ggplot-histogram-aes2.png")
 ```
 
@@ -4179,9 +4190,12 @@ Interestingly, the points did not show a simple linear trend. Instead, they seem
 df |>
   create_schema() |>
   add_scatterplot(c("cases", "days")) |>
-  add_barplot(c("stay_category", "cases")) |> # y-axis is weighted by cases
-  assign_cases(which(df$stay_category == "short"), 1) |> # Mark short-term green
-  assign_cases(which(df$stay_category == "long"), 2) |> # Mark long-term red
+  # Add barplot with y-axis is weighted by cases
+  add_barplot(c("stay_category", "cases")) |> 
+  # Mark short-term cases green
+  assign_cases(which(df$stay_category == "short"), 1) |> 
+  # Mark long-term cases red
+  assign_cases(which(df$stay_category == "long"), 2) |> 
   render()
 ```
 
@@ -4213,11 +4227,11 @@ df |>
 
 ```{r example-cases-avg-days}
 #| echo: false
+#| fig-cap: "Log-transforming the y-axis (the average number of days) in the scatterplot clearly shows that patients cluster into three different groups."
 include_figure("./figures/example-cases-avg-days.html")
 ```
 
 Now we can clearly see the gaps between the three different distributions along the y-axis. 
-
 > Try querying the points near the y-axis gaps by pressing the `Q` key and hovering over them. You should observe that the gaps roughly span the 60-90 day and 150-210 day ranges, corresponding to 2-3 months and 5-7 months, respectively. 
 
 The trend we see in the scatterplot above strong indication of a selection process is at work. Specifically, it seems that patients who stay in treatment for more than two months are likely to be transferred to medium-term care and kept around for longer, and, likewise, those who stay in treatment for more than five months are likely to be moved to long-term care. There are likely administrative of health-insurance related reasons for this trend, nevertheless, it is still an interesting pattern to take note of.
@@ -4233,14 +4247,17 @@ schema <- df |>
   add_scatterplot(c("cases", "days")) |>
   add_barplot(c("year", "cases")) |>
   add_barplot(c("year", "days")) |>
-  add_histogram(c("days", "days")) |> # Again, make sure to weigh the y-axis
-  set_parameters("histogram1", width = 20) # Set histogram binwidth to 20 days
+  # Again, make sure to weigh the y-axis
+  add_histogram(c("days", "days")) |> 
+   # Set histogram binwidth to 20 days
+  set_parameters("histogram1", width = 20)
 
 schema |> render()
 ```
 
 ```{r example-cases-days-time}
 #| echo: false
+#| fig-cap: "More complex figure, used for exploring how the number of cases has changed over time."
 include_figure("./figures/example-cases-days-time.html")
 ```
 
@@ -4263,6 +4280,7 @@ schema |>
 
 ```{r example-cases-days-time-zoom}
 #| echo: false
+#| fig-cap: "In 2022, the distribution of the days spent in treatment had a fatter tail compared with 2010, suggesting that there were more patients who spent long time in care."
 include_figure("./figures/example-cases-days-time-zoom.html")
 ```
 
@@ -4304,6 +4322,7 @@ df |>
 
 ```{r example-cases-days-children}
 #| echo: false
+#| fig-cap: "Figure used for exploring the trends among children and adolescents over time."
 include_figure("./figures/example-cases-days-children.html")
 ```
 
@@ -4355,6 +4374,7 @@ df |>
 
 ```{r example-cases-days-age}
 #| echo: false
+#| fig-cap: "Figure used for exploring the trends among age categories over time."
 include_figure("./figures/example-cases-days-age.html")
 ```
 
@@ -4465,6 +4485,7 @@ df |>
 
 ```{r example-cases-diagnosis-time}
 #| echo: false
+#| fig-cap: "Proportion of cases and days in treatment seemed to remain fairly constant across diagnoses, except for schizophrenia which had a marked increasing trend in days spent in treatment."
 include_figure("./figures/example-cases-diagnosis-time.html")
 ```
 
@@ -4718,11 +4739,11 @@ A second significant part of this project involved developing an interactive dat
 
 Currently, `plotscaper` offers a robust set of features for creating and manipulating interactive figures, as detailed in Section \@ref(system) or in Section \@ref(applied-example). While these features can be used to create a substantial range of useful interactive figures, some limitations and implementation gaps still exist, particularly when compared to other, more established data visualization packages. 
 
-#### Plot types
+#### Plot types and aesthetics
 
 In the current version, `plotscaper` offers six plot types: scatterplots, barplots, histograms, fluctuation diagrams, histograms, two-dimensional histograms, and parallel coordinate plots. Additionally, normalized representations, such as spineplots and spinograms, are available for all aggregate plots (and also parallel coordinate plots). While these six plot types can already be used to create a wide range of useful interactive figures, there are numerous other plots which could be highly useful in applied data analysis. Density plots, radar plots, mosaic plots, and maps, for example, should be compatible with the `plotscaper` model and could be potential additions in future versions of the package. Furthermore, a relatively simple addition which could be useful would be horizontal barplots. 
 
-Finally, in the current version of the system, all plots are specified nominally^[Meaning that, for instance, to add a scatterplot, we call the `add_scatterplot` function.]. While a full declarative plot specification in R would be appealing, implementing such a system has presented challenges, and the issue will be discussed in more depth in Section \@ref(declarative-schemas). This somewhat limits the package's extensibility, however, users familiar with TypeScript can still create arbitrary new plot types using `plotscape` code.
+Currently, all plots are specified nominally^[Meaning that, for instance, to add a scatterplot, we call the `add_scatterplot` function.]. While a full declarative plot specification in R would be appealing, implementing such a system has presented challenges, and the issue will be discussed in more depth in Section \@ref(declarative-schemas). This somewhat limits the package's extensibility, however, users familiar with TypeScript can still create arbitrary new plot types using `plotscape` code. Firther, most plot types support a restricted set of aesthetics for data mapping. For example, scatterplots are limited to the x-axis, y-axis, and point size. While a potential future extension of the package could introduce additional aesthetics such as shape, color must remain excluded as it is reserved for indicating user selections.
 
 #### Consistency
 

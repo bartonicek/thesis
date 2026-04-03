@@ -23,6 +23,9 @@ fig:stacked-proportion
 fig:union-geoms2
 fig:small-multiples
 def:unlabeled-div-1
+fig:unnamed-chunk-14
+fig:unnamed-chunk-16
+fig:unnamed-chunk-17
 fig:barplot-spineplot
 fig:spineplot-tree
 fig:barplot-preorder
@@ -53,6 +56,8 @@ def:scale
 fig:plotscaper-design
 fig:plotscaper-example1
 fig:plotscaper-example2
+fig:unnamed-chunk-40
+fig:unnamed-chunk-42
 fig:model-diagram
 fig:scene-diagram
 fig:plot-diagram
@@ -65,9 +70,15 @@ tab:index-table
 tab:longterm-care-schema
 fig:example-cases-days
 fig:example-cases-stay-cat
+fig:example-cases-avg-days
+fig:example-cases-days-time
+fig:example-cases-days-time-zoom
+fig:example-cases-days-children
 fig:example-cases-days-children-marked
+fig:example-cases-days-age
 tab:icd10
 fig:example-cases-diagnosis
+fig:example-cases-diagnosis-time
 tab:cases-by-year
 tab:days-by-year
 fig:example-cases-diagnosis-max
@@ -302,7 +313,7 @@ model-constraints
 potential-future-directions
 delivered-software
 scope-and-features
-plot-types
+plot-types-and-aesthetics
 consistency
 selection-model
 feature-depth

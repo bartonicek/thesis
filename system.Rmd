@@ -172,6 +172,7 @@ ggplot(mtcars, aes(x = mpg)) +
 
 ```{r}
 #| echo: false
+#| fig-cap: "A simple `ggplot2` histogram"
 knitr::include_graphics("./figures/ggplot-histogram-aes.png")
 ```
 
@@ -186,6 +187,7 @@ ggplot(mtcars, aes(x = mpg)) +
 
 ```{r}
 #| echo: false
+#| fig-cap: "Histogram with custom breaks"
 knitr::include_graphics("./figures/ggplot-histogram-aes2.png")
 ```
 

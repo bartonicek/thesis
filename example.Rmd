@@ -103,9 +103,12 @@ Interestingly, the points did not show a simple linear trend. Instead, they seem
 df |>
   create_schema() |>
   add_scatterplot(c("cases", "days")) |>
-  add_barplot(c("stay_category", "cases")) |> # y-axis is weighted by cases
-  assign_cases(which(df$stay_category == "short"), 1) |> # Mark short-term green
-  assign_cases(which(df$stay_category == "long"), 2) |> # Mark long-term red
+  # Add barplot with y-axis is weighted by cases
+  add_barplot(c("stay_category", "cases")) |> 
+  # Mark short-term cases green
+  assign_cases(which(df$stay_category == "short"), 1) |> 
+  # Mark long-term cases red
+  assign_cases(which(df$stay_category == "long"), 2) |> 
   render()
 ```
 
@@ -137,11 +140,11 @@ df |>
 
 ```{r example-cases-avg-days}
 #| echo: false
+#| fig-cap: "Log-transforming the y-axis (the average number of days) in the scatterplot clearly shows that patients cluster into three different groups."
 include_figure("./figures/example-cases-avg-days.html")
 ```
 
 Now we can clearly see the gaps between the three different distributions along the y-axis. 
-
 > Try querying the points near the y-axis gaps by pressing the `Q` key and hovering over them. You should observe that the gaps roughly span the 60-90 day and 150-210 day ranges, corresponding to 2-3 months and 5-7 months, respectively. 
 
 The trend we see in the scatterplot above strong indication of a selection process is at work. Specifically, it seems that patients who stay in treatment for more than two months are likely to be transferred to medium-term care and kept around for longer, and, likewise, those who stay in treatment for more than five months are likely to be moved to long-term care. There are likely administrative of health-insurance related reasons for this trend, nevertheless, it is still an interesting pattern to take note of.
@@ -157,14 +160,17 @@ schema <- df |>
   add_scatterplot(c("cases", "days")) |>
   add_barplot(c("year", "cases")) |>
   add_barplot(c("year", "days")) |>
-  add_histogram(c("days", "days")) |> # Again, make sure to weigh the y-axis
-  set_parameters("histogram1", width = 20) # Set histogram binwidth to 20 days
+  # Again, make sure to weigh the y-axis
+  add_histogram(c("days", "days")) |> 
+   # Set histogram binwidth to 20 days
+  set_parameters("histogram1", width = 20)
 
 schema |> render()
 ```
 
 ```{r example-cases-days-time}
 #| echo: false
+#| fig-cap: "More complex figure, used for exploring how the number of cases has changed over time."
 include_figure("./figures/example-cases-days-time.html")
 ```
 
@@ -187,6 +193,7 @@ schema |>
 
 ```{r example-cases-days-time-zoom}
 #| echo: false
+#| fig-cap: "In 2022, the distribution of the days spent in treatment had a fatter tail compared with 2010, suggesting that there were more patients who spent long time in care."
 include_figure("./figures/example-cases-days-time-zoom.html")
 ```
 
@@ -228,6 +235,7 @@ df |>
 
 ```{r example-cases-days-children}
 #| echo: false
+#| fig-cap: "Figure used for exploring the trends among children and adolescents over time."
 include_figure("./figures/example-cases-days-children.html")
 ```
 
@@ -279,6 +287,7 @@ df |>
 
 ```{r example-cases-days-age}
 #| echo: false
+#| fig-cap: "Figure used for exploring the trends among age categories over time."
 include_figure("./figures/example-cases-days-age.html")
 ```
 
@@ -389,6 +398,7 @@ df |>
 
 ```{r example-cases-diagnosis-time}
 #| echo: false
+#| fig-cap: "Proportion of cases and days in treatment seemed to remain fairly constant across diagnoses, except for schizophrenia which had a marked increasing trend in days spent in treatment."
 include_figure("./figures/example-cases-diagnosis-time.html")
 ```
 

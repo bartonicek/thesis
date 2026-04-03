@@ -517,10 +517,13 @@ Figure 8.1: Relationship between the number of cases in a patient subgroup and t
 <div class="sourceCode" id="cb130"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb130-1"><a href="applied-example.html#cb130-1" tabindex="-1"></a>df <span class="sc">|&gt;</span></span>
 <span id="cb130-2"><a href="applied-example.html#cb130-2" tabindex="-1"></a>  <span class="fu">create_schema</span>() <span class="sc">|&gt;</span></span>
 <span id="cb130-3"><a href="applied-example.html#cb130-3" tabindex="-1"></a>  <span class="fu">add_scatterplot</span>(<span class="fu">c</span>(<span class="st">&quot;cases&quot;</span>, <span class="st">&quot;days&quot;</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb130-4"><a href="applied-example.html#cb130-4" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;stay_category&quot;</span>, <span class="st">&quot;cases&quot;</span>)) <span class="sc">|&gt;</span> <span class="co"># y-axis is weighted by cases</span></span>
-<span id="cb130-5"><a href="applied-example.html#cb130-5" tabindex="-1"></a>  <span class="fu">assign_cases</span>(<span class="fu">which</span>(df<span class="sc">$</span>stay_category <span class="sc">==</span> <span class="st">&quot;short&quot;</span>), <span class="dv">1</span>) <span class="sc">|&gt;</span> <span class="co"># Mark short-term green</span></span>
-<span id="cb130-6"><a href="applied-example.html#cb130-6" tabindex="-1"></a>  <span class="fu">assign_cases</span>(<span class="fu">which</span>(df<span class="sc">$</span>stay_category <span class="sc">==</span> <span class="st">&quot;long&quot;</span>), <span class="dv">2</span>) <span class="sc">|&gt;</span> <span class="co"># Mark long-term red</span></span>
-<span id="cb130-7"><a href="applied-example.html#cb130-7" tabindex="-1"></a>  <span class="fu">render</span>()</span></code></pre></div>
+<span id="cb130-4"><a href="applied-example.html#cb130-4" tabindex="-1"></a>  <span class="co"># Add barplot with y-axis is weighted by cases</span></span>
+<span id="cb130-5"><a href="applied-example.html#cb130-5" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;stay_category&quot;</span>, <span class="st">&quot;cases&quot;</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb130-6"><a href="applied-example.html#cb130-6" tabindex="-1"></a>  <span class="co"># Mark short-term cases green</span></span>
+<span id="cb130-7"><a href="applied-example.html#cb130-7" tabindex="-1"></a>  <span class="fu">assign_cases</span>(<span class="fu">which</span>(df<span class="sc">$</span>stay_category <span class="sc">==</span> <span class="st">&quot;short&quot;</span>), <span class="dv">1</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb130-8"><a href="applied-example.html#cb130-8" tabindex="-1"></a>  <span class="co"># Mark long-term cases red</span></span>
+<span id="cb130-9"><a href="applied-example.html#cb130-9" tabindex="-1"></a>  <span class="fu">assign_cases</span>(<span class="fu">which</span>(df<span class="sc">$</span>stay_category <span class="sc">==</span> <span class="st">&quot;long&quot;</span>), <span class="dv">2</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb130-10"><a href="applied-example.html#cb130-10" tabindex="-1"></a>  <span class="fu">render</span>()</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:example-cases-stay-cat"></span>
 <iframe src="./figures/example-cases-stay-cat.html" width="100%" height="400px" data-external="1" style="border: none;">
 </iframe>
@@ -544,12 +547,15 @@ Figure 8.2: The relationship between cases and days is subject to a pooling effe
 <span id="cb131-10"><a href="applied-example.html#cb131-10" tabindex="-1"></a>  <span class="fu">set_scale</span>(<span class="st">&quot;scatterplot1&quot;</span>, <span class="st">&quot;y&quot;</span>, <span class="co"># Log-transform the y-axis</span></span>
 <span id="cb131-11"><a href="applied-example.html#cb131-11" tabindex="-1"></a>            <span class="at">transformation =</span> <span class="st">&quot;log10&quot;</span>, <span class="at">default =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
 <span id="cb131-12"><a href="applied-example.html#cb131-12" tabindex="-1"></a>  <span class="fu">render</span>()</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:example-cases-avg-days"></span>
 <iframe src="./figures/example-cases-avg-days.html" width="100%" height="400px" data-external="1" style="border: none;">
 </iframe>
-<p>Now we can clearly see the gaps between the three different distributions along the y-axis.</p>
-<blockquote>
-<p>Try querying the points near the y-axis gaps by pressing the <code>Q</code> key and hovering over them. You should observe that the gaps roughly span the 60-90 day and 150-210 day ranges, corresponding to 2-3 months and 5-7 months, respectively.</p>
-</blockquote>
+<p class="caption">
+Figure 8.3: Log-transforming the y-axis (the average number of days) in the scatterplot clearly shows that patients cluster into three different groups.
+</p>
+</div>
+<p>Now we can clearly see the gaps between the three different distributions along the y-axis.
+&gt; Try querying the points near the y-axis gaps by pressing the <code>Q</code> key and hovering over them. You should observe that the gaps roughly span the 60-90 day and 150-210 day ranges, corresponding to 2-3 months and 5-7 months, respectively.</p>
 <p>The trend we see in the scatterplot above strong indication of a selection process is at work. Specifically, it seems that patients who stay in treatment for more than two months are likely to be transferred to medium-term care and kept around for longer, and, likewise, those who stay in treatment for more than five months are likely to be moved to long-term care. There are likely administrative of health-insurance related reasons for this trend, nevertheless, it is still an interesting pattern to take note of.</p>
 </div>
 <div id="number-of-cases-over-time" class="section level4 hasAnchor" number="8.1.2.2">
@@ -560,12 +566,19 @@ Figure 8.2: The relationship between cases and days is subject to a pooling effe
 <span id="cb132-3"><a href="applied-example.html#cb132-3" tabindex="-1"></a>  <span class="fu">add_scatterplot</span>(<span class="fu">c</span>(<span class="st">&quot;cases&quot;</span>, <span class="st">&quot;days&quot;</span>)) <span class="sc">|&gt;</span></span>
 <span id="cb132-4"><a href="applied-example.html#cb132-4" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;year&quot;</span>, <span class="st">&quot;cases&quot;</span>)) <span class="sc">|&gt;</span></span>
 <span id="cb132-5"><a href="applied-example.html#cb132-5" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;year&quot;</span>, <span class="st">&quot;days&quot;</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb132-6"><a href="applied-example.html#cb132-6" tabindex="-1"></a>  <span class="fu">add_histogram</span>(<span class="fu">c</span>(<span class="st">&quot;days&quot;</span>, <span class="st">&quot;days&quot;</span>)) <span class="sc">|&gt;</span> <span class="co"># Again, make sure to weigh the y-axis</span></span>
-<span id="cb132-7"><a href="applied-example.html#cb132-7" tabindex="-1"></a>  <span class="fu">set_parameters</span>(<span class="st">&quot;histogram1&quot;</span>, <span class="at">width =</span> <span class="dv">20</span>) <span class="co"># Set histogram binwidth to 20 days</span></span>
-<span id="cb132-8"><a href="applied-example.html#cb132-8" tabindex="-1"></a></span>
-<span id="cb132-9"><a href="applied-example.html#cb132-9" tabindex="-1"></a>schema <span class="sc">|&gt;</span> <span class="fu">render</span>()</span></code></pre></div>
+<span id="cb132-6"><a href="applied-example.html#cb132-6" tabindex="-1"></a>  <span class="co"># Again, make sure to weigh the y-axis</span></span>
+<span id="cb132-7"><a href="applied-example.html#cb132-7" tabindex="-1"></a>  <span class="fu">add_histogram</span>(<span class="fu">c</span>(<span class="st">&quot;days&quot;</span>, <span class="st">&quot;days&quot;</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb132-8"><a href="applied-example.html#cb132-8" tabindex="-1"></a>   <span class="co"># Set histogram binwidth to 20 days</span></span>
+<span id="cb132-9"><a href="applied-example.html#cb132-9" tabindex="-1"></a>  <span class="fu">set_parameters</span>(<span class="st">&quot;histogram1&quot;</span>, <span class="at">width =</span> <span class="dv">20</span>)</span>
+<span id="cb132-10"><a href="applied-example.html#cb132-10" tabindex="-1"></a></span>
+<span id="cb132-11"><a href="applied-example.html#cb132-11" tabindex="-1"></a>schema <span class="sc">|&gt;</span> <span class="fu">render</span>()</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:example-cases-days-time"></span>
 <iframe src="./figures/example-cases-days-time.html" width="100%" height="400px" data-external="1" style="border: none;">
 </iframe>
+<p class="caption">
+Figure 8.4: More complex figure, used for exploring how the number of cases has changed over time.
+</p>
+</div>
 <p>From the barplots, we can immediately see an interesting pattern: while the numbers of cases seem to have declined over time, the number of days patients spent in care seem to seems to have remained fairly constant. This suggest that while there are fewer patients over all, they are being hospitalized for longer.</p>
 <p>We can confirm this interactively. Click on the bars corresponding to the year 2010 and 2022, in either of the two barplots (feel free to mark either of the bars by holding down the <code>1</code> or <code>2</code> keys and clicking them). You should see that, compared to 2010, there were more patients in long term care in 2022, and the relationship between the number of cases and the number of days in care was steeper.</p>
 <p>On its own, the declining number of cases over time might appear as a positive development; however, the constant number days in treatment suggests a more worrying trend. Specifically, treatment facility placements are limited resource <span class="citation">(<a href="#ref-who2022">Organization 2022</a>)</span>, and the fact that days in treatment have stayed constant while cases have declined may indicate that the Czech healthcare system is becoming burdened by patients in long-term care, reducing its capacity to serve new clients.</p>
@@ -575,8 +588,13 @@ Figure 8.2: The relationship between cases and days is subject to a pooling effe
 <span id="cb133-3"><a href="applied-example.html#cb133-3" tabindex="-1"></a>  <span class="fu">assign_cases</span>(<span class="fu">which</span>(df<span class="sc">$</span>year <span class="sc">==</span> <span class="dv">2022</span>), <span class="dv">2</span>) <span class="sc">|&gt;</span></span>
 <span id="cb133-4"><a href="applied-example.html#cb133-4" tabindex="-1"></a>  <span class="fu">zoom</span>(<span class="st">&quot;histogram1&quot;</span>, <span class="fu">c</span>(<span class="sc">-</span><span class="dv">100</span>, <span class="dv">0</span>, <span class="fl">3e03</span>, <span class="fl">1e05</span>), <span class="at">units =</span> <span class="st">&quot;data&quot;</span>) <span class="sc">|&gt;</span></span>
 <span id="cb133-5"><a href="applied-example.html#cb133-5" tabindex="-1"></a>  <span class="fu">render</span>()</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:example-cases-days-time-zoom"></span>
 <iframe src="./figures/example-cases-days-time-zoom.html" width="100%" height="400px" data-external="1" style="border: none;">
 </iframe>
+<p class="caption">
+Figure 8.5: In 2022, the distribution of the days spent in treatment had a fatter tail compared with 2010, suggesting that there were more patients who spent long time in care.
+</p>
+</div>
 <blockquote>
 <p>You can zoom into a plot in two ways: programmatically using the <code>zoom</code> function (as shown above), or manually by clicking and dragging to select a rectangular region and pressing the <code>Z</code> key. You can chain multiple zooms to magnify small regions of the plot. To undo zooming, press either the <code>X</code> to revert back one level of zoom, or <code>R</code> to reset the figure to its default state (including the default zoom level).</p>
 </blockquote>
@@ -607,8 +625,13 @@ Figure 8.2: The relationship between cases and days is subject to a pooling effe
 <span id="cb136-12"><a href="applied-example.html#cb136-12" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;care_category&quot;</span>, <span class="st">&quot;cases&quot;</span>)) <span class="sc">|&gt;</span></span>
 <span id="cb136-13"><a href="applied-example.html#cb136-13" tabindex="-1"></a>  <span class="fu">set_layout</span>(layout) <span class="sc">|&gt;</span> <span class="co"># Set the layout</span></span>
 <span id="cb136-14"><a href="applied-example.html#cb136-14" tabindex="-1"></a>  <span class="fu">render</span>() </span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:example-cases-days-children"></span>
 <iframe src="./figures/example-cases-days-children.html" width="100%" height="400px" data-external="1" style="border: none;">
 </iframe>
+<p class="caption">
+Figure 8.6: Figure used for exploring the trends among children and adolescents over time.
+</p>
+</div>
 <p>So far, we have been using a fairly simple interactive workflow that could be easily recreated via code, taking only one or two interactive actions at a time. However, now it is time to see the full potential of interactivity by chaining several interactive actions together. To explore how the proportion of child and adolescent patients evolved over time, try taking the following steps:</p>
 <blockquote>
 <ol style="list-style-type: decimal">
@@ -634,7 +657,7 @@ Figure 8.2: The relationship between cases and days is subject to a pooling effe
 <iframe src="./figures/example-cases-days-children-marked.html" width="100%" height="400px" data-external="1" style="border: none;">
 </iframe>
 <p class="caption">
-Figure 8.3: While the proportion of days spent in treatment by children and adolescent has declined, the proportion of cases that children and adolescents make up has increased.
+Figure 8.7: While the proportion of days spent in treatment by children and adolescent has declined, the proportion of cases that children and adolescents make up has increased.
 </p>
 </div>
 <p>Interestingly, the two barplots show the opposite trend. While the proportion of the treatment days used by children and adolescents has declined over time, the proportion of total cases they make up has increased. The relative increase in cases appears to be driven by an overall decline in patient numbers: in absolute counts, the number of child and adolescent patients has remained fairly constant between 2010 to 2022, while the total patient count has decreased.</p>
@@ -646,8 +669,13 @@ Figure 8.3: While the proportion of days spent in treatment by children and adol
 <span id="cb138-5"><a href="applied-example.html#cb138-5" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;age_category&quot;</span>, <span class="st">&quot;days&quot;</span>)) <span class="sc">|&gt;</span></span>
 <span id="cb138-6"><a href="applied-example.html#cb138-6" tabindex="-1"></a>  <span class="fu">add_barplot</span>(<span class="fu">c</span>(<span class="st">&quot;year&quot;</span>, <span class="st">&quot;days&quot;</span>)) <span class="sc">|&gt;</span></span>
 <span id="cb138-7"><a href="applied-example.html#cb138-7" tabindex="-1"></a>  <span class="fu">render</span>()</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:example-cases-days-age"></span>
 <iframe src="./figures/example-cases-days-age.html" width="100%" height="400px" data-external="1" style="border: none;">
 </iframe>
+<p class="caption">
+Figure 8.8: Figure used for exploring the trends among age categories over time.
+</p>
+</div>
 <p>Again, if we interrogate the figure by employing interactive actions such as selection, zooming, and normalization, we can discover that one age category in which there has been steady growth in both the proportion of cases and days spend in treatment are 70-79 year olds. This aligns with the limited placement availability hypothesis: while these patients account for a relatively small fraction of the total cases, they represent a disproportionately large and increasing proportion of days in treatment. Later, we will also see evidence that many of these patients suffer from neurodegenerative diseases, which require intensive long-term care. It may be the case that, with increasing life-expectancy, the healthcare system is not able to handle the influx of older patients, limiting the availability of placements.</p>
 </div>
 <div id="prevalence-of-diagnoses" class="section level4 hasAnchor" number="8.1.2.4">
@@ -809,15 +837,15 @@ Obsessive-compulsive disorder
 <iframe src="./figures/example-cases-diagnosis.html" width="100%" height="400px" data-external="1" style="border: none;">
 </iframe>
 <p class="caption">
-Figure 8.4: Majority of patient load was taken up by the top five most common disorders: alcohol-use disorders, schizophrenia, Alzheimer’s disease, neurotic and stress-related disorders, and psychoactive substance disorders.
+Figure 8.9: Majority of patient load was taken up by the top five most common disorders: alcohol-use disorders, schizophrenia, Alzheimer’s disease, neurotic and stress-related disorders, and psychoactive substance disorders.
 </p>
 </div>
-<p>The barplot in the top left panel of the Figure <a href="applied-example.html#fig:example-cases-diagnosis">8.4</a> shows that the five most common disorders accounted for the majority of patient cases. Each of these disorders affected over 40,000 patients between 2010 and 2022, representing over 75% of all cases (319,557 out of 414,242).</p>
+<p>The barplot in the top left panel of the Figure <a href="applied-example.html#fig:example-cases-diagnosis">8.9</a> shows that the five most common disorders accounted for the majority of patient cases. Each of these disorders affected over 40,000 patients between 2010 and 2022, representing over 75% of all cases (319,557 out of 414,242).</p>
 <blockquote>
-<p>Press the <code>Q</code> key and hover over the bars in the top left panel of Figure <a href="applied-example.html#fig:example-cases-diagnosis">8.4</a> to see what diagnosis each represents.</p>
+<p>Press the <code>Q</code> key and hover over the bars in the top left panel of Figure <a href="applied-example.html#fig:example-cases-diagnosis">8.9</a> to see what diagnosis each represents.</p>
 </blockquote>
 <p>In order of prevalence, the top five disorders were, were: alcohol-use disorders, schizophrenia, Alzheimer’s disease, neurotic and stress-related disorders, and disorders caused by psychoactive substances (excluding alcohol). Overall, the high prevalence of these disorders is fairly, given that their high socio-economic impact is well-known to psychiatrists. Nevertheless, it may be illustrative to take a closer look at this data and examine demographic trends.</p>
-<p>First, alcohol use disorders were the most common diagnosis. This is not surprising, since, globally, alcohol use disorders rank among the most common disorders and are associated with high mortality due to chronic health conditions and injury <span class="citation">(<a href="#ref-carvalho2019">Carvalho et al. 2019</a>)</span>. In the data set, this diagnosis was about twice as common in men and showed a fairly symmetric, normal-shaped age distribution, occurring the most frequently in 40-49 and 50-59 year-olds (this can be seen by selecting the corresponding bar in the top-left panel of figure Figure <a href="applied-example.html#fig:example-cases-diagnosis">8.4</a> and normalizing the age-category barplot).</p>
+<p>First, alcohol use disorders were the most common diagnosis. This is not surprising, since, globally, alcohol use disorders rank among the most common disorders and are associated with high mortality due to chronic health conditions and injury <span class="citation">(<a href="#ref-carvalho2019">Carvalho et al. 2019</a>)</span>. In the data set, this diagnosis was about twice as common in men and showed a fairly symmetric, normal-shaped age distribution, occurring the most frequently in 40-49 and 50-59 year-olds (this can be seen by selecting the corresponding bar in the top-left panel of figure Figure <a href="applied-example.html#fig:example-cases-diagnosis">8.9</a> and normalizing the age-category barplot).</p>
 <p>The second most prevalent category of diagnoses were schizophrenia, schizotypal, and delusional disorders. While the individual lifetime prevalence of schizophrenia is not as high as some other disorders on this list, the reason for its high representation in the data set is likely its chronic and serious nature. Among those with mental illness, people with schizophrenia have one of the lowest life expectancies <span class="citation">(see e.g. <a href="#ref-chang2011">C.-K. Chang et al. 2011</a>)</span>, and often require multi-year or even life-long hospitalization <span class="citation">(<a href="#ref-messias2007">Messias, Chen, and Eaton 2007</a>)</span>. This debilitating nature of schizophrenia has prompted some experts to describe it as “arguably one of the most severe health conditions affecting mankind” <span class="citation">(see e.g. <a href="#ref-messias2007">Messias, Chen, and Eaton 2007</a>; <a href="#ref-tandon2024">Tandon et al. 2024</a>)</span>. In the data set at hand, schizophrenic disorders had a fairly balanced sex ratio and a fairly flat age distribution.</p>
 <p>Third most prevalent disorder categories was Alzheimer’s disease. The high prevalence of this disorder is unfortunately also to be expected, as, in developed countries, Alzheimer’s disease tends the leading cause of long-term psychiatric care in old age <span class="citation">(see e.g. <a href="#ref-cao2020">Cao et al. 2020</a>; <a href="#ref-langa2017">Langa et al. 2017</a>)</span>. It also tends to be more prevalent in women. These patterns could be seen fairly well in the data set: the age distribution of Alzheimer’s disease was strongly skewed, occurring much more frequently in older patients (and, in fact, making up the majority of &gt;70 year-old patients), and the diagnosis was about ~40% more prevalent in women than in men. We can also see that Alzheimer’s patient made up the vast majority of patients who had died in care, further reinforcing its status as a disease of old age.</p>
 <p>The fourth most prevalent category of disorders were neurotic, stress-related, and somatoform disorders (excluding the obsessive-compulsive disorder, F42) which was classified as its own category in the data set. This category includes disorders such as specific phobias, generalized anxiety disorder, and the post-traumatic stress disorder <span class="citation">(<a href="#ref-icd2024a">World Health Organization 2024a</a>)</span>. These disorders are known to be relatively common, occur roughly twice as often in women as in men, and have a generally even age distribution, with decline in prevalence in older age <span class="citation">(<a href="#ref-bandelow2015">Bandelow and Michaelis 2015</a>)</span>. This pattern could be seen well in the data set, with women making up the majority of the cases and the age distribution being fairly uniform, until a drop-off starting at about 60-69 years of age. In fact, these disorders were the most common diagnosis for women under 40:</p>
@@ -875,10 +903,15 @@ Figure 8.4: Majority of patient load was taken up by the top five most common di
 <span id="cb141-6"><a href="applied-example.html#cb141-6" tabindex="-1"></a>  <span class="fu">set_layout</span>(<span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>), <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span></span>
 <span id="cb141-7"><a href="applied-example.html#cb141-7" tabindex="-1"></a>  <span class="fu">set_scale</span>(<span class="st">&quot;barplot1&quot;</span>, <span class="st">&quot;x&quot;</span>, <span class="at">breaks =</span> order_df<span class="sc">$</span>diagnosis) <span class="sc">|&gt;</span></span>
 <span id="cb141-8"><a href="applied-example.html#cb141-8" tabindex="-1"></a>  <span class="fu">render</span>()</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:example-cases-diagnosis-time"></span>
 <iframe src="./figures/example-cases-diagnosis-time.html" width="100%" height="400px" data-external="1" style="border: none;">
 </iframe>
+<p class="caption">
+Figure 8.10: Proportion of cases and days in treatment seemed to remain fairly constant across diagnoses, except for schizophrenia which had a marked increasing trend in days spent in treatment.
+</p>
+</div>
 <p>Overall, over time, the proportion of both cases and days in treatment the various diagnoses made up seemed to remain fairly constant, with perhaps a slight general decreasing trend in the number of cases. Of the top five diagnoses, the one which seemed to buck this trend was schizophrenia (F20-F29), which had a fairly marked increasing trend in the proportion of days. Furthermore, the number of cases related to psychoactive substance use disorders (excluding alcohol) seemed to also be rising slightly.</p>
-<p>Of the rarer disorders, the one in which there seemed to be a significant relative rise in both the proportion of cases and days in treatment were mental and behavioral disorders associated with physiological disturbances and physical factors (F50-F59). This category includes disorders such as anorexia, bulimia, sleep disorders, and sexual dysfunction disorders. Given that this category was more prevalent in women and young people (as can be seen by interrogating Figure <a href="applied-example.html#fig:example-cases-diagnosis">8.4</a>), the likely explanation for this trend is rise in the number of cases of anorexia and bulimia. There also seemed to be slight of a decrease in the number of days spent in treatment by patients with stress-related disorders (F40-F49 without F42) and depression disorders (F32 and F33).</p>
+<p>Of the rarer disorders, the one in which there seemed to be a significant relative rise in both the proportion of cases and days in treatment were mental and behavioral disorders associated with physiological disturbances and physical factors (F50-F59). This category includes disorders such as anorexia, bulimia, sleep disorders, and sexual dysfunction disorders. Given that this category was more prevalent in women and young people (as can be seen by interrogating Figure <a href="applied-example.html#fig:example-cases-diagnosis">8.9</a>), the likely explanation for this trend is rise in the number of cases of anorexia and bulimia. There also seemed to be slight of a decrease in the number of days spent in treatment by patients with stress-related disorders (F40-F49 without F42) and depression disorders (F32 and F33).</p>
 <p>We can quickly verify these findings by fitting simple linear regressions for each diagnosis. First, we can model the number of cases by year (see Table <a href="applied-example.html#tab:cases-by-year">8.4</a>). For most diagnoses, there seemed to be a decreasing trend, such that there were fewer cases with that particular diagnosis over time. The only diagnosis for which there was significant <em>increasing</em> trend was F50-F59, confirming the observations made in the interactive figure.</p>
 <table class="table" style="color: black; margin-left: auto; margin-right: auto;">
 <caption>
@@ -1425,10 +1458,10 @@ f42
 <iframe src="./figures/example-cases-diagnosis-max.html" width="100%" height="400px" data-external="1" style="border: none;">
 </iframe>
 <p class="caption">
-Figure 8.5: While Alzheimer’s patients accounted for the longest hospitalized cohorts prior to 2016, following 2016, the longest hospitalized cohorts tended to be schizophrenia patients.
+Figure 8.11: While Alzheimer’s patients accounted for the longest hospitalized cohorts prior to 2016, following 2016, the longest hospitalized cohorts tended to be schizophrenia patients.
 </p>
 </div>
-<p>In Figure <a href="applied-example.html#fig:example-cases-diagnosis-max">8.5</a>, I show plots of diagnoses, as well as a summary of days and cases over time. However, note that, whereas all barplots of days and cases over time shown before had sum (of cases and days) as the y-axis summary statistic, the two barplots in the lower half of figure Figure <a href="applied-example.html#fig:example-cases-diagnosis-max">8.5</a> show maximum, not sum. These plots effectively tell us the size and the number of days in treatment for the largest/longest hospitalized patient cohort within a given year. Based on theory in Section <a href="problems.html#problems">5</a>, we know that these plots will behave well under linked selection (with one selection group).</p>
+<p>In Figure <a href="applied-example.html#fig:example-cases-diagnosis-max">8.11</a>, I show plots of diagnoses, as well as a summary of days and cases over time. However, note that, whereas all barplots of days and cases over time shown before had sum (of cases and days) as the y-axis summary statistic, the two barplots in the lower half of figure Figure <a href="applied-example.html#fig:example-cases-diagnosis-max">8.11</a> show maximum, not sum. These plots effectively tell us the size and the number of days in treatment for the largest/longest hospitalized patient cohort within a given year. Based on theory in Section <a href="problems.html#problems">5</a>, we know that these plots will behave well under linked selection (with one selection group).</p>
 <p>By investigating the diagnoses, we can discover some interesting trends in the patient cohorts. Specifically, by comparing the schizophrenia (F20-F29) and the Alzheimer’s disease diagnoses (F0 and G30), we can see that they show a complementary trend in the maximum number of days hospitalized. Specifically, whereas Alzheimer’s disease generally accounted for the longest-hospitalized patient cohorts up until 2016, schizophrenia accounted for the longest-hospitalized patient cohorts for five of the six years following 2016 (excluding 2020, where Alzheimer’s disease narrowly beat it out). This occurred despite schizophrenia patient cohorts shrinking in size over time and the fact that Alzheimer’s disease was more restricted in terms of age-range, so we would naturally expect larger cohorts (due to “lumping”). On that note, developmental disorders (F80-F99), despite the making up only a small proportion of the total number cases, made up many of the largest patients cohorts year over year. This is understandable given that these patients came almost exclusively from the youngest age group and were otherwise relatively homogeneous.</p>
 </div>
 </div>

@@ -229,15 +229,16 @@
 
 \end{adjustwidth}
 
-\begin{quote}
-Note: A live version of this thesis featuring fully interactive figures is available at \url{https://bartonicek.github.io/thesis/}. Documentation for plotscaper, the R package developed as part of this research, can be found at \url{https://bartonicek.github.io/plotscaper/}.
-\end{quote}
-
 \chapter{Abstract}\label{abstract}
 
 Interactive data visualization has become a staple of modern data presentation. However, creating rich interactive figures still remains challenging, and widely available interactive data visualization systems often offer only limited support for many valuable interactive features. This implementation gap may stem from a subtle yet profound issue: what we can \emph{do} with a figure is fundamentally determined by what the figure \emph{is}. Graphs are not mere images; they are visual representations of structured information. Consequently, interactive features must align with the mathematical properties of the data they represent. Yet, this view poses challenges for the prevailing, independence-based approach to building data visualization systems. This approach, popularized by the Grammar of Graphics (\citeproc{ref-wilkinson2012}{Wilkinson 2012}), attempts to treat graphics, statistics, and interaction as independent, modular components.
 
 In this thesis, I argue that the independence model, despite many advantages, is fundamentally inadequate for comprehensively modeling graphics - visualization components are not independent, but instead deeply interconnected, particularly when interaction comes into play. Throughout this work, I explore this interconnectedness, the challenges it poses for interactive data visualization systems, and propose an alternative model based on some fundamental concepts from category theory. To put these ideas into practice, I also present \texttt{plotscaper}, an R package developed to refine these theoretical ideas and offer a practical tool for interactive data exploration. My goal is to demonstrate that, to build truly robust and consistent interactive data visualization systems, we may benefit from grounding our thinking in algebraic concepts.
+
+\begin{quote}
+\emph{Note: A live version of this thesis featuring fully interactive figures is available at \url{https://bartonicek.github.io/thesis/}.}
+\emph{Documentation for \texttt{plotscaper}, the R package developed as part of this research, can be found at \url{https://bartonicek.github.io/plotscaper/}.}
+\end{quote}
 
 \chapter{Acknowledgements}\label{acknowledgements}
 
@@ -1297,7 +1298,14 @@ Once we partition our data and compute the summaries, we can visualize them as g
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics[width=1\linewidth]{_main_files/figure-latex/unnamed-chunk-14-1} \end{center}
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{_main_files/figure-latex/unnamed-chunk-14-1} 
+
+}
+
+\caption{A simple barplot, based on data partitioned by a single categorical variable.}\label{fig:unnamed-chunk-14}
+\end{figure}
 
 However, there is only so much we can glean from our data with simple partitions like the one above. When we have multiple partitioning variables, we can investigate more granular subsets of our data by taking their product. While base R does not have a standalone data structure for products of multiple \texttt{factor}s\footnote{It is not too difficult to create this data structure: see Section \ref{product-factors}.}, many built-in functions create this data structure implicitly, when supplied with \texttt{list()} or formula arguments (using the \texttt{+} operator on the right-hand side of the formula to define the product):
 
@@ -1381,7 +1389,14 @@ These product partitions can also be visualized, to display our data at a greate
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics[width=1\linewidth]{_main_files/figure-latex/unnamed-chunk-16-1} \end{center}
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{_main_files/figure-latex/unnamed-chunk-16-1} 
+
+}
+
+\caption{Stacked barplot with data partitioned by the product of two categorical variables.}\label{fig:unnamed-chunk-16}
+\end{figure}
 
 In fact, Cartesian products of partitions are so useful and ubiquitous in data visualization that many data visualization systems (particularly ones based on the Grammar of Graphics, \citeproc{ref-wilkinson2012}{Wilkinson 2012}) construct them automatically. For instance, we can produce the exact same plot without having to explicitly aggregate the data ourselves, by running the following \texttt{ggplot} call:
 
@@ -1396,7 +1411,14 @@ In fact, Cartesian products of partitions are so useful and ubiquitous in data v
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics[width=1\linewidth]{_main_files/figure-latex/unnamed-chunk-17-1} \end{center}
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{_main_files/figure-latex/unnamed-chunk-17-1} 
+
+}
+
+\caption{A stacked barplot, produced automatically as a `ggplot2` default.}\label{fig:unnamed-chunk-17}
+\end{figure}
 
 It is worth taking a moment to analyze what is happening inside the \texttt{ggplot} call. The function takes the variables specified inside the \texttt{aes} call and constructs a Cartesian product of partitions. Importantly, it also automatically infers which variables should be used to construct the product and which should instead be aggregated over it. For instance, in the example above, the \texttt{income} variable is \emph{not} included in the product. This is because it is a continuous variable mapped to the y-axis, and this, in combination with the geometric object (\texttt{geom\_bar}), marks it as a an aggregation variable. This behavior is described in the \texttt{ggplot2} codebase in the following code comment:
 
@@ -2858,7 +2880,14 @@ Third, note that, in \texttt{plotscaper}, variable names are \emph{not} meant to
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics[width=1\linewidth]{./figures/ggplot-histogram-aes} \end{center}
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{./figures/ggplot-histogram-aes} 
+
+}
+
+\caption{A simple `ggplot2` histogram}\label{fig:unnamed-chunk-40}
+\end{figure}
 
 Overtly, it may seem as if the \texttt{aes} function maps the \texttt{mpg} variable to the x-axis. This would be the case if, for example, \texttt{geom\_point} had been used, however, with \texttt{geom\_histogram}, this interpretation is incorrect. Specifically, the x-axis actually represents the left and right edges of the histogram bins, a derived variable not found in the original data. Similarly, the y-axis shows bin counts, another derived variable. Setting custom histogram breaks makes this lack of a direct correspondence even clearer:
 
@@ -2869,7 +2898,14 @@ Overtly, it may seem as if the \texttt{aes} function maps the \texttt{mpg} varia
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics[width=1\linewidth]{./figures/ggplot-histogram-aes2} \end{center}
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{./figures/ggplot-histogram-aes2} 
+
+}
+
+\caption{Histogram with custom breaks}\label{fig:unnamed-chunk-42}
+\end{figure}
 
 Now it is easier to see that what gets mapped to the x-axis is \emph{not} the \texttt{mpg} variable. Instead, it is the variable representing the histogram breaks. The \texttt{mpg} variable gets mapped to the plot only implicitly, as the summarized counts within the bins (the y-axis variable). Thus, in \texttt{ggplot} call, the semantics of \texttt{aes(x\ =\ mpg,\ ...)} are fundamentally different in \texttt{geom\_histogram} as compared to, for example, \texttt{geom\_scatter}.
 
@@ -2928,13 +2964,13 @@ List of 2
   ..$ data:List of 3
   .. ..$ type     : 'scalar' chr "scatter"
   .. ..$ variables: chr [1:2] "wt" "mpg"
-  .. ..$ id       : 'scalar' chr "0d8b47a1-b056-44cc-94de-5fd6c4b2390a"
+  .. ..$ id       : 'scalar' chr "7ebcee61-6b83-4fd7-a72a-a2944ea5c9b3"
  $ :List of 2
   ..$ type: chr "add-plot"
   ..$ data:List of 3
   .. ..$ type     : 'scalar' chr "bar"
   .. ..$ variables: chr "cyl"
-  .. ..$ id       : 'scalar' chr "104841b0-39d5-4a2e-94b4-e4948aadca59"
+  .. ..$ id       : 'scalar' chr "8a08c8c1-5c7c-438c-afa1-c366a30c8416"
 \end{verbatim}
 
 As you can see, the object created with \texttt{create\_schema} is essentially just a \texttt{list} of messages. Modifying the schema by calling functions such as \texttt{add\_scatterplot} or \texttt{set\_scale} simply appends a new message to the list, similar to how objects of class \texttt{ggplot} are modified via the \texttt{+} operator (\citeproc{ref-wickham2016}{Wickham 2016}). This makes schemas easy to transport (e.g.~as JSON) and modify programmatically. Finally, note how rendering the schema requires an explicit call to \texttt{render}. This approach differs from the popular R convention of rendering implicitly via a \texttt{print} method; there is an important reason for this design choice which will be discussed later.
@@ -3452,11 +3488,11 @@ Consider the following implementation of a stream which produces values at 200-m
 \end{Shaded}
 
 \begin{verbatim}
-200 milliseconds has elapsed(28.57 milliseconds in dog years)
-401 milliseconds has elapsed(57.29 milliseconds in dog years)
-602 milliseconds has elapsed(86 milliseconds in dog years)
-803 milliseconds has elapsed(114.71 milliseconds in dog years)
-1004 milliseconds has elapsed(143.43 milliseconds in dog years)
+202 milliseconds has elapsed(28.86 milliseconds in dog years)
+402 milliseconds has elapsed(57.43 milliseconds in dog years)
+603 milliseconds has elapsed(86.14 milliseconds in dog years)
+804 milliseconds has elapsed(114.86 milliseconds in dog years)
+1005 milliseconds has elapsed(143.57 milliseconds in dog years)
 \end{verbatim}
 
 As can be seen, the event producer (stream) is defined separately from the event processing logic, which is constructed by piping the result of one operation into the next. Because of the associativity of function composition, the stream actually exhibits properties of a functor, meaning that the order of composition - either through direct function composition or \texttt{.pipe} chaining - does not affect the result. Additionally, while the stream transformations themselves are (generally) stateless, they can still produce useful side-effects (as can be seen on the example of the \texttt{console.log} call above). Further, because of this fact, they also lend themselves well to modeling asynchronous or even infinite data sequences (\citeproc{ref-abelson2022}{Abelson and Sussman 2022}; \citeproc{ref-fogus2013}{Fogus 2013}).
@@ -4913,9 +4949,12 @@ Interestingly, the points did not show a simple linear trend. Instead, they seem
 \NormalTok{df }\SpecialCharTok{|\textgreater{}}
   \FunctionTok{create\_schema}\NormalTok{() }\SpecialCharTok{|\textgreater{}}
   \FunctionTok{add\_scatterplot}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\StringTok{"cases"}\NormalTok{, }\StringTok{"days"}\NormalTok{)) }\SpecialCharTok{|\textgreater{}}
-  \FunctionTok{add\_barplot}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\StringTok{"stay\_category"}\NormalTok{, }\StringTok{"cases"}\NormalTok{)) }\SpecialCharTok{|\textgreater{}} \CommentTok{\# y{-}axis is weighted by cases}
-  \FunctionTok{assign\_cases}\NormalTok{(}\FunctionTok{which}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{stay\_category }\SpecialCharTok{==} \StringTok{"short"}\NormalTok{), }\DecValTok{1}\NormalTok{) }\SpecialCharTok{|\textgreater{}} \CommentTok{\# Mark short{-}term green}
-  \FunctionTok{assign\_cases}\NormalTok{(}\FunctionTok{which}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{stay\_category }\SpecialCharTok{==} \StringTok{"long"}\NormalTok{), }\DecValTok{2}\NormalTok{) }\SpecialCharTok{|\textgreater{}} \CommentTok{\# Mark long{-}term red}
+  \CommentTok{\# Add barplot with y{-}axis is weighted by cases}
+  \FunctionTok{add\_barplot}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\StringTok{"stay\_category"}\NormalTok{, }\StringTok{"cases"}\NormalTok{)) }\SpecialCharTok{|\textgreater{}} 
+  \CommentTok{\# Mark short{-}term cases green}
+  \FunctionTok{assign\_cases}\NormalTok{(}\FunctionTok{which}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{stay\_category }\SpecialCharTok{==} \StringTok{"short"}\NormalTok{), }\DecValTok{1}\NormalTok{) }\SpecialCharTok{|\textgreater{}} 
+  \CommentTok{\# Mark long{-}term cases red}
+  \FunctionTok{assign\_cases}\NormalTok{(}\FunctionTok{which}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{stay\_category }\SpecialCharTok{==} \StringTok{"long"}\NormalTok{), }\DecValTok{2}\NormalTok{) }\SpecialCharTok{|\textgreater{}} 
   \FunctionTok{render}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
@@ -4952,13 +4991,17 @@ However, the pooling effect does not itself explain the absence of points betwee
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics[width=1\linewidth]{./figures/example-cases-avg-days} \end{center}
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{./figures/example-cases-avg-days} 
+
+}
+
+\caption{Log-transforming the y-axis (the average number of days) in the scatterplot clearly shows that patients cluster into three different groups.}\label{fig:example-cases-avg-days}
+\end{figure}
 
 Now we can clearly see the gaps between the three different distributions along the y-axis.
-
-\begin{quote}
-Try querying the points near the y-axis gaps by pressing the \texttt{Q} key and hovering over them. You should observe that the gaps roughly span the 60-90 day and 150-210 day ranges, corresponding to 2-3 months and 5-7 months, respectively.
-\end{quote}
+\textgreater{} Try querying the points near the y-axis gaps by pressing the \texttt{Q} key and hovering over them. You should observe that the gaps roughly span the 60-90 day and 150-210 day ranges, corresponding to 2-3 months and 5-7 months, respectively.
 
 The trend we see in the scatterplot above strong indication of a selection process is at work. Specifically, it seems that patients who stay in treatment for more than two months are likely to be transferred to medium-term care and kept around for longer, and, likewise, those who stay in treatment for more than five months are likely to be moved to long-term care. There are likely administrative of health-insurance related reasons for this trend, nevertheless, it is still an interesting pattern to take note of.
 
@@ -4973,14 +5016,23 @@ A key question is how have the numbers of patients in treatment evolved over tim
   \FunctionTok{add\_scatterplot}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\StringTok{"cases"}\NormalTok{, }\StringTok{"days"}\NormalTok{)) }\SpecialCharTok{|\textgreater{}}
   \FunctionTok{add\_barplot}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\StringTok{"year"}\NormalTok{, }\StringTok{"cases"}\NormalTok{)) }\SpecialCharTok{|\textgreater{}}
   \FunctionTok{add\_barplot}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\StringTok{"year"}\NormalTok{, }\StringTok{"days"}\NormalTok{)) }\SpecialCharTok{|\textgreater{}}
-  \FunctionTok{add\_histogram}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\StringTok{"days"}\NormalTok{, }\StringTok{"days"}\NormalTok{)) }\SpecialCharTok{|\textgreater{}} \CommentTok{\# Again, make sure to weigh the y{-}axis}
-  \FunctionTok{set\_parameters}\NormalTok{(}\StringTok{"histogram1"}\NormalTok{, }\AttributeTok{width =} \DecValTok{20}\NormalTok{) }\CommentTok{\# Set histogram binwidth to 20 days}
+  \CommentTok{\# Again, make sure to weigh the y{-}axis}
+  \FunctionTok{add\_histogram}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\StringTok{"days"}\NormalTok{, }\StringTok{"days"}\NormalTok{)) }\SpecialCharTok{|\textgreater{}} 
+   \CommentTok{\# Set histogram binwidth to 20 days}
+  \FunctionTok{set\_parameters}\NormalTok{(}\StringTok{"histogram1"}\NormalTok{, }\AttributeTok{width =} \DecValTok{20}\NormalTok{)}
 
 \NormalTok{schema }\SpecialCharTok{|\textgreater{}} \FunctionTok{render}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics[width=1\linewidth]{./figures/example-cases-days-time} \end{center}
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{./figures/example-cases-days-time} 
+
+}
+
+\caption{More complex figure, used for exploring how the number of cases has changed over time.}\label{fig:example-cases-days-time}
+\end{figure}
 
 From the barplots, we can immediately see an interesting pattern: while the numbers of cases seem to have declined over time, the number of days patients spent in care seem to seems to have remained fairly constant. This suggest that while there are fewer patients over all, they are being hospitalized for longer.
 
@@ -5000,7 +5052,14 @@ Another way we can scrutinize the trend more closely by zooming into the histogr
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics[width=1\linewidth]{./figures/example-cases-days-time-zoom} \end{center}
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{./figures/example-cases-days-time-zoom} 
+
+}
+
+\caption{In 2022, the distribution of the days spent in treatment had a fatter tail compared with 2010, suggesting that there were more patients who spent long time in care.}\label{fig:example-cases-days-time-zoom}
+\end{figure}
 
 \begin{quote}
 You can zoom into a plot in two ways: programmatically using the \texttt{zoom} function (as shown above), or manually by clicking and dragging to select a rectangular region and pressing the \texttt{Z} key. You can chain multiple zooms to magnify small regions of the plot. To undo zooming, press either the \texttt{X} to revert back one level of zoom, or \texttt{R} to reset the figure to its default state (including the default zoom level).
@@ -5049,7 +5108,14 @@ To investigate how these numbers evolved over time, we can make use of the follo
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics[width=1\linewidth]{./figures/example-cases-days-children} \end{center}
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{./figures/example-cases-days-children} 
+
+}
+
+\caption{Figure used for exploring the trends among children and adolescents over time.}\label{fig:example-cases-days-children}
+\end{figure}
 
 So far, we have been using a fairly simple interactive workflow that could be easily recreated via code, taking only one or two interactive actions at a time. However, now it is time to see the full potential of interactivity by chaining several interactive actions together. To explore how the proportion of child and adolescent patients evolved over time, try taking the following steps:
 
@@ -5110,7 +5176,14 @@ We can also get a more granular breakdown by plotting the age category variable:
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics[width=1\linewidth]{./figures/example-cases-days-age} \end{center}
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{./figures/example-cases-days-age} 
+
+}
+
+\caption{Figure used for exploring the trends among age categories over time.}\label{fig:example-cases-days-age}
+\end{figure}
 
 Again, if we interrogate the figure by employing interactive actions such as selection, zooming, and normalization, we can discover that one age category in which there has been steady growth in both the proportion of cases and days spend in treatment are 70-79 year olds. This aligns with the limited placement availability hypothesis: while these patients account for a relatively small fraction of the total cases, they represent a disproportionately large and increasing proportion of days in treatment. Later, we will also see evidence that many of these patients suffer from neurodegenerative diseases, which require intensive long-term care. It may be the case that, with increasing life-expectancy, the healthcare system is not able to handle the influx of older patients, limiting the availability of placements.
 
@@ -5254,7 +5327,14 @@ We can also scrutinize the prevalence of different mental disorders over time. A
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}\includegraphics[width=1\linewidth]{./figures/example-cases-diagnosis-time} \end{center}
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{./figures/example-cases-diagnosis-time} 
+
+}
+
+\caption{Proportion of cases and days in treatment seemed to remain fairly constant across diagnoses, except for schizophrenia which had a marked increasing trend in days spent in treatment.}\label{fig:example-cases-diagnosis-time}
+\end{figure}
 
 Overall, over time, the proportion of both cases and days in treatment the various diagnoses made up seemed to remain fairly constant, with perhaps a slight general decreasing trend in the number of cases. Of the top five diagnoses, the one which seemed to buck this trend was schizophrenia (F20-F29), which had a fairly marked increasing trend in the proportion of days. Furthermore, the number of cases related to psychoactive substance use disorders (excluding alcohol) seemed to also be rising slightly.
 
@@ -5388,7 +5468,7 @@ Further, by analyzing the properties of functors and set operations, we can iden
 
 To evaluate the proposed model, I developed \texttt{plotscaper}, an R package for interactive data exploration, supported by \texttt{plotscape}, its TypeScript-based backend. The theoretical model and the software functioned as a crucial feedback loop; many of the model's core concepts emerged directly from addressing practical challenges encountered during development. By translating theory into functional code, I was able to empirically test and refine my assumptions regarding the structure and behavior of interactive data visualizations.
 
-\texttt{plotscaper} was also developed to provide a practical tool for data exploration, not just theory testing. As outlined in Section \ref{background}, within the R ecosystem, there is currently no shortage of interactive data visualization packages and frameworks; however, many offer only fairly basic interactive features out-of-the-box. Implementing complex features such as linked selection, representation switching, or parametric interaction (see section \ref{common-features}) often requires substantial programming effort, creating a barrier to entry for casual users (see e.g. \citeproc{ref-batch2017}{Batch and Elmqvist 2017}). Thus, a secondary goal of this project was to try to address this gap, and this goal seems to have been met with moderate success. Despite the experimental status of the package, and the fact that it is competing with large number of far better-established interactive data visualization frameworks and libraries, \texttt{plotscaper} has been downloaded over\footnote{The number only includes downloads from the RStudio CRAN mirror.} 4468 times in the 526 days since its initial release, see Figure \ref{fig:plotscaper-downloads}:
+\texttt{plotscaper} was also developed to provide a practical tool for data exploration, not just theory testing. As outlined in Section \ref{background}, within the R ecosystem, there is currently no shortage of interactive data visualization packages and frameworks; however, many offer only fairly basic interactive features out-of-the-box. Implementing complex features such as linked selection, representation switching, or parametric interaction (see section \ref{common-features}) often requires substantial programming effort, creating a barrier to entry for casual users (see e.g. \citeproc{ref-batch2017}{Batch and Elmqvist 2017}). Thus, a secondary goal of this project was to try to address this gap, and this goal seems to have been met with moderate success. Despite the experimental status of the package, and the fact that it is competing with large number of far better-established interactive data visualization frameworks and libraries, \texttt{plotscaper} has been downloaded over\footnote{The number only includes downloads from the RStudio CRAN mirror.} 4597 times in the 532 days since its initial release, see Figure \ref{fig:plotscaper-downloads}:
 
 \begin{figure}
 
@@ -5499,11 +5579,11 @@ A second significant part of this project involved developing an interactive dat
 
 Currently, \texttt{plotscaper} offers a robust set of features for creating and manipulating interactive figures, as detailed in Section \ref{system} or in Section \ref{applied-example}. While these features can be used to create a substantial range of useful interactive figures, some limitations and implementation gaps still exist, particularly when compared to other, more established data visualization packages.
 
-\subsubsection{Plot types}\label{plot-types}
+\subsubsection{Plot types and aesthetics}\label{plot-types-and-aesthetics}
 
 In the current version, \texttt{plotscaper} offers six plot types: scatterplots, barplots, histograms, fluctuation diagrams, histograms, two-dimensional histograms, and parallel coordinate plots. Additionally, normalized representations, such as spineplots and spinograms, are available for all aggregate plots (and also parallel coordinate plots). While these six plot types can already be used to create a wide range of useful interactive figures, there are numerous other plots which could be highly useful in applied data analysis. Density plots, radar plots, mosaic plots, and maps, for example, should be compatible with the \texttt{plotscaper} model and could be potential additions in future versions of the package. Furthermore, a relatively simple addition which could be useful would be horizontal barplots.
 
-Finally, in the current version of the system, all plots are specified nominally\footnote{Meaning that, for instance, to add a scatterplot, we call the \texttt{add\_scatterplot} function.}. While a full declarative plot specification in R would be appealing, implementing such a system has presented challenges, and the issue will be discussed in more depth in Section \ref{declarative-schemas}. This somewhat limits the package's extensibility, however, users familiar with TypeScript can still create arbitrary new plot types using \texttt{plotscape} code.
+Currently, all plots are specified nominally\footnote{Meaning that, for instance, to add a scatterplot, we call the \texttt{add\_scatterplot} function.}. While a full declarative plot specification in R would be appealing, implementing such a system has presented challenges, and the issue will be discussed in more depth in Section \ref{declarative-schemas}. This somewhat limits the package's extensibility, however, users familiar with TypeScript can still create arbitrary new plot types using \texttt{plotscape} code. Firther, most plot types support a restricted set of aesthetics for data mapping. For example, scatterplots are limited to the x-axis, y-axis, and point size. While a potential future extension of the package could introduce additional aesthetics such as shape, color must remain excluded as it is reserved for indicating user selections.
 
 \subsubsection{Consistency}\label{consistency}
 

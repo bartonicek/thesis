@@ -137,11 +137,11 @@ A second significant part of this project involved developing an interactive dat
 
 Currently, `plotscaper` offers a robust set of features for creating and manipulating interactive figures, as detailed in Section \@ref(system) or in Section \@ref(applied-example). While these features can be used to create a substantial range of useful interactive figures, some limitations and implementation gaps still exist, particularly when compared to other, more established data visualization packages. 
 
-#### Plot types
+#### Plot types and aesthetics
 
 In the current version, `plotscaper` offers six plot types: scatterplots, barplots, histograms, fluctuation diagrams, histograms, two-dimensional histograms, and parallel coordinate plots. Additionally, normalized representations, such as spineplots and spinograms, are available for all aggregate plots (and also parallel coordinate plots). While these six plot types can already be used to create a wide range of useful interactive figures, there are numerous other plots which could be highly useful in applied data analysis. Density plots, radar plots, mosaic plots, and maps, for example, should be compatible with the `plotscaper` model and could be potential additions in future versions of the package. Furthermore, a relatively simple addition which could be useful would be horizontal barplots. 
 
-Finally, in the current version of the system, all plots are specified nominally^[Meaning that, for instance, to add a scatterplot, we call the `add_scatterplot` function.]. While a full declarative plot specification in R would be appealing, implementing such a system has presented challenges, and the issue will be discussed in more depth in Section \@ref(declarative-schemas). This somewhat limits the package's extensibility, however, users familiar with TypeScript can still create arbitrary new plot types using `plotscape` code.
+Currently, all plots are specified nominally^[Meaning that, for instance, to add a scatterplot, we call the `add_scatterplot` function.]. While a full declarative plot specification in R would be appealing, implementing such a system has presented challenges, and the issue will be discussed in more depth in Section \@ref(declarative-schemas). This somewhat limits the package's extensibility, however, users familiar with TypeScript can still create arbitrary new plot types using `plotscape` code. Firther, most plot types support a restricted set of aesthetics for data mapping. For example, scatterplots are limited to the x-axis, y-axis, and point size. While a potential future extension of the package could introduce additional aesthetics such as shape, color must remain excluded as it is reserved for indicating user selections.
 
 #### Consistency
 
